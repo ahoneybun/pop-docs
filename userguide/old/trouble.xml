@@ -1,0 +1,113 @@
+<chapter id="troubfaq">
+		<title>Troubleshooting</title>
+	<highlights>
+		<para>General questions about troubleshooting</para>
+	</highlights>
+	
+
+	<!--
+		SECTION: Trouble-shooting
+	-->
+
+	<sect1 id="desc-troubleshooting">
+		<title>Troubleshooting</title>
+		<sect2>
+			<title>Where did my panels go?</title>
+			<para>
+				My desktop started up one day with no panels at all (i.e. no
+				&quot;applications, computer&quot; menu at the top, and no task list at
+				the bottom). I don't know why.
+			</para>
+			<para>
+				The fix was to start a terminal (right click on desktop, &quot;open
+				terminal&quot;) and run the command &quot;gnome-panel&quot;. They started up
+				again fine ... I checked &quot;Computer|Desktop
+				Preferences|Sessions|Current Session&quot; and scrolled down to
+				confirm that &quot;gnome-panel&quot; has the Style &quot;restart&quot; ... so I
+				stopped the command-line panels (by hitting ctrl-C in the
+				terminal) and the panels vanished, and restarted happlicationily.
+			</para>
+		</sect2>
+		
+		<sect2>
+			<title>
+				After upgrading all the packages from apt, my Gnome session
+				stops working (panel doesn't show, session doesn't start, etc.)
+				How can I fix this?
+			</title>
+			<para>
+				Try to reboot the system.
+			</para>
+			<para>
+				Some upgrades can be more intrusive than others, and in my most
+				recent upgrade, Gnome experienced these problems. I tried to
+				create a new user directory to no avail. Restarting the
+				computer totally fixed the problem. OwenMarshall.
+			</para>
+		</sect2>
+
+		<sect2>
+			<title>
+				Everytime I dual boot to my Windows partition, my computer
+				clock become X hours ahead/behind my local time. How do I solve
+				that problem with Ubuntu?
+			</title>
+			<itemizedlist>
+				<listitem>
+					Edit the file /etc/default/rcS. in there is a setting for
+					time (&quot;UTC=&quot;).
+				</listitem>
+				<listitem>
+					Set it to no (&quot;UTC=no&quot;)
+				</listitem>
+			</itemizedlist>
+		</sect2>
+
+		<sect2>
+			<title>I have a black &quot;X&quot; in the middle of my screen, in addition to the normal mouse cursor.</title>
+			<para>
+				This is caused by problems with hardware acceleration of the
+				cursor. You can work around this problem by editing
+				/etc/X11/XF86Config-4 and adding the following line:
+			</para>
+			<screen>Option &quot;HWCursor&quot; &quot;false&quot;</screen>
+			<para>
+				or
+			</para>
+			<screen>Option &quot;SWCursor&quot; &quot;true&quot;</screen>
+			<para>
+				to the Device section of the file.
+			</para>
+			<para>
+				Note that the option is specific for each video card driver.
+			</para>
+			<para>
+				To be sure to enter the proper information check the man page
+				for your driver.
+			</para>
+			<para>
+				Examples:
+			</para>
+			<screen>man radeon</screen>
+			<para>
+				for ati cards or
+			</para>
+			<screen>man nv</screen>
+			<para>
+				for nvidia cards.
+			</para>
+			<para>
+				The result section should look like:
+			</para>
+			<screen>
+Section &quot;Device&quot;
+ Identifier &quot;nVidia Corporation NV25 [Geforce4 Ti 4600] 0&quot;
+ Driver &quot;nvidia&quot;
+ BusID &quot;PCI:1:0:0&quot;
+ Option &quot;HWCursor&quot; &quot;false&quot;
+EndSection
+			</screen>
+		</sect2>
+	</sect1>
+</chapter>
+		

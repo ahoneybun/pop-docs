@@ -1,0 +1,56 @@
+#!/bin/sh
+
+# DATE: April 03, 2005
+# AUTHOR: Sean Wheller (sean@inwords.co.za)
+# ABSTRACT: A script for Ubuntu Docteam to make and maintain PO files.
+
+#for i in `find $1 -type f -name '*.po'`; do 
+#    LOCALEGETTER=$(echo $i | perl -e 'if(<STDIN> =~ m/(.*)-(.*)\.po/){print $2}' -) 
+#    po2xml $1$2.xml $i > $1$2-$LOCALEGETTER.xml 
+
+
+# Test if module was passed on the command. If not assume all modules
+
+if [ x$1 = x ]
+then
+    #modules="aboutubuntu adminguide faqguide quickguide releasenotes userguide"
+    modules="aboutubuntu releasenotes quickguide"
+else
+    modules="$1"
+fi
+echo "Processing modules: $modules"
+
+for m in $modules
+do
+	for file in `find $m/ -type f -regex [^-]+-[^-]+-[^-]+\.po`
+	do
+		# Ready oldtrans XML file name [ ]-[ ]-LANG.xml
+		translated=$m/`basename $file .po`.xml
+		
+		# Ready English file name [ ]-[ ].xml
+		orig=$m/`basename $file | sed -e 's/-..\.po/.xml/'`
+		
+		# Check integrity of PO file
+		msgfmt -vc $file
+		
+		# Convert PO against corresponding English file to temp XML file
+		po2xml $orig $file > $translated.new
+
+		#Test if old XML file exists, if yes test diff and patch translated XML file is exists
+		if [ -f $translated ]
+		then
+			diff $translated $translated.new > $translated.diff
+			if [ -f $translated.diff ]
+			then
+			    patch -p0 $translated $translated.diff
+			    rm $translated.diff
+			    rm $translated.new
+			else
+			    rm $translated.diff
+			    rm $translated.new
+			fi
+		else
+		            mv $translated.new $translated
+		fi
+	done
+done

@@ -1,0 +1,114 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+use File::Basename;
+
+my $ag = `cat build/adminguide-list.txt`;
+my %ag = map { basename($_) => 1 } split(/\s+/, $ag);
+
+my $au = `cat build/aboutubuntu-list.txt`;
+my %au = map { basename($_) => 1 } split(/\s+/, $au);
+
+my $rn = `cat build/releasenotes-list.txt`;
+my %rn = map { basename($_) => 1 } split(/\s+/, $rn);
+
+my $qg = `cat build/quickguide-list.txt`;
+my %qg = map { basename($_) => 1 } split(/\s+/, $qg);
+
+#my $ug = `cat build/usersguide-list.txt`;
+#my %ug = map { basename($_) => 1 } split(/\s+/, $ug);
+my %ug;
+
+my %common;
+
+my %all = map { $_ => 1 } (keys %qg, keys %ug, keys %rn);
+
+for my $k (keys %all)
+{
+	my $count = 0;
+	$count++ if exists $ag{$k};
+	$count++ if exists $au{$k};
+	$count++ if exists $rn{$k};
+	$count++ if exists $qg{$k};
+	$count++ if exists $ug{$k};
+
+	if ($count > 1)
+	{
+		$common{$k} = 1;
+		delete $ag{$k};
+		delete $au{$k};
+		delete $rn{$k};
+		delete $qg{$k};
+		delete $ug{$k};
+	}
+}
+
+if (! @ARGV)
+{
+	print STDERR "Usage: $0 doc [doc1 [doc2 ...]]\n";
+	print STDERR "\n";
+	print STDERR "  prints the images used by the given documents\n";
+	print STDERR "  doc can be one of: common, adminguide, aboutubuntu,\n";
+	print STDERR "                     releasenotes, quickguide, usersguide\n";
+	exit 1;
+}
+
+for my $doc (@ARGV)
+{
+	if ($doc eq 'common')
+	{
+		for my $k (keys %common)
+		{
+			print "$k\n";
+		}
+	}
+	elsif ($doc eq 'adminguide')
+	{
+		for my $k (keys %ag)
+		{
+			print "$k\n";
+		}
+	}
+	elsif ($doc eq 'aboutubuntu')
+	{
+		for my $k (keys %au)
+		{
+			print "$k\n";
+		}
+	}
+	elsif ($doc eq 'releasenotes')
+	{
+		for my $k (keys %rn)
+		{
+			print "$k\n";
+		}
+	}
+	elsif ($doc eq 'quickguide')
+	{
+		for my $k (keys %qg)
+		{
+			print "$k\n";
+		}
+	}
+	elsif ($doc eq 'usersguide')
+	{
+		for my $k (keys %ug)
+		{
+			print "$k\n";
+		}
+	}
+	#elsif ($doc eq 'faqguide')
+	#{
+	##	for my $k (keys %ug)
+	##	{
+	##		print "$k\n";
+	##	}
+	#}
+	else
+	{
+		print STDERR "Unknown package: ".$doc."\n";
+	}
+}
+
+exit 0;

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % xinclude SYSTEM "../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY % globalent SYSTEM "../../libs/global.ent">
+%globalent;
+]>
+<chapter id="about-thinking">
+	<title>Thinking Like a Linux User</title>
+	<para>Chances are you, like most of the world's current computer users, have no prior GNU/Linux experience, and the concept of re-learning everything you know seems a little intimidating.
+	Fortunately, it's really not all that hard, and Ubuntu makes it easier.
+	You may run into the occasional snag, but remember that you weren't born knowing everything there is to know about the operating systems you're used to, either.
+	This time, however, there are a lot of experienced people willing to provide free assistance -- never hesitate to ask questions or see if someone else has already asked the same thing.</para>
+
+	<para>Just keep an open mind and you'll be fine.</para>
+	
+	<sect1>
+		<title>Managing Your Files</title>
+		<para>The first thing you'll probably wonder about is where your files will be stored.
+		Under Microsoft Windows, you were provided with "drives", such as "Drive C:\" and "Drive D:\".
+		If you used one of Microsoft's more recent offerings, such as Microsoft Windows 2000 or Microsoft Windows XP, you were subtly encouraged to save everything to "My Documents".
+		GNU/Linux makes use of something similar to "My Documents".</para>
+		<para>Your files should all be stored in your "home" or "~" <firstterm>directory</firstterm>, the conceptual equivalent of a "folder".</para>
+	</sect1>
+	
+	<sect1>
+		<title>Knowing Your Filesystem</title>
+		<para>Next, you'll probably want to know exactly where "home" is.
+		It's great knowing that it exists, but it can be a little scary when you have no idea how things work.
+		To provide an explanation, we'll need to discuss Linux's management of partitions, often incorrectly called "drives", which are basically just segments of your harddisk.</para>
+	
+		<para>Linux uses a <firstterm>virtual filesystem tree</firstterm> to manage partitions and devices.
+		Every device (harddisks, CD-ROM drives, digital cameras, MP3 players, and virtually everything else that stores data or performs a function) is tracked and managed by the Linux kernel when attached to your computer.
+		The kernel enables communication with these devices, and your operating system makes them accessible to you via a friendly interface.
+		The virtual filesystem tree is a collection of devices, all <firstterm>mounted</firstterm>, which is to say they are made part of the filesystem, relative to the "root" of the "tree", universally referred to as "/".
+		Your operating system is stored relative to "/", as are all of your files.
+		Directories and other devices are layered on top of "/".</para>
+		
+		<para>Yes, directories <emphasis>and</emphasis> devices.
+		To Linux, a device is really nothing more than a collection of data, and a directory is just used to separate data from other data.
+		Conceptually, they are identical.
+		Your MP3 player's songs are just a collection of files, probably organized into a number of directories; your "home" directory is just a collection of files, probably organized into a number of directories.
+		It's not uncommon to see an iPod sitting next to someone's doctorate thesis research in a Linux filesystem, and later, this book will show you how to achieve that setup, too.
+		(Well, maybe it won't show you how to research stuff for your thesis, but anyone can modify this document, so the author can't say for sure.)</para>
+		
+		<para>Now that the theory is out of the way, we can proceed.
+		Your "home" directory will likely be located at <filename>/home/yourusername/</filename>, where 'yourusername' is your username.
+		Your "home" directory is yours; no other users can touch its contents without your permission, not even your little sister.</para>
+		
+		<para>The theory is important because <filename>/home/</filename> may just be a directory on <filename>/</filename>, or it might be another device.
+		Heck, <filename>/home/</filename> might be a directory, and <filename>yourusername/</filename> might be another device, like a 400GB external HDD you move between computers to carry your data and settings with you.
+		To Linux, the nature of mounted filesystems is irrelevant, and that is one of its many strengths.</para>
+		
+		<note><para>Note: As you may have noticed above, '/' is used as the directory delimiter under GNU/Linux, much like the layout of websites.
+		Users coming from other operating systems may be used to '\' or ':'; '/' behaves no differently.</para></note>
+	</sect1>
+	
+	<sect1>
+		<title>Filenames and Extensions</title>
+		<para>As you begin to work with GNU/Linux, you may notice that applications do not tend to enforce file extensions, those letters found after a filename, such as "txt" or "exe".
+		This is because they're optional.
+		That's right.
+		You do not need extensions for your system to work correctly.
+		Instead, GNU/Linux, and most applications that run on this platform, employs a system of auto-detection to determine the format of a file.
+		This may seem confusing at first, and you most certainly do not have to abandon extensions, but a number of other people tend to ignore them, and <firstterm>executable</firstterm> files (applications) are generally found without.</para>
+		
+		<para>It's entirely possible that you'll never once notice, but almost every application you use places "hidden" files in your "home" directory.
+		These are generally directories prefixed with a single period ('.'), but any file may be marked hidden with a period.
+		Hidden files are typically used only to record settings and preferences for the application with which they are associated.
+		Files are marked hidden to avoid showing up in directory listings, as they generally just clutter displays.
+		Hidden files are stored in your "home" folder for two reasons: the first reason being that it ensures each user's preferences are kept separate, and the second being that there's no guarantee a user can write to any other location on the system.
+		You should be aware of their existence, but know that they are not harmful in any way.</para>
+		
+		<para>Finally, everything under GNU/Linux is case-sensitive.
+		This means you can't type things with caps lock on and expect the system to find the right file.
+		"myFile" is not "myfile", and "myfile" is not "Myfile".
+		All three files could exist in the same directory, but they would all be different.</para>
+	</sect1>
+		
+	<sect1>
+		<title>GNU/Linux is a Multi-user Environment</title>
+		<para>The concept of "other users" has been mentioned several times in this section.
+		If you're the only one who will be using your computer, you might be wondering why you should care.
+		If it's a family computer, the reason might seem obvious, but there's probably a little more to it than you know.</para>
+		
+		<para>GNU/Linux is designed to be used by multiple users, as is the operating system you're used to, but it is also designed to be used by multiple users <emphasis>simultaneously</emphasis>.
+		Yes, simultaneous computing is a reality with GNU/Linux, and its design makes the sharing of system resources so efficient that you would probably never notice that it's happening.
+		Of course, nobody is able to use your system without your permission, and Ubuntu is not configured to allow it to happen by default, so there's nothing to be afraid of.</para>
+		
+		<para>To understand why it was designed this way, you will need to learn a little bit about the history of computing.</para>
+		
+		<para>In the past, computers were very, very expensive.
+		You would almost certainly not have had a desktop in the days when UNIX was developing.
+		As such, mainframe-oriented processing was common in companies -- one powerful computer would handle all processing tasks, and a number of weak terminals would give it instructions.
+		Each of those terminals represented a different user of the mainframe; each user was giving the mainframe instructions at the same as every other user.
+		It was therefore imperative that simultaneous computing be possible, and Linux, being based on the UNIX model, has retained that functionality.</para>
+		
+		<tip><para>Modern applications of this design the author has found to be very useful include the following:<itemizedlist>
+			<listitem>Handling administrative tasks over a secure connection while at school</listitem>
+			<listitem>Killing media players accidently left on in the morning from the train</listitem>
+			<listitem>Scheduling tasks that need to run with specific permissions while unable to physically be at the computer</listitem>
+			<listitem>Setting up a thinclient-driven network for friends on a tight budget</listitem>
+		</itemizedlist></para></tip>
+	</sect1>
+	
+	<sect1>
+		<title>Permissions, Users, and Groups</title>
+		<para>You now know that GNU/Linux is designed to support multiple users.
+		This section will conclude by explaining how GNU/Linux manages each user's data.</para>
+		
+		<para>As you know, every user has a "home" directory.
+		This directory is protected by a set of permissions.</para>
+		
+		<para>Things are about to get just a little technical; Ubuntu will greatly ease the application of these ideas, but understanding them is important.
+		The example used wll be the author's "home" directory listing.
+		</para>
+		
+		<para>
+			<computeroutput>
+				drwxr-xr-x  83 neil users 4120 Mar 28 18:30 neil
+			</computeroutput>
+		</para>
+		
+		<para>That probably looks quite alien to you, and if it does, you should know this may be the only time you'll have to see it.
+		The information related to permissions is found in the first, third, fourth, and ninth columns -- "drwxr-xr-x", "neil", "users", and "neil".</para>
+		
+		<para>To keep things simple, the third, fourth, and ninth columns will be explained first.
+		The ninth column displays the name of the file or directory.
+		Here, the directory is named "neil", since it is the author's home: <filename>/home/neil/</filename>.
+		The third column displays the name of the owner.
+		As would be expected, "neil" owns <filename>/home/neil/</filename>.
+		The fourth column displays the name of the owning group.
+		The GNU/Linux convention is to make all users members of the group "users"; <filename>/home/</filename>'s subdirectories are generally the only things belonging to the users group.
+		This group is limited for security reasons -- it wouldn't be smart to let anyone with an account begin replacing and deleting programs.
+		Instead, a special user exists to do that.</para>
+		
+		<para>Next, the letters "drwxr-xr-x" will be explained.</para>
+		
+		<para>The first letter, 'd', defines the type of file.
+		Directories, files, and special filesystem constructs are all identified based on this character.
+		In this case, the character is 'd', so this is a directory.</para>
+		
+		<para>The other nine characters should be broken up into groups of three.
+		Each group of three characters defines the permissions for "ugo": the "User", the "Group", and everyone on the system ("Others"), respectively.
+		'r' stands for "Read", 'w' stands for "Write", and 'x' stands for "eXecute".
+		Files marked with 'x' are generally programs; directories marked with 'x' are directories which can be descended into.</para>
+		
+		<para>Anyone with "rwx" access has full control over a file.
+		They may read it, change it, delete it, or use it.
+		Similarly, anyone with "---" lacks permission to do anything with the file -- they can't even open it.</para>
+		
+		<para>Applying this theory practically, if you remove "go"'s "rwx" access from a file, the file becomes private and only you may access it.
+		Removing permissions from a directory prevents anyone from entering that directory, effectively making all files inside of it private.</para>
+		
+		<para>Users and permissions have been described, but groups remain an abstract concept.
+		It's time to define them.</para>
+		
+		<para>Every system has a number of groups; "users" has already been introduced.
+		Each system's administrator is able to define additional groups.
+		Each user may belong to several groups.
+		Simple enough, right?</para>
+		
+		<para>It's now time to bring it all together. (Things are going to get a little complicated, but it won't get any worse after this.)
+		Say your username is "neil" and you have a co-worker with the username "bob".
+		You and "bob" both belong to the "users" group, but you're also both working on the Potato project.
+		As such, your system administrator has added you both to the "potato" group.
+		You're both members of "users" and "potato".</para>
+		
+		<para>Now, suppose you just wrote a file, <filename>/home/neil/PotatoMemo</filename>, for everyone involved with the Potato project.
+		You don't want anyone else to see it, so you change the group on <filename>PotatoMemo</filename> from "users" to "potato", and remove 'o's "rwx" access.
+		You then realize it isn't a program, so you make sure you've removed 'x' from everyone, and you decide you don't want anyone but you to modify it, so you also remove 'w' from the group.
+		You now have a file owned by the user "neil", the group "potato", with permissions "rw-r-----".
+		In plain English, this means "neil" can read and write to the file, and anyone who's part of the "potato" group, such as "bob", can read its contents.</para>
+		
+		<para>If you're still following this book, there's only one more concept to introduce: <firstterm>root</firstterm>, the system administrator.</para>
+		
+		<para>"root" is a special user, who's also part of the special group "root", and has absolute control over everything.
+		There is nothing root cannot read or write, and root has direct control over low-level system functions.</para>
+		<para>You'll likely hear this elsewhere, but if you happen to have root access, avoid running with root permissions whenever possible.</para>
+	</sect1>
+		
+	<sect1>
+		<title>Summary of Concepts</title>
+		<para>That was a lot of information to digest, so here's a quick review of the key points.</para>
+		<itemizedlist>
+			<listitem>The terms "directory" and "folder" are effectively interchangeable</listitem>
+			<listitem>"home", also referred to as "~", is effectively the same thing as "My Documents", and it is where you should store all your files</listitem>
+			<listitem>"home" is generally located at <filename>/home/yourusername/</filename>, where 'yourusername' is your username</listitem>
+			<listitem>File extensions are optional</listitem>
+			<listitem>"Hidden" files are files marked with a leading period; they are safe and generally record your preferences</listitem>
+			<listitem>GNU/Linux was designed to support multiple (simultaneous) users</listitem>
+			<listitem>Files and directories are owned by users and groups; permissions dictate what each user or group member can do with each file</listitem>
+			<listitem>root has no restrictions; root is the absolute administrator of any GNU/Linux system</listitem>
+		</itemizedlist>
+		<para>Congratulations -- you now know everything necessary to either begin using Ubuntu or impress your friends.
+		It wasn't really so hard, was it?</para>
+	</sect1>
+</chapter>

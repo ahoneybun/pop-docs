@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % xinclude SYSTEM "../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY % globalent SYSTEM "../../libs/global.ent">
+%globalent;
+]>
+<chapter id="installing-windowsdualboot">
+    <title>Dual-booting with Windows</title>
+    <para>Let’s assume you are a Windows user, and have been for a decent length of time – long
+        enough that all of your computing habits are Windows based, as it’s all you have ever known.
+        You have heard about Linux, free or open source programs, and it has attracted your attention
+        long enough that you have decided you want to try it. You don’t want to completely abandon
+        Windows for a multitude of reasons – you know how to use it, you know the shortcuts, and you
+        are afraid of breaking your computing world with one fell disto sized sweep. You want to
+        dual boot, and you have picked Ubuntu for its seemingly simple installation, ease of use, and
+        community (Ubuntu: &quot;humanity toward others&quot;).</para>
+    <para>First things first - you need to get your hands on the actual distribution that you plan
+        to install. Ubuntu’s current stable release is Warty – you can download the ISO and burn the
+        CD yourself, or you can place an order with Ubuntu and have the CD sent to your doorstep –
+        free of charge! The latter will take a bit of time if you are in the States, as the CDs ship
+        from Europe; however they are well worth the wait and come in a professional looking
+        package.</para>
+    <para>In this chapter we discuss the steps required for preparation and installation of Ubuntu in
+        a dual boot environment.</para>
+    <sect1 id="sect-dualbooting-winxp" status="writing">
+        <title>Dual Booting Ubuntu with Windows 2000/XP</title>
+        <authorblurb>
+            <para>Sean Wheller: This writup from Kevin Mulligan who notes: These instructions were
+                created using a machine running Windows 2000 Pro, not XP. The install should be
+                nearly identical for XP.</para>
+        </authorblurb>
+        <sect2 id="sect-dualbooting-winxp-prep">
+            <title>Preparation</title>
+            <para>Now you need to prepare your current Windows system to accept Ubuntu in a happy
+                manner. You will need a partitioning program – popular options are Partition Magic
+                ($), Partimage (free), and QtParted (free available both separately and on the
+                amazing System Rescue CD). I went with the System Rescue CD. </para>
+            <para>You need to open up some free space on your drive for Ubuntu to install to. This
+                is as simple as creating a new partition with the ext3 file system – easily
+                achievable in the above programs. You may also want to consider creating a FAT32
+                partition. Why? Linux cannot access NTFS partitions, but both Windows and Linux can
+                access FAT32. A common option is to put programs that will be used on both operating
+                systems (e-mail, browser, etc.) on the FAT32 partition to prevent installing the
+                programs on the separate operating systems. This also keeps everything together at
+                one point, so that e-mails or bookmarks are not left stranded on the other operating
+                system. </para>
+            <para>After you have created the ext3 partition (5-10GB if you intend to use Ubuntu
+                frequently, considering today’s drive sizes), put your Ubuntu CD in your CD-ROM and
+                reboot. If your system boots normally – back into Windows – you need to change your
+                boot order settings in your BIOS (hold down F8 or Del at the beginning of the boot
+                process; Google for more information) to read the CD-ROM before the hard
+            drive.</para>
+        </sect2>
+        <sect2 id="sect-dualbooting-winxp-inst">
+            <title>Installation</title>
+            <para>If your boot order is correct, the installation will start. Ubuntu’s installer is
+                a simple text-based guide, and is easy to follow. Following the on screen
+                instructions will set up your system pretty quickly. As a Windows user, one hitch
+                you must notice is that Ubuntu will attempt to install a new boot loader in your
+                Master Boot Record (MBR); the default boot loader provided by Ubuntu is GRUB; LILO
+                is available. </para>
+            <para>You have two options. The first is to let GRUB overwrite the Windows boot manager
+                in the MBR; this will severely break your installation if you ever attempt to remove
+                GRUB, as Windows will become severely confused. Reinstallation of the Windows MBR is
+                not difficult (Google), but may require a Windows rescue CD. If you plan to continue
+                using Ubuntu, or other distros, this is not an issue. Your second option is to
+                install GRUB on a separate partition, and point the Windows boot manager to its
+                location so you can access GRUB and Ubuntu.</para>
+            <para>Install GRUB, select your time and region settings, and point the installer toward
+                the ext3 partition you created to install Ubuntu on it. The installer may ask a few
+                more questions, and your Ubuntu operating system is ready for your use. Reboot,
+                remove the install CD from the CD-ROM, change your BIOS settings back to boot from
+                your drive first, reboot once more and your computer should load into GRUB. It
+                should list Ubuntu, a safe mode for Ubuntu, a memory test, and your Windows
+                installation. Make your selection, and enjoy your new operating system.</para>
+        </sect2>
+    </sect1>
+</chapter>

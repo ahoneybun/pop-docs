@@ -1,0 +1,146 @@
+#!/usr/bin/make -f
+
+common_target=/usr/share/ubuntu-docs
+rn_xml_target=/usr/share/gnome/help/release-notes
+au_xml_target=/usr/share/gnome/help/about-ubuntu
+qg_xml_target=/usr/share/gnome/help/quick-guide
+installdir=install -d -o root -g root -m 0755
+installfile=install -o root -g root -m 0644
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/makefile.mk
+
+DEB_MAKE_BUILD_TARGET=packaged
+
+# Hook in the build system the creation of the image list
+build/ubuntu-docs::
+	make imagelist
+
+install/ubuntu-docs::
+	if [ ! -d build/release-notes-html ]; then \
+		mv build/release-notes build/release-notes-html || true; \
+	fi
+	if [ ! -d build/about-ubuntu-html ]; then \
+		mv build/about-ubuntu build/about-ubuntu-html || true; \
+	fi
+
+#install/ubuntu-faqguide::
+#	if [ ! -f build/faqguide/html/index.html ]; then \
+#		mkdir build/faqguide-html; \
+#		mv build/faqguide/* build/faqguide-html/; \
+#		mv build/faqguide-html build/faqguide/html; \
+#	fi
+#	ln -s /usr/share/ubuntu-docs/C/images debian/$(cdbs_curpkg)/usr/share/doc/$(cdbs_curpkg)/images
+
+install/ubuntu-quickguide::
+	if [ ! -f build/quickguide/html/index.html ]; then \
+		mkdir build/quickguide-html; \
+		mv build/quickguide/* build/quickguide-html/; \
+		mv build/quickguide-html build/quickguide/html; \
+	fi
+
+binary-install/ubuntu-docs::
+	# Install C versions
+	$(installdir) debian/$(cdbs_curpkg)$(au_xml_target)/C
+	$(installfile) aboutubuntu/about-ubuntu.xml debian/$(cdbs_curpkg)$(au_xml_target)/C/
+	$(installdir) debian/$(cdbs_curpkg)$(rn_xml_target)/C
+	$(installfile) releasenotes/release-notes.xml debian/$(cdbs_curpkg)$(rn_xml_target)/C/
+	# Install translated versions
+	for lang in ca de fr it pt tl xh; do \
+		if [ -f aboutubuntu/about-ubuntu-$$lang.xml ]; then \
+			$(installdir) debian/$(cdbs_curpkg)$(au_xml_target)/$$lang ;\
+			$(installfile) aboutubuntu/about-ubuntu-$$lang.xml debian/$(cdbs_curpkg)$(au_xml_target)/$$lang/about-ubuntu.xml ;\
+		fi ;\
+		if [ -f releasenotes/release-notes-$$lang.xml ]; then \
+			$(installdir) debian/$(cdbs_curpkg)$(rn_xml_target)/$$lang ;\
+			$(installfile) releasenotes/release-notes-$$lang.xml debian/$(cdbs_curpkg)$(rn_xml_target)/$$lang/release-notes.xml ;\
+		fi ;\
+	done
+	$(installdir) debian/$(cdbs_curpkg)$(rn_xml_target)/images
+	#
+	# Select the images needed only for this package
+	#
+	for i in `./imgsel common releasenotes aboutubuntu`; do \
+		$(installfile) images/$$i debian/$(cdbs_curpkg)$(rn_xml_target)/images/; \
+	done
+	#
+	# Symlink the other common components
+	#
+	ln -s $(common_target)/C/{common,libs,REVISION,VERSION} debian/$(cdbs_curpkg)$(rn_xml_target)/
+	ln -s $(common_target)/C/{common,libs,REVISION,VERSION} debian/$(cdbs_curpkg)$(au_xml_target)/
+	#
+	# Symlink the images for the HTML version
+	#
+	$(installdir) debian/$(cdbs_curpkg)/usr/share/doc/$(cdbs_curpkg)/images/
+	ln -s $(common_target)/images/{admon,callouts,navig} \
+	      debian/$(cdbs_curpkg)/usr/share/doc/$(cdbs_curpkg)/images/; \
+	for i in `./imgsel common releasenotes`; do \
+		ln -s $(rn_xml_target)/images/$$i \
+		      debian/$(cdbs_curpkg)/usr/share/doc/$(cdbs_curpkg)/images/; \
+	done
+	#
+	# Setup the rest of the scrollkeeper things
+	#
+	dh_scrollkeeper -p$(cdbs_curpkg)
+
+#binary-install/ubuntu-faqguide::
+#	# TODO: select the images needed only for this package
+#	install -d -o root -g root -m 0755 debian/$(cdbs_curpkg)/usr/share/ubuntu-docs/C/images
+#	for i in `./imgsel faqguide`; do \
+#		install -o root -g root -m 0644 images/$$i debian/$(cdbs_curpkg)/usr/share/ubuntu-docs/C/images/; \
+#	done
+#	install -d -o root -g root -m 0755 debian/$(cdbs_curpkg)/usr/share/omf/ubuntu-docs/
+#	install -o root -g root -m 0644 debian/faqguide-C.omf debian/$(cdbs_curpkg)/usr/share/omf/ubuntu-docs/
+#	dh_scrollkeeper -p$(cdbs_curpkg)
+
+binary-install/ubuntu-quickguide::
+	# Install C versions
+	$(installdir) debian/$(cdbs_curpkg)$(qg_xml_target)/C
+	$(installfile) quickguide/quick-guide.xml debian/$(cdbs_curpkg)$(qg_xml_target)/C/
+	# Install translated versions
+	for lang in fr; do \
+		if [ -f quickguide/quick-guide-$$lang.xml ]; then \
+			$(installdir) debian/$(cdbs_curpkg)$(qg_xml_target)/$$lang ;\
+			$(installfile) quickguide/quick-guide-$$lang.xml debian/$(cdbs_curpkg)$(qg_xml_target)/$$lang/quick-guide.xml ;\
+		fi ;\
+	done
+	$(installdir) debian/$(cdbs_curpkg)$(qg_xml_target)/images
+	#
+	# Symlink the common images
+	#
+	for i in `./imgsel common`; do \
+		ln -s $(rn_xml_target)/images/$$i \
+		      debian/$(cdbs_curpkg)$(qg_xml_target)/images/; \
+	done
+	#
+	# Select the images needed only for this package
+	#
+	for i in `./imgsel quickguide`; do \
+		$(installfile) images/$$i debian/$(cdbs_curpkg)$(qg_xml_target)/images/; \
+	done
+	#
+	# Symlink the other common components
+	#
+	ln -s $(common_target)/C/{common,libs,REVISION,VERSION} debian/$(cdbs_curpkg)$(qg_xml_target)/
+	#
+	# Symlink the images for the HTML version
+	#
+	$(installdir) debian/$(cdbs_curpkg)/usr/share/doc/$(cdbs_curpkg)/images/
+	ln -s $(common_target)/images/{admon,callouts,navig} \
+	      debian/$(cdbs_curpkg)/usr/share/doc/$(cdbs_curpkg)/images/; \
+	for i in `./imgsel common`; do \
+		ln -s $(rn_xml_target)/images/$$i \
+		      debian/$(cdbs_curpkg)/usr/share/doc/$(cdbs_curpkg)/images/; \
+	done
+	for i in `./imgsel quickguide`; do \
+		ln -s $(qg_xml_target)/images/$$i \
+		      debian/$(cdbs_curpkg)/usr/share/doc/$(cdbs_curpkg)/images/; \
+	done
+	#
+	# Setup the rest of the scrollkeeper things
+	#
+	dh_scrollkeeper -p$(cdbs_curpkg)
+
+
+#binary-install/ubuntu-handbook::
+#	dh_scrollkeeper -v

@@ -1,0 +1,465 @@
+<chapter id="configfaq">
+		<title>Configuration</title>
+	<highlights>
+		<para>General questions about configuration</para>
+	</highlights>
+
+	<!--
+		SECTION: CONFIGURATION
+	-->
+
+	<sect1 id="desc-configuration">
+		<title>Configuration</title>
+		<sect2>
+			<title>How can I stop fsck on my vfat filesystem?</title>
+			<para>
+				If you want to prevent fsck from checking Windows (vfat)
+				partitions on boot (sometimes this seems to cause many error
+				messages), then edit /etc/fstab and change the pass argument
+				(6th column) to 0.
+			</para>
+		</sect2>
+
+		<sect2>
+			<title>How can I configure the system so that when I open a folder,
+			its contents are displayed in the existing window rather than
+			opening a new window (disabling "spatial" mode)?</title>
+			<para>
+				Open Computer->Desktop Preferences->File Management, select the
+				Behavior tab, and check the box next to "Always open in browser
+				windows".
+			</para>
+			<para>
+				The new "spatial view" of Gnome may take a little getting used
+				to but some people liked it after a while. Try it out before
+				you disable it. You can still click on folders with the middle
+				mouse-button and get the subfolder displayed in the same
+				window.
+			</para>
+		</sect2>
+
+		<sect2>
+			<title>What is the simplest way to install the development tools so that I can compile programs?</title>
+			<para>
+				sudo aptitude install build-essential
+			</para>
+			<para>
+				Development tools are included on the CD, and so do not need to
+				be downloaded.
+			</para>
+		</sect2>
+
+		<sect2>
+			<title>Once I have installed Ubuntu, will I be able to upgrade to the
+				next release?</title>
+			<para>
+				Yes.
+			</para>
+			<para>
+				We fully support upgrades from one release to the next. For
+				example, if you installed WartyWarthog, you will be able to
+				upgrade to HoaryHedgehog when it is released, and from
+				HoaryHedgehog to GrumpyGroundhog, and so forth in perpetuity.
+			</para>
+			<para>
+				Note that this does not necessarily extend to certain
+				situations involving unsupported software, such as packages in
+				the universe repository, or software which you obtained from a
+				third-party source.
+			</para>
+		</sect2>
+
+		<sect2>
+			<title>I have installed Ubuntu, but I need to compile a kernel module
+				(for example, in order to connect to the network). What do I
+				do?</title>
+			<para>
+				First, check whether the module you need is already present.
+				Many additional drivers are included in the default Ubuntu
+				kernel. If you still need to compile a module, the following
+				command will install everything you need:
+			</para>
+			<screen>sudo apt-get install build-essential linux-headers-`uname -r`</screen>
+			<para>
+				All of the packages needed are available on the Ubuntu CD.
+			</para>
+		</sect2>
+
+		<sect2>
+			<title>How can I enable sound preview in nautilus?</title>
+			<para>
+				Install "sox" via synaptic.
+			</para>
+			<note>
+				<para>
+					Note: You might need to enable universe.
+				</para>
+			</note>
+		</sect2>
+
+		<sect2>
+			<title>I am trying to set up an NFS server. I think I've done
+				everything right, but it doesn't seem to work. I get an error
+				"mount: RPC: Remote system error - Connection refused". What
+				have I missed?</title>
+			<para>
+				By default, the portmap daemon listens only on the loopback
+				interface (localhost). You can change this by editing
+				/etc/default/portmap and removing the "-i 127.0.0.1" option
+				from the command line arguments.
+			</para>
+		</sect2>
+
+		<sect2>
+			<title>
+				How can I install software development tools?
+			</title>
+			<para>
+				A default Ubuntu desktop installation includes a full-featured
+				Python development environment, so if you want to develop in
+				Python, you should already have everything you need.
+			</para>
+			<para>
+				If you want to develop in C or C++, install the build-essential
+				package.
+			</para>
+			<para>
+				The choice to exclude C/C++ development tools from the default
+				desktop install was an explicit one. The discussion is archived
+				here:
+				http://lists.ubuntu.com/archives/sounder/2004-September/000524.html
+			</para>
+		</sect2>
+
+		<sect2>
+			<title>
+				How do I configure my system to use the binary driver for ATI
+				or NVIDIA graphics cards?
+			</title>
+			<para>
+				TODO
+			</para>
+		</sect2>
+
+		<sect2>
+			<title>How do I install Java?</title>
+			<para>
+				See the <ulink url="http://wiki.ubuntu.com/Java">Java</ulink>
+				page.
+			</para>
+			<para>
+				Note to future editors: Please leave an explicit Java question
+				in the FAQ (either this one or the one at www.ubuntulinux.org).
+				On the <ulink url="http://www.ubuntulinux.org/">Ubuntu web
+				site</ulink>, Java is mentioned in a question that has the
+				title <emphasis>Unsupported formats and tools</emphasis>. This
+				is not a very helpful title for someone not familiar with Open
+				Source issues.
+			</para>
+		</sect2>
+
+		<sect2>
+			<title>
+				How do I change the Splash Screen image for all users?
+			</title>
+			<para>
+				To change the splash image for everybody on your system who
+				hasn't changed it themselves:
+			</para>
+			<itemizedlist>
+				<listitem>
+					applications -> Run application
+				</listitem>
+				<listitem>
+					gksudo gconf-editor
+				</listitem>
+				<listitem>
+					File -> New Defaults Window
+				</listitem>
+				<listitem>
+					Choose /applications/gnome-session/options from the tree on the left
+				</listitem>
+				<listitem>
+					Change the splash_image key to (e.g.) splash/ubuntu-logo-508x340.png
+				</listitem>
+			</itemizedlist>
+			<para>
+				Alternatively, you can use this in a script:
+			</para>
+			<itemizedlist>
+				<listitem>
+					Become root
+				</listitem>
+				<listitem>
+					Run the following command:
+					   <screen>
+gconftool-2 --direct --config-source=xml:readwrite:/etc/gconf/gconf.xml.defaults --type string --set
+ applications/gnome-session/options/splash_image splash/splash_image.png)
+					   </screen>
+				</listitem>
+			</itemizedlist>
+		</sect2>
+				 
+		<sect2>
+			<title>How do I change the desktop background image?</title>
+			<itemizedlist>
+				<listitem>
+					Computer -> Desktop Preferences -> Desktop Background
+				</listitem>
+				<listitem>
+					Select an alternate image, or click Add Wallpaper to add
+					your own
+				</listitem>
+			</itemizedlist>
+		</sect2>		 
+
+		<sect2>
+			<title>How do I change the default desktop background image for everyone?</title>
+			<itemizedlist>
+				<listitem>
+					applications -> Run application
+				</listitem>
+				<listitem>
+					gksudo gconf-editor
+				</listitem>
+				<listitem>
+					Enter your password if prompted
+				</listitem>
+				<listitem>
+					File -> New Defaults Window
+				</listitem>
+				<listitem>
+					Choose /desktop/gnome/background from the tree on the left
+				</listitem>
+				<listitem>
+					Change the picture_filename key to (e.g.)
+					/usr/share/backgrounds/ubuntu-calendar.png
+				</listitem>
+			</itemizedlist>
+		</sect2>
+
+		<sect2>
+			<title>How do I customize the applications menu?</title>
+			<para>
+				You can edit existing submenus under applications by
+				right-clicking in the menu. For example, here's how to add an
+				entry to the Games menu:
+			</para>
+			<itemizedlist>
+				<listitem>
+					Select applications -> Games, and right-click in the menu.
+				</listitem>
+				<listitem>
+					Select Entire Menu -> Add new item to this menu.
+					<itemizedlist>
+						<listitem>
+							In the window that applicationears, enter the name that you
+							want to applicationear in the menu in the Name field, and
+							enter the executable command in the Command field.
+						</listitem>
+						<listitem>
+							Click OK.
+						</listitem>
+					</itemizedlist>
+				</listitem>
+			</itemizedlist>
+			<para>
+				To edit the applications menu itself requires a few more steps.
+			</para>
+			<itemizedlist>
+				<listitem>
+					Start Nautilus (e.g. select Computer -> Home).
+				</listitem>
+				<listitem>
+					In Nautilus, press ctrl-L, type applications:/// in the
+					Location field, and hit Enter. (As you type, the label will
+					occasionally change to Go to:.) This will show a list of
+					the menu entries with their icons.
+				</listitem>
+			</itemizedlist>
+			<para>
+		To add a program to the menu, right-click in Nautilus, select Create Launcher, and fill in the fields. Name is the name that will applicationear in the menu, and Command is the actual command that will be executed when the menu item is selected. Click on OK to update the menu.
+			</para>
+			<para>
+		To add a submenu to applications, right-click in Nautilus and select Create Folder. The name of this new folder will become the entry in the applications menu. Then double-click on the new folder, and start adding launchers.
+			</para>
+			<para>
+		To change the applications menu for all users, go to applications-all-users:/// in Nautilus. You will need root privileges to change this.
+			</para>
+			<para>
+				Note: You can not customize the Computer menu.
+			</para>
+		</sect2>
+
+		<sect2>
+			<title>Are MS fonts available?</title>
+			<para>
+				Install the package msttcorefonts.
+			</para>
+			<para>
+				You can use Synaptic, or use the command
+			</para>
+			<screen>
+sudo apt-get install msttcorefonts
+			</screen>
+		</sect2>
+
+		<sect2>
+			<title>How do I play DVDs??</title>
+			<para>
+				See RestrictedFormats
+			</para>
+		</sect2>
+		
+		<sect2>
+			<title>How do I unrar a file?</title>
+			<para>
+				To unrar a file you will have to install the unrar package in
+				multiverse. Follow instructions below.
+			</para>
+			<screen>
+echo deb http://archive.ubuntu.com/ubuntu/ warty multiverse | sudo tee -a /etc/apt/sources.list
+			</screen>
+			<screen>
+sudo apt-get update
+sudo apt-get install unrar
+			</screen>
+		</sect2>
+
+		<sect2>
+			<title>How do I unrar a file?</title>
+			<para>
+				To unrar a file you will have to install the unrar package in
+				multiverse. Follow instructions below.
+			</para>
+			<screen>
+echo deb http://archive.ubuntu.com/ubuntu/ warty multiverse | sudo tee -a /etc/apt/sources.list
+sudo apt-get update
+sudo apt-get install unrar
+			</screen>
+		</sect2>
+
+		<sect2>
+			<title>My USB/Firewire removable device does not work. How can I
+			help to improve this?</title>
+			<para>
+				Please help us to debug this, so that we can improve the
+				hotplugging support. As a first step, please execute
+			</para>
+			<screen>
+pidof gnome-volume-manager || echo "gvm has died"
+			</screen>
+			<para>
+				in a terminal and check whether the message gvm has died
+				applicationears. If so, please log out and back in in this case and
+				submit a bug report for further evaluation of the crash.
+			</para>
+			<para>
+				If gnome-volume-manager is alive: Before plugging in the
+				device, do
+			</para>
+			<screen>
+killall gnome-volume-manager; gnome-volume-manager 2> gvm.txt
+			</screen>
+			<para>
+				Then plug in the device and execute the following commands in a
+				second terminal:
+			</para>
+			<screen>
+dmesg > dmesg.txt
+lshal > lshal.txt
+mount > mount.txt
+			</screen>
+			<para>
+				Then send a mail with some information and the four resulting
+				*.txt files attached to martin.pitt@canonical.com.
+			</para>
+		</sect2>
+		
+		<sect2>
+			<title>I have an iBook without an Alt-Gr key. How can I enter
+			special characters like "~@{[]}"?</title>
+			<itemizedlist>
+				<listitem>
+					Computer -> Desktop Preferences -> Keyboard
+				</listitem>
+				<listitem>
+					"Layout Options" tab
+				</listitem>
+				<listitem>
+					In the right-hand list open the "Third level choosers" group
+				</listitem>
+				<listitem>
+					Highlight "Press Left Win-key to choose 3rd level"
+				</listitem>
+				<listitem>
+					Click <emphasis>Add</emphasis>
+				</listitem>
+			</itemizedlist>
+		</sect2>
+
+		<sect2>
+			<title>How do I install XMMS?</title>
+			<para>
+				To xmms follow instructions below.
+			</para>
+			<screen>
+sudo apt-get install xmms
+			</screen>
+			<para>
+				If you get a error when trying to load xmms or it does not load
+				after installation run the following command to install mikmod.
+				Nvidia card users will need to follow this step. Make sure
+				universe is enabled in your sources.list.
+			</para>
+			<screen>
+sudo apt-get install mikmod
+			</screen>
+		</sect2>
+
+		<sect2>
+			<title>How can I share my printer on my LAN?</title>
+			<para>
+				Ubuntu's default installation of CUPS only listens for local
+				IPP connections. At the present time you have to edit
+				/etc/cups/cupsd.conf to make it available to other machines on
+				your LAN. There are two things that must be changed:
+			</para>
+			<itemizedlist>
+				<listitem>
+					A line that has Listen 127.0.0.1:631 can be replaced by
+					Port 631 to listen on all network interfaces, or, if you
+					have a more complex setup and don't want to listen on all
+					interfaces,you can add additional Listen lines for each IP
+					address that you want it to hear.
+				</listitem>
+				<listitem>
+					There is a group of lines that further limit what
+					listened-to traffic will be processed. By default it only
+					allows internal loopback (that's the 127.0.0.1 address).
+					You can add individual IP addresses in addition Allow
+					lines, or whole blocks such as a typical router's internal
+					network with 192.168.1.*. With the latter added, the block
+					looks like
+				</listitem>
+			</itemizedlist>
+			<screen>
+Order Deny,Allow 
+Deny From All
+Allow From 127.0.0.1
+Allow From 192.168.1.*
+			</screen>
+			<itemizedlist>
+				<listitem>
+					If you are going to print from Windows 98 or Windows 95
+					you'll need additional software from Microsoft in your
+					Windows box.
+				</listitem>
+				<listitem>
+					The page NetworkPrintingFromWin2K contains some notes on
+					setting up an Ubuntu printer in Windows 2000.
+				</listitem>
+			</itemizedlist>
+		</sect2>
+	</sect1>
+</chapter>

@@ -1,0 +1,451 @@
+<chapter id="installfaq">
+    <title>Installation Issues</title>
+    <highlights>
+        <para>This chapter covers issues and questions you might have concerning Ubuntu
+            installation. We will also cover installing Ubuntu inside a virtual machine and
+            installing non-free software.</para>
+    </highlights>
+    <!-- SECTION: INSTALLING -->
+    <sect1 id="sect-hardware">
+        <title>Hardware</title>
+        <sect2>
+            <!-- Will Ubuntu support my hardware? -->
+            <title>Will Ubuntu support my hardware?</title>
+            <para> Ubuntu mainly provides the software packages and uses Debian's package management
+                system. The hardware is controlled by the Linux kernel. So you may want to check
+                your favorite web search engine for the keywords 'linux' and 'hardware'. There are
+                already a few well-known resources where you can check if your hardware is
+                supported. </para>
+        </sect2>
+        <sect2>
+            <title>I have an applicationle system with only one mouse button. How can I perform actions
+                which require right-clicking or middle-clicking?</title>
+            <para> The F11 and F12 keys can be used to simulate these actions. </para>
+        </sect2>
+        <sect2>
+            <title>I have more than 900 megabytes of RAM, but the system only sees the first 900.
+                Why is that?</title>
+            <para> The default generic i386 kernel only has support for 900 megabytes of RAM. After
+                installation, you can select a different kernel as applicationropriate for your hardware. If
+                you are running on a P4, for example, you might type: </para>
+            <screen>sudo apt-get install linux-686</screen>
+            <para> Otherwise, if you are on a dual-processor workstation, you might type: </para>
+            <screen>sudo apt-get install linux-686-smp</screen>
+            <para> Choose from the list of linux packages the one that best suits your hardware. </para>
+        </sect2>
+        <sect2>
+            <title>What is the recommended RAM and how much hard drive space does Ubuntu need?</title>
+            <para> To install Ubuntu you should have at least 32MB of RAM. </para>
+            <para> You should have space on your hard disk to create a new disk partition of at
+                least 1.8 GB for a standard Ubuntu desktop system, or at least 350 MB for a minimal
+                custom installation. </para>
+        </sect2>
+    </sect1>
+    <sect1 id="sect-vm">
+        <title>Virtual Machines</title>
+        <sect2>
+            <!--Does Ubuntu work in Microsoft Virtual PC 2004?-->
+            <title>Does Ubuntu work in Microsoft Virtual PC 2004?</title>
+            <para> Yes, with a quick manual hack. Ubuntu currently auto-configures XFree86? during
+                the installation process, asking the user only what resolutions they'd like to
+                enable. The default color depth is automatically set to 24-bpp, and Microsoft
+                Virtual PC 2004 does not support 24-bpp color depth. In practice, this results in
+                garbled graphics output when the X Server starts and the login screen is displayed.
+                To fix this problem, you may manually change the default color depth setting in the
+                XFree86? config file. </para>
+            <para> These directions assume that you have installed Ubuntu as your guest operating
+                system normally, have rebooted, and have seen the garbled graphics output. </para>
+            <itemizedlist>
+                <listitem> In Microsoft Virtual PC, select Action-&gt;Reset to reboot the virtual
+                    machine. </listitem>
+                <listitem> Watch for the GNU GRUB prompt (don't blink or you'll miss it) and hit ESC
+                    when you see it. </listitem>
+                <listitem> Select the option in GRUB for recovery mode, and wait for Ubuntu to boot
+                    into the shell. Then type: </listitem>
+                <listitem>
+                    <emphasis>su root</emphasis> (you may have to type your password at this point,
+                    I'm not sure) </listitem>
+                <listitem>
+                    <emphasis>cd /etc/X11</emphasis>
+                </listitem>
+                <listitem>
+                    <emphasis>nano XF86Config-4</emphasis>
+                </listitem>
+                <listitem> Now, scroll down in emacs to Section "Screen" and find the entry named
+                    "DefaultDepth?". Change the setting you find there from 24 to 16. </listitem>
+                <listitem> Hit F10, f, s to save your changes </listitem>
+                <listitem> Hit F10, f, e to exit emacs </listitem>
+                <listitem> Reboot the virtual machine again as described in step 1. </listitem>
+            </itemizedlist>
+            <para> That's it - the virtual machine should now boot successfully into the beautiful
+                minimalist Ubuntu login screen. </para>
+        </sect2>
+        <sect2>
+            <!--  How do I get VMware to work after reboots?  -->
+            <title>How do I get VMware to work after reboots?</title>
+            <para> Using VMware under Ubuntu causes some problems because of Ubuntu's use of udev.
+                Until the VMware developers have created a patch for this, here is a quick way to
+                hack in 'support' for udev :) </para>
+            <itemizedlist>
+                <listitem>
+                    <para> First clear VMware's "Not Configured"-flag so that the next time, when
+                        you try to start VMware, you won't have to reconfigure VMware first. If it
+                        exists: </para>
+                    <screen>rm /etc/vmware/not_configured</screen>
+                </listitem>
+                <listitem>
+                    <para> Next we need to edit <emphasis>/etc/init.d/vmware</emphasis>. Find the
+                        following text (around line 800):
+                        <screen>
+case "$1" in
+start)
+						</screen> And insert the following text
+                        right under those two lines: <screen>
+for a in `seq 0 9`; do
+mknod /dev/vmnet$a c 119 $a &gt; /dev/null 2&gt;&amp;1
+done
+mknod /dev/vmmon c 10 165 &gt; /dev/null 2&gt;&amp;1
+						</screen>
+                    </para>
+                </listitem>
+                <listitem>
+                    <para> Now run /etc/init.d/vmware start and the program should work again. </para>
+                </listitem>
+            </itemizedlist>
+        </sect2>
+    </sect1>
+    <sect1 id="sect-installationapplications">
+        <title>Non-Free</title>
+        <sect2>
+            <!-- Where are Flash / Java / mp3 support? -->
+            <title>Where are Flash / Java / mp3 support? Is there a Free and working DVD player or
+                video player?</title>
+            <para> There are a number of commonly used formats and tools that we are unable to
+                support because they have restrictive distribution rights, require special licenses,
+                or are patent encumbered. We may be able to provide support for some of these in
+                restricted, but in general, we would prefer to support Free software and Free
+                formats. </para>
+            <para> If you add the debian-marillat repository to your Ubuntu sources.list (use
+                testing/main), you can use Synaptic or apt-get to install MPlayer, lame, and other
+                tools to deal with non-free formats like DVD and MP3. </para>
+            <para> A relatively clean way of getting Totem to work with all the proprietary file
+                formats is to install totem-xine rather than totem-gstreamer. Then you can download
+                the win32 codecs from elsewhere and install them in ~/.gnome2/totem-addons/ and
+                everything works fine. Of course, this isn't as cool and integrated as using
+                GStreamer for handling all the media, but it works well. </para>
+            <para> If you wish to use the Java SDK/RE, see Java on Debian for an installation guide
+                (it's also valid for Ubuntu). </para>
+            <para> As an alternative to the above mentioned Java on Debian tutorial, you may wish to
+                install some pre-packaged packages. The website http://z42.de/debian/ lists an apt
+                source that lets you install for example Sun Java2 v1.5 with a single
+                command:apt-get install sun-j2sdk1.5 sun-j2sdk1.5debian </para>
+        </sect2>
+        <sect2>
+            <!-- How do I install Java? -->
+            <title>How do I install Java?</title>
+            <para> Because Java is not open-source software, it is not installed by default.
+                However, Ubuntu users can choose to install Java quite easily, if they wish. All
+                that is needed is to follow these instructions. </para>
+            <para>
+                <emphasis>Note: These instructions are for 32 bit systems (e.g., Celerons, Pentium,
+                    Pentium2, Pentium3, Pentium4, Durons, Semprons, Athlons, AthlonsXP). If you are
+                    running a 64 bit system (e.g., Athlon64 or AMD Opteron), then it is recommended
+                    to download Java from <ulink url="http://www.blackdown.org">BlackDown</ulink>
+                    and follow their instructions.</emphasis>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem> Download Java: <ulink url="http://java.sun.com/webapplications/download/AutoDL?BundleId=9718">JAVA</ulink>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                <emphasis> Note: Enter the commands shown in the box below in a terminal/console
+                    screen. Be sure to change to the directory where the
+                    j2re-1_4_2_05-linux-i586.bin is stored before entering the first command below. </emphasis>
+            </para>
+            <screen>
+chmod a+x j2re-1_4_2_05-linux-i586.bin
+./j2re-1_4_2_05-linux-i586.bin
+sudo mv j2re1.4.2_05 /usr/local/
+sudo mkdir /usr/bin/java
+sudo ln -sf /usr/local/j2re1.4.2_05/bin/java /usr/bin/java
+sudo ln -sf /usr/local/j2re1.4.2_05/bin/java_vm /usr/bin/java_vm
+cd /home/username/.mozilla/plugins
+			</screen>
+            <para>
+                <emphasis>Note: In line 3 above, the character '1' is the numeral one, not the
+                    letter 'l' (pronounced 'el').</emphasis>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem> If you do not have a plugins directory you can create one. </listitem>
+                </itemizedlist>
+                <screen>
+mkdir -p /home/username/.mozilla/plugins
+			</screen>
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem> Just a few remaining steps: </listitem>
+                </itemizedlist>
+                <screen>
+ln -s /usr/local/j2re1.4.2_05/plugin/i386/ns610-gcc32/libjavaplugin_oji.so libjavaplugin_oji.so
+sudo ln -s /usr/local/j2re1.4.2_05/plugin/i386/ns610-gcc32/libjavaplugin_oji.so /usr/lib/mozilla-firefox/plugins/
+			</screen>
+            </para>
+            <para> That should give you working firefox java and systemwide java support. </para>
+            <para>
+                <emphasis>Note: These instructions first applicationeared in the Ubuntu FAQs and HOWTOs
+                    Forum posted by UbuntuGeek.</emphasis>
+            </para>
+        </sect2>
+    </sect1>
+    <sect1 id="sect-packageManagement">
+        <title>Package Management</title>
+        <sect2>
+            <!-- Which packages are available in Ubuntu? -->
+            <title>Which packages are available in Ubuntu?</title>
+            <para> Ubuntu contains essentially all of the packages available in the Debian
+                repositories, as well as many packages from third-party sources. Many packages are
+                customised to integrate smoothly with the Ubuntu system, to fix bugs, and to provide
+                newer versions of software. In the future, a website will be provided which lists
+                all of the available software. </para>
+        </sect2>
+        <sect2>
+            <!-- Do you provide packages compiled with processor- -->
+            <title>Do you provide packages compiled with processor-specific optimisations? Where can
+                I find them?</title>
+            <itemizedlist>
+                <listitem> Optimised kernels can be obtained by installing the "linux-686",
+                    "linux-k7", etc. packages. Search for "linux" with Synaptic, aptitude or
+                    apt-cache. </listitem>
+                <listitem> An optimised C library is installed by default, in the libc6-i686
+                    packages. </listitem>
+                <listitem> Optimised cryptography routines for i586- and i686-class systems are
+                    included with the OpenSSL library and used automatically </listitem>
+                <listitem> All Ubuntu packages are compiled using the i486 instruction set, with
+                    instruction choices based on the Pentium 4 processor. This combination provides
+                    benefits for modern processors without sacrificing compatibility with older and
+                    embedded devices. </listitem>
+            </itemizedlist>
+            <para> A comprehensive experiment to evaluate the effectiveness of more aggressive
+                processor optimisations for all Ubuntu packages is planned after the Warty release. </para>
+        </sect2>
+        <sect2>
+            <!-- I need newer versions of some Ubuntu packages, -->
+            <title>I need newer versions of some Ubuntu packages, such as I am accustomed to
+                receiving in Debian unstable. Where can I find them?</title>
+            <para> Soon after the Warty release, updated packages will be available in our
+                development branch on an ongoing basis, similar to the pace of Debian unstable. </para>
+        </sect2>
+        <sect2>
+            <!-- multiverse repository -->
+            <title>What kind of software does the multiverse repository contain?</title>
+            <para> Software in the "multiverse" component has not been determined to be Free
+                Software. </para>
+            <para> Please make certain that you verify your rights to use this software and comply
+                with the licensing terms of the copyright holder. This software receives no support
+                and usually cannot be fixed or updated. Use it at your own risk. </para>
+        </sect2>
+        <sect2>
+            <!-- an I use both Ubuntu and Debian packages together -->
+            <title>Can I use both Ubuntu and Debian packages together, in the same sources.list?</title>
+            <para> In general, it's not a very good idea. While Debian and Ubuntu are compatible to
+                a large degree, and share many of the same source packages, the binary packages are
+                not identical due to having been built independently. This causes unexpected effects
+                in the package management system. </para>
+            <para> However, in general, this is not an issue, for one simple reason: essentially all
+                of the software in Debian is also available in Ubuntu repositories, so there is no
+                reason to mix the two. </para>
+        </sect2>
+        <sect2>
+            <title>Is it possible to upgrade from Debian Sarge to Ubuntu Warty Warthog simply by
+                adding the "deb http://archive.ubuntu.com/ubuntu warty main restricted universe"
+                lines to /etc/apt/sources.list? </title>
+            <para> This is not supported, though a few brave souls have done it and reported mixed
+                results. Sarge and Warty froze at similar times, so some of the code in Warty is
+                newer than code in Sarge, and vice-versa. For example, Warty includes Gnome 2.8,
+                while Sarge is Gnome 2.6. Just trying to switch sources in sources.list will have
+                interesting and undefined results. Please feel free, if you are also feeling brave,
+                to try it and update this answer or the wiki with your results. </para>
+        </sect2>
+        <sect2>
+            <title>Can I upgrade directly from Debian Woody to Ubuntu?</title>
+            <para> Yes, you can upgrade directly from Debian Woody to Ubuntu 4.10 (Warty Warthog).
+                Notes and caveats about the upgrade process can be found <ulink
+                url="http://wiki.ubuntu.com/WartyWarthog/UpgradeNote">here</ulink>. </para>
+        </sect2>
+    </sect1>
+    <sect1 id="sect-packages">
+        <title>Package Questions</title>
+        <sect2>
+            <title>Do you include XFree86 or X.org?</title>
+            <para> Warty Warthog includes XFree86 4.3.99 packages with much improved hardware
+                support. The next Ubuntu release, codenamed Hoary Hedgehog will use the X.org server
+                instead. </para>
+        </sect2>
+        <sect2>
+            <title>Does Ubuntu come with a firewall installed?</title>
+            <para> Since Ubuntu doesn't run any daemons that listen to the outside world by default
+                (the postfix install only listens on localhost) there's no need for a default
+                firewall. </para>
+            <para> The rationale is that if a user's got a need for installing a world-facing
+                daemon, they'll be aware that they should configure a firewall/ACL for it too. </para>
+        </sect2>
+        <sect2>
+            <title>Where is gpdf?</title>
+            <para> GNOME 2.8's version of gpdf is available in universe. We decided to ship xpdf for
+                WartyWarthog instead, as gpdf doesn't support text searching and Type3 fonts. It
+                should do, by the time we release HoaryHedgehog with GNOME 2.10. </para>
+        </sect2>
+        <sect2>
+            <title>Does Warty Warthog / Ubuntu include complete multimedia support?</title>
+            <para> We're still working out some of the difficult legal / policy issues involved with
+                multimedia support. Warty Warthog includes some basic multimedia support, but
+                limited by what we can safely and freely do. Specific information is available for
+                some multimedia issues in the RestrictedFormats wiki page. </para>
+        </sect2>
+        <sect2>
+            <title>How do I get Firefox to open a new tab when I click a link?</title>
+            <para> Edit the file /etc/mozilla-firefox/mozilla-firefoxrc and change the line that
+                reads FIREFOX_OPEN_IN="window" to be FIREFOX_OPEN_IN="tab". There is a comment about
+                this on the line above. </para>
+        </sect2>
+        <sect2>
+            <title>Does Ubuntu include Mono and applications based on Mono?</title>
+            <para> Mono is not included in our Warty Warthog release, but may be included in future
+                releases. </para>
+        </sect2>
+    </sect1>
+    <sect1 id="sect-graphics">
+        <title>Graphics Questions</title>
+        <sect2>
+            <title>Where are the icons on the desktop? I want my Trashcan, Computer and Home icons
+                on the desktop!</title>
+            <para> In Warty Warthog, we decided to try out a new way of getting to all the important
+                locations on your computer and across the network, which complements the spatial
+                design behind Nautilus very nicely. </para>
+            <para> Icons on the desktop are almost always obscured by windows when you're getting
+                work done, and it's often a pain to move them out of the way or switch to a
+                different workspace to get at them. So, we've turned all of the special desktop
+                icons off, and provided access to them in the Computer menu. No more window tidying
+                when you just want to open your file manager! </para>
+            <para> We've included trashapplicationlet, which provides a working trash icon on your panel, so
+                it's always accessible. In the future, we'd like to make it so that you can delete
+                anything - not just files - by dragging to the trash. </para>
+            <para> If you want to turn some of the special desktop icons back on, run applications
+                &gt; System Tools &gt; Configuration Editor, navigate to /applications/nautilus/general, and
+                choose the icons you want to applicationear. </para>
+        </sect2>
+        <sect2>
+            <!-- What background images are available for widescreen laptop -->
+            <title>What background images are available for widescreen laptops and displays?</title>
+            <para> The Ubuntu Default Desktop and Ubuntu Monthly Calendar images are also available
+                in a 16:9 aspect ratio for those with widescreen laptops and displays. </para>
+        </sect2>
+    </sect1>
+    <sect1 id="sect-networking">
+        <title>Networking Questions</title>
+        <sect2>
+            <title>When I browse my network using the "Windows Network" method I can see all of the
+                machines, but only connect to XP workstations. When I try to connect to Windows 2003
+                Servers, I get a permissions error. Now, when I try "Connect to Server" method, I
+                fill out the details and enter my password when asked, it responds by asking for the
+                password again. I have also added a computer account to Windows server for my
+                Unbuntu machine then repeated these steps with the same results.</title>
+            <para> It seems entering 'servername' in the server field and 'sharename' in the share
+                field is not sufficient. Try putting 'servername/sharename' in the server field and
+                leaving the share field blank. We understand this is very counter-intuitive, but it
+                works, we're working to improve this user interface. </para>
+        </sect2>
+        <sect2>
+            <title>My wireless network uses WEP encryption for better security. How can I set up
+                Ubuntu to connect to it?</title>
+            <para> Ubuntu's Network Settings dialog has support for wireless network cards. Network
+                configuration is in 'Computer -&gt; System Configuration -&gt; Networking' </para>
+        </sect2>
+    </sect1>
+    <sect1 id="sect-other">
+        <title>Miscelenious Questions</title>
+        <sect2>
+            <title>What's the root password after I install? How do I use the root account?</title>
+            <para> The root account is disabled when you first install Ubuntu. The first user
+                created during the installation has administrative rights on the system, and can run
+                programs as root with sudo, using only their normal user password. For example: sudo
+                apt-get update. </para>
+            <para> All uses of sudo will require the user's password.Note that the root account does
+                not have a password at all after the initial install. You can set the root password
+                by typing sudo passwd root.If you need a shell with root privileges, run sudo -s.
+                The benefits of this are mentioned in the wiki here. </para>
+            <para> Please keep in mind that booting into recovery mode only works if you have a root
+                password set. Otherwise the only way to access your system in case of problems is to
+                use a Live CD and mount your filesystem. </para>
+        </sect2>
+        <sect2>
+            <title>The default installation is for a graphical desktop environment, but I'd like to
+                install a server or other minimal system. How can I do this?</title>
+            <para> Type "custom" at the initial CD-ROM boot prompt. This will install only the base
+                packages, after which you can install only what you need, using 'aptitude' or
+                'apt-get'. </para>
+        </sect2>
+        <sect2>
+            <title>How can I boot Ubuntu with different options using grub?</title>
+            <para> You can have grub boot the kernel using different options for just the one boot
+                by changing the boot command line using grub's interactive mode: </para>
+            <itemizedlist>
+                <listitem> When you see the GRUB Loading message, press ESC to get to the grub menu.
+                    Here, you will see several lines with kernel descriptions in them: select the
+                    one that does not say '''recovery''' using the arrow keys. </listitem>
+                <listitem> Press e to edit the commands associated with that kernel. This will bring
+                    up another screen with various options, the one you are looking for has kernel
+                    in it. Using the arrow keys, select the line with kernel in it and press e to
+                    edit the line. </listitem>
+                <listitem> This will take you to a screen with the contents of the line in it, just
+                    add your new command at the end, then press enter. </listitem>
+                <listitem> You will be returned to the previous menu and you should be able to see
+                    your altered boot options added to the line you edited (unless the boor command
+                    line is too long). Press b to boot using the edited boot command. </listitem>
+            </itemizedlist>
+            <para> Ubuntu will now load with your new option enabled. </para>
+        </sect2>
+        <sect2>
+            <title>How do I permanently change the options grub uses to boot Ubuntu?</title>
+            <para> Ok, so you have used the above technique and found that you need to permanently
+                make a change to the grub parameters, here is what you need to do. </para>
+            <itemizedlist>
+                <listitem> Edit /boot/grub/menu.lst (e.g., sudo gedit /boot/grub/menu.lst) </listitem>
+                <listitem> Find the line which looks like: <screen>kopt root=/dev/hda1 ro</screen>
+                </listitem>
+                <listitem> Add your parameters to the end of the line </listitem>
+                <listitem> Save your changesRun sudo update-grub </listitem>
+                <listitem> Run sudo update-grub </listitem>
+                <listitem> Reboot </listitem>
+            </itemizedlist>
+        </sect2>
+        <sect2>
+            <title>How do I change the Login Screen image?</title>
+            <itemizedlist>
+                <listitem> Computer -&gt; System Configuration -&gt; Login Screen Setup </listitem>
+                <listitem> Enter your password if prompted </listitem>
+                <listitem> Choose the Graphical greeter tab </listitem>
+                <listitem> Select an alternate theme </listitem>
+            </itemizedlist>
+        </sect2>
+        <sect2>
+            <title>How do I change the Splash Screen image?</title>
+            <itemizedlist>
+                <listitem> applications -&gt; System Tools -&gt; Configuration Editor </listitem>
+                <listitem> Choose /applications/gnome-session/options from the tree on the left </listitem>
+                <listitem> Change the splash_image key to (e.g.) splash/ubuntu-logo-508x340.png </listitem>
+            </itemizedlist>
+            <warning>
+                <title>Careful</title>
+                <para> The above does not work for me on a post-RC Warty system. It says pairs and
+                    schemes cannot be edited, and refuses to change anything. What does work IME is
+                    disabling the splash by way of Computer / Desktop Preferences / Sessions,
+                    unchecking the show splash item. MartinManey </para>
+            </warning>
+        </sect2>
+    </sect1>
+</chapter>

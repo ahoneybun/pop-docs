@@ -1,0 +1,46 @@
+#!/bin/sh
+
+# DATE: April 03, 2005
+# AUTHOR: Sean Wheller (sean@inwords.co.za)
+# ABSTRACT: A script for Ubuntu Docteam to make and maintain POT files.
+
+# Test if module was passed on the command. If not assume all modules
+if test x$1 = x;
+    #then modules="aboutubuntu adminguide faqguide quickguide releasenotes userguide"
+    then modules="userguide"
+else
+    modules="$1"
+fi
+echo $modules
+
+for m in $modules
+do
+            # find only English language documents in the module
+            #files=`( find $m/ -type f -regex [^-]+-[^-]+\.xml)`
+            files=`( find $m/ -type f -name "*.xml")`
+	
+	for i in $files; do
+	    # Ready new filename based on English filebase
+	    j=`echo $i | sed -e 's/xml/pot/g'`
+	    file=$j
+	    
+	    #Convert English document to temporary POT file
+	    xml2pot $i > $file.new
+	    
+	    #Test if old POT file exists
+                if test -s $file; then
+                    msgmerge -o $file -i $file $file.new 2> /dev/null
+                        # Test for changes: if changes update old POT; otherwise remove new 
+                        if ! cmp -s $file $file.new; then
+                            #Update the existing old POT file
+                            msgmerge -U -i $file $file.new
+                            rm $file.new
+                        else
+                            rm $file.new
+                        fi
+                 # If no old POT make first instance
+                 else
+                     mv $file.new $file
+                 fi
+            done
+done
