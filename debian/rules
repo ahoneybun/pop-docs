@@ -1,0 +1,14 @@
+#!/usr/bin/make -f
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/makefile.mk
+
+DEB_DH_INSTALL_ARGS = -X.svn
+
+DEB_SRCDIR = gnome
+
+DEB_MAKE_BUILD_TARGET = gdeb
+
+$(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/%:
+	dh_scrollkeeper -p$(cdbs_curpkg) $(DEB_DH_SCROLLKEEPER_ARGS)
+

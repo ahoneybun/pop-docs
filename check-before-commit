@@ -1,0 +1,70 @@
+#!/bin/sh
+
+# Written by Enrico Zini after an idea from Mary Gardininer
+
+fail () {
+	echo "$*" >&2
+	echo "There seem to be problems to fix before committing"
+	exit 1
+}
+
+CHANGES=`svn status | grep -v '?[[:space:]]\+' | sed 's/^.[[:space:]]\+//'`
+
+# Find out what needs to be validated
+if echo "$CHANGES" | grep -Eq '^(common|images|libs)/'
+then
+	VALIDATE="quickguide/quickguide.xml faqguide/faqguide.xml adminguide/adminguide.xml about-ubuntu.xml release-notes.xml userguide/userguide.xml"
+	TARGETS="all"
+else
+	if echo "$CHANGES" | grep -q '^quickguide/'
+	then
+		VALIDATE="$VALIDATE quickguide/quickguide.xml"
+		TARGETS="$TARGETS qg"
+	fi
+	if echo "$CHANGES" | grep -q '^faqguide/'
+	then
+		VALIDATE="$VALIDATE faqguide/faqguide.xml"
+		TARGETS="$TARGETS faq"
+	fi
+	if echo "$CHANGES" | grep -Eq '^(adminguide)/'
+	then
+		VALIDATE="$VALIDATE adminguide/adminguide.xml"
+		TARGETS="$TARGETS ag"
+	fi
+	if echo "$CHANGES" | grep -Eq '^(userguide)/'
+	then
+		VALIDATE="$VALIDATE userguide/userguide.xml"
+		TARGETS="$TARGETS ug"
+	fi
+	if echo "$CHANGES" | grep -Eq '^about-ubuntu.xml'
+	then
+		VALIDATE="$VALIDATE about-ubuntu.xml"
+		TARGETS="$TARGETS abt"
+	fi
+	if echo "$CHANGES" | grep -Eq '^release-notes.xml'
+	then
+		VALIDATE="$VALIDATE release-notes.xml"
+		TARGETS="$TARGETS rn"
+	fi
+fi	
+
+if [ -z "$VALIDATE" ]
+then
+	echo "No XML files where changed: no need to validate or rebuild documentation."
+else
+	for i in $VALIDATE
+	do
+		echo "Validating $i..."
+		./validate.sh $i || fail "$i did not validate."
+	done
+
+	for i in $TARGETS
+	do
+		echo "Building $i..."
+		make $i || fail "building the HTML version with \"make $i\" failed."
+	done
+fi
+
+echo
+echo "All `basename $0` could check, seems to be fine."
+exit 0
