@@ -1,0 +1,951 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="tips-and-tricks-chap" status="writing">
+	<!-- This chapter may be taken out and information from it included elsewhere -->
+	<title id="tips-and-tricks">Tips &amp; Tricks</title>
+	<qandaset>
+		<qandaentry id="restartgnomewithoutreboot" xreflabel="restart GNOME without rebooting the computer">
+			<question>
+				<para>How do I restart GNOME without rebooting the computer?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>Save and close all open applications.</para>
+          </listitem>
+          <listitem>
+            <para>Use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>Backspace</keycap>
+							</keycombo>
+							 shortcut keys to restart GNOME.
+						</para>
+           </listitem>
+           <listitem>
+            <para>If <keycombo>
+                <keycap>Ctrl</keycap>
+                <keycap>Alt</keycap>
+                <keycap>Backspace</keycap>
+							</keycombo>
+              is disabled, type
+						<screen>sudo /etc/init.d/gdm restart</screen>
+            </para>
+						<para>(See <xref linkend="disableCtrlAltBackspace"/> to disable <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>Backspace</keycap>
+							</keycombo>.)
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I automatically turn on <keycap>Num Lock</keycap> when GNOME starts?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>Make sure the universe repository is enabled. (See <xref linkend="extra-repositories"/>)
+						</para>
+					</listitem>
+					<listitem>
+						<para>Install the numlockx package with <application>Add/Remove Applications</application> (See <xref linkend="extra-repositories"/>)
+							<literallayout>x11 (universe) &gt; numlockx</literallayout>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Make a backup copy of your existing <filename>/etc/X11/gdm/Init/Default</filename> file.
+							<screen>sudo cp /etc/X11/gdm/Init/Default /etc/X11/gdm/Init/Default_backup</screen>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Open <filename>/etc/X11/gdm/Init/Default</filename> for editing.
+							<screen>sudo gedit /etc/X11/gdm/Init/Default</screen>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Find this line (It should be the last line in the file).</para>
+						<programlisting>exit 0</programlisting>
+						<para></para>
+					</listitem>
+					<listitem>
+						<para>Add the following lines above the &quot;exit 0&quot; line.</para>
+						<programlisting>
+if [ -x /usr/bin/numlockx ]; then
+/usr/bin/numlockx on
+fi
+						</programlisting>
+					</listitem>
+					<listitem>
+						<para>Save the edited file. (See <ulink url="sample/Default_numlockx"/> for an example.)
+					  </para>
+					</listitem>
+				</orderedlist>
+						<para>The change will take effect the next time you log in to GNOME. If you want to test it right away, turn off Num Lock and restart GNOME (See <xref linkend="restartgnomewithoutreboot"/>.)
+						</para>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I run programs automatically when GNOME starts?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>Choose 
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Preferences</guisubmenu>
+								<guimenuitem>Sessions</guimenuitem>
+							</menuchoice>. 
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Click on the <guibutton>Startup Programs</guibutton> tab.
+						</para>
+					</listitem>
+					<listitem>
+						<para>Use the
+								<guibutton>Add</guibutton>,
+								<guibutton>Edit</guibutton>, and 
+								<guibutton>Delete</guibutton> buttons to manage
+							programs to run at startup.
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I switch to Console mode?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>Use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo>
+							shortcut keys to switch to the first console.
+						</para>
+					</listitem>
+					<listitem>
+						<para>To switch back to Desktop mode, use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F7</keycap>
+							</keycombo> shortcut keys.
+						</para>
+					</listitem>
+				</orderedlist>
+					<note>
+						<para>There are six consoles available. Each one is accessible with the
+							shortcut keys <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo> to <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F6</keycap>
+							</keycombo>.
+						</para>
+					</note>
+			</answer>
+		</qandaentry>
+		<qandaentry id="disableCtrlAltBackspace" xreflabel="How do I disable the Ctrl-Alt-Backspace shortcut keys from restarting X?">
+			<question>
+				<para>
+					<!-- Can't use keycombo tag here because the xslt won't handle it in the toc  -->
+					How do I disable the Ctrl-Alt-Backspace shortcut keys from restarting X?
+				</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>Make a backup copy of your existing <filename>/etc/X11/xorg.conf</filename> file.
+							<screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup</screen>
+						</para>
+					</listitem>
+					<listitem>
+					<para>Open <filename>/etc/X11/xorg.conf</filename> for editing.
+						<screen>sudo gedit /etc/X11/xorg.conf</screen>
+					</para>
+					</listitem>
+					<listitem>
+						<para>Add the following lines to the end of the file:
+							<programlisting>Section	"ServerFlags"
+Option	"DontZap"	"yes"
+EndSection</programlisting>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Save the edited file. (See <ulink url="sample/xorg.conf_disablectrlaltbackspacegnome"/> for an example.)</para>
+					</listitem>
+					<listitem>
+						<para>The change will take effect the next time you log in to GNOME. If you want the change to take effect immediately, restart GNOME manually. (See <xref linkend="restartgnomewithoutreboot"/>.)</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I use spatial mode in <application>Nautilus</application>?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>In <application>Nautilus</application>, choose
+							<menuchoice>
+								<guimenu>Edit</guimenu>
+								<guisubmenu>Preferences</guisubmenu>
+							</menuchoice>.
+						</para>
+					</listitem>
+					<listitem>
+						<para>Click on the <guilabel>Behaviour</guilabel> tab.</para>
+					</listitem>
+					<listitem>
+						<para>Unselect the <guilabel>Always open in browser windows</guilabel> check box.</para>
+					</listitem>
+					<listitem>
+						<para>Close and reopen <application>Nautilus</application>.</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I show hidden files and folders in <application>
+						<phrase>Nautilus</phrase></application>?
+				</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>In <application>Nautilus</application>, use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>H</keycap>
+							</keycombo> shortcut keys to toggle hidden files and folders on and off. 
+						</para>
+					</listitem>
+					<listitem>
+						<para>To permanently show all hidden files and folders, choose <menuchoice>
+								<guimenu>Edit</guimenu>
+								<guimenuitem>Preferences</guimenuitem>
+							</menuchoice>.
+						</para>
+					</listitem>
+					<listitem>
+						<para>Click on the <guilabel>Views</guilabel> tab.</para>
+					</listitem>
+					<listitem>
+						<para>Select the <guilabel>Show hidden and backup files</guilabel> check box.</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>
+					How can I browse files and folders as root user in <application><phrase>Nautilus</phrase>
+						</application>?
+				</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>Start a new desktop configuration file in the <filename>/usr/share/applications</filename> directory.
+							<screen>sudo gedit /usr/share/applications/Nautilus-root.desktop</screen>
+							A blank file called Nautilus-root.desktop opens in gedit.
+						</para>
+					</listitem>
+					<listitem>
+						<para>Add the following lines to the new file:</para>
+						<programlisting>[Desktop Entry]
+Name=File Browser (Root)
+Comment=Browse the filesystem with the file manager
+Exec=gksudo "nautilus --browser %U"
+Icon=file-manager
+Terminal=false
+Type=Application
+Categories=Application;System;</programlisting>
+					</listitem>
+					<listitem>
+						<para>
+							Save the file and close <application>gedit</application>. (See <ulink
+              url="sample/Nautilus-root.desktop_browsefilesfoldersasrootnautilus"/> for an example.)
+						</para>
+					</listitem>
+					<listitem>
+						<para>To start <application>Nautilus</application> as the root user, choose 
+							<menuchoice>
+								<guimenu>Applications</guimenu>
+								<guisubmenu>System Tools</guisubmenu>
+								<guimenuitem>File Browser (Root)</guimenuitem>
+							</menuchoice>
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+			</qandaentry>
+		<qandaentry>
+			<question>
+				<para>
+					How can I <phrase>view</phrase> remote SSH, FTP, and SFTP
+					servers using <phrase>Nautilus</phrase>?
+				</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>Make sure the <application>Nautilus</application> <guilabel>Location Bar</guilabel> is open. Toggle the bar on and off with 
+							<menuchoice>
+								<guimenu>Go</guimenu>
+								<guisubmenu>Location...</guisubmenu>
+							</menuchoice>
+							You can also use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>L</keycap>
+							</keycombo> shortcut keys.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							In the <guilabel>Location Bar</guilabel>, enter the following:
+						</para>
+						<para>For SSH, use:
+							<screen><phrase>ssh</phrase>://username@ssh.server.com</screen>
+						</para>
+						<para>For FTP, use:
+							<screen>ftp://username@ftp.server.com</screen>
+						</para>
+						<para>For SFTP, use:
+							<screen><phrase>sftp</phrase>://username@sftp.server.com</screen>
+						</para>
+						<para>Replace username with your username and replace everything after the @ symbol with the server's address. You will be prompted for a password if needed. If there is no username (anonymous) omit the username and the @ symbol.
+						</para>
+						<para>Alternatively, to specify your password manually, change one of the above like so:
+							<screen>ftp://username:password@ftp.server.com</screen>
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How can I show the Computer, Home, and Trash desktop icons in GNOME?
+				</para>
+			</question>
+			<!-- Using gTweakUI as a frontend to Configuration Editor -->
+			<answer>
+				<orderedlist>
+						<listitem>
+							<para>Make sure the universe and multiverse repositories are enabled. (See <xref linkend="extra-repositories"/>)
+							</para>
+						</listitem>
+						<listitem>
+							<para>Install the gtweakui package with <application>Add/Remove Applications</application> (See <xref linkend="extra-repositories"/>)
+							</para>
+							<para>
+							<literallayout>Gnome (universe) &gt; gtweakui</literallayout>
+						</para>
+					</listitem>
+					<listitem>
+						<para>After <application>gTweakUI</application> is installed, choose
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Preferences</guisubmenu>
+								<guimenuitem>gTweakUI - Nautilus</guimenuitem>
+							</menuchoice>.
+						</para>
+					</listitem>
+					<listitem>
+						<para>Select the <guilabel>Show computer icon</guilabel>, <guilabel>Show home icon</guilabel>,
+							and <guilabel>Show trash icon</guilabel> check boxes. The changes take effect immediately.
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I change the default file type "Open with" program?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>In <application>Nautilus</application>, right click on the file and choose 
+							<menuchoice>
+								<guimenu>Properties</guimenu>
+							</menuchoice> 
+							from the menu that appears. The <guilabel>Properties</guilabel> dialog opens.</para>
+					</listitem>
+					<listitem>
+						<para>Click on the <guibutton>Open With</guibutton> tab. A list of applications appears.
+						</para>
+					</listitem>
+					<listitem>
+						<para>Select the default application you want for the file type. If the application is not on the list, use the <guibutton>Add</guibutton> button to add the application to the list.
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How can I change my preferred email client to Mozilla Thunderbird?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>Choose 
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Preferences</guisubmenu>
+								<guimenuitem>Preferred Applications</guimenuitem>
+							</menuchoice>.
+						</para>
+					</listitem>
+					<listitem>
+						<para>Click on the <guibutton>Mail Reader</guibutton> tab, and select the <guilabel>Custom</guilabel> option. 	</para>
+					</listitem>
+					<listitem>
+						<para>In the <guilabel>Command</guilabel> text box, type
+							<userinput>
+								<command>mozilla-thunderbird %s</command></userinput>, then close the dialog.
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I open files as root user via right click?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>
+							<screen>gedit $HOME/.gnome2/nautilus-scripts/Open\ as\ root</screen>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Insert the following lines into the new file</para>
+						<programlisting>for uri in $NAUTILUS_SCRIPT_SELECTED_URIS; do
+gnome-sudo "gnome-open $uri" &amp;
+done</programlisting>
+					</listitem>
+					<listitem>
+						<para>Save the edited file (<ulink url="sample/Open-as-root_openfilesasrootviarightclick"/>)
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<screen>chmod +x $HOME/.gnome2/nautilus-scripts/Open\ as\ root</screen>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Right click on the file and <menuchoice
+                                   >
+								<guimenuitem>Scripts</guimenuitem>
+								<guimenuitem>Open as root</guimenuitem>
+							</menuchoice>
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I disable beep sound in Terminal mode?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>
+						Start a <application>Terminal</application>
+						session,
+						select: <phrase>&terminal;</phrase>
+						from the desktop menu system. 
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<menuchoice>
+								<guimenu>Edit</guimenu>
+								<guimenuitem>Current Profile...</guimenuitem>
+							</menuchoice>
+							.Select the
+							<guibutton>General</guibutton> tab. Uncheck the
+							<guilabel>Terminal bell</guilabel>
+							checkbox.
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I load Web site faster in Mozilla Firefox?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>
+							<menuchoice>
+								<guimenu>Applications</guimenu>
+								<guisubmenu>Internet</guisubmenu>
+								<guimenuitem>Firefox Web
+									Browser
+								</guimenuitem>
+							</menuchoice>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							In the <interface>Navigation
+								toolbar
+							</interface>
+							URL field enter <userinput>
+								<command>about:config</command>
+							</userinput>.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Use the <guilabel>Filter</guilabel> field to
+							change the following parameters:
+						</para>
+						<itemizedlist>
+							<listitem>
+								<para>
+									<emphasis>network.dns.disableIPv6</emphasis>
+									- Set the <option>Value</option>
+									parameter to
+									<option>true</option>.
+								</para>
+							</listitem>
+							<listitem>
+								<para>
+									<emphasis>network.http.pipelining</emphasis>
+									- Set the <option>Value</option>
+									parameter to
+									<option>true</option>.
+								</para>
+							</listitem>
+							<listitem>
+								<para>
+									<emphasis>network.http.pipelining.maxrequests</emphasis>
+									- Set the <option>Value</option>
+									parameter to <option>8</option>.
+								</para>
+							</listitem>
+							<listitem>
+								<para>
+									<emphasis>network.http.proxy.pipelining</emphasis>
+									- Set the <option>Value</option>
+									parameter to
+									<option>true</option>.
+								</para>
+							</listitem>
+						</itemizedlist>
+					</listitem>
+					<listitem>
+						<para>Restart Mozilla Firefox</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I disable beep sound for link find function in
+					Mozilla Firefox?
+				</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>
+							<menuchoice>
+								<guimenu>Applications</guimenu>
+								<guisubmenu>Internet</guisubmenu>
+								<guimenuitem>Firefox Web
+									Browser
+								</guimenuitem>
+							</menuchoice>
+						</para>
+					</listitem>
+					<listitem>
+						<!-- markup against system -->
+						<para>Mozilla Firefox
+							<screen>Address Bar -&gt; <emphasis role="bold">about:config</emphasis>
+Filter: -&gt; <emphasis role="bold">accessibility.typeaheadfind.enablesound</emphasis> -&gt;
+<emphasis role="bold">false</emphasis></screen>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Restart Mozilla Firefox</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I restore the original icons for Mozilla Firefox?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>
+							<screen>wget -c http://frankandjacq.com/ubuntuguide/mozilla-firefox.png
+wget -c http://frankandjacq.com/ubuntuguide/document.png
+chmod 644 mozilla-firefox.png
+chmod 644 document.png
+sudo dpkg-divert --rename /usr/share/pixmaps/mozilla-firefox.png
+sudo dpkg-divert --rename /usr/share/pixmaps/mozilla-firefox.xpm
+sudo dpkg-divert --rename /usr/lib/mozilla-firefox/icons/default.xpm
+sudo dpkg-divert --rename /usr/lib/mozilla-firefox/icons/document.png
+sudo dpkg-divert --rename /usr/lib/mozilla-firefox/chrome/icons/default/default.xpm
+sudo cp mozilla-firefox.png /usr/share/pixmaps/mozilla-firefox.png
+sudo cp mozilla-firefox.png /usr/share/pixmaps/mozilla-firefox.xpm
+sudo cp mozilla-firefox.png /usr/lib/mozilla-firefox/icons/default.xpm
+sudo cp document.png /usr/lib/mozilla-firefox/icons/document.png
+sudo cp mozilla-firefox.png /usr/lib/mozilla-firefox/chrome/icons/default/default.xpm</screen>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Read <xref linkend="restartgnomewithoutreboot"/>.</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I restore the original icons for Mozilla Thunderbird?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>
+							<screen>wget -c http://frankandjacq.com/ubuntuguide/mozilla-thunderbird.xpm
+chmod 644 mozilla-thunderbird.xpm
+sudo dpkg-divert --rename /usr/share/pixmaps/mozilla-thunderbird.xpm
+sudo dpkg-divert --rename /usr/share/pixmaps/mozilla-thunderbird-menu.xpm
+sudo dpkg-divert --rename /usr/share/pixmaps/mozilla-thunderbird-pm-menu.xpm
+sudo dpkg-divert --rename /usr/lib/mozilla-thunderbird/chrome/icons/default/mozilla-thunderbird.xpm
+sudo dpkg-divert --rename /usr/lib/mozilla-thunderbird/chrome/icons/default/messengerWindow16.xpm
+sudo dpkg-divert --rename /usr/lib/mozilla-thunderbird/chrome/icons/default/messengerWindow.xpm
+sudo dpkg-divert --rename /usr/lib/mozilla-thunderbird/chrome/icons/default/default.xpm
+sudo cp mozilla-thunderbird.xpm /usr/share/pixmaps/mozilla-thunderbird.xpm
+sudo cp mozilla-thunderbird.xpm /usr/share/pixmaps/mozilla-thunderbird-menu.xpm
+sudo cp mozilla-thunderbird.xpm /usr/share/pixmaps/mozilla-thunderbird-pm-menu.xpm
+sudo cp mozilla-thunderbird.xpm /usr/lib/mozilla-thunderbird/chrome/icons/default/mozilla-thunderbird.xpm
+sudo cp mozilla-thunderbird.xpm /usr/lib/mozilla-thunderbird/chrome/icons/default/messengerWindow16.xpm
+sudo cp mozilla-thunderbird.xpm /usr/lib/mozilla-thunderbird/chrome/icons/default/messengerWindow.xpm
+sudo cp mozilla-thunderbird.xpm /usr/lib/mozilla-thunderbird/chrome/icons/default/default.xpm</screen>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Read <xref linkend="restartgnomewithoutreboot"/>.</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I install/uninstall .deb file?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>To install .deb file</para>
+						<screen>sudo dpkg -i package_file.deb</screen>
+					</listitem>
+					<listitem>
+						<para>To uninstall .deb file</para>
+						<screen>sudo dpkg -r package_name</screen>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I convert .rpm file to .deb file?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>
+							<screen>sudo alien package_file.rpm</screen>
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I rename all files in a directory at once?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>
+							<screen>wget -c <ulink url="&mvb-url;">&mvb-url;</ulink>
+sudo tar zxvf &mvb-tar; -C /usr/ 
+sudo chown -R root:root /usr/mvb_1.6/ 
+sudo ln -fs /usr/mvb_1.6/mvb /usr/bin/mvb mvb -h</screen>
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I set system-wide environment variables?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>
+							<screen>sudo cp /etc/bash.bashrc /etc/bash.bashrc_backup
+sudo gedit /etc/bash.bashrc</screen>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Append the System-wide Environment Variables
+							at the end of file
+						</para>
+					</listitem>
+					<listitem>
+						<para>Save the edited file</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I save <quote>man</quote> outputs into file?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>
+							<screen>man command | col -b &gt; file.txt</screen>
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I generate MD5 checksum file?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>
+							<screen>md5sum file.iso &gt; file.iso.md5</screen>
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I check MD5 checksum of files?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>
+							Assuming that <filename>file.iso</filename>
+							and <filename>file.iso.md5</filename> are in the
+							same folder.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<screen>md5sum -c file.iso.md5</screen>
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I mount/unmount Image (ISO) files without burning?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>To mount Image (ISO) file</para>
+						<screen>sudo mkdir /media/iso
+sudo modprobe loop 
+sudo mount file.iso /media/iso/ -t iso9660 -o loop</screen>
+					</listitem>
+					<listitem>
+						<para>To unmount Image (ISO) file</para>
+						<screen>sudo umount <filename>/media/iso/</filename></screen>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I change the timeout seconds for GRUB menu on boot-up?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+sudo gedit /boot/grub/menu.lst</screen>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Find this line</para>
+						<programlisting>...
+timeout 3
+...</programlisting>
+					</listitem>
+					<listitem>
+						<para>Replace with the following line</para>
+						<programlisting>timeout X_seconds</programlisting>
+					</listitem>
+					<listitem>
+						<para>
+							Save the edited file (<ulink
+                                    url="sample/menu.list_increasedecreasetimeoutgrub"
+                                />)
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I change default Operating System boot-up for GRUB menu?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+sudo gedit /boot/grub/menu.lst</screen>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Find this line</para>
+						<programlisting>...
+default 0
+...</programlisting>
+					</listitem>
+					<listitem>
+						<para>Replace with the following line</para>
+						<programlisting>default X_sequence</programlisting>
+					</listitem>
+					<listitem>
+						<para>
+							Save the edited file (<ulink
+                                    url="sample/menu.list_changedefaultosgrub"
+                                />)
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry id="skipservices" xreflabel="How do I temporary skip boot-up services?">
+			<question>
+				<para>How do I temporary skip boot-up services?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>Press <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>C</keycap>
+							</keycombo>
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I permanently disable/enable boot-up services?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>Run <application>Services Settings</application>:
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Services</guimenuitem>
+							</menuchoice>.
+						</para>
+					</listitem>
+					<listitem>
+						<para>Ubuntu will ask for your password, enter it.</para>
+					</listitem>
+					<listitem>
+						<para>Tick/untick the services you want running, then click <guibutton>OK</guibutton> when done.</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>How do I clean /tmp/ folder contents on shutdown?</para>
+			</question>
+			<answer>
+				<orderedlist>
+					<listitem>
+						<para>
+							<screen>sudo cp /etc/init.d/sysklogd /etc/init.d/sysklogd_backup
+sudo gedit /etc/init.d/sysklogd</screen>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Find this section</para>
+						<programlisting>...
+stop)
+log_begin_msg "Stopping system log daemon..."
+start-stop-daemon --stop --quiet --oknodo --exec $binpath --pidfile $pidfile
+log_end_msg $?
+...</programlisting>
+					</listitem>
+					<listitem>
+						<para>Add the following line below it</para>
+						<programlisting>rm -fr /tmp/* /tmp/.??*</programlisting>
+					</listitem>
+					<listitem>
+						<para>
+							Save the edited file (<ulink
+                                    url="sample/sysklogd_cleantmpfoldershutdown"
+                                />)
+						</para>
+					</listitem>
+				</orderedlist>
+			</answer>
+		</qandaentry>
+	</qandaset>
+</chapter>

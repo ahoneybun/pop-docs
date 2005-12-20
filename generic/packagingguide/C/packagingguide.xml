@@ -1,0 +1,776 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY language "&EnglishAmerican;">
+]>
+<book lang="&language;" id="packagingguide">
+	<title>Ubuntu Packaging Guide</title>
+	<bookinfo>
+		&copyright; &disclaimer; &legalnotice; &publisher;
+		<authorgroup>
+			<author>
+				<firstname>Ankur</firstname>
+				<surname>Kotwal</surname>
+				<!--<email>ankur.kotwal@gmail.com</email>-->
+			</author>
+			<author>
+				<firstname>Jordan</firstname>
+				<surname>Mantha</surname>
+				<!--<email>mantha@chem.unr.edu</email>-->
+			</author>
+		</authorgroup>
+	</bookinfo>
+	<preface id="pack-preface">
+        <title>Preface</title>
+			<para>
+				<emphasis role="bold">The following admonitions will be found
+					throughout the guide:
+				</emphasis>
+			</para>
+			<note>
+				<para>A note presents interesting, sometimes technical, pieces
+					of information related to the surrounding discussion.
+				</para>
+			</note>
+			<tip>
+				<para>A tip offers advice or an easier way of doing
+					something.
+				</para>
+			</tip>
+			<caution>
+				<para>A caution alerts the reader to potential problems and
+					helps avoid them.
+				</para>
+				<!-- Direct referencing in a non-instructional context is bad. -->
+			</caution>
+			<warning>
+				<para>A warning advises the reader of a hazard condition that
+					may arise in a given scenario.
+				</para>
+			</warning>
+			<para>
+				<emphasis role="bold">Type conventions will be displayed as
+					follows:
+				</emphasis>
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>File names or paths to directories will be shown in
+						<filename>monospace</filename> type.
+					</para>
+				</listitem>
+				<listitem>
+					<para>Packages that need to be installed will be shown as:</para>
+					<para>Category &gt; PackageName</para>
+				</listitem>
+				<listitem>
+					<para>
+						Commands that you type at a <application>Terminal</application>
+						prompt will
+						be shown as:
+					</para>
+					<para>
+						<!-- NOTE: the spaces before </screen> are significant, and will be in the html output. -->
+						<screen>command to type                                 </screen>
+					</para>
+				</listitem>
+				<listitem>
+					<para>When variables, parameters, SGML tags, etc. are
+						contained within a paragraph of text, they will be shown
+						in <filename>monospace</filename> type. Otherwise, they
+						will use the normal type.
+					</para>
+				</listitem>
+			</itemizedlist>
+			<para>
+				<emphasis role="bold">Code conventions:</emphasis>
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>Code and mark-up samples will be formatted in a grey
+						block.
+					</para>
+				</listitem>
+				<listitem>
+					<para>Sometimes, lines of code or mark-up examples will be
+						longer than the page width. To avoid having them run off
+						the page, the slash character &quot;\&quot; is
+						used to denote a soft line break. This means that the
+						line of code is meant to be on one line, but for print
+						formatting, it has been broken across two or more
+						lines.
+					</para>
+				</listitem>
+			</itemizedlist>
+			<para>
+				<emphasis role="bold">Text editing:</emphasis>
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>The text editor referenced in the instructions
+						provided by this document is
+						<application>vim</application> which is installed as a
+						default Ubuntu package.  </para>
+				</listitem>
+				<listitem>
+					<para>At times in this guide <application>vim</application>
+						is run from the command line using
+						<application>sudo</application>, as most configuration
+						files require root privileges to alter them. It is
+						recommended that you also run
+						<application>vim</application> from the command line
+						when shown in this guide.
+					</para>
+				</listitem>
+			</itemizedlist>
+	</preface>
+
+	<chapter id="pack-intro">
+		<title>Introduction</title>
+		
+		<para>This guide will introduce the reader to the world of Debian-based
+			packaging. The target audience is experienced Ubuntu/Debian users
+			and prospective developers. It is designed to be a introduction to
+			the tools and processes involved in packaging programs for
+			inclusion in Ubuntu/Debian or for distribution to other people. It
+			is written specifically for Ubuntu but many of the tools and
+			techniques can be applied to any Debian-based Linux distribution.
+			The concepts found in the guide are backed by examples. As is often
+			the case with many technical fields, skills are only gained with
+			experience; reading alone will not make you an expert. Thus, it is
+			highly recommended that the reader attempts working the
+			examples.</para>
+
+		<para><emphasis role="bold">Required Tools/Packages</emphasis></para>
+		
+		<para>In order to start packaging there are several tools that you need
+			to have installed, some of which are not installed by default on
+			Ubuntu. The packages will be required to complete the examples in
+			the guide.</para>
+
+		<para><application>dpkg-dev</application> - This package contains the
+			tools needed to unpack, build and upload Debian source
+			packages.</para>
+					
+		<para><application>devscripts</application> - This package contains
+			some nice and useful scripts that will be helpful to
+			maintainers.</para>
+	
+		<para><application>dh-make</application> and
+			<application>debhelper</application> - dh-make is necessary to
+			create the skeleton of our example package, and it will use some of
+			the debhelper tools for creating packages.</para>
+		
+		<para><application>file</application> - This handy program can
+			determine what type a file is.</para>
+
+		<para><application>gcc</application> and
+			<application>g++</application>The GNU C and C++ compilers</para>
+			
+		<para><application>libc6-dev</application> - The C libraries and header
+			files gcc needs to link with to create object files.</para>
+		
+		<para><application>perl</application> - Perl is one of the most used
+			interpreted scripting languages on today’s Unix-like
+			systems.</para>
+
+		<para><application>make</application> - Used to automate compilation
+			and installation steps in creating a program.</para>
+		
+		<para><application>patch</application> - Useful utility that will take
+			a file containing a difference listing (produced by the diff
+			program) and apply it to the original file.</para>
+
+		<para><application>autoconf</application> and
+			<application>automake</application> - Many programs use configure
+			scripts and Makefiles preprocessed with help of programs like
+			these.</para>
+
+		<para><application>fakeroot</application> - Lets you emulate being root
+			which is necessary for some parts of the build process.</para>	
+		
+		<para><application>gnupg</application> - A tool that enables you to
+			digitally sign packages. This is especially important if you want
+			to distribute it to other people.</para>
+
+		<para><application>lintian</application> and
+			<application>linda</application> - These are Debian package checker
+			that looks for common mistakes after you build the package, and
+			explain the errors found.</para>
+
+		<para><application>dchroot</application> and
+			<application>debootstrap</application> - These packages are used to
+			configure and run a chroot environment.  The chroot environment is
+			used to isolate the development environment from the normal
+			operating environment.</para>
+
+		<para><application>pbuilder</application> - Used for creating and
+			maintaining special chroot environments for building Debian
+			packages.  Building Debian packages using pbuilder verifies the
+			proper build dependency and avoid failed-to-build-from-source
+			(FTBFS) bugs.</para>
+
+		<para><application>debian-policy</application> - The Policy includes
+			explanations of the structure and contents of the Debian archive,
+			several OS design issues, the filesystem Hierarchy Standard (which
+			says where each file and directory should be) etc. For you, the
+			most important thing is that it describes requirements that each
+			package must satisfy to be included in the distribution. (see
+			/usr/share/doc/Debian-policy/policy.html/index.html)</para>
+
+
+		<para>The diagram shows the packages required and their dependencies.
+		</para>
+
+		<para>
+			<inlinemediaobject>
+				<imageobject>
+			                <imagedata
+								fileref="../images/&language;/packaging-dia.png"
+								format="PNG"/>
+				</imageobject>
+			</inlinemediaobject></para>
+		
+		<para><emphasis role="bold">To install the required packages, enter the
+				following command.  </emphasis></para>
+
+		<screen>sudo apt-get install build-essential dh-make automake pbuilder \
+gnupg lintian dchroot debian-policy debian-reference</screen>
+
+	</chapter>
+
+	<chapter id="pack-chroot"><title>chroot Environment</title>
+		<para>A chroot environment is commonly used for development related
+			work and is basically like a virtual install of build-related
+			software. It is always a good idea to do development work in a
+			chroot environment as development work often requires the
+			installation of development packages (whose main purpose is for
+			building packages). An example of this is when a certain
+			application requires the development version of a library to build
+			(e.g. libabc-dev). A normal user would not require the development
+			version of libabc. Thus it is better to install such development
+			packages in a chroot so as to leave the normal operating
+			environment clean and uncluttered.</para>
+		<para>First, install the required packages:</para>
+		<para>$ sudo apt-get install dchroot</para>
+		<para>The next steps are to create and configure the and enter the
+			chroot environment.</para>
+		<para>$ sudo mkdir /var/chroot</para>
+		<para>$ sudo echo “mychroot /var/chroot” &gt;&gt;
+			/etc/dchroot.conf</para> 
+		<para>$ sudo debootstrap –variant=buildd breezy /var/chroot/
+			http://archive.Ubuntu.com/Ubuntu/</para>
+		<para>$ sudo cp /etc/resolv.conf /var/chroot/etc/resolv.conf</para>
+		<para>$ sudo cp /etc/apt/sources.list /var/chroot/etc/apt/</para>
+		<para>$ sudo chroot /var/chroot/</para>
+		<para>In order to be able to use apt in the chroot, add Ubuntu sources
+			to chroot apt sources:</para>
+		<para>$ sudo echo “deb http://archive.Ubuntu.com/Ubuntu breezy main
+			restricted universe multiverse” &gt; /etc/apt/sources.lis</para>
+		<para>$ sudo echo “deb-src http://archive.Ubuntu.com/Ubuntu breezy main
+			restricted universe multiverse” &gt;&gt;
+			/etc/apt/sources.lis</para>
+		<para>$ apt-get update</para>
+		<para>$ apt-get install build-essential dh-make automake pbuilder gnupg
+			lintian wget debconf devscripts gnupg</para> 
+		<para>$ exit</para> 
+		<para>If your locale is something other than en_US, run the
+			following:</para> 
+		<para>$ sudo chroot /var/chroot/</para> 
+		<para>$ apt-get install locales dialog</para>
+		<para>$ dpkg-reconfigure locales</para> 
+		<para>$ exit</para> 
+		<para>Next, fix the user and root password for the chroot environment.
+			The last line below is to avoid sudo warnings when resolving in the
+			chroot environment:</para> 
+		<para>$ sudo cp /etc/passwd /var/chroot/etc/</para> 
+		<para>$ sudo sed 's/\([^:]*\):[^:]*:/\1:*:/' /etc/shadow | sudo tee
+			/var/chroot/etc/shadow</para> 
+		<para>$ sudo cp /etc/group /var/chroot/etc/</para> 
+		<para>$ sudo cp /etc/hosts /var/chroot/etc/</para> 
+		<para>To enable sudo, setup your root password and the first sudo user
+			in the admin group (for the chroot environment). In the following
+			commands, substitute “&lt;user&gt;” with the username that will be
+			used in the chroot environment:</para> 
+		<para>$ sudo cp /etc/sudoers /var/chroot/etc/</para> 
+		<para>$ sudo chroot /var/chroot/</para>
+		<para>$ dpkg-reconfigure passwd</para>
+		<para>$ passwd &lt;user&gt;</para>
+		<para>$ exit</para>
+		<para>The system fstab needs to be modified so that the chroot
+			environment will have access to the system home directories, temp
+			directory, etc. Note that the actual system home directory is used
+			in the chroot environment.</para>
+		<para>$ sudo editor /etc/fstab</para>
+		<para>Add these lines:</para>
+		<para>/home /var/chroot/home none bind 0 0</para>
+		<para>/tmp /var/chroot/tmp none bind 0 0</para>
+		<para>/media/cdrom /var/chroot/media/cdrom none bind 0 0</para>
+		<para>proc-chroot /var/chroot/proc proc defaults 0 0</para>
+		<para>devpts-chroot /var/chroot/dev/pts devpts defaults 0 0</para>
+		<para>Mount the new fstab entries</para>
+		<para>$ sudo mount -a</para>
+		<para>The default bash profile includes chroot information in the
+			prompt. To make this visible: </para>
+		<para>$ sudo chroot /var/chroot/</para>
+		<para>$ echo mychroot &gt; etc/Debian_chroot</para>
+		<para>$ exit</para>
+		<para>Now when you want to use your chroot (you may omit the -c
+			mychroot if there's only one, or you just want the first one in
+			/etc/dchroot.conf). The -d parameter means that your environment
+			will be preserved, this is generally useful if you want chrooted
+			applications to seamlessly use your X server, your session manager,
+			etc. </para>
+		<para>$ dchroot -c mychroot -d</para> 
+	</chapter>
+
+	<chapter id="pack-pbuilder"><title>pbuilder</title>
+
+	<sect1 id="pack-pbuilder-intro"><title>Introduction</title>
+		<para>pbuilder is a personal package builder for Debian packages. It is
+			used to make .debs from the source packages. It does so by
+			constructing a chroot system, and builds packages inside the
+			chroot. It is an ideal system to use to check that a package has
+			correct build-dependencies.</para> 
+		<para>A pbuilder environment is similar in many ways to a chroot
+			environment except that the entire pbuilder environment is
+			compressed and stored in a single tarball.  Everytime pbuilder is
+			invoked the tarball is uncompressed, the package is built and then
+			the uncompressed environment is then deleted. The only time the
+			environment is not deleted is when it is updated – in this case, a
+			new compressed tarball is created and the environment is deleted.
+			In contrast a chroot environment is persistent. pbuilder is ideal
+			for building packages as a clean pristine environment is used to
+			build each package.</para>
+	</sect1>
+
+	<sect1 id="pack-pbuilder-conf"><title>Configuration</title>
+		<para>Configuring pbuilder involves</para>
+		<para>$ sudo apt-get install pbuilder</para>
+		<para>$ sudo editor /etc/pbuilder/pbuilderrc</para>
+		<para>Modify /etc/pbuilder/pbuilderrc and apply the following changes
+			changing the relevant lines to the following values: </para>
+		<para>MIRRORSITE=http://archive.Ubuntu.com/Ubuntu</para>
+		<para>DISTRIBUTION=breezy</para>
+		<para>APTCONFDIR="/etc/pbuilder/apt.config/"</para>
+		<para>OTHERMIRROR="deb 
+			<ulink url="http://archive.ubuntu.com/ubuntu">
+				http://archive.Ubuntu.com/Ubuntu</ulink>
+			breezy main restricted universe multiverse"</para> 
+		<para>Next, files from /etc/apt need to be copied to pbuilder apt
+			configuration directory: </para> 
+		<para>$ sudo mkdir /etc/pbuilder/apt.config/</para> 
+		<para>$ sudo cp -ar /etc/apt/* /etc/pbuilder/apt.config/</para> 
+		<para>$ sudo echo “APT::Get::AllowUnauthenticated 1;” &gt;
+			/etc/pbuilder/apt.config/apt.conf.d/allow-unauthenticated</para>
+		<para>$ sudo rm /etc/pbuilder/apt.config/apt.conf.d/99update-notifier
+			</para>
+		<para>Finally, create the pbuilder environment: </para> 
+		<para>$ sudo pbuilder create –distribution breezy</para>
+	</sect1>
+
+	<sect1 id="pack-pbuilder-update"><title>Keeping the pbuilder environment 
+		up-to-date</title>
+		<para>It is a good idea to keep your pbuilder environment up to date
+			with the latest packages. The following command updates the
+			pbuilder tarball: </para> 
+		<para>$ sudo pbuilder update</para>
+	</sect1>
+	<sect1 id="pack-pbuilder-dist_upgrade"><title>Updating to a new release
+		</title> 
+		<para>When a new release of Ubuntu is available, the pbuilder tarball
+			can be updated to the new release with the following command (where
+			“&lt;release” is replaced with the release name).</para> <para>$
+			sudo pbuilder update –distribution &lt;release&gt;
+			--override-config</para>
+	</sect1>
+
+	</chapter>
+	<chapter id="pack-scenarios"><title>Packaging Scenarios</title>
+
+	<sect1 id="pack-scenarios-new_app"><title>Package a new application</title>
+		<para>The following scenario is used when packaging an application for
+			which a package does not already exist. Upstream is the term used
+			to describe the original unmodified application. The applications
+			are distributed as tarballs and come in two formats – gzip and
+			bzip2. The summary of the steps undertaken for this scenario (once
+			the tarball has been retrieved) are:</para>
+		<orderedlist>
+			<listitem> <para>Enter chroot environment and retrieve the upstream
+					tarball</para></listitem> 
+			<listitem><para>Modify the package-related files</para> </listitem> 
+			<listitem><para>Create and sign package</para> </listitem> 
+			<listitem><para>Build and test the binary package</para> </listitem>
+		</orderedlist>
+
+		<sect2><title>Enter chroot environment and retrieve the upstream tarball
+				</title>
+			<para>In the following commands “&lt;application_url&gt;” should be
+				replaced by the URL of the source of the application.</para>
+			<para>$ dchroot -c mychroot -d</para> <para>$ wget
+				&lt;application_url&gt;</para> <para>$ tar -xvzf
+				application-version.tar.gz</para> <para>$ cd
+				application-version</para>
+		</sect2>
+
+		<sect2><title>Modify the package-related files</title>
+			<para>Create the Debian directory and packaging file templates -
+				this is achieved through dh_make. dh_make asks the user what
+				type of package they are creating. For simple applications
+				(like the ones this document is intended for), the package will
+				contain a “single binary”. In the following commands
+				“&lt;e-mail_address&gt;” is your e-mail address.</para> <para>$
+				dh_make -e &lt;e-mail_address&gt;</para> <para>$ cd
+				Debian</para> <para>$ rm *.ex *.EX README.Debian docs
+				dirs</para> <para>The rm command above removes example and
+				unneeded files. There should now be five files in the Debian
+				directory:</para> 
+			<orderedlist> 
+				<listitem><para>changelog</para> </listitem> 
+				<listitem><para>compat</para> </listitem> 
+				<listitem><para>control</para> </listitem> 
+				<listitem><para>copyright</para> </listitem> 
+				<listitem><para>rules</para> </listitem> 
+			</orderedlist>
+
+		<sect3><title>compat</title>
+			<para>The compat file contains the debhelper compatibility version.
+				The file should always contain the value 4. dh_make already
+				creates the file appropriately and hence it does not need to be
+				modified.</para>
+		</sect3>
+		<sect3><title>copyright</title>
+			<para>The copyright file contains license and copyright information
+				as supplied by the upstream software author. The default file
+				created by dh_make looks like this:</para>
+			<para>This package was debianized by Your Name
+				&lt;your.name@domain.com&gt; on</para> 
+			<para>Mon, 8 Aug 2005 22:28:54 +1000.</para>
+			<para>It was downloaded from &lt;fill in ftp site&gt;</para>
+			<para>Copyright Holder: &lt;put author(s) name and email here&gt;
+			</para>
+			<para>License:</para>
+			<para>&lt;Put the license of the package here&gt;</para>
+			<para>The required fields that need to be manually edited are:
+			</para>
+			<orderedlist>
+				<listitem><para>Download site – this typically is a link to the
+						homepage for the application e.g.
+						http://gaim.sourceforge.net</para> </listitem>
+				<listitem> <para>Software author name and e-mail address</para>
+					</listitem>
+				<listitem><para>License – this section of the file typically
+						involves copying the header of the license information
+						provided with the application source code. A example
+						is:</para> </listitem>
+			</orderedlist>
+			<para>GNU GENERAL PUBLIC LICENSE</para>
+			<para>Version 2, June 1991</para>
+			<para>Copyright (C) 1989, 1991 Free Software Foundation, Inc.</para>
+			<para>59 Temple Place, Suite 330, Boston, MA 02111-1307 USA</para>
+			<para>Everyone is permitted to copy and distribute verbatim copies
+			</para>
+			<para>of this license document, but changing it is not allowed.
+			</para>
+		</sect3>
+
+		<sect3><title>control</title>
+			<para>The control file contains information related to the package
+				that is built such as build-time dependencies, runtime
+				dependencies, package name, description, etc. The default file
+				created by dh_make looks like this:</para> 
+			<para>Source: &lt;application&gt;</para> 
+			<para>Section: unknown</para>
+			<para>Priority: optional</para> 
+			<para>Maintainer: Ankur Kotwal &lt;ankur.kotwal@gmail.com&gt;</para>
+			<para>Build-Depends: debhelper (&gt;= 4.0.0)</para> 
+			<para>Standards-Version: 3.6.1</para> 
+			<para>Package: &lt;application&gt;</para>
+			<para>Architecture: any</para> 
+			<para>Depends: ${shlibs:Depends}, ${misc:Depends}</para>
+			<para>Description: &lt;insert up to 60 chars description&gt;</para> 
+			<para>&lt;insert long description, indented with spaces&gt;</para> 
+			<para>The fields in the file are:</para> 
+			<orderedlist> 
+				<listitem><para>Source – the name of the application. Should be
+						lower case and not contain any spaces. For example the
+						Gnome applet “Fast User Switch Applet” would become
+						“fast-user-switch-applet”</para> 
+				</listitem> 
+				<listitem><para>Section – the collection of packages to which
+						this package belongs to (e.g. net, gnome, libs).</para>
+				</listitem> 
+				<listitem> <para>Priority – in most cases this value will be
+						“optional”</para> </listitem> 
+				<listitem><para>Maintainer – the name and e-mail address of the
+						person that packaged the application. Please make sure
+						that this field includes a valid "To: " header for an
+						email, because after the package is uploaded, the bug
+						tracking system will use this field to deliver bug
+						emails. Avoid using commas, ampersands and
+						parenthesis.</para> 
+				</listitem>
+				<listitem><para>Build-Depends – the list of build dependencies
+						for the package (i.e. the packages that need to be
+						installed to build the application from source and
+						create the package).  The value of this field is a
+						comma separated list in the format. For example the
+						value “blah (&gt;= 3.0.2), mouse (&lt;= 4.0.0)”
+						specifies that in order to build this package, blah
+						(version 3.0.2 or greater) and mouse (version 4.0.0 or
+						lower) are required.</para> 
+				</listitem> 
+			</orderedlist> 
+			<para>The build-depends can typically be found in the README or
+				INSTALL file that comes with the application source. Once the
+				build dependencies are known, their matching package names need
+				to be determined. The package names are typically similar to
+				the application names. A useful command to determine package
+				names is apt-cache, reading its man page is highly recommended.
+				Build-depends often require the development version of a
+				package (i.e. the version of the package used to build other
+				software). For example if an application requires the “cairo”
+				library, the build-depends will require “libcairo-dev”.</para>
+			<para>The following packages must be in the build-depends for new
+				packages: “debhelper (&gt;= 4.1.0), cdbs (&gt;= 0.4.23-1.1),
+				debhelper (&gt;= 4.2.21)”</para> 
+			<orderedlist> 
+				<listitem><para>Standards-Version – the version of the Debian
+						Policy standards that this package follows. This value
+						is best left to the default that dh_make
+						provides.</para>
+				</listitem> 
+				<listitem> <para>Package – the name of the package. The value
+						is almost always the same as that for “Source”.</para> 
+				</listitem> 
+				<listitem><para>Architecture – this value is best left to
+						“any”.</para>
+				</listitem> 
+				<listitem> <para>Depends – the list of runtime dependencies for
+						the package (i.e. the packages that are needed to run
+						this application). The value is in the same format as
+						the “Build-Depends” and completing this value requires
+						the same process. Depends requires the binary version
+						of a package (i.e. the version of the package used to
+						run other software). For example if an application
+						requires the “cairo” library, the depends will require
+						“libcairo”.</para>
+				</listitem> 
+			</orderedlist>
+		</sect3>
+
+		<sect3><title>rules</title>
+			<para>The rules file describes the steps involved in
+				compiling/building the application, pre-compilation,
+				pre-installation and installation. The rules file can be very
+				complicated but in recent times has become much simpler thanks
+				to cdbs. cdbs is a set of scripts (which can be called from
+				within the rules file) which take much of the pain of building
+				an application away.</para>
+			<para>$ rm rules</para>
+			<para>$ editor rules</para>
+			<para>A simple cdbs based rules file should contain the following:
+				</para>
+			<para>#!/usr/bin/make -f</para>
+			<para>include /usr/share/cdbs/1/rules/debhelper.mk</para>
+			<para>include /usr/share/cdbs/1/class/autotools.mk</para>
+			<para>If the application requires extra parameters during
+				configure, they can be specified in the rules file by adding
+				the following line (where “&lt;extra_parameters&gt;” is
+				substituted for the actual parameters):</para>
+			<para>DEB_CONFIGURE_EXTRA_FLAGS := &lt;extra_parameters&gt;</para>
+			<para>cdbs is a powerful tool that is highly configurable. For
+				further information on using cdbs please see the documentation
+				at <ulink url="http://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml"> 
+				http://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml</ulink>
+			</para>
+		</sect3>
+
+		<sect3><title>changelog</title>
+			<para>The changelog file documents the various releases of the
+				package and the changes that occurred between each
+				release.</para>
+			<para>$ editor changelog</para>
+			<para>A sample changelog file is as follows:</para>
+			<para>&lt;package&gt; (&lt;version&gt;) &lt;release&gt;; urgency=low
+				</para>
+			<para>* Initial release.</para>
+			<para>* This is my first Debian package.</para>
+			<para>* Made changes to the README.</para>
+			<para>-- Ankur Kotwal &lt;ankur.kotwal@gmail.com&gt; Mon, 8 Aug
+				2005 22:28:54 +1000</para>
+			<para>The fields in the file are:</para>
+			<orderedlist>
+				<listitem><para>Package – the name of the package.</para>
+					</listitem>
+	
+				<listitem><para>Version – the version of the release. The
+					format for the version is
+					&lt;upstream_version&gt;-&lt;Debian_version&gt;&lt;
+					Ubuntu_version&gt;.  An example of this is
+					“2.12.1-0ubuntu7”. In this example, the upstream
+					version (i.e. the version as given by the author(s) of the application) is 2.12.1. The Debian version is 0 (a zero implies the application
+					has not been packaged for Debian). The Ubuntu version
+						is the version of this package specific to Ubuntu.
+						Since Ubuntu packages are based on Debian packages, a
+						Debian version is always present. The value of zero is
+						used to indicate that this upstream version of the
+						package does not yet exist in Debian. The Ubuntu
+						version can be missing in some cases. This is the case
+						when the Debian package is pulled into Ubuntu without
+						any changes. When packaging any application for Ubuntu,
+						you will always be required to provide an Ubuntu
+						version. Packages pulled in from Debian are requested
+						manually but packaged and built automatically (and
+						hence do not have an Ubuntu version as the Debian
+						package is not modified, just rebuilt).</para>
+				</listitem>
+				<listitem><para>Release – the version of Ubuntu that this package is a part of. By default this value is “unstable” but for Ubuntu it should be “breezy” or whichever is the targeted release for the package.</para>
+				</listitem>
+				<listitem><para>Urgency – this value will in most cases be “low” and can be left unmodified.</para>
+				</listitem>
+				<listitem><para>Log lines – the log lines contain a brief summary of the changes introduced in this version. They start with two spaces, an asterisk and another space.</para>
+				</listitem>
+				<listitem><para>Package Creator Details – the last line in the above sample contains the details of the person that created each version of the package. The line is automatically generated by dh_make and does not need to be modified.</para>
+				</listitem>
+			</orderedlist>
+			<para>When modifying an existing changelog, run the following command (it creates a new changelog entry). Please note that the version often needs to be manually updated.</para>
+			<para>$ dch -i</para>
+		</sect3>
+	</sect2>
+	<sect2><title>Create and sign source package</title>
+		<para>Once the debian directory files have been modified, it is time to build the package. Run the following command from the &lt;application-version&gt; directory (not the &lt;application-version&gt;/debian directory).</para>
+		<para>$ dpkg-buildpackage -rfakeroot</para>
+	</sect2>
+	<sect2><title>Build and test binary package</title>
+		<para>Now it is finally time to build the binary package in a clean pristine environment – the pbuilder environment. By default, pbuilder produces packages in the /var/cache/pbuilder/result directory.</para>
+		<para>$ sudo pbuilder build ../&lt;application&gt;-&lt;version&gt;.dsc</para>
+		<para>Once built, lintian is used on the .deb. lintian verifies that the built package adheres to the Debian package policy and also checks for common errors.</para>
+		<para>$ lintian /var/cache/pbuilder/result/&lt;application&gt;-&lt;version&gt;.deb</para>
+		<para>All lintian errors should ideally be fixed and the package rebuilt – this can take several iterations. Once all the lintian errors have been resolved, you can congratulate yourself! You have just built an Ubuntu package. Before you release your newly built package to the world, you should install and test it.</para>
+	</sect2>
+	<sect2><title>Worked Example</title>
+		<para>Please note that this section is incomplete.</para>
+		<para>$ dchroot -c mychroot -d</para>
+		<para>$ sudo pbuilder update</para>
+		<para>$ tar -xv{z|j}f &lt;app-ver&gt;.tar.{gz|bz2}</para>
+		<para>$ cd &lt;app-ver&gt;</para>
+		<para>$ dh_make -e &lt;e-mail_address&gt;</para>
+		<para>$ edit copyright</para>
+		<para>$ edit control</para>
+		<para>$ edit rules</para>
+		<para>$ dch -i</para>
+		<para>$ dpkg-buildpackage -rfakeroot</para>
+		<para>$ sudo pbuilder build ../&lt;app-ver&gt;-&lt;revision&gt;.dsc</para>
+		<para>$ lintian /var/cache/pbuilder/result/&lt;application&gt;-&lt;version&gt;.deb</para>
+	</sect2>
+	</sect1>
+	<sect1 id="pack-scenarios-upgrade"><title>Upgrade an existing tarball</title>
+		<para>Please note that this section is incomplete.</para>
+		<para>The following scenario is used when packaging a new version of an already packaged application. The summary of the steps undertaken for this scenario (once the tarball has been retrieved) are:</para>
+		<orderedlist>
+			<listitem><para>Enter chroot environment and retrieve the upstream tarball</para>
+			</listitem>
+			<listitem><para>Unpack the tarball. If required, rename the directory</para>
+			</listitem>
+			<listitem><para>Modify the package-related files</para>
+			</listitem>
+			<listitem><para>Create and sign package</para>
+			</listitem>
+			<listitem><para>Build and test the binary package</para>
+			</listitem>
+		</orderedlist>
+		<para>$ apt-get source &lt;application&gt;-&lt;version&gt;</para>
+		<para>$ cd &lt;application&gt;-&lt;version&gt;</para>
+		<para>$ dch -i</para>
+		<para>$ dpkg-buildpackage -rfakeroot</para>
+		<para>$ sudo pbuilder build ../&lt;application&gt;-&lt;version&gt;.dsc</para>
+		<para>$ lintian /var/cache/pbuilder/result/&lt;application&gt;-&lt;version&gt;.deb</para>
+	</sect1>
+	<sect1 id="pack-scenarios-patch"><title>Add a patch</title>
+		<para>Please note that this section is incomplete.</para>
+		<para>$ Assuming debianized tree</para>
+		<para>$ cd &lt;application&gt;-&lt;version&gt;</para>
+		<para>$ mkdir Debian/patches // if it doesn't exist</para>
+		<para>$ dpatch-edit-patch &lt;patch-name&gt;</para>
+		<para>(make changes and exit)</para>
+		<para>$ echo &lt;patch-name&gt; &gt;&gt; Debian/patches/00list</para>
+		<para>$ dch -i</para>
+		<para>$ dpkg-buildpackage -rfakeroot</para>
+		<para>$ sudo pbuilder build ../&lt;application&gt;-&lt;version&gt;.dsc</para>
+		<para>$ lintian /var/cache/pbuilder/result/&lt;application&gt;-&lt;version&gt;.deb</para>
+	</sect1>
+	</chapter>
+	<chapter id="pack-tips"><title>Tips &amp; Tricks</title>
+		<sect1 id="pack-tips-checklist"><title>Packaging Quick Reference Checklist</title>
+			<para>The following steps should be followed when creating/updating a package:</para>
+			<orderedlist>
+				<listitem><para>Unpack upstream tarball into a temporary directory</para>
+				</listitem>
+				<listitem><para>Determine the dependencies of the application</para>
+				</listitem>
+				<listitem><para>apt-get install the dependencies</para>
+				</listitem>
+				<listitem><para>./configure and build the application</para>
+				</listitem>
+				<listitem><para>Test the application</para>
+				</listitem>
+				<listitem><para>Unpack upstream tarball</para>
+				</listitem>
+				<listitem><para>Convert and rename the upstream tarball to &lt;app_name&gt;_&lt;version&gt;.orig.tar.gz</para>
+				</listitem>
+				<listitem><para>Rename the application directory to &lt;app_name&gt;-&lt;version&gt;</para>
+				</listitem>
+				<listitem><para>Change directory to &lt;app_name&gt;-&lt;version&gt;</para>
+				</listitem>
+				<listitem><para>Create packaging templates - run dh_make -e &lt;email_address&gt;</para>
+				</listitem>
+				<listitem><para>Change directory to Debian</para>
+				</listitem>
+				<listitem><para>Remove unwanted templates - rm *.ex *.EX README.Debian docs dirs</para>
+				</listitem>
+				<listitem><para>Edit copyright</para>
+					<orderedlist>
+						<listitem><para>Update the download location</para>
+						</listitem>
+						<listitem><para>List the software author(s) in the copyright holder field</para>
+						</listitem>
+						<listitem><para>Add the software license at the end of the file</para>
+						</listitem>
+					</orderedlist>
+				</listitem>
+				<listitem><para>Edit control</para>
+				</listitem>
+				<listitem><para>Edit rules</para>
+				</listitem>
+				<listitem><para>Edit changelog (shortcut dch -i)</para>
+					<orderedlist>
+						<listitem><para>Update version</para>
+						</listitem>
+						<listitem><para>Ensure that the release field is the next version of Ubuntu (currently breezy)</para>
+						</listitem>
+						<listitem><para>Make desired changes to changelog</para>
+						</listitem>
+					</orderedlist>
+				</listitem>
+				<listitem><para>Create and sign package – run dpkg-buildpackage -rfakeroot</para>
+				</listitem>
+				<listitem><para>Build package – run sudo pbuilder build ../&lt;application&gt;-&lt;version&gt;.dsc</para>
+				</listitem>
+				<listitem><para>Find and resolve lintian warnings – litian /var/cache/pbuilder/result/&lt;application&gt;-&lt;version&gt;.deb</para>
+				</listitem>
+				<listitem><para>Test package</para>
+				</listitem>
+			</orderedlist>
+		</sect1>
+		<sect1 id="pack-tips-test_compiles"><title>Fast test compiles</title>
+			<para>A way to do fast test compiles is to bypass the pbuilder and use dpkg-buildpackage. This should only be done when testing out the build of an application. The final .deb must always be built using pbuilder as it is the only way of ensuring that an application has been properly packaged.</para>
+			<para>$ sudo apt-get build-dep &lt;package&gt;</para>
+			<para>$ dpkg-buildpackage -uc -us -rfakeroot</para>
+		</sect1>
+	</chapter>
+</book>

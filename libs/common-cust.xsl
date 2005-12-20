@@ -31,11 +31,11 @@
     <!-- Glossaries -->
     <xsl:param name="glossterm.auto.link" select="1"/>
     <xsl:param name="firstterm.only.link" select="1"/>
-    <xsl:param name="glossary.collection">/usr/share/computerdictionary/glossary/glossary.xml</xsl:param>
+    <xsl:param name="glossary.collection" select="'/usr/share/computerdictionary/glossary/glossary.xml'"/>
     <xsl:param name="glossentry.show.acronym" select="'primary'"/>
     
     <!-- Bibliographies -->
-  <xsl:param name="bibliography.collection">/usr/share/computerdictionary/bibliography/references.xml</xsl:param>
+    <xsl:param name="bibliography.collection" select="'/usr/share/computerdictionary/bibliography/references.xml'"/>
     <xsl:param name="bibliography.numbered" select="1"/>
     
     <!-- Captions -->
