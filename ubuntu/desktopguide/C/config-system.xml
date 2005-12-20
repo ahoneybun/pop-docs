@@ -1,0 +1,860 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="configuring-your-system-chap" status="writing">
+	<title id="configuring-your-system">Configuring Your System</title>
+	<para>This chapter contains information on configuring your system.</para>
+	<sect1 id="hardware" status="writing">
+		<title>Hardware</title>
+		<sect2 id="digital-cameras">
+			<title>Digital Cameras</title>
+				<para>Most USB digital cameras will be automatcially detected by Ubuntu. Simply just plug in and switch on your USB digital camera, Ubuntu will then ask you if you would like to import the photos from your camera. Click on <guibutton>Import</guibutton>, Ubuntu will then show you a preview of your photos. Choose a location to save your photos to, then click on <guibutton>Import</guibutton>, Ubuntu will then save your photos to your hard drive.</para>
+		</sect2>
+		<sect2 id="sound-cards">
+			<title>Sound Cards</title>
+				<para>Many common sound cards are automatically detected by Ubuntu during installation, if you are not hearing sound there are a couple of things you can try:</para>
+		   <orderedlist>
+			<listitem>
+				<para>Check that the sound isn't muted, click the speaker icon on the top panel of your Ubuntu desktop and check each device.</para>
+			</listitem>
+			<listitem>
+				<para>Check to see if root can use sound. Type into a terminal:</para>
+		<para>
+<screen>
+sudo totem &amp;
+</screen>
+		</para>
+		<para>Once <application>Totem</application> launches, try playing a sound or movie file. If the sound now works, do the following in a terminal to enable everyone to use sound:</para>
+		<para>
+<screen>
+sudo chmod 666 /dev/dsp
+</screen>
+		</para>
+			</listitem>
+		    </orderedlist>
+		<para>More information can be found on <ulink url="https://wiki.ubuntu.com/SoundProblemsHoary">SoundProblemsHoary</ulink> on the Ubuntu Wiki.</para>
+		</sect2>
+
+		<sect2 id="graphics-cards">
+			<title>3D Graphic Cards</title>
+		        <qandaset>
+        	       	 <qandaentry id="installnvidiadriver" xreflabel="3D Nvidia video card driver">
+        		        <question>
+        		            <para>3D Nvidia Video Card Driver</para>
+        		        </question>
+        		        <answer>
+        		            <orderedlist>
+        		                <listitem>
+        		                    <para>Read <xref linkend="extra-repositories"/></para>
+        		                </listitem>
+        		                <listitem>
+				<para>Install the nvidia-glx and nvidia-settings packages with <application>Add/Remove Applications</application> (See <xref linkend="add-applications"/>)
+				</para> 
+                            <para>
+                                <literallayout>Miscellaneous - Graphical (restricted) &gt; nvidia-glx
+Miscellaneous - Graphical (restricted) &gt; nvidia-settings</literallayout>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                <screen>
+sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup 
+sudo nvidia-glx-config enable 
+sudo gedit /usr/share/applications/NVIDIA-Settings.desktop</screen>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>Insert the following lines into the new file
+                                <programlisting>
+[Desktop Entry]
+Name=NVIDIA Settings
+Comment=NVIDIA Settings
+Exec=nvidia-settings
+Icon=
+Terminal=false
+Type=Application
+Categories=Application;System;</programlisting>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>Save the edited file (<ulink
+                                    url="sample/NVIDIA-Settings.desktop_installnvidiadriver"
+                                />)</para>
+                        </listitem>
+                        <listitem>
+                            <para>Read <xref linkend="restartgnomewithoutreboot"/>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                <menuchoice>
+                                    <guimenu>Applications</guimenu>
+                                    <guisubmenu>System Tools</guisubmenu>
+                                    <guimenuitem>NVIDIA Settings</guimenuitem>
+                                </menuchoice>
+                            </para>
+                        </listitem>
+                    </orderedlist>
+                </answer>
+            </qandaentry>
+            <qandaentry>
+                <question>
+                    <para>Disable the Nvidia Graphics Logo on Startup</para>
+                </question>
+                <answer>
+                    <orderedlist>
+                        <listitem>
+                            <para>Read <xref linkend="installnvidiadriver"/>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                <screen>
+sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup 
+sudo gedit /etc/X11/xorg.conf</screen>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>Find this section</para>
+                            <para>
+                                <programlisting>
+...
+Section "Device"
+Identifier	"NVIDIA Corporation NV11 [GeForce2 MX/MX 400]"
+Driver		"nvidia"
+BusID		"PCI:1:0:0"
+...</programlisting>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>Add the following line below it</para>
+                            <para>
+                                <programlisting>
+Option  "NoLogo"</programlisting>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>Save the edited file ( <ulink
+                                    url="sample/xorg.conf_disablenvidialogo"
+                            />)</para>
+                        </listitem>
+                        <listitem>
+                            <para>Read <xref linkend="restartgnomewithoutreboot"/>
+                            </para>
+                        </listitem>
+                    </orderedlist>
+                </answer>
+            </qandaentry>
+	<!-- unconfirmed ATI drivers, someone who owns an ATI card please confirm that this works -->
+            <qandaentry id="installatidriver">
+                <question>
+                    <para>3D ATI Video Card Driver</para>
+                </question>
+                <answer>
+			<orderedlist>
+                        <listitem>
+ 				<para>Install the xorg-driver-fglrx package with <application>Add/Remove Applications</application> (See <xref linkend="add-applications"/>)
+				</para> 
+                            <para>
+                                <literallayout>Miscellaneous - Graphical (restricted) &gt; xorg-driver-fglrx</literallayout>
+                            </para>
+                        </listitem>
+			<listitem>
+			    <para><screen>
+echo fglrx | sudo tee -a /etc/modules
+sudo depmod -a ; sudo modprobe fglrx
+sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup 
+sudo sed -i -e 's/"ati"/"fglrx"/' /etc/X11/xorg.conf</screen></para>
+			</listitem>
+			<listitem>
+			    <para>If you are using an NForce2-based motherboard you will also need to do the following:</para>
+			    <para><screen>
+sudo gedit /etc/X11/xorg.conf
+			    </screen></para>
+			    <para>Change <quote>Section "Device"</quote> add the following line:</para>
+			    <para><screen>
+  Option  "UseInternalAGPGART" "no"</screen></para>
+			</listitem>
+			<listitem>
+			    <para>Restart your machine for changes to take effect.</para>
+			</listitem>
+			</orderedlist>
+		</answer>
+	    </qandaentry>
+	    </qandaset>
+	    </sect2>
+	    <sect2 id="modems">
+		<title>Modems</title>
+		<qandaset>
+		<qandaentry id="winmodems">		
+		<question><para>Winmodems</para></question>
+		<answer>
+		<para>Most winmodems are not supported by Ubuntu, but drivers can be found that will enable the use of such modems. First you need to identify what chipset your winmodem is using:</para>
+		<para>
+<screen>
+wget -c <ulink url="&scanmodem-url;">&scanmodem-url;</ulink> 
+gunzip -c &scanmodem-gz; &gt; scanModem 
+chmod +x scanModem
+sudo ./scanModem 
+gedit Modem/ModemData.txt</screen>
+		</para>
+		<para>Check the output in Gedit, it should list what modem chipset you have. Once you are aware of the chipset you have, see <ulink url="&linmodem;">&linmodem;</ulink> and follow the directions for your 	modem. More infomation can be found at <ulink url="https://wiki.ubuntu.com/SettingUpModems">SettingUpModems</ulink> on the Ubuntu Wiki.</para>
+		</answer>
+		</qandaentry>
+		<qandaentry id="adsl">
+		<question><para>ADSL Modems</para></question>
+		<answer>
+		<para>All PPPOE and router-style ADSL modems are supported by Ubuntu (that use ethernet for the connections), and some USB ADSL modems are supported too. For router-style ADSL modems, just connect it up, configure the modem as per your ISPs instructions and configure networking in Ubuntu. For information on PPPOE modems see <ulink url="https://wiki.ubuntu.com/ADSLPPPoE">ADSLPPoE</ulink> on the Ubuntu wiki.</para>
+		</answer>
+		</qandaentry>
+	    </qandaset>
+	  </sect2>
+	  <sect2 id="Handhelds">
+		<title>Handhelds</title>
+		<qandaset>
+	            <qandaentry>
+        	        <question>
+        	            <para>PalmOS Devices</para>
+        	        </question>
+        	        <answer>
+        	            <orderedlist>
+        	                <listitem>
+        	                    <para>
+                                <screen>
+sudo gedit /etc/udev/rules.d/10-custom.rules</screen>
+        	                    </para>
+        	                </listitem>
+                        <listitem>
+                            <para>Insert the following line into the new file</para>
+                            <para>
+                                <programlisting>
+BUS="usb", SYSFS{product}="Palm Handheld*", KERNEL="ttyUSB*", NAME{ignore_remove}="pilot", MODE="666"</programlisting>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>Save the edited file (<ulink
+                                    url="sample/10-custom.rules_configurepalmosdevices"
+                                />)</para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                <menuchoice>
+                                    <guimenu>System</guimenu>
+                                    <guisubmenu>Preferences</guisubmenu>
+                                    <guimenuitem>PalmOS Devices</guimenuitem>
+                                </menuchoice>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>Follow the instructions on screen</para>
+                        </listitem>
+	                <listitem>
+	                    <para>Read <xref linkend="extra-repositories"/></para>
+	                </listitem>
+
+			<listitem>
+			    <para>Install the J-Pilot package with <application>Add/Remove Applications</application> (See <xref linkend="add-applications"/>)</para> 
+                            <para>
+                                <literallayout>Cross Platform (universe) &gt; jpilot</literallayout>
+                            </para>
+                        </listitem>
+			<listitem>
+                            <para>
+                                <menuchoice>
+                                    <guimenu>Applications</guimenu>
+                                    <guisubmenu>Office</guisubmenu>
+                                    <guimenuitem>J-Pilot</guimenuitem>
+                                </menuchoice>
+			    </para>
+			</listitem>
+                    </orderedlist>
+                </answer>
+            </qandaentry>
+	    </qandaset>
+	</sect2>
+	<sect2 id="other-hardware">
+	    <title>Other Hardware</title>
+	    <qandaset>
+            <qandaentry id="listpartitiontables" xreflabel="check disk space and view the partition table">
+                <question>
+                    <para>How do I check disk space usage and view the partition table?</para>
+                </question>
+                <answer>
+                    <orderedlist>
+                        <listitem>
+                            <para>Launch &disks; </para>
+                        </listitem>
+                        <listitem>
+                            <para>Select the <guibutton>Harddrive</guibutton>, then the <guibutton>Partitions</guibutton> tab</para>
+                        </listitem>
+                        <listitem>
+                            <para>Each partition will be listed under <guilabel>Partition List</guilabel>, with disk space and mount point.</para>
+                        </listitem>
+                    </orderedlist>
+                </answer>
+            </qandaentry>
+            <qandaentry>
+                <question>
+                    <para>How do I list mounted devices?</para>
+                </question>
+                <answer>
+                    <orderedlist>
+                        <listitem>
+                            <para>
+                                <screen>mount</screen>
+                            </para>
+                        </listitem>
+                    </orderedlist>
+                </answer>
+            </qandaentry>
+            <qandaentry>
+                <question>
+                    <para>How do I list PCI devices?</para>
+                </question>
+                <answer>
+                    <orderedlist>
+                        <listitem>
+                            <para>
+                                <screen>lspci</screen>
+                            </para>
+                        </listitem>
+                    </orderedlist>
+                </answer>
+            </qandaentry>
+            <qandaentry>
+                <question>
+                    <para>How do I list USB devices?</para>
+                </question>
+                <answer>
+                    <orderedlist>
+                        <listitem>
+                            <para>
+                                <screen>lsusb</screen>
+                            </para>
+                        </listitem>
+                    </orderedlist>
+                </answer>
+            </qandaentry>
+            <qandaentry>
+                <question>
+                    <para>How do I speed up CD/DVD-ROM access (enable DMA)?</para>
+                </question>
+                <answer>
+                    <orderedlist>
+                        <listitem>
+                            <para>Assuming that <filename class="devicefile"
+                                    >/dev/cdrom</filename> is the location of
+                                CD/DVD-ROM</para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                <screen>
+sudo hdparm -d1 /dev/cdrom 
+sudo cp /etc/hdparm.conf /etc/hdparm.conf_backup 
+sudo gedit /etc/hdparm.conf</screen>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>Append the following lines at the end of file</para>
+                            <para>
+                                <programlisting>
+/dev/cdrom {
+dma = on
+}</programlisting>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>Save the edited file (<ulink
+                                    url="sample/hdparm.conf_speedupcddvdrom"
+                            />)</para>
+                        </listitem>
+                    </orderedlist>
+                </answer>
+            </qandaentry>
+            <qandaentry>
+                <question>
+                    <para>How do I mount/unmount CD/DVD-ROMs manually, and show all
+                        hidden and associated files/folders?</para>
+                </question>
+                <answer>
+                    <orderedlist>
+                        <listitem>
+                            <para>Assuming that <filename class="devicefile"
+                                    >/media/cdrom0/</filename> is the location
+                                of CD/DVD-ROM</para>
+                        </listitem>
+                        <listitem>
+                            <para>To mount CD/DVD-ROM</para>
+                            <para>
+                                <screen>
+sudo mount /media/cdrom0/ -o unhide</screen>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>To unmount CD/DVD-ROM</para>
+                            <para>
+                                <screen>
+sudo umount /media/cdrom0/</screen>
+                            </para>
+                        </listitem>
+                    </orderedlist>
+                </answer>
+            </qandaentry>
+            <qandaentry>
+                <question>
+                    <para>How do I forcefully unmount CD/DVD-ROMs manually?</para>
+                </question>
+                <answer>
+                    <orderedlist>
+                        <listitem>
+                            <para>
+                                <screen>
+sudo eject</screen>
+                            </para>
+                        </listitem>
+                    </orderedlist>
+                </answer>
+            </qandaentry>
+            <qandaentry id="remountfstabwithoutreboot" xreflabel="How do I remount /etc/fstab without rebooting?">
+                <question>
+                    <para>How do I remount /etc/fstab without rebooting?</para>
+                </question>
+                <answer>
+                    <orderedlist>
+                        <listitem>
+                            <para>
+                                <screen>
+sudo mount -a</screen>
+                            </para>
+                        </listitem>
+                    </orderedlist>
+                </answer>
+            </qandaentry>
+        </qandaset>
+	</sect2>
+      </sect1>
+      <sect1 id="networking" status="writing">
+		<title>Networking</title>
+		<!-- Setting up network cards, config, add section on networking apps such as gftp, ssh etc -->
+		<sect2 id="configuring-network">
+			<title>Configuring The Network</title>
+		     <qandaset>
+	            	<qandaentry id="confignetwork" xreflabel="configure network connections">
+                    	<question>
+  	                  <para>Configuring Network Connections</para>
+  	              	</question>
+     		      	<answer>
+   	                 <orderedlist>
+                        <listitem>
+                            <para>
+                                <menuchoice>
+                                    <guimenu>System</guimenu>
+                                    <guisubmenu>Administration</guisubmenu>
+                                    <guimenuitem>Networking</guimenuitem>
+                                </menuchoice>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>Select the <guibutton>Connections</guibutton>
+                                tab. select the <option>Ethernet
+                                connection</option> interface from the list,
+                                then click the <guibutton>Properties</guibutton>
+                                button. Ensure that the <guibutton>This device
+                                    is configured</guibutton> is checked. From
+                                the <guibutton>Configuration</guibutton>
+                                drop-list select <option>DHCP/Static IP
+                                address</option>, then click
+                                <guibutton>OK</guibutton>.</para>
+                        </listitem>
+                        <listitem>
+                            <para>Select the <guibutton>DNS</guibutton> tab add
+                                or delete DNS Servers in the <guilabel>DNS
+                                    Servers</guilabel> list.</para>
+                        </listitem>
+                    </orderedlist>
+                </answer>
+            </qandaentry>
+            <qandaentry>
+                <question>
+                    <para>Activate/Deactivate Network Connections</para>
+                </question>
+                <answer>
+                    <orderedlist>
+                        <listitem>
+                            <para>
+                                <menuchoice>
+                                    <guimenu>System</guimenu>
+                                    <guisubmenu>Administration</guisubmenu>
+                                    <guimenuitem>Networking</guimenuitem>
+                                </menuchoice>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>Select <menuchoice>
+                                    <guimenuitem>Network settings</guimenuitem>
+                                    <interface>Connections Tab</interface>
+                                    <guilabel>Ethernet connection</guilabel>
+                                </menuchoice>
+                                <option>Activate/Deactivate</option>
+                            </para>
+                        </listitem>
+                    </orderedlist>
+                </answer>
+            </qandaentry>
+            <qandaentry>
+                <question>
+                    <para>Change the Computer Name</para>
+                </question>
+                <answer>
+                    <orderedlist>
+                        <listitem>
+                            <para>
+                                <menuchoice>
+                                    <guimenu>System</guimenu>
+                                    <guisubmenu>Administration</guisubmenu>
+                                    <guimenuitem>Networking</guimenuitem>
+                                </menuchoice>
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>Select the <guibutton>General</guibutton> tab.
+                                Enter the name of the computer in the
+                                    <guilabel>Hostname</guilabel> field.</para>
+                        </listitem>
+                        <listitem>
+                            <para>Click <guibutton>OK</guibutton>, close all
+                                open applications and reboot.</para>
+                        </listitem>
+                    </orderedlist>
+                </answer>
+            </qandaentry>
+            <qandaentry>
+                <question>
+                    <para>Browse Network Computers</para>
+                </question>
+                <answer>
+                    <note>
+                        <para>Assuming that network connections have been
+                            configured properly. See <xref
+                                linkend="confignetwork"/> for more
+                        information.</para>
+                    </note>
+                    <orderedlist>
+                        <listitem>
+                            <para>This screen lists all network servers and
+                                Samba servers, if computers, network folders or
+                                Sambas servers could not be found, try to access
+                                them directly. <!-- Read <xref
+                                    linkend="accessnetworkfolderswihoutmount"/>.--> </para>
+                            <para>
+                                <menuchoice>
+                                    <guimenu>Places</guimenu>
+                                    <guimenuitem>Network Servers</guimenuitem>
+                                </menuchoice>
+                            </para>
+                        </listitem>
+                    </orderedlist>
+                </answer>
+            </qandaentry>
+           </qandaset>
+	</sect2>
+	<sect2 id="wireless">
+		<title>Wireless</title>
+		<para>Describe wireless here</para>
+	</sect2>
+	<sect2 id="networking-utils" status="writing">
+		<title>Networking Utilities</title>
+		<qandaset>
+	            <qandaentry id="firestarter">
+        	         <question>
+     	                 <para>Firestarter Firewall</para>
+    		         </question>
+    	         	 <answer>
+			    <orderedlist>
+        	                <listitem>
+   	                          <para>Read <xref linkend="extra-repositories"/>
+        	                     </para>
+        	                </listitem>
+        	                <listitem>
+					    <para>With <application>Add/Remove Applications</application>
+        	                            
+        	                                (See <xref linkend="add-applications"/>)
+        	                            install:</para>
+        	                    <para><literallayout>System Administration (universe) &gt; Firestarter</literallayout>
+        	                    </para>
+	                        </listitem>
+	                        <listitem>
+	                            <para>After it is installed, run &firestarter-firewall-tool; to configure your firewall. The firewall will now start in the background when your computer starts.</para>
+	                        </listitem>
+	                    </orderedlist>
+        	         </answer>
+     	 	        </qandaentry>
+			<qandaentry>
+				<question>
+					<para>EtherApe Graphical Network Monitor</para>
+				</question>
+				<answer>
+					<para>Etherape displays network activity among different hosts using circles of
+						varying size.</para>
+					<orderedlist>
+						<listitem>
+							<para>Read <xref linkend="extra-repositories"/>
+							</para>
+						</listitem>
+						<listitem>
+							<para>Install the etherape package with <application>Add/Remove Applications</application> (See <xref linkend="add-applications"/>)
+							</para>
+							<para>
+								<literallayout>GNOME Desktop Environment (universe) &gt; etherape</literallayout>
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<menuchoice>
+									<guimenu>Applications</guimenu>
+									<guisubmenu>Internet</guisubmenu>
+									<guimenuitem>Etherape</guimenuitem>
+								</menuchoice>
+							</para>
+						</listitem>
+					</orderedlist>
+				</answer>
+			</qandaentry>	 
+			<qandaentry>
+				<question>
+					<para>Etherreal Network Traffic Analyzer</para>
+				</question>
+				<answer>
+					<para>Ethereal is a network traffic analyser/sniffer that captures packets
+						off the network in real time and displays the contents of them.</para>
+					<orderedlist>
+						<listitem>
+							<para>Read <xref linkend="extra-repositories"/>
+							</para>
+						</listitem>
+						<listitem>
+							<para>Install the ethereal package with <application>Add/Remove Applications</application> (See <xref linkend="add-applications"/>)
+							</para>
+							<para>
+								<literallayout>Networking (universe) &gt; ethereal</literallayout>
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<menuchoice>
+									<guimenu>Applications</guimenu>
+									<guisubmenu>Internet</guisubmenu>
+									<guimenuitem>Ethereal</guimenuitem>
+								</menuchoice>
+							</para>
+						</listitem>
+					</orderedlist>
+				</answer>
+			</qandaentry>
+		</qandaset>
+	</sect2>
+     </sect1>
+     <sect1 id="system-utilities" status="writing">
+		<title>System Utilities</title>
+		<qandaset>
+			<qandaentry>
+				<question>
+					<para>GParted Partition Editor</para>
+				</question>
+				<answer>
+					<orderedlist>
+						<listitem>
+							<para>Read <xref linkend="extra-repositories"/>
+							</para>
+						</listitem>
+						<listitem>
+							<para>Install the gparted package with <application>Add/Remove Applications</application> (See <xref linkend="add-applications"/>)
+							</para>
+							<para>
+								<literallayout>GNOME Desktop Environment (universe) &gt; gparted</literallayout>
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<menuchoice>
+									<guimenu>Applications</guimenu>
+									<guisubmenu>System Tools</guisubmenu>
+									<guimenuitem>GParted</guimenuitem>
+								</menuchoice>
+							</para>
+						</listitem>
+					</orderedlist>
+				</answer>
+			</qandaentry>
+			<qandaentry>
+				<question>
+					<para>RAR Archiver</para>
+				</question>
+				<answer>
+					<orderedlist>
+						<listitem>
+							<para>Read <xref linkend="extra-repositories"/>
+							</para>
+						</listitem>
+						<listitem>
+							<para>Install the rar package with <application>Add/Remove Applications</application> (See <xref linkend="add-applications"/>)
+							</para>
+							<para>
+								<literallayout>Utilities (multiverse) &gt; rar</literallayout>
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+							<screen>
+sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen>
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<menuchoice>
+									<guimenu>Applications</guimenu>
+									<guisubmenu>Accessories</guisubmenu>
+									<guimenuitem>Archive Manager</guimenuitem>
+								</menuchoice>
+							</para>
+						</listitem>
+					</orderedlist>
+				</answer>
+			</qandaentry>
+		</qandaset>
+    
+     <sect2 id="fonts" status="writing">
+		<title>Fonts</title>
+		<qandaset>
+			<qandaentry id="extra-fonts" xreflabel="Extra Fonts">
+				<question>
+					<para>Extra Fonts</para>
+				</question>
+				<answer>
+					<orderedlist>
+						<listitem>
+							<para>Make sure the universe and multiverse repositories are enabled. (See <xref linkend="extra-repositories"/>)
+							</para>
+						</listitem>
+						<listitem>
+							<para>Install the font packages with <application>Add/Remove Applications</application>
+								 (See <xref linkend="add-applications"/>)
+							</para>
+							<para>
+								<literallayout>Miscellaneous - Graphical (universe) &gt; xfonts-intl-arabic
+Miscellaneous - Graphical (universe) &gt; xfonts-intl-asian
+Miscellaneous - Graphical (universe) &gt; xfonts-intl-chinese
+Miscellaneous - Graphical (universe) &gt; xfonts-intl-chinese-big
+Miscellaneous - Graphical (universe) &gt; xfonts-intl-european
+Miscellaneous - Graphical (universe) &gt; xfonts-intl-japanese 
+Miscellaneous - Graphical (universe) &gt; xfonts-intl-japanese-big
+Miscellaneous - Graphical (universe) &gt; xfonts-intl-phonetic
+Miscellaneous - Graphical &gt; gsfonts-x11
+Miscellaneous - Graphical (multiverse) &gt; msttcorefonts  
+								</literallayout>
+							</para>
+						</listitem>
+						<listitem>
+							<para>Rebuild the font information cache files
+							</para>
+							<screen>sudo fc-cache -f -v</screen>
+						</listitem>
+					</orderedlist>
+				</answer>
+			</qandaentry>
+			<qandaentry>
+				<question>
+					<para>Chinese Input Method (SCIM)</para>
+				</question>
+				<answer>
+					<orderedlist>
+						<listitem>
+							<para>Make sure the universe repository is enabled. (See <xref linkend="extra-repositories"/>)
+							</para>
+						</listitem>
+						<listitem>
+							<para>Make sure you have the Chinese fonts installed. (See <xref linkend="extra-fonts"/>.)
+							</para>
+						</listitem>
+						<listitem>
+							<para>Install the scim packages with <application>Add/Remove Applications</application>
+								 (See <xref linkend="add-applications"/>)
+							</para>
+							<para>
+								<literallayout>Utilities (universe) &gt; scim
+Utilities (universe) &gt; scim-chinese
+Utilities (universe) &gt; scim-config-socket
+Utilities (universe) &gt; scim-gtk2-immodule
+Utilities (universe) &gt; scim-tables-zh
+</literallayout>
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<screen>wget -c <ulink url="&fireflysung-url;">&fireflysung-url;</ulink>
+sudo tar zxvf &fireflysung-tar; -C /usr/share/fonts/truetype/ 
+sudo chown -R root:root /usr/share/fonts/truetype/fireflysung-1.3.0/ 
+sudo fc-cache -f -v</screen>
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<menuchoice>
+									<guimenu>System</guimenu>
+									<guisubmenu>Preferences</guisubmenu>
+									<guimenuitem>SCIM Input Method Setup</guimenuitem>
+								</menuchoice>
+							</para>
+						</listitem>
+						<listitem>
+							<para>To activate SCIM press <keycombo>
+									<keycap>Ctrl</keycap>
+									<keycap>Space</keycap>
+								</keycombo>.
+							</para>
+						</listitem>
+					</orderedlist>
+				</answer>
+			</qandaentry>
+		</qandaset>
+	</sect2>
+	</sect1>
+	<sect1 id="programming" status="writing">
+		<title>Programming</title>
+			<qandaset>
+			<qandaentry>
+				<question>
+					<para>Basic Compilers
+						(build-essential)</para>
+				</question>
+				<answer>
+					<orderedlist>
+						<listitem>
+							<para>Read <xref linkend="extra-repositories"/>
+							</para>
+						</listitem>
+						<listitem>
+							<para>Install the build-essential package with <application>Add/Remove Applications</application> (See <xref linkend="add-applications"/>)
+							</para>
+							<para>
+								<literallayout>Development &gt; build-essential
+								</literallayout>
+							</para>
+						</listitem>
+					</orderedlist>
+				</answer>
+			</qandaentry>
+		</qandaset>
+	</sect1>
+</chapter>
