@@ -369,20 +369,132 @@
     </sect1>
 	<sect1 id="dhcp" status="writing">
 		<title>Dynamic Host Configuration Protocol (DHCP)</title>
-          <para>
-            DHCP para ...
-          </para>
+            <para>Dynamic Host Configuration Protocol (DHCP) is a network service that enables hosts
+                computers to be automatically assigned with settings from a server as apposed to
+                manually configuring each network host. Computers configured to be DHCP clients have
+                no control over the settings they receive from the DHCP server and the configuration
+                is transparent to the computers' user.</para>
+            <para>The most common settings provided by a DHCP server to DHCP clients, include:</para>
+            <itemizedlist spacing="compact">
+                <listitem>
+                    <para>IP-Address and Netmask</para>
+                </listitem>
+                <listitem>
+                    <para>DNS</para>
+                </listitem>
+                <listitem>
+                    <para>WINS</para>
+                </listitem>
+            </itemizedlist>
+            <para>However, a DHCP server can also supply configuration properties such as:</para>
+            <itemizedlist spacing="compact">
+                <listitem>
+                    <para>Host Name</para>
+                </listitem>
+                <listitem>
+                    <para>Domain Name</para>
+                </listitem>
+                <listitem>
+                    <para>Default Gateway</para>
+                </listitem>
+                <listitem>
+                    <para>Time Server</para>
+                </listitem>
+                <listitem>
+                    <para>Print Server</para>
+                </listitem>
+            </itemizedlist>
+            <para>The advantage of using DHCP is that changes to the network, for example a change
+                in the address of the DNS server, need only be changed at the DHCP server and all
+                network hosts will be reconfigured the next time each of their DHCP clients poll the
+                DHCP server. As an added advantage it is also easier to integrate new computers into
+                the network as there is no need to check for the availability of an ip-address.
+                Conflicts in ip-address allocation are also reduced.</para>
+            <para>A DHCP server can provide configuration settings using two methods:</para>
+            <variablelist>
+                <varlistentry>
+                    <term>MAC Address</term>
+                    <listitem>
+                        <para>This method entails using DHCP to identify the unique hardware address
+                            of each network card connected to the network and then continuously
+                            supply a constant configuration each time the DHCP client makes a
+                            request from the DHCP server.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Address Pool</term>
+                    <listitem>
+                        <para>This method entails defining a pool (sometimes also called a range or
+                            scope) of ip-addresses from which DHCP clients are supplied their
+                            configuration properties dynamically and on a fist come first serve
+                            basis. When a DHCP client is no longer on the network for a specified
+                            period, the configuration is expired and released back to the address
+                            pool for use by other DHCP Clients.</para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+            <para>Ubuntu is shipped with both DHCP server and client. The server is
+                    <application>dhcpd</application> (dynamic host configuration protocol daemon).
+                The client provided with Ubuntu is <application>???</application> and should be
+                installed on all computers required to be automatically configured. Both programs
+                are easy to install and configure and will be automatically started at system boot.</para>
       <sect2 id="dhcp-installation" status="writing">
         <title>Installation</title>
+          <para>At the prompt enter the following command to install
+                  <application>dhcpd</application>:</para>
           <para>
-            Installation para ...
+              <command>sudo apt-get install dhcpd</command>
           </para>
+          <para>You will see the following output, which explains what to do next:</para>
+          <screen>
+Please note that if you are installing the DHCP server for the first
+time you need to configure it first. Please stop (/etc/init.d/dhcp
+stop) the DHCP server daemon, edit /etc/dhcpd.conf to suit your needs
+and particular configuration, and restart the DHCP server daemon
+(/etc/init.d/dhcp start).
+
+You also need to edit /etc/default/dhcp to specify the interfaces dhcpd
+should listen to. By default it listens to eth0.
+
+NOTE: dhcpd's messages are being sent to syslog. Look there for
+diagnostics messages.
+
+Starting DHCP server: dhcpd failed to start - check syslog for diagnostics.  </screen>
       </sect2>
       <sect2 id="dhcp-configuration" status="writing">
         <title>Configuration</title>
-          <para>
-            Configuration para ...
-          </para>
+            <para>The error-message the installation ends with might be a little confusing but the
+                following steps will help you configuring the service:</para>
+            <para>Most commonly what you want to do is assign IP addresses randomly. This can be
+                done with settings as follows:</para>
+            <screen>
+# Sample /etc/dhcpd.conf
+# (add your comments here) 
+default-lease-time 600;
+max-lease-time 7200;
+option subnet-mask 255.255.255.0;
+option broadcast-address 192.168.1.255;
+option routers 192.168.1.254;
+option domain-name-servers 192.168.1.1, 192.168.1.2;
+option domain-name "mydomain.org";
+
+subnet 192.168.1.0 netmask 255.255.255.0 {
+range 192.168.1.10 192.168.1.100;
+range 192.168.1.150 192.168.1.200;
+} </screen>
+            <para>This will result in DHCP server giving a client an IP address from the range
+                192.168.1.10-192.168.1.100 or 192.168.1.150-192.168.1.200. It will lease an IP
+                address for 600 seconds if the client doesn't ask for specific time frame. Otherwise
+                the maximum (allowed) lease will be 7200 seconds. The server will also "advise" the
+                client that it should use 255.255.255.0 as its subnet mask, 192.168.1.255 as its
+                broadcast address, 192.168.1.254 as the router/gateway and 192.168.1.1 and
+                192.168.1.2 as its DNS servers. </para>
+            <para>If you need to specify a WINS server for your Windows clients you will need to
+                include the netbios-name-servers option e.g.</para>
+            <screen>
+option netbios-name-servers 192.168.1.1; </screen>
+            <para>Dhcpd configuration settings are taken from DHCP mini-HOWTO, which can be found
+                    <ulink url="http://www.tldp.org/HOWTO/DHCP/index.html">here</ulink>. </para>
       </sect2>
       <sect2 id="dhcp-references" status="writing">
         <title>References</title>
@@ -393,9 +505,14 @@
     </sect1>
 	<sect1 id="dns" status="writing">
 		<title>Domain Name Servers (DNS)</title>
-          <para>
-            DNS para ...
-          </para>
+            <para>Domain Name Server (DNS) is an Internet service that maps IP addresses and fully
+                qualified domain names (FQDN) to one another. In this way DNS alleviates the need to
+                remember IP addresses. Computers that run DNS are called
+                <emphasis role="italics">name
+                servers</emphasis>. Ubuntu ships with <application>BIND</application> (Berkley
+                Internet Naming Daemon), one of the most common programs used for maintaining a name
+                server on GNU/Linux.</para>
+            <!-- things to do: IPv6-->
       <sect2 id="dns-installation" status="writing">
         <title>Installation</title>
           <para>
@@ -1021,16 +1138,15 @@ $ svnserve --help</programlisting>
                     <para><application>PostgreSQL</application></para>
                 </listitem>
             </itemizedlist>
-
-            They are available in main repository. This section
+            They are available in the main repository. This section
             explain how to install and configure these database
-            servers on Ubuntu Linux.
+            servers.
           </para>
       <sect2 id="mysql" status="writing">
         <title>MySQL</title>
           <para>
           MySQL is a fast, multi-threaded, multi-user and robust SQL
-          database server. MySQL Server is intended for
+          database server. It is intended for
           mission-critical, heavy-load production systems as well as
           for embedding into mass-deployed software.
           </para>
@@ -1047,7 +1163,7 @@ $ svnserve --help</programlisting>
             </para>
 
             <para>
-            Once the installation is complete, the MySQL server would be
+            Once the installation is complete, the MySQL server should be
             started automatically. You can run the following command to
             check whether MySQL server is running:
             </para>
@@ -1057,21 +1173,26 @@ $ svnserve --help</programlisting>
             </para>
 
             <para>
-            When you run this command, you must see the following line
+            When you run this command, you should see the following line
             or something similar:
             </para>
 
 <programlisting>
 tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
 </programlisting>
+	<para>If the server is not running correctly, you can type the following command to start it:</para>
+            <para>
+<!--check this command -->
+            <command>sudo /etc/init.d/mysql restart</command>
+            </para>
+
         </sect3>
         <sect3 id="mysql-configuration" status="writing">
           <title>Configuration</title>
             <para>
             By default, the administrator password is not set. Once you
-            install MySQL, first thing you must do is to configure
-            MySQL administrator password. To configure MySQL
-            administrator password, please run the following commands:
+            install MySQL, the first thing you must do is to configure
+            the MySQL administrator password. To do this, run the following commands:
             </para>
             <para>
             <command>sudo mysqladmin -u root password newrootsqlpassword</command>
@@ -1081,8 +1202,8 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
             </para>
 
             <para>
-            You can edit /etc/mysql/my.cnf file to configure MySQL basic
-            settings, log file, port number, etc. Please refer
+            You can edit /etc/mysql/my.cnf file to configure the basic
+            settings, log file, port number, etc. Refer to
             /etc/mysql/my.cnf file for more details.
             </para>
         </sect3>
@@ -1097,7 +1218,7 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
         <sect3 id="postgresql-installation" status="writing">
           <title>Installation</title>
             <para>
-            To install PostgreSQL, you can run the following command in the
+            To install PostgreSQL, run the following command in the
             command prompt:
             </para>
 
@@ -1106,83 +1227,73 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
             </para>
 
             <para>
-            Once the installation is complete, you must configure
-            PostgreSQL server based on your needs. The default
-            PostgreSQL configuration is viable. You are recommended to
-            configure it based on your needs.</para>
+            Once the installation is complete, you should configure
+            PostgreSQL server based on your needs, although the default
+            configuration is viable.</para>
             
         </sect3>
         <sect3 id="postgresql-configuration" status="writing">
           <title>Configuration</title>
-            <para>By default, the TCP/IP enabled connection is disabled.
+            <para>By default, connection via TCP/IP is disabled.
             PostgreSQL supports multiple client authentication methods.
             By default, IDENT authentication method is used. You are
             recommended to refer the PostgreSQL Administrator's Guide for
-            details. </para>
+            details.</para> <!-- link to this? -->
             
-            <para>We assume, you wish to enable TCP/IP connections and
-            use MD5 method for client authentication. PostgreSQL configuration files are stored in
+            <para>The following discussion assumes that you wish to enable TCP/IP connections and
+            use MD5 method for client authentication. PostgreSQL configuration files are stored in the
             <emphasis role="italics">/etc/postgresql/&lt;version&gt;/main</emphasis>
             directory. For example, if you install PostgreSQL 7.4, the
-            configuration files are stored in
+            configuration files are stored in the
             <emphasis role="italics">/etc/postgresql/7.4/main</emphasis> directory.
             </para>
             
             <tip>
             <para>
              To configure <emphasis role="italics">ident</emphasis>
-             authentication method, you must add entries to <emphasis
+             authentication, add entries to the <emphasis
              role="italics">/etc/init.d/postgresql/7.4/main/pg_ident.conf</emphasis>
              file.
             </para>
             </tip>
 
-            <para>To enable TCP/IP connections, you must open
-            appropriate configuration file using following command: </para>
-
-            <para> <command>sudo vim
-            /etc/postgresql/7.4/main/postgresql.conf</command></para>
+            <para>To enable TCP/IP connections, edit the file <emphasis
+             role="italics">/etc/postgresql/7.4/main/postgresql.conf</emphasis></para>
 
             <para>Locate the line <emphasis role="italics">#tcpip_socket =
-            false</emphasis> and change it as
+            false</emphasis> and change it to
             <emphasis role="italics">tcpip_socket =
             true</emphasis>. You may
-            also edit all other parameters, if you are sure about what
-            you do. For details, refer this configuration file.
-            Alternatively, you can also refer PostgreSQL documentation.
+            also edit all other parameters, if you know what you are doing! For details, refer to the configuration file or to the PostgreSQL documentation.
             </para>
 
-            <para>By default, the user credentials is not set for
+            <para>By default, the user credentials are not set for
             <emphasis role="italics">MD5</emphasis> client
-            authentication method. So, we can first configure the PostgreSQL server to use
+            authentication. So, first it is necessary to configure the PostgreSQL server to use
             <emphasis role="italics">trust</emphasis> client
-            authentication method, connect to the database,
+            authentication, connect to the database,
             configure the password and revert the configuration back to use
-            <emphasis role="italics">MD5</emphasis> client authentication method.
+            <emphasis role="italics">MD5</emphasis> client authentication.
             To enable <emphasis role="italics">trust</emphasis> client
-            authentication method, you must open the file using following command: </para>
+            authentication, edit the  file <emphasis
+            role="italics">/etc/postgresql/7.4/main/pg_hba.conf</emphasis></para>
 
-            <para> <command>sudo vim
-            /etc/postgresql/7.4/main/pg_hba.conf</command></para>
-
-            <para>Comment all the existing lines using
+            <para>Comment out all the existing lines which use
             <emphasis role="italics">ident</emphasis> and
             <emphasis role="italics">MD5</emphasis>
-            client authentication methods and add the following
+            client authentication and add the following
             line:</para>
 <programlisting>
 local   all         postgres                          trust sameuser
 </programlisting>
 
-            <para>Once you add the above line, you can save the
-            configuration file and exit. Run the following command to
+            <para>Then, run the following command to
             start PostgreSQL server:
             </para>
             <para><command>sudo /etc/init.d/postgresql
             start</command></para>
 
-            <para>Once PostgreSQL server is successfully started, you
-            can run the following command to connect to default
+            <para>Once the PostgreSQL server is successfully started, run the following command to connect to the default
             PostgreSQL template database</para>
 
             <para><command>psql -U postgres -d
@@ -1190,26 +1301,19 @@ local   all         postgres                          trust sameuser
 
             <para>The above command connects to PostgreSQL
             database <emphasis role="italics">template1</emphasis> as user
-            <emphasis role="italics">postgres</emphasis>. Once you connect to PostgreSQL
+            <emphasis role="italics">postgres</emphasis>. Once you connect to the PostgreSQL
             server, you will be in the SQL prompt. You can run the
-            following SQL command at your SQL prompt to configure the
+            following SQL command at the prompt to configure the
             password for the user <emphasis
             role="italics">postgres</emphasis>.</para>
 
             <para><command>template1=# ALTER USER postgres with
             encrypted password 'your_password';</command></para>
 
-            <para>Once you configure the password, you can edit
+            <para>After configuring the password, edit the file
             <emphasis
             role="italics">/etc/postgresql/7.4/main/pg_hba.conf</emphasis> to use
-            <emphasis role="italics">MD5</emphasis> authentication
-            method.  To use <emphasis role="italics">MD5</emphasis>
-            authentication method, you can open the configuration file
-            using following command:</para>
-
-            <para> <command>sudo vim
-            /etc/postgresql/7.4/main/pg_hba.conf</command></para>
-
+            <emphasis role="italics">MD5</emphasis> authentication:</para>
             <para>Comment the recently added <emphasis
             role="italics">trust</emphasis> line and add the following
             line: </para>
@@ -1219,8 +1323,8 @@ local   all         postgres                          md5 sameuser
 </programlisting>
             <warning>
             <para>
-             By no means, the above configuration is complete. You are
-             recommended to refer PostgreSQL Administrator's Guide to
+             The above configuration is not complete by any means. You are
+             recommended to refer to PostgreSQL Administrator's Guide to
              configure more parameters.
             </para>
             </warning>
