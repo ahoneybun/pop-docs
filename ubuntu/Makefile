@@ -70,7 +70,7 @@ IMAGES=../build/ubuntu/images/
 SERVERBASE=../build/ubuntu/serverguide/
 
 .PHONY: all
-all: au dg server package
+all: au dg server package status
 
 	# copy style sheet to build directory
 	cp default.css ../build/ubuntu/default.css
@@ -109,6 +109,10 @@ status:
 	@echo "----- desktopguide status report -----"
 	xsltproc --xinclude -o $(STBASE)dg-report.xml $(wOS) desktopguide/C/desktopguide.xml
 	xsltproc --xinclude -o $(STBASE)dg-report.html $(NWDBXSL) $(STBASE)dg-report.xml
+	
+	@echo "----- serverguide status report -----"
+	xsltproc --xinclude -o $(STBASE)sg-report.xml $(wOS) ../generic/serverguide/C/serverguide.xml
+	xsltproc --xinclude -o $(STBASE)sg-report.html $(NWDBXSL) $(STBASE)sg-report.xml
 	
 	@echo "----- Complete. Find outputs at" $(STBASE)
 
@@ -225,7 +229,6 @@ rn:
 #Status: AVAILABLE
 # DESKTOP Guide - build for all archs
 dg: dg-C
-dg-all: dg-C dg-CS dg-DA dg-DE dg-EN_AU dg-ES dg-FA dg-FI dg-FR dg-HE dg-ID dg-IT dg-MK dg-PT dg-PT_BR dg-SR dg-SV dg-TL
 
 dg-C:
 	@echo "--- Building the Desktop Guide . . ."
