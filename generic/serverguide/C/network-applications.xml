@@ -45,45 +45,220 @@
             </para>
         </sect2>
     </sect1>
-	<sect1 id="tcpip" status="help">
+	<sect1 id="tcpip" status="review">
 		<title>TCP/IP</title>
           <para>
-            TCP/IP para ...
+            The Transmission Control Protocol and Internet Protocol (TCP/IP) are a standard set of protocols
+            developed in the late 1970s by the Defense Advanced Research Projects Agency (DARPA) as a means
+            of communication between different types of computers and computer networks. TCP/IP is the driving
+            force of the Internet, and thus it is the most popular set of network protocols on Earth. 
           </para>
-      <sect2 id="tcpip-introduction" status="help">
+      <sect2 id="tcpip-introduction" status="review">
         <title>TCP/IP Introduction</title> 
           <para>
-            TCP/IP Introduction para ...
+            The two protocol components of TCP/IP deal with different aspects of computer networking.
+            <emphasis role="Italics">Internet Protocol</emphasis>, the "IP" of TCP/IP is a connectionless
+            protocol which deals only with network packet routing using the 
+            <emphasis role="italics">IP datagram</emphasis> as the basic unit of networking information.
+            The IP datagram consists of a header, followed by a message.  
+            The <emphasis role="italics">Transmission Control Protocol</emphasis> is the "TCP" of TCP/IP,
+            and enables network hosts to establish connections which may be used to exchange data streams.
+            TCP also guarantees that the data between connections is delivered, and arrives at one network 
+            host in the same order as sent from another network host.
           </para>
           </sect2>
-        <sect2 id="tcpip-configuration" status="help">
+        <sect2 id="tcpip-configuration" status="review">
           <title>TCP/IP Configuration</title>
             <para>
-              TCP/IP Configuration para ...
+            The TCP/IP protocol configuration consists of several elements which must be set by editing the
+            appropriate configuration files, or deploying solutions such as the Dynamic Host Configuration
+            Protocol (DHCP) server which in turn, can be configured to provide the proper TCP/IP configuration
+            settings to network clients automatically. These configuration values must be set correctly in
+            order to facilitate the proper network operation of your Ubuntu system.
+            </para>
+            <para>
+            The common configuration elements of TCP/IP, and their purpose are as follows:
+            <itemizedlist>
+               <listitem>
+                  <para>
+                  <emphasis role="bold">IP Address</emphasis> The IP Address is a unique
+                  identifying string expressed as four decimal numbers ranging from zero (0)
+                  to two-hundred and fifty-five (255), separated by periods,
+                  with each of the four numbers representing eight (8) bits of the address for a
+                  total length of thirty-two (32) bits for the whole address. This format is called
+                  <emphasis role="italics">dotted quad
+                  notation</emphasis>.</para>
+                     <para>
+                     IP Addresses are defined in <emphasis role="italics">classes</emphasis> whereby the
+                     bits making up an address correspond to network, and host ranges.  There are four
+                     principal address classes: A, B, C, and D. Class A IP addresses would typically be
+                     used in very large organizations, and have the format 
+                     <emphasis role="italics">network.host.host.host</emphasis> whereas
+                     the more common Class C address could be used in smaller organizations, and is
+                     often used for individual host subscribers to Internet Service Providers. A Class
+                     C address would resemble <emphasis role="italics">network.network.network.host</emphasis>
+                     Class D addresses are special in that they are known as 
+                     <emphasis role="italics">Multicast</emphasis> addresses.
+                     Some examples of valid IP addresses are 127.0.0.1 and 82.211.81.166.
+                     </para>
+               </listitem>
+               <listitem>
+                  <para>
+                  <emphasis role="bold">Netmask</emphasis> The Subnetwork Mask (or simply,
+                  <emphasis role="italics">netmask</emphasis>) is a local bit mask, or set of flags
+                  which separate the portions of an IP address significant to the network from the
+                  bits significant to the <emphasis role="italics">subnetwork</emphasis>.  For example,
+                  in a Class C network, the standard netmask is 255.255.255.0 which masks the first
+                  three bytes of the IP Address, and allows the last byte of the IP Address to
+                  remain available for specifying hosts on the subnetwork.
+                  </para>
+               </listitem>
+               <listitem>
+                  <para>
+                  <emphasis role="bold">Network Address</emphasis> The Network Address represents the
+                  bytes comprising the network portion of an IP address.  For example, the host 12.128.1.2
+                  in a Class A network would use 12.0.0.0 as the network address, which uses twelve (12)
+                  to represent the first byte of the IP address, (the network part) and zeroes (0) 
+                  in all of the remaining three bytes to represent the potential host values.  Network
+                  hosts using the very common private, and non-routable IP addresses such as 192.168.1.100
+                  would in turn, use a Network Address of 192.168.1.0 which specifies the first three
+                  bytes of the Class C 192.168.1 network, and a zero (0) for all the possible hosts on the
+                  network.
+                  </para>
+               </listitem>
+               <listitem>
+                  <para>
+                  <emphasis role="bold">Broadcast Address</emphasis> The Broadcast Address is an IP Address
+                  which allows network data to be sent simultaneously to all hosts on a given subnetwork rather
+                  than specifying a particular network host.  The standard general broadcast address for IP networks is
+                  255.255.255.255, but this broadcast address cannot be used to send a broadcast message to
+                  every host on the Internet because routers block it.  A more appropriate broadcast address
+                  is set to match a specific subnetwork.  For example, on the popular, private Class C IP network
+                  192.168.1.0, the broadcast address should be configured as 192.168.1.255. Broadcast messages are
+                  typically produced by network protocols such as the Address Resolution Protocol (ARP) and the 
+                  Routing Information Protocol (RIP).             
+                  </para>
+               </listitem>
+               <listitem>
+                  <para>
+                  <emphasis role="bold">Gateway Address</emphasis> A Gateway Address is the IP Address through which
+                  a particular network, or host on a network may be reached.  If one network host wishes to communicate
+                  with another network host, and that host is not located on the same network, then a 
+                  <emphasis role="italics">gateway</emphasis> must be used. In many cases, the Gateway Address will be that
+                  of a router on the same network, which will in turn, pass traffic on to other networks, or hosts such as
+                  Internet hosts.  The value of the Gateway Address setting must be correct, or your system will not be able
+                  to reach any hosts beyond those on the same network.                  
+                  </para>
+               </listitem>
+               <listitem>
+                  <para>
+                  <emphasis role="bold">Nameserver Address</emphasis> Nameserver Addresses represent the IP Addresses of
+                  Domain Name Server (DNS) systems which resolve network hostnames into IP Addresses.  There are three levels of
+                  Nameserver Addresses which may be specified in order of precedence, The 
+                  <emphasis role="italics">Primary</emphasis>
+                  Nameserver, the <emphasis role="italics">Secondary</emphasis> Nameserver, and the 
+                  <emphasis role="italics">Tertiary</emphasis>
+                  Nameserver. In order for your system to be able to resolve network hostnames into their
+                  corresponding IP Addresses, you must specify valid Nameserver Addresses, which you are authorized to use
+                  in your system's TCP/IP configuration.  In many cases these addresses can, and will be provided by your
+                  network service provider, but many free, and publicly accessible Nameservers are available for use, such as
+                  the Level3 (Verizon) servers with IP Addresses from
+                  4.2.2.1 to 4.2.2.6. </para>
+                     <tip>
+                        <para>
+                        The IP Address, Netmask, Network Address, Broadcast Address, and Gateway Address
+                        are typically specified via the appropriate directives in the 
+                        file <emphasis role="bold">/etc/network/interfaces</emphasis>. For more information, 
+                        view the system manual page for interfaces with the command: 
+                         <command>man interfaces</command>
+                        </para>
+                     </tip>
+                     <tip>
+                        <para>
+                        The Nameserver Addresses are typically specified via 
+                        <emphasis role="italics">nameserver</emphasis> directives in the 
+                        file <emphasis role="bold">/etc/resolv.conf</emphasis>. For more information, 
+                        view the system manual page for resolv.conf with the command: 
+                         <command>man resolv.conf</command>
+                        </para>
+                     </tip>
+               </listitem>
+            </itemizedlist>
             </para>
         </sect2>
-        <sect2 id="ip-routing" status="help">
+        <sect2 id="ip-routing" status="review">
           <title>IP Routing</title>
             <para>
-              IP Routing para ...
+              IP routing is a means of specifying, and discovering paths in a TCP/IP network along which
+              network data may be sent.  Routing uses a set of <emphasis role="talics">routing tables</emphasis>
+              to direct the forwarding of network data packets from their source to the destination, often
+              via many intermediary network nodes known as <emphasis role="italics">routers</emphasis>.
+              IP Routing is the principle mode of path discovery on the Internet.  There are two primary forms of
+              IP Routing, <emphasis role="italics">Static Routing</emphasis>, and 
+              <emphasis role="italics">Dynamic Routing.</emphasis>
+            </para>
+            <para>
+            Static routing involves manually adding IP routes to the system's routing table, and this is usually
+            done by manipulating the routing table with the <command>route</command> command. Static routing enjoys
+            many advantages over dynamic routing, such as simplicity of implementation on smaller networks, 
+            predictability, (the routing table is always computed in advance, and thus the route is precisely the 
+            same each time it used) and low overhead on other routers and network links due to the lack of a
+            dynamic routing protocol.  However, static routing does present some disadvantages as well.  For example,
+            static routing is limited to small networks, and does not scale well.  Static routing also fails completely
+            to adapt to network outages, and failures along the route due to the fixed nature of the route. 
+            </para>
+            <para>
+            Dynamic Routing depends on large networks with multiple possible IP routes from a source to a destination,
+            and makes use of special routing protocols, such as the Router Information Protocol (RIP) which handle
+            the automatic adjustments in routing tables that make dynamic routing possible.  Dynamic routing
+            has several advantages over static routing, such as superior scalability, and the ability to adapt
+            to failures, and outages along network routes. Additionally, there is less manual configuration of the
+            routing tables, since routers learn from one another about their existence and available routes. This trait
+            also eliminates the possibility of introducing mistakes in the routing tables via human error.
+            Dynamic routing is not perfect however, and presents disadvantages such as heightened complexity, and
+            additional network overhead from router communications, which does not immediately benefit the end-users,
+            but still consumes network bandwidth.
             </para>
         </sect2>
-        <sect2 id="tcp-and-udp" status="help">
+        <sect2 id="tcp-and-udp" status="review">
           <title>TCP and UDP</title>
             <para>
-              TCP and UDP para ...
+              TCP is a a connection-based protocol, offering error correction, and guaranteed delivery of
+              data via what is known as <emphasis role="italics">flow control</emphasis>. Flow control
+              determines when the flow of a data stream needs to be stopped, and previously sent data
+              packets should to be re-sent due to problems, such as <emphasis role="italics">collisions</emphasis>,
+              for example, thus ensuring complete, and accurate delivery of the data.  TCP is typically
+              used in the exchange of important information such as database transactions. 
+            </para>
+            <para>
+              The User Datagram Protocol (UDP) on the other hand, is a <emphasis role="italics">connectionless</emphasis>
+              protocol which never deals with the transmission of important data because it lacks flow
+              control, or any other method to assure reliable delivery of the data.  UDP is commonly used
+              in such applications as audio, and video streaming, where it is considerably faster than
+              TCP due to the lack of error correction, and flow control.
             </para>
         </sect2>
-        <sect2 id="icmp" status="help">
+        <sect2 id="icmp" status="review">
           <title>ICMP</title>
             <para>
-              ICMP para ...
+              The Internet Control Messaging Protocol (ICMP) is an extension to the Internet Protocol (IP) as defined
+              in the Request For Comments (RFC) #792, and supports network packets containing control, error, and
+              informational messages.  ICMP is used by such network applications as the <application>ping</application>
+              utility, which can determine the availability of a network host, or device.  Examples of some error messages
+              returned by ICMP which are useful to both network hosts, and devices such as routers, include 
+              <emphasis role="italics">Destination Unreachable</emphasis>, and <emphasis role="italics">Time Exceeded</emphasis>.
             </para>
         </sect2>
-        <sect2 id="daemons" status="help">
+        <sect2 id="daemons" status="review">
           <title>Daemons</title>
             <para>
-              Daemons para ...
+              Daemons are special system applications which typically execute continuously, in the background, and
+              await requests for the functions they provide from other applications.  Many daemons are network-centric; that is,
+              a great deal of daemons executing in the background on an Ubuntu system may provide network-related functionality.
+              Some examples of such network daemons include the <emphasis role="italics">Hyper Text Transport Protocol Daemon</emphasis> 
+              (httpd) which provides web server functionality, the <emphasis role="italics">Secure SHell Daemon</emphasis> (sshd) which
+              provides secure remote login shell, and file transfer capabilities, and  the <emphasis role="italics">Internet Message Access 
+              Protocol Daemon</emphasis> (imapd) which provides E-Mail services.
             </para>
         </sect2>
     </sect1>
@@ -152,13 +327,14 @@
         <sect2 id="openssh-installation" status="review">
         <title>Installation</title>
         <para>
-        Installation of the OpenSSH client, and server applications is simple, and straightforward process, using the 
+        Installation of the OpenSSH client, and server applications is simple, and straightforward process, using a 
+        combination of the <application>sudo</application> utility to obtian root privileges, and the 
         <application>apt-get</application> application. To install the OpenSSH client applications on your Ubuntu system, 
         use this command at the prompt:
         </para>
            <para>
                <command>
-               apt-get install openssh-client
+               sudo apt-get install openssh-client
                </command>
            </para>
         <para>
@@ -166,7 +342,7 @@
         </para>
            <para>
               <command>
-              apt-get install openssh-server
+              sudo apt-get install openssh-server
               </command>
            </para>
         </sect2>
@@ -731,35 +907,36 @@ option netbios-name-servers 192.168.1.1; </screen>
             </para>
             <itemizedlist spacing="compact">
                 <listitem>
-                    <para><emphasis role="bold">ExecCGI</emphasis> — Allow
+                    <para><emphasis role="bold">ExecCGI</emphasis> - Allow
                     execution of CGI scripts. CGI scripts are not
                     executed if this option is not chosen.</para>
                 </listitem>
                 <listitem>
-                    <para><emphasis role="bold">Includes</emphasis> — Allow server-side includes.</para>
+                    <para><emphasis role="bold">Includes</emphasis> - Allow server-side includes.</para>
                 </listitem>
                 <listitem>
                     <para><emphasis
-                    role="bold">IncludesNOEXEC</emphasis> — Allow server-side includes,
+                    role="bold">IncludesNOEXEC</emphasis> - Allow server-side includes,
                     but disable the #exec and #include commands in CGI
                     scripts.</para>
                 </listitem>
                 <listitem>
                     <para>
-                    <emphasis role="bold">Indexes</emphasis> — Display a formatted list of the
+                    <emphasis role="bold">Indexes</emphasis> - Display a formatted list of the
                     directory's contents, if no DirectoryIndex (such as
                     index.html) exists in the requested directory.
                     </para>
                 </listitem>
                 <listitem>
                     <para>
-                    <emphasis role="bold">Multiview</emphasis> — Support content-negotiated multiviews;
+                    <emphasis role="bold">Multiview</emphasis> - Support content-negotiated multiviews;
                     this option is disabled by default.
                     </para>
                 </listitem>
                 <listitem>
                     <para>
-                    <emphasis role="bold">SymLinksIfOwnerMatch</emphasis> — Only follow symbolic links
+                    <emphasis
+                    role="bold">SymLinksIfOwnerMatch</emphasis> - Only follow symbolic links
                     if the target file or directory has the same owner
                       as the link.
                     </para>
@@ -787,7 +964,7 @@ The directives set for a virtual host only apply to that particular virtual host
           <title>Server Settings</title>
             <para>
 This section explains howto configure basic server settings.</para>
-                    <para><emphasis role="bold">LockFile</emphasis> — The Lock File value corresponds to the LockFile  directive. This directive sets the path to the lockfile used when the server is compiled with either USE_FCNTL_SERIALIZED_ACCEPT or USE_FLOCK_SERIALIZED_ACCEPT. It must be stored on the local disk. It should be left to the default value unless the logs directory is located on an NFS share. If this is the case, the default value should be changed to a location on the local disk and to a directory that is readable only by root. </para>
+                    <para><emphasis role="bold">LockFile</emphasis> - The Lock File value corresponds to the LockFile  directive. This directive sets the path to the lockfile used when the server is compiled with either USE_FCNTL_SERIALIZED_ACCEPT or USE_FLOCK_SERIALIZED_ACCEPT. It must be stored on the local disk. It should be left to the default value unless the logs directory is located on an NFS share. If this is the case, the default value should be changed to a location on the local disk and to a directory that is readable only by root. </para>
 
 <para><emphasis role="bold">PidFile</emphasis> - The PID File value corresponds to the PidFile directive. This directive sets the file in which the server records its process ID (pid). This file should only be readable by root. In most cases, it should be left to the default value.</para>
 
@@ -838,58 +1015,302 @@ This section explains howto configure basic server settings.</para>
               </para>
         </sect3>
       </sect2>
-      <sect2 id="https-configuration" status="writing">
+      <sect2 id="https-configuration" status="review">
         <title>HTTPS Configuration</title>
           <para>
-            HTTPS Configuration para ...
+           The <application>mod_ssl</application> module adds
+           an important feature to the Apache2 server - the ability to
+           encrypt communications.  Thus, when your browser is
+           communicating using SSL encryption, the
+           https:// prefix is used at the beginning of the Uniform
+           Resource Locator (URL) in the browser navigation bar.
           </para>
-        <sect3 id="certificates-and-security" status="writing">
+
+          <para>
+          The <application>mod_ssl</application> module is available in
+          <application>apache2-common</application> package. If you have
+          installed this package, you can run the following command to
+          enable <application>mod_ssl</application> module:
+          </para>
+
+          <para>
+            <command>sudo a2enmod ssl</command>
+          </para>
+        <sect3 id="certificates-and-security" status="review">
           <title>Certificates and Security</title>
             <para>
-              Certificates and Security para ...
+              To set up your secure server, use public cryptography to
+              create a public and private key pair. In most cases, you
+              send your certificate request (including your public key),
+              proof of your company's identity, and payment to a
+              Certificate Authority (CA). The
+              CA verifies the certificate request and your identity, and
+              then sends back a certificate for your secure server. 
             </para>
+             <para>
+             Alternatively, you can create your own self-signed
+             certificate. Note, however, that self-signed certificates
+             should not be used in most production environments.
+             Self-signed certificates are not automatically accepted by
+             a user's browser users are prompted by the browser to
+             accept the certificate and create the secure connection.
+             </para>
+
+             <para>
+              Once you have a self-signed certificate or a signed
+              certificate from the CA of your choice, you need to
+              install it on your secure server.
+             </para>
         </sect3>
-        <sect3 id="types-of-certificates" status="writing">
+        <sect3 id="types-of-certificates" status="review">
           <title>Types of Certificates</title>
             <para>
-              Types of Certificates para ...
+             You need a key and a certificate to operate your secure
+             server which means that you can either generate a
+             self-signed certificate or purchase a CA-signed
+             certificate.  A CA-signed certificate provides two important
+              capabilities for your server:
             </para>
-        </sect3>
-        <sect3 id="generating-a-key" status="writing">
-          <title>Generating a Key</title>
+
+            <itemizedlist>
+            <listitem>
             <para>
-              Generating a Key para ...
+            Browsers (usually) automatically recognize the certificate
+            and allow a secure connection to be made, without prompting
+            the user.
             </para>
-        </sect3>
-        <sect3 id="generating-a-ca" status="writing">
-          <title>Generating a Certificate Request</title>
+            </listitem>
+            <listitem>
             <para>
-              Generating a Certificate Request para ...
+             When a CA issues a signed certificate, they are
+             guaranteeing the identity of the organization that is
+             providing the webpages to the browser.
+            </para>
+            </listitem>
+            </itemizedlist>
+
+            <para>
+             Most Web browsers that support SSL have a list of CAs whose
+             certificates they automatically accept. If a browser
+             encounters a certificate whose authorizing CA is not in the
+             list, the browser asks the user to either accept or decline
+             the connection.
+            </para>
+            <para>
+             You can generate a self-signed certificate for your secure server, but
+            be aware that a self-signed certificate does not provide the same
+            functionality as a CA-signed certificate. A self-signed certificate is
+            not automatically recognized by most Web browsers, and a self-signed
+            certificate does not provide any guarantee concerning the identity of
+            the organization that is providing the website. A CA-signed certificate
+            provides both of these important capabilities for a secure server. 
+            The process of getting a certificate from a CA is fairly
+            easy. A quick overview is as follows:
+            </para>
+
+            <orderedlist>
+            <listitem>
+               <para>Create an encryption private and public key
+                pair.</para>
+            </listitem>
+            <listitem>
+                 <para>Create a certificate request based on the public key. The
+              certificate request contains information about your server and the
+              company hosting it.</para>
+            </listitem>
+            <listitem>
+                 <para>Send the certificate request, along with documents proving your
+              identity, to a CA. We cannot tell you which certificate authority to
+              choose. Your decision may be based on your past experiences, or on the
+              experiences of your friends or colleagues, or purely on monetary
+              factors.</para>
+
+                    <para>Once you have decided upon a CA, you need to follow the
+              instructions they provide on how to obtain a certificate
+              from them.</para>
+            </listitem>
+            <listitem>
+               <para>When the CA is satisfied that you are indeed who you claim to be,
+            they send you a digital certificate.</para>
+            </listitem>
+            <listitem>
+               <para>Install this certificate on your secure server, and begin handling
+            secure transactions. </para>
+            </listitem>
+            </orderedlist>
+
+            <para>Whether you are getting a certificate from a CA or generating your own
+            self-signed certificate, the first step is to generate a key.
             </para>
         </sect3>
-        <sect3 id="creating-a-self-signed-certificate" status="writing">
+        <sect3 id="generating-a-csr" status="review">
+          <title>Generating a Certificate Signing Request (CSR)</title>
+            <para>
+            To generate the Certificate Signing Request (CSR), you should create your
+            own key. You can run the following command to create the
+            key:
+            </para>
+
+            <para><command>openssl genrsa -des3 -out server.key
+            1024</command></para>
+
+<programlisting>
+Generating RSA private key, 1024 bit long modulus
+.....................++++++
+.................++++++
+unable to write 'random state'
+e is 65537 (0x10001)
+Enter pass phrase for server.key:
+</programlisting>
+
+        <para>
+        You can now enter your passphrase. For best security, it should
+        atleast contain eight characters. It should include numbers
+        and/or punctuation and not be a word in a dictionary. Also
+        remember that your passphrase is case sensitive. 
+        </para>
+
+        <para>
+        Re-type the passphrase to verify. Once you have re-typed it
+        correctly, the server key is generated and stored in
+        <command>server.key</command> file.
+        </para>
+
+        <warning>
+        <para>
+        You can also run your secure webserver without a passphrase.
+        This is convenient because you will not need to enter the
+        passphrase every time you start your sercure webserver. But, it
+        is highly insecure and a compromise of the key means a
+        compromise of the server as well.
+        </para>
+        </warning>
+
+        <para>
+        In any case, you can choose to run your secure webserver without
+        a passphrase by leaving out the -des3 switch in the generated
+        phase or by issuing the following command:
+        </para>
+
+        <para><command>openssl rsa -in server.key -out
+        server.key.insecure</command></para>
+
+        <para>
+        Once you run the above command, the insecure key will be stored
+        in <command>server.key.insecure</command> file. You can use this
+        file to generate the CSR without passphrase.
+        </para>
+
+        <para>
+        To create the CSR you can run the following command:
+        </para>
+
+        <para><command>openssl req -new -key server.key -out server.csr</command></para>
+
+        <para>It will prompt you enter the passphrase. If you enter the
+        correct passphrase, it will prompt you to enter Company Name,
+        Site Name, Email Id, etc. Once you enter all these details, your
+        CSR will be created and it will be stored in
+        <command>server.csr</command> file. You can submit this CSR file
+        to a CA for processing. The CAN will use this CSR file and issue
+        the certificate. On the other hand, you can create self-signed
+        certificate using this CSR.</para>
+
+        </sect3>
+        <sect3 id="creating-a-self-signed-certificate" status="review">
           <title>Creating a Self Signed Certificate</title>
             <para>
-              Creating a Self Signed Certificate para ...
+            To create the self signed cerficiate, you can run the
+            following command:
             </para>
-        </sect3>
-        <sect3 id="testing-the-certificate" status="writing">
-          <title>Testing the Certificate</title>
+
             <para>
-              Testing the Certificate para ...
+            <command>openssl x509 -req -days 365 -in server.csr -signkey
+            server.key -out server.crt</command>
             </para>
+
+            <para>The above command will prompt you to enter the
+            passphrase. Once you enter the correct passphrase, your
+            certificate will be created and it will be stored in
+            <command>server.crt</command> file.  </para>
+        <warning>
+        <para>
+            If your secure server is to be used in a production environment, you
+            probably need a CA-signed certificate.  You are not
+            recommended to use self signed certificate.
+        </para>
+        </warning>
         </sect3>
-        <sect3 id="accessing-the-server" status="writing">
+        <sect3 id="installing-the-certificate" status="review">
+          <title>Installing the Certificate</title>
+
+            <para>You can install the key file
+            <command>server.key</command> and certificate file
+            <command>server.crt</command> or the certificate file issued
+            by your CA by running following commands:
+            </para>
+
+            <para><command>sudo cp server.key /etc/apache2/ssl/</command></para>
+            <para><command>sudo cp server.crt /etc/apache2/ssl/</command></para>
+            <para><command>sudo chmod 400 /etc/apache2/ssl/server.key
+            /etc/apache2/ssl/server.crt</command></para>
+
+            <para>
+            You should add the following four lines to
+            <command>/etc/apache2/sites-available/default</command>
+            file. You should place them in VirtualHost section. They
+            should be placed under DocumentRoot line:
+            </para>
+<programlisting>
+SSLEngine on
+
+SSLOptions +FakeBasicAuth +ExportCertData +CompatEnvVars +StrictRequire
+
+SSLCertificateFile /etc/apache2/ssl/server.crt
+SSLCertificateKeyFile /etc/apache2/ssl/server.key
+</programlisting>
+          
+            <para>
+            HTTPS listens on port number 443. You should add the
+            following line to <command>/etc/apache2/ports.conf</command>
+            file:
+            </para>
+<programlisting>
+Listen 443
+</programlisting>
+
+        </sect3>
+        <sect3 id="accessing-the-server" status="review">
           <title>Accessing the Server</title>
             <para>
-              Accessing the Server para ...
+            Once you install your certificate, you should restart your
+            webserver. You can run the following command to
+            restart your webserver:
             </para>
+            <para><command>sudo /etc/init.d/apache2
+            restart</command></para>
+
+        <note><para>
+        You should remember and enter the passphrase every time you
+        start your secure webserver.
+        </para></note>
+
+            <para>It will prompt you to enter the passphrase. Once you
+            enter the correct passphrase, the secure webserver will be
+            started. You can access the secure server pages by typing
+            <command>https://your_hostname/url/</command> in your
+            browser navigation bar.</para>
+
         </sect3>
       </sect2>
-      <sect2 id="http-references" status="writing">
+      <sect2 id="http-references" status="review">
         <title>References</title>
           <para>
           <ulink url="http://httpd.apache.org/docs/2.0/">Apache2
+          Documentation</ulink>
+          </para>
+          <para>
+          <ulink url="http://www.modssl.org/docs/">Mod SSL
           Documentation</ulink>
           </para>
       </sect2>
