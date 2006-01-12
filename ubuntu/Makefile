@@ -76,7 +76,7 @@ all: au dg server package status
 	cp default.css ../build/ubuntu/default.css
 
 # This is here to select what to build for the .deb package.
-gdeb: au server dg
+gdeb: au-brief server dg
 
 #Status: AVAILABLE
 # Ubuntu Status Reports
@@ -202,6 +202,10 @@ au-C:
 	cp libs/ubuntu.css $(ABASE)
 
 	@echo "--- Complete. Find outputs at" $(ABASE)
+
+au-brief:
+
+	cd aboutubuntu/C/ && ./mk_brief && cd ../../
 
 #Status: AVAILABLE
 # Release Notes
