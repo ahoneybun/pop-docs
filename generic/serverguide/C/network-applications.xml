@@ -12,9 +12,9 @@
 <!ENTITY language "&EnglishAmerican;">
 <!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
 ]>
-<chapter id="networking-related-applications" status="writing">
-	<title>Networking Related Applications</title>
-  <para>Networking Related Applications para ... </para>
+<chapter id="networking" status="writing">
+	<title>Networking</title>
+  <para>Networking para ... </para>
 	<sect1 id="network-configuration" status="help">
 		<title>Network Configuration</title>
           <para>
@@ -169,19 +169,31 @@
                         The IP Address, Netmask, Network Address, Broadcast Address, and Gateway Address
                         are typically specified via the appropriate directives in the 
                         file <emphasis role="bold">/etc/network/interfaces</emphasis>. For more information, 
-                        view the system manual page for interfaces with the command: 
-                         <command>man interfaces</command>
+                        view the system manual page for interfaces with the command:
                         </para>
                      </tip>
+<para> 
+<screen>
+<command>
+man interfaces
+</command>
+</screen>
+</para>                     
                      <tip>
                         <para>
                         The Nameserver Addresses are typically specified via 
                         <emphasis role="italics">nameserver</emphasis> directives in the 
                         file <emphasis role="bold">/etc/resolv.conf</emphasis>. For more information, 
-                        view the system manual page for resolv.conf with the command: 
-                         <command>man resolv.conf</command>
+                        view the system manual page for resolv.conf with the command:
                         </para>
                      </tip>
+<para>
+<screen> 
+<command>
+man resolv.conf
+</command>
+</screen>
+</para>                        
                </listitem>
             </itemizedlist>
             </para>
@@ -292,9 +304,9 @@
             </para>
         </sect2>
     </sect1>
-	<sect1 id="openssh-server" status="review">
+	<sect1 id="openssh-server" status="complete">
 		<title>OpenSSH Server</title>
-      <sect2 id="openssh-introduction" status="review">
+      <sect2 id="openssh-introduction">
         <title>Introduction</title> 
            <para>
             This section of the Ubuntu Server Starter Guide introduces a powerful collection of tools
@@ -324,64 +336,63 @@
             methods, including plain password, public key, and <application>Kerberos</application> tickets.
             </para>
           </sect2>
-        <sect2 id="openssh-installation" status="review">
+        <sect2 id="openssh-installation">
         <title>Installation</title>
         <para>
-        Installation of the OpenSSH client, and server applications is simple, and straightforward process, using a 
-        combination of the <application>sudo</application> utility to obtian root privileges, and the 
-        <application>apt-get</application> application. To install the OpenSSH client applications on your Ubuntu system, 
-        use this command at the prompt:
+        Installation of the OpenSSH client, and server applications is simple. To install the OpenSSH client applications on your Ubuntu system, use this command at the prompt:
         </para>
            <para>
-               <command>
-               sudo apt-get install openssh-client
-               </command>
+<screen>
+<command>
+sudo apt-get install openssh-client
+</command>
+</screen>
            </para>
         <para>
         To install the OpenSSH server application, and related support files, use this command:
         </para>
            <para>
-              <command>
-              sudo apt-get install openssh-server
-              </command>
+<screen>
+<command>
+sudo apt-get install openssh-server
+</command>
+</screen>
            </para>
         </sect2>
-        <sect2 id="openssh-configuration" status="review">
+        <sect2 id="openssh-configuration">
           <title>Configuration</title>
             <para>
-              You may configure the default behavior of the OpenSSH server application, <application>sshd</application> 
-              by editing the file /etc/ssh/sshd_config. For information about the configuration directives used in this file, you may
+              You may configure the default behavior of the OpenSSH server application, <application>sshd</application>, by editing the file /etc/ssh/sshd_config. For information about the configuration directives used in this file, you may
               view the appropriate manual page with the following command:
             </para>
                <para>
-                  <command>
-                  man sshd_config
-                  </command>
+<screen>
+<command>
+man sshd_config
+</command>
+</screen>
                </para>
             <para>
             There are many directives in the <application>sshd</application> configuration file controlling such things as communications
-            settings, and authentication modes. For example, you may change the default Transmission Control Protocol (TCP) port that your OpenSSH
-            server listens for incoming connections on by editing the /etc/ssh/ssh_config file.
+            settings, and authentication modes. The following are examples of configuration directives that can be changed by editing the /etc/ssh/ssh_config file.
             </para>
             <tip>
                <para>Prior to editing the configuration file, you should make a copy of the original file, and protect it 
                from writing so you will have the original settings as a reference, and to re-use as necessary.
                </para>
-            </tip>
-           <para>
-           Copy the /etc/ssh/sshd_config file, and protect it from writing with the commands:
-           </para>
-             <para>
+               <para>Copy the /etc/ssh/sshd_config file, and protect it from writing with the commands:
+               </para>
+               <para>
                 <command>sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.original</command>
-             </para>
-             <para>
+               </para>
+               <para>
                 <command>sudo chmod a-w /etc/ssh/sshd_config.original</command>
-             </para> 
+               </para> 
+	    </tip>
             <para>
-            Now edit the /etc/ssh/sshd_config file and set the value of the <emphasis role="italic">Port</emphasis> directive to the port number you wish the server
-            to bind to, and listen on.  
+            The following are examples of configuration directives you may change.
             </para>
-               <itemizedlist>
+           <itemizedlist>
                <listitem>
                <para>
                To set your OpenSSH to listen on TCP port 2222 instead of the default TCP port 22, change
@@ -391,31 +402,15 @@
                Port 2222
                </para>
                </listitem>
-               </itemizedlist>
-            <para>
-            After making changes to the /etc/ssh/sshd_config file, save the file, and restart the <application>sshd</application> 
-            server application to effect the changes using the command:
-            </para>
-               <para>
-                  <command>
-                  sudo /etc/init.d/ssh restart
-                  </command>
-               </para>
-            <para>
-            Other examples of configuration directives you may change include configuring the <application>sshd</application> server
-            application to accept public key-based login credentials, or having <application>sshd</application> display a pre-login
-            banner, such as the contents of the /etc/issue, or /etc/issue.net file.  
-            </para>
-            <itemizedlist>
-            <listitem>
+	<listitem>
             <para>
             To have <application>sshd</application> allow public key-based login credentials, simply add, or modify the line:
             </para>
                <para>
-               RSAAuthentication yes
+               PubkeyAuthentication yes
                </para>
             <para>
-            in the /etc/ssh/sshd_config file.
+            in the /etc/ssh/sshd_config file, or if already present ensure the line is not commented out.
             </para>
             </listitem>
             <listitem>
@@ -431,7 +426,16 @@
                </para>
              </listitem>
              </itemizedlist>
-                        <warning>
+	    <para>
+            After making changes to the /etc/ssh/sshd_config file, save the file, and restart the <application>sshd</application> 
+            server application to effect the changes using the command:
+            </para>
+               <para>
+                  <command>
+                  sudo /etc/init.d/ssh restart
+                  </command>
+               </para>
+		<warning>
                            <para>
                            Many other configuration directives for <application>sshd</application> are available for changing the server application's
                            behavior to fit your needs. Be advised however, if your only method of access to a server is <application>ssh</application>,
@@ -481,7 +485,9 @@
                         <para>At the prompt enter the following command to install
                                 <application>vsftpd</application>:</para>
                         <para>
-                            <command>sudo apt-get install vsftpd</command>
+<screen>
+<command>sudo apt-get install vsftpd</command>
+</screen>
                         </para>
                     </listitem>
                 </varlistentry>
@@ -509,28 +515,120 @@
             </variablelist>
                 </sect2>
     </sect1>
-	<sect1 id="network-file-system" status="writing">
+	<sect1 id="network-file-system" status="review">
 		<title>Network File System (NFS)</title>
           <para>
-            NFS para ...
+          NFS allows a system to share directories and files with others
+          over a network. By using NFS, users and programs can access
+          files on remote systems almost as if they were local files.
           </para>
-      <sect2 id="nfs-installation" status="writing">
-        <title>Installation</title>
+
           <para>
-            Installation para ...
+          Some of the most notable benefits that NFS can provide are:
+          </para>
+
+          <itemizedlist>
+          <listitem>
+      <para>Local workstations use less disk space because commonly used data
+can be stored on a single machine and still remain accessible to others
+over the network.</para>
+          </listitem>
+          <listitem>
+      <para>There is no need for users to have separate home directories on
+every network machine. Home directories could be set up on the NFS
+server and made available throughout the network.</para>
+          </listitem>
+          <listitem>
+
+      <para>Storage devices such as floppy disks, CDROM drives, and USB
+Thumb drives can be used by other machines on the network. This may
+reduce the number of removable media drives throughout the
+network.</para>
+          </listitem>
+          </itemizedlist>
+
+      <sect2 id="nfs-installation" status="review">
+        <title>Installation</title>
+      
+          <para>
+          At the prompt enter the following command to install NFS
+          Server:
+          </para>
+          <para>
+<screen>
+sudo apt-get install nfs-kernel-server
+</screen>
           </para>
       </sect2>
-      <sect2 id="nfs-configuration" status="writing">
+      <sect2 id="nfs-configuration" status="review">
         <title>Configuration</title>
           <para>
-            Configuration para ...
+          You can configure the directories to be exported by adding them to
+          <command>/etc/exports</command> file. For example:
+          </para>
+          <para>
+<screen>
+/ubuntu  *(ro,sync,no_root_squash)
+/home    *(rw,sync,no_root_squash)
+</screen>
+          </para>
+
+          <para>
+          You can replace * with one of the hostname formats. Make
+          hostname declaration as specific as possible so unwanted
+          systems cannot access the NFS mount.
+          </para>
+
+          <para>
+          To start NFS server, you can run the following command:
+          </para>
+          <para>
+<screen>
+sudo /etc/init.d/nfs-kernel-server start
+</screen>
           </para>
       </sect2>
-      <sect2 id="nfs-references" status="writing">
-        <title>References</title>
+      <sect2 id="nfs-client-configuration" status="review">
+        <title>NFS Client Configuration</title>
           <para>
-            References para ...
+          Use the mount command to mount a shared NFS directory from
+          another machine:
           </para>
+          <para>
+<screen>
+sudo mount example.hostname.com:/ubuntu /local/ubuntu
+</screen>
+</para>
+      <warning>
+      <para>
+      The mount point directory <command>/local/ubuntu</command> must
+      exit. There should be no subdirectories in
+      <command>/local/ubuntu</command> directory.
+      </para>
+      </warning>
+
+      <para>
+       An alternate way to mount an NFS share from another machine is to
+       add a line to the <command>/etc/fstab</command> file. The line must state the
+       hostname of the NFS server, the directory on the server being
+       exported, and the directory on the local machine where the NFS
+       share is to be mounted.
+      </para>
+
+      <para>
+      The general syntax for the line in <command>/etc/fstab</command>
+      file is as follows:
+      </para>
+      
+      <para>
+<programlisting>
+example.hostname.com:/ubuntu  /local/ubuntu  nfs   rsize=8192,wsize=8192,timeo=14,intr
+</programlisting>
+      </para>
+      </sect2>
+      <sect2 id="nfs-references" status="review">
+        <title>References</title>
+				<para><ulink url="http://nfs.sourceforge.net/">Linux NFS faq</ulink></para>
       </sect2>
     </sect1>
 	<sect1 id="dhcp" status="review">
@@ -609,7 +707,9 @@
           <para>At the prompt enter the following command to install
                   <application>dhcpd</application>:</para>
           <para>
-              <command>sudo apt-get install dhcpd</command>
+<screen>
+<command>sudo apt-get install dhcpd</command>
+</screen>
           </para>
           <para>You will see the following output, which explains what to do next:</para>
           <screen>
@@ -772,7 +872,9 @@ option netbios-name-servers 192.168.1.1; </screen>
                           <application>apache2</application> and
                           <application>apache2-common</application>:</para>
                   <para>
-                      <command>sudo apt-get install apache2 apache2-common</command>
+<screen>
+<command>sudo apt-get install apache2 apache2-common</command>
+</screen>
                   </para>
               </listitem>
           </varlistentry>
@@ -1000,7 +1102,9 @@ This section explains howto configure basic server settings.</para>
                 following command:</para>
                 
                 <para>
-                  <command>sudo apt-get install apache2 apache2-common</command>
+<screen>
+<command>sudo apt-get install apache2 apache2-common</command>
+</screen>
                 </para>
                 <para>
                 Once you install the module, the module will
@@ -1353,7 +1457,9 @@ To access Subversion repository using HTTP protocol, you must install and config
 		To install Subversion, you run:
             </para>
 				<para>
-	    <command>sudo apt-get install subversion libapache2-svn</command>
+<screen>
+<command>sudo apt-get install subversion libapache2-svn</command>
+</screen>
 			</para>
 
         </sect3>
@@ -1567,7 +1673,9 @@ $ svnserve --help</programlisting>
             </para>
 
             <para>
-            <command>sudo apt-get install mysql-server mysql-client</command>
+<screen>
+<command>sudo apt-get install mysql-server mysql-client</command>
+</screen>
             </para>
 
             <para>
@@ -1631,7 +1739,9 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
             </para>
 
             <para>
-            <command>sudo apt-get install postgresql</command>
+<screen>
+<command>sudo apt-get install postgresql</command>
+</screen>
             </para>
 
             <para>

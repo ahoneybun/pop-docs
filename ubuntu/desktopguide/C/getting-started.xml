@@ -339,13 +339,6 @@
                         an aggregate version number does not make much sense. We
                         prefer to give an idea of when each release was pushed
                         through the wires.</para>
-                    <para>You may ask yourself, &quot;With such a numbering
-                        scheme, what happens when the version number reaches
-                        2100?&quot;</para>
-                    <para>Our answer is, &quot;Our grandchildren should be
-                        able to figure that one out. At the moment, we're just
-                        focused on the next release :-)&quot;</para>
-                    <!-- It would be 100.04. =P (NT) -->
                 </sect3>
                 <sect3 id="obtaining-cds" status="writing">
                     <title>Obtaining Ubuntu CDs</title>
@@ -519,28 +512,6 @@
 		    (to match one character). </para>
 		</sect3>
 		</sect2>
-		<sect2 id="root-and-sudo">
-			<title>Root And Sudo</title>
-			<para>The use of the root user account is unnecessary in Ubuntu, when having to preform actions on your system that require root privileges the "sudo" application enables ordinary users to preform these actions instead. The first user account you created on your system during installation will, by default, have access to sudo.  You can restrict and enable sudo access to users with the "Users and Groups" application (see uag for more information).</para>
-			<para>When you run an application that requires root privileges, sudo will ask you to input your normal user password first. This insures that rouge applications cannot damage your system, and serves as a reminder that you are about to preform actions that can damage your system also.</para>
-			<para>To use sudo when using the command line, simply type "sudo" before the command you wish to run. Sudo will prompt you on the command line for your users password, enter it then press the enter key to continue.</para>
-			<para>Sudo will also remember your password for a set amount of time. This feature was designed to allow users to preform multiple administrative tasks without being asked for a password each time. It is for this reason that once you have entered your password once, remember that you still have access to damage your system and Ubuntu will not stop you.</para>
-			<para>Some other tips to using sudo include:</para>
-			<itemizedlist>
-				<listitem>
-				<para>The root account is disabled in Ubuntu for security reasons</para>
-				</listitem>
-				<listitem>
-				<para>To use a "root" terminal, type "sudo -s" at the command line</para>
-				</listitem>
-				<listitem>
-				<para>The entire group of default configuration tools in Ubuntu already use sudo, so they will prompt you for your password if needed.</para>
-				</listitem>
-				<listitem>
-				<para>To run other applications with sudo use Applications->System Tools->Run as different user and choose "Root" as the user.</para>
-				</listitem>
-			</itemizedlist>
-		</sect2>
 		<sect2 id="text-editing">
 			<title>Text Editing</title>
 			<para>Gedit is the default Ubuntu text editor, which you can launch by clicking Applications->Accessories->Text Editor on the desktop menu system. There are also quite a few terminal-based editors available in Ubuntu, popular ones include VIM and Emacs (the use of each causes much friendly debate within the Linux community).</para>
@@ -557,31 +528,69 @@
 			<para>TODO</para>
 			<para>All of the files on a linux system have permissions that allow or prevent others from viewing, modifying or executing. The super user "root" has the ability to access any file on the system. Each file has access restrictions, user restrictions and have an owner/group association.</para>
 		</sect2>
-		<sect2 id="users-and-groups">
+		<sect2 id="users-and-groups" xreflabel="the Users and Groups section">
 			<title>Users and Groups</title>
 			<para>TODO</para>
 			<para>Include info on setting up new users and adding them to groups here</para>
 		</sect2>
 
+		<sect2 id="root-and-sudo" xreflabel="the Root and Sudo section">
+			<title>Root And Sudo</title>
+			<para>The root user in GNU/Linux is the user which has administrative access to your system. Normal users do not have this access for security reasons. However, Ubuntu does not include the root user. Instead, administrative access is given to individual users, who may use the "sudo" application to perform administrative tasks. The first user account you created on your system during installation will, by default, have access to sudo. You can restrict and enable sudo access to users with the "Users and Groups" application (see <xref linkend="users-and-groups"/> for more information).</para>
+			<para>When you run an application that requires root privileges, sudo will ask you to input your normal user password. This ensures that rogue applications cannot damage your system, and serves as a reminder that you are about to perform administrative actions which require you to be careful!</para>
+			<para>To use sudo when using the command line, simply type "sudo" before the command you wish to run. Sudo will prompt you on the command line for your users password, enter it then press the enter key to continue.</para>
+			<para>Sudo will remember your password for a set amount of time. This feature was designed to allow users to perform multiple administrative tasks without being asked for a password each time.</para>
+				   <note>
+					<para>Be careful when doing administrative tasks, you might damage your system!</para>
+				   </note>
+			<para>Some other tips to using sudo include:</para>
+			<itemizedlist>
+				<listitem>
+				<para>To use a "root" terminal, type "sudo -s" at the command line</para>
+				</listitem>
+				<listitem>
+				<para>The entire group of default graphical configuration tools in Ubuntu already use sudo, so they will prompt you for your password if needed.</para>
+				</listitem>
+				<listitem>
+				<para>To run other applications with sudo use Applications->System Tools->Run as different user and choose "Root" as the user.</para>
+				</listitem>
+				<listitem>
+				<para>For more information on the <application>sudo</application> program and the absence of a root user in Ubuntu, read the <ulink url="&wiki-RootSudo;">sudo page</ulink> on the Ubuntu wiki.</para>
+				</listitem>
+
+			</itemizedlist>
+		</sect2>
+
 	</sect1>	
 	<sect1 id="installing-applications" status="writing">
-	<title xreflabel="installing applications">Installing Applications</title>
-	    <sect2 id="add-applications" xreflabel="the section on adding applications to your Ubuntu system">
+	<title xreflabel="Adding, Removing and Updating Applications">Adding, Removing and Updating Applications</title>
+	    <sect2 id="applications-introduction">
+		<title>Introduction</title>
+		<para>There are several ways to manage your applications in Ubuntu. Each method of managing applications involves a different level of complexity. This section describes the following methods of adding, removing and updating applications:</para>
+		<itemizedlist>
+			<listitem><para>the Add Applications program - this is the simplest way to add and remove programs</para></listitem>
+			<listitem><para>the Synaptic package manager - this graphical program provides a more advanced means of handling programs</para></listitem>
+		<!--think about whether to include a section on apt from the command line here (mdke)-->	
+		</itemizedlist>
+	    </sect2>
+
+	    <sect2 id="add-applications" xreflabel="the Add Applications section">
 		<title>Add Applications</title>
-			<para>Add Applications is a graphical way of installing and removing applications in Ubuntu. It uses the Debian package management system behind the scenes to ensure easy, problem free management of applications. To launch Add Applications click
+			<para>Add Applications is a simple graphical way of installing and removing applications in Ubuntu. To launch Add Applications click
 				<menuchoice>
 					<guimenu>Applications</guimenu>
 					<guimenuitem>Add Applications</guimenuitem>
 				</menuchoice> on the desktop menu system.
 			</para>
-			<para>Each time you launch Add Applications you will be asked for your password. This is to ensure only users who have the appropriate privileges can add and remove applications from your Ubuntu system. To allow other users other then the first initial user to access Add Applications you need to assign them the necessary privileges using the Users and Groups tool (see Users Groups and Sudo for more information).
+			<para>Running <application>Add Applications</application> requires administrative rights. To change the users who can do this, see <xref linkend="root-and-sudo"/> for more information.
 			</para>
-			<para>To install new applications click the category on the left of the screen, then click on the checkbox for the application you want to install. On the right side of the screen, information about each application will appear to help you choose which applications you need. Once satisfied click Apply, then Add/Remove Programs will proceed to download and install your chosen applications, as well as installing any additional applications that are required. You may be asked to insert your Ubuntu CD-ROM to install some packages also.
+			<para>To install new applications click the category on the left of the screen, then check the box of the application you want to install. On the right side of the screen, information about each application will appear to help you choose which applications you need. When finished click <guimenu>Apply</guimenu>, then <application>Add Programs</application> will proceed to download and install your chosen programs, as well as installing any additional applications that are required. If you have not activated the online package archive, you may be asked to insert your Ubuntu CD-ROM to install some packages.
 			</para>
-			<para>Some applications and packages are not available to install using Add/Remove Programs. Within this guide, the additional packages will be installed using apt-get on the command line. Optionally, you can use the advanced package manager Synaptic when required (see installing applications using Synaptic below).
+			<para>Some applications and packages are not available to install using <application>Add Programs</application>. If you cannot find the package you are looking for, click <guimenu>File -> Advanced</guimenu> which will open the Synaptic package manager (see below).
 			</para>
 		</sect2>
-	    <sect2 id="synaptic" xreflabel="the section about the Synaptic Package Manager">
+
+	    <sect2 id="synaptic" xreflabel="the Synaptic Package Manager section">
 		<title>Synaptic</title>
 			<para>Synaptic is an advanced package management application that can install and remove every package available to your system. The interface is graphical but a lot more information is presented to the user, however this means that Synaptic gives you complete control over the package management of your system.
 To launch Synaptic, choose 
@@ -596,7 +605,8 @@ To launch Synaptic, choose
 			<para>Alternatively you can click the Search tool bar button, enter the package name in the search text field and click the Search button. Synaptic will now show you a much shorter list from which to select your application for installation. This can be much easier than having to look through the very long list of applications on your own.
 			</para>
 		</sect2>
-	    <sect2 id="extra-repositories" xreflabel="the section about adding the Universe and Multiverse repositories">
+
+	    <sect2 id="extra-repositories" xreflabel="the Universe and Multiverse section">
 		<title>Universe and Multiverse Repositories</title>
 			<para>There are thousands of software programs available for installation on Ubuntu. These programs are stored in software repositories (archives) and are made freely available for installation over the Internet. This makes it very easy to install new programs in Linux. To organise the software, Ubuntu repositories are categorised into four groups.
 			</para>
@@ -640,10 +650,11 @@ To launch Synaptic, choose
 				</listitem>
 			</orderedlist>
 		</sect2>
-	    <sect2 id="updates" xreflabel="the section about updating your Ubuntu system">
+	    <sect2 id="updates" xreflabel="the Update Ubuntu section">
 		<title>Updates</title>
 			<para>Sometimes the Ubuntu developers release feature and security updates for applications and packages within the Ubuntu system. When these updates are available, Ubuntu will inform you with a pop-up from your notification area. When you see this pop-up, click <guibutton>Show Updates</guibutton>, enter your password and click <guibutton>OK</guibutton>. The Ubuntu Update manager will list available updates, to download and install these updates click <guibutton>Install</guibutton>. Ubuntu will then download and install the available updates from the Internet.  When Ubuntu Update manager has finished updating your system, click <guibutton>Close</guibutton>, then close Ubuntu Update Manager to finish updating your system. 
 			</para>
 	   </sect2>
+
 	</sect1>
 </chapter>
