@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY distro-rev "6.04">
+<!ENTITY distro-version "Dapper Drake">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="scenarios">
+	<title>Packaging Scenarios</title>
+	<sect1 id="packaging-scratch">
+		<title>Creating a source package from scratch</title>
+		
+		<important><para><emphasis role="bold">Requirements:</emphasis> automake, gnupg, and
+				lintian.</para>
+		</important>
+		
+		<para>One of the problems that many beginning packagers face is that there are
+			multiple ways of packaging and there is often more than one tool to do the
+			same job. In this first example we will use just the essential packages.</para>
+			
+		<para>In this example we will be using the GNU <application>hello</application>
+			program as our example. To get the source package make sure you have "deb-src"
+			lines in your /etc/apt/sources.list file. Then move to a working
+			directory (~/hello/ for example) and execute:</para>
+
+		<para><screen>apt-get source hello</screen></para>
+		
+		<note><para>Unlike many <application>apt-get</application> commands you do not
+				need to have root privileges to get the source package because it is
+				downloaded to the current directory.</para></note>
+		
+		<para>What the above command does is:</para>
+			<orderedlist>
+
+			<listitem><para>Download the source package. A source package usually consists
+					of a .dsc file which describes the package and gives md5sum's for the
+					source package, a .orig.tar.gz file which is the source code from the
+					author, and a .diff.gz file which is the patch that is applied to the
+					source code to include the packaging information.</para></listitem>
+
+			<listitem><para>Untar the .orig.tar.gz file into the current directory.
+			</para></listitem>
+
+			<listitem><para>Apply the gunziped .diff.gz to the unpacked source
+					directory.</para></listitem>
+
+			</orderedlist>
+
+		<para>If you manually download the source package (.dsc, .orig.tar.gz, and
+			.diff.gz files) you can unpack them in the same way <application>apt-get
+				source</application> does by using <application>dpkg-source</application>
+			like so:</para>
+		<para><screen>dpkg-source -x *.dsc</screen></para>
+
+		<para>Now let's go into the source directory that we just unpacked:</para>
+		<para><screen>cd hello-2.1.1/</screen></para>
+
+		<para>We see that this directory look like a typical source directory and if we
+			where to compare this directory with one made from downloading the source
+			tarball and unpacking it would be that we now have a new directory called
+			debian in our source directory. This is the customary directory
+			that holds all of the changes made by the packager. This allows for a
+			separation of the packaging from the actual source code. Since the actual
+			source code is not of much interest to us right now we will move into the
+			debian directory:</para>
+
+		<para><screen>cd debian/</screen></para>
+
+		<para>and we see the following files:</para>
+
+		<para><screen>changelog  control  copyright  postinst  prerm  rules </screen></para>
+
+		<para>These files contain all the information and rules needed to create source
+			and binary packages from the original source code. Now let us go through each
+			file in detail.</para>
+	
+		<sect2>
+			<title>changelog</title>
+			<para>The changelog file is, as the name indicates, a listing of
+				the changes made in each version. It has a specific format that gives the
+				version, distribution, changes, and indicates who made the changes and
+				when.</para>
+		</sect2>
+
+		<sect2>
+			<title>control</title>
+			<para>The control file contains the information that the package
+				manager (such as <application>apt-get</application>,
+				<application>synaptic</application>, and
+				<application>aptitude</application>) uses, build-dependecies,
+				maintainer information, and much more.</para>
+			<para>For <application>hello</application> the control file looks like:</para>
+			<para><screen>Source: hello
+Section: devel
+Priority: optional
+Maintainer: Santiago Vila &lt;sanvila@debian.org&gt;
+Standards-Version: 3.6.1
+
+Package: hello
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: The classic greeting, and a good example
+ The GNU hello program produces a familiar, friendly greeting.  It
+ allows non-programmers to use a classic computer science tool which
+ would otherwise be unavailable to them.
+ .
+ Seriously, though: this is an example of how to do a Debian
+ package.
+ It is the Debian version of the GNU Project's `hello world' program
+ (which is itself an example for the GNU Project).</screen></para>
+
+			<para>The first paragraph is for the source package. It gives the package name
+				(hello), the section the package should be put under (devel), the
+				importance of the package (optional), the maintainer (Santiago Vila), and
+				the version of the Debian Policy that the package adheres to
+				(3.6.1).</para>			   
+
+		</sect2>
+
+	</sect1>
+
+	<sect1 id="packaging-debhelper" status="writing">
+		<title>Creating a source package with debhelper</title>
+		<important><para><emphasis role="bold">Requirements:</emphasis> debhelper, gnupg,
+				and fakeroot</para>
+		</important>
+
+		<para> As a maintainer, you will rarely do packages from scratch. /* Most of the
+			time, you will just need to update a current package, or to "Ubuntu-ize"
+			packages that come from Debian. */ To make the job even easier, you can use
+			the debhelper's scripts. Debhelper is a set of Perl scripts that automate the
+			process of package building. With those scripts, building a Debian pac kage
+			become quite simple.  </para>
+
+		<para>In this scenario, we will build again the GNU Hello package, but this
+			time we will be using the <application>debhelper</application> package. First,
+			created a directory where your development files will be stored: </para>
+
+		<para><screen>mkdir hello-debhelper</screen></para>
+
+		<para>Then, get the sources package:</para>
+
+		<para><screen>apt-get source hello-debhelper</screen></para>
+
+		<para>And build the package!</para>
+
+		<para><screen>
+cd hello-debhelper-*
+debuild -rfakeroot -kSOMEKEY
+			</screen>
+		</para>
+
+		<para>Replace SOMEKEY by your GNUPG key. When the program finished, look in your
+			directory, you have now created a .deb file! The debuild command is actually
+			just a call of the ``make'' program. Instead of using a makefile, it use the
+			``rules'' file located in the debian/ directory.</para>
+		
+		<para> Here the content of the debian/rules file.</para>
+
+		<para><screen> #!/usr/bin/make -f
+
+package = hello-debhelper
+
+CC = gcc
+CFLAGS = -g -Wall
+
+ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+  CFLAGS += -O2
+endif
+
+#export DH_VERBOSE=1
+
+clean:
+        dh_testdir
+        dh_clean
+        rm -f build
+        -$(MAKE) -i distclean
+
+install: build
+        dh_clean
+        dh_installdirs
+        $(MAKE) prefix=$(CURDIR)/debian/$(package)/usr \
+                mandir=$(CURDIR)/debian/$(package)/usr/share/man \
+                infodir=$(CURDIR)/debian/$(package)/usr/share/info \
+                install
+
+build:
+        ./configure --prefix=/usr
+        $(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)"
+        touch build
+
+binary-indep: install
+# There are no architecture-independent files to be uploaded
+# generated by this package.  If there were any they would be
+# made here.
+
+binary-arch: install
+        dh_testdir -a
+        dh_testroot -a
+        dh_installdocs -a NEWS
+        dh_installchangelogs -a ChangeLog
+        dh_strip -a
+        dh_compress -a
+        dh_fixperms -a
+        dh_installdeb -a
+        dh_shlibdeps -a
+        dh_gencontrol -a
+        dh_md5sums -a
+        dh_builddeb -a
+
+binary: binary-indep binary-arch
+
+.PHONY: binary binary-arch binary-indep clean checkroot
+			</screen>
+		</para>
+
+		<para>As you see, the debian/rules file is just a plain Makefile.</para>
+
+	</sect1>
+
+</chapter>
