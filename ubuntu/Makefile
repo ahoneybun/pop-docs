@@ -82,25 +82,6 @@ gdeb: server dg
 # Ubuntu Status Reports
 status:
 	@echo "----- Building status reports... please be patient. -----"
-#	@echo "----- User Guide status report -----"
-#	xsltproc --xinclude -o $(STBASE)ug-report.xml $(wOS) userguide/C/userguide.xml
-#	xsltproc --xinclude -o $(STBASE)ug-report.html $(NWDBXSL) $(STBASE)ug-report.xml
-	
-#	@echo "----- Quick Guide status report -----"
-#	xsltproc --xinclude -o $(STBASE)qg-report.xml $(wOS) quickguide/C/quick-guide.xml
-#	xsltproc --xinclude -o $(STBASE)qg-report.html $(NWDBXSL) $(STBASE)qg-report.xml
-
-#	@echo "----- Admin Guide status report -----"
-#	xsltproc --xinclude -o $(STBASE)ag-report.xml $(wOS) adminguide/C/adminguide.xml
-#	xsltproc --xinclude -o $(STBASE)ag-report.html $(NWDBXSL) $(STBASE)ag-report.xml
-
-#	@echo "----- Install Guide status report -----"
-#	xsltproc --xinclude -o $(STBASE)in-report.xml $(wOS) ../generic/instalguide/C/installation-guide.xml
-#	xsltproc --xinclude -o $(STBASE)in-report.html $(NWDBXSL) $(STBASE)in-report.xml
-	
-#	@echo "----- Release Notes status report -----"
-#	xsltproc --xinclude -o $(STBASE)rn-report.xml $(wOS) releasenotes/C/release-notes.xml
-#	xsltproc --xinclude -o $(STBASE)rn-report.html $(NWDBXSL) $(STBASE)rn-report.xml
 	
 	@echo "----- About Ubuntu status report -----"
 	xsltproc --xinclude -o $(STBASE)au-report.xml $(wOS) aboutubuntu/C/about-ubuntu.xml
@@ -231,61 +212,15 @@ rn:
 dg: dg-C
 
 dg-C:
-	@echo "--- Building the Desktop Guide . . ."
-	
-	@echo "--- Removing existing build files (if any). . ."
-	rm -f $(DGBASE)C/*.*
-	rm -f $(DGBASE)C/sample/*
-	
-	@echo "--- Building files . . ."
 
-	rm -f ../build/ubuntu/desktopguide/C/*.*
+# The build commands for this are pretty complicated, so for simplicity, it's migrated to a separate Makefile. This will help us organise the translations.
 
-	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "desktopguide/C/db/desktopguide.db" libs/desktopguide-html-chunk-cust.xsl desktopguide/C/desktopguide.xml
+	@echo "--- Building the Ubuntu Desktop Guide . . ."
 
-	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "desktopguide/C/db/bookinfo.db" libs/desktopguide-html-chunk-cust.xsl desktopguide/C/bookinfo.xml
+	cd desktopguide/C && ./mk && cd ../../
 
-	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "desktopguide/C/db/preface.db" libs/desktopguide-html-chunk-cust.xsl desktopguide/C/preface.xml
+	@echo "--- Complete. Find outputs at" $(DGBASE)
 
-	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "desktopguide/C/db/getting-started.db" libs/desktopguide-html-chunk-cust.xsl desktopguide/C/getting-started.xml
-
-	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "desktopguide/C/db/common-tasks.db" libs/desktopguide-html-chunk-cust.xsl desktopguide/C/common-tasks.xml
-
-	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "desktopguide/C/db/config-system.db" libs/desktopguide-html-chunk-cust.xsl desktopguide/C/config-system.xml
-
-	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "desktopguide/C/db/system-admin.db" libs/desktopguide-html-chunk-cust.xsl desktopguide/C/system-admin.xml
-
-	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "desktopguide/C/db/tips-and-tricks.db" libs/desktopguide-html-chunk-cust.xsl desktopguide/C/tips-and-tricks.xml
-
-	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "desktopguide/C/db/getting-help.db" libs/desktopguide-html-chunk-cust.xsl desktopguide/C/getting-help.xml
-
-	xsltproc --xinclude --output ../build/ubuntu/desktopguide/C/index.html --stringparam target.database.document "desktopguide/C/olinkdb.xml" --stringparam current.docid "DesktopGuide" libs/desktopguide-html-chunk-cust.xsl desktopguide/C/desktopguide.xml 
-
-
-#	@echo "--- Building new files. . ."
-#	xsltproc --xinclude --stringparam target.database.document "../../../olinkdb.xml" --stringparam current.docid "DesktopGuide" #--stringparam base.dir $(DGBASE)C/ $(DGHTMLCHUNKXSL) desktopguide/C/desktopguide.xml
-#	xsltproc --xinclude -o $(DGBASE)C/desktopguide-all.html $(DGHTMLSINGLEXSL) desktopguide/C/desktopguide.xml
-#	#	xsltproc --xinclude -o $(DGBASE)dg-imagelist.txt $(MKIMGLST) desktopguide/C/desktopguide.xml
-	
-	mkdir -p $(IMAGES)C
-	
-	cp -r ../ubuntu/images/C/*.* $(IMAGES)C
-	
-	mkdir -p $(IMAGES)admon
-	cp -r ../common/admon/*.* $(IMAGES)admon
-	
-	mkdir -p $(IMAGES)callouts
-	cp -r ../common/callouts/*.* $(IMAGES)callouts
-	
-	mkdir -p $(IMAGES)navig
-	cp -r ../common/navig/*.* $(IMAGES)navig
-	
-	mkdir -p $(DGBASE)C/sample
-	cp -r desktopguide/C/sample/* $(DGBASE)C/sample/
-	
-	cp libs/ubuntu-book.css $(DGBASE)
-	
-	@echo "Complete. Find outputs at" $(DGBASE)C/
 
 # QuickTour
 #qt:
@@ -301,7 +236,7 @@ clean:
 
 ## Server Guide
 server:
-	@echo "--- Building the Ubuntu Server Starter Guide . . ."
+	@echo "--- Building the Ubuntu Server Guide . . ."
 	
 	@echo "--- Removing existing build files (if any). . ."
 	rm -f $(SERVERBASE)C/*.html 

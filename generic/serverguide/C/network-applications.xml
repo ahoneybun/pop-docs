@@ -3,6 +3,8 @@
 	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 <!ENTITY % globalent SYSTEM "../../../libs/global.ent">
 %globalent;
+<!ENTITY % genericent SYSTEM "../../libs/generic.ent">
+%genericent;
 <!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
 %cdo-C;
 <!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
@@ -14,7 +16,14 @@
 ]>
 <chapter id="networking" status="writing">
 	<title>Networking</title>
-  <para>Networking para ... </para>
+  <para>Networks consist of two, or more devices, such as computer systems, printers, and related
+        equipment which are connected either by physical cabling, or via wireless links for the
+        purpose of sharing, and distributing information among the connected devices. 
+  </para>
+  <para>This section of the Ubuntu Server Guide provides general, and specific information pertaining
+        to networking including an overview of network concepts, and detailed discussion of popular
+        network protocols, and network server applications.
+  </para>
 	<sect1 id="network-configuration" status="help">
 		<title>Network Configuration</title>
           <para>
@@ -81,7 +90,7 @@
             <itemizedlist>
                <listitem>
                   <para>
-                  <emphasis role="bold">IP Address</emphasis> The IP Address is a unique
+                  <emphasis role="bold">IP address</emphasis> The IP address is a unique
                   identifying string expressed as four decimal numbers ranging from zero (0)
                   to two-hundred and fifty-five (255), separated by periods,
                   with each of the four numbers representing eight (8) bits of the address for a
@@ -89,7 +98,7 @@
                   <emphasis role="italics">dotted quad
                   notation</emphasis>.</para>
                      <para>
-                     IP Addresses are defined in <emphasis role="italics">classes</emphasis> whereby the
+                     IP addresses are defined in <emphasis role="italics">classes</emphasis> whereby the
                      bits making up an address correspond to network, and host ranges.  There are four
                      principal address classes: A, B, C, and D. Class A IP addresses would typically be
                      used in very large organizations, and have the format 
@@ -109,7 +118,7 @@
                   which separate the portions of an IP address significant to the network from the
                   bits significant to the <emphasis role="italics">subnetwork</emphasis>.  For example,
                   in a Class C network, the standard netmask is 255.255.255.0 which masks the first
-                  three bytes of the IP Address, and allows the last byte of the IP Address to
+                  three bytes of the IP address, and allows the last byte of the IP address to
                   remain available for specifying hosts on the subnetwork.
                   </para>
                </listitem>
@@ -128,7 +137,7 @@
                </listitem>
                <listitem>
                   <para>
-                  <emphasis role="bold">Broadcast Address</emphasis> The Broadcast Address is an IP Address
+                  <emphasis role="bold">Broadcast Address</emphasis> The Broadcast Address is an IP address
                   which allows network data to be sent simultaneously to all hosts on a given subnetwork rather
                   than specifying a particular network host.  The standard general broadcast address for IP networks is
                   255.255.255.255, but this broadcast address cannot be used to send a broadcast message to
@@ -141,7 +150,7 @@
                </listitem>
                <listitem>
                   <para>
-                  <emphasis role="bold">Gateway Address</emphasis> A Gateway Address is the IP Address through which
+                  <emphasis role="bold">Gateway Address</emphasis> A Gateway Address is the IP address through which
                   a particular network, or host on a network may be reached.  If one network host wishes to communicate
                   with another network host, and that host is not located on the same network, then a 
                   <emphasis role="italics">gateway</emphasis> must be used. In many cases, the Gateway Address will be that
@@ -152,48 +161,35 @@
                </listitem>
                <listitem>
                   <para>
-                  <emphasis role="bold">Nameserver Address</emphasis> Nameserver Addresses represent the IP Addresses of
-                  Domain Name Server (DNS) systems which resolve network hostnames into IP Addresses.  There are three levels of
+                  <emphasis role="bold">Nameserver Address</emphasis> Nameserver Addresses represent the IP addresses of
+                  Domain Name Server (DNS) systems which resolve network hostnames into IP addresses.  There are three levels of
                   Nameserver Addresses which may be specified in order of precedence, The 
                   <emphasis role="italics">Primary</emphasis>
                   Nameserver, the <emphasis role="italics">Secondary</emphasis> Nameserver, and the 
                   <emphasis role="italics">Tertiary</emphasis>
                   Nameserver. In order for your system to be able to resolve network hostnames into their
-                  corresponding IP Addresses, you must specify valid Nameserver Addresses, which you are authorized to use
+                  corresponding IP addresses, you must specify valid Nameserver Addresses, which you are authorized to use
                   in your system's TCP/IP configuration.  In many cases these addresses can, and will be provided by your
                   network service provider, but many free, and publicly accessible Nameservers are available for use, such as
-                  the Level3 (Verizon) servers with IP Addresses from
+                  the Level3 (Verizon) servers with IP addresses from
                   4.2.2.1 to 4.2.2.6. </para>
                      <tip>
                         <para>
-                        The IP Address, Netmask, Network Address, Broadcast Address, and Gateway Address
+                        The IP address, Netmask, Network Address, Broadcast Address, and Gateway Address
                         are typically specified via the appropriate directives in the 
-                        file <emphasis role="bold">/etc/network/interfaces</emphasis>. For more information, 
-                        view the system manual page for interfaces with the command:
-                        </para>
-                     </tip>
-<para> 
+                        file <filename>/etc/network/interfaces</filename>. For more information, 
+                        view the system manual page for interfaces with the following command typed at a terminal prompt:
 <screen>
-<command>
-man interfaces
-</command>
+<command>man interfaces</command>
 </screen>
-</para>                     
-                     <tip>
-                        <para>
-                        The Nameserver Addresses are typically specified via 
-                        <emphasis role="italics">nameserver</emphasis> directives in the 
-                        file <emphasis role="bold">/etc/resolv.conf</emphasis>. For more information, 
-                        view the system manual page for resolv.conf with the command:
+                        The Nameserver Addresses are typically specified via  <emphasis role="italics">nameserver</emphasis> 
+                        directives in the file <filename>/etc/resolv.conf</filename>. For more information, 
+                        view the system manual page for <filename>resolv.conf</filename> with the following command typed at a terminal prompt:
+<screen> 
+<command>man resolv.conf</command>
+</screen>
                         </para>
                      </tip>
-<para>
-<screen> 
-<command>
-man resolv.conf
-</command>
-</screen>
-</para>                        
                </listitem>
             </itemizedlist>
             </para>
@@ -202,7 +198,7 @@ man resolv.conf
           <title>IP Routing</title>
             <para>
               IP routing is a means of specifying, and discovering paths in a TCP/IP network along which
-              network data may be sent.  Routing uses a set of <emphasis role="talics">routing tables</emphasis>
+              network data may be sent.  Routing uses a set of <emphasis role="italics">routing tables</emphasis>
               to direct the forwarding of network data packets from their source to the destination, often
               via many intermediary network nodes known as <emphasis role="italics">routers</emphasis>.
               IP Routing is the principle mode of path discovery on the Internet.  There are two primary forms of
@@ -211,7 +207,7 @@ man resolv.conf
             </para>
             <para>
             Static routing involves manually adding IP routes to the system's routing table, and this is usually
-            done by manipulating the routing table with the <command>route</command> command. Static routing enjoys
+            done by manipulating the routing table with the <application>route</application> command. Static routing enjoys
             many advantages over dynamic routing, such as simplicity of implementation on smaller networks, 
             predictability, (the routing table is always computed in advance, and thus the route is precisely the 
             same each time it used) and low overhead on other routers and network links due to the lack of a
@@ -309,7 +305,7 @@ man resolv.conf
       <sect2 id="openssh-introduction">
         <title>Introduction</title> 
            <para>
-            This section of the Ubuntu Server Starter Guide introduces a powerful collection of tools
+            This section of the &ubuntu; &sg-title; introduces a powerful collection of tools
             for the remote control of networked computers, and transfer of data between networked 
             computers called <emphasis role="italics">OpenSSH</emphasis>. You will also learn
             about some of the configuration settings possible with the OpenSSH server application, and
@@ -339,54 +335,48 @@ man resolv.conf
         <sect2 id="openssh-installation">
         <title>Installation</title>
         <para>
-        Installation of the OpenSSH client, and server applications is simple. To install the OpenSSH client applications on your Ubuntu system, use this command at the prompt:
+        Installation of the OpenSSH client, and server applications is simple. To install the OpenSSH client applications on your Ubuntu system, use this command at a terminal prompt:
         </para>
            <para>
 <screen>
-<command>
-sudo apt-get install openssh-client
-</command>
+<command>sudo apt-get install openssh-client</command>
 </screen>
            </para>
         <para>
-        To install the OpenSSH server application, and related support files, use this command:
+        To install the OpenSSH server application, and related support files, use this command at a terminal prompt:
         </para>
            <para>
 <screen>
-<command>
-sudo apt-get install openssh-server
-</command>
+<command>sudo apt-get install openssh-server</command>
 </screen>
            </para>
         </sect2>
         <sect2 id="openssh-configuration">
           <title>Configuration</title>
             <para>
-              You may configure the default behavior of the OpenSSH server application, <application>sshd</application>, by editing the file /etc/ssh/sshd_config. For information about the configuration directives used in this file, you may
-              view the appropriate manual page with the following command:
+              You may configure the default behavior of the OpenSSH server application, <application>sshd</application>, by editing the file <filename>/etc/ssh/sshd_config</filename>. For information about the configuration directives used in this file, you may
+              view the appropriate manual page with the following command, issued at a terminal prompt:
             </para>
                <para>
 <screen>
-<command>
-man sshd_config
-</command>
+<command>man sshd_config</command>
 </screen>
                </para>
             <para>
             There are many directives in the <application>sshd</application> configuration file controlling such things as communications
-            settings, and authentication modes. The following are examples of configuration directives that can be changed by editing the /etc/ssh/ssh_config file.
+            settings, and authentication modes. The following are examples of configuration directives that can be changed by editing the <filename>/etc/ssh/ssh_config</filename> file.
             </para>
             <tip>
                <para>Prior to editing the configuration file, you should make a copy of the original file, and protect it 
                from writing so you will have the original settings as a reference, and to re-use as necessary.
                </para>
-               <para>Copy the /etc/ssh/sshd_config file, and protect it from writing with the commands:
+               <para>Copy the <filename>/etc/ssh/sshd_config</filename> file, and protect it from writing with the following commands, issued at a terminal prompt:
                </para>
                <para>
-                <command>sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.original</command>
-               </para>
-               <para>
-                <command>sudo chmod a-w /etc/ssh/sshd_config.original</command>
+<screen>
+<command>sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.original</command>
+<command>sudo chmod a-w /etc/ssh/sshd_config.original</command>
+</screen>
                </para> 
 	    </tip>
             <para>
@@ -410,41 +400,50 @@ man sshd_config
                PubkeyAuthentication yes
                </para>
             <para>
-            in the /etc/ssh/sshd_config file, or if already present ensure the line is not commented out.
+            in the <filename>/etc/ssh/sshd_config</filename> file, or if already present ensure the line is not commented out.
             </para>
             </listitem>
             <listitem>
              <para>
-             To make your OpenSSH server display the contents of the /etc/issue.net file as a pre-login
+             To make your OpenSSH server display the contents of the <filename>/etc/issue.net</filename> file as a pre-login
              banner, simply add, or modify the line:
              </para>
                <para>
                Banner  /etc/issue.net
                </para>
                <para>
-               in the /etc/ssh/sshd_config file.
+               in the <filename>/etc/ssh/sshd_config</filename> file.
                </para>
              </listitem>
              </itemizedlist>
 	    <para>
-            After making changes to the /etc/ssh/sshd_config file, save the file, and restart the <application>sshd</application> 
-            server application to effect the changes using the command:
+            After making changes to the <filename>/etc/ssh/sshd_config</filename>  file, save the file, and restart the <application>sshd</application> 
+            server application to effect the changes using the following command at a terminal prompt:
             </para>
                <para>
-                  <command>
-                  sudo /etc/init.d/ssh restart
-                  </command>
+<screen>
+<command>sudo /etc/init.d/ssh restart</command>
+</screen>
                </para>
 		<warning>
                            <para>
                            Many other configuration directives for <application>sshd</application> are available for changing the server application's
                            behavior to fit your needs. Be advised however, if your only method of access to a server is <application>ssh</application>,
-                           and you make a mistake in configuring <application>sshd</application> via the /etc/ssh/sshd_config file, you may find you
+                           and you make a mistake in configuring <application>sshd</application> via the <filename>/etc/ssh/sshd_config</filename> file, you may find you
                            are locked out of the server upon restarting it, or that the <application>sshd</application> server refuses to start due
                            to an incorrect configuration directive, so be extra careful when editing this file on a remote server.
                            </para>
                         </warning>
         </sect2>
+   <sect2 id="openssh-references" status="review">
+      <title>References</title>
+      <para>
+      <ulink url="http://www.openssh.org/">OpenSSH Website</ulink>
+      </para>
+      <para>
+      <ulink url="https://wiki.ubuntu.com/AdvancedOpenSSH">Advanced OpenSSH Wiki Page</ulink>
+      </para>
+   </sect2>
      </sect1>
 	<sect1 id="ftp-server-introduction" status="review">
         <title>FTP Introduction</title> 
@@ -467,7 +466,7 @@ man sshd_config
                 default user account called &apos;anonymous&quot; or &quot;ftp&quot; and
                 sending their email address as the password. In the Authenticated mode a user must
                 have an account and password. User access to the FTP server directories and files is
-                dependant on the permissions defined for the account used at login. As a general
+                dependent on the permissions defined for the account used at login. As a general
                 rule the FTP daemon will hide the root directory of the FTP server and change it to
                 the FTP Home directory. This hides the rest of the file system from remote
             sessions.</para>
@@ -482,7 +481,7 @@ man sshd_config
                 <varlistentry>
                     <term>Installation:</term>
                     <listitem>
-                        <para>At the prompt enter the following command to install
+                        <para>At a terminal prompt enter the following command to install
                                 <application>vsftpd</application>:</para>
                         <para>
 <screen>
@@ -498,7 +497,7 @@ man sshd_config
                     <listitem>
                         <para>
                         You can edit the vsftpd configuration file,
-                        /etc/vsftpd.conf to
+                        <filename>/etc/vsftpd.conf</filename> to
                         change the default settings. More information about
                         each configuration parameter is available in
                         the configuration file.
@@ -508,8 +507,16 @@ man sshd_config
                 <varlistentry>
                     <term>Manage Service:</term>
                     <listitem>
-                        <para> <command>sudo /etc/init.d/vsftpd start</command></para>
-                        <para><command>sudo /etc/init.d/vsftpd stop</command> </para>
+                        <para> 
+<screen>
+<command>sudo /etc/init.d/vsftpd start</command>
+</screen>
+                        </para>
+                        <para>
+<screen>
+<command>sudo /etc/init.d/vsftpd stop</command>
+</screen>
+                        </para>
                     </listitem>
                 </varlistentry>
             </variablelist>
@@ -551,12 +558,12 @@ network.</para>
         <title>Installation</title>
       
           <para>
-          At the prompt enter the following command to install NFS
+          At a terminal prompt enter the following command to install NFS
           Server:
           </para>
           <para>
 <screen>
-sudo apt-get install nfs-kernel-server
+<command>sudo apt-get install nfs-kernel-server</command>
 </screen>
           </para>
       </sect2>
@@ -564,7 +571,7 @@ sudo apt-get install nfs-kernel-server
         <title>Configuration</title>
           <para>
           You can configure the directories to be exported by adding them to
-          <command>/etc/exports</command> file. For example:
+          the <filename>/etc/exports</filename> file. For example:
           </para>
           <para>
 <screen>
@@ -580,49 +587,49 @@ sudo apt-get install nfs-kernel-server
           </para>
 
           <para>
-          To start NFS server, you can run the following command:
+          To start NFS server, you can run the following command at a terminal prompt:
           </para>
           <para>
 <screen>
-sudo /etc/init.d/nfs-kernel-server start
+<command>sudo /etc/init.d/nfs-kernel-server start</command>
 </screen>
           </para>
       </sect2>
       <sect2 id="nfs-client-configuration" status="review">
         <title>NFS Client Configuration</title>
           <para>
-          Use the mount command to mount a shared NFS directory from
-          another machine:
+          Use the <application>mount</application> command to mount a shared NFS directory from
+          another machine, by typing a command line similar to the following at a terminal prompt:
           </para>
           <para>
 <screen>
-sudo mount example.hostname.com:/ubuntu /local/ubuntu
+<command>sudo mount example.hostname.com:/ubuntu /local/ubuntu</command>
 </screen>
 </para>
       <warning>
       <para>
-      The mount point directory <command>/local/ubuntu</command> must
+      The mount point directory <filename>/local/ubuntu</filename> must
       exit. There should be no subdirectories in
-      <command>/local/ubuntu</command> directory.
+      <filename>/local/ubuntu</filename> directory.
       </para>
       </warning>
 
       <para>
        An alternate way to mount an NFS share from another machine is to
-       add a line to the <command>/etc/fstab</command> file. The line must state the
+       add a line to the <filename>/etc/fstab</filename> file. The line must state the
        hostname of the NFS server, the directory on the server being
        exported, and the directory on the local machine where the NFS
        share is to be mounted.
       </para>
 
       <para>
-      The general syntax for the line in <command>/etc/fstab</command>
+      The general syntax for the line in <filename>/etc/fstab</filename>
       file is as follows:
       </para>
       
       <para>
 <programlisting>
-example.hostname.com:/ubuntu  /local/ubuntu  nfs   rsize=8192,wsize=8192,timeo=14,intr
+example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,intr
 </programlisting>
       </para>
       </sect2>
@@ -634,7 +641,7 @@ example.hostname.com:/ubuntu  /local/ubuntu  nfs   rsize=8192,wsize=8192,timeo=1
 	<sect1 id="dhcp" status="review">
 		<title>Dynamic Host Configuration Protocol (DHCP)</title>
             <para>Dynamic Host Configuration Protocol (DHCP) is a network service that enables hosts
-                computers to be automatically assigned with settings from a server as apposed to
+                computers to be automatically assigned with settings from a server as opposed to
                 manually configuring each network host. Computers configured to be DHCP clients have
                 no control over the settings they receive from the DHCP server and the configuration
                 is transparent to the computers' user.</para>
@@ -672,8 +679,8 @@ example.hostname.com:/ubuntu  /local/ubuntu  nfs   rsize=8192,wsize=8192,timeo=1
                 in the address of the DNS server, need only be changed at the DHCP server and all
                 network hosts will be reconfigured the next time each of their DHCP clients poll the
                 DHCP server. As an added advantage it is also easier to integrate new computers into
-                the network as there is no need to check for the availability of an ip-address.
-                Conflicts in ip-address allocation are also reduced.</para>
+                the network as there is no need to check for the availability of an IP address.
+                Conflicts in IP address allocation are also reduced.</para>
             <para>A DHCP server can provide configuration settings using two methods:</para>
             <variablelist>
                 <varlistentry>
@@ -689,7 +696,7 @@ example.hostname.com:/ubuntu  /local/ubuntu  nfs   rsize=8192,wsize=8192,timeo=1
                     <term>Address Pool</term>
                     <listitem>
                         <para>This method entails defining a pool (sometimes also called a range or
-                            scope) of ip-addresses from which DHCP clients are supplied their
+                            scope) of IP addresses from which DHCP clients are supplied their
                             configuration properties dynamically and on a fist come first serve
                             basis. When a DHCP client is no longer on the network for a specified
                             period, the configuration is expired and released back to the address
@@ -704,7 +711,7 @@ example.hostname.com:/ubuntu  /local/ubuntu  nfs   rsize=8192,wsize=8192,timeo=1
                 are easy to install and configure and will be automatically started at system boot.</para>
       <sect2 id="dhcp-installation" status="review">
         <title>Installation</title>
-          <para>At the prompt enter the following command to install
+          <para>At a terminal prompt enter the following command to install
                   <application>dhcpd</application>:</para>
           <para>
 <screen>
@@ -762,14 +769,15 @@ option netbios-name-servers 192.168.1.1; </screen>
             <para>Dhcpd configuration settings are taken from DHCP mini-HOWTO, which can be found
                     <ulink url="http://www.tldp.org/HOWTO/DHCP/index.html">here</ulink>. </para>
       </sect2>
-      <sect2 id="dhcp-references" status="writing">
+      <sect2 id="dhcp-references" status="review">
         <title>References</title>
           <para>
-            References para ...
+            <ulink url="http://www.dhcp-handbook.com/dhcp_faq.html">DHCP
+            FAQ</ulink>
           </para>
       </sect2>
     </sect1>
-	<sect1 id="dns" status="writing">
+	<sect1 id="dns" status="review">
 		<title>Domain Name Servers (DNS)</title>
             <para>Domain Name Server (DNS) is an Internet service that maps IP addresses and fully
                 qualified domain names (FQDN) to one another. In this way DNS alleviates the need to
@@ -779,54 +787,245 @@ option netbios-name-servers 192.168.1.1; </screen>
                 Internet Naming Daemon), one of the most common programs used for maintaining a name
                 server on GNU/Linux.</para>
             <!-- things to do: IPv6-->
-      <sect2 id="dns-installation" status="writing">
+      <sect2 id="dns-installation" status="review">
         <title>Installation</title>
+          <para>At a terminal prompt enter the following command to install
+                  <application>dns</application>:</para>
           <para>
-            Installation para ...
+<screen>
+<command>sudo apt-get install bind</command>
+</screen>
           </para>
       </sect2>
-      <sect2 id="dns-configuration" status="writing">
+      <sect2 id="dns-configuration" status="review">
         <title>Configuration</title>
           <para>
-            Configuration para ...
+          The DNS configuration files are stored in
+          <filename>/etc/bind</filename> directory. The
+          primary configuration file is
+         <filename>/etc/bind/named.conf</filename>. The content
+          of default configuration file is shown below:
           </para>
-        <sect3 id="primary-dns" status="writing">
-          <title>Primary DNS</title>
-            <para>
-              Primary DNS para ...
-            </para>
-        </sect3>
-        <sect3 id="secondary-dns" status="writing">
-          <title>Secondary DNS</title>
-            <para>
-              Secondary DNS para ...
-            </para>
-        </sect3>
+
+          <para>
+<programlisting>
+// This is the primary configuration file for the BIND DNS server named.
+//
+// Please read /usr/share/doc/bind/README.Debian for information on the 
+// structure of BIND configuration files in Debian for BIND versions 8.2.1 
+// and later, *BEFORE* you customize this configuration file.
+//
+
+include "/etc/bind/named.conf.options";
+
+// reduce log verbosity on issues outside our control
+logging {
+	category lame-servers { null; };
+	category cname { null; };
+};
+
+// prime the server with knowledge of the root servers
+zone "." {
+        type hint;
+        file "/etc/bind/db.root";
+};
+
+// be authoritative for the localhost forward and reverse zones, and for
+// broadcast zones as per RFC 1912
+
+zone "localhost" {
+        type master;
+        file "/etc/bind/db.local";
+};
+
+zone "127.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.127";
+};
+
+zone "0.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.0";
+};
+
+zone "255.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.255";
+};
+
+// add local zone definitions here
+include "/etc/bind/named.conf.local";
+</programlisting>
+          </para>
+
+          <para>
+          The <application>include</application> line specifies the
+          filename which contains the DNS options. The
+          <application>directory</application> line in options file tells
+          DNS where to look for files. All files DNS use will be
+          relative to this directory.
+          </para>
+
+          <para>
+          The file named <filename>/etc/bind/db.root</filename> 
+          describes the root name servers in the world. The servers
+          change over time and must be maintained now and then.
+          </para>
+
+          <para>
+          The <application>zone</application> section defines a master
+          server and it is stored in a file mentioned against file tag.
+          Every zone file contains 3 resource records (RRS): A SOA RR, A
+          NS RR and A PTR RR. SOA is short of Start of Authority. The
+          "@" is a special notation meaning the origin. NS is the Name
+          Server RR. PTR is Domain Name Pointer.  To start the DNS server,
+          run the following command from a terminal prompt: 
+           </para>
+           <para>
+<screen>
+<command>sudo /etc/init.d/bind start</command>
+</screen>
+           </para>
+          <para>You can refer the
+          documentation mentioned in references section for details.
+          </para>
       </sect2>
-      <sect2 id="dns-references" status="writing">
+      <sect2 id="dns-references" status="review">
         <title>References</title>
           <para>
-            References para ...
+            <ulink url="http://www.tldp.org/HOWTO/DNS-HOWTO.html">DNS
+            HOWTO</ulink>
           </para>
       </sect2>
     </sect1>
-	<sect1 id="cups" status="help">
+	<sect1 id="cups" status="review">
 		<title>CUPS - Print Server</title>
           <para>
-            CUPS para ...
+            The primary mechanism for Ubuntu printing, and print services is the <emphasis role="bold">Common UNIX Printing System</emphasis>. (CUPS) This printing system is a freely-available, portable printing layer, which has become the new standard for printing in most GNU/Linux distributions.
           </para>
-      <sect2 id="cups-installation" status="help">
+          <para>
+          CUPS manages print jobs, queues, and provides network printing using the standard Internet Printing Protocol (IPP) while offering support for a very large range of printers, from dot-matrix, to laser, and many in-between.  CUPS also supports PostScript Printer Description, (PPD) auto-detection of network printers, and features a simple web browser-based configuration, and administration tool.
+          </para>
+      <sect2 id="cups-installation" status="review">
         <title>Installation</title>
           <para>
-            Installation para ...
+            To install CUPS on your Ubuntu computer, simply use <application>sudo</application> with the the <application>apt-get</application> command and give the packages to install as the first parameter. A complete CUPS install has many dependency packages, but they may all be specified on the same command line.  Enter the following at a terminal prompt to install CUPS:
           </para>
+          <para>
+<screen>
+<command>
+sudo apt-get install cupsys cupsys-client cupsys-driver-gimpprint \
+cupsys-driver-gimpprint-data defoma fontconfig foomatic-db \
+foomatic-filters  libcupsimage2 libexpat1 libfontconfig1 \
+libfreetype6 libgimpprint1 libjpeg62 libpaper1 libpng12-0 \
+libpoppler0c2 libslp1 libtiff4 patch perl perl-modules \
+ttf-bitstream-vera ucf
+</command>
+</screen>
+          </para>
+          <para>
+          Upon authenticating with your user password, the packages should be downloaded, and installed without error. Upon the conclusion of installation, the CUPS server will be started automatically.
+          </para>
+          <tip>
+          <para>
+          For troubleshooting purposes you can access CUPS server errors via the error log file at: <filename>/var/log/cups/error_log</filename>
+          </para>
+          </tip>
       </sect2>
-      <sect2 id="cups-configuration" status="help">
+      <sect2 id="cups-configuration" status="review">
         <title>Configuration</title>
           <para>
-            Configuration para ...
+            The Common UNIX Printing System server's behavior is controlled by settings configured through the directives contained in the file: <filename>/etc/cups/cupsd.conf</filename>.  The CUPS configuration file follows the same syntax as the primary configuration file for the Apache HTTP server, so users familiar with editing Apache's configuration file should feel at ease when editing the CUPS configuration file. Some examples of settings you may wish to change initially will be presented here.
           </para>
+          <tip>
+               <para>Prior to editing the configuration file, you should make a copy of the original file, and protect it 
+               from writing so you will have the original settings as a reference, and to re-use as necessary.
+               </para>
+               <para>Copy the <filename>/etc/cups/cupsd.conf</filename> file, and protect it from writing with the following commands, issued at a terminal prompt:
+               </para>
+               <para>
+<screen>
+<command>sudo cp /etc/cups/cupsd.conf /etc/cups/cupsd.conf.original</command>
+<command>sudo chmod a-w /etc/cups/cupsd.conf.original</command>
+</screen>
+               </para> 
+	    </tip>
+          <itemizedlist>
+                <listitem>
+                <para>
+                <emphasis role="bold">ServerAdmin</emphasis>: To configure the e-mail address of the designated administrator of the CUPS server, simply edit the <filename>/etc/cups/cupsd.conf</filename> configuration file with your preferred editor, and modify the <emphasis role="italics">ServerAdmin</emphasis> line accordingly.  For example, if you are the Administrator for the CUPS server, and your e-mail address is 'bjoy@somebigco.com', then you'd modify the ServerAdmin line to appear as such:
+                </para>
+                <para>
+<screen>
+ServerAdmin bjoy@somebigco.com
+</screen>
+                </para>
+                </listitem>
+                <listitem>
+                <para>
+                <emphasis role="bold">Listen</emphasis>: By default on Ubuntu, the CUPS server installation listens only on the loopback interface at IP address <emphasis role="italics">127.0.0.1</emphasis>. In order to instruct the CUPS server to listen on an actual network adapter's IP address, you must specify either a hostname, the IP address, or optionally, an IP address/port pairing via the addition of a Listen directive.  For example, if your CUPS server resides on a local network, at the IP address <emphasis role="italics">192.168.10.250</emphasis>, and you'd like to make it accessible to the other systems on this subnetwork, then you would edit the <filename>/etc/cups/cupsd.conf</filename> and add a Listen directive, as such:
+                </para>
+                <para>
+<screen>
+Listen 127.0.0.1:631       # existing Loopback Listen
+Listen 192.168.10.250:631  # Listen on the LAN interface, Port 631 (IPP)
+</screen>
+                </para>
+                </listitem>
+                <listitem>
+                <para>
+                <emphasis role="bold">AuthGroupName</emphasis>: The AuthGroupName directive defines which system group, as defined in <filename>/etc/group</filename> is to be used for so-called <emphasis role="italics">Group Authorization</emphasis>. You may wish to change this to a group that your user is a member of, so that you can later define Security options to use 'Group' <emphasis role="italics">AuthClass</emphasis> directives, which would subsequently allow your username access by default. To define an AuthGroupName, locate the explanation for it under the Security section of <filename>/etc/cups/cupsd.conf</filename>, and add one accordingly, as such:
+                </para>
+                <para>
+<screen>
+# AuthGroupName: the group name for "Group" authorization.
+AuthGroupName admin
+</screen>
+                </para>
+                <para>
+                The above example makes the members of the system group <emphasis role="italics">admin</emphasis> the default AuthGroupName members.
+                </para>
+                </listitem>
+                <listitem>
+                <para>
+                <emphasis role="bold">AuthClass</emphasis>: The AuthClass directive defines which style of authentication to use for a defined Location in the <filename>/etc/cups/cupsd.conf</filename> file.  For example, to specify <emphasis role="bold">Group</emphasis> authorization, and make use of the last example illustrated above, you could modify a location for which you wish to allow members of the system's <emphasis role="italics">admin</emphasis> group to have authorization by editing the AuthClass directive as such:
+                </para>
+                <para>
+<screen>
+&lt;Location /admin&gt;
+AuthType Basic
+#AuthClass System  # we want to use Group instead
+AuthClass Group
+...
+</screen>
+                </para>
+                </listitem>
+          </itemizedlist>
+                <note>
+                <para>
+                Whenever you make changes to the <filename>/etc/cups/cupsd.conf</filename> configuration file, you'll need to restart the CUPS server by typing the following command at a terminal prompt:
+                </para>
+                <para>
+<screen>
+<command>sudo /etc/init.d/cupsys restart</command>
+</screen>
+                </para>
+                </note>
+                <para>
+                For more examples of configuration directives in the CUPS server configuration file, view the associated system manual page, by entering the following command at a terminal prompt:
+               </para>
+               <para>
+<screen>
+<command>man cupsd.conf</command>
+</screen>
+               </para>
       </sect2>
+      <sect2 id="cups-references" status="review">
+        <title>References</title>
+        <para>
+        <ulink url="http://www.cups.org/">CUPS Website</ulink>
+        </para>
+        </sect2>
     </sect1>
 	<sect1 id="http" status="review">
 		<title>HTTP - Apache2 Web Server</title>
@@ -868,7 +1067,7 @@ option netbios-name-servers 192.168.1.1; </screen>
           <varlistentry>
               <term>Installation:</term>
               <listitem>
-                  <para>At the prompt enter the following command to install
+                  <para>At a terminal prompt enter the following command to install
                           <application>apache2</application> and
                           <application>apache2-common</application>:</para>
                   <para>
@@ -899,7 +1098,7 @@ option netbios-name-servers 192.168.1.1; </screen>
           the filename is set by the TypesConfig directive, and is
           mime.types by default.</para>
 
-          <para>The default Apache2 configuration file is /etc/apache2/apache2.conf.
+          <para>The default Apache2 configuration file is <filename>/etc/apache2/apache2.conf</filename> .
           You can edit this file to configure the Apache2 server. You can
           configure the port number, document root, modules, log files, 
           virutal hosts, etc.
@@ -1057,7 +1256,7 @@ Virtual hosts allow you to run different servers for different IP addresses, dif
 <para>
 The directives set for a virtual host only apply to that particular virtual host. If a directive is set server-wide and not defined within the virtual host settings, the default setting is used. For example, you can define a Webmaster email address and not define individual email addresses for each virtual host. 
     </para>
- <para>Edit the Document Root Directory value to the directory that contains the root document (such as index.html) for the virtual host. This option corresponds to the DocumentRoot  directive within the  &lt;VirtualHost&gt; directive. The default DocumentRoot is /var/www.</para>
+ <para>Edit the Document Root Directory value to the directory that contains the root document (such as index.html) for the virtual host. This option corresponds to the DocumentRoot  directive within the  &lt;VirtualHost&gt; directive. The default DocumentRoot is <filename>/var/www</filename>.</para>
 
  <para>The Webmaster email address corresponds to the ServerAdmin  directive within the VirtualHost  directive. This email address is used in the footer of error pages if you choose to show a footer with an email address on the error pages.</para>
 
@@ -1096,10 +1295,10 @@ This section explains howto configure basic server settings.</para>
 
               You can install additional Apache2 modules, and use them
               with your web server. You can install Apache2
-              modules using the <command>apt-get</command>
+              modules using the <application>apt-get</application>
               command. For example, to install the Apache2 module
               for MYSQL authentication, you can run the
-                following command:</para>
+                following command from a terminal prompt:</para>
                 
                 <para>
 <screen>
@@ -1109,13 +1308,13 @@ This section explains howto configure basic server settings.</para>
                 <para>
                 Once you install the module, the module will
                 be available under
-                /etc/apache2/mods-available directory. You can use
-              the <command>a2enmod</command> command to
+                <filename>/etc/apache2/mods-available</filename> directory. You can use
+              the <application>a2enmod</application> command to
               enable a module. You can use
-              the <command>a2dismod</command> command to
+              the <application>a2dismod</application> command to
               disable a module. Once you enable the module,
               the module will be available under
-              the /etc/apache2/mods-enabled directory.
+              the <filename>/etc/apache2/mods-enabled</filename> directory.
               </para>
         </sect3>
       </sect2>
@@ -1133,12 +1332,14 @@ This section explains howto configure basic server settings.</para>
           <para>
           The <application>mod_ssl</application> module is available in
           <application>apache2-common</application> package. If you have
-          installed this package, you can run the following command to
+          installed this package, you can run the following command from a terminal prompt to
           enable <application>mod_ssl</application> module:
           </para>
 
           <para>
-            <command>sudo a2enmod ssl</command>
+<screen>
+<command>sudo a2enmod ssl</command>
+</screen>
           </para>
         <sect3 id="certificates-and-security" status="review">
           <title>Certificates and Security</title>
@@ -1188,7 +1389,7 @@ This section explains howto configure basic server settings.</para>
             <para>
              When a CA issues a signed certificate, they are
              guaranteeing the identity of the organization that is
-             providing the webpages to the browser.
+             providing the web pages to the browser.
             </para>
             </listitem>
             </itemizedlist>
@@ -1251,13 +1452,15 @@ This section explains howto configure basic server settings.</para>
           <title>Generating a Certificate Signing Request (CSR)</title>
             <para>
             To generate the Certificate Signing Request (CSR), you should create your
-            own key. You can run the following command to create the
+            own key. You can run the following  command from a terminal prompt to create the
             key:
             </para>
 
-            <para><command>openssl genrsa -des3 -out server.key
-            1024</command></para>
-
+            <para>
+<screen>
+<command>openssl genrsa -des3 -out server.key 1024</command>
+</screen>
+            </para>
 <programlisting>
 Generating RSA private key, 1024 bit long modulus
 .....................++++++
@@ -1269,7 +1472,7 @@ Enter pass phrase for server.key:
 
         <para>
         You can now enter your passphrase. For best security, it should
-        atleast contain eight characters. It should include numbers
+        at least contain eight characters. It should include numbers
         and/or punctuation and not be a word in a dictionary. Also
         remember that your passphrase is case sensitive. 
         </para>
@@ -1277,45 +1480,51 @@ Enter pass phrase for server.key:
         <para>
         Re-type the passphrase to verify. Once you have re-typed it
         correctly, the server key is generated and stored in
-        <command>server.key</command> file.
+        <filename>server.key</filename> file.
         </para>
 
         <warning>
         <para>
-        You can also run your secure webserver without a passphrase.
+        You can also run your secure web server without a passphrase.
         This is convenient because you will not need to enter the
-        passphrase every time you start your sercure webserver. But, it
+        passphrase every time you start your secure web server. But, it
         is highly insecure and a compromise of the key means a
         compromise of the server as well.
         </para>
         </warning>
 
         <para>
-        In any case, you can choose to run your secure webserver without
+        In any case, you can choose to run your secure web server without
         a passphrase by leaving out the -des3 switch in the generated
-        phase or by issuing the following command:
+        phase or by issuing the following command at a terminal prompt:
         </para>
 
-        <para><command>openssl rsa -in server.key -out
-        server.key.insecure</command></para>
-
+        <para>
+<screen>
+<command>openssl rsa -in server.key -out server.key.insecure</command>
+</screen>
+        </para>
         <para>
         Once you run the above command, the insecure key will be stored
-        in <command>server.key.insecure</command> file. You can use this
+        in <filename>server.key.insecure</filename> file. You can use this
         file to generate the CSR without passphrase.
         </para>
 
         <para>
-        To create the CSR you can run the following command:
+        To create the CSR, run the following command at a terminal prompt:
         </para>
 
-        <para><command>openssl req -new -key server.key -out server.csr</command></para>
+        <para>
+<screen>
+<command>openssl req -new -key server.key -out server.csr</command>
+</screen>
+        </para>
 
         <para>It will prompt you enter the passphrase. If you enter the
         correct passphrase, it will prompt you to enter Company Name,
         Site Name, Email Id, etc. Once you enter all these details, your
         CSR will be created and it will be stored in
-        <command>server.csr</command> file. You can submit this CSR file
+        <filename>server.csr</filename> file. You can submit this CSR file
         to a CA for processing. The CAN will use this CSR file and issue
         the certificate. On the other hand, you can create self-signed
         certificate using this CSR.</para>
@@ -1324,19 +1533,20 @@ Enter pass phrase for server.key:
         <sect3 id="creating-a-self-signed-certificate" status="review">
           <title>Creating a Self Signed Certificate</title>
             <para>
-            To create the self signed cerficiate, you can run the
-            following command:
+            To create the self signed certificate, run the
+            following command at a terminal prompt:
             </para>
 
             <para>
-            <command>openssl x509 -req -days 365 -in server.csr -signkey
-            server.key -out server.crt</command>
+<screen>
+<command>openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt</command>
+</screen>
             </para>
 
             <para>The above command will prompt you to enter the
             passphrase. Once you enter the correct passphrase, your
             certificate will be created and it will be stored in
-            <command>server.crt</command> file.  </para>
+            <filename>server.crt</filename> file.  </para>
         <warning>
         <para>
             If your secure server is to be used in a production environment, you
@@ -1349,19 +1559,20 @@ Enter pass phrase for server.key:
           <title>Installing the Certificate</title>
 
             <para>You can install the key file
-            <command>server.key</command> and certificate file
-            <command>server.crt</command> or the certificate file issued
-            by your CA by running following commands:
+            <filename>server.key</filename> and certificate file
+            <filename>server.crt</filename> or the certificate file issued
+            by your CA by running following commands at a terminal prompt:
             </para>
-
-            <para><command>sudo cp server.key /etc/apache2/ssl/</command></para>
-            <para><command>sudo cp server.crt /etc/apache2/ssl/</command></para>
-            <para><command>sudo chmod 400 /etc/apache2/ssl/server.key
-            /etc/apache2/ssl/server.crt</command></para>
-
+            <para>
+<screen>
+<command>sudo cp server.key /etc/apache2/ssl/</command>
+<command>sudo cp server.crt /etc/apache2/ssl/</command>
+<command>sudo chmod 400 /etc/apache2/ssl/server.key /etc/apache2/ssl/server.crt</command>
+</screen>
+            </para>
             <para>
             You should add the following four lines to
-            <command>/etc/apache2/sites-available/default</command>
+            <filename>/etc/apache2/sites-available/default</filename>
             file. You should place them in VirtualHost section. They
             should be placed under DocumentRoot line:
             </para>
@@ -1376,7 +1587,7 @@ SSLCertificateKeyFile /etc/apache2/ssl/server.key
           
             <para>
             HTTPS listens on port number 443. You should add the
-            following line to <command>/etc/apache2/ports.conf</command>
+            following line to <filename>/etc/apache2/ports.conf</filename>
             file:
             </para>
 <programlisting>
@@ -1388,22 +1599,24 @@ Listen 443
           <title>Accessing the Server</title>
             <para>
             Once you install your certificate, you should restart your
-            webserver. You can run the following command to
-            restart your webserver:
+            web server. You can run the following command at a terminal prompt to
+            restart your web server:
             </para>
-            <para><command>sudo /etc/init.d/apache2
-            restart</command></para>
-
+            <para>
+<screen>            
+<command>sudo /etc/init.d/apache2 restart</command>
+</screen>
+            </para>
         <note><para>
         You should remember and enter the passphrase every time you
-        start your secure webserver.
+        start your secure web server.
         </para></note>
 
-            <para>It will prompt you to enter the passphrase. Once you
-            enter the correct passphrase, the secure webserver will be
+            <para>You will be prompted to enter the passphrase. Once you
+            enter the correct passphrase, the secure web server will be
             started. You can access the secure server pages by typing
-            <command>https://your_hostname/url/</command> in your
-            browser navigation bar.</para>
+            https://your_hostname/url/ in your
+            browser address bar.</para>
 
         </sect3>
       </sect2>
@@ -1419,48 +1632,158 @@ Listen 443
           </para>
       </sect2>
     </sect1>
-	<sect1 id="squid" status="writing">
-		<title>SQUID - Proxy Server</title>
+	<sect1 id="squid" status="review">
+		<title>Squid - Proxy Server</title>
           <para>
-            SQUID para ...
+          Squid is a full-feature web proxy cache server application which provides proxy and cache services for Hyper Text
+          Transport Protocol, (HTTP) File Transfer Protocol, (FTP) and other popular network protocols.  Squid can implement
+          caching and proxying of Secure Sockets Layer (SSL) requests, caching of Domain Name Server (DNS) lookups, and perform
+          transparent caching. Squid also supports a wide variety of caching protocols, such as Internet Cache Protocol, (ICP)
+          the Hyper Text Caching Protocol, (HTCP) the Cache Array Routing Protocol (CARP), and the Web Cache Coordination 
+          Protocol. (WCCP) 
           </para>
-      <sect2 id="squid-installation" status="writing">
+          <para>
+          The Squid proxy cache server is an excellent solution to a variety of proxy and caching server needs, and scales from
+          the branch office, to enterprise level networks while providing extensive, granular access control mechanisms, and
+          monitoring of critical parameters via the Simple Network Management Protocol. (SNMP)  When selecting computer systems
+          for use as dedicated Squid proxy, or caching servers, ensure your system is configured with a large amount of physical
+          memory, as Squid maintains an in-memory cache for increased performance.
+          </para>
+      <sect2 id="squid-installation" status="review">
         <title>Installation</title>
           <para>
-            Installation para ...
+            At a terminal prompt, enter the following command to install the Squid server:
+          </para>
+          <para>
+<screen>
+<command>sudo apt-get install squid squid-common</command>
+</screen>
           </para>
       </sect2>
-      <sect2 id="squid-configuration" status="writing">
+      <sect2 id="squid-configuration" status="review">
         <title>Configuration</title>
           <para>
-            Configuration para ...
+            Squid is configured by editing the directives contained within the <filename>/etc/squid/squid.conf</filename> configuration file.
+            The following examples illustrate some of the directives which may be modified to affect the behavior of the Squid server.
+            For more in-depth configuration of Squid, see the References section. 
           </para>
+             <tip>
+               <para>Prior to editing the configuration file, you should make a copy of the original file, and protect it 
+               from writing so you will have the original settings as a reference, and to re-use as necessary.
+               </para>
+               <para>Copy the <filename>/etc/squid/squid.conf</filename> file, and protect it from writing with the following commands entered at a terminal prompt:
+               </para>
+               <para>
+<screen>             
+<command>sudo cp /etc/squid/squid.conf /etc/squid/squid.conf.original</command>
+<command>sudo chmod a-w /etc/squid/squid.conf.original</command>
+</screen>
+               </para> 
+	          </tip>
+	        <para>
+           <itemizedlist>
+               <listitem>
+                  <para>
+                  To set your Squid server to listen on TCP port 8888 instead of the default TCP port 3128, change
+                  the http_port directive as such:
+                  </para>
+                  <para>
+                  http_port 8888
+                  </para>
+               </listitem>
+	            <listitem>
+                  <para>
+                  Change the visible_hostname directive in order to give the Squid server a specific hostname.  This hostname
+                  does not necessarily need to be the computer's hostname. In this example it is set to <emphasis role="italics">weezie</emphasis>
+                  </para>
+                  <para>
+                  visible_hostname weezie
+                  </para>
+               </listitem>
+               <listitem>
+                  <para>
+                     Again, Using Squid' access control, you may configure use of Internet services proxied by Squid
+                     to be available only users with certain Internet Protocol (IP) addresses.  For example, we'll illustrate access 
+                     by users of the 192.168.42.0/24 subnetwork only:
+                  </para>
+                  <para>
+                     Add the following to the <emphasis role="bold">bottom</emphasis> of the ACL section of your <filename>/etc/squid/squid.conf</filename> file:
+                  </para>
+                  <para>
+                     acl fortytwo_network src 192.168.42.0/24
+                  </para>
+                  <para>
+                     Then, add the following to the <emphasis role="bold">top</emphasis> of the http_access section of your
+                     <filename>/etc/squid/squid.conf</filename> file:
+                  </para>
+                  <para>
+                     http_access allow fortytwo_network
+                  </para>
+               </listitem>
+               <listitem>
+                  <para>
+                     Using the excellent access control features of Squid, you may configure use of Internet services proxied by Squid
+                     to be available only during normal business hours.  For example, we'll illustrate access by employees of a business
+                     which is operating between 9:00AM and 5:00PM, Monday through Friday, and uses the 10.1.42.0/42 subnetwork:
+                  </para>
+                  <para>
+                     Add the following to the <emphasis role="bold">bottom</emphasis> of the ACL section of your <filename>/etc/squid/squid.conf</filename> file:
+                  </para>
+                  <para>
+                     acl biz_network src 10.1.42.0/24
+                     acl biz_hours time M T W T F 9:00-17:00
+                  </para>
+                  <para>
+                     Then, add the following to the <emphasis role="bold">top</emphasis> of the http_access section of your
+                     <filename>/etc/squid/squid.conf</filename> file:
+                  </para>
+                  <para>
+                     http_access allow biz_network biz_hours
+                  </para>
+               </listitem>
+          </itemizedlist>
+          </para>
+	    <para>
+          After making changes to the <filename>/etc/squid/squid.conf</filename> file, save the file, and restart the <application>squid</application> 
+          server application to effect the changes using the following command entered at a terminal prompt:
+       </para>
+          <para>
+<screen>
+<command>sudo /etc/init.d/squid restart</command>
+</screen>
+           </para>
+      </sect2>
+      <sect2 id="squid-references" status="review">
+      <title>References</title>
+      <para>
+      <ulink url="http://www.squid-cache.org/">Squid Website</ulink>
+      </para>
       </sect2>
     </sect1>
-	<sect1 id="version-control-system" status="writing">
+	<sect1 id="version-control-system" status="review">
 		<title>Version Control System</title>
           <para>
 Version control is the art of managing changes to information. It has long been a critical tool for programmers, who typically spend their time making small changes to software and then undoing those changes the next day. But the usefulness of version control software extends far beyond the bounds of the software development world. Anywhere you can find people using computers to manage information that changes often, there is room for version control.</para>
 <para>
           </para>
-      <sect2 id="subversion" status="writing">
+      <sect2 id="subversion" status="review">
         <title>Subversion</title>
           <para>
 Subversion is an open source version control system. Using Subversion, you can record the history of source files and documents. It manages files and directories over time. A tree of files is placed into a central repository. The repository is much like an ordinary file server, except that it remembers every change ever made to files and directories.
           </para>
-        <sect3 id="subversion-installation" status="writing">
+        <sect3 id="subversion-installation" status="review">
           <title>Installation</title>
             <para>
 To access Subversion repository using HTTP protocol, you must install and configure web server. Apache2 is proven to work with Subversion. Please refer HTTP subsection in Apache2 section to install and configure Apache2 web server.  To access Subversion repository using HTTPS protocol, you must install and configure digital certificate in your Apache 2 web server. Please refer HTTPS subsection in Apache2 section to install and configure the digital certificate.
 						</para>
 						<para>
-		To install Subversion, you run:
+		To install Subversion, you run the following command from a terminal prompt:
             </para>
-				<para>
+	    <para>
 <screen>
 <command>sudo apt-get install subversion libapache2-svn</command>
 </screen>
-			</para>
+	    </para>
 
         </sect3>
         <sect3 id="subversion-configuration" status="review">
@@ -1469,9 +1792,13 @@ To access Subversion repository using HTTP protocol, you must install and config
 	This step assumes you have installed above mentioned packages on your system. This section explains how to create Subversion repository and access the project.</para>
 			<sect4 id="create-svn-repos" status="review">
 				<title>Create Subversion Repository</title>
-<para>The Subversion repository can be created using the following command:</para>
+<para>The Subversion repository can be created using the following command from a terminal prompt:</para>
 
-  <para><command>svnadmin create /path/to/repos/project</command></para>
+        <para>
+<screen>
+<command>svnadmin create /path/to/repos/project</command>
+</screen>
+        </para>
 			</sect4>
 
         </sect3>
@@ -1519,11 +1846,19 @@ In this section, we will see howto configure Subversion for all these access met
 				</para>
 			<sect4 id="direct-repos-access" status="review">
 				<title>Direct repository access (file://)</title>
-<para> This is the simplest of all access methods. It does not require any Subversion server process to be running. This access method is used to access Subversion from the same machine. The syntax is as follows:</para>
+<para> This is the simplest of all access methods. It does not require any Subversion server process to be running. This access method is used to access Subversion from the same machine. The syntax of the command, entered at a terminal prompt is as follows:</para>
 
-  <para><command>svn co file:///path/to/repos/project</command></para>
+        <para>
+<screen>
+<command>svn co file:///path/to/repos/project</command>
+</screen>
+        </para>
   <para>or</para>
-	<para><command>svn co file://localhost/path/to/repos/project</command></para>
+	<para>
+<screen>
+<command>svn co file://localhost/path/to/repos/project</command>
+</screen>
+        </para>
 	<note>
 		<para>If you do not specify the hostname, you must use three forward slashes (///). If you specify the hostname, you must use two forward slashes (//).</para>
 	</note>
@@ -1531,7 +1866,7 @@ In this section, we will see howto configure Subversion for all these access met
 			</sect4>
 			<sect4 id="access-via-webdav" status="review">
 				<title>Access via WebDAV protocol (http://)</title>
-<para> To access the Subversion repository via WebDAV protocol, you must configure your Apache 2 web server. You must add the following snippet in your /etc/apache2/apache2.conf file:</para>
+<para> To access the Subversion repository via WebDAV protocol, you must configure your Apache 2 web server. You must add the following snippet in your <filename>/etc/apache2/apache2.conf</filename> file:</para>
 
 	<programlisting> &lt;Location /svn&gt;
   DAV svn
@@ -1543,9 +1878,14 @@ In this section, we will see howto configure Subversion for all these access met
   Require valid-user
   &lt;/LimitExcept&gt;
   &lt;/Location&gt; </programlisting>
-  <para>Next, you must create /etc/subversion/passwd file. This file contains user authentication details. To add an entry, ie.. to add a user, you can run the following command:</para>
-	<para><command>htpasswd2 /etc/subversion/passwd user_name</command></para>
-	<para>It prompts you to enter the password. Once you enter the password, the user is added. Now, to access the repository you can run the following command:</para>
+  <para>Next, you must create <filename>/etc/subversion/passwd</filename> file. This file contains user authentication details. To add an entry, ie.. to add a user, you can run the following command from a terminal prompt:</para>
+	<para>
+<screen>        
+<command>htpasswd2 /etc/subversion/passwd user_name</command>
+</screen>
+        </para>
+	<para>This command will prompt you to enter the password. Once you enter the password, the user is added. Now, to access the repository you can run the following command:</para>
+        <!-- where is the command for the above para? -->
 	<warning>
 		<para>
 			The password is transmitted as plain text. If you are worried about password snooping, you are advised to use SSL encryption. For details, please refer next section.
@@ -1562,7 +1902,7 @@ In this section, we will see howto configure Subversion for all these access met
 						You can install a digital certificate issued by Signing authority like Verisign. Alternatively, you can install your own self signed certificate.
 					</para>
 					<para>
-						This step assumes you have installed and configured digital certificate in your Apache 2 web server. Now to access Subversion repository please refer the above section! Yeah, the access methods are exactly the same except the protocl. You must use https:// to access the Subversion repository.
+						This step assumes you have installed and configured digital certificate in your Apache 2 web server. Now to access Subversion repository please refer the above section! Yeah, the access methods are exactly the same except the protocol. You must use https:// to access the Subversion repository.
 					</para>
 
 			</sect4>
@@ -1574,7 +1914,7 @@ In this section, we will see howto configure Subversion for all these access met
 # password-db = passwd</programlisting>
 
 					<para>
-					fter uncommenting the above lines, you can maintain the user list in passwd file. So, edit the file passwd in the same directory and add new user. The syntax is as follows:
+					After uncommenting the above lines, you can maintain the user list in passwd file. So, edit the file passwd in the same directory and add new user. The syntax is as follows:
 					</para>
 					<programlisting>username = password</programlisting>
 					<para>
@@ -1592,21 +1932,39 @@ In this section, we will see howto configure Subversion for all these access met
 For more usage details, please refer,
 $ svnserve --help</programlisting>
 
-					<para>Once you run this command, Subversion starts listening on default port (3690). To access the project repository, you must run the following command: </para>
-					<para><command>svn co svn://hostname/project project --username user_name</command></para>
-					<para>Based on server configuration, it prompts for password. Once it is authenticated, it checks out the code from Subversion repository.  To synchronize the project repository with the local copy, you can run <command>update</command> sub-command. The syntax is as follows:</para>
-					<para><command>cd project_dir ; svn update</command></para>
-					<para>For more details about using each Subversion sub-command, you can refer the manual. For example, to learn more about co (checkout) command, please run:</para>
-					<para><command>svn co help</command></para>
+					<para>Once you run this command, Subversion starts listening on default port (3690). To access the project repository, you must run the following command from a terminal prompt: </para>
+					<para>
+<screen>
+<command>svn co svn://hostname/project project --username user_name</command>
+</screen>
+                                        </para>
+					<para>Based on server configuration, it prompts for password. Once it is authenticated, it checks out the code from Subversion repository.  To synchronize the project repository with the local copy, you can run the <command>update</command> sub-command. The syntax of the command, entered at a terminal prompt is as follows:</para>
+					<para>
+<screen>
+<command>cd project_dir ; svn update</command>
+</screen>
+                                        </para>
+					<para>For more details about using each Subversion sub-command, you can refer the manual. For example, to learn more about the co (checkout) command, please run the following command from a terminal prompt:</para>
+                                        <para>
+<screen>  
+<command>svn co help</command>
+</screen>
+                                        </para>
 
 			</sect4>
 			<sect4 id="access-via-custom-protocol-with-ssl" status="review">
 				<title>Access via custom protocol with SSL encryption (svn+ssh://)</title>
-					<para> The configuration and server process is same as svn:// method. For details, please refer the above section. This step assumes, you have followed the above step and run Subversion server using svnserve command.</para>
+					<para> The configuration and server process is same as svn:// method. For details, please refer the above section. This step assumes, you have followed the above step and run Subversion server using <application>svnserve</application>  command.</para>
 
 					<para>It is also assumed that the ssh server is running in that machine and it is allowing incoming connections. To confirm, please try to login to that machine using ssh. If you can login, then everything is perfect. If you cannot login, please address it before continuing further.</para>
 
-					<para>svn+ssh:// protocol is used to access Subversion repository using SSL encryption. As you know, the data transfer is encrypted. To access the project repository, you must run the following command: </para>
+					<para>svn+ssh:// protocol is used to access Subversion repository using SSL encryption. The data transfer is encrypted using this method. To access the project repository, (for example with a checkout) you must use the following command syntax. Issue the following from a terminal prompt: 
+                                        </para>
+                                        <para>
+<screen>
+<command>svn co svn+ssh://hostname/var/svn/repos/project</command>
+</screen>
+                                        </para>
 
 					<note><para> You must use full path (/path/to/repos/project) to access Subversion repository using this access method. </para></note>
 					<para>
@@ -1616,28 +1974,154 @@ $ svnserve --help</programlisting>
 			</sect3>
 
       </sect2>
-      <sect2 id="cvs-server" status="writing">
+      <sect2 id="cvs-server" status="review">
         <title>CVS Server</title> 
           <para>
-            CVS Server para ...
+          CVS is a version control system. You can use it to record the
+          history of source files.
           </para>
-        <sect3 id="cvs-installation" status="writing">
+        <sect3 id="cvs-installation" status="review">
           <title>Installation</title>
             <para>
-              Installation para ...
+              At a terminal prompt, enter the following command to install
+              <application>cvs</application>:
+
+<screen>
+<command>sudo apt-get install cvs</command>
+</screen>
+
+After you install <application>cvs</application> you should install
+<application>xinetd</application> to start/stop cvs server. At the
+prompt, enter the following command to install
+<application>xinetd</application>:
+
+<screen>
+<command>sudo apt-get install xinetd</command>
+</screen>
             </para>
         </sect3>
-        <sect3 id="cvs-configuration" status="writing">
+        <sect3 id="cvs-configuration" status="review">
           <title>Configuration</title>
             <para>
-              Configuration para ...
+            Once you install CVS, the repository will be automatically
+            initialized. By default, the repository resides under
+            <application>/var/lib/cvs</application> directory. You can
+            change this path by running following command:
+
+<screen>
+<command>cvs -d /your/new/cvs/repo init</command>
+</screen>
+
+Once the initial repository is setup, you can configure
+<application>xinetd</application> to run CVS server. You can copy the
+following lines to <filename>/etc/xinetd/cvspserver</filename> 
+file.
+
+<programlisting>
+service cvspserver
+{
+     port = 2401
+     socket_type = stream
+     protocol = tcp
+     user = root
+     wait = no
+     type = UNLISTED
+     server = /usr/bin/cvs
+     server_args = -f --allow-root /var/lib/cvs pserver
+     disable = no
+}
+</programlisting>
+
+<note>
+<para>
+Ensure to edit the repository if you have changed the default
+repository <application>/var/lib/cvs</application> directory.
+</para>
+</note>
+
+Once you have configured <application>xinetd</application> you can run
+cvs server by running following command:
+
+<screen>
+<command>sudo /etc/init.d/xinetd start</command>
+</screen>
+            </para>
+            <para>
+            You can confirm CVS server is running by running following
+command:
+            </para>
+
+            <para>
+<screen>
+<command>sudo netstat -tap | grep cvs</command>
+</screen>
+            </para>
+
+            <para>
+            When you run this command, you should see the following line
+            or something similar:
+            </para>
+
+<programlisting>
+tcp        0      0 *:cvspserver            *:* LISTEN 
+</programlisting>
+
+        <para>
+From here you can continue to add users, add new projects and manage CVS
+server. 
+        </para>
+        <warning>
+<para>
+          CVS allows the user to add users independently of the
+underlying OS installation. Probably the easiest way is to use the Linux
+Users for CVS although it has a minor security issues. Please refer CVS
+manual for details.
+</para>
+        </warning>
+
+        </sect3>
+        <sect3 id="cvs-add-projects" status="review">
+          <title>Add Projects</title>
+            <para>
+            This section explain to add new project to CVS repository.
+            Create the directory, add necessary document and source
+            files to the directory. Now, run the following command to
+            add this project to CVS repository:
+<screen>
+<command>cd your/project</command>
+<command>cvs import -d :pserver:username@hostname.com:/var/lib/cvs -m "Importing my project to CVS repository" . new_project start</command>
+</screen>
+
+<tip>
+<para>
+You can use CVSROOT environment variable to store CVS root directory.
+Once you export CVSROOT environment variable, you can avoid using -d option to
+above cvs command.
+</para>
+</tip>
+The string <emphasis role="italics">new_project</emphasis> is a vendor
+tag, and <emphasis role="italics">start</emphasis> is a release tag.
+They fill no purpose in this context, but since CVS requires them they
+must be present.
+
+<warning>
+<para>
+When you add a new project, the CVS user you use must have write access to CVS
+repository (<application>/var/lib/cvs</application>). By default,
+<application>src</application> group have write access to CVS
+repository. So, you can add the user to this group, thus, he can add and
+manage projects in the CVS repository.
+</para>
+</warning>
             </para>
         </sect3>
       </sect2>
-      <sect2 id="version-control-ref" status="writing">
+      <sect2 id="version-control-ref" status="review">
         <title>References</title> 
 				<para><ulink url="http://subversion.tigris.org/">Subversion Home Page</ulink></para>
 				<para><ulink url="http://svnbook.red-bean.com/">Subversion Book</ulink></para>
+				<para><ulink
+url="http://ximbiot.com/cvs/manual/cvs-1.11.21/cvs_toc.html">CVS Manual</ulink></para>
       </sect2>
     </sect1>
 	<sect1 id="databases" status="review">
@@ -1668,8 +2152,7 @@ $ svnserve --help</programlisting>
         <sect3 id="mysql-installation" status="review">
           <title>Installation</title>
             <para>
-            To install MySQL, you can run the following command in the
-            command prompt:
+            To install MySQL, run the following command from a terminal prompt:
             </para>
 
             <para>
@@ -1680,12 +2163,14 @@ $ svnserve --help</programlisting>
 
             <para>
             Once the installation is complete, the MySQL server should be
-            started automatically. You can run the following command to
+            started automatically. You can run the following command from a terminal prompt to
             check whether MySQL server is running:
             </para>
 
             <para>
-            sudo netstat -tap | grep mysql
+<screen>
+<command>sudo netstat -tap | grep mysql</command>
+</screen>
             </para>
 
             <para>
@@ -1698,9 +2183,10 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
 </programlisting>
 	<para>If the server is not running correctly, you can type the following command to start it:</para>
             <para>
-<!--check this command -->
-            <command>sudo /etc/init.d/mysql restart</command>
-            </para>
+<screen>
+<command>sudo /etc/init.d/mysql restart</command>
+</screen>
+        </para>
 
         </sect3>
         <sect3 id="mysql-configuration" status="review">
@@ -1711,16 +2197,20 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
             the MySQL administrator password. To do this, run the following commands:
             </para>
             <para>
-            <command>sudo mysqladmin -u root password newrootsqlpassword</command>
+<screen>
+<command>sudo mysqladmin -u root password newrootsqlpassword</command>
+</screen>
             </para>
             <para>
-            <command>sudo mysqladmin -u root -h localhost password newrootsqlpassword</command>
+<screen>
+<command>sudo mysqladmin -u root -h localhost password newrootsqlpassword</command>
+</screen>
             </para>
 
             <para>
-            You can edit /etc/mysql/my.cnf file to configure the basic
+            You can edit <filename>/etc/mysql/my.cnf</filename> file to configure the basic
             settings, log file, port number, etc. Refer to
-            /etc/mysql/my.cnf file for more details.
+            <filename>/etc/mysql/my.cnf</filename> file for more details.
             </para>
         </sect3>
       </sect2>
@@ -1760,23 +2250,21 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
             
             <para>The following discussion assumes that you wish to enable TCP/IP connections and
             use MD5 method for client authentication. PostgreSQL configuration files are stored in the
-            <emphasis role="italics">/etc/postgresql/&lt;version&gt;/main</emphasis>
+            <filename>/etc/postgresql/&lt;version&gt;/main</filename>
             directory. For example, if you install PostgreSQL 7.4, the
             configuration files are stored in the
-            <emphasis role="italics">/etc/postgresql/7.4/main</emphasis> directory.
+            <filename>/etc/postgresql/7.4/main</filename> directory.
             </para>
             
             <tip>
             <para>
-             To configure <emphasis role="italics">ident</emphasis>
-             authentication, add entries to the <emphasis
-             role="italics">/etc/init.d/postgresql/7.4/main/pg_ident.conf</emphasis>
+             To configure <application>ident</application>
+             authentication, add entries to the <filename>/etc/postgresql/7.4/main/pg_ident.conf</filename>
              file.
             </para>
             </tip>
 
-            <para>To enable TCP/IP connections, edit the file <emphasis
-             role="italics">/etc/postgresql/7.4/main/postgresql.conf</emphasis></para>
+            <para>To enable TCP/IP connections, edit the file <filename>/etc/postgresql/7.4/main/postgresql.conf</filename></para>
 
             <para>Locate the line <emphasis role="italics">#tcpip_socket =
             false</emphasis> and change it to
@@ -1793,8 +2281,7 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
             configure the password and revert the configuration back to use
             <emphasis role="italics">MD5</emphasis> client authentication.
             To enable <emphasis role="italics">trust</emphasis> client
-            authentication, edit the  file <emphasis
-            role="italics">/etc/postgresql/7.4/main/pg_hba.conf</emphasis></para>
+            authentication, edit the  file <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename></para>
 
             <para>Comment out all the existing lines which use
             <emphasis role="italics">ident</emphasis> and
@@ -1808,29 +2295,34 @@ local   all         postgres                          trust sameuser
             <para>Then, run the following command to
             start PostgreSQL server:
             </para>
-            <para><command>sudo /etc/init.d/postgresql
-            start</command></para>
-
-            <para>Once the PostgreSQL server is successfully started, run the following command to connect to the default
+            <para>
+<screen>
+<command>sudo /etc/init.d/postgresql start</command>
+</screen>
+            </para>
+            <para>Once the PostgreSQL server is successfully started, run the following command at a terminal prompt to connect to the default
             PostgreSQL template database</para>
 
-            <para><command>psql -U postgres -d
-            template1</command></para>
-
+            <para>
+<screen>
+<command>psql -U postgres -d template1</command>
+</screen>
+            </para>
             <para>The above command connects to PostgreSQL
             database <emphasis role="italics">template1</emphasis> as user
             <emphasis role="italics">postgres</emphasis>. Once you connect to the PostgreSQL
             server, you will be in the SQL prompt. You can run the
-            following SQL command at the prompt to configure the
+            following SQL command at the <application>psql</application> prompt to configure the
             password for the user <emphasis
             role="italics">postgres</emphasis>.</para>
 
-            <para><command>template1=# ALTER USER postgres with
-            encrypted password 'your_password';</command></para>
-
+            <para>
+<screen>
+<command>template1=# ALTER USER postgres with encrypted password 'your_password';</command>
+</screen>
+            </para>
             <para>After configuring the password, edit the file
-            <emphasis
-            role="italics">/etc/postgresql/7.4/main/pg_hba.conf</emphasis> to use
+            <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename> to use
             <emphasis role="italics">MD5</emphasis> authentication:</para>
             <para>Comment the recently added <emphasis
             role="italics">trust</emphasis> line and add the following
@@ -1892,22 +2384,354 @@ local   all         postgres                          md5 sameuser
             </para>
         </sect3>
       </sect2>
-      <sect2 id="mailman" status="writing">
+      <sect2 id="mailman" status="review">
         <title>Mailman</title> 
           <para>
-            Mailman para ...
+          Mailman is an open source program for managing electronic mail
+          discussions and e-newsletter lists. Many open source mailing
+          lists (including all the <ulink
+          url="http://lists.ubuntu.com">Ubuntu mailing lists</ulink>) use
+          Mailman as their mailing list software. It is powerful, easy
+          to install and easy to maintain.
           </para>
-        <sect3 id="mailman-installation" status="writing">
+        <sect3 id="mailman-installation" status="review">
           <title>Installation</title>
             <para>
-              Installation para ...
+            Mailman provides the web interface for the administrators
+            and users. So, it requires apache with mod_perl support.
+            Mailman uses an external mail server to send/receive emails.
+            It works perfectly with the following mail servers:
             </para>
+            <para>
+            <itemizedlist spacing="compact">
+                <listitem>
+                    <para><application>Postfix</application></para>
+                </listitem>
+                <listitem>
+                    <para><application>Exim</application></para>
+                </listitem>
+                <listitem>
+                    <para><application>Sendmail</application></para>
+                </listitem>
+                <listitem>
+                    <para><application>Qmail</application></para>
+                </listitem>
+            </itemizedlist>
+            </para>
+
+            <para>
+            We will see howto install mailman, apache web server and
+            Exim mail server. If you wish to install mailman
+            with different mail server, please refer the references
+            section. 
+            </para>
+          <sect4 id="mailman-apache2">
+            <title>Apache2</title>
+              <para>
+                To install apache2 you refer <ulink
+                url="#http-installation">HTTP - Apache2 Web Server</ulink>
+                section.
+              </para>
+          </sect4>
+          <sect4 id="mailman-exim4">
+            <title>Exim4</title>
+              <para>
+              To install Exim4 you run following commands at a terminal prompt:
+<screen>
+<command>sudo apt-get install exim4</command>
+<command>sudo apt-get install exim4-base</command>
+<command>sudo apt-get install exim4-config</command>
+</screen>
+
+Once exim4 is installed, the configuration files are stored in
+the <filename>/etc/exim4</filename> directory. In ubuntu, by default, the exim4 configuration files are
+split across different files. You can change this behavior by changing
+the following variable in the <filename>/etc/exim4/update-exim4.conf</filename> file.
+
+              <itemizedlist spacing="compact">
+              <listitem>
+                <para><application>dc_use_split_config='true'</application></para>
+              </listitem>
+              </itemizedlist>
+              </para>
+          </sect4>
+          <sect4 id="mailman-mailman">
+            <title>Mailman</title>
+              <para>
+              To install Exim4 you run following command at a terminal prompt:
+<screen>
+<command>sudo apt-get install mailman</command> 
+</screen>
+
+It copies the installation files in
+<application>/var/lib/mailman</application> directory. It installs the
+CGI scripts in <application>/usr/lib/cgi-bin/mailman</application>
+directory.  It creates <emphasis role="italics">list</emphasis> linux
+user. It creates <emphasis role="italics">list</emphasis> linux
+group. The mailman process will be owned by this user. 
+              </para>
+          </sect4>
         </sect3>
         <sect3 id="mailman-configuration" status="writing">
           <title>Configuration</title>
             <para>
-              Configuration para ...
+            This section assumes you have successfully installed
+            <application>mailman</application>,
+            <application>apache2</application> and
+            <application>exim4</application>. Now you just need
+            to configure them. 
             </para>
+          <sect4 id="mailman-conf-apache2">
+            <title>Apache2</title>
+              <para>
+              Once apache2 is installed, you can add following lines in
+              <filename>/etc/apache2/apache2.conf</filename> file:
+<programlisting>
+Alias /images/mailman/ "/usr/share/images/mailman/"
+Alias /pipermail/ "/var/lib/mailman/archives/public/"
+</programlisting>
+
+Mailman uses apache2 to render its CGI scripts. The mailman CGI scripts
+are installed in <application>/usr/lib/cgi-bin/mailman</application>
+directory. So, the mailman url will be
+http://hostname/cgi-bin/mailman/. You can make changes to
+<filename>/etc/apache2/apache2.conf</filename> file if you wish to
+change this behavior.
+              </para>
+          </sect4>
+
+          <sect4 id="mailman-conf-exim4">
+            <title>Exim4</title>
+              <para>
+              Once Exim4 is installed, you can start the Exim server using following
+              command from a terminal prompt:
+<screen>
+<command>sudo apt-get /etc/init.d/exim4 start</command>
+</screen>
+
+In order to make mailman work with exim4, you need to configure exim4.
+As mentioned earlier, by default, exim4 uses multiple configuration
+files of different types. For details, please refer <ulink
+url="http://www.exim.org">Exim</ulink> website.  To run mailman, we
+should add new configuration file to the following configuration
+types: 
+              <itemizedlist spacing="compact">
+              <listitem>
+                <para>Main</para>
+              </listitem>
+              <listitem>
+                <para>Transport</para>
+              </listitem>
+              <listitem>
+                <para>Router</para>
+              </listitem>
+              </itemizedlist>
+              Exim creates a master configuration file, by sorting all
+              these mini configuration files. So, the order of these
+              configuration files is very important.
+              </para>
+          </sect4>
+          <sect4 id="mailman-conf-main">
+            <title>Main</title>
+              <para>
+              All the configuration files belonging to main type are
+              stored in
+              <filename>/etc/exim4/conf.d/main/</filename> directory. You can add
+              the following content in a new file. You may name it as
+              04_exim4-config_mailman:
+
+<programlisting>
+# start
+# Home dir for your Mailman installation -- aka Mailman's prefix
+# directory.
+# By default this is set to "/usr/local/mailman"
+# On a Red Hat/Fedora system using the RPM use "/var/mailman"
+# On Debian using the deb package use "/var/lib/mailman"
+# This is normally the same as ~mailman
+MM_HOME=/var/lib/mailman
+#
+# User and group for Mailman, should match your --with-mail-gid
+# switch to Mailman's configure script.  Value is normally "mailman"
+MM_UID=list
+MM_GID=list
+#
+# Domains that your lists are in - colon separated list
+# you may wish to add these into local_domains as well
+domainlist mm_domains=hostname.com
+#
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#
+# These values are derived from the ones above and should not need
+# editing unless you have munged your mailman installation
+#
+# The path of the Mailman mail wrapper script
+MM_WRAP=MM_HOME/mail/mailman
+#
+# The path of the list config file (used as a required file when
+# verifying list addresses)
+MM_LISTCHK=MM_HOME/lists/${lc::$local_part}/config.pck
+# end
+</programlisting>
+          </para>
+          </sect4>
+          <sect4 id="mailman-conf-transport">
+            <title>Transport</title>
+              <para>
+All the configuration files belonging to transport type are stored in
+<filename>/etc/exim4/conf.d/transport/</filename> directory. You
+can add the following content in a new file. You may name it as
+<application>40_exim4-config_mailman</application>:
+
+<programlisting>
+  mailman_transport:
+   driver = pipe
+   command = MM_WRAP \
+               '${if def:local_part_suffix \
+                     {${sg{$local_part_suffix}{-(\\w+)(\\+.*)?}{\$1}}} \
+                     {post}}' \
+               $local_part
+    current_directory = MM_HOME
+    home_directory = MM_HOME
+    user = MM_UID
+    group = MM_GID
+</programlisting>
+              </para>
+          </sect4>
+          <sect4 id="mailman-conf-router">
+            <title>Router</title>
+              <para>
+All the configuration files belonging to router type are stored in
+<filename>/etc/exim4/conf.d/router/</filename> directory. You can add the following content
+in a new file. You may name it as
+<application>101_exim4-config_mailman</application>:
+<programlisting>
+  mailman_router:
+   driver = accept
+   require_files = MM_HOME/lists/$local_part/config.pck
+   local_part_suffix_optional
+   local_part_suffix = -bounces : -bounces+* : \
+                       -confirm+* : -join : -leave : \
+                       -owner : -request : -admin
+   transport = mailman_transport
+</programlisting>
+
+              </para>
+<warning>
+<para>
+The order of main and transport configuration files can be in any order.
+But, the order of router configuration files must be in the same order.
+This particular file, must appear before
+<application>200_exim4-config_primary</application> file.
+These two configuration files contain same type of information. The
+first file takes the precedence. For more details, please refer 
+references section.
+</para>
+</warning>
+          </sect4>
+          <sect4 id="mailman-conf-mailman">
+            <title>Mailman</title>
+              <para>
+Once mailman is installed, you can run it using the following command:
+<screen>
+<command>sudo /etc/init.d/mailman start</command>
+</screen>
+
+Once mailman is installed, you should create the default mailing list.
+Run the following command to create the mailing list:
+
+
+<screen>
+<command>sudo /usr/sbin/newlist mailman</command>
+</screen>
+
+<programlisting>
+  Enter the email of the person running the list: bhuvan at ubuntu.com
+  Initial mailman password:
+  To finish creating your mailing list, you must edit your <filename>/etc/aliases</filename> (or
+  equivalent) file by adding the following lines, and possibly running the
+  `newaliases' program:
+
+  ## mailman mailing list
+  mailman:              "|/var/lib/mailman/mail/mailman post mailman"
+  mailman-admin:        "|/var/lib/mailman/mail/mailman admin mailman"
+  mailman-bounces:      "|/var/lib/mailman/mail/mailman bounces mailman"
+  mailman-confirm:      "|/var/lib/mailman/mail/mailman confirm mailman"
+  mailman-join:         "|/var/lib/mailman/mail/mailman join mailman"
+  mailman-leave:        "|/var/lib/mailman/mail/mailman leave mailman"
+  mailman-owner:        "|/var/lib/mailman/mail/mailman owner mailman"
+  mailman-request:      "|/var/lib/mailman/mail/mailman request mailman"
+  mailman-subscribe:    "|/var/lib/mailman/mail/mailman subscribe mailman"
+  mailman-unsubscribe:  "|/var/lib/mailman/mail/mailman unsubscribe mailman"
+
+  Hit enter to notify mailman owner...
+
+  # 
+</programlisting>
+
+We have configured exim to recognize all emails from mailman. So, it is
+not mandatory to make any new entries in
+<filename>/etc/aliases</filename>.  If you have made any changes
+to the configuration files, please ensure that you restart those
+services, before continuing to next section
+</para>
+          </sect4>
+        </sect3>
+        <sect3 id="mailman-admin" status="review">
+          <title>Administration</title>
+<para>
+We assume you have done the default installation. The
+mailman cgi scripts are still in
+<application>/usr/lib/cgi-bin/mailman/</application> directory.  Mailman
+provides web based administration facility. To access this page, point
+your browser to the following url: 
+
+</para>
+<para>
+http://hostname/cgi-bin/mailman/admin
+</para>
+
+<para>
+The default mailing list, <emphasis role="italics">mailman</emphasis>
+will appear in this screen. If you click the mailing list name, it
+will ask for authentication password.  If you enter the correct
+password, you will be able to change administrative settings of this
+mailing list.
+
+You can create new mailing list using command line utility
+(<command>/usr/sbin/newlist</command>).
+Alternatively, you can create new mailing list using web interface. 
+</para>
+        </sect3>
+        <sect3 id="mailman-users" status="review">
+          <title>Users</title>
+<para>
+Mailman provides web based interfaces for users. To access this page,
+point your browser to the following url:
+</para>
+
+<para>
+http://hostname/cgi-bin/mailman/listinfo
+</para>
+
+<para>
+The default mailing list, <emphasis role="italics">mailman</emphasis>
+will appear in this screen. If you
+click the mailing list name, it will display the subscription form. You
+can enter your email address, name (optional) and password to subscribe.
+An email intimation will be sent to you. You can follow the
+instructions in the email to subscribe.
+</para>
+        </sect3>
+        <sect3 id="mailman-references" status="review">
+          <title>References</title>
+<para>
+<ulink url="http://www.list.org/mailman-install/index.html"> GNU Mailman
+- Installation Manual</ulink>
+</para>
+<para>
+<ulink url="http://www.exim.org/howto/mailman21.html">HOWTO - Using Exim
+4 and Mailman 2.1 together</ulink>
+</para>
         </sect3>
       </sect2>
       <sect2 id="newsgroups" status="help">

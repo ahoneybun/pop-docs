@@ -10,6 +10,7 @@
     <xsl:param name="generate.legalnotice.link" select="1"/>
 	<!-- requires DocBook XSL 1.69.1a -->
     <xsl:param name="generate.revhistory.link" select="1"/>
+    <xsl:param name="toc.max.depth" select="2"/>
     <xsl:param name="chunker.output.indent" select="'yes'"/>
     <xsl:param name="body.font.master" select="10"/>
     <xsl:param name="html.stylesheet" select="'../ubuntu-book.css'"/>

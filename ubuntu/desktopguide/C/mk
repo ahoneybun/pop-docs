@@ -1,21 +1,41 @@
-# This is a test make file for the desktop guide
+	rm -f ../../../build/ubuntu/desktopguide/C/*.*
+	rm -f ../../../build/ubuntu/desktopguide/C/sample/*
+	
+	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/desktopguide.db" ../../libs/desktopguide-html-chunk-cust.xsl desktopguide.xml
 
-rm -f ../../../build/ubuntu/desktopguide/C/*.*
+	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/bookinfo.db" ../../libs/desktopguide-html-chunk-cust.xsl bookinfo.xml
 
-xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/desktopguide.db" ../../libs/desktopguide-html-chunk-cust.xsl desktopguide.xml
+	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/preface.db" ../../libs/desktopguide-html-chunk-cust.xsl preface.xml
 
-xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/bookinfo.db" ../../libs/desktopguide-html-chunk-cust.xsl bookinfo.xml
+	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/getting-started.db" ../../libs/desktopguide-html-chunk-cust.xsl getting-started.xml
 
-xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/preface.db" ../../libs/desktopguide-html-chunk-cust.xsl preface.xml
+	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/common-tasks.db" ../../libs/desktopguide-html-chunk-cust.xsl common-tasks.xml
 
-xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/getting-started.db" ../../libs/desktopguide-html-chunk-cust.xsl getting-started.xml
+	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/config-system.db" ../../libs/desktopguide-html-chunk-cust.xsl config-system.xml
 
-xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/common-tasks.db" ../../libs/desktopguide-html-chunk-cust.xsl common-tasks.xml
+	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/tips-and-tricks.db" ../../libs/desktopguide-html-chunk-cust.xsl tips-and-tricks.xml
 
-xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/config-system.db" ../../libs/desktopguide-html-chunk-cust.xsl config-system.xml
+	xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/getting-help.db" ../../libs/desktopguide-html-chunk-cust.xsl getting-help.xml
 
-xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/system-admin.db" ../../libs/desktopguide-html-chunk-cust.xsl system-admin.xml
+	xsltproc --xinclude --output ../../../build/ubuntu/desktopguide/C/index.html --stringparam target.database.document "olinkdb.xml" --stringparam current.docid "DesktopGuide" ../../libs/desktopguide-html-chunk-cust.xsl desktopguide.xml 
 
-xsltproc --stringparam collect.xref.targets "only" --stringparam targets.filename "db/tips-and-tricks.db" ../../libs/desktopguide-html-chunk-cust.xsl tips-and-tricks.xml
-
-xsltproc --xinclude --output ../../../build/ubuntu/desktopguide/C/index.html --stringparam target.database.document "olinkdb.xml" --stringparam current.docid "DesktopGuide" ../../libs/desktopguide-html-chunk-cust.xsl desktopguide.xml 
+	xsltproc --xinclude --output ../../../build/ubuntu/desktopguide/C/desktopguide-all.html --stringparam target.database.document "olinkdb.xml" --stringparam current.docid "DesktopGuide" ../../libs/desktopguide-html-single-cust.xsl desktopguide.xml 
+	
+	mkdir -p ../../../build/ubuntu/images/C
+	
+	cp -r ../../images/C/*.* ../../../build/ubuntu/images/C
+	
+	mkdir -p ../../../build/ubuntu/images/admon
+	cp -r ../../../common/admon/*.* ../../../build/ubuntu/images/admon
+	
+	mkdir -p ../../../build/ubuntu/images/callouts
+	cp -r ../../../common/callouts/*.* ../../../build/ubuntu/images/callouts
+	
+	mkdir -p ../../../build/ubuntu/images/navig
+	cp -r ../../../common/navig/*.* ../../../build/ubuntu/images/navig
+	
+	mkdir -p ../../../build/ubuntu/desktopguide/C/sample
+	cp -r sample/* ../../../build/ubuntu/desktopguide/C/sample/
+	
+	cp ../../libs/ubuntu-book.css ../../../build/ubuntu/desktopguide/
+	
