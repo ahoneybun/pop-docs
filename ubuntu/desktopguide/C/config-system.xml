@@ -15,6 +15,639 @@
 <chapter id="configuring-your-system-chap" status="writing">
 	<title id="configuring-your-system">Configuring Your System</title>
 	<para>This chapter contains information on configuring your system.</para>
+	<sect1 id="desktop-tips">
+	  <title>Desktop Customisation</title>
+		<para>This section details some tips for customising the desktop. They are mostly tips for customising the desktop environment (called <application>GNOME</application>), and the file manager (called <application>Nautilus</application>).</para> 
+ 		<sect2><title>Run programs automatically when GNOME starts</title>
+			<orderedlist>
+				<listitem>
+					<para>Choose 
+						<menuchoice>
+							<guimenu>System</guimenu>
+							<guisubmenu>Preferences</guisubmenu>
+							<guimenuitem>Sessions</guimenuitem>
+						</menuchoice>. 
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Click on the <guibutton>Startup Programs</guibutton> tab.
+					</para>
+				</listitem>
+				<listitem>
+					<para>Use the
+						<guibutton>Add</guibutton>,
+						<guibutton>Edit</guibutton>, and 
+						<guibutton>Delete</guibutton> buttons to manage
+							programs to run at startup.
+					</para>
+				</listitem>
+			</orderedlist>
+		</sect2>
+		<sect2><title>Login automatically to GNOME when the computer starts</title>
+				<para>It is possible to login a user automatically when the computer boots. This is not recommended for most computers, as it is not secure and may allow other users access to your information</para>
+				<orderedlist>
+					<listitem>
+						<para>
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Login Screen Setup</guimenuitem>
+							</menuchoice>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Select the <guibutton>General</guibutton> tab. Check the
+								<guilabel>Login a user automatically on first bootup</guilabel>
+							checkbox option.</para>
+					</listitem>
+				</orderedlist>
+		</sect2>
+		<sect2>
+			<title>Automatically turn on <keycap>Num Lock</keycap> when GNOME starts</title>
+				<orderedlist>
+					<listitem>
+						<para>Make sure the Universe repository is enabled. (See <xref linkend="extra-repositories"/>)
+						</para>
+					</listitem>
+					<listitem>
+						<para>Install the numlockx package with <application>Add Applications</application> (See <xref linkend="add-applications"/>)
+							<literallayout>x11 (universe) &gt; numlockx</literallayout>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Make a backup copy of your existing <filename>/etc/X11/gdm/Init/Default</filename> file.
+							<screen>sudo cp /etc/X11/gdm/Init/Default /etc/X11/gdm/Init/Default_backup</screen>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Open <filename>/etc/X11/gdm/Init/Default</filename> for editing.
+							<screen>sudo gedit /etc/X11/gdm/Init/Default</screen>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Find this line (It should be the last line in the file).</para>
+						<programlisting>exit 0</programlisting>
+						<para></para>
+					</listitem>
+					<listitem>
+						<para>Add the following lines above the &quot;exit 0&quot; line.</para>
+						<programlisting>
+if [ -x /usr/bin/numlockx ]; then
+/usr/bin/numlockx on
+fi
+						</programlisting>
+					</listitem>
+					<listitem>
+						<para>Save the edited file. (See <ulink url="sample/Default_numlockx"/> for an example.)
+					  </para>
+					</listitem>
+				</orderedlist>
+						<para>The change will take effect the next time you log in to GNOME. If you want to test it right away, turn off Num Lock and restart GNOME (See <xref linkend="restartgnomewithoutreboot"/>.)
+						</para>
+		</sect2>		
+		<sect2>
+			<title>Spatial mode in <application>Nautilus</application></title>
+			<orderedlist>
+				<listitem>
+					<para>In <application>Nautilus</application>, choose
+						<menuchoice>
+							<guimenu>Edit</guimenu>
+							<guisubmenu>Preferences</guisubmenu>
+						</menuchoice>.
+					</para>
+				</listitem>
+				<listitem>
+					<para>Click on the <guilabel>Behaviour</guilabel> tab.</para>
+				</listitem>
+				<listitem>
+					<para>Unselect the <guilabel>Always open in browser windows</guilabel> check box.</para>
+				</listitem>
+				<listitem>
+					<para>Close and reopen <application>Nautilus</application>.</para>
+				</listitem>
+			</orderedlist>
+		</sect2>
+		<sect2>
+			<title>Show hidden files and folders in <application>
+						<phrase>Nautilus</phrase></application></title>
+			<orderedlist>
+				<listitem>
+					<para>In <application>Nautilus</application>, use the <keycombo>
+							<keycap>Ctrl</keycap>
+							<keycap>H</keycap>
+						</keycombo> shortcut keys to toggle hidden files and folders on and off. 
+					</para>
+				</listitem>
+				<listitem>
+					<para>To permanently show all hidden files and folders, choose <menuchoice>
+							<guimenu>Edit</guimenu>
+							<guimenuitem>Preferences</guimenuitem>
+						</menuchoice>.
+					</para>
+				</listitem>
+				<listitem>
+					<para>Click on the <guilabel>Views</guilabel> tab.</para>
+				</listitem>
+				<listitem>
+						<para>Select the <guilabel>Show hidden and backup files</guilabel> check box.</para>
+				</listitem>
+			</orderedlist>
+		</sect2>
+		<sect2 id="nautilus-location-bar" xreflabel="Opening the Location Bar">
+			<title>Open the Location Bar in <application>Nautilus</application></title>
+				<para>The <guilabel>Location Bar</guilabel> is the bar in your file manager in which you can type an address. Toggle the bar on and off with:
+							<menuchoice>
+								<guimenu>Go</guimenu>
+								<guisubmenu>Location...</guisubmenu>
+							</menuchoice>
+							You can also use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>L</keycap>
+							</keycombo> shortcut keys.</para>
+		</sect2>
+		<sect2>
+			<title>View remote SSH, FTP, and SFTP servers using <application>Nautilus</application></title>
+			<orderedlist>
+				<listitem>
+						<para>Make sure the <application>Nautilus</application> <guilabel>Location Bar</guilabel> is open (see <xref linkend="nautilus-location-bar"/>).</para>
+				</listitem>
+				<listitem>
+						<para>
+							In the <guilabel>Location Bar</guilabel>, enter the following:
+						</para>
+						<para>For SSH, use:
+							<screen><phrase>ssh</phrase>://username@ssh.server.com</screen>
+						</para>
+						<para>For FTP, use:
+							<screen>ftp://username@ftp.server.com</screen>
+						</para>
+						<para>For SFTP, use:
+							<screen><phrase>sftp</phrase>://username@sftp.server.com</screen>
+						</para>
+						<para>Replace username with your username and replace everything after the @ symbol with the server's address. You will be prompted for a password if needed. If there is no username (anonymous) omit the username and the @ symbol.
+						</para>
+						<para>Alternatively, to specify your password manually, change one of the above like so:
+							<screen>ftp://username:password@ftp.server.com</screen>
+						</para>
+				</listitem>
+			</orderedlist>
+		</sect2>
+		<sect2>
+			<title>Change the default file type "Open with" program</title>
+			<orderedlist>
+				<listitem>
+						<para>In <application>Nautilus</application>, right click on the file and choose 
+							<menuchoice>
+								<guimenu>Properties</guimenu>
+							</menuchoice> 
+							from the menu that appears. The <guilabel>Properties</guilabel> dialog opens.</para>
+				</listitem>
+				<listitem>
+						<para>Click on the <guibutton>Open With</guibutton> tab. A list of applications appears.
+						</para>
+				</listitem>
+				<listitem>
+						<para>Select the default application you want for the file type. If the application is not on the list, use the <guibutton>Add</guibutton> button to add the application to the list.
+						</para>
+				</listitem>
+			</orderedlist>
+		</sect2>
+		<sect2>
+			<title>Open files with administrative privileges from the file manager</title>
+			<orderedlist>
+				<listitem>
+						<para>
+							<screen>gedit $HOME/.gnome2/nautilus-scripts/Open\ as\ root</screen>
+						</para>
+				</listitem>
+				<listitem>
+						<para>Insert the following lines into the new file</para>
+						<programlisting>for uri in $NAUTILUS_SCRIPT_SELECTED_URIS; do
+gnome-sudo "gnome-open $uri" &amp;
+done</programlisting>
+				</listitem>
+				<listitem>
+						<para>Save the edited file (<ulink url="sample/Open-as-root_openfilesasrootviarightclick"/>)
+						</para>
+				</listitem>
+				<listitem>
+						<para>
+							<screen>chmod +x $HOME/.gnome2/nautilus-scripts/Open\ as\ root</screen>
+						</para>
+				</listitem>
+				<listitem>
+						<para>Right click on the file and <menuchoice
+                                   >
+								<guimenuitem>Scripts</guimenuitem>
+								<guimenuitem>Open as root</guimenuitem>
+							</menuchoice>
+						</para>
+				</listitem>
+			</orderedlist>
+		</sect2>
+		<sect2>
+			<title>Hide Recent Documents in the Places menu</title>
+				<para>Open a terminal and run the command:</para><screen>chmod 400 ~/.recently-used</screen>
+				<para>To enable it again, run the command:</para><screen>chmod 600 ~/.recently-used</screen>
+		</sect2>
+		<sect2>
+			<title>Install desktop applets (gDesklets)</title>
+				<orderedlist>
+					<listitem>
+							<para>Read <xref linkend="extra-repositories"/>
+							</para>
+					</listitem>
+					<listitem>
+							<para>Install the gdesklets and gdesklets-data packages with <application>Add Applications</application> (See <xref linkend="add-applications"/>)
+							</para>
+							<para>
+								<literallayout>GNOME Desktop Environment (universe) &gt; gdesklets
+Miscellaneous - Graphical (universe) &gt; gdesklets-data</literallayout>
+							</para>
+					</listitem>
+					<listitem>
+							<para>
+								<menuchoice>
+									<guimenu>Applications</guimenu>
+									<guisubmenu>Accessories</guisubmenu>
+									<guimenuitem>gDesklets</guimenuitem>
+								</menuchoice>
+							</para>
+					</listitem>
+				</orderedlist>
+		</sect2>
+		<sect2>
+			<title>Show the Computer, Home, and Trash desktop icons in GNOME</title>
+			<!-- Using gTweakUI as a frontend to Configuration Editor -->
+				<orderedlist>
+					<listitem>
+							<para>Make sure the Universe and Multiverse repositories are enabled. (See <xref linkend="extra-repositories"/>)
+							</para>
+					</listitem>
+						<!-- From "Add Applications" I can't find gTweakUI, even with a search. With Synaptic is OK. -->
+					<listitem>
+						<para>Install the gtweakui package with <application>Add Applications</application> (See <xref linkend="add-applications"/>)
+							</para>
+							<para>
+							<literallayout>Gnome (universe) &gt; gtweakui</literallayout>
+						</para>
+					</listitem>
+					<listitem>
+						<para>After <application>gTweakUI</application> is installed, choose
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Preferences</guisubmenu>
+								<guimenuitem>gTweakUI - Nautilus</guimenuitem>
+							</menuchoice>.
+						</para>
+					</listitem>
+					<listitem>
+						<para>Select the <guilabel>Show computer icon</guilabel>, <guilabel>Show home icon</guilabel>,
+							and <guilabel>Show trash icon</guilabel> check boxes. The changes take effect immediately.
+						</para>
+					</listitem>
+				</orderedlist>
+		</sect2>
+		<sect2>
+			<title>Change my preferred email client to Mozilla Thunderbird</title>
+			<orderedlist>
+				<listitem>
+						<para>Choose 
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Preferences</guisubmenu>
+								<guimenuitem>Preferred Applications</guimenuitem>
+							</menuchoice>.
+						</para>
+				</listitem>
+				<listitem>
+						<para>Click on the <guibutton>Mail Reader</guibutton> tab, and select the <guilabel>Custom</guilabel> option. 	</para>
+				</listitem>
+				<listitem>
+						<para>In the <guilabel>Command</guilabel> text box, type
+							<userinput>
+								<command>mozilla-thunderbird %s</command></userinput>, then close the dialog.
+						</para>
+				</listitem>
+			</orderedlist>
+		</sect2>
+		<sect2 id="restartgnomewithoutreboot" xreflabel="restart GNOME without rebooting the computer">
+			<title>Restart GNOME without rebooting the computer</title>
+			<orderedlist>
+				<listitem>
+						<para>Save and close all open applications.</para>
+			          </listitem>
+			          <listitem>
+            				<para>Use the <keycombo>
+						<keycap>Ctrl</keycap>
+						<keycap>Alt</keycap>
+						<keycap>Backspace</keycap>
+						</keycombo>
+							 shortcut keys to restart GNOME.
+					</para>
+           			</listitem>
+           			<listitem>
+            				<para>If <keycombo>
+                <keycap>Ctrl</keycap>
+                <keycap>Alt</keycap>
+                <keycap>Backspace</keycap>
+							</keycombo>
+              is disabled, type
+						<screen>sudo /etc/init.d/gdm restart</screen>
+            </para>
+						<para>(See <xref linkend="disableCtrlAltBackspace"/> to disable <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>Backspace</keycap>
+							</keycombo>.)
+						</para>
+				</listitem>
+			</orderedlist>
+		</sect2>
+     <sect2 id="fonts" status="writing">
+		<title>Install Extra Fonts</title>
+				<para>This section describes how to install extra fonts from the Ubuntu archives.</para>
+				<orderedlist>
+						<listitem>
+							<para>Make sure the Universe and Multiverse repositories are enabled. (See <xref linkend="extra-repositories"/>)
+							</para>
+						</listitem>
+						<listitem>
+							<para>Install the font packages with <application>Add/Remove Applications</application>
+								 (See <xref linkend="add-applications"/>)
+							</para>
+							<para>
+								<literallayout>Miscellaneous - Graphical (universe) &gt; xfonts-intl-arabic
+Miscellaneous - Graphical (universe) &gt; xfonts-intl-asian
+Miscellaneous - Graphical (universe) &gt; xfonts-intl-chinese
+Miscellaneous - Graphical (universe) &gt; xfonts-intl-chinese-big
+Miscellaneous - Graphical (universe) &gt; xfonts-intl-european
+Miscellaneous - Graphical (universe) &gt; xfonts-intl-japanese 
+Miscellaneous - Graphical (universe) &gt; xfonts-intl-japanese-big
+Miscellaneous - Graphical (universe) &gt; xfonts-intl-phonetic
+Miscellaneous - Graphical &gt; gsfonts-x11
+Miscellaneous - Graphical (multiverse) &gt; msttcorefonts  
+								</literallayout>
+							</para>
+						</listitem>
+						<listitem>
+							<para>Rebuild the font information cache files
+							</para>
+							<screen>sudo fc-cache -f -v</screen>
+						</listitem>
+					</orderedlist>
+			<para>If you prefer to download individual fonts by hand, you can install them simply and easily by opening a file manager, and typing <application>fonts:///</application> into the location bar (See <xref linkend="nautilus-location-bar"/>). Then you can simply drag the font you downloaded into the group of existing fonts.</para>
+		</sect2>
+			<sect2>
+				<title>RAR Archiver</title>
+					<orderedlist>
+						<listitem>
+							<para>Read <xref linkend="extra-repositories"/>
+							</para>
+						</listitem>
+						<listitem>
+							<para>Install the rar package with <application>Add/Remove Applications</application> (See <xref linkend="add-applications"/>)
+							</para>
+							<para>
+								<literallayout>Utilities (multiverse) &gt; rar</literallayout>
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+							<screen>
+sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen>
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<menuchoice>
+									<guimenu>Applications</guimenu>
+									<guisubmenu>Accessories</guisubmenu>
+									<guimenuitem>Archive Manager</guimenuitem>
+								</menuchoice>
+							</para>
+						</listitem>
+					</orderedlist>
+			</sect2>
+	</sect1>
+<sect1 id="partitions-booting" status="writing">
+	<title>Partitions and Booting</title>
+			<sect2>
+				<title>Graphical Partition Editor</title>
+					<orderedlist>
+						<listitem>
+							<para>Read <xref linkend="extra-repositories"/>
+							</para>
+						</listitem>
+						<listitem>
+							<para>Install the gparted package with <application>Add/Remove Applications</application> (See <xref linkend="add-applications"/>)
+							</para>
+						</listitem>
+						<listitem>
+							<para>You can run the application with:
+								<menuchoice>
+									<guimenu>Applications</guimenu>
+									<guisubmenu>System Tools</guisubmenu>
+									<guimenuitem>GParted</guimenuitem>
+								</menuchoice>
+							</para>
+						</listitem>
+					</orderedlist>
+			</sect2>
+		<sect2>
+			<title>Mount/unmount Windows partitions</title>
+				<orderedlist>
+					<listitem>
+						<para>Read <xref linkend="listpartitiontables"/>
+						</para>
+					</listitem>
+					<listitem>
+						<para>First make a directory where it can be mounted</para><screen>
+sudo mkdir /media/windows</screen>
+					</listitem>
+					<listitem>
+						<para>Next, run the following command to mount an NTFS Windows Partition and allow read-only access:</para><screen>
+sudo mount /dev/hda1 /media/windows/ -t ntfs -o umask=0222</screen>
+						<note>
+							<para>Replace <emphasis role="bold">/dev/hda1</emphasis> with the correct device name for your partition.</para>
+							<para>If your Windows partition uses the FAT32 filesystem, replace <emphasis role="bold">ntfs</emphasis>with <emphasis role="bold">vfat</emphasis> in the above command.</para>
+							<para>If you have a FAT32 filesystem, it is also safe to allow read-write access. To do this, change the value of <emphasis role="bold">umask</emphasis> to 0000.</para>
+						</note>
+					</listitem>
+					<listitem>
+						<para>To unmount the partition, run the following command:</para><screen>
+sudo umount /media/windows/</screen>
+					</listitem>
+				</orderedlist>
+		</sect2>
+		<sect2>
+			<title>Mount Windows partitions on boot-up</title>
+				<orderedlist>
+					<listitem>
+						<para>Read <xref linkend="listpartitiontables"/>
+						</para>
+					</listitem>
+
+					<listitem>
+						<para>First make a directory where it can be mounted</para><screen>
+sudo mkdir /media/windows</screen>
+					</listitem>
+					<listitem>
+						<para>Next, backup your configuration file for mounting drives and open the file in a text editor with administrative privileges:</para><screen>
+sudo cp /etc/fstab /etc/fstab_backup
+sudo gedit /etc/fstab</screen>
+					</listitem>
+					<listitem>
+						<para>Append the following line at the end of file
+							<programlisting>/dev/hda1 /media/windows ntfs umask=0222 0 0</programlisting>
+						</para>
+						<note>
+							<para>Replace <emphasis role="bold">/dev/hda1</emphasis> with the correct device name for your partition.</para>
+							<para>If your Windows partition uses the FAT32 filesystem, replace <emphasis role="bold">ntfs</emphasis>with <emphasis role="bold">vfat</emphasis> in the above command.</para>
+							<para>If you have a FAT32 filesystem, it is also safe to allow read-write access. To do this, change the value of <emphasis role="bold">umask</emphasis> to 0000.</para>
+						</note>
+					</listitem>
+					<listitem>
+						<para>Save the edited file (<ulink
+							url="sample/fstab_automountntfs"/>)</para>
+					</listitem>
+					<listitem>
+						<para>Read <xref linkend="remountfstabwithoutreboot"
+							/></para>
+					</listitem>
+				</orderedlist>
+		</sect2>
+		<sect2>
+			<title>Change default Operating System at boot</title>
+				<orderedlist>
+					<listitem>
+						<para>Make a backup of your boot configuration file, and open it in a text editor:</para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+sudo gedit /boot/grub/menu.lst</screen>
+					</listitem>
+					<listitem>
+						<para>Find this line</para>
+						<programlisting>...
+default 0
+...</programlisting>
+					</listitem>
+					<listitem>
+						<para>Replace with the following line</para>
+						<programlisting>default X_sequence</programlisting>
+					</listitem>
+					<listitem>
+						<para>
+							Save the edited file (<ulink
+                                    url="sample/menu.list_changedefaultosgrub"
+                                />)
+						</para>
+					</listitem>
+				</orderedlist>
+		</sect2>
+<!-- I'm tempted to remove the following tip, it shouldn't be necessary now with NetworkMagic -->
+		<sect2 id="skipservices" xreflabel="Temporarily skip boot-up services">
+			<title>Temporarily skip boot-up services</title>
+				<orderedlist>
+					<listitem>
+						<para>Press <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>C</keycap>
+							</keycombo>.
+						</para>
+					</listitem>
+				</orderedlist>
+		</sect2>
+		<sect2>
+			<title>Permanently disable/enable boot-up services</title>
+				<orderedlist>
+					<listitem>
+						<para>Run <application>Services Settings</application>:
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Services</guimenuitem>
+							</menuchoice>.
+						</para>
+					</listitem>
+					<listitem>
+						<para>Ubuntu will ask for your password, enter it.</para>
+					</listitem>
+					<listitem>
+						<para>Tick/untick the services you want running, then click <guibutton>OK</guibutton> when done.</para>
+					</listitem>
+					<listitem>
+						<para>For greater control over the boot-up services, install the <application>bum</application> from the Universe repository and run it:
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Boot-up Manager</guimenuitem>
+							</menuchoice>.
+						</para>
+					</listitem>
+				</orderedlist>
+		</sect2>
+		<sect2>
+			<title>Clean /tmp/ folder contents on shutdown</title>
+				<orderedlist>
+					<listitem>
+						<para>
+							<screen>sudo cp /etc/init.d/sysklogd /etc/init.d/sysklogd_backup
+sudo gedit /etc/init.d/sysklogd</screen>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Find this section</para>
+						<programlisting>...
+stop)
+log_begin_msg "Stopping system log daemon..."
+start-stop-daemon --stop --quiet --oknodo --exec $binpath --pidfile $pidfile
+log_end_msg $?
+...</programlisting>
+					</listitem>
+					<listitem>
+						<para>Add the following line below it</para>
+						<programlisting>rm -fr /tmp/* /tmp/.??*</programlisting>
+					</listitem>
+					<listitem>
+						<para>
+							Save the edited file (<ulink
+                                    url="sample/sysklogd_cleantmpfoldershutdown"
+                                />)
+						</para>
+					</listitem>
+				</orderedlist>
+		</sect2>
+		<sect2>
+			<title>Change the timeout for boot menu</title>
+				<orderedlist>
+					<listitem>
+						<para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+sudo gedit /boot/grub/menu.lst</screen>
+						</para>
+					</listitem>
+					<listitem>
+						<para>Find this line</para>
+						<programlisting>...
+timeout 3
+...</programlisting>
+					</listitem>
+					<listitem>
+						<para>Replace with the following line</para>
+						<programlisting>timeout X_seconds</programlisting>
+					</listitem>
+					<listitem>
+						<para>
+							Save the edited file (<ulink
+                                    url="sample/menu.list_increasedecreasetimeoutgrub"
+                                />)
+						</para>
+					</listitem>
+				</orderedlist>
+		</sect2>
+
+	</sect1>
 	<sect1 id="hardware" status="writing">
 		<title>Hardware</title>
 		<sect2 id="digital-cameras">
@@ -48,12 +681,8 @@ sudo chmod 666 /dev/dsp
 
 		<sect2 id="graphics-cards">
 			<title>3D Graphic Cards</title>
-		        <qandaset>
-        	       	 <qandaentry id="installnvidiadriver" xreflabel="3D Nvidia video card driver">
-        		        <question>
-        		            <para>3D Nvidia Video Card Driver</para>
-        		        </question>
-        		        <answer>
+        	       	 <sect3 id="installnvidiadriver" xreflabel="3D Nvidia video card driver">
+        		        <title>3D Nvidia Video Card Driver</title>
         		            <orderedlist>
         		                <listitem>
         		                    <para>Read <xref linkend="extra-repositories"/></para>
@@ -106,13 +735,9 @@ Categories=Application;System;</programlisting>
                             </para>
                         </listitem>
                     </orderedlist>
-                </answer>
-            </qandaentry>
-            <qandaentry>
-                <question>
-                    <para>Disable the Nvidia Graphics Logo on Startup</para>
-                </question>
-                <answer>
+            </sect3>
+            <sect3>
+                <title>Disable the Nvidia Graphics Logo on Startup</title>
                     <orderedlist>
                         <listitem>
                             <para>Read <xref linkend="installnvidiadriver"/>
@@ -154,14 +779,10 @@ Option  "NoLogo"</programlisting>
                             </para>
                         </listitem>
                     </orderedlist>
-                </answer>
-            </qandaentry>
+            </sect3>
 	<!-- unconfirmed ATI drivers, someone who owns an ATI card please confirm that this works -->
-            <qandaentry id="installatidriver">
-                <question>
-                    <para>3D ATI Video Card Driver</para>
-                </question>
-                <answer>
+            <sect3 id="installatidriver">
+                <title>3D ATI Video Card Driver</title>
 			<orderedlist>
                         <listitem>
  				<para>Install the xorg-driver-fglrx package with <application>Add/Remove Applications</application> (See <xref linkend="add-applications"/>)
@@ -190,44 +811,32 @@ sudo gedit /etc/X11/xorg.conf
 			    <para>Restart your machine for changes to take effect.</para>
 			</listitem>
 			</orderedlist>
-		</answer>
-	    </qandaentry>
-	    </qandaset>
+	    </sect3>
 	    </sect2>
-	    <sect2 id="modems">
+	    <sect2 id="modems" xreflabel="Modems">
 		<title>Modems</title>
-		<qandaset>
-		<qandaentry id="winmodems">		
-		<question><para>Winmodems</para></question>
-		<answer>
-		<para>Most winmodems are not supported by Ubuntu, but drivers can be found that will enable the use of such modems. First you need to identify what chipset your winmodem is using:</para>
-		<para>
+		<sect3 id="winmodems">		
+			<title>Winmodems</title>
+				<para>Most winmodems are not supported by Ubuntu, but drivers can be found that will enable the use of such modems. First you need to identify what chipset your winmodem is using:</para>
+				<para>
 <screen>
 wget -c <ulink url="&scanmodem-url;">&scanmodem-url;</ulink> 
 gunzip -c &scanmodem-gz; &gt; scanModem 
 chmod +x scanModem
 sudo ./scanModem 
 gedit Modem/ModemData.txt</screen>
-		</para>
-		<para>Check the output in Gedit, it should list what modem chipset you have. Once you are aware of the chipset you have, see <ulink url="&linmodem;">&linmodem;</ulink> and follow the directions for your 	modem. More infomation can be found at <ulink url="https://wiki.ubuntu.com/SettingUpModems">SettingUpModems</ulink> on the Ubuntu Wiki.</para>
-		</answer>
-		</qandaentry>
-		<qandaentry id="adsl">
-		<question><para>ADSL Modems</para></question>
-		<answer>
-		<para>All PPPOE and router-style ADSL modems are supported by Ubuntu (that use ethernet for the connections), and some USB ADSL modems are supported too. For router-style ADSL modems, just connect it up, configure the modem as per your ISPs instructions and configure networking in Ubuntu. For information on PPPOE modems see <ulink url="https://wiki.ubuntu.com/ADSLPPPoE">ADSLPPoE</ulink> on the Ubuntu wiki.</para>
-		</answer>
-		</qandaentry>
-	    </qandaset>
+				</para>
+				<para>Check the output in Gedit, it should list what modem chipset you have. Once you are aware of the chipset you have, see <ulink url="&linmodem;">&linmodem;</ulink> and follow the directions for your 	modem. More infomation can be found at <ulink url="https://wiki.ubuntu.com/SettingUpModems">SettingUpModems</ulink> on the Ubuntu Wiki.</para>
+		</sect3>
+		<sect3 id="adsl">
+		<title>ADSL Modems</title>
+			<para>All PPPOE and router-style ADSL modems are supported by Ubuntu (that use ethernet for the connections), and some USB ADSL modems are supported too. For router-style ADSL modems, just connect it up, configure the modem as per your ISPs instructions and configure networking in Ubuntu. For information on PPPOE modems see <ulink url="https://wiki.ubuntu.com/ADSLPPPoE">ADSLPPoE</ulink> on the Ubuntu wiki.</para>
+		</sect3>
 	  </sect2>
 	  <sect2 id="Handhelds">
 		<title>Handhelds</title>
-		<qandaset>
-	            <qandaentry>
-        	        <question>
-        	            <para>PalmOS Devices</para>
-        	        </question>
-        	        <answer>
+		<sect3>
+	            <title>PalmOS Devices</title>
         	            <orderedlist>
         	                <listitem>
         	                    <para>
@@ -279,18 +888,12 @@ BUS="usb", SYSFS{product}="Palm Handheld*", KERNEL="ttyUSB*", NAME{ignore_remove
 			    </para>
 			</listitem>
                     </orderedlist>
-                </answer>
-            </qandaentry>
-	    </qandaset>
+            </sect3>
 	</sect2>
 	<sect2 id="other-hardware">
 	    <title>Other Hardware</title>
-	    <qandaset>
-            <qandaentry id="listpartitiontables" xreflabel="check disk space and view the partition table">
-                <question>
-                    <para>How do I check disk space usage and view the partition table?</para>
-                </question>
-                <answer>
+	    <sect3 id="listpartitiontables" xreflabel="Check disk space and view the partition table">
+                <title>Check disk space usage and view the partition table</title>
                     <orderedlist>
                         <listitem>
                             <para>Launch &disks; </para>
@@ -302,55 +905,26 @@ BUS="usb", SYSFS{product}="Palm Handheld*", KERNEL="ttyUSB*", NAME{ignore_remove
                             <para>Each partition will be listed under <guilabel>Partition List</guilabel>, with disk space and mount point.</para>
                         </listitem>
                     </orderedlist>
-                </answer>
-            </qandaentry>
-            <qandaentry>
-                <question>
-                    <para>How do I list mounted devices?</para>
-                </question>
-                <answer>
+            </sect3>
+            <sect3>
+                <title>List devices</title>
                     <orderedlist>
                         <listitem>
-                            <para>
+                            <para>To list mounted devices, run the following command in a terminal:</para>
                                 <screen>mount</screen>
-                            </para>
                         </listitem>
-                    </orderedlist>
-                </answer>
-            </qandaentry>
-            <qandaentry>
-                <question>
-                    <para>How do I list PCI devices?</para>
-                </question>
-                <answer>
-                    <orderedlist>
                         <listitem>
-                            <para>
+                            <para>To list PCI devices:</para>
                                 <screen>lspci</screen>
-                            </para>
                         </listitem>
-                    </orderedlist>
-                </answer>
-            </qandaentry>
-            <qandaentry>
-                <question>
-                    <para>How do I list USB devices?</para>
-                </question>
-                <answer>
-                    <orderedlist>
                         <listitem>
-                            <para>
+                            <para>To list USB devices:</para>
                                 <screen>lsusb</screen>
-                            </para>
                         </listitem>
                     </orderedlist>
-                </answer>
-            </qandaentry>
-            <qandaentry>
-                <question>
-                    <para>How do I speed up CD/DVD-ROM access (enable DMA)?</para>
-                </question>
-                <answer>
+            </sect3>
+            <sect3>
+                <title>Speed up CD/DVD-ROM access (enable DMA)</title>
                     <orderedlist>
                         <listitem>
                             <para>Assuming that <filename class="devicefile"
@@ -380,14 +954,10 @@ dma = on
                             />)</para>
                         </listitem>
                     </orderedlist>
-                </answer>
-            </qandaentry>
-            <qandaentry>
-                <question>
-                    <para>How do I mount/unmount CD/DVD-ROMs manually, and show all
-                        hidden and associated files/folders?</para>
-                </question>
-                <answer>
+            </sect3>
+            <sect3>
+                <title>Mount/unmount CD/DVD-ROMs manually, and show all
+                        hidden and associated files/folders</title>
                     <orderedlist>
                         <listitem>
                             <para>Assuming that <filename class="devicefile"
@@ -409,13 +979,9 @@ sudo umount /media/cdrom0/</screen>
                             </para>
                         </listitem>
                     </orderedlist>
-                </answer>
-            </qandaentry>
-            <qandaentry>
-                <question>
-                    <para>How do I forcefully unmount CD/DVD-ROMs manually?</para>
-                </question>
-                <answer>
+            </sect3>
+            <sect3>
+                    <title>Forcefully unmount CD/DVD-ROMs manually</title>
                     <orderedlist>
                         <listitem>
                             <para>
@@ -424,13 +990,9 @@ sudo eject</screen>
                             </para>
                         </listitem>
                     </orderedlist>
-                </answer>
-            </qandaentry>
-            <qandaentry id="remountfstabwithoutreboot" xreflabel="How do I remount /etc/fstab without rebooting?">
-                <question>
-                    <para>How do I remount /etc/fstab without rebooting?</para>
-                </question>
-                <answer>
+            </sect3>
+            <sect3 id="remountfstabwithoutreboot" xreflabel="Remount /etc/fstab without rebooting?">
+                <title>Remount /etc/fstab without rebooting?</title>
                     <orderedlist>
                         <listitem>
                             <para>
@@ -439,84 +1001,13 @@ sudo mount -a</screen>
                             </para>
                         </listitem>
                     </orderedlist>
-                </answer>
-            </qandaentry>
-        </qandaset>
+            </sect3>
 	</sect2>
       </sect1>
       <sect1 id="networking" status="writing">
 		<title>Networking</title>
-		<!-- Setting up network cards, config, add section on networking apps such as gftp, ssh etc -->
-		<sect2 id="configuring-network">
-			<title>Configuring The Network</title>
-		     <qandaset>
-	            	<qandaentry id="confignetwork" xreflabel="configure network connections">
-                    	<question>
-  	                  <para>Configuring Network Connections</para>
-  	              	</question>
-     		      	<answer>
-   	                 <orderedlist>
-                        <listitem>
-                            <para>
-                                <menuchoice>
-                                    <guimenu>System</guimenu>
-                                    <guisubmenu>Administration</guisubmenu>
-                                    <guimenuitem>Networking</guimenuitem>
-                                </menuchoice>
-                            </para>
-                        </listitem>
-                        <listitem>
-                            <para>Select the <guibutton>Connections</guibutton>
-                                tab. select the <option>Ethernet
-                                connection</option> interface from the list,
-                                then click the <guibutton>Properties</guibutton>
-                                button. Ensure that the <guibutton>This device
-                                    is configured</guibutton> is checked. From
-                                the <guibutton>Configuration</guibutton>
-                                drop-list select <option>DHCP/Static IP
-                                address</option>, then click
-                                <guibutton>OK</guibutton>.</para>
-                        </listitem>
-                        <listitem>
-                            <para>Select the <guibutton>DNS</guibutton> tab add
-                                or delete DNS Servers in the <guilabel>DNS
-                                    Servers</guilabel> list.</para>
-                        </listitem>
-                    </orderedlist>
-                </answer>
-            </qandaentry>
-            <qandaentry>
-                <question>
-                    <para>Activate/Deactivate Network Connections</para>
-                </question>
-                <answer>
-                    <orderedlist>
-                        <listitem>
-                            <para>
-                                <menuchoice>
-                                    <guimenu>System</guimenu>
-                                    <guisubmenu>Administration</guisubmenu>
-                                    <guimenuitem>Networking</guimenuitem>
-                                </menuchoice>
-                            </para>
-                        </listitem>
-                        <listitem>
-                            <para>Select <menuchoice>
-                                    <guimenuitem>Network settings</guimenuitem>
-                                    <interface>Connections Tab</interface>
-                                    <guilabel>Ethernet connection</guilabel>
-                                </menuchoice>
-                                <option>Activate/Deactivate</option>
-                            </para>
-                        </listitem>
-                    </orderedlist>
-                </answer>
-            </qandaentry>
-            <qandaentry>
-                <question>
-                    <para>Change the Computer Name</para>
-                </question>
-                <answer>
+            <sect2>
+                <title>Change the Computer Name</title>
                     <orderedlist>
                         <listitem>
                             <para>
@@ -537,50 +1028,11 @@ sudo mount -a</screen>
                                 open applications and reboot.</para>
                         </listitem>
                     </orderedlist>
-                </answer>
-            </qandaentry>
-            <qandaentry>
-                <question>
-                    <para>Browse Network Computers</para>
-                </question>
-                <answer>
-                    <note>
-                        <para>Assuming that network connections have been
-                            configured properly. See <xref
-                                linkend="confignetwork"/> for more
-                        information.</para>
-                    </note>
-                    <orderedlist>
-                        <listitem>
-                            <para>This screen lists all network servers and
-                                Samba servers, if computers, network folders or
-                                Sambas servers could not be found, try to access
-                                them directly. <!-- Read <xref
-                                    linkend="accessnetworkfolderswihoutmount"/>.--> </para>
-                            <para>
-                                <menuchoice>
-                                    <guimenu>Places</guimenu>
-                                    <guimenuitem>Network Servers</guimenuitem>
-                                </menuchoice>
-                            </para>
-                        </listitem>
-                    </orderedlist>
-                </answer>
-            </qandaentry>
-           </qandaset>
-	</sect2>
-	<sect2 id="wireless">
-		<title>Wireless</title>
-		<para>Describe wireless here</para>
-	</sect2>
+            </sect2>
 	<sect2 id="networking-utils" status="writing">
 		<title>Networking Utilities</title>
-		<qandaset>
-	            <qandaentry id="firestarter">
-        	         <question>
-     	                 <para>Firestarter Firewall</para>
-    		         </question>
-    	         	 <answer>
+	            <sect3 id="firestarter">
+     	                 <title>Firestarter Firewall</title>
 			    <orderedlist>
         	                <listitem>
    	                          <para>Read <xref linkend="extra-repositories"/>
@@ -598,13 +1050,9 @@ sudo mount -a</screen>
 	                            <para>After it is installed, run &firestarter-firewall-tool; to configure your firewall. The firewall will now start in the background when your computer starts.</para>
 	                        </listitem>
 	                    </orderedlist>
-        	         </answer>
-     	 	        </qandaentry>
-			<qandaentry>
-				<question>
-					<para>EtherApe Graphical Network Monitor</para>
-				</question>
-				<answer>
+     	 	        </sect3>
+			<sect3>
+				<title>Graphical Network Monitor</title>
 					<para>Etherape displays network activity among different hosts using circles of
 						varying size.</para>
 					<orderedlist>
@@ -629,13 +1077,9 @@ sudo mount -a</screen>
 							</para>
 						</listitem>
 					</orderedlist>
-				</answer>
-			</qandaentry>	 
-			<qandaentry>
-				<question>
-					<para>Etherreal Network Traffic Analyzer</para>
-				</question>
-				<answer>
+			</sect3>	 
+			<sect3>
+				<title>Network Traffic Analyzer</title>
 					<para>Ethereal is a network traffic analyser/sniffer that captures packets
 						off the network in real time and displays the contents of them.</para>
 					<orderedlist>
@@ -660,185 +1104,13 @@ sudo mount -a</screen>
 							</para>
 						</listitem>
 					</orderedlist>
-				</answer>
-			</qandaentry>
-		</qandaset>
-	</sect2>
+			</sect3>
+		</sect2>
      </sect1>
-     <sect1 id="system-utilities" status="writing">
-		<title>System Utilities</title>
-		<qandaset>
-			<qandaentry>
-				<question>
-					<para>GParted Partition Editor</para>
-				</question>
-				<answer>
-					<orderedlist>
-						<listitem>
-							<para>Read <xref linkend="extra-repositories"/>
-							</para>
-						</listitem>
-						<listitem>
-							<para>Install the gparted package with <application>Add/Remove Applications</application> (See <xref linkend="add-applications"/>)
-							</para>
-							<para>
-								<literallayout>GNOME Desktop Environment (universe) &gt; gparted</literallayout>
-							</para>
-						</listitem>
-						<listitem>
-							<para>
-								<menuchoice>
-									<guimenu>Applications</guimenu>
-									<guisubmenu>System Tools</guisubmenu>
-									<guimenuitem>GParted</guimenuitem>
-								</menuchoice>
-							</para>
-						</listitem>
-					</orderedlist>
-				</answer>
-			</qandaentry>
-			<qandaentry>
-				<question>
-					<para>RAR Archiver</para>
-				</question>
-				<answer>
-					<orderedlist>
-						<listitem>
-							<para>Read <xref linkend="extra-repositories"/>
-							</para>
-						</listitem>
-						<listitem>
-							<para>Install the rar package with <application>Add/Remove Applications</application> (See <xref linkend="add-applications"/>)
-							</para>
-							<para>
-								<literallayout>Utilities (multiverse) &gt; rar</literallayout>
-							</para>
-						</listitem>
-						<listitem>
-							<para>
-							<screen>
-sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen>
-							</para>
-						</listitem>
-						<listitem>
-							<para>
-								<menuchoice>
-									<guimenu>Applications</guimenu>
-									<guisubmenu>Accessories</guisubmenu>
-									<guimenuitem>Archive Manager</guimenuitem>
-								</menuchoice>
-							</para>
-						</listitem>
-					</orderedlist>
-				</answer>
-			</qandaentry>
-		</qandaset>
-    
-     <sect2 id="fonts" status="writing">
-		<title>Fonts</title>
-		<qandaset>
-			<qandaentry id="extra-fonts" xreflabel="Extra Fonts">
-				<question>
-					<para>Extra Fonts</para>
-				</question>
-				<answer>
-					<orderedlist>
-						<listitem>
-							<para>Make sure the universe and multiverse repositories are enabled. (See <xref linkend="extra-repositories"/>)
-							</para>
-						</listitem>
-						<listitem>
-							<para>Install the font packages with <application>Add/Remove Applications</application>
-								 (See <xref linkend="add-applications"/>)
-							</para>
-							<para>
-								<literallayout>Miscellaneous - Graphical (universe) &gt; xfonts-intl-arabic
-Miscellaneous - Graphical (universe) &gt; xfonts-intl-asian
-Miscellaneous - Graphical (universe) &gt; xfonts-intl-chinese
-Miscellaneous - Graphical (universe) &gt; xfonts-intl-chinese-big
-Miscellaneous - Graphical (universe) &gt; xfonts-intl-european
-Miscellaneous - Graphical (universe) &gt; xfonts-intl-japanese 
-Miscellaneous - Graphical (universe) &gt; xfonts-intl-japanese-big
-Miscellaneous - Graphical (universe) &gt; xfonts-intl-phonetic
-Miscellaneous - Graphical &gt; gsfonts-x11
-Miscellaneous - Graphical (multiverse) &gt; msttcorefonts  
-								</literallayout>
-							</para>
-						</listitem>
-						<listitem>
-							<para>Rebuild the font information cache files
-							</para>
-							<screen>sudo fc-cache -f -v</screen>
-						</listitem>
-					</orderedlist>
-				</answer>
-			</qandaentry>
-			<qandaentry>
-				<question>
-					<para>Chinese Input Method (SCIM)</para>
-				</question>
-				<answer>
-					<orderedlist>
-						<listitem>
-							<para>Make sure the universe repository is enabled. (See <xref linkend="extra-repositories"/>)
-							</para>
-						</listitem>
-						<listitem>
-							<para>Make sure you have the Chinese fonts installed. (See <xref linkend="extra-fonts"/>.)
-							</para>
-						</listitem>
-						<listitem>
-							<para>Install the scim packages with <application>Add/Remove Applications</application>
-								 (See <xref linkend="add-applications"/>)
-							</para>
-							<para>
-								<literallayout>Utilities (universe) &gt; scim
-Utilities (universe) &gt; scim-chinese
-Utilities (universe) &gt; scim-config-socket
-Utilities (universe) &gt; scim-gtk2-immodule
-Utilities (universe) &gt; scim-tables-zh
-</literallayout>
-							</para>
-						</listitem>
-						<listitem>
-							<para>
-								<screen>wget -c <ulink url="&fireflysung-url;">&fireflysung-url;</ulink>
-sudo tar zxvf &fireflysung-tar; -C /usr/share/fonts/truetype/ 
-sudo chown -R root:root /usr/share/fonts/truetype/fireflysung-1.3.0/ 
-sudo fc-cache -f -v</screen>
-							</para>
-						</listitem>
-						<listitem>
-							<para>
-								<menuchoice>
-									<guimenu>System</guimenu>
-									<guisubmenu>Preferences</guisubmenu>
-									<guimenuitem>SCIM Input Method Setup</guimenuitem>
-								</menuchoice>
-							</para>
-						</listitem>
-						<listitem>
-							<para>To activate SCIM press <keycombo>
-									<keycap>Ctrl</keycap>
-									<keycap>Space</keycap>
-								</keycombo>.
-							</para>
-						</listitem>
-					</orderedlist>
-				</answer>
-			</qandaentry>
-		</qandaset>
-	</sect2>
-	</sect1>
 	<sect1 id="programming" status="writing">
 		<title>Programming</title>
-			<qandaset>
-			<qandaentry>
-				<question>
-					<para>Basic Compilers
-						(build-essential)</para>
-				</question>
-				<answer>
+			<sect2>
+				<title>Basic Compilers</title>
 					<orderedlist>
 						<listitem>
 							<para>Read <xref linkend="extra-repositories"/>
@@ -853,8 +1125,67 @@ sudo fc-cache -f -v</screen>
 							</para>
 						</listitem>
 					</orderedlist>
-				</answer>
-			</qandaentry>
-		</qandaset>
+			</sect2>
+			<sect2 id="java" xreflabel="Java Runtime Environment">
+				<title>Java Runtime Environment (1.5)</title>
+					<orderedlist>
+						<listitem>
+							<para>Make sure the multiverse repository is enabled. (See <xref linkend="extra-repositories"/>)
+							</para>
+						</listitem>
+						<listitem>
+							<para>Go to <ulink url="&java-download;">&java-download;</ulink> and click on <quote>Download JRE 5.0 Update 4</quote>. Ensure you do not choose the link with the NetBeans bundle.
+							</para>
+							<note>
+								<para>At the time of this writing J2SE is at version 5.0 Update 4. This is subject to
+									change. If you do not see this version on Sun&apos;s website, download the newest version displayed.
+								</para>
+							</note>
+						</listitem>
+						<listitem>
+							<para>You must first accept the licence, then click on <quote>Linux self-extracting file</quote> (jre-1_5_0_04-linux-i586.bin). Save this file to your hard drive.
+							</para>
+						</listitem>
+						<listitem>
+							<!-- isnt fakeroot a dependancy of java-package anyway? -->
+							<para>Install the java-package package with <application>Add/Remove Applications</application> 
+							(See <xref linkend="add-applications"/>)
+							</para>
+							<para>
+								<literallayout>Miscellaneous - Text Based (multiverse) &gt; java-package</literallayout>
+								<!-- Dependancy installs this already Utilities &gt; fakeroot -->
+							</para>
+						</listitem>
+						<listitem>
+							<para>Make the downloaded file executable. At the command line, change to the directory where you downloaded the file, and type
+								<screen>chmod +x jre-1_5_0_04-linux-i586.bin</screen>
+							</para>
+						</listitem>
+						<listitem>
+							<para>To install JRE, run the downloaded file. Type
+								<screen>fakeroot make-jpkg jre-1_5_0_04-linux-i586.bin</screen>
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<screen>dpkg -i sun-j2re1.5_1.5.0+update04_i386.deb</screen>
+							</para>
+						</listitem>
+					</orderedlist>
+			</sect2>
+			<sect2>
+				<title>Development Tools</title>
+				<para>This section has a list of handy open source development tools for use on Ubuntu such as Integrated Development Environments and powerful editors.</para>
+					<orderedlist>
+						<listitem><para><ulink url="http://anjuta.sourceforge.net/">Anjuta</ulink> is a versatile Integrated Development Environment (IDE) for C and C++ on GNU/Linux.</para></listitem>
+						<listitem><para><ulink url="http://bluefish.openoffice.nl/index.html">Bluefish</ulink> is a powerful editor for experienced web designers and programmers.</para></listitem>
+						<listitem><para><ulink url="http://www.eclipse.org/">Eclipse</ulink> is an open source community whose projects are focused on providing a vendor-neutral open development platform and application frameworks for building software. </para></listitem>
+						<listitem><para><ulink url="http://www.die-offenbachs.de/detlev/eric3.html">eric3</ulink> is a full featured Python (and Ruby) IDE that is written in PyQt using the QScintilla editor widget.</para></listitem>
+						<listitem><para><ulink url="http://www.python.org/idle/">IDLE</ulink> is the Python IDE built with the Tkinter GUI toolkit.</para></listitem>
+						<listitem><para><ulink url="http://www.kdevelop.org/">The KDevelop-Project</ulink> aims to build up an easy to use IDE for KDE. KDevelop supports many programming languages.</para></listitem>
+						<listitem><para><ulink url="http://www.monodevelop.com/Main_Page">MonoDevelop</ulink> is a free GNOME IDE primarily designed for C# and other .NET languages.</para></listitem>
+						<listitem><para><ulink url="http://www.netbeans.org/index.html">NetBeans</ulink> is an open-source project dedicated to providing rock solid software development products.</para></listitem>
+					</orderedlist>
+			</sect2>
 	</sect1>
 </chapter>
