@@ -176,20 +176,27 @@
                      <tip>
                         <para>
                         The IP address, Netmask, Network Address, Broadcast Address, and Gateway Address
-                        are typically specified via the appropriate directives in the 
-                        file <filename>/etc/network/interfaces</filename>. For more information, 
-                        view the system manual page for interfaces with the following command typed at a terminal prompt:
+                        are typically specified via the appropriate directives in the file  <filename>/etc/network/interfaces</filename>. The Nameserver Addresses are typically specified via  <emphasis role="italics">nameserver</emphasis> 
+                        directives in the file <filename>/etc/resolv.conf</filename>. For more information, 
+                        view the system manual page for <filename>interfaces</filename>, or <filename>resolv.conf</filename> respectively, with the following commands typed at a terminal prompt:
+                        </para>
+                     </tip>
+                    <para>
+                    Access the system manual page for <filename>interfaces</filename> with the following command:
+                    </para>
+                    <para>
 <screen>
 <command>man interfaces</command>
 </screen>
-                        The Nameserver Addresses are typically specified via  <emphasis role="italics">nameserver</emphasis> 
-                        directives in the file <filename>/etc/resolv.conf</filename>. For more information, 
-                        view the system manual page for <filename>resolv.conf</filename> with the following command typed at a terminal prompt:
+                    </para>
+                    <para>
+                    Access the system manual page for <filename>resolv.conf</filename> with the following command:
+                    </para>
+                    <para>
 <screen> 
 <command>man resolv.conf</command>
 </screen>
-                        </para>
-                     </tip>
+                    </para>
                </listitem>
             </itemizedlist>
             </para>
@@ -372,13 +379,13 @@
                </para>
                <para>Copy the <filename>/etc/ssh/sshd_config</filename> file, and protect it from writing with the following commands, issued at a terminal prompt:
                </para>
+	    </tip>
                <para>
 <screen>
 <command>sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.original</command>
 <command>sudo chmod a-w /etc/ssh/sshd_config.original</command>
 </screen>
                </para> 
-	    </tip>
             <para>
             The following are examples of configuration directives you may change.
             </para>
@@ -924,13 +931,8 @@ ttf-bitstream-vera ucf
 </screen>
           </para>
           <para>
-          Upon authenticating with your user password, the packages should be downloaded, and installed without error. Upon the conclusion of installation, the CUPS server will be started automatically.
+          Upon authenticating with your user password, the packages should be downloaded, and installed without error. Upon the conclusion of installation, the CUPS server will be started automatically. For troubleshooting purposes you can access CUPS server errors via the error log file at: <filename>/var/log/cups/error_log</filename>.
           </para>
-          <tip>
-          <para>
-          For troubleshooting purposes you can access CUPS server errors via the error log file at: <filename>/var/log/cups/error_log</filename>
-          </para>
-          </tip>
       </sect2>
       <sect2 id="cups-configuration" status="review">
         <title>Configuration</title>
@@ -943,13 +945,13 @@ ttf-bitstream-vera ucf
                </para>
                <para>Copy the <filename>/etc/cups/cupsd.conf</filename> file, and protect it from writing with the following commands, issued at a terminal prompt:
                </para>
+               </tip>
                <para>
 <screen>
 <command>sudo cp /etc/cups/cupsd.conf /etc/cups/cupsd.conf.original</command>
 <command>sudo chmod a-w /etc/cups/cupsd.conf.original</command>
 </screen>
-               </para> 
-	    </tip>
+               </para>
           <itemizedlist>
                 <listitem>
                 <para>
@@ -970,6 +972,17 @@ ServerAdmin bjoy@somebigco.com
 Listen 127.0.0.1:631       # existing Loopback Listen
 Listen 192.168.10.250:631  # Listen on the LAN interface, Port 631 (IPP)
 </screen>
+                </para>
+                <para>
+                In the example above, you may comment out, or remove the reference to the Loopback address (127.0.0.1) if you do not wish <application>cupsd</application> to listen on that interface, but would rather have it only listen on the Ethernet interfaces of the Local Area Network. (LAN) To enable listening for all network interfaces for which a certain hostname is bound, including the Loopback, you could create a Listen entry for the hostname <emphasis role="italics">socrates</emphasis> as such:
+                </para>
+                <para>
+<screen>
+Listen socrates:631  # Listen on all interfaces for the hostname 'socrates'
+</screen>
+                </para> 
+                <para>
+                The CUPS server configuration file, <filename>/etc/cups/cupsd.conf</filename> contains several examples of possible Listen directives which are valid for use.
                 </para>
                 </listitem>
                 <listitem>
@@ -1001,16 +1014,6 @@ AuthClass Group
                 </para>
                 </listitem>
           </itemizedlist>
-                <note>
-                <para>
-                Whenever you make changes to the <filename>/etc/cups/cupsd.conf</filename> configuration file, you'll need to restart the CUPS server by typing the following command at a terminal prompt:
-                </para>
-                <para>
-<screen>
-<command>sudo /etc/init.d/cupsys restart</command>
-</screen>
-                </para>
-                </note>
                 <para>
                 For more examples of configuration directives in the CUPS server configuration file, view the associated system manual page, by entering the following command at a terminal prompt:
                </para>
@@ -1019,6 +1022,16 @@ AuthClass Group
 <command>man cupsd.conf</command>
 </screen>
                </para>
+                               <note>
+                <para>
+                Whenever you make changes to the <filename>/etc/cups/cupsd.conf</filename> configuration file, you'll need to restart the CUPS server by typing the following command at a terminal prompt:
+                </para>
+                </note>
+                <para>
+<screen>
+<command>sudo /etc/init.d/cupsys restart</command>
+</screen>
+                </para>
       </sect2>
       <sect2 id="cups-references" status="review">
         <title>References</title>
@@ -1673,13 +1686,13 @@ Listen 443
                </para>
                <para>Copy the <filename>/etc/squid/squid.conf</filename> file, and protect it from writing with the following commands entered at a terminal prompt:
                </para>
+	     </tip>
                <para>
 <screen>             
 <command>sudo cp /etc/squid/squid.conf /etc/squid/squid.conf.original</command>
 <command>sudo chmod a-w /etc/squid/squid.conf.original</command>
 </screen>
                </para> 
-	          </tip>
 	        <para>
            <itemizedlist>
                <listitem>
@@ -1743,15 +1756,17 @@ Listen 443
                </listitem>
           </itemizedlist>
           </para>
-	    <para>
+          <note>
+	  <para>
           After making changes to the <filename>/etc/squid/squid.conf</filename> file, save the file, and restart the <application>squid</application> 
           server application to effect the changes using the following command entered at a terminal prompt:
-       </para>
+          </para>
+          </note>
           <para>
 <screen>
 <command>sudo /etc/init.d/squid restart</command>
 </screen>
-           </para>
+          </para>
       </sect2>
       <sect2 id="squid-references" status="review">
       <title>References</title>

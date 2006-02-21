@@ -232,20 +232,97 @@
             Synaptic keeps a history of all activities it performs.  To view the Synaptic history, simply click the <emphasis role="italics">File</emphasis> > <emphasis role="italics">History</emphasis> menu, then select the Month you wish to view information for in the left pane with the arrow control.  you may also search for specific history information with the Find feature, by entering a search string into the text input field, and clicking the <emphasis role="italics">Find</emphasis> button.
             </para>
             </sect1>
-	<sect1 id="gai" status="writing">
+	<sect1 id="gai" status="review">
 		<title>GAI</title>
           <para>
-            <!-- Is this General Applet Interface, and if so, what kind of context and treatment of it is required here?  If not, what is this GAI referrinf to? -->
+            The <emphasis role="bold">Gnome App Install</emphasis> (GAI) application is another graphical software installation option available for Ubuntu.  It provides a very simple, and easy to use interface for adding, or removing application software with "a click of a button". 
+          </para>
+          <para>
+          Only simple addition, and removal of application software may be performed with GAI. For more complex requirements, such as upgrading application software, you should consider using Synaptic Package Manager instead.
+          </para>
+          <para>
+          When the GAI application is launched, a main window, titled <emphasis role="bold">Add Applications</emphasis> appears, which is split into two major panes: a left pane, containing Package categories, and packages, represented by icons, and labels, and a right pane which provides detailed information on the packages.  There is a menu at top, and buttons at bottom, including a search text input field, and search button, plus <emphasis role="italics">Close</emphasis>, and <emphasis role="italics">Apply</emphasis> buttons.
+          </para>
+          <para>
+          Installation, and removal of software applications using GAI is very simple, and will be described here:
+          <itemizedlist>
+                <listitem>
+                <para>
+                <emphasis role="bold">Installation of Applications</emphasis>: To install an application with GAI, simply browse, or search, until the desired application is located, then click on the checkbox located to the left of the application's entry, and then click the <emphasis role="italics">Apply</emphasis> button. A <emphasis role="bold">Changes Pending</emphasis> window will appear describing what will occur upon pressing the <emphasis role="italics">Apply</emphasis> button.  To cancel the operation, press the <emphasis role="italics">Cancel</emphasis> button, or click the <emphasis role="italics">Apply</emphasis> button to proceed.  At this point, the software should be downloaded, and installed.  If any additional input is required during the process, GAI will present windows prompting for input. After the software is installed, a <emphasis role="bold">Changes Applied</emphasis> window will appear.  Click the <emphasis role="italics">Close</emphasis> button to conclude the installation process. Finally, a <emphasis role="bold">New Programs</emphasis> window will appear, describing the installed application, and its location(s) on the system's menus.  Click the <emphasis role="italics">Close</emphasis> button to finish installation.
+                </para>
+                </listitem>
+                <listitem>
+                <para>
+                <emphasis role="bold">Removal of Applications</emphasis>: Removal of software applications with GAI is a similar process to installation.  Simply browse, or search to locate the software application you wish to remove, and <emphasis role="italics">uncheck</emphasis> the software application's entry check box.  Click the <emphasis role="italics">Apply</emphasis> button, and a <emphasis role="bold">Changes Pending</emphasis> window will appear describing what will occur upon pressing the <emphasis role="italics">Apply</emphasis> button. To cancel the operation, press the <emphasis role="italics">Cancel</emphasis> button, or click the <emphasis role="italics">Apply</emphasis> button to proceed. At this point, the application will be removed from the system, and a <emphasis role="bold">Changes Applied</emphasis> window will appear.  Click the <emphasis role="italics">Close</emphasis> button to complete the removal process.
+                </para>
+                </listitem>
+          </itemizedlist>
           </para>
     </sect1>
-	<sect1 id="configuration" status="writing">
+	<sect1 id="configuration" status="review">
 		<title>Configuration</title>
           <para>
-          <!-- Should this section be deiscussing the configuration of repositories via /etc/apt/sources.list, or configuration of APT via /etc/apt.conf, or both?
-          
-          Configuration of the Advanced Package Tool (APT) system repositories is handled by the /etc/apt/sources.list configuration file.
-          -->
+          Configuration of the Advanced Package Tool (APT) system repositories is stored in the /etc/apt/sources.list configuration file. An example of this file is referenced here, along with information on adding, or removing repository references from the file.
           </para>
+          <para>
+          Here is a simple example of a typical <filename>/etc/apt/sources.list</filename> file:
+          <programlisting>
+deb cdrom:[Ubuntu 5.10 _Breezy Badger_ - Release i386 (20051012)]/ breezy main restricted
+
+
+## Uncomment the following two lines to fetch updated software from the network
+# deb http://us.archive.ubuntu.com/ubuntu breezy main restricted
+# deb-src http://us.archive.ubuntu.com/ubuntu breezy main restricted
+
+## Uncomment the following two lines to fetch major bug fix updates produced
+## after the final release of the distribution.
+# deb http://us.archive.ubuntu.com/ubuntu breezy-updates main restricted
+# deb-src http://us.archive.ubuntu.com/ubuntu breezy-updates main restricted
+
+## Uncomment the following two lines to add software from the 'universe'
+## repository.
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team, and may not be under a free licence. Please satisfy yourself as to
+## your rights to use the software. Also, please note that software in
+## universe WILL NOT receive any review or updates from the Ubuntu security
+## team.
+# deb http://us.archive.ubuntu.com/ubuntu breezy universe
+# deb-src http://us.archive.ubuntu.com/ubuntu breezy universe
+
+## Uncomment the following two lines to add software from the 'backports'
+## repository.
+## N.B. software from this repository may not have been tested as
+## extensively as that contained in the main release, although it includes
+## newer versions of some applications which may provide useful features.
+## Also, please note that software in backports WILL NOT receive any review
+## or updates from the Ubuntu security team.
+# deb http://us.archive.ubuntu.com/ubuntu breezy-backports main restricted \
+# universe multiverse
+# deb-src http://us.archive.ubuntu.com/ubuntu breezy-backports main restricted \
+# universe multiverse
+
+# deb http://security.ubuntu.com/ubuntu breezy-security main restricted
+# deb-src http://security.ubuntu.com/ubuntu breezy-security main restricted
+
+# deb http://security.ubuntu.com/ubuntu breezy-security universe
+# deb-src http://security.ubuntu.com/ubuntu breezy-security universe
+          </programlisting>
+          </para>
+          <note>
+          <para>
+          Long lines in the example above, (Multiverse) have been truncated by adding a backslash (\) and a newline in order to better fit this space, those lines in an actual file, should be one continous line, with no such newlines, or backslashes.
+          </para>
+          </note>
+          <para>
+          You may edit the file to enable repositories, or disable them.  For example, to disable the requirement of inserting the Ubuntu CD-ROM whenever package operations occur, simple comment out the appropriate line for the CD-ROM, which appears at the top of the file:
+          </para>
+          <para>
+<screen>
+# no more prompting for CD-ROM please
+# deb cdrom:[Ubuntu 5.10 _Breezy Badger_ - Release i386 (20051012)]/ breezy main restricted
+</screen>
+          </para>
+          
     </sect1>
 	<sect1 id="extra-repositories" status="review">
 		<title>Extra Repositories</title>
@@ -255,9 +332,31 @@
           <para>
           Many other package sources are available, sometimes even offering only one package, as in the case of package sources provided by the developer of a single application.  You should always be very careful, and cautious when using non-standard package sources, however.  Research the source, and packages carefully before performing any installation, as some package sources, and their packages could render your system unstable, or non-functional in some respects.
           </para>
+          <note>
           <para>
-          While detailing the process for adding extra repositories is beyond the scope of this guide, information concerning the process is available both for users of the Synaptic package manager, and for those who prefer to edit the <filename>/etc/apt/sources.list</filename> file directly from the References for this section.
+          Long lines following section, (Multiverse) have been truncated by adding a backslash (\) and a newline in order to better fit this space, those lines in an actual file, should be one continous line, with no such newlines, or backslashes.
           </para>
+          </note>
+          <para>
+          To enable the <emphasis role="italics">Multiverse</emphasis>, and <emphasis role="italics">Universe</emphasis> repositories, edit the <filename>/etc/apt/sources.list</filename> file, and uncomment the appropriate lines:
+          </para>
+          <para>
+<screen>
+# We want Multiverse, and Universe repositories, please
+#
+deb http://us.archive.ubuntu.com/ubuntu breezy universe
+deb-src http://us.archive.ubuntu.com/ubuntu breezy universe
+deb http://us.archive.ubuntu.com/ubuntu breezy-backports main restricted \
+universe multiverse
+deb-src http://us.archive.ubuntu.com/ubuntu breezy-backports main restricted \
+universe multiverse
+</screen>
+          </para>
+          <warning>
+          <para>
+          Be advised that neither the Multiverse, nor Universe repositories contain officially supported packages!  Install software from these repositories at your own risk.
+          </para>
+          </warning>
           <sect2 id="extra-repositories-references" status="review">
                 <title>References</title>
                 <para>
