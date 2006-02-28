@@ -17,47 +17,109 @@
 <chapter id="intro-chap">
 	<title id="intro">Introduction</title>
 	
-		<para>Welcome to the &ubuntu; Packaging Guide! This guide is primarily addressed to
-			those who would like to make and maintain &ubuntu; packages. Although many of
-			the concepts in this guide could be used to make binary packages for personal
-			use, it is designed for those people wanting to distribute their packages to
-			and for others.  While it is also written with the &ubuntu; linux distribution
-			in mind, it should also be useful for any .deb based distibution.</para>
+	<para>Welcome to the &ubuntu; Packaging Guide! This guide is primarily addressed to
+		those who would like to make and maintain &ubuntu; packages. Although many of the
+		concepts in this guide could be used to make binary packages for personal use, it
+		is designed for those people wanting to distribute their packages to and for
+		others.  While it is also written with the &ubuntu; Linux distribution in mind, it
+		should also be useful for any .deb based distribution.</para>
 
-		<para>There are several reasons why you might want to learn how to package for
-			Ubuntu. First, building and fixing &ubuntu; packages is a great way to
-			contribute to the &ubuntu; community. It is also a good way to learn how
-			&ubuntu; and the applications you have installed work, or maybe, you want to
-			install a package that is not in the &ubuntu; repositories. Hopefully after you
-			have completed this guide you will have the tools and knowledge you need to do
-			all of these.</para>
-	
-		<para>This guide assumes that the reader has a reasonable knowledge of general
-			linux tools and installation of linux software in &ubuntu;.  Basically, you should
-			be able to use the terminal with ease and be familiar with apt tools (for
-			example, apt-get, aptitude or synaptic).</para>
+	<para>There are several reasons why you might want to learn how to package for Ubuntu.
+		First, building and fixing &ubuntu; packages is a great way to contribute to the
+		&ubuntu; community. It is also a good way to learn how &ubuntu; and the
+		applications you have installed work, or maybe, you want to install a package that
+		is not in the &ubuntu; repositories. Hopefully after you have completed this guide
+		you will have the tools and knowledge you need to do all of these.</para>
+
+	<sect1>
+		<title>Prerequisites</title>
+			
+		<para>This guide assumes that the reader has a reasonable knowledge of building
+			and installing software from source on Linux distributions. The guide also
+			uses the Command Line Interface (CLI) throughout so you should be comfortable
+			using a terminal. Below is a quick overview or review of of some of the
+			prerequisite knowledge.</para>
+
+		<sect2>
+			<title>make</title> 
+			<para><emphasis role="bold">Description:</emphasis></para>
 		
-		<para>Besides this guide, there are many resources available to people trying to
-			learn how to package for &ubuntu;/Debian:
-	
-			<itemizedlist>
+			<para>This a very important software building tool. GNU Make is used to render
+				a complex complilation task into a trivial one. It is important that you
+				know how to use it, because we will store most of the informations about
+				the packaging process in a Makefile.</para>
+																			  
+
+			<para><emphasis role="bold">References:</emphasis></para>
+
+			<para>GNU Make has a well written <filename>make</filename> page and extensive
+				<filename>info</filename> documentation.  Documentation is also available
+				at the <ulink url="www.gnu.org/software/make/manual/make.html">GNU
+			</ulink> website.</para>
+
+		</sect2>
+
+		<sect2>
+			<title>./configure</title>
+			<para><emphasis role="bold">Description:</emphasis></para>
 				
-				<listitem><para><ulink
-					url="http://www.debian.org/doc/manuals/maint-guide/">
-					Debian New Maintainers Guide</ulink></para> 
-				</listitem>
+			<para>This script is included in almost all Linux source, especially for
+				software written compiled languages such as C, and C++. It is used to
+				generate a Makefile (file used by <application>make</application>) that is
+				properly configured for your system. Standard Debian packaging tools us it
+				and so it is important that you know what the
+				<filename>configure</filename> script does. You do not need to know how to
+				create a <filename>configure</filename> script yourself as the software
+				author will do that, however, you may have to adjust it at some point to
+				get the &ubuntu; package to build correctly.</para>
 
-				<listitem><para><ulink
-					url="http://www.debian.org/doc/debian-policy/">
-					Debian Policy</ulink></para> 
-				</listitem>
+			<para><emphasis role="bold">Quick Howto:</emphasis></para>
 
-				<listitem><para><ulink
-					url="http://www.debian.org/doc/manuals/developers-reference/">
-					Debian Developer's Reference</ulink></para> 
-				</listitem>
-	
-			</itemizedlist>
-		</para>
-	
+			<para>First, get the <application>GNU Hello</application> source. From a
+					<application>Termianl</application>:</para>
+
+			<screen>
+wget http://ftp.gnu.org/gnu/hello/hello-2.1.1.tar.gz   # get the package
+tar -xzf hello-2.1.1.tar.gz                            # unpack it
+cd hello-2.1.1/
+			</screen>
+
+			<para>Now, with <filename>./configure</filename> you can run the
+				<filename>configure</filename> script to generate a Makefile that is
+				customized to your system.</para>
+
+			<para>You can also give <filename>./configure</filename> command line options.
+				For instance, by default <application>GNU Hello</application> will install
+				to the <filename>/usr/local/</filename> directory. You could instead
+				install it somewhere else (a personal binary directory,
+				<filename>~/programs/</filename>)</para>
+
+			<screen>./configure --prefix="$HOME/programs/"   # specify install dir.</screen>
+
+			<para>You can see all the <filename>./configure</filename> options by giving
+				it the <emphasis>--help</emphasis> flag.</para>
+
+			<para><emphasis role="bold">References:</emphasis></para>
+
+			<para>Information on <filename>./configure</filename> can be found in the
+				<application>make</application> documentation.</para>
+							
+		</sect2>
+
+		<sect2>
+			<title>Apt</title>
+			<para>apt info ...</para>
+		</sect2>
+
+		<sect2>
+			<title>diff</title>
+			<para>diff info ...</para>
+		</sect2>
+
+		<sect2>
+			<title>patch</title>
+			<para>patch info ...</para>
+		</sect2>
+
+	</sect1>
 </chapter>

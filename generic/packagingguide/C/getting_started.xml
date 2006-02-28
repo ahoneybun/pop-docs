@@ -16,233 +16,8 @@
 ]>
 <chapter id="gettingstarted-chap">
 	<title>Getting Started</title>
-	<sect1 id="basic-skills">
-		<title>Basic Packaging Skills</title>
-		
-		<para>Making Debian packages is not all that difficult, however you need to
-			know how the basics of compiling programs from source. Fortunately, this is
-			quite easy to learn. All you need is spend a little bit of your time learning
-			how to use a small set of tools. This guide will explain the basic 
-			usage.</para>
-		
-		<sect2 id="make">
-			<title>make</title>
-	
-				<para>This tool can be quite simple and straightforward to use, but it can
-					also become very complex. <application>make</application> is generaly
-					used to make program complilation easier by automating its process. It
-					should be familiar to people who have used the C language. For others,
-					here a quick.</para>
-				
-				<para>In C (or in any other programming language), all of the code is
-					rarely put in a single source file. Instead, the program program is
-					split into smaller parts.  This make the program easier to maintain
-					and saves you from compiling the whole program when you make small
-					changes. However, there is a small drawback using this technic, its
-					make programs a little more complecated to compile. Let's illustrate
-					what I mean with an example.</para>
 
-				<para>Copy the examples below (main.c, a.c and b.c) into files on your hard drive.</para>
-				<para>The main program, save it as main.c</para>
-<screen>
-/* main.c */
-
-#include &lt;stdio.h&gt;
-
-/* define some external functions */
-extern int func_a();
-extern int func_b();
-
-int
-main(int argc, char *argv[])
-{
-    int a = func_a();
-    int b = func_b();
-
-    printf("hello world,\n");
-    printf("a - %d; b - %d;\n", a, b);
-
-    return 0;
-}
-</screen>
-
-				<para>A function definition in a external file, save it as a.c</para>
-
-<screen>
-/* a.c */
-
-int
-func_a()
-{
-    return 5;
-}
-</screen>
-
-				<para>Another function, save it as b.c</para>
-
-<screen>
-/* b.c */
-int
-func_b()
-{
-    return 10 * 10;
-}
-</screen>
-				<para>Now you have the source of a full working program, try
-					to compile it without <application>make</application>.</para>
-				<note>
-					<para>To compile the program you need to have the <application>build-essential</application>
-						package installed. Instructions how to install it are located at
-						the Essential Packaging Tools section.</para>
-				</note>
-				<para>Now from the terminal, type:</para>
-				<screen>
-$ gcc -c main.c a.c b.c
-$ gcc -o hello main.o a.o b.o</screen>
-
-				<para>The first command invoke the GNU C Complier (GCC). The compiler
-					transforms the source code into machine code. The second
-					<application>make</application> command makes the compiler call
-					linker, which links the code together into an a single file called an
-					executable. An in-depth description of the compiling and linking
-					process in outside to scope of this guide.</para>
-
-				<para>This example is quite simple, but imagine a big program split into
-					severals hundred files and directories. This task can become extremely
-					cumbersome. That's why <application>make</application> was created, to
-					automate the process of program compilation. Let's make a Makefile for
-					this example.</para>
-
-				<para>In your favorite editor copy the Makefile below and save it a file
-					named ``Makefile''. ``Makefile'' is the standard name for all
-					<application>make</application> scripts. If you save it to another
-					name, you will need to launch <application>make</application> with the
-					-f option. (ie. <filename>make -f filename</filename> ) We will use
-					that option later for building package.</para>
-				
-<screen>
-# Makefile for hello
-
-all: hello
-
-hello: main.o a.o b.o
-        gcc -o hello main.o a.o b.o
-
-main.o: main.c
-        gcc -c main.c
-
-a.o: a.c
-        gcc -c a.c
-
-a.o: b.c
-        gcc -c b.c
-</screen>
-				<para>Now that you have a makefile, you can build your program by
-					entering in the terminal:</para>
-				<screen>$ make</screen>
-				<para>It's obviously more simple this way. Another avantage of using
-					is, that <application>gcc</application> only compiles the
-					needed parts. Let's make a little modification to the program.</para>
-				<para>Change <filename>a.c</filename> to look like:</para>
-<screen>
-/* a.c */
-
-int
-func_a()
-{
-    return 20;
-}
-</screen>	
-				<para>And now, run <application>make</application>again. As you see,
-					<application>make</application>didn't recompile the whole program.
-					It just recompiled the changed parts, and relinked the program
-					together.</para>
-				
-				<para>However, a difficulty that one can often run into with
-					<application>make</application> is that it does not detect the
-					configuration of your system. The system configuraton of a computer
-					can differ a lot between the various Linux distributions and from
-					computer to computer. So, that one Makefile could work wit specific
-					distribution, but not on another. So, that's why programs are
-					generally distributed with another script called
-					<filename>configure</filename>, which is discussed in the next
-					section.</para>
-	
-		</sect2>
-		<sect2 id="autoconf">
-			<title>Autoconf - the very basics</title>
-			
-			<para>Autoconf's scripts are not hard to use, but building one can be
-				significantly more difficult. You need to know how to use them because
-				many packages are shipped with a <filename>configure</filename> script.
-				First, get the <application>GNU hello</application> package. From the
-				terminal, run:</para>
-			
-<screen>
-$ wget http://ftp.gnu.org/gnu/hello/hello-2.1.1.tar.gz   # get the package
-$ tar -xzf hello-2.1.1.tar.gz                            # unpack it
-$ cd hello-2.1.1/
-</screen>
-
-			<para>Now, you can generate a Makefile with by entering this from the
-				<application>Terminal</application>:</para>
-
-			<screen>$ ./configure</screen>
-
-			<para>This will generate a Makefile for your system. Sometimes you will see a
-				<filename>./configure</filename> script, but if you see
-				<filename>configure.ac</filename> or <filename>configure.in</filename>,
-				you can generate it with <application>autoconf</application>.  Just
-				calling <application>autoconf</application> without arguments in the
-				directory where <filename>configure.ac</filename> is located will also
-				work.</para>
-			
-				<screen>$ autoconf</screen>
-	
-				<para>An significant advantage to using a <filename>configure</filename>
-					script, is that you can easily modify the behaviour of the generated
-					Makefile. You can give the <filename>configure</filename> script
-					options just like many other programs.  Let's say that you want
-					install <application>GNU Hello</application> in
-					<filename>/usr/local/hello</filename> directory. You could invoke
-					<filename>configure</filename> with the <filename>--prefix</filename>
-					option. Here a simple example for <application>GNU
-						Hello</application>:</para>
-			
-<screen>
-$ ./configure --prefix=/usr/local/hello   # generate the Makefile
-$ make                             # build the program
-$ sudo make install                # install it in /usr/local/hello
-$ cd /usr/local/hello				  # check what has been installed
-$ ls -R
-$ export PATH="$PATH:/usr/local/hello/bin"  # add it in you path
-$ hello									  # enjoy, your newly installed package
-$ sudo rm -rf  /usr/local/hello	  # uninstall it
-</screen>
-
-				<para>This is how we install a package without a package manager
-				(ie. Debian APT, or Redhat RPM). Installing packages this way is
-				obviously complicated. Removing them is even more complicated.</para>				
-		</sect2>
-		<sect2 id="apt">
-			<title>Advanced Package Tool (APT)</title>
-			
-			<para>APT info</para>
-		</sect2>
-		<sect2 id="diff">
-			<title>diff</title>
-			
-			<para>diff info...</para>
-		</sect2>
-		<sect2 id="patch">
-			<title>patch</title>
-			
-			<para>patch info...</para>
-		</sect2>
-	</sect1>
-
-	<sect1 id="tools">
-		<title>Essential Packaging Tools</title>
+	<para><emphasis role="bold">Essential Packaging Tools</emphasis></para>
 		
 		<para>There are many tools written specifically for packaging on Debian based
 			systems. Many of them are not <emphasis>essential</emphasis> to creating
@@ -307,18 +82,16 @@ $ sudo rm -rf  /usr/local/hello	  # uninstall it
 					to use to check that a package has correct
 					build-dependencies.</para></listitem>
 		</itemizedlist>
-	</sect1>
 
-	<sect1 id="binary-source"> <title>Binary and Source Packages</title> <para>Most users
-			of a Debian-based distribution such as &ubuntu; will never have to deal with
-			the actual source code that is used to create all of the applications on their
-			computer. Instead, the source code is compiled into
+		<para><emphasis role="bold">Binary and Source Packages</emphasis></para>
+		
+		<para>Most users of a Debian-based distribution such as &ubuntu; will never have
+			to deal with the actual source code that is used to create all of the
+			applications on their computer. Instead, the source code is compiled into
 			<emphasis>binary</emphasis> packages from the <emphasis>source</emphasis>
 			package that contains both the source code itself and the rules for making the
 			binary package. So packagers upload the source packages with their changes to
 			the build systems that then compile the binary packages for each chip
 			architecture and distribute the binary .deb files to the apt mirrors.</para>
-
-	</sect1>
 
 </chapter>

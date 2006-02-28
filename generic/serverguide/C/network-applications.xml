@@ -41,16 +41,69 @@
               Wireless para ...
             </para>
         </sect2>
-        <sect2 id="managing-dns-entries" status="help">
+        <sect2 id="managing-dns-entries" status="review">
           <title>Managing DNS Entries</title>
-            <para>
-              Managing DNS Entries para ...
+            <para>This section explains howto configure the nameserver
+            to use when resolving IP address to hostnames and vice
+            versa. It does not explain to configure the system as a name
+            server.
             </para>
+            <para>
+            To manage DNS entries, you can add, edit or remove DNS names
+            from <filename>/etc/resolv.conf</filename> file. A <ulink
+            url="sample/resolv.conf">sample file</ulink> is given below:
+            </para>
+<programlisting>
+search com
+nameserver 204.11.126.131
+nameserver 64.125.134.133
+nameserver 64.125.134.132
+nameserver 208.185.179.218
+</programlisting>
+            
+            <para>
+             The <application>search</application> key specifies the string
+             which will be appended to an incomplete hostname. Here, we
+             have mentioned it as <application>com</application>. So, when we
+             run: <command>ping ubuntu</command> it would be interpreted
+             as <command>ping ubuntu.com</command>.
+            </para> 
+
+            <para>
+            The <application>nameserver</application> key specifies the
+            nameserver IP address. It will be used to resolve the given
+            IP address or hostname. This file can have multiple nameserver
+            entries. The nameservers will be used by the network query
+            in the same order.
+            </para>
+
+            <warning>
+            <para>
+            If the DNS server names are retrieved dynamically from DHCP
+            or PPPOE (retrieved from your ISP), do not add nameserver
+            entries in this file. It will be updated automatically.
+           </para>
+            </warning>
+
         </sect2>
-        <sect2 id="managing-hosts" status="help">
+        <sect2 id="managing-hosts" status="review">
           <title>Managing Hosts</title>
             <para>
-              Managing Hosts para ...
+            To manage hosts, you can add, edit or remove hosts from
+            <filename>/etc/hosts</filename> file. The file contains IP
+            addresses and their corresponding hostnames.  When your
+            system tries to resolve a hostname to an IP address or
+            determine the hostname for an IP address, it refers to the
+            <filename>/etc/hosts</filename> file before using the name
+            servers.  If the IP address is listed in the
+            <filename>/etc/hosts</filename> file, the name servers are
+            not used.
+            </para>
+
+            <para>
+            If your network contains computers whose IP
+            addresses are not listed in DNS, it is recommended that you
+            add them to the <filename>/etc/hosts</filename> file.
             </para>
         </sect2>
     </sect1>
