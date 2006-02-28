@@ -172,7 +172,7 @@ Description: The classic greeting, and a good example
 
 				<listitem><para><emphasis role="bold">Maintainer:</emphasis> The
 						package maintainer with email address. In this case
-						<emphasis>Santiago Vila &le;sanvila@debian.org&gt;</emphasis>
+						<emphasis>Santiago Vila &lt;sanvila@debian.org&gt;</emphasis>
 					</para></listitem>
 
 				<listitem><para><emphasis role="bold">Standards-Version:</emphasis> The
@@ -286,9 +286,10 @@ It was downloaded from: {URL of webpage}
 
 Upstream Author(s): {Name and email address of authors}
 
-Copyright (C) {Year(s)} by {Authors}
-
 Copyright:
+	Copyright (C) {Year(s)} by {Authors} {Email}
+
+License:
 
 </screen></para> 
 
@@ -524,7 +525,7 @@ lintian *.dsc</screen></para>
 
 		<para><screen>
 cd hello-debhelper-*
-debuild -rfakeroot -kSOMEKEY
+debuild -kSOMEKEY
 			</screen>
 		</para>
 
@@ -606,11 +607,108 @@ binary: binary-indep binary-arch
 		<title>Common Mistakes and Error Checking</title>
 		<para>This section should discuss common packaging mistakes and some tools for
 			error checking before uploading..</para>
+			
+		<orderedlist>
+	  <listitem>
+	  <para>See those .ex files in debian/? Those are just example templates. A fully polished package will not have them. So modify them and save them or just delete them if not needed</para>
+	  </listitem>
+	  </orderedlist>
 	</sect1>
 
 	<sect1 id="packaging-pbuilder">
 		<title>Building With Pbuilder</title>
-		<para>This section should be a pbuilder how-to.</para>
+		<para>Pbuilder is a package builder the builds the package from within a chroot
+			environment. You can build binary package without using
+			<application>pbuilder</application> but you must have all the build
+			dependencies installed on your system first. Pbuilder allows the packager to
+			check the build dependencies because the package is built within a minimal
+			&ubuntu; installation and the build dependencies are downloaded according to
+			the <filename>debian/control</filename> file.</para>
+
+		<sect2>
+			<title>Installing and Configuring a Pbuilder Environment</title>
+			<para>The first, and perhaps most obvious, thing to do is install
+				<application>pbuilder</application>. Once that is accomplished you will
+				need to set up the <filename>/etc/pbuilderrc</filename> configuration
+				file. </para>
+			<screen>
+# URL of package archive.				
+MIRRORSITE=http://archive.ubuntu.com/ubuntu # URL of package archive.
+				
+# Release you want to use.
+DISTRIBUTION=dapper 
+
+# Directory where pbuilder will look for apt configuration files.
+APTCONFDIR="/etc/pbuilder/apt.config/"
+
+# Other repositories you want pbuilder to use. In this case the Universe repos.
+OTHERMIRROR="deb http://archive.ubuntu.com/ubuntu dapper universe multiverse"
+			</screen>
+
+			<para>To avoid having <application>pbuilder</application> complain about
+				unauthenticated packages you have apt allow unauthenticated packages by:</para>
+			<screen>sudo mkdir /etc/pbuilder/apt.config/
+sudo cp -ar /etc/apt/* /etc/pbuilder/apt.config/
+sudo cat "APT::Get::AllowUnauthenticated 1;" >> \
+/etc/pbuilder/apt.config/apt.conf.d/allow-unauthenticated
+			</screen>
+
+			<caution><para>You will need to remove the
+					<filename>99update-notifier</filename> file from the
+					<filename>/etc/pbuilder/apt.config/apt.conf.d/</filename> directory as
+					it can potentially break future pbuilder updates because
+					<application>update-notifies</application> is not usually
+					installed.</para></caution>
+
+			<para>Once you have adjusted the <application>pbuilder</application>
+				configuration files you can create the pbuilder chroot by:</para>
+
+			<screen>sudo pbuilder create --distribution dapper</screen>
+			
+			<note><para>Creating a pbuilder environment will take some time as
+					<application>debootstrap</application> is essentially making a minimal
+					&ubuntu; installation.</para></note>
+
+		</sect2>	
+		<sect2>
+			<title>Using the Pbuilder</title>
+			<para>Now that you have a running pbuilder you can build binary packages from
+				the source package by:</para>
+
+			<screen>sudo pbuilder build *.dsc</screen>
+
+			<para>This will build all the source packages in the current directory. The
+				resulting .debs and source packages can be found in
+				<filename>/var/cache/pbuilder/result/</filename> (default) or whatever you set the
+				<emphasis>BUILDRESULT</emphasis> variable to be in the
+				<filename>/etc/pbuilderrc</filename> configuration file.</para>
+
+		</sect2>
+
+		<sect2>
+			<title>Updating the Pbuilder</title>
+			
+			<para>You should always have a current pbuilder whenever you are testing your
+				source packages, especially when you are building for a development
+				release that is rapidly changing, to ensure that the dependencies are
+				properly found. To update your pbuilder use:</para>
+
+			<screen>sudo pbuilder update</screen>
+
+			<para>Or if you change something in the <filename>/etc/pbuilderrc</filename>
+				configuration file:</para>
+
+			<screen>sudo pbuilder update --override-config</screen>
+
+			<para>You can also use this update technique to change releases. Once the
+				development release has been released you can start building for the next
+				development releases by changing all of the occurrences of the previous
+				release name to the new one in <filename>/etc/pbuilderrc</filename> and
+				<filename>/etc/pbuilder/apt.config/sources.list</filename> and then
+				updating the pbuilder.</para>
+			
+		</sect2>
+			
 	</sect1>
 
 </chapter>

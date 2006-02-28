@@ -103,9 +103,40 @@ fi
 						<para>The change will take effect the next time you log in to GNOME. If you want to test it right away, turn off Num Lock and restart GNOME (see <xref linkend="restartgnomewithoutreboot"/>).
 						</para>
 		</sect2>		
-		<sect2 id="menu-editing" status="help">
+		<sect2 id="menu-editing" status="review">
+		<!-- This is based on Dapper Flight4, and might need finalizing later - Madpilot -->
 		<title>Menu Editing</title>
-			<para>[...]</para>
+			<para>Ubuntu comes with the <application>Alacarte Menu Editor</application>, so you can customise your menus and add entries for applications that don't automatically appear after they are installed.
+			</para>
+			<para>To add a new menu entry:
+			</para>
+			<procedure>
+				<step>
+					<para>Open <application>Alacarte</application> with 
+								<menuchoice>
+									<guimenu>Applications</guimenu>
+									<guisubmenu>Accessories</guisubmenu>
+									<guimenuitem>Alacarte Menu Editor</guimenuitem>
+								</menuchoice>, or by right-clicking on any menu and choosing <guimenuitem>Edit Menus</guimenuitem>.
+ 					</para>
+				</step>
+				<step>
+					<para>In Alacarte's left-hand pane, choose the submenu the new entry should appear in.
+					</para>
+				</step>
+				<step>
+					<para>Choose 
+						<menuchoice>
+							<guimenu>File</guimenu>
+							<guimenuitem>New Entry</guimenuitem>
+						</menuchoice>. In the <guilabel>New Entry</guilabel> window, choose a <guilabel>Name</guilabel>, <guilabel>Comment</guilabel>, <guilabel>Command</guilabel> and <guilabel>Icon</guilabel>. The <guilabel>Command</guilabel> will usually be the package name, <guilabel>Name</guilabel> is what will appear on the menu, and the <guilabel>Comment</guilabel> will appear in the tooltip that appears near the menu entry. <guilabel>Icons</guilabel> are added to the <filename>/usr/share/pixmaps</filename> directory by default, or can be chosen from anywhere in your files.
+					</para>
+				</step>
+			</procedure>
+			<para>To change the order of menu entries, use the up and down arrows on the right-hand side of the <application>Alacarte</application> window.
+			</para>
+			<para>To stop a menu entry from being displayed, use the checkboxes beside each entry. This does not erase the menu entry, so you can restore it later in the same way.
+			</para>
 		</sect2>
 		<sect2 status="writing">
 			<title>Spatial mode in <application>Nautilus</application></title>
@@ -664,27 +695,11 @@ sudo chmod 666 /dev/dsp
                             <para>
                                 <screen>
 sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup 
-sudo nvidia-glx-config enable 
-sudo gedit /usr/share/applications/NVIDIA-Settings.desktop</screen>
+sudo nvidia-glx-config enable </screen>
                             </para>
                         </step>
                         <step>
-                            <para>Insert the following lines into the new file
-                                <programlisting>
-[Desktop Entry]
-Name=NVIDIA Settings
-Comment=NVIDIA Settings
-Exec=nvidia-settings
-Icon=
-Terminal=false
-Type=Application
-Categories=Application;System;</programlisting>
-                            </para>
-                        </step>
-                        <step>
-                            <para>Save the edited file (<ulink
-                                    url="sample/NVIDIA-Settings.desktop_installnvidiadriver"
-                                />)</para>
+                            <para>You may adjust the settings of the new drivers by running the application <application>nvidia-settings</application> (see <xref linkend="run-application"/>). If you wish, add a menu entry for this program (see <xref linkend="menu-editing"/>).</para>
                         </step>
                         <step>
                             <para>Read <xref linkend="restartgnomewithoutreboot"/>
@@ -794,6 +809,24 @@ gedit Modem/ModemData.txt</screen>
 			<para>All PPPOE and router-style ADSL modems are supported by Ubuntu (that use ethernet for the connections), and some USB ADSL modems are supported too. For router-style ADSL modems, just connect it up, configure the modem as per your ISPs instructions and configure networking in Ubuntu. For information on PPPOE modems see <ulink url="https://wiki.ubuntu.com/ADSLPPPoE">ADSLPPoE</ulink> on the Ubuntu wiki.</para>
 		</sect3>
 	  </sect2>
+	  <sect2 id="printers" status="writing">
+	  	<title>Printers</title>
+	  		<para>Some printers will be automatically detected by Ubuntu; for those that are not, choose 
+	  			<menuchoice>
+					<guimenu>System</guimenu>
+					<guisubmenu>Administration</guisubmenu>
+					<guimenuitem>Printing</guimenuitem>
+				</menuchoice>
+			then choose 
+				<menuchoice>
+					<guimenu>Printer</guimenu>
+					<guimenuitem>Add Printer</guimenuitem>
+				</menuchoice>
+			and run the Printer Install Wizard.
+	  		</para>
+	  		<para>There are some printers that need further setup. Search the databases at <ulink url="http://www.linuxprinting.org/">LinuxPrinting.org</ulink> or check the <ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsPrinters">Ubuntu Wiki's Printer page</ulink> for possible information on your printer.
+	  		</para>
+	  </sect2>
 	  <sect2 id="Handhelds" status="writing">
 		<title>Handhelds</title>
 		<sect3 status="writing">
@@ -866,6 +899,7 @@ BUS="usb", SYSFS{product}="Palm Handheld*", KERNEL="ttyUSB*", NAME{ignore_remove
                         <step>
                             <para>To list mounted devices, run the following command in a terminal:</para>
                                 <screen>mount</screen>
+			    <para>The listing shows the device (such as a hard disk partition), the mount point (where you access the files), the filesystem type and the mount options.</para>
                         </step>
                         <step>
                             <para>To list PCI devices:</para>
