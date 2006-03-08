@@ -28,8 +28,8 @@
 				generating .pot template files for translators. If you use <application>cdbs</application>
 				in Dapper your package should now do this automatically, build and check for a .pot
 				file in po/ directory.</para>
-			<para>You will need the kdepot patch (or similar, it may not apply exactly depending
-				on the age of the admin directory).</para>
+			<para>You will need the <ulink url="../files/kubuntu_01_kdepot.diff">kdepot patch</ulink> (or similar, it may not
+				apply exactly depending on the age of the admin directory).</para>
 			<para>If your package uses <application>debhelper</application>, or <application>cdbs</application>
 				and includes it's own kde.mk file you need to add the rules yourself.</para>
 			<para>For <application>cdbs</application> add these lines to your debian/rules:</para>
@@ -180,6 +180,8 @@ Doing nothing for myapp_source.changes</screen>
 					<listitem><para>Whether running debuild -S -sa on this package generates files in the diff
 							outside of debian/.</para></listitem>
 				</itemizedlist>
+				<para>REVU-Tools can also be used stand-alone, install the
+					<application>revu-tools</application> package.</para>
 			</sect3>
 		</sect2>
 	</sect1>
@@ -187,9 +189,221 @@ Doing nothing for myapp_source.changes</screen>
 	<sect1 id="ubuntu-sync">
 		<title>Merges and Syncs</title>
 		
-		<para>Describe the Ubuntu release cycle. How to merge or sync packages from Debian
-			and how to tell the difference.</para>
+		<para>&ubuntu; is based on the Debian Linux distribution and uses the same package
+			managment system (APT). It the beginning of each &ubuntu; development cycle the
+			packages in &ubuntu; are updated to those in Debian unstable. However,
+			because &ubuntu; is not the same as Debian, some of the packages need to
+			be modified to work in &ubuntu;. There might also be bug fixes that &ubuntu;
+			developerss have introduced into the packages. You can determine whether this has
+			taken place by noting the package version. If the package version include
+			ubuntu in it (an example would be gimp-2.2.9-3ubuntu2) then the &ubuntu;
+			developers have made some change and it is no longer the same as the Debian package.
+			There are more than 1000 such packages in the Universe repository.</para>
+		
+		<para>At the start of the development cycle a decision has to be made with regard
+			to these ubuntu versioned packages. Of course if the Debian version hasn't
+			changed since the last &ubuntu; release then nothing needs to be changed.
+			However, if there is a newer version of the package in Debian then one
+			of two things should happen. If all of the reasons that the ubuntu version
+			existed (bug fixes, dependencies, etc.) are fixed in the new Debian package
+			then we can just take the Debian package directly. This is called a
+			<emphasis>sync</emphasis>. However, if the new Debian version has the same
+			issues that caused the ubuntu version to be made, then those changes need
+			to be applied to the new Debian version. This is called <emphasis>merging</emphasis>.
+		</para>
+		<sect2 id="merge-tutorial" status="writing">
+			<title>Merging Tutorial</title>
+			<para>The merging process involves looking at the changes to both the Debian
+				Ubuntu source packages and determining. Let's now look at an example.
+				Our example will be the classic CD burning program <application>xcdroast</application>.
+			</para>
+			<para>To start, let's make a folder to hold our project and move there:</para>
+			<screen>
+mkdir ~/xcdroast
+cd ~/xcdroast</screen>
+			<para>Now let's download all of the source packages that are involved into
+				this directory:</para>
+			<itemizedlist>
+				<listitem><para>The <application>xcdroast</application> source tarball that is used
+						by all versions:</para>
+					<itemizedlist>
+						<listitem>
+<para><ulink url="http://ftp.debian.org/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15.orig.tar.gz">xcdroast_0.98+0alpha15.orig.tar.gz</ulink></para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>The &ubuntu; Breezy source package files:</para>
+					<itemizedlist>
+						<listitem>
+<para><ulink url="http://archive.ubuntu.com/ubuntu/pool/universe/x/xcdroast/xcdroast_0.98+0alpha15-1.1ubuntu1.dsc">
+		xcdroast_0.98+0alpha15-1.1ubuntu1.dsc</ulink></para>
+						</listitem>
+						<listitem><para>
+<ulink url="http://archive.ubuntu.com/ubuntu/pool/universe/x/xcdroast/xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz">
+	xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz</ulink></para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>The Debian source package files that the Breezy packages are derived from:</para>
+						<itemizedlist>
+							<listitem>
+<para><ulink url="http://ftp.debian.org/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-1.1.diff.gz">
+		xcdroast_0.98+0alpha15-1.1.diff.gz</ulink></para>
+							</listitem>
+							<listitem>
+<para><ulink url="http://ftp.debian.org/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-1.1.dsc">
+		xcdroast_0.98+0alpha15-1.1.dsc</ulink></para>
+							</listitem>
+						</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>The new Debian source package files that the Dapper packages will be
+						derived from:</para>
+					<itemizedlist>
+						<listitem>
+<para><ulink url="http://ftp.debian.org/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-3.dsc">
+		xcdroast_0.98+0alpha15-3.dsc</ulink></para>
+						</listitem>
+						<listitem>
+<para><ulink url="http://ftp.debian.org/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-3.diff.gz">
+		xcdroast_0.98+0alpha15-3.diff.gz</ulink></para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+			</itemizedlist>
+			<note><para>>This can also be done by searching for the Debian packages
+				at <ulink url="packages.debian.org">packages.debian.org</ulink> and the Ubuntu
+				packages at <ulink
+					url="packages.ubuntu.com">packages.ubuntu.com</ulink>.</para></note>
+		<tip><para>A very useful tool to have when doing merges (or any Ubuntu packaging) is
+				<application>devscripts</application>. If you do not have that already
+				installed install it before procceding.</para></tip>
+			
+			<para>By looking at the &ubuntu; changelog you should be able to know what to expect
+				the differences between the Ubuntu and Debian version that it was derived
+				from are going to be. For xcdroast the &ubuntu; changelog can be found at
+	<ulink url="http://changelogs.ubuntu.com/changelogs/pool/universe/x/xcdroast/xcdroast_0.98+0alpha15-1.1ubuntu1/changelog">
+					changelogs.ubuntu.com</ulink>. It says that a .desktop file was fixed and properly
+				installed to fix a bug reported in
+				<ulink url="https://launchpad.net/distros/ubuntu/+source/xcdroast/+bug/2698">Malone</ulink>.
+			</para>
+			
+			<para>Now let's see what the actual changes in the source packages are:</para>
+			<screen>
+debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-1.1ubuntu1.dsc > ubuntu.debdiff
+less ubuntu.debdiff</screen>
+			
+			<para>The lines that start with - have been removed from the Debian version and those that start
+				with + have been added to the &ubuntu; version.</para>
+			<para>This is what we see:</para>
+			<itemizedlist>
+				<listitem>
+					<para>in debian/rules install is being used instead of cp to install the xcdroast icon.
+						Also, there is a new line installing the .desktop file.</para>
+				</listitem>
+				<listitem>
+					<para>in debian/changelog the changes made are added to the changelog entry.</para>
+				</listitem>
+				<listitem>
+					<para>in debian/dirs usr/share/applications has been added for install lines above to
+						work properly.</para>
+				</listitem>
+				<listitem>
+					<para>xcdroast.desktop is added</para>
+				</listitem>
+			</itemizedlist>
+			
+			<para>Now we know why the Debian source was changed. Now we need to see what has changed in
+				the Debian versions.</para>
+			<screen>
+debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-3.dsc > debian.debdiff
+less debian.debdiff</screen>
+			<para>There is a lot more in this debdiff than in the last one. One way we can get a
+				better idea of what has changed is to see what files were changed in the debdiff:</para>
+			
+			<screen>grep diff debian.debdiff</screen>
+			
+			<para>This indicates that debian/postinst, debian/rules, debian/changelog, debian/doc-base.manual,
+				debian/control, and debian/menu were changed in the new Debian version.</para>
+			<para>Thus we can see that we need to check debian/rules to see if the &ubuntu; changes were made.
+				We can also see that debian/dirs was not changed from the old Debian version. Let us
+				now look at the files. We can unpack the source package by using
+				<application>dpkg-source</application>:</para>
+			
+			<screen>dpkg-source -x xcdroast_0.98+0alpha15-3.dsc</screen>
+			
+			<para>This will unzip the xcdroast_0.98+0alpha15.orig.tar.gz file to create a xcdroast-0.98+0alpha15
+				directory and apply the changes found in xcdroast_0.98+0alpha15-3.diff.gz.</para>
+			<para>Lets now go to the debian directory:</para>
+			
+			<screen>cd xcdroast-0.98+0alpha15/debian/</screen>
+			
+			<para>One can see in rules that changes made by &ubuntu; were not applied to the new Debian version.
+				This means that:</para>
+			
+			<screen>cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps</screen>
+			
+			<para>...should be changed to:</para>
+			
+			<screen>
+#cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps
 
+#install desktop and icon
+install -D -m 644 $(CURDIR)/debian/xcdroast.desktop $(CURDIR)/debian/xcdroast/usr/share/applications/xcdroast.desktop
+install -D -m 644 $(CURDIR)/debian/xcdroast.xpm $(CURDIR)/debian/xcdroast/usr/share/pixmaps/xcdroast.xpm</screen>
+
+			<para>Now in dirs the following line needs to be added for the .desktop file to be installed:</para>
+			<screen>usr/share/applications</screen>
+			
+			<para>Now we need the actual .desktop file (<emphasis>xcdroast.desktop</emphasis>)
+				from the ubuntu.debdiff (or the ubuntu source package) we see that it is:</para>
+			<screen>
+[Desktop Entry]
+Encoding=UTF-8
+Name=X-CD-Roast
+Comment=Create a CD
+Exec=xcdroast
+Icon=xcdroast.xpm
+Type=Application
+Categories=Application;AudioVideo;</screen>
+			
+			<para>The last change that needs to be made is in changelog. Not only do we need to
+				add what we have just done (resync to Debian) but we should also add in the
+				previous &ubuntu; changelog entries. To do this run dch -i -D dapper and put
+				something to the effect of:</para>
+			<screen>
+xcdroast (0.98+0alpha15-3<emphasis>ubuntu1</emphasis>) dapper; urgency=low
+
+  * Resynchronise with Debian.</screen>
+
+			<para>Make sure to change the version number to the correct &ubuntu; version.
+				Also add:</para>
+			<screen>
+xcdroast (0.98+0alpha15-1.1ubuntu1) breezy; urgency=low
+
+  * Fix and install existing .desktop file. (Closes Malone #2698)
+				
+  -- Barry deFreese &lt;bddebian@comcast.net&gt;  Sat,  1 Oct 2005 19:39:04 -0400</screen>
+			<para>between the 0.98+0alpha15-1.1 and 0.98+0alpha15-2 log entries.</para>
+			
+			<para>Now you can build and test the new source pacakges. There are different ways to do this but one example is:</para>
+			<screen>
+cd ..
+debuild -S
+cd ..
+sudo pbuilder build xcdroast_0.98+0alpha15-3ubuntu1.dsc</screen>
+			
+			<para>This will build the source package and sign it and then build the .deb in a pbuilder
+				environment to make sure it builds correctly. Make sure to always test your packages
+				before submitting patches, etc. Now the last step is to make a debdiff that can be
+				submitted to a bug report or the MOTUs on the #ubuntu-motu irc channel. To do this
+				we want the difference between the Debian sid source package and the new &ubuntu; version:
+			</para>
+			<screen>debdiff xcdroast_0.98+0alpha15-3.dsc xcdroast_0.98+0alpha15-3ubuntu1.dsc >
+				xcdroast_0.98+0alpha15-3ubuntu1.debdiff</screen>
+		</sect2>
 	</sect1>
 
 </chapter>

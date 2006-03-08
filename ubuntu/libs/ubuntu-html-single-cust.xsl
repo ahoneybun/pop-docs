@@ -4,7 +4,7 @@
     <!-- ======================= -->
     <!-- Imports -->
 	<xsl:import href="/usr/share/xml/docbook/stylesheet/nwalsh/xhtml/docbook.xsl"/>
-	
+	<xsl:import href="ubuntu-banner.xsl"/>	
 
     <!-- Params -->
     <xsl:param name="generate.legalnotice.link" select="1"/>
@@ -13,10 +13,9 @@
     <xsl:param name="toc.max.depth" select="2"/>
     <xsl:param name="chunker.output.indent" select="'yes'"/>
     <xsl:param name="body.font.master" select="10"/>
-    <xsl:param name="html.stylesheet" select="'../ubuntu-book.css'"/>
+    <xsl:param name="html.stylesheet" select="'../../common/ubuntu-book.css'"/>
     <xsl:param name="shade.verbatim" select="0"/>
     <xsl:param name="draft.mode" select="'yes'"/>
-    <!--<xsl:param name="draft.watermark.image" select="'https://wiki.ubuntu.com/htdocs/ubuntu/img/u-draft.png'"/>-->
 
 	<!--Navigation Graphics-->
 	<xsl:param name="navig.graphics" select="1"/>
