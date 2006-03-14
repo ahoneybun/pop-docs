@@ -45,6 +45,8 @@
     <xsl:template match="guilabel">
       <xsl:call-template name="inline.italicseq"/>
     </xsl:template>
+
+	<xsl:param name="use.id.as.filename" select="1"/>
     
 	<!-- this strippath template is copied from the 1.68.1 version of common.xls  -->
 	<xsl:template name="strippath">
