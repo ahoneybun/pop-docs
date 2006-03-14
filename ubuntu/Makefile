@@ -43,9 +43,10 @@ MKIMGLST=../libs/imagelist.xsl
 # Collected and Write Status
 wOS=../libs/writeOwnerStatus.xsl
 
-# Desktop Guide Docbook HTML Customization Layer
+# Ubuntu Docbook HTML Customization Layer
 UBUNTUCHUNKXSL=libs/ubuntu-html-chunk-cust.xsl
 UBUNTUSINGLEXSL=libs/ubuntu-html-single-cust.xsl
+PDFSTYLE=libs/ubuntu-pdf.xsl
 
 # Base gnome directories for output from processor
 BASE=../build/ubuntu/
@@ -87,6 +88,10 @@ all: au dg sg server package status
 # This is here to select what to build for the .deb package.
 gdeb: server dg
 
+# This builds all the guides in PDF format. You need to install Java, Apache Fop, the Jimi imaging library, and other horrible non-free things to make this work
+
+pdf: server-pdf dg-pdf package-pdf sg-pdf
+
 #Status: AVAILABLE
 # Ubuntu Status Reports
 status:
@@ -115,7 +120,8 @@ sg:
 	rm -f $(SGBASE)C/*
 	@echo "--- Building new files. . . "
 
-	xsltproc --xinclude --stringparam base.dir $(SGBASE)C/ $(UBUNTUCHUNKXSL) ../generic/styleguide/styleguide.xml
+	xsltproc --xinclude --stringparam base.dir $(SGBASE)en/ $(UBUNTUCHUNKXSL) ../generic/styleguide/styleguide.xml
+	xsltproc --xinclude -o $(SGBASE)en/styleguide-single.html $(UBUNTUSINGLEXSL) ../generic/styleguide/styleguide.xml
 
 	mkdir -p $(IMAGES)admon
 	cp -r ../common/admon/*.* $(IMAGES)admon
@@ -132,6 +138,17 @@ sg:
 	cp libs/img/*png ../build/ubuntu/common/img/
 
 	@echo "--- Complete. Find output at" $(SGBASE)
+
+sg-pdf:
+
+	rm -rf $(SGBASE)
+	mkdir -p $(SGBASE)en/images
+	cp -r ../common/admon-pdf/*.png $(SGBASE)en/images/
+
+	xsltproc --xinclude -o $(SGBASE)en/styleguide.fo $(PDFSTYLE) ../generic/styleguide/styleguide.xml
+	fop.sh -fo $(SGBASE)en/styleguide.fo -pdf $(SGBASE)en/styleguide.pdf
+	rm $(SGBASE)en/styleguide.fo
+	rm -rf $(SGBASE)en/images
 
 #Status: AVAILABLE
 # About Ubuntu Document
@@ -157,7 +174,10 @@ au-C:
 	mkdir -p $(IMAGES)navig
 	cp -r ../common/navig/*.* $(IMAGES)navig
 	
-	cp libs/ubuntu.css $(ABASE)
+	# copy style sheet and common images to build directory
+	mkdir -p ../build/ubuntu/common/img
+	cp libs/*css ../build/ubuntu/common/
+	cp libs/img/*png ../build/ubuntu/common/img/
 
 	@echo "--- Complete. Find outputs at" $(ABASE)
 
@@ -198,6 +218,16 @@ dg-C:
 
 	@echo "--- Complete. Find outputs at" $(DGBASE)
 
+dg-pdf:
+
+	rm -rf $(DGBASE)
+	mkdir -p $(DGBASE)C/images
+	cp -r ../common/admon-pdf/*.png $(DGBASE)C/images/
+
+	xsltproc --xinclude -o $(DGBASE)C/desktopguide.fo $(PDFSTYLE) desktopguide/C/desktopguide.xml
+	fop.sh -fo $(DGBASE)C/desktopguide.fo -pdf $(DGBASE)C/desktopguide.pdf
+	rm $(DGBASE)C/desktopguide.fo
+	rm -rf $(DGBASE)C/images
 
 ## Server Guide
 server:
@@ -229,6 +259,17 @@ server:
 	cp libs/img/*png ../build/ubuntu/common/img/
 
 	@echo "--- Complete. Find output at" $(SERVERBASE)
+
+server-pdf:
+
+	rm -rf $(SERVERBASE)
+	mkdir -p $(SERVERBASE)C/images
+	cp -r ../common/admon-pdf/*.png $(SERVERBASE)C/images/
+
+	xsltproc --xinclude -o $(SERVERBASE)C/serverguide.fo $(PDFSTYLE) ../generic/serverguide/C/serverguide.xml
+	fop.sh -fo $(SERVERBASE)C/serverguide.fo -pdf $(SERVERBASE)C/serverguide.pdf
+	rm $(SERVERBASE)C/serverguide.fo
+	rm -rf $(SERVERBASE)C/images
 
 ## Packaging Guide
 package:
@@ -263,6 +304,16 @@ package:
 
 	@echo "--- Complete. Find output at" $(PGBASE)
 
+package-pdf:
+
+	rm -rf $(PGBASE)
+	mkdir -p $(PGBASE)C/images
+	cp -r ../common/admon-pdf/*.png $(PGBASE)C/images/
+
+	xsltproc --xinclude -o $(PGBASE)C/packagingguide.fo $(PDFSTYLE) ../generic/packagingguide/C/packagingguide.xml
+	fop.sh -fo $(PGBASE)C/packagingguide.fo -pdf $(PGBASE)C/packagingguide.pdf
+	rm $(PGBASE)C/packagingguide.fo
+	rm -rf $(PGBASE)C/images
 
 clean:
 	rm -rf $(BASE)
