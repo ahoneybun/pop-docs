@@ -43,10 +43,11 @@ MKIMGLST=../libs/imagelist.xsl
 # Collected and Write Status
 wOS=../libs/writeOwnerStatus.xsl
 
-# Ubuntu Docbook HTML Customization Layer
+# Ubuntu Docbook Customization Layer
+
 UBUNTUCHUNKXSL=libs/ubuntu-html-chunk-cust.xsl
 UBUNTUSINGLEXSL=libs/ubuntu-html-single-cust.xsl
-PDFSTYLE=libs/ubuntu-pdf.xsl
+PDFSTYLE=../libs/ubuntu-pdf.xsl
 
 # Base gnome directories for output from processor
 BASE=../build/ubuntu/
@@ -108,6 +109,10 @@ status:
 	@echo "----- serverguide status report -----"
 	xsltproc --xinclude -o $(STBASE)sg-report.xml $(wOS) ../generic/serverguide/C/serverguide.xml
 	xsltproc --xinclude -o $(STBASE)sg-report.html $(NWDBXSL) $(STBASE)sg-report.xml
+
+	@echo "----- packagingguide status report -----"
+	xsltproc --xinclude -o $(STBASE)pg-report.xml $(wOS) ../generic/packagingguide/C/packagingguide.xml
+	xsltproc --xinclude -o $(STBASE)pg-report.html $(NWDBXSL) $(STBASE)pg-report.xml
 	
 	@echo "----- Complete. Find outputs at" $(STBASE)
 

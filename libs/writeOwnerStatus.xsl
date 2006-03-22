@@ -30,7 +30,8 @@
         </article>
     </xsl:template>
     <xsl:template name="doItems">
-        <xsl:for-each select="//chapter|//sect1|//sect2|//sect3|//sect4|//sect5">
+<!--        <xsl:for-each select="//chapter|//sect1|//sect2|//sect3|//sect4|//sect5"> -->
+        <xsl:for-each select="//chapter|//sect1">
             <row>
                 <entry>
                     <xsl:value-of select="title"/>
@@ -84,9 +85,14 @@
         </xsl:for-each>
     </xsl:template>
     <xsl:template name="doAuthor">
-        <xsl:if test="authorblurb">
+        <xsl:if test="sect1info/authorblurb/para[text()]">
             <para>
-                <xsl:value-of select="authorblurb/para"/>
+                <xsl:value-of select="sect1info/authorblurb/para"/>
+            </para>
+        </xsl:if>
+        <xsl:if test="chapterinfo/authorblurb/para[text()]">
+            <para>
+                <xsl:value-of select="chapterinfo/authorblurb/para"/>
             </para>
         </xsl:if>
     </xsl:template>

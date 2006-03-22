@@ -50,9 +50,14 @@
 						</para>
 					</step>
 					<step>
-						<para>Select the <guibutton>General</guibutton> tab. Check the
-								<guilabel>Login a user automatically on first bootup</guilabel>
-							checkbox option.</para>
+						<para>Select the <guibutton>Security</guibutton> tab. Check the
+								<guilabel>Enable Automatic Login</guilabel>
+							checkbox option.
+						</para>
+					</step>
+					<step>
+						<para>Choose the user you wish to be automatically logged in.
+						</para>
 					</step>
 				</procedure>
 		</sect2>
@@ -74,17 +79,18 @@
 						</para>
 					</step>
 					<step>
-						<para>Find this line (It should be the last line in the file):</para>
+						<para>Find this line (It should be the last line in the file):
 						<programlisting>exit 0</programlisting>
-						<para></para>
+						</para>
 					</step>
 					<step>
-						<para>Add the following lines above the &quot;exit 0&quot; line:</para>
+						<para>Add the following lines above the &quot;exit 0&quot; line:
 						<programlisting>
 if [ -x /usr/bin/numlockx ]; then
 /usr/bin/numlockx on
 fi
 						</programlisting>
+						</para>
 					</step>
 					<step>
 						<para>Save the edited file. (See <ulink url="sample/Default_numlockx"/> for an example.)
@@ -126,7 +132,7 @@ fi
 		</sect2>
 		<sect2 status="review">
 			<title>Change Display Mode in <application>Nautilus</application></title>
-				<para>Nautilus provides two modes in which you can interact with your filesystem: <emphasis>Spatial mode</emphasis> and <emphasis>Browser mode</emphasis>.</para>
+				<para>Ubuntu's file manager Nautilus provides two modes in which you can interact with your filesystem: <emphasis>Spatial mode</emphasis> and <emphasis>Browser mode</emphasis>.</para>
 				<itemizedlist>
 					<listitem><para>In <emphasis>Browser mode</emphasis>, the file manager window represents a browser, which can display any location. Opening a folder updates the current file manager window to show the contents of the new folder.</para></listitem>
 					<listitem><para>In <emphasis>Spatial mode</emphasis>, the file manager window represents a particular folder. Opening a folder opens the new window for that folder. Each time you open a particular folder, you will find its window displayed in the same place on the screen and the same size as the last time you viewed it (this the reason for the name).</para></listitem>
@@ -193,7 +199,8 @@ fi
 							You can also use the <keycombo>
 								<keycap>Ctrl</keycap>
 								<keycap>L</keycap>
-							</keycombo> shortcut keys.</para>
+							</keycombo> shortcut keys.
+				</para>
 		</sect2>
 		<sect2 status="review">
 			<title>View remote SSH, FTP, and SFTP servers using <application>Nautilus</application></title>
@@ -223,7 +230,7 @@ fi
 			</procedure>
 		</sect2>
 		<sect2 status="review">
-			<title>Change the default file type "Open with" program</title>
+			<title>Change the default "Open with" program for a file type</title>
 			<procedure>
 				<step>
 						<para>In <application>Nautilus</application>, right click on the file and choose 
@@ -301,12 +308,12 @@ done</programlisting>
 					</step>
 				</procedure>
 		</sect2>
-		<sect2 status="writing">
+		<sect2 status="review">
 			<title>Show the Computer, Home, and Trash desktop icons in GNOME</title>
 				<procedure>
 					<step>
 					<!-- Menu changes in Dapper mean this might have to change before release -->
-						<para>Open the <application>Configuration Editor</application> with &gnome-config-editor;.
+						<para>Open the <application>Configuration Editor</application> with &gnome-config-editor;
 						</para>
 					</step>
 					<step>
@@ -324,7 +331,7 @@ done</programlisting>
 					</step>
 				</procedure>
 		</sect2>
-		<sect2 status="writing">
+		<sect2 status="review">
 			<title>Change my preferred email client to Mozilla Thunderbird</title>
 			<procedure>
 				<step>
@@ -459,8 +466,7 @@ sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen>
 						<step>
 							<para>Install the <application>gparted</application> package (see <xref linkend="add-applications"/>).</para>
 						</step>
-						<step>
-						<!-- check this before Dapper freeze! -->	
+						<step>	
 							<para>You can run the application with &gparted;.
 							</para>
 						</step>
@@ -533,6 +539,26 @@ sudo gedit /etc/fstab
 					<step>
 						<para>Read <xref linkend="remountfstabwithoutreboot"
 							/></para>
+					</step>
+				</procedure>
+		</sect2>
+		<sect2 status="writing">
+			<title>Run a system command automatically at startup</title>
+				<para>Sometimes it can be useful to add a custom command to the startup process so that your computer executes it on every boot. To do this:</para>
+				<procedure>
+					<step>
+						<para>Edit the <application>crontab</application> with administrative privileges (see <xref linkend="root-and-sudo"/>):</para>
+							<screen>sudo crontab -e</screen>
+					</step>
+					<step>
+						<para>Insert the following line:</para>
+							<screen>@reboot /home/user/command</screen>
+					<note>
+						<para>Replace <filename>/home/user/command</filename> with the full address to your command.</para>
+					</note>
+					</step>
+					<step>
+						<para>Save the file and exit.</para>
 					</step>
 				</procedure>
 		</sect2>
@@ -671,6 +697,12 @@ timeout 3
 		<sect2 id="digital-cameras" status="review">
 			<title>Digital Cameras</title>
 				<para>Most USB digital cameras will be automatically detected by Ubuntu. Simply plug in and switch on your USB digital camera, Ubuntu will then ask you if you would like to import the photos from your camera. Click on <guibutton>Import</guibutton>, Ubuntu will then show you a preview of your photos. Choose a location to save your photos to, then click on <guibutton>Import</guibutton>, Ubuntu will then save your photos to your hard drive.</para>
+				<para>If you do not get the auto-import popup with your camera, it might be worth starting <application>gThumb</application> and trying 
+					<menuchoice>
+						<guimenu>File</guimenu>
+						<guimenuitem>Import Photos...</guimenuitem>
+					</menuchoice>. See <xref linkend="gthumb"/> for more on <application>gThumb</application>. 
+				</para>
 		</sect2>
 		<sect2 id="sound-cards" status="review">
 			<title>Sound Cards</title>
