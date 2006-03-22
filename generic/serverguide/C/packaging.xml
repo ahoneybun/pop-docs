@@ -31,6 +31,72 @@
         Many complex packages use the concept of <emphasis role="italics">dependencies</emphasis>.  Dependencies are additional packages required by the principle package in order for the principle package to function properly.  For example, the speech synthesis package <emphasis role="italics">Festival</emphasis> depends upon the package <emphasis role="italics">festvox-kalpc16k</emphasis>, which is a package supplying one of the voices used by the festival application.  In order for the Festival application to function, all of the dependencies must be installed in conjunction with the principle Festival package.
         </para>
   </sect1>
+  <sect1 id="apt-get" status="review">
+	<title>apt-get</title>
+        <para>
+        The <application>apt-get</application> command is a powerful command-line tool used to work with Ubuntu's Advanced Package Tool (APT) performing such functions as installation of new software packages, upgrade of existing software packages, updating of the package list index, and even upgrading the entire Ubuntu system.
+        </para>
+        <para>
+        Being a simple command-line tool, <application>apt-get</application> has numerous advantages over other package management tools available in Ubuntu for server administrators.  Some of these advantages include ease of use over simple terminal connections, (SSH) and the ability to be used in system administration scripts, which in turn, can be automated by the <application>cron</application> scheduling utility.
+        </para>
+        <para>
+        Some examples of popular uses for the <application>apt-get</application> utility:
+        <itemizedlist>
+               <listitem>
+                <para>
+                <emphasis role="bold">Install Package</emphasis>: Installation of packages using the <application>apt-get</application> tool is quite simple.  For example, to install the network scanner <emphasis role="italics">nmap</emphasis>, type the following at a terminal prompt:
+<screen>
+<command>sudo apt-get install nmap</command>
+</screen>
+                </para>
+                </listitem>
+                <listitem>
+                <para>
+                <emphasis role="bold">Remove Package</emphasis>: Removal of a package, or packages is also a straightforward, and simple process. To remove the nmap package installed in the previous example, the following command typed at a terminal prompt would suffice:
+<screen>
+<command>sudo apt-get remove nmap</command>
+</screen>
+                </para>
+                <tip>
+                <para><emphasis role="bold">Multiple Packages</emphasis>: You may specify multiple packages to the install, and remove functions of <application>apt-get</application> on the same command line, separated by spaces.
+                </para>
+                </tip>
+                </listitem>
+                <listitem>
+                <para>
+                <emphasis role="bold">Update Package Index</emphasis>: The APT package index is essentially a database of available packages from the repositories defined in the <filename>/etc/apt/sources.list</filename> file.  To update the local package index with the latest changes made in repositories defined in your computer's repository listing, type the following at a terminal prompt:
+<screen>
+<command>sudo apt-get update</command>
+</screen>
+                </para>
+                </listitem>
+                <listitem>
+                <para>
+                <emphasis role="bold">Upgrade Packages</emphasis>: Over time, upgraded versions to packages currently installed on your computer may become available from the package repositories defined in your computer's repository listing.  To upgrade a  <emphasis role="italics">single</emphasis> package, you should first update your package index as outlined above, and then proceed to upgrading the packages with the following command entered at a terminal prompt:
+<screen>
+<command>sudo apt-get upgrade</command>
+</screen>
+                </para>
+                <para>
+                If you need to upgrade a complex package with dependencies, then another possibility for upgrades exists in the <emphasis role="italics">dist-upgrade</emphasis> parameter, which uses an intelligent dependency resolution system to adjust any new dependencies during the upgrade process.  
+                </para>
+                <para>
+                Also, you may upgrade your entire Ubuntu system from one revision to another with dist-upgrade.  For example, to upgrade from Ubuntu version 5.10, to version &distro-rev;, you would first ensure the version &distro-rev; repositories replace the existing 5.10 repositories in your computer's <filename>/etc/apt/sources.list</filename>, then simply issue the <application>apt-get update</application> command as detailed above, and finally, perform the actual upgrade by issuing the following command at a terminal prompt:
+<screen>
+<command>sudo apt-get dist-upgrade</command>
+</screen>               
+                </para>
+                <para>
+                After a fairly considerable amount of time, your computer will be upgraded to the new revision. Typically, some post-upgrade steps would be required as detailed in the upgrade notes for the revision you are upgrading to.
+                </para>
+                <para>
+                Actions of the <application>apt-get</application> command, such as installation, and removal of packages are logged in the /var/log/dpkg.log log file.
+                </para>
+                </listitem>
+        </itemizedlist>
+        </para>
+  </sect1>
+
   <sect1 id="aptitude" status="review">
 	<title>Aptitude</title>
         <para>
@@ -106,71 +172,7 @@
         <para>To exit Aptitude, simply press the <keycap>q</keycap> key, and confirm you wish to exit. Many other functions are available from the Aptitude menu, by pressing the <keycap>F10</keycap> key.
         </para>
   </sect1>
-  <sect1 id="apt-get" status="review">
-	<title>apt-get</title>
-        <para>
-        The <application>apt-get</application> command is a powerful command-line tool used to work with Ubuntu's Advanced Package Tool (APT) performing such functions as installation of new software packages, upgrade of existing software packages, updating of the package list index, and even upgrading the entire Ubuntu system.
-        </para>
-        <para>
-        Being a simple command-line tool, <application>apt-get</application> has numerous advantages over other package management tools available in Ubuntu for server administrators.  Some of these advantages include ease of use over simple terminal connections, (SSH) and the ability to be used in system administration scripts, which in turn, can be automated by the <application>cron</application> scheduling utility.
-        </para>
-        <para>
-        Some examples of popular uses for the <application>apt-get</application> utility:
-        <itemizedlist>
-               <listitem>
-                <para>
-                <emphasis role="bold">Install Package</emphasis>: Installation of packages using the <application>apt-get</application> tool is quite simple.  For example, to install the network scanner <emphasis role="italics">nmap</emphasis>, type the following at a terminal prompt:
-<screen>
-<command>sudo apt-get install nmap</command>
-</screen>
-                </para>
-                </listitem>
-                <listitem>
-                <para>
-                <emphasis role="bold">Remove Package</emphasis>: Removal of a package, or packages is also a straightforward, and simple process. To remove the nmap package installed in the previous example, the following command typed at a terminal prompt would suffice:
-<screen>
-<command>sudo apt-get remove nmap</command>
-</screen>
-                </para>
-                <tip>
-                <para><emphasis role="bold">Multiple Packages</emphasis>: You may specify multiple packages to the install, and remove functions of <application>apt-get</application> on the same command line, separated by spaces.
-                </para>
-                </tip>
-                </listitem>
-                <listitem>
-                <para>
-                <emphasis role="bold">Update Package Index</emphasis>: The APT package index is essentially a database of available packages from the repositories defined in the <filename>/etc/apt/sources.list</filename> file.  To update the local package index with the latest changes made in repositories defined in your computer's repository listing, type the following at a terminal prompt:
-<screen>
-<command>sudo apt-get update</command>
-</screen>
-                </para>
-                </listitem>
-                <listitem>
-                <para>
-                <emphasis role="bold">Upgrade Packages</emphasis>: Over time, upgraded versions to packages currently installed on your computer may become available from the package repositories defined in your computer's repository listing.  To upgrade a  <emphasis role="italics">single</emphasis> package, you should first update your package index as outlined above, and then proceed to upgrading the packages with the following command entered at a terminal prompt:
-<screen>
-<command>sudo apt-get upgrade</command>
-</screen>
-                </para>
-                <para>
-                If you need to upgrade a complex package with dependencies, then another possibility for upgrades exists in the <emphasis role="italics">dist-upgrade</emphasis> parameter, which uses an intelligent dependency resolution system to adjust any new dependencies during the upgrade process.  
-                </para>
-                <para>
-                Also, you may upgrade your entire Ubuntu system from one revision to another with dist-upgrade.  For example, to upgrade from Ubuntu version 5.10, to version 6.04, you would first ensure the version 6.04 repositories replace the existing 5.10 repositories in your computer's <filename>/etc/apt/sources.list</filename>, then simply issue the <application>apt-get update</application> command as detailed above, and finally, perform the actual upgrade by issuing the following command at a terminal prompt:
-<screen>
-<command>sudo apt-get dist-upgrade</command>
-</screen>               
-                </para>
-                <para>
-                After a fairly considerable amount of time, your computer will be upgraded to the new revision. Typically, some post-upgrade steps would be required as detailed in the upgrade notes for the revision you are upgrading to.
-                </para>
-                <para>
-                Actions of the <application>apt-get</application> command, such as installation, and removal of packages are logged in the /var/log/dpkg.log log file.
-                </para>
-                </listitem>
-        </itemizedlist>
-        </para>
-  </sect1>
+
   <sect1 id="synaptic" status="review">
 	<title>Synaptic</title>
         <para>
@@ -269,10 +271,8 @@ deb cdrom:[Ubuntu 5.10 _Breezy Badger_ - Release i386 (20051012)]/ breezy main r
 ## newer versions of some applications which may provide useful features.
 ## Also, please note that software in backports WILL NOT receive any review
 ## or updates from the Ubuntu security team.
-# deb http://us.archive.ubuntu.com/ubuntu breezy-backports main restricted \
-# universe multiverse
-# deb-src http://us.archive.ubuntu.com/ubuntu breezy-backports main restricted \
-# universe multiverse
+# deb http://us.archive.ubuntu.com/ubuntu breezy-backports main restricted universe multiverse
+# deb-src http://us.archive.ubuntu.com/ubuntu breezy-backports main restricted universe multiverse
 
 # deb http://security.ubuntu.com/ubuntu breezy-security main restricted
 # deb-src http://security.ubuntu.com/ubuntu breezy-security main restricted
@@ -281,11 +281,6 @@ deb cdrom:[Ubuntu 5.10 _Breezy Badger_ - Release i386 (20051012)]/ breezy main r
 # deb-src http://security.ubuntu.com/ubuntu breezy-security universe
           </programlisting>
           </para>
-          <note>
-          <para>
-          Long lines in the example above, (Multiverse) have been truncated by adding a backslash (\) and a newline in order to better fit this space, those lines in an actual file, should be one continous line, with no such newlines, or backslashes.
-          </para>
-          </note>
           <para>
           You may edit the file to enable repositories, or disable them.  For example, to disable the requirement of inserting the Ubuntu CD-ROM whenever package operations occur, simple comment out the appropriate line for the CD-ROM, which appears at the top of the file:
           </para>

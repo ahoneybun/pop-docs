@@ -12,9 +12,8 @@
 <!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
 %xinclude;
 <!ENTITY language "&EnglishAmerican;">
-<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
 ]>
-<chapter id="networking" status="writing">
+<chapter id="networking" status="review">
 	<title>Networking</title>
   <para>Networks consist of two or more devices, such as computer systems, printers, and related
         equipment which are connected by either physical cabling wireless links for the
@@ -24,16 +23,71 @@
         to networking, including an overview of network concepts and detailed discussion of popular
         network protocols and server applications.
   </para>
-	<sect1 id="network-configuration" status="help">
+	<sect1 id="network-configuration" status="review">
 		<title>Network Configuration</title>
           <para>
-            Network Configuration para ...
+            Ubuntu ships with a number of graphical utilities to configure your network devices.
+			This document is geared toward server administrators and will focus on managing your
+			network on the command line.
           </para>
-      <sect2 id="ethernet" status="help">
+      <sect2 id="ethernet" status="review">
         <title>Ethernet</title> 
           <para>
-            Ethernet para ...
-          </para>
+            The primary tool for configuring and managing your ethernet devices is 
+			<application>ifconfig</application>.  Run with no arguments, it will list your active
+			network devices along with any IPv4 and/or IPv6 addresses, MAC address, broadcast
+			address, subnet mask, and some statistical information.  If its only argument is the
+			name of a network device, it will display this information for only that device:
+			<screen>$ sudo ifconfig eth1
+eth1      Link encap:Ethernet  HWaddr 00:09:5B:8F:5B:23  
+          inet addr:192.168.0.1  Bcast:192.168.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::209:5bff:fe8f:5b23/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:457859 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:565745 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:45254899 (43.1 Mb)  TX bytes:454524813 (433.4 Mb)
+          Interrupt:10 Base address:0x4f00</screen>
+			The -a switch will cause <application>ifconfig</application> to list all network devices,
+			including those that are down.  Any other usage is to configure a device.  For example,
+			if you want to assign a specific IP address to a device rather than having it dynamically
+			assigned via DHCP, you would issue a command such as this:
+			<screen>sudo ifconfig eth0 10.0.0.1</screen>
+			More than one IP address may be assigned to a physical network device through the use of
+			interface <emphasis role="italics">aliases</emphasis>.  For instance, if eth0 in the
+			example above also needed to be assigned the address 10.0.0.2, it would be accomplished
+			with the following command:
+			<screen>sudo ifconfig eth0:1 10.0.0.2</screen>
+			Interface aliases are sometimes referred to as virtual network interfaces, but note that
+			they are not recognized by the kernel as network devices, and tools like iptables must
+			refer to the physical device (eth0, in this case).
+			</para>
+			<para>
+			Please refer <application>ifconfig</application> man page or the <ulink
+			url="http://www.tldp.org/LDP/nag/nag.html">Network Administrator's Guide</ulink> for more
+			advanced usage.
+            </para>
+			<para>
+			Routing is an essential part of any network configuration.  Very advanced routing policies
+			can be defined using the <application>iproute2</application> package, but this document
+			will focus on the usage of the original <application>route</application> command.  See the
+			<application>ip</application> man page or the <ulink url="http://lartc.org/">Linux Advanced
+			Routing &amp; Traffic Control</ulink> howto for information on advanced routing.
+			</para>
+			<para>
+			If your network is not automatically configured via DHCP, you will need a <emphasis
+			role="italics">default gateway</emphasis> before you will have a functional network.
+			Assume your router's IP address is 192.168.0.1:
+			<screen>sudo route add default gw 192.168.0.1</screen>
+			Substitute your ISP's gateway IP address if the machine you're working on <emphasis
+			role="italics">is</emphasis> the router.  You may add other routes, for example if you have
+			multiple network devices connecting multiple networks.  For instance, your eth1 device may
+			connect to your 192.168.1.0 network, in which case it will need its own specific route:
+			<screen>sudo route add -net 192.168.1.0 netmask 255.255.255.0 dev eth1</screen>
+			In the above example, traffic addressed to the 192.168.1.0 network will be routed through eth1,
+			whatever its IP address happens to be.
+			</para>
+			<para>See the <application>route</application> man page for complete usage details.</para>
           </sect2>
         <sect2 id="wireless" status="help">
           <title>Wireless</title>
@@ -336,30 +390,118 @@ nameserver 208.185.179.218
 	<sect1 id="firewall-configuration" status="help">
 		<title>Firewall Configuration</title>
           <para>
-            Firewall Configuration para ...
+             The Linux kernel includes the <emphasis role="italics">Netfilter</emphasis> subsystem,
+			 which is used to manipulate or decide the fate of network traffic headed into or through
+			 your server.  All modern Linux firewall solutions use this system for packet filtering.
           </para>
         <sect2 id="firewall-introduction" status="help">
           <title>Firewall Introduction</title>
             <para>
-              Firewall Introduction para ...
+              The kernel's packet filtering system would be of little use to administrators without
+			  a userspace interface to manage it.  This is the purpose of iptables.  When a packet
+			  reaches your server, it will be handed off to the Netfilter subsystem for acceptance,
+			  manipulation, or rejection based on the rules supplied to it from userspace via
+			  iptables.  Thus, iptables is all you need to manage your firewall if you're familiar
+			  with it, but many frontends are available to simplify the task.
             </para>
         </sect2>
         <sect2 id="ip-masquerading" status="help">
           <title>IP Masquerading</title>
             <para>
-              IP Masquerading para ...
+              The purpose of IP Masquerading is to allow machines with private, non-routable IP
+			  addresses on your network to access the Internet through the machine doing the
+			  masquerading.  Traffic from your private network destined for the Internet must be
+			  manipulated for replies to be routable back to the machine that made the request.
+			  To do this, the kernel must modify the <emphasis role="italics">source</emphasis>
+			  IP address of each packet so that replies will be routed back to it, rather than
+			  to the private IP address that made the request, which is impossible over the 
+			  Internet.  Linux uses <emphasis role="italics">Connection Tracking</emphasis>
+			  (conntrack) to keep track of which connections belong to which machines and reroute
+			  each return packet accordingly.  Traffic leaving your private network is thus
+			  &quot;masqueraded&quot; as having originated from your Ubuntu gateway machine.
+			  This process is referred to in Microsoft documentation as Internet
+			  Connection Sharing.
             </para>
+			<para>
+              This can be accomplished with a single iptables rule, which may differ slightly
+			  based on your network configuration:
+			  <screen>sudo iptables -t nat -A POSTROUTING -s 192.168.0.0/16 -o ppp0 -j MASQUERADE</screen>
+			  The above command assumes that your private address space is 192.168.0.0/16 and
+			  that your Internet-facing device is ppp0.  The syntax is broken down as follows:
+			  <itemizedlist>
+				  <listitem><para> -t nat -- the rule is to go into the nat table</para></listitem>
+				  <listitem><para> -A POSTROUTING -- the rule is to be appended (-A) to the POSTROUTING 
+				  chain</para></listitem>
+				  <listitem><para> -s 192.168.0.0/16 -- the rule applies to traffic originating from the
+				  specified address space</para></listitem>
+				  <listitem><para> -o ppp0 -- the rule applies to traffic scheduled to be routed through
+				  the specified network device</para></listitem>
+				  <listitem><para> -j MASQUERADE -- traffic matching this rule is to &quot;jump&quot;
+				  (-j) to the MASQUERADE target to be manipulated as described above</para></listitem>
+			  </itemizedlist>
+			</para>
+			<para>
+              Each chain in the filter table (the default table, and where most or all packet
+			  filtering occurs) has a default <emphasis role="italics">policy</emphasis> of
+			  ACCEPT, but if you are creating a firewall in addition to a gateway device, you
+			  may have set the policies to DROP or REJECT, in which case your masqueraded
+			  traffic needs to be allowed through the FORWARD chain for the above rule to work:
+			  <screen>sudo iptables -A FORWARD -s 192.168.0.0/16 -o ppp0 -j ACCEPT
+sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED -i ppp0 -j ACCEPT</screen>
+			  The above commands will allow all connections from your local network to the
+			  Internet, and all traffic related to those connections to return to the machine
+			  that initiated them.
+			</para>
         </sect2>
         <sect2 id="firewall-tools" status="help">
           <title>Tools</title>
             <para>
-              Tools para ...
+              There are many tools available to help you construct a complete firewall without
+			  intimate knowledge of iptables.  For the GUI-inclined, 
+			  <application>Firestarter</application> is quite popular and easy to use, and
+			  <application>fwbuilder</application> is very powerful and will look familiar 
+			  to an administrator who has used a commercial firewall utility such as Checkpoint 
+			  FireWall-1.  If you prefer a command-line tool with plain-text configuration files, 
+			  <application>Shorewall</application> is a very powerful solution to help you 
+			  configure an advanced firewall for any network.  If your network is relatively 
+			  simple, or if you don't have a network, <application>ipkungfu</application> should 
+			  give you a working firewall &quot;out of the box&quot; with zero configuration, 
+			  and will allow you to easily set up a more advanced firewall by editing simple, 
+			  well-documented configuration files.  Another interesting tool is 
+			  <application>fireflier</application>, which is designed to be a desktop firewall 
+			  application.  It is made up of a server (fireflier-server) and your choice of GUI 
+			  clients (GTK or QT), and behaves like many popular interactive firewall 
+			  applications for Windows.
             </para>
         </sect2>
         <sect2 id="firewall-logs" status="help">
           <title>Logs</title>
             <para>
-              Logs para ...
+              Firewall logs are essential for recognizing attacks, troubleshooting your
+			  firewall rules, and noticing unusual activity on your network.  You must include
+			  logging rules in your firewall for them to be generated, though, and logging
+			  rules must come before any applicable terminating rule (a rule with a target
+			  that decides the fate of the packet, such as ACCEPT, DROP, or REJECT).  For
+			  example:
+			  <screen>sudo iptables -A INPUT -m state --state NEW -p tcp --dport 80 -j LOG --log-prefix "NEW_HTTP_CONN: "</screen>
+			  A request on port 80 from the local machine, then, would generate a log in dmesg
+			  that looks like this:
+			</para>
+			<para>
+			  <screen>[4304885.870000] NEW_HTTP_CONN: IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=58288 DF PROTO=TCP SPT=53981 DPT=80 WINDOW=32767 RES=0x00 SYN URGP=0</screen>
+			</para>
+			<para>
+              The above log will also appear in <filename>/var/log/messages</filename>,
+			  <filename>/var/log/syslog</filename>, and <filename>/var/log/kern.log</filename>.
+			  This behavior can be modified by editing <filename>/etc/syslog.conf</filename>
+			  appropriately or by installing and configuring <application>ulogd</application>
+			  and using the ULOG target instead of LOG.  The <application>ulogd</application>
+			  daemon is a userspace server that listens for logging instructions from the kernel
+			  specifically for firewalls, and can log to any file you like, or even to a
+			  <application>PostgreSQL</application> or <application>MySQL</application>
+			  database.  Making sense of your firewall logs can be simplified by using a log
+			  analyzing tool such as <application>fwanalog</application>, <application>
+			  fwlogwatch</application>, or <application>lire</application>.
             </para>
         </sect2>
     </sect1>
@@ -508,8 +650,8 @@ nameserver 208.185.179.218
       </para>
    </sect2>
      </sect1>
-	<sect1 id="ftp-server-introduction" status="review">
-        <title>FTP Introduction</title> 
+	<sect1 id="ftp-server" status="review">
+        <title>FTP Server</title> 
             <para>File Transfer Protocol (FTP) is a TCP protocol for uploading and downloading
                 files between computers. FTP works on a client/server model. The server component is
                 called an <emphasis>FTP daemon</emphasis>. It continuously listens for FTP requests
@@ -533,56 +675,66 @@ nameserver 208.185.179.218
                 rule, the FTP daemon will hide the root directory of the FTP server and change it to
                 the FTP Home directory. This hides the rest of the file system from remote
             sessions.</para>
-            <sect2 id="vsftpd-ftp-server" status="review">
-                <title>vsftpd - FTP Server</title>
-                <procedure><step>
+            <sect2 id="vsftpd-ftp-server-installation" status="review">
+                <title>vsftpd - FTP Server Installation</title>
                     <para>vsftpd is an FTP daemon available in
                     Ubuntu Linux. It is easy to install, setup, and
-                    maintain.</para></step>
-                </procedure>
-            <variablelist>
-                <varlistentry>
-                    <term>Installation:</term>
-                    <listitem>
-                        <para>At a terminal prompt, enter the following command to install
-                                <application>vsftpd</application>:</para>
-                        <para>
-<screen>
-<command>sudo apt-get install vsftpd</command>
-</screen>
-                        </para>
-                    </listitem>
-                </varlistentry>
-                </variablelist>
-                <variablelist>
-                <varlistentry>
-                    <term>Configuration:</term>
-                    <listitem>
-                        <para>
-                        You can edit the vsftpd configuration file,
-                        <filename>/etc/vsftpd.conf</filename>, to
-                        change the default settings. More information about
-                        each configuration parameter is available in
-                        the configuration file.
-                        </para>
-                    </listitem>
-                </varlistentry>
-                <varlistentry>
-                    <term>Manage Service:</term>
-                    <listitem>
-                        <para> 
-<screen>
-<command>sudo /etc/init.d/vsftpd start</command>
-</screen>
-                        </para>
-                        <para>
-<screen>
-<command>sudo /etc/init.d/vsftpd stop</command>
-</screen>
-                        </para>
-                    </listitem>
-                </varlistentry>
-            </variablelist>
+                    maintain.  To install <application>vsftpd</application> you
+                can run the following command:
+                <screen> <command>sudo apt-get install vsftpd</command> </screen>
+                </para>
+
+                </sect2>
+            <sect2 id="vsftpd-ftp-server-configuration" status="review">
+                <title>vsftpd - FTP Server Configuration</title>
+                <para>
+                You can edit the vsftpd configuration file,
+                <filename>/etc/vsftpd.conf</filename>, to
+                change the default settings.
+
+                By default only anonymous FTP is
+                allowed. If you wish to disable this option, you
+                should change the following line:
+<programlisting>
+anonymous_enable=YES
+</programlisting>
+                to
+<programlisting>
+anonymous_enable=NO
+</programlisting>
+                By default, local system users are not allowed to
+                login to FTP server. To change this setting, you
+                should uncomment the following line:
+<programlisting>
+#local_enable=YES
+</programlisting>
+                By default, users are allowed to download files
+                from FTP server. They are not allowed to upload
+                files to FTP server. To change this setting, you
+                should uncomment the following line:
+<programlisting>
+#write_enable=YES
+</programlisting>
+                Similarly, by default, the anonymous users are not
+                allowed to upload files to FTP server. To change
+                this setting, you should uncomment the following
+                line:
+<programlisting>
+#anon_upload_enable=YES
+</programlisting>
+                The configuration file consists of lot of
+                configuration parameters. The information about
+                each parameter is available in the configuration
+                file. Alternatively, you can refer the man
+                page, <command>man 5 vsftpd.conf</command> for
+                details of each parameter. 
+                </para>
+                <para> 
+                Once you configure <application>vsftpd</application> you
+                can start the daemon. You can run following command to
+                run <application>vsftpd</application> daemon:
+                  <screen> <command>sudo /etc/init.d/vsftpd start</command> </screen>
+                </para>
                 </sect2>
     </sect1>
 	<sect1 id="network-file-system" status="review">
@@ -785,7 +937,7 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
           <para>You will see the following output, which explains what to do next:</para>
           <screen>
 Please note that if you are installing the DHCP server for the first
-time you need to configure it first. Please stop (/etc/init.d/dhcp
+time you need to configure. Please stop (/etc/init.d/dhcp
 stop) the DHCP server daemon, edit /etc/dhcpd.conf to suit your needs
 and particular configuration, and restart the DHCP server daemon
 (/etc/init.d/dhcp start).
@@ -1915,10 +2067,10 @@ Subversion is an open source version control system. Using Subversion, you can r
             <para>
 To access Subversion repository using the HTTP protocol, you must install and 
 configure a web server. Apache2 is proven to work with Subversion. Please 
-refer to the HTTP subsection in the Apache2 section to install and configure 
+refer the HTTP subsection in the Apache2 section to install and configure 
 Apache2.  To access the Subversion repository using the HTTPS protocol, you 
 must install and configure a digital certificate in your Apache 2 web server. 
-Please refer to the HTTPS subsection in the Apache2 section to install and 
+Please refer HTTPS subsection in the Apache2 section to install and 
 configure the digital certificate.
 						</para>
 						<para>
@@ -2444,9 +2596,9 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
             <para>By default, connection via TCP/IP is disabled.
             PostgreSQL supports multiple client authentication methods.
             By default, IDENT authentication method is used.  Please
-            refer to <ulink 
+            refer <ulink 
 			url="http://www.postgresql.org/docs/8.1/static/admin.html">
-			the PostgreSQL Administrator's Guide</ulink></para>
+			the PostgreSQL Administrator's Guide</ulink>.</para>
             
             <para>The following discussion assumes that you wish to enable 
 			TCP/IP connections and use the MD5 method for client 
@@ -2536,54 +2688,471 @@ local   all         postgres                          md5 sameuser
             <warning>
             <para>
              The above configuration is not complete by any means. Please
-             refer to <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">
+             refer <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">
 			 the PostgreSQL Administrator's Guide</ulink> to configure more parameters.
             </para>
             </warning>
         </sect3>
       </sect2>
     </sect1>
-	<sect1 id="email-services" status="writing">
+	<sect1 id="email-services" status="review">
 		<title>Email Services</title>
           <para>
-            Email Services para ...
+            The process of getting an email from one person to another over a network or
+			the Internet involves many systems working together.  Each of these systems
+			must be correctly configured for the process to work.  The sender uses a <emphasis>Mail
+			User Agent</emphasis> (MUA), or email client, to send the message through one or more
+			<emphasis>Mail Transfer Agents</emphasis> (MTA), the last of which will hand it off to a 				<emphasis>Mail Delivery Agent</emphasis> (MDA) for delivery to the 
+			recipient's mailbox, from which it
+			will be retrieved by the recipient's email client, usually via a POP3 or IMAP server.
           </para>
-      <sect2 id="postfix" status="writing">
-        <title>PostFix</title>
+      <sect2 id="postfix" status="review">
+        <title>Postfix</title>
           <para>
-            PostFix is the default email server in Ubuntu Linux. It
+            <application>Postfix</application> is the default Mail Transfer Agent (MTA) in Ubuntu. It
             attempts to be fast and easy to administer and secure. It is
-            compatible with the sendmail email server.
+            compatible with the MTA <application>sendmail</application>. This section explains how
+            to install and configure <application>postfix</application>. It also explains how to
+            set it up as an SMTP server using a secure connection (for sending emails securely).
           </para>
-        <sect3 id="postfix-installation" status="writing">
+        <sect3 id="postfix-installation" status="review">
           <title>Installation</title>
             <para>
-              Installation para ...
+            To install <application>postfix</application> with SMTP-AUTH and Transport Layer
+            Security (TLS), run the following command:
+<screen>
+<command>sudo apt-get install postfix libsasl2 sasl2-bin libsasl2-modules libdb3-util procmail</command>
+</screen>
             </para>
         </sect3>
-        <sect3 id="postfix-configuration" status="writing">
+        <sect3 id="postfix-configuration" status="review">
           <title>Configuration</title>
             <para>
-              Configuration para ...
+            To configure <application>postfix</application>, run the following command:
+<screen>
+<command>sudo dpkg-reconfigure postfix</command>
+</screen>
+            The user interface will be displayed. On each screen, select the following
+            values:
+            <itemizedlist spacing="compact">
+            <listitem><para>Ok</para></listitem>
+            <listitem><para>Internet Site</para></listitem>
+            <listitem><para>NONE</para></listitem>
+            <listitem><para>mail.example.com</para></listitem>
+            <listitem><para>mail.example.com, localhost.localdomain, localhost</para></listitem>
+            <listitem><para>No</para></listitem>
+            <listitem><para>127.0.0.0/8</para></listitem>
+            <listitem><para>Yes</para></listitem>
+            <listitem><para>0</para></listitem>
+            <listitem><para>+</para></listitem>
+            <listitem><para>all</para></listitem>
+            </itemizedlist>
+            </para>
+            <note>
+            <para>
+            Replace mail.example.com with your mail server hostname.
+            </para>
+            </note>
+            <para>Next, you can configure
+            <application>postfix</application> to use SASL for SMTP
+            AUTH. You can configure the digital certificate 
+            for TLS. You can get the digital
+            certificate from a certificate authority. Alternatively, you
+            can create the certificate yourself. Refer <ulink
+            url="#creating-a-self-signed-certificate">Creating a Self
+            Signed Certificate</ulink> section for more details.
+            
+            </para>
+            <para>Now, run the following commands to configure SMTP AUTH and
+            TLS. You can use <command>postconf</command> to configure
+            all <application>postfix</application> parameters.  The
+            configuration parameters will be stored in
+            <filename>/etc/postfix/main.cf</filename> file. Later if you
+            wish to re-configure a particular parameter, you can either
+            run the command or change it manually in the file.
+<screen>
+postconf -e 'smtpd_sasl_local_domain ='
+postconf -e 'smtpd_sasl_auth_enable = yes'
+postconf -e 'smtpd_sasl_security_options = noanonymous'
+postconf -e 'broken_sasl_auth_clients = yes'
+postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination'
+postconf -e 'inet_interfaces = all'
+echo 'pwcheck_method: saslauthd' >> /etc/postfix/sasl/smtpd.conf
+echo 'mech_list: plain login' >> /etc/postfix/sasl/smtpd.conf
+
+mkdir /etc/postfix/ssl
+cd /etc/postfix/ssl/
+openssl genrsa -des3 -rand /etc/hosts -out smtpd.key 1024
+chmod 600 smtpd.key
+openssl req -new -key smtpd.key -out smtpd.csr
+openssl x509 -req -days 3650 -in smtpd.csr -signkey smtpd.key -out smtpd.crt
+openssl rsa -in smtpd.key -out smtpd.key.unencrypted
+mv -f smtpd.key.unencrypted smtpd.key
+openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650
+
+postconf -e 'smtpd_tls_auth_only = no'
+postconf -e 'smtp_use_tls = yes'
+postconf -e 'smtpd_use_tls = yes'
+postconf -e 'smtp_tls_note_starttls_offer = yes'
+postconf -e 'smtpd_tls_key_file = /etc/postfix/ssl/smtpd.key'
+postconf -e 'smtpd_tls_cert_file = /etc/postfix/ssl/smtpd.crt'
+postconf -e 'smtpd_tls_CAfile = /etc/postfix/ssl/cacert.pem'
+postconf -e 'smtpd_tls_loglevel = 1'
+postconf -e 'smtpd_tls_received_header = yes'
+postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
+postconf -e 'tls_random_source = dev:/dev/urandom'
+postconf -e 'myhostname = mail.example.com'
+</screen>
+          Alternatively, you can store these commands in a <ulink
+          url="sample/posfix_commands.sh">seperate file</ulink> and run them from the
+          file.
+            </para>
+            <note>
+            <para>
+            After you run all the commands, the SMTP AUTH is configured
+            with <application>postfix</application>.  The self-signed
+            cerficiate is created for TLS and it is configured with
+            <application>postfix</application>.
+            </para>
+            </note>
+            <para>
+            Now, the file <filename>/etc/postfix/main.cf</filename>
+            should look like this:
+<programlisting>
+# See /usr/share/postfix/main.cf.dist for a commented, more complete
+# version
+
+smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
+biff = no
+
+# appending .domain is the MUA's job.
+append_dot_mydomain = no
+
+# Uncomment the next line to generate "delayed mail" warnings
+#delay_warning_time = 4h
+
+myhostname = server1.example.com
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+myorigin = /etc/mailname
+mydestination = server1.example.com, localhost.example.com, localhost
+relayhost =
+mynetworks = 127.0.0.0/8
+mailbox_command = procmail -a "$EXTENSION"
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all
+smtpd_sasl_local_domain =
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_security_options = noanonymous
+broken_sasl_auth_clients = yes
+smtpd_recipient_restrictions =
+permit_sasl_authenticated,permit_mynetworks,reject _unauth_destination
+smtpd_tls_auth_only = no
+smtp_use_tls = yes
+smtpd_use_tls = yes
+smtp_tls_note_starttls_offer = yes
+smtpd_tls_key_file = /etc/postfix/ssl/smtpd.key
+smtpd_tls_cert_file = /etc/postfix/ssl/smtpd.crt
+smtpd_tls_CAfile = /etc/postfix/ssl/cacert.pem
+smtpd_tls_loglevel = 1
+smtpd_tls_received_header = yes
+smtpd_tls_session_cache_timeout = 3600s
+tls_random_source = dev:/dev/urandom
+</programlisting>
+            The postfix initial configuration is complete. You can run
+            the following command to start postfix daemon:
+            <screen><command>sudo /etc/init.d/postfix start</command></screen>
+
+            Now the <application>postfix</application> daemon is installed, configured and run
+            successfully. <application>Postfix</application> supports SMTP AUTH as defined in
+            <ulink
+            url="ftp://ftp.isi.edu/in-notes/rfc2554.txt">RFC2554</ulink>.
+            It is based on <ulink
+            url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>.If
+            you wish to configure SMTP authentication, continue
+            with the next section.
+            </para>
+        </sect3>
+        <sect3 id="postfix-smtp-authentication" status="review">
+          <title>SMTP Authentication</title>
+            <para>
+            In this section, we will see howto configure
+            <application>postfix</application> to use
+            <application>saslauthd</application> for SMTP AUTH.  The
+            <application>libsasl2</application>,
+            <application>sasl2-bin</application> and
+            <application>libsasl2-modules</application> are necessary to
+            enable SMTP AUTH using SASL. You can install these applications if
+            you have not installed them already.
+<screen>
+<command>mkdir -p /var/spool/postfix/var/run/saslauthd</command>
+<command>rm -rf /var/run/saslauthd</command>
+</screen>
+
+            To activate <application>saslauthd</application>, edit the file <filename>/etc/default/saslauthd</filename>, and change or add the START, PARAMS and MECHANISMS variables. The file should look like this:
+
+<programlisting>
+# This needs to be uncommented before saslauthd will be run
+# automatically
+START=yes
+
+PARAMS="-m /var/spool/postfix/var/run/saslauthd"
+
+# You must specify the authentication mechanisms you wish to use.
+# This defaults to "pam" for PAM support, but may also include
+# "shadow" or "sasldb", like this:
+# MECHANISMS="pam shadow"
+
+MECHANISMS="pam"
+</programlisting>
+            </para>
+<note>
+<para>
+If you prefer, you can use <emphasis role="strong">shadow</emphasis>
+instead of <emphasis role="strong">pam</emphasis>. This will use MD5
+hashed password transfer and is perfectly secure. The username and
+password needed to authenticate will be those of the users on the system
+you are using on the server.
+</para>
+</note>
+        <para>
+        Finally, edit the file
+        <filename>/etc/init.d/saslauthd</filename>. You can search and
+        comment the following line:
+
+<programlisting>
+dir=`dpkg-statoverride --list $PWDIR`
+</programlisting>
+
+Next, you can change the variables PWDIR, PIDFILE and add a new variable
+"dir" at the beginning of the file:
+
+<programlisting>
+PWDIR="/var/spool/postfix/var/run/${NAME}"
+PIDFILE="${PWDIR}/saslauthd.pid"
+dir="root sasl 755 ${PWDIR}"
+</programlisting>
+        </para>
+        </sect3>
+        <sect3 id="postfix-testing" status="review">
+          <title>Testing</title>
+            <para>
+          SMTP AUTH configuration is complete. Now it is time to start
+          and test the setup. You can run the following command to start
+          the SASL daemon:
+            <screen><command>sudo /etc/init.d/saslauthd start</command></screen>
+
+          To see if SMTP-AUTH and TLS work properly, run the following
+          command:
+            <screen><command>telnet mail.example.com 25</command></screen>
+          After you have established the connection to the postfix mail
+          server, type:
+            <screen>ehlo mail.example.com</screen>
+          If you see the following lines among others, then everything
+          is working perfectly. Type <command>quit</command> to exit.
+<programlisting>
+250-STARTTLS
+250-AUTH LOGIN PLAIN
+250-AUTH=LOGIN PLAIN
+250 8BITMIME
+</programlisting>
+        </para>
+        </sect3>
+      </sect2>
+      <sect2 id="exim4" status="review">
+        <title>Exim4</title>
+          <para>
+            <application>Exim4</application> is is another Message Transfer
+            Agent (MTA) developed at the University of Cambridge for use
+            on Unix systems connected to the internet. Exim can be
+            installed in place of <application>sendmail</application>,
+            although the configuration of
+            <application>exim</application> is quite different to
+            that of <application>sendmail</application>.
+          </para>
+        <sect3 id="exim4-installation" status="review">
+          <title>Installation</title>
+            <para>
+            To install <application>exim4</application>, run the following command:
+<screen>
+<command>sudo apt-get install exim4 exim4-base exim4-config</command>
+</screen>
+            </para>
+        </sect3>
+        <sect3 id="exim4-configuration" status="review">
+          <title>Configuration</title>
+            <para>
+            To configure <application>exim4</application>, run the following command:
+<screen>
+<command>sudo dpkg-reconfigure exim4-config</command>
+</screen>
+            The user interface will be displayed. The user interface
+            lets you configure many parameters. For example, In
+            <application>exim4</application> the configuration files are
+            split among multiple files. If you wish to have them in one
+            file you can configure accordingly in this user interface.
+            </para>
+
+            <para>
+            All the parameters you configure in the user interface are
+            stored in
+            <filename>/etc/exim4/update-exim4.conf.conf</filename> file.
+            If you wish to re-configure, either you re-run the
+            configuration wizard or manually edit this file
+            using your favourite editor. Once you configure, you can run
+            the following command to generate the master configuration
+            file:
+<screen>
+<command>sudo update-exim4.conf</command>
+</screen>
+            The master configuration file, is generated and
+            it is stored in
+            <filename>/var/lib/exim4/config.autogenerated</filename>. 
+            
+            <warning>
+            <para>
+            At any time, you should not edit the master configuration
+            file,
+            <filename>/var/lib/exim4/config.autogenerated</filename>
+            manually. It is updated automatically every time you run
+            <command>update-exim4.conf</command>
+            </para>
+            </warning>
+            You can run
+            the following command to start
+            <application>exim4</application> daemon.
+<screen>
+<command>sudo /etc/init.d/exim4 start</command>
+</screen>
+            <emphasis role="strong">TODO:</emphasis> This section should
+            cover configuring SMTP AUTH with exim4. 
             </para>
         </sect3>
       </sect2>
-      <sect2 id="courier-imap-server" status="writing">
-        <title>Courier IMAP Server</title> 
+      <sect2 id="dovecot-server" status="review">
+        <title>Dovecot Server</title> 
           <para>
-            Courier IMAP Server para ...
+          <application>Dovecot</application> is a Mail Delivery Agent, written with security
+          primarily in mind. It supports the major mailbox formats: mbox
+          or Maildir. This section explain how to set it up as an imap or
+          pop3 server.
           </para>
-        <sect3 id="courier-installation" status="writing">
+        <sect3 id="dovecot-installation" status="review">
           <title>Installation</title>
             <para>
-              Installation para ...
+            To install <application>dovecot</application>, run the following command in the
+            command prompt:
+<screen>
+<command>sudo apt-get install dovecot-common dovecot-imapd dovecot-pop3d</command>
+</screen>
             </para>
         </sect3>
-        <sect3 id="courier-configuration" status="writing">
+        <sect3 id="dovecot-configuration" status="review">
           <title>Configuration</title>
             <para>
-              Configuration para ...
+            To configure <application>dovecot</application>, you can edit the file
+            <filename>/etc/dovecot/dovecot.conf</filename>. You can
+            choose the protocol you use. It could be pop3, pop3s (pop3
+            secure), imap and imaps (imap secure). A description of these protocols is beyond the scope of this guide. For further information, refer to the wikipedia articles on <ulink
+            url="http://en.wikipedia.org/wiki/POP3">POP3</ulink> and
+            <ulink
+            url="http://en.wikipedia.org/wiki/Internet_Message_Access_Protocol">IMAP</ulink>.
             </para>
+
+            <para>
+            IMAPS and POP3S are more secure that the simple IMAP and
+            POP3 because they use SSL encryption to connect. Once you
+            have chosen the protocol, amend the following line in the file
+            <filename>/etc/dovecot/dovecot.conf</filename>:
+<programlisting>
+protocols = pop3 pop3s imap imaps
+</programlisting>
+
+            It enables the protocols when <application>dovecot</application> is started. Next, add the following line in pop3 section in the file <filename>/etc/dovecot/dovecot.conf</filename>:
+<programlisting>
+pop3_uidl_format = %08Xu%08Xv
+</programlisting>
+
+            Next, choose the mailbox you use. <application>Dovecot</application> supports
+            <emphasis role="strong">maildir</emphasis> and <emphasis
+            role="strong">mbox</emphasis> formats. These are the most
+            commonly used mailbox formats. They both have their own
+            benefits and they are discussed on <ulink
+            url="http://dovecot.org/doc/configuration.txt">the dovecot website</ulink>.
+            </para>
+            <para>
+            Once you have chosen your mailbox type, edit the file
+            <filename>/etc/dovecot/dovecot.conf</filename> and change
+            the following line:
+<programlisting>
+default_mail_env = maildir:~/Maildir # (for maildir)
+or
+default_mail_env = mbox:~/mail:INBOX=/var/spool/mail/%u # (for mbox)
+</programlisting>
+            </para>
+<note>
+<para>
+You should configure your Mail Trasport Agent (MTA) to transfer the
+incoming mail to this type of mailbox if it is different from the one
+you have configured.
+</para>
+</note>
+          <para>
+          Once you have configured dovecot, start the <application>dovecot</application> daemon
+          in order to test your setup:
+
+          <screen><command>sudo /etc/init.d/dovecot start</command></screen>
+
+          If you have enabled imap, or pop3, you can also try to log in
+          with the commands <command>telnet localhost pop3</command> or
+          <command>telnet localhost</command> imap2. If you see
+          something like the following, the installation has been
+          successful:
+<programlisting>
+bhuvan@rainbow:~$ telnet localhost pop3
+Trying 127.0.0.1...
+Connected to localhost.localdomain.
+Escape character is '^]'.
++OK Dovecot ready.
+</programlisting>
+          </para>
+        </sect3>
+        <sect3 id="dovecot-ssl" status="review">
+          <title>Dovecot SSL Configuration</title>
+            <para>
+            To configure <application>dovecot</application> to use SSL, you can edit the file
+            <filename>/etc/dovecot/dovecot.conf</filename> and amend
+            following lines:
+<programlisting>
+ssl_cert_file = /etc/ssl/certs/dovecot.pem
+ssl_key_file = /etc/ssl/private/dovecot.pem
+ssl_disable = no
+disable_plaintext_auth = no
+</programlisting>
+
+          The <emphasis role="strong">cert</emphasis> and <emphasis
+          role="strong">key</emphasis> files are created automatically
+          by <application>dovecot</application> when you install it. Please note that these keys
+          are not signed and will give "bad signature" errors when
+          connecting from a client. To avoid this, you can use
+          commercial certificates, or even better, you can use your own
+          SSL certificates.
+          </para>
+	</sect3>
+	<sect3>
+	  <title>Firewall Configuration for an Email Server</title>
+          <para>
+          To access your mail server from another computer, you must
+          configure your firewall to allow connections to the server on
+          the necessary ports.
+            <itemizedlist>
+            <listitem><para>IMAP - 143</para></listitem>
+            <listitem><para>IMAPS - 993</para></listitem>
+            <listitem><para>POP3 - 110</para></listitem>
+            <listitem><para>POP3S - 995</para></listitem>
+            </itemizedlist>
+          </para>
         </sect3>
       </sect2>
       <sect2 id="mailman" status="review">
@@ -2674,7 +3243,7 @@ group. The mailman process will be owned by this user.
               </para>
           </sect4>
         </sect3>
-        <sect3 id="mailman-configuration" status="writing">
+        <sect3 id="mailman-configuration" status="review">
           <title>Configuration</title>
             <para>
             This section assumes you have successfully installed

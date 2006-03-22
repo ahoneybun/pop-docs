@@ -4,7 +4,6 @@
     <!-- ======================= -->
     <!-- Imports -->
 	<xsl:import href="/usr/share/xml/docbook/stylesheet/nwalsh/xhtml/docbook.xsl"/>
-	<xsl:import href="ubuntu-banner.xsl"/>	
 
     <!-- Params -->
     <xsl:param name="generate.legalnotice.link" select="1"/>
