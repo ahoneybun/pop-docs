@@ -2726,7 +2726,7 @@ local   all         postgres                          md5 sameuser
             </para>
         </sect3>
         <sect3 id="postfix-configuration" status="review">
-          <title>Configuration</title>
+          <title>Basic Configuration</title>
             <para>
             To configure <application>postfix</application>, run the following command:
 <screen>
@@ -2753,23 +2753,20 @@ local   all         postgres                          md5 sameuser
             Replace mail.example.com with your mail server hostname.
             </para>
             </note>
-            <para>Next, you can configure
+	 </sect3>
+        <sect3 id="postfix-smtp-authentication" status="review">
+          <title>SMTP Authentication</title>
+            <para>The next steps are to configure
             <application>postfix</application> to use SASL for SMTP
-            AUTH. You can configure the digital certificate 
-            for TLS. You can get the digital
-            certificate from a certificate authority. Alternatively, you
-            can create the certificate yourself. Refer <ulink
-            url="#creating-a-self-signed-certificate">Creating a Self
-            Signed Certificate</ulink> section for more details.
-            
-            </para>
-            <para>Now, run the following commands to configure SMTP AUTH and
-            TLS. You can use <command>postconf</command> to configure
+            AUTH. Rather than editing the configuration file directly, 
+	     you can use the <command>postconf</command> command to configure
             all <application>postfix</application> parameters.  The
             configuration parameters will be stored in
             <filename>/etc/postfix/main.cf</filename> file. Later if you
             wish to re-configure a particular parameter, you can either
-            run the command or change it manually in the file.
+            run the command or change it manually in the file.</para>
+	<procedure>
+		<step><para>Configure Postfix to do SMTP AUTH using SASL (saslauthd):
 <screen>
 postconf -e 'smtpd_sasl_local_domain ='
 postconf -e 'smtpd_sasl_auth_enable = yes'
@@ -2779,7 +2776,12 @@ postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permit_myn
 postconf -e 'inet_interfaces = all'
 echo 'pwcheck_method: saslauthd' >> /etc/postfix/sasl/smtpd.conf
 echo 'mech_list: plain login' >> /etc/postfix/sasl/smtpd.conf
-
+</screen>
+		</para>
+		</step>
+		<step><para>Next, configure the digital certificate 
+            for TLS.
+<screen>
 mkdir /etc/postfix/ssl
 cd /etc/postfix/ssl/
 openssl genrsa -des3 -rand /etc/hosts -out smtpd.key 1024
@@ -2789,7 +2791,16 @@ openssl x509 -req -days 3650 -in smtpd.csr -signkey smtpd.key -out smtpd.crt
 openssl rsa -in smtpd.key -out smtpd.key.unencrypted
 mv -f smtpd.key.unencrypted smtpd.key
 openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650
-
+</screen>
+		</para>
+		<note><para>You can get the digital
+            certificate from a certificate authority. Alternatively, you
+            can create the certificate yourself. Refer <ulink
+            url="#creating-a-self-signed-certificate">Creating a Self
+            Signed Certificate</ulink> section for more details.</para></note>
+		</step>
+		<step><para>Configure Postfix to do TLS encryption for both incoming and outgoing mail:
+<screen>
 postconf -e 'smtpd_tls_auth_only = no'
 postconf -e 'smtp_use_tls = yes'
 postconf -e 'smtpd_use_tls = yes'
@@ -2803,64 +2814,23 @@ postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
 postconf -e 'tls_random_source = dev:/dev/urandom'
 postconf -e 'myhostname = mail.example.com'
 </screen>
-          Alternatively, you can store these commands in a <ulink
-          url="sample/posfix_commands.sh">seperate file</ulink> and run them from the
-          file.
-            </para>
+		</para>
+		</step>
+		</procedure>
             <note>
             <para>
             After you run all the commands, the SMTP AUTH is configured
-            with <application>postfix</application>.  The self-signed
+            with <application>postfix</application>. The self-signed
             cerficiate is created for TLS and it is configured with
             <application>postfix</application>.
             </para>
             </note>
             <para>
             Now, the file <filename>/etc/postfix/main.cf</filename>
-            should look like this:
-<programlisting>
-# See /usr/share/postfix/main.cf.dist for a commented, more complete
-# version
-
-smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
-biff = no
-
-# appending .domain is the MUA's job.
-append_dot_mydomain = no
-
-# Uncomment the next line to generate "delayed mail" warnings
-#delay_warning_time = 4h
-
-myhostname = server1.example.com
-alias_maps = hash:/etc/aliases
-alias_database = hash:/etc/aliases
-myorigin = /etc/mailname
-mydestination = server1.example.com, localhost.example.com, localhost
-relayhost =
-mynetworks = 127.0.0.0/8
-mailbox_command = procmail -a "$EXTENSION"
-mailbox_size_limit = 0
-recipient_delimiter = +
-inet_interfaces = all
-smtpd_sasl_local_domain =
-smtpd_sasl_auth_enable = yes
-smtpd_sasl_security_options = noanonymous
-broken_sasl_auth_clients = yes
-smtpd_recipient_restrictions =
-permit_sasl_authenticated,permit_mynetworks,reject _unauth_destination
-smtpd_tls_auth_only = no
-smtp_use_tls = yes
-smtpd_use_tls = yes
-smtp_tls_note_starttls_offer = yes
-smtpd_tls_key_file = /etc/postfix/ssl/smtpd.key
-smtpd_tls_cert_file = /etc/postfix/ssl/smtpd.crt
-smtpd_tls_CAfile = /etc/postfix/ssl/cacert.pem
-smtpd_tls_loglevel = 1
-smtpd_tls_received_header = yes
-smtpd_tls_session_cache_timeout = 3600s
-tls_random_source = dev:/dev/urandom
-</programlisting>
-            The postfix initial configuration is complete. You can run
+            should look like <ulink url="sample/postfix_configuration">this</ulink>.
+		</para>
+		<para>
+            The postfix initial configuration is complete. Run
             the following command to start postfix daemon:
             <screen><command>sudo /etc/init.d/postfix start</command></screen>
 
@@ -2869,17 +2839,10 @@ tls_random_source = dev:/dev/urandom
             <ulink
             url="ftp://ftp.isi.edu/in-notes/rfc2554.txt">RFC2554</ulink>.
             It is based on <ulink
-            url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>.If
-            you wish to configure SMTP authentication, continue
-            with the next section.
+            url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>. However it is still necessary to set up SASL authentication before you can use SMTP.
             </para>
-        </sect3>
-        <sect3 id="postfix-smtp-authentication" status="review">
-          <title>SMTP Authentication</title>
             <para>
-            In this section, we will see howto configure
-            <application>postfix</application> to use
-            <application>saslauthd</application> for SMTP AUTH.  The
+            The
             <application>libsasl2</application>,
             <application>sasl2-bin</application> and
             <application>libsasl2-modules</application> are necessary to

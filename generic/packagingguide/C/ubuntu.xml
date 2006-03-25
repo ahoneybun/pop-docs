@@ -11,42 +11,8 @@
 %xinclude;
 <!ENTITY language "en">
 ]>
-<chapter id="Ubuntu-chap" status="review">
-	<title>Ubuntu Specific Packaging</title>
-	<para>Material that is specific to &ubuntu; development.</para>
-
-	<sect1 id="kubuntu" status="writing">
-		<title>Packaging for Kubuntu</title>
-		<para>Below are package issues specific to KDE.</para>
-		<sect2 id="generating-pot-files">
-			<title>Generating .pot Files</title>
-			<para>The Ubuntu translation website <ulink url="https://launchpad.net/rosetta/">Rosetta</ulink>
-				now supports KDE, which means KDE packages need to support Rosetta by
-				generating .pot template files for translators. If you use <application>cdbs</application>
-				in Dapper your package should now do this automatically, build and check for a .pot
-				file in po/ directory.</para>
-			<para>You will need the <ulink url="../files/kubuntu_01_kdepot.diff">kdepot patch</ulink> (or similar, it may not
-				apply exactly depending on the age of the admin directory).</para>
-			<para>If your package uses <application>debhelper</application>, or <application>cdbs</application>
-				and includes it's own kde.mk file you need to add the rules yourself.</para>
-			<para>For <application>cdbs</application> add these lines to your debian/rules:</para>
-			<screen>
-common-post-build-arch::
-	mkdir -p po
-        XGETTEXT=/usr/bin/kde-xgettext sh admin/cvs.sh extract-messages
-
-clean::
-        rm -rf po</screen>
-			<para>And for <application>debhelper</application> the following to the end of the
-				<emphasis>install</emphasis> rule:</para>
-			<screen>
-mkdir -p po
-XGETTEXT=/usr/bin/kde-xgettext sh admin/cvs.sh extract-messages</screen>
-			<para>Then add this to the <emphasis>clean</emphasis> rule:</para>
-			<screen>
-rm -f po/*.pot</screen>
-		</sect2>
-	</sect1>
+<chapter id="ubuntu-chap" status="review">
+	<title>Ubuntu Packaging</title>
 
 	<sect1 id="ubuntu-upload" status="review">
 		<title>Uploading and Review</title>
@@ -401,6 +367,40 @@ sudo pbuilder build xcdroast_0.98+0alpha15-3ubuntu1.dsc</screen>
 			<screen>debdiff xcdroast_0.98+0alpha15-3.dsc xcdroast_0.98+0alpha15-3ubuntu1.dsc >
 				xcdroast_0.98+0alpha15-3ubuntu1.debdiff</screen>
 		</sect2>
+	</sect1>
+
+	<sect1 id="ubuntu-kubuntu" status="writing">
+		<title>Packaging for Kubuntu</title>
+		<para>Below are package issues specific to KDE.</para>
+		<sect2 id="generating-pot-files">
+			<title>Generating .pot Files</title>
+			<para>The Ubuntu translation website <ulink url="https://launchpad.net/rosetta/">Rosetta</ulink>
+				now supports KDE, which means KDE packages need to support Rosetta by
+				generating .pot template files for translators. If you use <application>cdbs</application>
+				in Dapper your package should now do this automatically, build and check for a .pot
+				file in po/ directory.</para>
+			<para>You will need the <ulink url="../files/kubuntu_01_kdepot.diff">kdepot patch</ulink> (or similar, it may not
+				apply exactly depending on the age of the admin directory).</para>
+			<para>If your package uses <application>debhelper</application>, or <application>cdbs</application>
+				and includes it's own kde.mk file you need to add the rules yourself.</para>
+			<para>For <application>cdbs</application> add these lines to your debian/rules:</para>
+			<screen>
+common-post-build-arch::
+	mkdir -p po
+        XGETTEXT=/usr/bin/kde-xgettext sh admin/cvs.sh extract-messages
+
+clean::
+        rm -rf po</screen>
+			<para>And for <application>debhelper</application> the following to the end of the
+				<emphasis>install</emphasis> rule:</para>
+			<screen>
+mkdir -p po
+XGETTEXT=/usr/bin/kde-xgettext sh admin/cvs.sh extract-messages</screen>
+			<para>Then add this to the <emphasis>clean</emphasis> rule:</para>
+			<screen>
+rm -f po/*.pot</screen>
+		</sect2>
+
 	</sect1>
 
 </chapter>
