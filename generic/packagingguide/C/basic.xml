@@ -11,10 +11,10 @@
 %xinclude;
 <!ENTITY language "en">
 ]>
-<chapter id="basic" status="writing">
+<chapter id="basic-chap" status="writing">
 	<title>Basic Packaging</title>
-	<sect1 id="packaging-scratch" status="writing">
-		<title>Creating a Source Package From Scratch</title>
+	<sect1 id="basic-scratch" status="writing">
+		<title>Packaging From Scratch</title>
 		
 		<important><para><emphasis role="bold">Requirements:</emphasis> automake, gnupg,
 				and lintian, fakeroot.</para> </important>
@@ -495,8 +495,8 @@ lintian *.dsc</screen></para>
 		
 	</sect1>
 
-	<sect1 id="packaging-debhelper" status="writing">
-		<title>Creating a Source Package with Debhelper</title>
+	<sect1 id="basic-debhelper" status="writing">
+		<title>Packaging With Debhelper</title>
 		<important><para><emphasis role="bold">Requirements:</emphasis> debhelper, gnupg,
 				and fakeroot</para>
 		</important>
@@ -594,52 +594,88 @@ binary: binary-indep binary-arch
 
 	</sect1>
 
-	<sect1 id="packaging-updating" status="help">
+	<sect1 id="basic-cdbs" status="help">
+		<title>Packaging With CDBS</title>
+		<para>Discuss CDBS usage briefly and reference Duckcorps guide.</para>
+	</sect1>
+
+	
+	<sect1 id="basic-updating" status="help">
 		<title>Updating Packages</title>
 		<para>This section should discuss how to deal with new upstream releases and
 			making changes to other people's packages.</para>
 	</sect1>
 
-	<sect1 id="packaging-mistakes" status="writing">
-		<title>Common Mistakes and Error Checking</title>
-		<para>This section should discuss common packaging mistakes and some tools for
-			error checking before uploading..</para>
+	<sect1 id="basic-mistakes" status="writing">
+		<title>Common Mistakes</title>
 			
-		<orderedlist>
-	  <listitem>
-	  <para>See those .ex files in debian/? Those are just example templates. A fully polished package will not
-		  have them. So modify them and save them or just delete them if not needed</para>
-	  </listitem>
-	  </orderedlist>
-		<sect2 id="changing-orig-tarball">
+		<sect2 id="basic-ex_files">
+			<title>dh_make Example Files</title>
+			
+			<para>When you use dh_make to create the initial "debianization" example files
+				for various tasks are created in the <filename>debian/</filename>
+				directory. The templates have a .ex extentions. If you want to use one
+				rename it to remove the extention. If you do not need it, remove it to
+				keep the <application>debian/</application> clean.</para>
+
+		</sect2>
+
+		<sect2 id="basic-orig-tarball">
 			<title>Changing the Original Tarball</title>
-			<para>This section contains reasons why not, when you are allowed and when not you're allowed
-				to change the original and solutions to some problems with .orig.tar.gz's.</para>
-			<sect3 id="problems-that-occur">
-				<title>Problems</title>
-				<para>Here is a list of problems that occur when you change the original tarball:</para>
-				<orderedlist>
-					<listitem><para>Reproducability</para>
-						<para>If you take just the .diff.gz and .dsc, you or someone else has
-							no means to reproduce the changes in the orig-tarball.</para>
-					</listitem>
-					<listitem><para>Upgradeability</para>
-						<para>No easy way to upgrade to a new upstream version.</para>
-					</listitem>
-					<listitem><para>Debian to &ubuntu; Syncs</para>
-						<para>Changing original tarballs makes it hard to automatically sync from
-							Debian to &ubuntu;.</para>
-					</listitem>
-					<listitem><para>Usage of VCS for Debian package</para>
-						<!-- I guess that counts for other VCS as well, although I don't have
-						     experience there... yet -->
-						<para>If you use svn (<application>svn-buildpackage</application>) to handle your
-							Debian package, you usually don't store the original tarball inside. If
-							someone else will do a checkout, he'll need to get the original tarball
-							seperately. (see point 1 from here on).</para>
-					</listitem>
-					<listitem><para>Security tracking</para>
-						<para>Consider a situation, where someone <emphasis>wants</emphasis> to
+
+			<para>There are two different types of source package, native and non-native.
+				A native package is one that is specific to &ubuntu;/Debian. It has the
+				<application>debian/</application> directory containing the packaging
+				information and any changes to the source inclued in the tarball (usually
+				&lt;packagename&gt;_&lt;version&gt;.tar.gz). Non-native packages are more
+				common and recommended for most situations. A non-native package splits
+				the source package into a &lt;packagename&gt;_&lt;version&gt;.orig.tar.gz
+				tarball that is identical (hopefully including md5sum) to the source
+				tarball downloaded from the project's homepage and a .diff.gz file the
+				contains all the differences (<filename>debian/</filename> directory and
+				patches) from the original source tarball.</para>
+
+			<para>Here is a list of potential problems that can occur if you change the
+				original tarball:</para>
+		
+			<orderedlist>
+
+				<listitem><para>Reproducability</para>
+
+					<para>If you take just the .diff.gz and .dsc, you or someone else has
+						no means to reproduce the changes in the
+						orig-tarball.</para></listitem>
+
+				<listitem><para>Upgradeability</para>
+		
+					<para>It is much easier to upgrade to a new upstream (from the author)
+						version if the .orig.tar.gz is preserved and there is a clear
+						seperation between the upstream source and the changes made to
+						produce the &ubuntu; source package.</para> </listitem>
+
+				<listitem><para>Debian to &ubuntu; Syncronization</para>
+
+					<para>Changing original tarballs makes it hard to automatically sync
+						from Debian to &ubuntu;. Normally only the .diff.gz and .dsc files
+						change within the same upstream version since the .orig.tar.gz
+						file is shared by all the Debian or &ubuntu; revisions. It is much
+						more difficult to sync if the md5sums of the .orig.tar.gz files
+						are not the same.</para> </listitem>
+
+				<listitem><para>Usage of Revision Control for Debian package</para>
+					
+					<para>If you use svn (<application>svn-buildpackage</application>) to
+						handle your Debian package, you usually don't store the original
+						tarball inside. If someone else does a checkout, he'll need to
+						get the original tarball seperately. Other revision control
+						systems can be used to track only the packging files
+						(<filename>debian/</filename>, etc.) and not the whole
+						source. However, if the .orig.tar.gz is not the same then
+						obviously problems can occur.</para></listitem>
+
+				<listitem><para>Security tracking</para>
+
+					<para>Consider a situation, where someone <emphasis>wants</emphasis> to
 							introduce a backdoor/rootkit or other evil stuff. If the original
 							tarball is intact, it can be easily scanned through the .diff.gz and
 							see if the one who debianized the package tries to do something evil.
@@ -647,90 +683,132 @@ binary: binary-indep binary-arch
 							differences between the tarball and the really original source if the
 							individual wants to check if the one who debianized the software
 							introduces evil stuff.</para>
-						<note><para>You still have to trust upstream for not doing evil things here, but
-								this is valid even if the original is unchanged or
-								not.</para></note>
-					</listitem>
-					<listitem><para>The diff.gz</para>
-						<para>You already have the option to use the .diff.gz to reflect changes to
-							the original tarball.</para>
-					</listitem>
-				</orderedlist>
-			</sect3>
-			<sect3 id="exceptions-orig">
-				<title>Exceptions and Non-Exceptions</title>
-				<para>Allowed</para>
-				<orderedlist><listitem><para>Upstream tarball contains (non-free) stuff, that cannot be
-							redistributed thus remove the portions of non-free stuff.</para>
-					</listitem>
-				</orderedlist>
-				<para>Not Allowed</para>
-				<orderedlist><listitem><para>Directory Layout Wrong</para>
-						<note><para><application>dpkg-source</application> is quite flexible with this and manages to
-								produce the correct directory layout even if:</para></note>
-						<itemizedlist><listitem><para>The directory inside the tarball is not named
-									&lt;upstream&gt;-&lt;version&gt;.</para></listitem>
-							<listitem><para>There is no subdirectory inside the tarball</para></listitem>
-						</itemizedlist>
-					</listitem>
-					<listitem><para>Files that need to be removed to keep the .diff.gz small (e.g.
-							autotools-stuff):</para>
-						<itemizedlist>
-							<listitem><para>Everything, that needs to be deleted, should be done in the clean
-									rule. Since the .diff.gz is created with diff -u, you'll not see
-									removed files in .diff.gz.</para></listitem>
-							</itemizedlist>
-						</listitem>
-						<listitem><para>Files to be modified</para>
-							<itemizedlist>
-								<listitem><para>Always need to go into .diff.gz. That's the purpose
-										of it!</para></listitem>
-							</itemizedlist>
-						</listitem>
-						<listitem><para>Wrong permissions on files</para>
-							<itemizedlist><listitem>
-									<para>These won't be represented in .diff.gz. However you have
-										the means to change this in debian/rules.</para>
-									<caution><para>If you don't know how to do it with <application>cdbs</application>,
-											use
-											<application>debhelper</application>!</para></caution>
-								</listitem>
-							</itemizedlist>
-						</listitem>
-						<listitem><para>What to do with .orig.tar.gz which already include a debian/ dir?</para>
-							<itemizedlist><listitem>
-									<para>Do not repackage. Ask upstream to delete the debian/ dir and
-										provide a diff.gz instead. This makes it easier to review
-										his upstream work, his packaging work and your packaging work.
-									</para>
-							</listitem>
-						</itemizedlist>
-					</listitem>
-				</orderedlist>
-				<para>Kind Of Allowed</para>
-				<orderedlist>
-					<listitem><para>Upstream provides only bzip2</para>
-						<itemizedlist>
-							<listitem><para>Just do bunzip2 on the .tar.bz2 and gzip -9 on the tar.</para></listitem>
-							<listitem><para>The md5sums of the .tar you provide and the original
-									.tar must match!</para></listitem>
-							<!-- FIXME: Get an example of the item below -->
-							<listitem><para>Eventually provide get-orig-source in debian/rules, that does
-									this converting.</para></listitem>
-							<!-- FIXME: Maybe a watch file could handle this to. Maybe with a custom "action" script? -->
-						</itemizedlist>
-					</listitem>
-					<listitem><para>Directly imported from SVN</para>
-						<itemizedlist>
-							<listitem><para>Provide get-orig-source in debian/rules.</para></listitem>
-						</itemizedlist>
-					</listitem>
-				</orderedlist>
-				<note><para>It's always a good idea to contact upstream and ask him/her if he/she can correct stuff like
-					autoconf-issues or directory layout (or old FSF-adress) or other things, you need to "patch"
-					afterwards in .diff.gz.</para></note>
-			</sect3>
+		
+						<note><para>You still have to trust the authors of the software to
+								not do anything evil, but that is the case regardless of
+								whether the original is unchanged or
+								not.</para></note></listitem>
+
+				<listitem><para>The .diff.gz</para>
+						
+					<para>The option to use the .diff.gz to reflect changes to the
+						original tarball already exists so it is easy to make changes
+						without touching the original tarball.</para></listitem>
+				
+			</orderedlist>
+
+
+			<para><emphasis role="bold">It is acceptiable to change the original tarball
+					if:</emphasis></para>
+
+			<itemizedlist>
+	
+				<listitem><para>it contains non-free parts that cannot be redistributed.
+						Remove those parts and note it somewhere in the packaging. Often
+						such packages use "dfsg" (which stands for Debian Free Software
+						Guidelines) in the package name or versioning to indicate that
+						non-free parts have been removed.</para></listitem>
+					
+				<listitem><para>the authors only provide bzip2'ed source.</para>
+					<itemizedlist>
+						
+						<listitem><para>Just <application>bunzip2</application> the
+								.tar.bz2 and <application>gzip -9 </application> the
+								resulting tar.</para></listitem>
+							
+						<listitem><para>The md5sums of the .tar you provide and the
+								original .tar must match!</para></listitem>
+	
+						<listitem><para>Eventually provide a get-orig-source rule in
+								debian/rules that does this conversion
+								automatically.</para></listitem>
+					
+					</itemizedlist>
+				</listitem>
+					
+				<listitem><para>Directly imported from SVN</para>
+					<itemizedlist>
+						<listitem><para>Provide get-orig-source in debian/rules.</para></listitem>
+					</itemizedlist>
+				</listitem>
+	
+			</itemizedlist>
+
+			<para><emphasis role="bold">The following are <emphasis>not</emphasis> reasons to
+					change the original tarbal:</emphasis></para>
+			
+			<itemizedlist>
+				
+				<listitem><para>Wrong Directory Layout</para>
+					
+					<note><para><application>dpkg-source</application> is quite flexible
+							and manages to produce the correct directory layout even
+							if:</para></note>
+						
+					<itemizedlist>
+						
+						<listitem><para>The directory inside the tarball is not named
+								&lt;upstream&gt;-&lt;version&gt;.</para></listitem>
+				
+						<listitem><para>There is no subdirectory inside the tarball</para></listitem>
+					</itemizedlist>
+			
+				</listitem>
+			
+				<listitem><para>Files that need to be removed to keep the .diff.gz small,
+						for example files created by autotools. Everything, that needs to
+						be deleted, should be done in the clean rule. Since the .diff.gz
+						is created with diff -u, you'll not see removed files in
+						.diff.gz.</para></listitem>
+										
+				<listitem><para>Files need to be modified. Files that need to be modified
+						should to go into .diff.gz. That is its purpose!</para></listitem>
+				
+				<listitem><para>Wrong permissions on files. You can use
+						<filename>debian/rules</filename> to do this.</para></listitem>
+	
+			</itemizedlist>
+			
+			
+			<tip><para>What do I do with a .orig.tar.gz which already includes a
+					<filename>debian/</filename> dir?</para>
+					
+				<para>Do not repackage it. You can ask the authors to delete the debian/
+					dir and provide a diff.gz instead. This makes it easier to review the
+					authors work, and separate packaging from program source.  </para>
+			</tip>
+				
+			<note><para>It's always a good idea to contact the program's authors and ask
+					them if they can correct autoconf issues, directory layout, old Free
+					Software Foundation address in COPYRIGHT files, or other things that
+					are not specific to the packaging but would be convienient for yous so
+					you do not need to "patch" the source in .diff.gz.</para></note>
+		
 		</sect2>
+
+		<sect2>
+			<title>Copyright Information</title>
+
+			<para>The <filename>debian/copyright</filename> should contain:</para>
+			
+			<itemizedlist>
+				
+				<listitem><para>the licensing information for <emphasis>all</emphasis>
+						files in the source. Sometimes authors put a license in
+						<filename>COPYING</filename> but some files in their source have
+						different licensing information.</para></listitem>
+
+				<listitem><para>the copyright holders and year(s).</para></listitem>
+
+				<listitem><para>the <emphasis>entire</emphasis> license unless it is one
+						of the licenses found in
+						<filename>/usr/share/common-licenses/</filename> in which case you
+						should just include the preamble.</para></listitem>
+
+			</itemizedlist>
+				
+		</sect2>
+
 	</sect1>
 
 </chapter>
