@@ -63,7 +63,7 @@ eth1      Link encap:Ethernet  HWaddr 00:09:5B:8F:5B:23
 			refer to the physical device (eth0, in this case).
 			</para>
 			<para>
-			Please refer <application>ifconfig</application> man page or the <ulink
+			Please refer to the <application>ifconfig</application> man page or the <ulink
 			url="http://www.tldp.org/LDP/nag/nag.html">Network Administrator's Guide</ulink> for more
 			advanced usage.
             </para>
@@ -89,12 +89,6 @@ eth1      Link encap:Ethernet  HWaddr 00:09:5B:8F:5B:23
 			</para>
 			<para>See the <application>route</application> man page for complete usage details.</para>
           </sect2>
-        <sect2 id="wireless" status="help">
-          <title>Wireless</title>
-            <para>
-              Wireless para ...
-            </para>
-        </sect2>
         <sect2 id="managing-dns-entries" status="review">
           <title>Managing DNS Entries</title>
             <para>This section explains how to configure the nameserver
@@ -341,14 +335,14 @@ nameserver 208.185.179.218
             routing tables, since routers learn from one another about their existence and available routes. This trait
             also eliminates the possibility of introducing mistakes in the routing tables via human error.
             Dynamic routing is not perfect, however, and presents disadvantages such as heightened complexity and
-            additional network overhead from router communications, which does not immediately benefit the end-users,
+            additional network overhead from router communications, which does not immediately benefit the end users,
             but still consumes network bandwidth.
             </para>
         </sect2>
         <sect2 id="tcp-and-udp" status="review">
           <title>TCP and UDP</title>
             <para>
-              TCP is a a connection-based protocol, offering error correction and guaranteed delivery of
+              TCP is a connection-based protocol, offering error correction and guaranteed delivery of
               data via what is known as <emphasis role="italics">flow control</emphasis>. Flow control
               determines when the flow of a data stream needs to be stopped, and previously sent data
               packets should to be re-sent due to problems such as <emphasis role="italics">collisions</emphasis>,
@@ -357,10 +351,11 @@ nameserver 208.185.179.218
             </para>
             <para>
               The User Datagram Protocol (UDP), on the other hand, is a <emphasis role="italics">connectionless</emphasis>
-              protocol which never deals with the transmission of important data because it lacks flow
-              control or any other method to assure reliable delivery of the data.  UDP is commonly used
+              protocol which seldom deals with the transmission of important data because it lacks flow
+              control or any other method to ensure reliable delivery of the data.  UDP is commonly used
               in such applications as audio and video streaming, where it is considerably faster than
-              TCP due to the lack of error correction and flow control.
+              TCP due to the lack of error correction and flow control, and where the loss of a few packets
+			  is not generally catastrophic.
             </para>
         </sect2>
         <sect2 id="icmp" status="review">
@@ -382,7 +377,7 @@ nameserver 208.185.179.218
               a large number of daemons executing in the background on an Ubuntu system may provide network-related functionality.
               Some examples of such network daemons include the <emphasis role="italics">Hyper Text Transport Protocol Daemon</emphasis> 
               (httpd), which provides web server functionality; the <emphasis role="italics">Secure SHell Daemon</emphasis> (sshd), which
-              provides secure remote login shell and file transfer capabilities; and  the <emphasis role="italics">Internet Message Access 
+              provides secure remote login shell and file transfer capabilities; and the <emphasis role="italics">Internet Message Access 
               Protocol Daemon</emphasis> (imapd), which provides E-Mail services.
             </para>
         </sect2>
@@ -449,7 +444,7 @@ nameserver 208.185.179.218
 			  <screen>sudo iptables -A FORWARD -s 192.168.0.0/16 -o ppp0 -j ACCEPT
 sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED -i ppp0 -j ACCEPT</screen>
 			  The above commands will allow all connections from your local network to the
-			  Internet, and all traffic related to those connections to return to the machine
+			  Internet and all traffic related to those connections to return to the machine
 			  that initiated them.
 			</para>
         </sect2>
@@ -573,9 +568,9 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
             </para>
             <tip>
                <para>Prior to editing the configuration file, you should make a copy of the original file and protect it 
-               from writing so you will have the original settings as a reference and to re-use as necessary.
+               from writing so you will have the original settings as a reference and to reuse as necessary.
                </para>
-               <para>Copy the <filename>/etc/ssh/sshd_config</filename> file, and protect it from writing with the following commands, issued at a terminal prompt:
+               <para>Copy the <filename>/etc/ssh/sshd_config</filename> file and protect it from writing with the following commands, issued at a terminal prompt:
                </para>
 	    </tip>
                <para>
@@ -610,8 +605,8 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
             </listitem>
             <listitem>
              <para>
-             To make your OpenSSH server displays the contents of the <filename>/etc/issue.net</filename> file as a pre-login
-             banner, simply add, or modify the line:
+             To make your OpenSSH server display the contents of the <filename>/etc/issue.net</filename> file as a pre-login
+             banner, simply add or modify the line:
              </para>
                <para>
                Banner  /etc/issue.net
@@ -655,8 +650,8 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
             <para>File Transfer Protocol (FTP) is a TCP protocol for uploading and downloading
                 files between computers. FTP works on a client/server model. The server component is
                 called an <emphasis>FTP daemon</emphasis>. It continuously listens for FTP requests
-                from remote clients. When a request is received it manages the the login and sets up
-                the connection. For the duration of a session it executes any of commands sent by
+                from remote clients. When a request is received, it manages the the login and sets up
+                the connection. For the duration of the session it executes any of commands sent by
                 the FTP client.</para>
             <para>Access to an FTP server can be managed in two ways:</para>
             <itemizedlist spacing="compact">
@@ -669,8 +664,8 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
             </itemizedlist>
             <para>In the Anonymous mode, remote clients can access the FTP server by using the
                 default user account called &apos;anonymous&quot; or &quot;ftp&quot; and
-                sending their email address as the password. In the Authenticated mode a user must
-                have an account and password. User access to the FTP server directories and files is
+                sending an email address as the password. In the Authenticated mode a user must
+                have an account and a password. User access to the FTP server directories and files is
                 dependent on the permissions defined for the account used at login. As a general
                 rule, the FTP daemon will hide the root directory of the FTP server and change it to
                 the FTP Home directory. This hides the rest of the file system from remote
@@ -678,7 +673,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
             <sect2 id="vsftpd-ftp-server-installation" status="review">
                 <title>vsftpd - FTP Server Installation</title>
                     <para>vsftpd is an FTP daemon available in
-                    Ubuntu Linux. It is easy to install, setup, and
+                    Ubuntu. It is easy to install, set up, and
                     maintain.  To install <application>vsftpd</application> you
                 can run the following command:
                 <screen> <command>sudo apt-get install vsftpd</command> </screen>
@@ -722,7 +717,7 @@ anonymous_enable=NO
 <programlisting>
 #anon_upload_enable=YES
 </programlisting>
-                The configuration file consists of lot of
+                The configuration file consists of many
                 configuration parameters. The information about
                 each parameter is available in the configuration
                 file. Alternatively, you can refer the man
@@ -732,9 +727,15 @@ anonymous_enable=NO
                 <para> 
                 Once you configure <application>vsftpd</application> you
                 can start the daemon. You can run following command to
-                run <application>vsftpd</application> daemon:
+                run the <application>vsftpd</application> daemon:
                   <screen> <command>sudo /etc/init.d/vsftpd start</command> </screen>
                 </para>
+				<note><para>
+				Please note that the defaults in the configuration file are
+				set as they are for security reasons.  Each of the above
+				changes makes the system a little less secure, so make them
+				only if you need them.
+				</para></note>
                 </sect2>
     </sect1>
 	<sect1 id="network-file-system" status="review">
@@ -742,7 +743,7 @@ anonymous_enable=NO
           <para>
           NFS allows a system to share directories and files with others
           over a network. By using NFS, users and programs can access
-          files on remote systems almost as if they are local files.
+          files on remote systems almost as if they were local files.
           </para>
 
           <para>
@@ -773,7 +774,7 @@ network.</para>
         <title>Installation</title>
       
           <para>
-          At a terminal prompt enter the following command to install NFS
+          At a terminal prompt enter the following command to install the NFS
           Server:
           </para>
           <para>
@@ -796,7 +797,7 @@ network.</para>
           </para>
 
           <para>
-          You can replace * with one of the hostname formats. Make
+          You can replace * with one of the hostname formats. Make the
           hostname declaration as specific as possible so unwanted
           systems cannot access the NFS mount.
           </para>
@@ -824,7 +825,7 @@ network.</para>
       <warning>
       <para>
       The mount point directory <filename>/local/ubuntu</filename> must
-      exist. There should be no files or subdirectories in
+      exist. There should be no files or subdirectories in the
       <filename>/local/ubuntu</filename> directory.
       </para>
       </warning>
@@ -855,7 +856,7 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
     </sect1>
 	<sect1 id="dhcp" status="review">
 		<title>Dynamic Host Configuration Protocol (DHCP)</title>
-            <para>Dynamic Host Configuration Protocol (DHCP) is a network service that enables host
+            <para>The Dynamic Host Configuration Protocol (DHCP) is a network service that enables host
                 computers to be automatically assigned settings from a server as opposed to
                 manually configuring each network host. Computers configured to be DHCP clients have
                 no control over the settings they receive from the DHCP server, and the configuration
@@ -904,7 +905,7 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
                         <para>This method entails using DHCP to identify the unique hardware address
                             of each network card connected to the network and then continually
                             supplying a constant configuration each time the DHCP client makes a
-                            request to the DHCP server.</para>
+                            request to the DHCP server using that network device.</para>
                     </listitem>
                 </varlistentry>
                 <varlistentry>
@@ -954,7 +955,7 @@ Starting DHCP server: dhcpd failed to start - check syslog for diagnostics.  </s
         <title>Configuration</title>
             <para>The error message the installation ends with might be a little confusing, but the
                 following steps will help you configure the service:</para>
-            <para>Most commonly, what you want to do is assign IP addresses randomly. This can be
+            <para>Most commonly, what you want to do is assign an IP address randomly. This can be
                 done with settings as follows:</para>
             <screen>
 # Sample /etc/dhcpd.conf
@@ -971,7 +972,7 @@ subnet 192.168.1.0 netmask 255.255.255.0 {
 range 192.168.1.10 192.168.1.100;
 range 192.168.1.150 192.168.1.200;
 } </screen>
-            <para>This will result in DHCP server giving a client an IP address from the range
+            <para>This will result in the DHCP server giving a client an IP address from the range
                 192.168.1.10-192.168.1.100 or 192.168.1.150-192.168.1.200. It will lease an IP
                 address for 600 seconds if the client doesn't ask for a specific time frame. Otherwise
                 the maximum (allowed) lease will be 7200 seconds. The server will also "advise" the
@@ -982,14 +983,13 @@ range 192.168.1.150 192.168.1.200;
                 include the netbios-name-servers option, e.g.</para>
             <screen>
 option netbios-name-servers 192.168.1.1; </screen>
-            <para>Dhcpd configuration settings are taken from DHCP mini-HOWTO, which can be found
+            <para>Dhcpd configuration settings are taken from the DHCP mini-HOWTO, which can be found
                     <ulink url="http://www.tldp.org/HOWTO/DHCP/index.html">here</ulink>. </para>
       </sect2>
       <sect2 id="dhcp-references" status="review">
         <title>References</title>
           <para>
-            <ulink url="http://www.dhcp-handbook.com/dhcp_faq.html">DHCP
-            FAQ</ulink>
+            <ulink url="http://www.dhcp-handbook.com/dhcp_faq.html">DHCP FAQ</ulink>
           </para>
       </sect2>
     </sect1>
@@ -1000,7 +1000,7 @@ option netbios-name-servers 192.168.1.1; </screen>
                 remember IP addresses. Computers that run DNS are called
                 <emphasis role="italics">name
                 servers</emphasis>. Ubuntu ships with <application>BIND</application> (Berkley
-                Internet Naming Daemon), one of the most common programs used for maintaining a name
+                Internet Naming Daemon), the most common program used for maintaining a name
                 server on GNU/Linux.</para>
             <!-- things to do: IPv6-->
       <sect2 id="dns-installation" status="review">
@@ -1016,11 +1016,11 @@ option netbios-name-servers 192.168.1.1; </screen>
       <sect2 id="dns-configuration" status="review">
         <title>Configuration</title>
           <para>
-          The DNS configuration files are stored in
+          The DNS configuration files are stored in the
           <filename>/etc/bind</filename> directory. The
           primary configuration file is
          <filename>/etc/bind/named.conf</filename>. The content
-          of default configuration file is shown below:
+          of the default configuration file is shown below:
           </para>
 
           <para>
@@ -1091,8 +1091,8 @@ include "/etc/bind/named.conf.local";
           <para>
           The <application>zone</application> section defines a master
           server, and it is stored in a file mentioned against file tag.
-          Every zone file contains 3 resource records (RRS): A SOA RR, A
-          NS RR and A PTR RR. SOA is short of Start of Authority. The
+          Every zone file contains 3 resource records (RRs): an SOA RR, an
+          NS RR and a PTR RR. SOA is short of Start of Authority. The
           "@" is a special notation meaning the origin. NS is the Name
           Server RR. PTR is Domain Name Pointer.  To start the DNS server,
           run the following command from a terminal prompt: 
@@ -1103,14 +1103,13 @@ include "/etc/bind/named.conf.local";
 </screen>
            </para>
           <para>You can refer the
-          documentation mentioned in references section for details.
+          documentation mentioned in the references section for details.
           </para>
       </sect2>
       <sect2 id="dns-references" status="review">
         <title>References</title>
           <para>
-            <ulink url="http://www.tldp.org/HOWTO/DNS-HOWTO.html">DNS
-            HOWTO</ulink>
+            <ulink url="http://www.tldp.org/HOWTO/DNS-HOWTO.html">DNS HOWTO</ulink>
           </para>
       </sect2>
     </sect1>
@@ -1124,20 +1123,19 @@ include "/etc/bind/named.conf.local";
 			distributions.
           </para>
           <para>
-          CUPS manages print jobs and queues  and provides network printing using 
+          CUPS manages print jobs and queues and provides network printing using 
 		  the standard Internet Printing Protocol (IPP), while offering support 
 		  for a very large range of printers, from dot-matrix to laser and many 
 		  in between.  CUPS also supports PostScript Printer Description (PPD) and 
-		  auto-detection of network printers, and features a simple web 
-		  browser-based configuration and administration tool. This web-based tool
-		  is disabled in Ubuntu by default for security reasons, but may be
-		  enabled by editing the CUPS configuration file, <filename>
-		  /etc/cups/cupsd.conf</filename>
+		  auto-detection of network printers, and features a simple web-based 
+		  configuration and administration tool. This web-based tool is disabled 
+		  in Ubuntu by default for security reasons, but may be enabled by editing 
+		  the CUPS configuration file, <filename>/etc/cups/cupsd.conf</filename>.
           </para>
       <sect2 id="cups-installation" status="review">
         <title>Installation</title>
           <para>
-            To install CUPS on your Ubuntu computer, simply use <application>sudo</application> with the the <application>apt-get</application> command and give the packages to install as the first parameter. A complete CUPS install has many dependency packages, but they may all be specified on the same command line.  Enter the following at a terminal prompt to install CUPS:
+            To install CUPS on your Ubuntu computer, simply use <application>sudo</application> with the the <application>apt-get</application> command and give the packages to install as the first parameter. A complete CUPS install has many package dependencies, but they may all be specified on the same command line.  Enter the following at a terminal prompt to install CUPS:
           </para>
           <para>
 <screen>
@@ -1156,6 +1154,12 @@ ttf-bitstream-vera ucf
 		  and installed without error. Upon the conclusion of installation, the CUPS server 
 		  will be started automatically. For troubleshooting purposes, you can access CUPS 
 		  server errors via the error log file at: <filename>/var/log/cups/error_log</filename>.
+		  If the error log does not show enough information to troubleshoot any problems you
+		  encounter, the verbosity of the CUPS log can be increased by changing the <emphasis
+		  role="bold">LogLevel</emphasis> directive in the configuration file (discussed below)
+		  to "debug" or even "debug2", which logs everything, from the default of "info".  If 
+		  you make this change, remember to change it back once you've solved your problem, to 
+		  prevent the log file from becoming overly large.
           </para>
       </sect2>
       <sect2 id="cups-configuration" status="review">
@@ -1172,7 +1176,7 @@ ttf-bitstream-vera ucf
           <tip>
                <para>Prior to editing the configuration file, you should make a copy of 
 			   the original file and protect it from writing, so you will have the original 
-			   settings as a reference, and to re-use as necessary.
+			   settings as a reference, and to reuse as necessary.
                </para>
                <para>Copy the <filename>/etc/cups/cupsd.conf</filename> file and protect it 
 			   from writing with the following commands, issued at a terminal prompt:
@@ -1187,7 +1191,7 @@ ttf-bitstream-vera ucf
           <itemizedlist>
                 <listitem>
                 <para>
-                <emphasis role="bold">ServerAdmin</emphasis>: To configure the e-mail 
+                <emphasis role="bold">ServerAdmin</emphasis>: To configure the email 
 				address of the designated administrator of the CUPS server, simply 
 				edit the <filename>/etc/cups/cupsd.conf</filename> configuration file 
 				with your preferred text editor, and modify the <emphasis 
@@ -1317,9 +1321,9 @@ AuthClass Group
         </para>
         </sect2>
     </sect1>
-	<sect1 id="http" status="review">
-		<title>HTTP - Apache2 Web Server</title>
-      <para>Apache is the most commonly used Web Server on Linux systems. Web Servers are used
+	<sect1 id="httpd" status="review">
+		<title>HTTPD - Apache2 Web Server</title>
+      <para>Apache is the most commonly used Web Server on GNU/Linux systems. Web Servers are used
           to serve Web Pages requested by client computers. Clients typically request and view
           Web Pages using Web Browser applications such as <application>Firefox</application>,
               <application>Opera</application>, or <application>Mozilla</application>.</para>
@@ -1344,7 +1348,7 @@ AuthClass Group
           <procedure><step>
                   <para>The Apache2 web server is available in Ubuntu
                   Linux. This section explains howto install
-                  Apache2 in Ubuntu Linux.</para></step>
+                  Apache2 in Ubuntu.</para></step>
           </procedure>
       <variablelist>
           <varlistentry>
@@ -1374,11 +1378,11 @@ AuthClass Group
         <title>Configuration</title>
           <para>
           Apache is configured by placing directives in plain text
-          configuration files. The main configuration file is usually
-          called apache2.conf. The location of this file is set at
-          compile-time but may be overridden with the -f  command line
+          configuration files. The main configuration file is called 
+		  <filename>apache2.conf</filename>. The location of this file is set at
+          compile-time but may be overridden with the -f command line
           flag. In addition, other configuration files may be added
-          using the Include  directive, and wildcards can be used to
+          using the Include directive, and wildcards can be used to
           include many configuration files. Any directive may be placed
           in any of these configuration files. Changes to the main
           configuration files are only recognized by Apache2 when it is
@@ -1386,7 +1390,7 @@ AuthClass Group
 
           <para>The server also reads a file containing mime document types;
           the filename is set by the TypesConfig directive, and is
-          mime.types by default.</para>
+          <filename>mime.types</filename> by default.</para>
 
           <para>The default Apache2 configuration file is <filename>/etc/apache2/apache2.conf</filename> .
           You can edit this file to configure the Apache2 server. You can
@@ -1397,43 +1401,94 @@ AuthClass Group
           <title>Basic Settings</title>
             <para>
              This section explains Apache2 server essential configuration
-             parameters. You must refer <ulink
+             parameters. You must refer to the <ulink
              url="http://httpd.apache.org/docs/2.0/">Apache2
              Documentation</ulink> for more details.</para>
 
              <itemizedlist>
 
              <listitem><para>
-             Enter a valid fully qualified domain name that you have the
-             right to use in the Server Name text area. This option
-             corresponds to the ServerName  directive in apache2.conf.
-             The ServerName directive sets the hostname of the Web
-             server.
+             Apache2 ships with a virtual-host-friendly default configuration.
+			 That is, it is configured with a single default virtual host (using
+			 the VirtualHost directive) which can modified or used as-is if you
+			 have a single site, or used as a template for additional virtual hosts
+			 if you have multiple sites.  If left alone, the default virtual host
+			 will serve as your default site, or the site users will see if the
+			 URL they enter does not match the ServerName directive of any of your 
+			 custom sites.  To modify the default virtual host, edit the file
+			 <filename>/etc/apache2/sites-available/default</filename>.  If you
+			 wish to configure a new virtual host or site, copy that file into the
+			 same directory with a name you choose.  For example,
+			 <command>sudo cp /etc/apache2/sites-available/default /etc/apache2/sites-available/mynewsite</command>
+			 Edit the new file to configure the new site using some of the directives
+			 described below.
             </para></listitem>
 
-             <listitem><para>Enter the email address of the person who maintains the
-             Web server in the Webmaster email address text area. This
-             option corresponds to the ServerAdmin  directive in
-             apache2.conf. If you configure the server's error pages to
-             contain an email address, this email address will be used
-             so that users can report a problem by sending email to the
-             server's administrator. The default value is
-             root@localhost.</para></listitem>
+             <listitem><para>
+			 The ServerAdmin directive specifies the email address to be advertized
+			 for the server's administrator.  The default value is webmaster@localhost.
+			 This should be changed to an email address that is delivered to you (if you
+			 are the server's administrator).  If your website has a problem, Apache2
+			 will display an error message containing this email address to report the
+			 problem to.  Find this directive in your site's configuration file in
+			 /etc/apache2/sites-available.
+			 </para></listitem>
 
-             <listitem><para>Enter the port number of Apache2 server. 
-             This option corresponds to the Listen  directive in
-             apache2.conf. The default and recommended value is 80. 
+             <listitem><para>
+             The Listen directive specifies the port, and optionally the IP address,
+			 Apache2 should listen on.  If the IP address is not specified, Apache2
+			 will listen on all IP addresses assigned to the machine it runs on.
+			 The default value for the Listen directive is 80.  Change this to
+			 127.0.0.1:80 to cause Apache2 to listen only on your loopback interface
+			 so that it will not be available to the Internet, to (for example) 81
+			 to change the port that it listens on, or leave it as is for normal
+			 operation.  This directive can be found and changed in its own file,
+			 <filename>/etc/apache2/ports.conf</filename>
              </para></listitem>
+
+			 <listitem><para>
+			 The ServerName directive is optional and specifies what FQDN your
+			 site should answer to.  The default virtual host has no ServerName
+			 directive specified, so it will respond to all requests that do not
+			 match a ServerName directive in another virtual host.  If you have
+			 just aquired the domain name ubunturocks.com and wish to host it on
+			 your Ubuntu server, the value of the ServerName directive in your
+			 virtual host configuration file should be ubunturocks.com.  Add this
+			 directive to the new virtual host file you created earlier (<filename>
+			 /etc/apache2/sites-available/mynewsite</filename>).
+			 <tip><para>
+				You may also want your site to respond to www.ubunturocks.com, since
+				many users will assume the www prefix is appropriate.  Use the
+				ServerAlias directive for this.  You may also use wildcards in the
+				ServerAlias directive.  For example,
+				<command>ServerAlias *.ubunturocks.com</command>
+				will cause your site to respond to any domain request ending in
+				.ubunturocks.com.
+			 </para></tip>
+			 </para></listitem>
+
+			 <listitem><para>
+			 The DocumentRoot directive specifies where Apache should look for the
+			 files that make up the site.  The default value is /var/www.  No site
+			 is configured there, but if you uncomment the RedirectMatch directive
+			 in <filename>/etc/apache2/apache2.conf</filename> requests will be
+			 redirected to /var/www/apache2-default where the default Apache2 site
+			 awaits.  Change this value in your site's virtual host file, and
+			 remember to create that directory if necessary!
+			 </para></listitem>
             </itemizedlist>
 
-            <tip>
-            <para>
-            If you set the server to listen to a port under 1024, you
-            must be root to start it. For port 1024 and above,
-            <application>apache2</application> can be started as a
-            regular user.
-            </para>
-            </tip>
+			<tip><para>
+			The /etc/apache2/sites-available directory is <emphasis role="bold">
+			not</emphasis> parsed by Apache2.  Symbolic links in /etc/apache2/sites-enabled
+			point to &quot;available&quot; sites.  Use the a2ensite (Apache2
+			Enable Site) utility to create those symbolic links, like so:
+			<command>sudo a2ensite mynewsite</command>
+			where your site&apos;s configuration file is <filename>
+			/etc/apache2/sites-available/mynewsite</filename>.  Similarly, the
+			a2dissite utility should be used to disable sites.
+			</para></tip>
+
         </sect3>
         <sect3 id="default-settings" status="review">
           <title>Default Settings</title>
@@ -1456,23 +1511,37 @@ AuthClass Group
 
              <para>For example, when a user requests the page
              http://www.example.com/this_directory/, he or she will
-             get either the DirectoryIndex page if it exists, or a
-             server-generated directory list. The server will try to
+             get either the DirectoryIndex page if it exists, a
+             server-generated directory list if it does not and the
+			 Indexes option is specified, or a Permission Denied page
+			 if neither is true.  The server will try to
              find one of the files listed in the DirectoryIndex
              directive and will return the first one it finds. If it
              does not find any of these files and if Options Indexes is
              set for that directory, the server will generate and
              return a list, in HTML format, of the subdirectories and
-             files in the directory. 
+             files in the directory.  The default value, found in
+			 <filename>/etc/apache2/apache2.conf</filename> is &quot;
+			 index.html index.cgi index.pl index.php index.xhtml&quot;.
+			 Thus, if Apache2 finds a file in a requested directory
+			 matching any of these names, the first will be displayed.
             </para>
             </listitem>
 
             <listitem>
             <para>
-             Use the Error Code section to configure Apache2 Server
-             to redirect the client to a local or external URL in the
-             event of a problem or error. This option corresponds to
-             the ErrorDocument  directive.
+             The ErrorDocument directive allows you to specify a file
+			 for Apache to use for specific error events.  For example,
+			 if a user requests a resource that does not exist, a 404
+			 error will occur, and per Apache2's default configuration,
+			 the file <filename>/usr/share/apache2/error/HTTP_NOT_FOUND.html.var
+			 </filename> will be displayed.  That file is not in the
+			 server's DocumentRoot, but there is an Alias directive in
+			 <filename>/etc/apache2/apache2.conf</filename> that redirects
+			 requests to the /error directory to /usr/share/apache2/error/.
+			 To see a list of the default ErrorDocument directives, use this
+			 command:
+			 <command>grep ErrorDocument /etc/apache2/apache2.conf</command>
             </para>
             </listitem>
 
@@ -1480,30 +1549,49 @@ AuthClass Group
             <listitem>
             <para>
              By default, the server writes the transfer log to the file
-             /var/log/apache2/access.log. You can configure a custom
-             log format. This option corresponds to LogFormat
-             directive. The server writes the error log to the
-             /var/log/apache2/error.log file. This option corresponds
-             to the ErrorLog directive. The log level can be set using
-             the LogLevel directive.
-            </para>
+             /var/log/apache2/access.log. You can change this on a per-site
+			 basis in your virtual host configuration files with the CustomLog
+			 directive, or omit it to accept the default, specified in <filename>
+			 /etc/apache2/apache2.conf</filename>.  You may also specify the file
+			 to which errors are logged, via the ErrorLog directive, whose default
+			 is <filename>/var/log/apache2/error.log</filename>.  These are kept
+			 separate from the transfer logs to aid in troubleshooting problems
+			 with your Apache2 server.  You may also specify the LogLevel (the
+			 default value is &quot;warn&quot;) and the LogFormat (see <filename>
+			 /etc/apache2/apache2.conf</filename> for the default value).
+			 </para>
             </listitem>
 
             <listitem>
             <para>
-            You can configure the Default Directory Options for all
-            directories. This option corresponds to Option directive
-            within &lt;Directory&gt; directive. You can configure the
-            following options:
+            Some options are specified on a per-directory basis rather than per-server.
+			Option is one of these directives.  A Directory stanza is enclosed in 
+			XML-like tags, like so:
+			<command>&lt;Direcotory /var/www/mynewsite&gt;
+				...
+			&lt;/Directory&gt;</command>
+			The Options directive within a Directory stanza accepts one or more of the
+			following values (among others), separated by spaces:
             </para>
             <itemizedlist spacing="compact">
                 <listitem>
                     <para><emphasis role="bold">ExecCGI</emphasis> - Allow
                     execution of CGI scripts. CGI scripts are not
-                    executed if this option is not chosen.</para>
+                    executed if this option is not chosen.
+					<tip><para>Most files should not be executed as CGI scripts.  This
+					would be very dangerous.  CGI scripts should kept in a directory 
+					separate from and outside your DocumentRoot, and only only this
+					directory should have the ExecCGI option set.  This is the default,
+					and the default location for CGI scripts is /usr/lib/cgi-bin.
+					</para></tip>
+					</para>
                 </listitem>
                 <listitem>
-                    <para><emphasis role="bold">Includes</emphasis> - Allow server-side includes.</para>
+                    <para><emphasis role="bold">Includes</emphasis> - Allow server-side includes.
+					Server-side includes allow an HTML file to <emphasis role="italics">
+					include</emphasis> other files.  This is not a common option.  See
+					<ulink url="http://httpd.apache.org/docs/2.0/howto/ssi.html">the Apache2
+					SSI Howto</ulink> for mor information.</para>
                 </listitem>
                 <listitem>
                     <para><emphasis
@@ -1514,22 +1602,27 @@ AuthClass Group
                 <listitem>
                     <para>
                     <emphasis role="bold">Indexes</emphasis> - Display a formatted list of the
-                    directory's contents, if no DirectoryIndex (such as
-                    index.html) exists in the requested directory.
+                    directory's contents, if no DirectoryIndex (such as index.html) exists in the 
+					requested directory.
+					<caution><para>For security reasons, this should usually not be set, and certainly
+					should not be set on your DocumentRoot directory.  Enable this option carefully on
+					a per-directory basis only if you are certain you want users to see the entire
+					contents of the directory.</para></caution>
                     </para>
                 </listitem>
                 <listitem>
                     <para>
                     <emphasis role="bold">Multiview</emphasis> - Support content-negotiated multiviews;
-                    this option is disabled by default.
+                    this option is disabled by default for security reasons.  See the <ulink
+					url="http://httpd.apache.org/docs/2.0/mod/mod_negotiation.html#multiviews">Apache2
+					documentation on this option</ulink>.
                     </para>
                 </listitem>
                 <listitem>
                     <para>
                     <emphasis
                     role="bold">SymLinksIfOwnerMatch</emphasis> - Only follow symbolic links
-                    if the target file or directory has the same owner
-                      as the link.
+                    if the target file or directory has the same owner as the link.
                     </para>
                 </listitem>
             </itemizedlist>
@@ -2070,7 +2163,7 @@ configure a web server. Apache2 is proven to work with Subversion. Please
 refer the HTTP subsection in the Apache2 section to install and configure 
 Apache2.  To access the Subversion repository using the HTTPS protocol, you 
 must install and configure a digital certificate in your Apache 2 web server. 
-Please refer HTTPS subsection in the Apache2 section to install and 
+Please refer to the HTTPS subsection in the Apache2 section to install and 
 configure the digital certificate.
 						</para>
 						<para>
@@ -2425,8 +2518,8 @@ and manage the CVS server.
 <para>
           CVS allows the user to add users independently of the
 underlying OS installation. Probably the easiest way is to use the Linux
-Users for CVS, although it has potential security issues. Please refer CVS
-manual for details.
+Users for CVS, although it has potential security issues. Please refer
+to the CVS manual for details.
 </para>
         </warning>
 
@@ -2478,7 +2571,7 @@ url="http://ximbiot.com/cvs/manual/cvs-1.11.21/cvs_toc.html">CVS Manual</ulink><
 	<sect1 id="databases" status="review">
 		<title>Databases</title>
           <para>
-            Ubuntu Linux provides two Database servers. They are:
+            Ubuntu provides two Database servers. They are:
             <itemizedlist spacing="compact">
                 <listitem>
                     <para><application><trademark>MySQL</trademark></application></para>

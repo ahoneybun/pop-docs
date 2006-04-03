@@ -14,14 +14,15 @@
 <chapter id="gs-chap" status="review">
 	<title>Getting Started</title>
 
-	<sect1 id="gs-essential" status="review">
-		<title>Essential Packaging Tools</title>
+	<sect1 id="gs-tools" status="review" xreflabel="Packaging Tools">
+		<title>Packaging Tools</title>
 		
 		<para>There are many tools written specifically for packaging on Debian based
 			systems. Many of them are not <emphasis>essential</emphasis> to creating
-			packages but are very helpful and often automate repetitive tasks. However,
-			the following is a list of packages that are deemed necessary to begin
-			packaging:</para>
+			packages but are very helpful and often automate repetitive tasks. Their
+			<application>man</application> and <application>info</application> are good
+			source of information. However, the following is a list of packages that are
+			deemed necessary to begin packaging:</para>
 
 		<variablelist>
 			<varlistentry>
@@ -43,48 +44,54 @@
 				<listitem><para>contains many scripts that will make the packager's life
 						much easier. Some of the more commonly used are
 						<application>debdiff</application>,
-						<application>dch</application>, <application>debpkg</application>,
-						<application>debuild</application>, and
+						<application>dch</application>, <application>debuild</application>, and
 						<application>debsign</application>.</para></listitem>
 			</varlistentry>
+
+			<varlistentry><term><application>debhelper</application> and
+					<application>dh-make</application></term>
+				<listitem><para>this set of scripts helps .deb packagers by automating
+						common packaging tasks.  <application>dh-make</application> can be
+						used to do the initial "debianization" and provides many example
+						files.</para></listitem>
+			</varlistentry>
+				
+			<varlistentry><term><application>patch</application> and
+					<application>diff</application></term> <listitem><para>used to create
+						and apply patches. They are quite extensively used in packaging
+						because it is easier, cleaner, and more efficient to represent
+						small changes as patches rather than have multiple copies of a
+						file.</para></listitem> </varlistentry>
+			
+			<varlistentry><term><application>gnupg</application></term>
+				<listitem><para>a complete and free replacement for PGP used to
+						digitally sign files, including packages.</para></listitem>
+			</varlistentry>
+				
+			<varlistentry><term><application>fakeroot</application></term>
+				<listitem><para>simulates running a command with root privileges. This
+				is useful for creating binary packages while a regular user.</para></listitem>
+			</varlistentry>
+			
+			<varlistentry><term><application>lintian</application> and
+					<application>linda</application></term>
+				<listitem><para>dissect Debian packages and report bugs and policy
+						violations. They contain automated checks for many aspects of
+						Debian policy as well as some checks for common
+						errors.</para></listitem>
+			</varlistentry>
+			
+			<varlistentry><term><application>pbuilder</application></term>
+				<listitem><para>constructs a chroot system, and builds a package inside
+						the chroot. It is an ideal system to use to check that a package
+						has correct build-dependencies and to build clean packages to be
+						distributed and tested.</para></listitem> </varlistentry>
 		</variablelist>
-
-		<para>There are many more tools that will be introduced as the guide progresses.
-			If you want to take the time to install them now here is the list:</para>
-
-		<itemizedlist>
-
-			<listitem><para><application>automake</application> - automatically creates
-					Makefile.in's from Makefile.am's</para></listitem>
-
-			<listitem><para><application>debhelper</application> and
-					<application>dh-make</application> - this set of scripts helps .deb
-					packagers by automating common packaging tasks.
-					<application>dh-make</application> can be used to do the initial
-					"debianization" and provides many example files.</para></listitem>
-		
-			<listitem><para><application>gnupg</application> - a complete and free
-					replacement for PGP, used for signing packages.</para></listitem>
-
-			<listitem><para><application>lintian</application> - dissects Debian packages
-					and reports bugs and policy violations. It contains automated checks
-					for many aspects of Debian policy as well as some checks for common
-					errors.</para></listitem>
-			
-			<listitem><para><application>dchroot</application> - a setuid binary that
-					allows users to execute a shell or other command under different root
-					filesystems.</para></listitem>
-			
-			<listitem><para><application>pbuilder</application> - constructs a chroot
-					system, and builds a package inside the chroot. It is an ideal system
-					to use to check that a package has correct
-					build-dependencies.</para></listitem>
-		</itemizedlist>
 
 	</sect1>
 
 
-	<sect1 id="gs-bin_source" status="review">
+	<sect1 id="gs-bin_source" status="review" xreflabel="Binary and Source Packages">
 		<title>Binary and Source Packages</title>
 		
 		<para>Most users of a Debian-based distribution such as &ubuntu; will never have
@@ -98,10 +105,10 @@
 
 	</sect1>
 		
-	<sect1 id="gs-pbuilder" status="review">
+	<sect1 id="gs-pbuilder" status="review" xreflabel="Pbuilder">
 	<title>Building With Pbuilder</title>
-	<para>Pbuilder is a package builder the builds the package from within a chroot
-		environment. You can build binary package without using
+	<para>Pbuilder is a package builder the builds the package from within a chrooted
+		environment. You can build binary packages without using
 		<application>pbuilder</application> but you must have all the build
 		dependencies installed on your system first. Pbuilder allows the packager to
 		check the build dependencies because the package is built within a minimal
@@ -179,7 +186,8 @@ sudo cat "APT::Get::AllowUnauthenticated 1;" >> \
 		<screen>sudo pbuilder update</screen>
 
 		<para>Or if you change something in the <filename>/etc/pbuilderrc</filename>
-			configuration file:</para>
+			configuration file (or any pbuilder config file, for example
+			<filename>/etc/pbuilder/apt.config/sources.list</filename>) :</para>
 
 		<screen>sudo pbuilder update --override-config</screen>
 

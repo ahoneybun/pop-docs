@@ -52,6 +52,8 @@ PDFSTYLE=../libs/ubuntu-pdf.xsl
 # Base gnome directories for output from processor
 BASE=../build/ubuntu/
 
+PDFBASE=../build/pdf/ubuntu/
+
 STBASE=../build/ubuntu/status/
 
 UGBASE=../build/ubuntu/userguide/
@@ -79,7 +81,7 @@ SERVERBASE=../build/ubuntu/serverguide/
 SGBASE=../build/ubuntu/styleguide/
 
 .PHONY: all
-all: au dg sg server package status
+all: au dg sg server package status rn
 
 	# copy style sheet and common images to build directory
 	mkdir -p ../build/ubuntu/common/img
@@ -146,14 +148,13 @@ sg:
 
 sg-pdf:
 
-	rm -rf $(SGBASE)
-	mkdir -p $(SGBASE)en/images
-	cp -r ../common/admon-pdf/*.png $(SGBASE)en/images/
+	mkdir -p $(PDFBASE)images
+	cp -r ../common/admon-pdf/*.png $(PDFBASE)images/
 
-	xsltproc --xinclude -o $(SGBASE)en/styleguide.fo $(PDFSTYLE) ../generic/styleguide/styleguide.xml
-	fop.sh -fo $(SGBASE)en/styleguide.fo -pdf $(SGBASE)en/styleguide.pdf
-	rm $(SGBASE)en/styleguide.fo
-	rm -rf $(SGBASE)en/images
+	xsltproc --xinclude -o $(PDFBASE)styleguide.fo $(PDFSTYLE) ../generic/styleguide/styleguide.xml
+	fop.sh -fo $(PDFBASE)styleguide.fo -pdf $(PDFBASE)styleguide.pdf
+	rm $(PDFBASE)styleguide.fo
+	rm -rf $(PDFBASE)images
 
 #Status: AVAILABLE
 # About Ubuntu Document
@@ -219,20 +220,37 @@ dg-C:
 
 	@echo "--- Building the Ubuntu Desktop Guide . . ."
 
-	cd desktopguide/C && ./mk && cd ../../
+	xsltproc --xinclude --stringparam base.dir $(DGBASE)C/ $(UBUNTUCHUNKXSL) desktopguide/C/desktopguide.xml
+	xsltproc --xinclude -o $(DGBASE)C/desktopguide-all.html $(UBUNTUSINGLEXSL) desktopguide/C/desktopguide.xml
+
+	mkdir -p $(IMAGES)admon
+	cp -r ../common/admon/*.* $(IMAGES)admon
+	
+	mkdir -p $(IMAGES)callouts
+	cp -r ../common/callouts/*.* $(IMAGES)callouts
+	
+	mkdir -p $(IMAGES)navig
+	cp -r ../common/navig/*.* $(IMAGES)navig
+	
+	mkdir -p $(DGBASE)C/sample
+	cp -r desktopguide/C/sample/* $(DGBASE)C/sample/
+	
+	# copy style sheet and common images to build directory
+	mkdir -p ../build/ubuntu/common/img
+	cp libs/*css ../build/ubuntu/common/
+	cp libs/img/*png ../build/ubuntu/common/img/
 
 	@echo "--- Complete. Find outputs at" $(DGBASE)
 
 dg-pdf:
 
-	rm -rf $(DGBASE)
-	mkdir -p $(DGBASE)C/images
-	cp -r ../common/admon-pdf/*.png $(DGBASE)C/images/
+	mkdir -p $(PDFBASE)C/images
+	cp -r ../common/admon-pdf/*.png $(PDFBASE)C/images/
 
-	xsltproc --xinclude -o $(DGBASE)C/desktopguide.fo $(PDFSTYLE) desktopguide/C/desktopguide.xml
-	fop.sh -fo $(DGBASE)C/desktopguide.fo -pdf $(DGBASE)C/desktopguide.pdf
-	rm $(DGBASE)C/desktopguide.fo
-	rm -rf $(DGBASE)C/images
+	xsltproc --xinclude -o $(PDFBASE)C/desktopguide.fo $(PDFSTYLE) desktopguide/C/desktopguide.xml
+	fop.sh -fo $(PDFBASE)C/desktopguide.fo -pdf $(PDFBASE)C/desktopguide.pdf
+	rm $(PDFBASE)C/desktopguide.fo
+	rm -rf $(PDFBASE)C/images
 
 ## Server Guide
 server:
@@ -267,14 +285,14 @@ server:
 
 server-pdf:
 
-	rm -rf $(SERVERBASE)
-	mkdir -p $(SERVERBASE)C/images
-	cp -r ../common/admon-pdf/*.png $(SERVERBASE)C/images/
+	rm -rf $(PDFBASE)
+	mkdir -p $(PDFBASE)C/images
+	cp -r ../common/admon-pdf/*.png $(PDFBASE)C/images/
 
-	xsltproc --xinclude -o $(SERVERBASE)C/serverguide.fo $(PDFSTYLE) ../generic/serverguide/C/serverguide.xml
-	fop.sh -fo $(SERVERBASE)C/serverguide.fo -pdf $(SERVERBASE)C/serverguide.pdf
-	rm $(SERVERBASE)C/serverguide.fo
-	rm -rf $(SERVERBASE)C/images
+	xsltproc --xinclude -o $(PDFBASE)C/serverguide.fo $(PDFSTYLE) ../generic/serverguide/C/serverguide.xml
+	fop.sh -fo $(PDFBASE)C/serverguide.fo -pdf $(PDFBASE)C/serverguide.pdf
+	rm $(PDFBASE)C/serverguide.fo
+	rm -rf $(PDFBASE)C/images
 
 ## Packaging Guide
 package:
@@ -311,14 +329,13 @@ package:
 
 package-pdf:
 
-	rm -rf $(PGBASE)
-	mkdir -p $(PGBASE)C/images
-	cp -r ../common/admon-pdf/*.png $(PGBASE)C/images/
+	mkdir -p $(PDFBASE)C/images
+	cp -r ../common/admon-pdf/*.png $(PDFBASE)C/images/
 
-	xsltproc --xinclude -o $(PGBASE)C/packagingguide.fo $(PDFSTYLE) ../generic/packagingguide/C/packagingguide.xml
-	fop.sh -fo $(PGBASE)C/packagingguide.fo -pdf $(PGBASE)C/packagingguide.pdf
-	rm $(PGBASE)C/packagingguide.fo
-	rm -rf $(PGBASE)C/images
+	xsltproc --xinclude -o $(PDFBASE)C/packagingguide.fo $(PDFSTYLE) ../generic/packagingguide/C/packagingguide.xml
+	fop.sh -fo $(PDFBASE)C/packagingguide.fo -pdf $(PDFBASE)C/packagingguide.pdf
+	rm $(PDFBASE)C/packagingguide.fo
+	rm -rf $(PDFBASE)C/images
 
 clean:
 	rm -rf $(BASE)
