@@ -16,148 +16,138 @@
 
 	<sect1 id="ubuntu-upload" status="review">
 		<title>Uploading and Review</title>
-		<para><ulink url="http://revu.tauware.de">REVU</ulink> is a web-based tool to
-			give people who have worked on packages a chance to "put their packages
-			out there" for other people to look at and comment on in a structured manner.</para>
-		<para>Once a packager's <ulink url="https://wiki.ubuntu.com/GPGKey">GPG key</ulink>
-			has been added to the REVU keyring, the packager can begin to upload his
-			packages to REVU. They are then commented by reviewers and the packager
-			can send updates of his package to REVU until it gets advocated by at
-			least 2 <ulink url="https://wiki.ubuntu.com/MOTU">MOTU</ulink>s. When that
-			point is reached, a MOTU uploads the approved package to Universe.</para>
+
+		<para>Once you have created a source package (either a completely new package or
+			just an update/bugfix) you then you will probably want to distribute your
+			package so that other people can enjoy your hard work. The most effective way
+			to do that fo &ubuntu; is contribute your package to the Universe repository.
+			The community developers that are responsible for the Universe repository are
+			known as Masters of the Universe (<ulink
+				url="https://wiki.ubuntu.com/MOTU">MOTU</ulink>). <ulink
+				url="http://revu.tauware.de">REVU</ulink> is a web-based tool that gives
+			people a place to upload their source packages for other people to look at and
+			MOTUs to review in a structured manner.</para>
+
 		<sect2 id="contribute-as-uploader">
 			<title>Contributing as an Uploader</title>
-			<para>Would you like a program to be distributed in &ubuntu; that is not available in
-				the development version of either &ubuntu; (currently &distro-version;) or Debian
-				(Sid)? Then you might like to package this program and upload it to REVU!
-				In order to do so, you need to register as an uploader on the REVU system.</para>
-			<para>What you require is:</para>
-			<itemizedlist>
-				<listitem><para>A GPG key</para></listitem>
-				<listitem><para>Knowledge on how to make Debian packages</para></listitem>
-				<listitem><para>One or more new packages to upload</para></listitem>
-			</itemizedlist>
-			<note><para>It is not necessary to get your key signed, but it is a good idea
-					anyway.</para></note>
-			<para>Send a signed email with your GnuPG keyid, asking to be added to the REVU keyring,
-				to <email>keyring@tiber.tauware.de</email>. One of the REVU admins will then add
-				you then to the uploaders keyring. You don't need a password to upload packages,
-				only to log in to the website and reply to comments.</para>
+		
+			<para>First, you will need to have your <ulink
+					url="https://wiki.ubuntu.com/GPGKey">GPG Key</ulink> added to the REVU
+				keyring. This ensures that only real people upload to REVU and uploads can
+				be tracked.</para>
+	
+			<para>To add your key send a <emphasis>signed</emphasis> email with your GnuPG
+				keyid, asking to be added to the REVU keyring, to
+				<email>keyring@tiber.tauware.de</email>. One of the REVU admins will then
+				add you then to the uploaders keyring and reply to your email. You don't
+				need a password to upload packages, only to log in to the website and
+				reply to comments.</para>
+
+			<note><para>It is not necessary to get your key signed to upload to REVU, but
+					it is a good idea to have it signed at some point.</para></note>
+			
+			
 			<sect3 id="upload-your-packages">
 				<title>Uploading your packages</title>
-				<para>Uploading to REVU uses <application>dput</application>. You need to set dput
-					before your first upload. Edit <filename>/etc/dput.cf</filename> and add
-					the following entry:</para>
-				<screen>
-[revu]
-fqdn = revu.tauware.de
-incoming = /incoming
-login = anonymous</screen>
-				<para>Only upload signed packages and always include the original tarball, otherwise reviewers
-					will not be able to look at your extracted source package.</para>
-				<para>In order to do so, use the options "-S -sa" to build only the source package and also
-					include the original source in the package.</para>
-				<para>After the package is built, you can use <application>dput</application> with the above
-					config file changes to upload it by specifying just the *_source.changes file that was
-					created:</para>
-					<screen>
-dput *_source.changes</screen>
-				<note><para>If you are reuploading a changed package (after receiving reviews), you may get an
-						error like this:</para></note>
+
+				<para>Uploading to REVU uses <application>dput</application>. The &ubuntu;
+					version of <application>dput</application> already knows about REVU so
+					you do not need to change any configuration files. Only upload signed
+					packages and unlike other repositories you should always include the
+					original tarball, otherwise reviewers will not be able to look at your
+					extracted source package. In order to do so, use the options "-S -sa"
+					with <application>debuild</application> or
+					<application>dpkg-buildpackage</application> to build only the source
+					package and also include the original source in the package.</para>
+				
+				<para>After the source package is built, you can use
+					<application>dput</application> with the above config file changes to
+					upload it by specifying just the <filename>_source.changes</filename>
+					file that was created: </para>
+
+				<screen>dput revu *_source.changes</screen>
+
+				<note><para>If you are reuploading a changed package (after receiving
+						reviews), you may get an error like this:</para>
+					
 				<screen>
 Upload package to host revu
 Already uploaded to tauware.de
 Doing nothing for myapp_source.changes</screen>
-				<para>To fix, add the -f option to dput to force the upload.</para>
+			
+				<para>To fix, add the -f option to dput to force the upload or remove the
+					<filename>.upload</filename> file that was created by
+					<application>dput</application>.</para></note>
+			
 				<para>Processing of uploads is done every 5 minutes. So, if your upload does not show up,
 				please contact the REVU administrators by email or join the IRC channel #ubuntu-motu.</para>
+		
 			</sect3>
+		
 			<sect3 id="howto-login">
 				<title>How to login to REVU</title>
-				<para>After your first upload, you will be automatically registered to the database and
-					assigned a random password. Use the email address you used in the changelog file
-					of your upload as login and press the 'recover password' link, so as to receive
-					your password by email.</para>
+			
+				<para>After your first upload, you will be automatically registered to the
+					database and assigned a random password. On the <ulink
+						url="http://revu.tauware.de">REVU</ulink> website use the email
+					address you used in the changelog file of your upload as the login and
+					press the 'recover password' link. You will be taken to a page that
+					has your encrypted password with instructions how to decrypt
+					it.</para>
+				
 			</sect3>
+
 			<sect3 id="view-and-comment-uploads">
 				<title>View and comment uploads</title>
+			
 				<para>Packages uploaded to REVU are made public. You can browse them without logging
 					in to the system. However, commenting uploads is only available to registered
 					users. As an uploader, you can only comment your own uploads. This can be
 					useful to give reviewers some info on the changes you have made between two
 					uploads of your packages.</para>
+
 			</sect3>
+
 			<sect3 id="additional-rules">
 				<title>Additional rules</title>
+		
 				<itemizedlist>
+
 					<listitem><para>You must have reviewed the package for known security
 							vulnerabilities and provide patches for all of them.</para></listitem>
-					<listitem><para>We can refuse the package on the grounds of known security
-							problems and design.</para></listitem>
-					<listitem><para>You must have included a copyright and licence file, and those
+					
+					<listitem><para>The package can be refused on the grounds of known
+							security problems and design.</para></listitem>
+					
+					<listitem><para>You must have included a copyright and license file, and those
 							must allow inclusion of the package in the universe component
 							and on mirrors.</para></listitem>
+					
 					<listitem><para>The package must be known to build on top of the main component
 							of the current &ubuntu; stable release, it may require other
 							packages already in Universe.</para></listitem>
 				</itemizedlist>
 			</sect3>
+
 			<sect3 id="getting-help">
 				<title>Getting Help</title>
 				<para>If you need help on these steps or if you have more questions about REVU, you can
 					ask on #ubuntu-motu on the Freenode network.</para>
 			</sect3>
+
 		</sect2>
-		<sect2 id="contribute-as-reviewer">
-			<title>Contribute as a Reviewer</title>
-			<para>If you have some experience in packaging and know the policy well, then you can help improving
-				the packages uploaded to universe and guide packagers in doing so, by contributing as a
-				reviewer on REVU.</para>
-			<para>What you need:</para>
-			<itemizedlist>
-				<listitem><para>A GPG key</para></listitem>
-				<listitem><para>Be a MOTU</para></listitem>
-			</itemizedlist>
-			<para>Send a signed and encrypted mail with your password and GnuPG keyid to
-				<email>keyring@tiber.tauware.de</email>. And you will be marked as a Reviewer in the
-				database.</para>
-			<sect3 id="using-revu-tools">
-				<title>Using REVU-tools</title>
-				<para><application>REVU-Tools</application> is a set of scripts used on REVU to automatize
-					the reviewing process. It gathers fours scripts: revu-build, revu-orig, revu-report
-					and a hook script for pbuilder, used by revu-build to perform build tests.</para>
-				<para>On REVU, only REVU admins can run these tools. If you are not a REVU admin, ask
-					one to run it on the package you want to review.</para>
-				<para>Among the details that REVU-tools gives are:</para>
-				<itemizedlist>
-					<listitem><para>Whether the package is a Debian-native.</para></listitem>
-					<listitem><para>Whether the package contains a usable debian/watch file.</para></listitem>
-					<listitem><para>Whether new versions of the program are available, using the debian/watch
-							file with uscan.</para></listitem>
-					<listitem><para>Whether the md5 sums of the upstream tarball and the orig.tar.gz are
-							identical, and whether this is normal or not.</para></listitem>
-					<listitem><para>Whether there is a diff between the extracted upstream tarball and
-							orig.tar.gz</para></listitem>
-					<listitem><para>Whether the package fails to build from source in pbuilder.</para></listitem>
-					<listitem><para>Whether lintian and linda are happy with the package.</para></listitem>
-					<listitem><para>Whether running debuild -S -sa on this package generates files in the diff
-							outside of debian/.</para></listitem>
-				</itemizedlist>
-				<para>REVU-Tools can also be used stand-alone, install the
-					<application>revu-tools</application> package.</para>
-			</sect3>
-		</sect2>
+
 	</sect1>
 
 	<sect1 id="ubuntu-sync" status="review">
 		<title>Merges and Syncs</title>
 		
 		<para>&ubuntu; is based on the Debian Linux distribution and uses the same package
-			managment system (APT). It the beginning of each &ubuntu; development cycle the
+			management system (APT). It the beginning of each &ubuntu; development cycle the
 			packages in &ubuntu; are updated to those in Debian unstable. However,
 			because &ubuntu; is not the same as Debian, some of the packages need to
 			be modified to work in &ubuntu;. There might also be bug fixes that &ubuntu;
-			developerss have introduced into the packages. You can determine whether this has
+			developers have introduced into the packages. You can determine whether this has
 			taken place by noting the package version. If the package version include
 			ubuntu in it (an example would be gimp-2.2.9-3ubuntu2) then the &ubuntu;
 			developers have made some change and it is no longer the same as the Debian package.
@@ -174,7 +164,7 @@ Doing nothing for myapp_source.changes</screen>
 			issues that caused the ubuntu version to be made, then those changes need
 			to be applied to the new Debian version. This is called <emphasis>merging</emphasis>.
 		</para>
-		<sect2 id="merge-tutorial" status="writing">
+		<sect2 id="merge-tutorial">
 			<title>Merging Tutorial</title>
 			<para>The merging process involves looking at the changes to both the Debian
 				Ubuntu source packages and determining. Let's now look at an example.
@@ -191,7 +181,7 @@ cd ~/xcdroast</screen>
 						by all versions:</para>
 					<itemizedlist>
 						<listitem>
-<para><ulink url="http://ftp.debian.org/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15.orig.tar.gz">xcdroast_0.98+0alpha15.orig.tar.gz</ulink></para>
+<para><ulink url="http://snapshot.debian.net/archive/2006/01/16/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15.orig.tar.gz">xcdroast_0.98+0alpha15.orig.tar.gz</ulink></para>
 						</listitem>
 					</itemizedlist>
 				</listitem>
@@ -212,11 +202,11 @@ cd ~/xcdroast</screen>
 					<para>The Debian source package files that the Breezy packages are derived from:</para>
 						<itemizedlist>
 							<listitem>
-<para><ulink url="http://ftp.debian.org/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-1.1.diff.gz">
+<para><ulink url="http://snapshot.debian.net/archive/2004/08/10/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-1.1.diff.gz">
 		xcdroast_0.98+0alpha15-1.1.diff.gz</ulink></para>
 							</listitem>
 							<listitem>
-<para><ulink url="http://ftp.debian.org/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-1.1.dsc">
+<para><ulink url="http://snapshot.debian.net/archive/2004/08/10/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-1.1.dsc">
 		xcdroast_0.98+0alpha15-1.1.dsc</ulink></para>
 							</listitem>
 						</itemizedlist>
@@ -226,17 +216,17 @@ cd ~/xcdroast</screen>
 						derived from:</para>
 					<itemizedlist>
 						<listitem>
-<para><ulink url="http://ftp.debian.org/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-3.dsc">
+<para><ulink url="http://snapshot.debian.net/archive/2005/10/06/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-3.dsc">
 		xcdroast_0.98+0alpha15-3.dsc</ulink></para>
 						</listitem>
 						<listitem>
-<para><ulink url="http://ftp.debian.org/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-3.diff.gz">
+<para><ulink url="http://snapshot.debian.net/archive/2005/10/06/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-3.diff.gz">
 		xcdroast_0.98+0alpha15-3.diff.gz</ulink></para>
 						</listitem>
 					</itemizedlist>
 				</listitem>
 			</itemizedlist>
-			<note><para>>This can also be done by searching for the Debian packages
+			<note><para>This can also be done by searching for the Debian packages
 				at <ulink url="packages.debian.org">packages.debian.org</ulink> and the Ubuntu
 				packages at <ulink
 					url="packages.ubuntu.com">packages.ubuntu.com</ulink>.</para></note>

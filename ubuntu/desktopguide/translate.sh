@@ -44,7 +44,6 @@ for x in rosetta-desktopguide/*; do
 	fi
 
 done
-
 	sed -i -e "s@/C@/$y@g" $y/mk
 
 rm -rf rosetta-desktopguide
