@@ -603,19 +603,118 @@ binary: binary-indep binary-arch
 
 	</sect1>
 
-	<sect1 id="basic-cdbs" status="help">
+	<sect1 id="basic-cdbs" status="review">
 		<title>Packaging With CDBS</title>
-		<para>Discuss CDBS usage briefly and reference Duckcorps guide.</para>
-	</sect1>
 
-	
-	<sect1 id="basic-updating" status="help">
+		<para>CDBS is a tool that uses debhelper to make building and maintaining Debian
+			packages even easier. It has many advantages :</para>
+
+			<itemizedlist>
+				<listitem><para>it produces short, readable and efficient
+						<filename>debian/rules</filename></para></listitem>
+				
+				<listitem><para>it automates debhelper and autotools for you so you do not
+						have to worry about repetitive tasks</para></listitem>
+				
+				<listitem><para>it helps you focus on more important packaging problems
+						because it helps without limiting customization</para></listitem>
+				
+				<listitem><para>classes used in CDBS have been well tested so you can
+				avoid dirty hacks to solve common problems</para></listitem>
+				
+				<listitem><para>switching to CDBS is easy</para></listitem>
+				
+				<listitem><para>it is easily extendable</para></listitem>
+			</itemizedlist>
+		
+		<sect2>
+			<title>Using CDBS in packages</title>
+		
+			<para>Using CDBS in an &ubuntu; package is very easy. After adding cdbs to the
+				Build-Depends in <filename>debian/control</filename>, a basic
+				<filename>debian/rules</filename> using CDBS can fit in 2 lines. For a
+				simple C/C++ software with no extra rules such as
+				<application>hello</application>, <filename>debian/rules</filename> can
+				look like this :</para>
+
+			<screen>#!/usr/bin/make -f
+				
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/autotools.mk</screen>
+
+			<para>That is all you need to build the program, and deal with installing and
+				cleaning! You can then use <filename>.install</filename> and
+				<filename>.info</filename> files and tune your package with the usual
+				debhelper functions in the various sections for
+				<filename>debian/rules</filename>.</para>
+
+			<warning><para> Do not use DEB_AUTO_UPDATE_DEBIAN_CONTROL:=yes to
+					automatically change <filename>debian/control</filename>. It can
+					cause bad things and Debian considers it a reason to reject a package
+					from entering the archives. See <ulink
+						url="http://ftp-master.debian.org/REJECT-FAQ.html">
+						http://ftp-master.debian.org/REJECT-FAQ.html</ulink> for more
+					information</para></warning>
+			
+			<para>As you can see, CDBS mostly works by including <filename>.mk</filename>
+				files in <filename>debian/rules</filename>. The
+				<application>cdbs</application> package provides such files in
+				<filename>/usr/share/cdbs/1/</filename>, that allow you to do quite a lot
+				of packaging tasks. Other packages such as <filename>quilt</filename> add
+				more modules to CDBS and can be used as Build-Depends. Note that you can
+				also use your own CDBS rules and include them in the package. The most
+				useful modules included with the <filename>cdbs</filename> package
+				are:</para>
+
+			<itemizedlist>
+				
+				<listitem><para><filename>rules/debhelper.mk</filename>: calls debhelper
+						in all required sections</para></listitem>
+			
+				<listitem><para><filename>rules/dpatch.mk</filename>: allows you to use
+						dpatch to ease patching the sources</para></listitem>
+				
+				<listitem><para><filename>rules/simple-patchsys.mk</filename>: provides a
+						very easy way to patch the source</para></listitem>
+				
+				<listitem><para><filename>rules/tarball.mk</filename>: allows to build
+						packages using the compressed tarball in the
+						package</para></listitem>
+				
+				<listitem><para><filename>class/autotools.mk</filename>: calls autotools
+						in all required sections</para></listitem>
+				
+				<listitem><para><filename>class/gnome.mk</filename>: builds GNOME programs
+						(requires the proper Build-Depends in
+						<filename>debian/control</filename>)</para></listitem>
+				
+				<listitem><para><filename>class/kde.mk</filename>: builds KDE programs
+						(requires the proper Build-Depends in
+						<filename>debian/control</filename>)</para></listitem>
+				
+				<listitem><para><filename>class/python-distutils.mk</filename>:
+						facilitates packaging python programs</para></listitem>
+			
+			</itemizedlist>
+		</sect2>
+		
+		<sect2>
+			<title>More information on CDBS</title>
+		
+			<para>For more information on CDBS, see Marc Dequ&#232;nes's guide at <ulink
+					url="https://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml">
+					https://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml</ulink>.</para>
+		
+		</sect2>
+	</sect1>
+		
+	<sect1 id="basic-updating" status="writing">
 		<title>Updating Packages</title>
 		<para>This section should discuss how to deal with new upstream releases and
 			making changes to other people's packages.</para>
 	</sect1>
 
-	<sect1 id="basic-mistakes" status="writing">
+	<sect1 id="basic-mistakes" status="review">
 		<title>Common Mistakes</title>
 			
 		<sect2 id="basic-ex_files">

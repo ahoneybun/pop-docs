@@ -105,22 +105,24 @@
 
 	</sect1>
 		
-	<sect1 id="gs-pbuilder" status="review" xreflabel="Pbuilder">
-	<title>Building With Pbuilder</title>
-	<para>Pbuilder is a package builder the builds the package from within a chrooted
-		environment. You can build binary packages without using
-		<application>pbuilder</application> but you must have all the build
-		dependencies installed on your system first. Pbuilder allows the packager to
-		check the build dependencies because the package is built within a minimal
-		&ubuntu; installation and the build dependencies are downloaded according to
-		the <filename>debian/control</filename> file.</para>
+	<sect1 id="gs-pbuilder" status="review" xreflabel="pbuilder">
+		<title>The Personal Builder: pbuilder</title>
+		
+		<para>Using pbuilder as a package builder allows you to build the package from
+			within a chrooted environment. You can build binary packages without using
+			<application>pbuilder</application> but you must have all the build
+			dependencies installed on your system first. However, pbuilder allows the
+			packager to check the build dependencies because the package is built within a
+			minimal &ubuntu; installation and the build dependencies are downloaded
+			according to the <filename>debian/control</filename> file.</para>
 
 	<sect2>
-		<title>Installing and Configuring a Pbuilder Environment</title>
+		<title>Installing and configuring a pbuilder environment</title>
+		
 		<para>The first, and perhaps most obvious, thing to do is install
-			<application>pbuilder</application>. Once that is accomplished you will
-			need to set up the <filename>/etc/pbuilderrc</filename> configuration
-			file. </para>
+			<application>pbuilder</application>. Then you need to set up the
+			<filename>/etc/pbuilderrc</filename> configuration file. </para>
+		
 		<screen>
 # URL of package archive.				
 MIRRORSITE=http://archive.ubuntu.com/ubuntu # URL of package archive.
@@ -138,9 +140,9 @@ OTHERMIRROR="deb http://archive.ubuntu.com/ubuntu dapper universe multiverse"
 		<para>To avoid having <application>pbuilder</application> complain about
 			unauthenticated packages you have apt allow unauthenticated packages by:</para>
 		<screen>sudo mkdir /etc/pbuilder/apt.config/
-sudo cp -ar /etc/apt/* /etc/pbuilder/apt.config/
-sudo cat "APT::Get::AllowUnauthenticated 1;" >> \
-/etc/pbuilder/apt.config/apt.conf.d/allow-unauthenticated
+sudo cp -a /etc/apt/* /etc/pbuilder/apt.config/
+echo "APT::Get::AllowUnauthenticated 1;" | \
+	sudo tee -a /etc/pbuilder/apt.config/apt.conf.d/allow-unauthenticated
 		</screen>
 
 		<caution><para>You will need to remove the
@@ -161,7 +163,7 @@ sudo cat "APT::Get::AllowUnauthenticated 1;" >> \
 
 	</sect2>	
 	<sect2>
-		<title>Using the Pbuilder</title>
+		<title>Using the pbuilder</title>
 		<para>Now that you have a running pbuilder you can build binary packages from
 			the source package by:</para>
 
@@ -176,7 +178,7 @@ sudo cat "APT::Get::AllowUnauthenticated 1;" >> \
 	</sect2>
 
 	<sect2>
-		<title>Updating the Pbuilder</title>
+		<title>Updating the pbuilder</title>
 		
 		<para>You should always have a current pbuilder whenever you are testing your
 			source packages, especially when you are building for a development

@@ -304,8 +304,10 @@ less debian.debdiff</screen>
 #cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps
 
 #install desktop and icon
-install -D -m 644 $(CURDIR)/debian/xcdroast.desktop $(CURDIR)/debian/xcdroast/usr/share/applications/xcdroast.desktop
-install -D -m 644 $(CURDIR)/debian/xcdroast.xpm $(CURDIR)/debian/xcdroast/usr/share/pixmaps/xcdroast.xpm</screen>
+install -D -m 644 $(CURDIR)/debian/xcdroast.desktop \
+	$(CURDIR)/debian/xcdroast/usr/share/applications/xcdroast.desktop
+install -D -m 644 $(CURDIR)/debian/xcdroast.xpm \
+	$(CURDIR)/debian/xcdroast/usr/share/pixmaps/xcdroast.xpm</screen>
 
 			<para>Now in dirs the following line needs to be added for the .desktop file to be installed:</para>
 			<screen>usr/share/applications</screen>
@@ -354,26 +356,80 @@ sudo pbuilder build xcdroast_0.98+0alpha15-3ubuntu1.dsc</screen>
 				submitted to a bug report or the MOTUs on the #ubuntu-motu irc channel. To do this
 				we want the difference between the Debian sid source package and the new &ubuntu; version:
 			</para>
-			<screen>debdiff xcdroast_0.98+0alpha15-3.dsc xcdroast_0.98+0alpha15-3ubuntu1.dsc >
-				xcdroast_0.98+0alpha15-3ubuntu1.debdiff</screen>
+			<screen>debdiff xcdroast_0.98+0alpha15-3.dsc xcdroast_0.98+0alpha15-3ubuntu1.dsc > \
+	xcdroast_0.98+0alpha15-3ubuntu1.debdiff</screen>
 		</sect2>
 	</sect1>
 
-	<sect1 id="ubuntu-kubuntu" status="writing">
+	<sect1 id="ubuntu-kubuntu" status="review">
 		<title>Packaging for Kubuntu</title>
-		<para>Below are package issues specific to KDE.</para>
+		
+		<para>As one might imagine, the main packaging issues specific to Kubuntu are with
+			KDE and Qt.</para>
+		
+		<sect2 id="build-dependencies">
+			<title>Build Dependencies</title>
+	
+			<para>Kubuntu programs are mostly KDE ones. Therefore, they need to
+				Build-Depend on <filename>kdelibs4-dev</filename> to build. Since KDE's
+				focus is to have programs interacting, some programs might also need to
+				Build-Depend on other parts of KDE, such as
+				<filename>kdepim-dev</filename> for example. Be sure to get the list of
+				necessary dependencies for your program.  </para>
+	
+		</sect2>
+
+		<sect2 id="desktop-files">
+			<title>Desktop Files</title>
+		
+			<para>KDE has some specific paths. Most settings for KDE go to either
+				<filename>/etc/kde3/</filename> or <filename>/usr/share/apps/</filename>.
+				It is important to note that the general desktop files for KDE should go
+				to <filename>/usr/share/applications/kde/</filename>. The install path
+				for the desktop files should be fixed if they don't use this (except for
+				specific desktop files, such as service menus for example).  </para>
+			
+			<para>KDE desktop files also need specific entries to fit in the KMenu. A
+				minimal desktop file for a KDE program could be something like
+				this:</para>
+				
+			<screen>[Desktop Entry]
+Encoding=UTF-8
+Name=Kfoo
+Name[xx]=Kfoo
+GenericName=Bar description
+Exec=kfoo
+Icon=kfoo
+Terminal=false
+Categories=Qt;KDE;Utility;</screen>
+
+			<para>Note that the Categories field must begin with Qt;KDE;. There are
+				specific desktop file entries for KDE programs and modules, that allow to
+				declare the given programs as KCModules or autostart them when logging in.
+			</para>
+	
+		</sect2>
+		
 		<sect2 id="generating-pot-files">
 			<title>Generating .pot Files</title>
-			<para>The Ubuntu translation website <ulink url="https://launchpad.net/rosetta/">Rosetta</ulink>
-				now supports KDE, which means KDE packages need to support Rosetta by
-				generating .pot template files for translators. If you use <application>cdbs</application>
-				in Dapper your package should now do this automatically, build and check for a .pot
-				file in po/ directory.</para>
-			<para>You will need the <ulink url="../files/kubuntu_01_kdepot.diff">kdepot patch</ulink> (or similar, it may not
-				apply exactly depending on the age of the admin directory).</para>
-			<para>If your package uses <application>debhelper</application>, or <application>cdbs</application>
-				and includes it's own kde.mk file you need to add the rules yourself.</para>
+
+			<para>The Ubuntu translation website <ulink
+					url="https://launchpad.net/rosetta/">Rosetta</ulink> now supports KDE,
+				which means KDE packages need to support Rosetta by generating .pot
+				template files for translators. If you use <application>cdbs</application>
+				in Dapper your package should now do this automatically, build and check
+				for a .pot file in po/ directory.</para>
+
+			<para>You will need the <ulink url="../files/kubuntu_01_kdepot.diff">kdepot
+					patch</ulink> (or similar, it may not apply exactly depending on the
+				age of the admin directory).</para>
+
+			<para>If your package uses <application>debhelper</application>, or
+				<application>cdbs</application> and includes it's own kde.mk file you need
+				to add the rules yourself.</para>
+
 			<para>For <application>cdbs</application> add these lines to your debian/rules:</para>
+
 			<screen>
 common-post-build-arch::
 	mkdir -p po
@@ -390,7 +446,7 @@ XGETTEXT=/usr/bin/kde-xgettext sh admin/cvs.sh extract-messages</screen>
 			<screen>
 rm -f po/*.pot</screen>
 		</sect2>
-
+		
 	</sect1>
 
 </chapter>
