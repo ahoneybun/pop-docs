@@ -309,7 +309,7 @@ done</programlisting>
 				<para>Open a terminal and run the command:</para><screen>chmod 400 ~/.recently-used</screen>
 				<para>To enable it again, run the command:</para><screen>chmod 600 ~/.recently-used</screen>
 		</sect2>
-		<sect2 status="writing">
+		<sect2 status="review">
 			<title>Advanced Desktop Applets</title>
 				<para><application>gDesklets</application> is a system for bringing mini programs (desklets), such as weather forecasts, news tickers, system information displays, or music player controls, onto your desktop, where they are sitting there in a symbiotic relationship of eye candy and usefulness.</para>
 				<procedure>
@@ -334,12 +334,11 @@ done</programlisting>
 			<title>Show the Computer, Home, and Trash desktop icons in GNOME</title>
 				<procedure>
 					<step>
-					<!-- Menu changes in Dapper mean this might have to change before release -->
-						<para>Open the <application>Configuration Editor</application> with &gnome-config-editor;
+						<para>Open the <application>Configuration Editor</application>, by running the program <filename>gconf-editor</filename> (see <xref linkend="run-application"/>).
 						</para>
 					</step>
 					<step>
-						<para>When <application>Configuration Editor</application> opens, choose
+						<para>Choose
 							<menuchoice>
 								<guimenu>apps</guimenu>
 								<guisubmenu>nautilus</guisubmenu>
@@ -437,7 +436,7 @@ EndSection</programlisting>
 				<para>This section describes how to install extra fonts from the Ubuntu archives.</para>
 				<procedure>
 						<step>
-							<para>Install the following packages from the <emphasis>Universe</emphasis> and <emphasis>Multiverse</emphasis> repositories (see <xref linkend="add-applications"/>):
+							<para>For <emphasis role="bold">international fonts</emphasis>, install the following packages from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>):
 							</para>
 							<para>
 								<literallayout>xfonts-intl-arabic
@@ -448,13 +447,18 @@ xfonts-intl-european
 xfonts-intl-japanese 
 xfonts-intl-japanese-big
 xfonts-intl-phonetic
-gsfonts-x11
-msttcorefonts  
 								</literallayout>
 							</para>
 						</step>
 						<step>
-							<para>Rebuild the font information cache files:
+							<para>For <emphasis role="bold">Microsoft TrueType core fonts</emphasis>, install the <application>msttcorefonts</application> package from the <emphasis>Multiverse</emphasis> repository (see <xref linkend="add-applications"/>).
+							</para>
+						</step>
+						<step>
+							<para>For <emphasis role="bold">Ghostscript fonts</emphasis>, install the <application>gsfonts-x11</application> package (see <xref linkend="add-applications"/>).
+							</para>
+						</step>						<step>
+							<para>After installing any new font, rebuild the font information files by typing the following at a terminal prompt:
 							</para>
 							<screen>sudo fc-cache -f -v</screen>
 						</step>
@@ -610,19 +614,6 @@ default 0
 					</step>
 				</procedure>
 		</sect2>
-<!-- I'm tempted to remove the following tip, it shouldn't be necessary now with NetworkMagic -->
-		<sect2 id="skipservices" xreflabel="Temporarily skip boot-up services" status="writing">
-			<title>Temporarily skip boot-up services</title>
-				<procedure>
-					<step>
-						<para>Press <keycombo>
-								<keycap>Ctrl</keycap>
-								<keycap>C</keycap>
-							</keycombo>.
-						</para>
-					</step>
-				</procedure>
-		</sect2>
 		<sect2 status="writing">
 			<title>Permanently disable/enable boot-up services</title>
 				<procedure>
@@ -642,7 +633,7 @@ default 0
 						<para>Tick/untick the services you want running, then click <guibutton>OK</guibutton> when done.</para>
 					</step>
 					<step>
-						<para>For greater control over the boot-up services, install the <application>bum</application> from the Universe repository and run it:
+						<para>For greater control over the boot-up services, install the <application>bum</application> from the Universe repository (see <xref linkend="add-applications"/>) and run it:
 							<menuchoice>
 								<guimenu>System</guimenu>
 								<guisubmenu>Administration</guisubmenu>
@@ -723,31 +714,6 @@ timeout 3
 					</menuchoice>. See <xref linkend="gthumb"/> for more on <application>gThumb</application>. 
 				</para>
 		</sect2>
-		<sect2 id="sound-cards" status="review">
-			<title>Sound Cards</title>
-				<para>Most common sound cards are automatically detected by Ubuntu during installation, if you are not hearing sound there are a couple of things you can try:</para>
-		   <procedure>
-			<step>
-				<para>Check that the sound isn&apos;t muted, click the speaker icon on the top panel of your Ubuntu desktop and check each device.</para>
-			</step>
-			<step>
-				<para>Check to see if root can use sound. Type into a terminal:</para>
-		<para>
-<screen>
-sudo totem &amp;
-</screen>
-		</para>
-		<para>Once <application>Totem</application> launches, try playing a sound or movie file. If the sound now works, do the following in a terminal to enable everyone to use sound:</para>
-		<para>
-<screen>
-sudo chmod 666 /dev/dsp
-</screen>
-		</para>
-			</step>
-		    </procedure>
-		<!-- Will this Hoary-era page still be relevant to Dapper? -->
-		<para>More information can be found on <ulink url="https://wiki.ubuntu.com/SoundProblemsHoary">SoundProblemsHoary</ulink> on the Ubuntu Wiki.</para>
-		</sect2>
 
 		<sect2 id="graphics-cards" status="writing">
 			<title>3D Graphic Cards</title>
@@ -759,7 +725,7 @@ sudo chmod 666 /dev/dsp
 				</para> 
                         </step>
                         <step>
-                            <para>
+                            <para>Run:
                                 <screen>
 sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup 
 sudo nvidia-glx-config enable </screen>
@@ -834,7 +800,7 @@ Option  "NoLogo"</programlisting>
  				<para>Install the <application>xorg-driver-fglrx</application> package from the <emphasis>Restricted</emphasis> repository (see <xref linkend="add-applications"/>).</para> 
                         </step>
 			<step>
-			    <para><screen>
+			    <para>Run these commands in a terminal:<screen>
 echo fglrx | sudo tee -a /etc/modules
 sudo depmod -a ; sudo modprobe fglrx
 sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup 

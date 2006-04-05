@@ -16,7 +16,7 @@
     <xsl:param name="html.stylesheet" select="'../../common/ubuntu-book.css'"/>
     <xsl:param name="shade.verbatim" select="0"/>
     <xsl:param name="draft.mode" select="'yes'"/>
-
+    <xsl:param name="chunk.first.sections" select="'1'"/>
 	<!--Navigation Graphics-->
 	<xsl:param name="navig.graphics" select="1"/>
 	<xsl:param name="navig.graphics.path" select="'../../images/navig/'"/>

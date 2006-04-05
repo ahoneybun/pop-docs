@@ -14,18 +14,22 @@
 ]>
 <chapter id="add-applications" xreflabel="Adding, Removing and Updating Applications" status="complete">
 	<title>Adding, Removing and Updating Applications</title>
-		<para>In order to add or remove applications in Ubuntu you need to use a <emphasis>package manager</emphasis>. The following package managers are described in this section:</para>
+		<para>This chapter is a complete guide to adding, removing and updating applications on an Ubuntu system.</para>
+		<sect1 id="add-applications-introduction" status="complete">
+			<title>Introduction</title>
+		<para>In order to add or remove applications in Ubuntu you need to use a <emphasis>package manager</emphasis>. A package manager is a tool that makes installing and uninstalling applications easy by handling the software in preconfigured packages that are optimized for Ubuntu. The following package managers are described in this chapter:</para>
 		<itemizedlist>
 			<listitem><para><application>Add/Remove Applications</application> - this is the simplest way to manage programs.</para></listitem>
 			<listitem><para><application>Synaptic</application> - this graphical program provides a more advanced means of managing programs.</para></listitem>
 			<listitem><para><application>APT</application> - this is a powerful command line program to manage programs.</para></listitem>
 		</itemizedlist>
-		<para>You may also wish to increase the number of programs available to install through your package managers. Not all the programs that exist for Ubuntu are available by default. You may have to add extra repositories in order to make them available: that is also described in this section.</para>
-		<para>Finally, this section explains how to update your system.</para>
+		<para>You may also wish to increase the number of programs available to install through your package managers. Not all the programs that exist for Ubuntu are available by default. You may have to add extra repositories in order to make them available: that is also described in this chapter.</para>
+		<para>Finally, this chapter explains how to update your system.</para>
 			<note>
 				<para>You can only have one package management application running at a time. For example, if you are running <application>Add/Remove Applications</application> and try to launch <application>Update Ubuntu</application>, it will fail with an error. Close the running application before you relaunch the new one.
 				</para>
 			</note>
+	</sect1>
 	    <sect1 id="gnome-app-install" status="complete">
 		<title>Add/Remove Applications</title>
 			<para><application>Add/Remove Applications</application> is a simple graphical way of installing and removing applications in Ubuntu. To launch Add/Remove Applications click
@@ -69,7 +73,7 @@
 			</para>
 		</sect1>
 		<sect1 id="apt-get" status="complete">
-			<title>Command Line Installation</title>
+			<title>Command Line Package Management</title>
 			<sect2 id="apt" status="review">
 			<title>APT</title>
 				<para><application>APT</application> (Advanced Packaging Tool) is a powerful package management system, on which the graphical programs described above like <application>Add/Remove Applications</application> and <application>Synaptic</application> are based. <application>APT</application> automatically handles dependencies and performs other operations on system packages to allow the installation of the desired package/s.</para>
@@ -112,36 +116,41 @@
 			</tip>
 		</sect2>
 	</sect1>
-	<sect1 id="dpkg-and-gdebi" status="review">
-		<title>Installing .deb Files</title>
-		<sect2 id="install-deb" status="complete">
-			<title>Install/uninstall .deb files</title>
-				<procedure>
-					<para>Although the preferred method of installing programs is via the package managers described in <xref linkend="add-applications"/>, you can also download and install individual .deb files which contain software. You will need administrative privileges to do this (see <xref linkend="root-and-sudo"/>).
-					</para>
+	<sect1 id="install-file" status="complete">
+		<title>Installing a Single Package File</title>
+		<para>The preferred method of installing programs is via the package managers described in this chapter. However, although the Ubuntu package archives are very large, it is possible that you may wish to install a package which is not available in the Ubuntu archives. If this happens, you can also download and install files from websites.</para>
 					<caution>
-						<para>It is important to ensure that the .deb files you plan to use come from a safe source before installing them.
+						<para>It is important to ensure that any files you download come from a safe source before installing them.
 						</para>
 					</caution>
+		<para>There are many different kinds of Linux package files. Most of these are associated with the package managers of specific Linux distributions. Examples are <emphasis>Debian Package</emphasis> files (<emphasis>.deb</emphasis> files), <emphasis>Redhat Package Manager</emphasis> files (<emphasis>.rpm</emphasis> files), and <emphasis>Tarballs</emphasis> (<emphasis>.tar</emphasis> files).</para>
+		<para>This section deals with installing these single files.</para>
+		<warning><para>It is not guaranteed that these files will be compatible with your system and you will not receive security updates if you install these files. For these reasons, if you wish to install a program, always use a native Ubuntu package of the application available through a package manager, if there is one available.</para></warning>
+
+		<sect2 id="install-deb" status="complete">
+			<title>Install/uninstall <emphasis>.deb</emphasis> files</title>
+					<para>These files are <emphasis>Debian packages</emphasis>. The package files associated with Ubuntu have the <emphasis>.deb</emphasis> suffix because of Ubuntu's close relations with the Debian GNU/Linux distribution. You will need administrative privileges to install a <emphasis>.deb</emphasis> file (see <xref linkend="root-and-sudo"/>).
+					</para>
+				<procedure>
 					<step>
-						<para>To install a .deb file, simply double click on it.</para>
+						<para>To install a <emphasis>.deb</emphasis> file, simply double click on it.</para>
 					</step>
 					<step>
-						<para>Alternatively, you can also install a deb. file by opening a terminal and typing:
+						<para>Alternatively, you can also install a <emphasis>.deb</emphasis> file by opening a terminal and typing:
 						<screen>sudo dpkg -i package_file.deb</screen>
 						</para>
 					</step>
 					<step>
-						<para>To uninstall a .deb file, deselect it in your package manager, or type:
+						<para>To uninstall a <emphasis>.deb</emphasis> file, deselect it in your package manager, or type:
 						<screen>sudo dpkg -r package_name</screen>
 						</para>
 					</step>
 				</procedure>
 		</sect2>
-		<sect2 status="review">
-			<title>Convert .rpm files to .deb files</title>
+		<sect2 id="alien" status="complete">
+			<title>Convert <emphasis>.rpm</emphasis> files to <emphasis>.deb</emphasis> files</title>
 				<procedure>
-					<para>RPM files are Red Hat Package Manager Files. It is not recommended to install these on an Ubuntu system. In almost all cases, a native Ubuntu DEB package is available. However, if absolutely necessary, an RPM file can be converted to a DEB package using the program <application>alien</application>.
+					<para>Another type of package files is <emphasis>Red Hat Package Manager</emphasis> files which have the <emphasis>.rpm</emphasis> suffix. It is not recommended to install these on an Ubuntu system. In almost all cases, a native Ubuntu <emphasis>.deb</emphasis> package is available. However, if absolutely necessary, an <emphasis>.rpm</emphasis> file can be converted to a <emphasis>.deb</emphasis> package using the program <application>alien</application>.
 					</para>
 					<step>
 						<para>Install the <application>alien</application> program (<xref linkend="add-applications"/>).
@@ -152,9 +161,13 @@
 					</step>
 				</procedure>
 			</sect2>
+			<sect2 id="tarballs" status="complete">
+				<title>Install <emphasis>tarballs</emphasis></title>
+					<para>Files with the <emphasis>.tar.gz</emphasis> or <emphasis>.tar.bz2</emphasis> suffix are package files known as <emphasis>tarballs</emphasis> which are widely used in Linux and Unix.</para>
+					<para>If there is no native Ubuntu package available in any of the Ubuntu repositories, you can use the command line to install or uninstall the Tarball file by following the instructions that come with the package.</para>
+					<para>Tarballs often contain the source code of the program, and need to be <emphasis>compiled</emphasis> in order to be used. To do this, extra software will generally be needed (see <xref linkend="build-essential"/>).</para>
+		</sect2>
 	</sect1>
-	
-	
 	    <sect1 id="extra-repositories" xreflabel="Adding Extra Repositories" status="complete">
 		<title>Extra Repositories</title>
 			<sect2 status="review"><title>What are Repositories?</title>
