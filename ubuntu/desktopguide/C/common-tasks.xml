@@ -13,11 +13,6 @@
 <!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
 ]>
 <chapter id="common-tasks-chap" status="writing">
-	<chapterinfo>
-		<authorblurb>
-			<para></para>
-		</authorblurb>
-	</chapterinfo>
 	<title id="common-tasks">Common Tasks</title>
 	<para>This chapter contains information on common tasks.</para>
 		<sect1 id="music" status="review">
@@ -149,13 +144,14 @@
 					</procedure>
 			</sect2>
 	</sect1>
-	<sect1 id="video" status="complete">
+	<sect1 id="video" status="review">
 		<title>Video</title>
-		<para>Many video formats can be played in Ubuntu using free codecs found in the repositories. This includes formats such as MPEG and other common video formats. To install further codec support see <xref linkend="codecs"/>.</para>
-		<para>To play movies, Ubuntu comes with <application>Totem Movie Player</application> which looks and functions similar to Windows Media Player. Some features of
+		<para>To play video, Ubuntu comes with <application>Totem Movie Player</application> which looks and functions similar to Windows Media Player. Some features of
 		<application>Totem</application> include custom playlists, DVD playback and more. 
 	        You can start <application>Totem</application> by clicking: &totem; from the desktop menu system.
 		</para>
+		<para>To read video files, <application>Totem</application> uses the <application>Gstreamer</application> framework. To play some video formats, you may need to add further codec support (see <xref linkend="codecs"/>).</para>
+		<para>There are also other multimedia applications available. Examples include <application>Mplayer</application>, <application>Xine</application> and <application>Totem-xine</application> (which uses the <application>Xine</application> framework, instead of the <application>Gstreamer</application> framework. Some users may benefit from trying alternative video players.</para>
 		<sect2 id="dvdplayback" xreflabel="DVD playback" status="complete">
 			<title>DVD Playback</title>
 				<para>The movie players provided in Ubuntu are capable of reading DVDs that are not encrypted. However, most commercial DVDs are encrypted with CSS (the Content Scrambling System) and currently for legal reasons it is not possible to include support for these DVDs in Ubuntu. However it is possible to enable support as follows:</para>
@@ -249,10 +245,13 @@
 					<para>You can also try the <application>PiTiVi</application> video editor by installing the <application>pitivi</application> package from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>). <application>PiTiVi</application> is a video editor for the GNOME desktop. It is still in fairly early development, but worth a try.</para>
 			</sect2>
 	   </sect1>
-		<sect1 id="codecs" xreflabel="Multimedia Codecs" status="review">
+		<sect1 id="codecs" xreflabel="Multimedia Codecs" status="complete">
 		<title>Multimedia Codecs</title>
 			<para>Many applications in Ubuntu use the <application>GStreamer</application> open source multimedia framework. The codec plugins for <application>GStreamer</application> are organised in different packages depending on the licensing that applies to the various codecs. You can see which codecs are contained in which plugin on the <ulink url="http://gstreamer.freedesktop.org/documentation/plugins.html">GStreamer website</ulink>.</para>
-			<para>To install extra codecs:</para>
+			<para>Other applications, such as <application>Mplayer</application> and <application>Xine</application>, do not use the <application>Gstreamer</application> framework. Due to patent and copyright restrictions, codecs for these programs are not included at all in Ubuntu. For more information on these read the <ulink url="&restricted-formats;">Restricted Formats</ulink> wiki page.</para>
+		<sect2 id="codecs-gstreamer" status="review">
+			<title>Add Codecs to <application>Gstreamer</application></title>
+			<para>To install extra codecs for <application>Gstreamer</application>:</para>
 				<procedure>
 					<step>
 							<para>Install the following packages from the <emphasis>Universe</emphasis> and <emphasis>Multiverse</emphasis> repositories (see <xref linkend="add-applications"/>):
@@ -273,8 +272,7 @@ gstreamer0.10-ffmpeg
 							</warning>
 					</step>
 				</procedure>
-			<para>Due to patent and copyright restrictions, some codecs are not included at all in Ubuntu. For more information on these read <ulink url="&restricted-formats;">&restricted-formats;</ulink>.
-			</para>
+		</sect2>
 	</sect1>
 	<sect1 id="internet" status="review">
 		<title>Internet</title>
@@ -369,14 +367,25 @@ gstreamer0.10-ffmpeg
 		</sect2>
 		<sect2 id="web-browsing" status="review">
 			<title>World Wide Web</title>
-			<para>The powerful and secure <application>Mozilla Firefox</application> web browser is included in Ubuntu. 				<application>Mozilla Firefox</application> features tabbed browsing, pop-up blocking, in-built search facilities, live
-			bookmarks and more. Also supported are popular plug-ins such as Java, Macromedia Flash, and Real Player just to name a few. <application>Mozilla Firefox</application> can be launched by clicking &firefox; from the desktop menu system.
+			<para>The powerful and secure <application>Mozilla Firefox</application> web browser is included in Ubuntu. <application>Firefox</application> features tabbed browsing, pop-up blocking, in-built search facilities, live
+			bookmarks and more. Also supported are popular plug-ins such as Java, Macromedia Flash, and Real Player. <application>Firefox</application> can be launched by clicking &firefox; from the desktop menu system.
 			</para>
+			<sect3 id="firefox-multimedia" status="review">
+				<title>Viewing Online Audio and Video in Firefox</title>
+				<para>In order to view online audio and video streams in <application>Firefox</application>, you may need to install some plugins. Which plugin you choose to install depends on the media player which you prefer.</para>
+				<procedure>
+					<step><para>For the <application>Totem Gstreamer</application> plugin (the default Ubuntu media player), install the <application>totem-gstreamer-firefox-plugin</application> package from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>).</para></step>
+					<step><para>For the <application>Totem Xine</application> plugin, install the <application>totem-xine-firefox-plugin</application> package from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>).</para></step>
+					<step><para>For the <application>Mplayer</application> plugin, install the <application>mozilla-mplayer</application> package from the <emphasis>Multiverse</emphasis> repository (see <xref linkend="add-applications"/>).</para></step>
+					<step><para>The changes will take effect when you close and open <application>Firefox</application>.</para></step>
+				</procedure>
+					<note><para>These steps will install the plugin for <application>Firefox</application>. However, to play some formats, you may need to add some extra codecs (see <xref linkend="codecs"/>).</para></note>
+			</sect3>
 			<sect3 status="review">
-				<title>Macromedia Flash for Mozilla Firefox</title>
+				<title>Macromedia Flash for Firefox</title>
 					<procedure>
 						<step>
-							<para>To view flash graphics from the Mozilla Firefox web browser, you need to install the <application>flashplayer-mozilla</application> package from the <emphasis>Multiverse</emphasis> repository (see <xref linkend="add-applications"/>).
+							<para>To view flash graphics from the Mozilla Firefox web browser, you need to install the <application>flashplugin-nonfree</application> package from the <emphasis>Multiverse</emphasis> repository (see <xref linkend="add-applications"/>).
 							</para>
 						</step>
 						<step>
@@ -899,7 +908,7 @@ includes the functionality and plug-ins of other famous image editing and proces
 	</sect1>
 	<sect1 id="programming" status="review">
 		<title>Programming</title>
-			<sect2 status="complete">
+			<sect2 id="build-essential" status="complete">
 				<title>Basic Compilers</title>
 					<procedure>
 						<step>
