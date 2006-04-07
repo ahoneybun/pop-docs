@@ -12,116 +12,14 @@
 <!ENTITY language "en">
 <!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
 ]>
-<chapter id="configuring-your-system-chap" status="review">
+<chapter id="configuring-your-system-chap" status="complete">
 	<title id="configuring-your-system">Configuring Your System</title>
 	<para>This chapter contains information on configuring your system.</para>
-	<sect1 id="desktop-tips" status="review">
+	<sect1 id="desktop-tips" status="complete">
 	  <title>Desktop Tricks</title>
 		<para>This section details some tips for using and customising Ubuntu&apos;s desktop environment (called <application>GNOME</application>), and the file manager (called <application>Nautilus</application>).</para> 
- 		<sect2 status="review">
- 		<title>Run programs automatically when GNOME starts</title>
-			<procedure>
-				<step>
-					<para>Choose &sessions; 
-					</para>
-				</step>
-				<step>
-					<para>
-						Click on the <guibutton>Startup Programs</guibutton> tab.
-					</para>
-				</step>
-				<step>
-					<para>Use the
-						<guibutton>Add</guibutton>,
-						<guibutton>Edit</guibutton>, and 
-						<guibutton>Delete</guibutton> buttons to manage
-							programs to run at startup. Some programs will automatically add themselves to this list when you configure them.
-					</para>
-				</step>
-			</procedure>
-		</sect2>
-		<sect2 status="review">
-				<title>Login automatically to GNOME when the computer starts</title>
-				<para>It is possible to login a user automatically when the computer boots. This is not recommended for most computers, as it is not secure and may allow other users access to your information</para>
-				<procedure>
-					<step>
-						<para>
-							&login-screen-setup;
-						</para>
-					</step>
-					<step>
-						<para>Select the <guibutton>Security</guibutton> tab. Check the
-								<guilabel>Enable Automatic Login</guilabel>
-							checkbox option.
-						</para>
-					</step>
-					<step>
-						<para>Choose the user you wish to be automatically logged in.
-						</para>
-					</step>
-				</procedure>
-		</sect2>
-		<sect2 status="review">
-			<title>Automatically turn on <keycap>Num Lock</keycap> when GNOME starts</title>
-				<procedure>
-					<step>
-						<para>Install the <application>numlockx</application> package from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>)
-						</para>
-					</step>
-					<step>
-						<para>Make a backup copy of your existing <filename>/etc/X11/gdm/Init/Default</filename> file:
-							<screen>sudo cp /etc/X11/gdm/Init/Default /etc/X11/gdm/Init/Default_backup</screen>
-						</para>
-					</step>
-					<step>
-						<para>Open <filename>/etc/X11/gdm/Init/Default</filename> for editing:
-							<screen>sudo gedit /etc/X11/gdm/Init/Default</screen>
-						</para>
-					</step>
-					<step>
-						<para>Find this line (It should be the last line in the file):
-						<programlisting>exit 0</programlisting>
-						</para>
-					</step>
-					<step>
-						<para>Add the following lines above the &quot;exit 0&quot; line:
-						<programlisting>
-if [ -x /usr/bin/numlockx ]; then
-/usr/bin/numlockx on
-fi
-						</programlisting>
-						</para>
-					</step>
-					<step>
-						<para>Save the edited file. (<ulink url="sample/Default_numlockx">an example</ulink>)
-					  </para>
-					</step>
-				</procedure>
-						<para>The change will take effect the next time you log in to GNOME. If you want to test it right away, turn off Num Lock and restart GNOME (see <xref linkend="restartgnomewithoutreboot"/>).
-						</para>
-		</sect2>	
-		<sect2 id="run-application" status="complete">
-			<title>Start a Program Manually</title>
-				<para>Sometimes it can be useful to start a program manually, for example when the program does not have an entry in the menu. This is easy to do with the <application>Run Applications</application> dialogue.
-				</para>
-				<para>For an application you intend to use regularly that does not have a menu entry, it is also very easy to add a menu entry to Ubuntu. (see <xref linkend="menu-editing"/>)
-				</para>
-				<procedure>
-					<step>
-						<para>Open the <application>Run Applications</application> dialogue by typing:						<keycombo>
-								<keycap>Alt</keycap>
-								<keycap>F2</keycap>
-							</keycombo>
-						</para>
-					</step>
-					<step>
-						<para>Enter the name of the program you wish to run, and press <keycap>Enter</keycap>.
-						</para>
-					</step>
-				</procedure>
-		</sect2>	
-		<sect2 id="menu-editing" status="review">
-		<!-- This is based on Dapper Flight4, and might need finalizing later - madpilot -->
+
+		<sect2 id="menu-editing" status="complete">
 		<title>Menu Editing</title>
 			<para>Ubuntu comes with the <application>Alacarte Menu Editor</application>, so you can customize your menus and add entries for applications that don&apos;t automatically appear after they are installed.
 			</para>
@@ -129,7 +27,7 @@ fi
 			</para>
 			<procedure>
 				<step>
-					<para>Open <application>Alacarte</application> with &menu-editor;, or by right-clicking on any menu and choosing <guimenuitem>Edit Menus</guimenuitem>.
+					<para>Open <application>Alacarte</application> with &menu-editor;, or by right-clicking on any top-level menu and choosing <guimenuitem>Edit Menus</guimenuitem>.
  					</para>
 				</step>
 				<step>
@@ -150,7 +48,73 @@ fi
 			<para>To stop a menu entry from being displayed, use the checkboxes beside each entry. This does not erase the menu entry, so you can restore it later in the same way.
 			</para>
 		</sect2>
-		<sect2 status="review">
+
+		<sect2 id="run-application" status="complete">
+			<title>Start a Program Manually</title>
+				<para>Sometimes it can be useful to start a program manually, for example when the program does not have an entry in the menu. This is easy to do with the <application>Run Applications</application> dialogue.
+				</para>
+				<para>For an application you intend to use regularly that does not have a menu entry, it is also very easy to add a menu entry to Ubuntu. (see <xref linkend="menu-editing"/>)
+				</para>
+				<procedure>
+					<step>
+						<para>Open the <application>Run Applications</application> dialogue by typing:						<keycombo>
+								<keycap>Alt</keycap>
+								<keycap>F2</keycap>
+							</keycombo>
+						</para>
+					</step>
+					<step>
+						<para>Enter the name of the program you wish to run, and press <keycap>Enter</keycap>.
+						</para>
+					</step>
+				</procedure>
+		</sect2>	
+
+ 		<sect2 status="complete">
+ 		<title>Run programs automatically when GNOME starts</title>
+			<procedure>
+				<step>
+					<para>Choose &sessions;. 
+					</para>
+				</step>
+				<step>
+					<para>
+						Click on the <guibutton>Startup Programs</guibutton> tab.
+					</para>
+				</step>
+				<step>
+					<para>Use the
+						<guibutton>Add</guibutton>,
+						<guibutton>Edit</guibutton>, and 
+						<guibutton>Delete</guibutton> buttons to manage
+							programs to run at startup. Some programs will automatically add themselves to this list when you configure them.
+					</para>
+				</step>
+			</procedure>
+		</sect2>
+		<sect2 status="complete">
+				<title>Login automatically to GNOME when the computer starts</title>
+				<para>It is possible to login a user automatically when the computer boots. This is not recommended for most computers, as it is not secure and may allow other users access to your information</para>
+				<procedure>
+					<step>
+						<para>
+							&login-screen-setup;
+						</para>
+					</step>
+					<step>
+						<para>Select the <guibutton>Security</guibutton> tab. Check the
+								<guilabel>Enable Automatic Login</guilabel>
+							checkbox option.
+						</para>
+					</step>
+					<step>
+						<para>Choose the user you wish to be automatically logged in.
+						</para>
+					</step>
+				</procedure>
+		</sect2>	
+
+		<sect2 status="complete">
 			<title>Change Display Mode in <application>Nautilus</application></title>
 				<para>Ubuntu's file manager Nautilus provides two modes in which you can interact with your filesystem: <emphasis>Spatial mode</emphasis> and <emphasis>Browser mode</emphasis>.</para>
 				<itemizedlist>
@@ -178,7 +142,7 @@ fi
 				</step>
 			</procedure>
 		</sect2>
-		<sect2 status="review">
+		<sect2 status="complete">
 			<title>Show hidden files and folders in <application>
 						<phrase>Nautilus</phrase></application></title>
 			<procedure>
@@ -186,7 +150,7 @@ fi
 					<para>In <application>Nautilus</application>, use the <keycombo>
 							<keycap>Ctrl</keycap>
 							<keycap>H</keycap>
-						</keycombo> shortcut keys to toggle hidden files and folders on and off, or 
+						</keycombo> shortcut keys to toggle hidden files and folders on and off, or select
 						<menuchoice>
 							<guimenu>View</guimenu>
 							<guimenuitem>Show Hidden Files</guimenuitem>
@@ -209,7 +173,7 @@ fi
 				</step>
 			</procedure>
 		</sect2>
-		<sect2 id="nautilus-location-bar" xreflabel="Opening the Location Bar" status="review">
+		<sect2 id="nautilus-location-bar" xreflabel="Opening the Location Bar" status="complete">
 			<title>Open the Location Bar in <application>Nautilus</application></title>
 				<para>The <guilabel>Location Bar</guilabel> is the bar in your file manager in which you can type an address. Toggle the bar on and off with:
 							<menuchoice>
@@ -222,7 +186,7 @@ fi
 							</keycombo> shortcut keys.
 				</para>
 		</sect2>
-		<sect2 status="review">
+		<sect2 status="complete">
 			<title>View remote SSH, FTP, and SFTP servers using <application>Nautilus</application></title>
 			<procedure>
 				<step>
@@ -247,9 +211,17 @@ fi
 							<screen>ftp://username:password@ftp.server.com</screen>
 						</para>
 				</step>
+				<step>
+					<para>To access remote servers easily through <application>Nautilus</application>, add a permanent bookmark to the server by selecting
+		 					<menuchoice>
+								<guimenu>Places</guimenu>
+								<guisubmenu>Connect to Server...</guisubmenu>
+							</menuchoice> and entering the details for the remote server.
+					</para>
+				</step>
 			</procedure>
 		</sect2>
-		<sect2 status="review">
+		<sect2 status="complete">
 			<title>Change the default "Open with" program for a file type</title>
 			<procedure>
 				<step>
@@ -269,11 +241,11 @@ fi
 				</step>
 			</procedure>
 		</sect2>
-		<sect2 status="writing">
+		<sect2 status="complete">
 			<title>Open files with administrative privileges from the file manager</title>
 			<para>To enable support for opening files with administrative privileges from the file manager, you need to add a <emphasis>Nautilus script</emphasis>:
 			</para>
-			<warning><para>Please note that enabling the ability to open files with administrative privileges constitutes a security risk. Always ensure that you are familiar with the file that you are opening.</para></warning>
+			<warning><para>Please note that opening files with administrative privileges constitutes a security risk. Always ensure that you are familiar with the file that you are opening.</para></warning>
 			<procedure>
 				<step><para>Open a new file to edit in the relevant directory:
 						
@@ -304,134 +276,7 @@ done</programlisting>
 				</step>
 			</procedure>
 		</sect2>
-		<sect2 status="review">
-			<title>Hide Recent Documents in the Places menu</title>
-				<para>Open a terminal and run the command:</para><screen>chmod 400 ~/.recently-used</screen>
-				<para>To enable it again, run the command:</para><screen>chmod 600 ~/.recently-used</screen>
-		</sect2>
-		<sect2 status="review">
-			<title>Advanced Desktop Applets</title>
-				<para><application>gDesklets</application> is a system for bringing mini programs (desklets), such as weather forecasts, news tickers, system information displays, or music player controls, onto your desktop, where they are sitting there in a symbiotic relationship of eye candy and usefulness.</para>
-				<procedure>
-					<step>
-							<para>Install the <application>gdesklets</application> and <application>gdesklets-data</application> packages from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>).
-							</para>
-					</step>
-					<step>
-							<para>Choose: 
-								<menuchoice>
-									<guimenu>Applications</guimenu>
-									<guisubmenu>Accessories</guisubmenu>
-									<guimenuitem>gDesklets</guimenuitem>
-								</menuchoice>
-							</para>
-					</step>
-					<step><para>For more information, visit the <ulink url="http://www.gdesklets.org/">gDesklets website</ulink></para>
-					</step>
-				</procedure>
-		</sect2>
-		<sect2 status="review">
-			<title>Show the Computer, Home, and Trash desktop icons in GNOME</title>
-				<procedure>
-					<step>
-						<para>Open the <application>Configuration Editor</application>, by running the program <filename>gconf-editor</filename> (see <xref linkend="run-application"/>).
-						</para>
-					</step>
-					<step>
-						<para>Choose
-							<menuchoice>
-								<guimenu>apps</guimenu>
-								<guisubmenu>nautilus</guisubmenu>
-								<guimenuitem>desktop</guimenuitem>
-							</menuchoice>.
-						</para>
-					</step>
-					<step>
-						<para>Tick the box beside <guilabel>computer_icon_visible</guilabel>, <guilabel>home_icon_visible</guilabel>, and <guilabel>trash_icon_visible</guilabel>. The changes take effect immediately.
-						</para>
-					</step>
-				</procedure>
-		</sect2>
-		<sect2 status="review">
-			<title>Change my preferred email client to Mozilla Thunderbird</title>
-			<procedure>
-				<step>
-						<para>Choose &preferred-applications;
-						</para>
-				</step>
-				<step>
-						<para>Click on the <guibutton>Mail Reader</guibutton> tab, and select the <guilabel>Custom</guilabel> option. 	</para>
-				</step>
-				<step>
-						<para>In the <guilabel>Command</guilabel> text box, type
-							<userinput>
-								<command>mozilla-thunderbird %s</command></userinput>, then close the dialog.
-						</para>
-				</step>
-			</procedure>
-		</sect2>
-		<sect2 id="restartgnomewithoutreboot" xreflabel="restart GNOME without rebooting the computer" status="review">
-			<title>Restart GNOME without rebooting the computer</title>
-			<procedure>
-				<step>
-						<para>Save and close all open applications.</para>
-			          </step>
-			          <step>
-            				<para>Use the <keycombo>
-						<keycap>Ctrl</keycap>
-						<keycap>Alt</keycap>
-						<keycap>Backspace</keycap>
-						</keycombo>
-							 shortcut keys to restart GNOME.
-					</para>
-           			</step>
-           			<step>
-            				<para>If <keycombo>
-                <keycap>Ctrl</keycap>
-                <keycap>Alt</keycap>
-                <keycap>Backspace</keycap>
-							</keycombo>
-              is disabled, type
-						<screen>sudo /etc/init.d/gdm restart</screen>
-            </para>
-						<para>(See <xref linkend="disableCtrlAltBackspace"/> to disable <keycombo>
-								<keycap>Ctrl</keycap>
-								<keycap>Alt</keycap>
-								<keycap>Backspace</keycap>
-							</keycombo>.)
-						</para>
-				</step>
-			</procedure>
-		</sect2>
-		<sect2 id="disableCtrlAltBackspace" xreflabel="Prevent the Ctrl-Alt-Backspace shortcut keys from restarting X" status="review">
-			<title>Preventing the Ctrl-Alt-Backspace shortcut keys from restarting X</title>
-				<procedure>
-					<step>
-						<para>Make a backup copy of your existing <filename>/etc/X11/xorg.conf</filename> file:
-							<screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup</screen>
-						</para>
-					</step>
-					<step>
-					<para>Open <filename>/etc/X11/xorg.conf</filename> for editing:
-						<screen>sudo gedit /etc/X11/xorg.conf</screen>
-					</para>
-					</step>
-					<step>
-						<para>Add the following lines to the end of the file:
-							<programlisting>Section	"ServerFlags"
-Option	"DontZap"	"yes"
-EndSection</programlisting>
-						</para>
-					</step>
-					<step>
-						<para>Save the edited file (<ulink url="sample/xorg.conf_disablectrlaltbackspacegnome">an example</ulink>).</para>
-					</step>
-					<step>
-						<para>The change will take effect the next time you log in to GNOME. If you want the change to take effect immediately, restart GNOME manually. (See <xref linkend="restartgnomewithoutreboot"/>.)</para>
-					</step>
-				</procedure>
-		</sect2>
-     <sect2 id="fonts" status="writing">
+     <sect2 id="fonts" status="complete">
 		<title>Install Extra Fonts</title>
 				<para>This section describes how to install extra fonts from the Ubuntu archives.</para>
 				<procedure>
@@ -465,7 +310,7 @@ xfonts-intl-phonetic
 					</procedure>
 			<para>If you prefer to download individual fonts by hand, you can install them simply and easily by opening a file manager, and typing <application>fonts:///</application> into the location bar (See <xref linkend="nautilus-location-bar"/>). Then you can simply drag the font you downloaded into the group of existing fonts.</para>
 		</sect2>
-		<sect2 status="review">
+		<sect2 status="complete">
 				<title>RAR Archiver</title>
 					<procedure>
 						<step>
@@ -483,11 +328,140 @@ sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen>
 						</step>
 					</procedure>
 		</sect2>
+		<sect2 status="complete">
+			<title>Advanced Desktop Applets</title>
+				<para><application>gDesklets</application> is a system for bringing mini programs (desklets), such as weather forecasts, news tickers, system information displays, or music player controls, onto your desktop, in a symbiotic relationship of eye candy and usefulness.</para>
+				<procedure>
+					<step>
+							<para>Install the <application>gdesklets</application> and <application>gdesklets-data</application> packages from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>).
+							</para>
+					</step>
+					<step>
+							<para>Choose: 
+								<menuchoice>
+									<guimenu>Applications</guimenu>
+									<guisubmenu>Accessories</guisubmenu>
+									<guimenuitem>gDesklets</guimenuitem>
+								</menuchoice>
+							</para>
+					</step>
+					<step><para>For more information, visit the <ulink url="http://www.gdesklets.org/">gDesklets website</ulink></para>
+					</step>
+				</procedure>
+		</sect2>
+		<sect2 status="complete">
+			<title>Hide Recent Documents in the Places menu</title>
+				<para>To hide <guilabel>Recent Documents</guilabel> from the <guilabel>Places</guilabel> menu, open a terminal and run the command:</para><screen>chmod 400 ~/.recently-used</screen>
+				<para>To enable it again, run the command:</para><screen>chmod 600 ~/.recently-used</screen>
+		</sect2>
+		<sect2 status="complete">
+			<title>Show the Computer, Home, and Trash desktop icons in GNOME</title>
+				<procedure>
+					<step>
+						<para>Open the <application>Configuration Editor</application>, by running the program <filename>gconf-editor</filename> (see <xref linkend="run-application"/>).
+						</para>
+					</step>
+					<step>
+						<para>Choose
+							<menuchoice>
+								<guimenu>apps</guimenu>
+								<guisubmenu>nautilus</guisubmenu>
+								<guimenuitem>desktop</guimenuitem>
+							</menuchoice>.
+						</para>
+					</step>
+					<step>
+						<para>Tick the box beside <guilabel>computer_icon_visible</guilabel>, <guilabel>home_icon_visible</guilabel>, and <guilabel>trash_icon_visible</guilabel>. The changes take effect immediately.
+						</para>
+					</step>
+				</procedure>
+		</sect2>
+		<sect2 status="complete">
+			<title>Change my preferred email client to Mozilla Thunderbird</title>
+			<procedure>
+				<step>
+						<para>Choose &preferred-applications;
+						</para>
+				</step>
+				<step>
+						<para>Click on the <guibutton>Mail Reader</guibutton> tab, and select the <guilabel>Custom</guilabel> option. 	</para>
+				</step>
+				<step>
+						<para>In the <guilabel>Command</guilabel> text box, type
+							<userinput>
+								<command>mozilla-thunderbird %s</command></userinput>, then close the dialog.
+						</para>
+				</step>
+			</procedure>
+		</sect2>
+		<sect2 id="restartgnomewithoutreboot" xreflabel="restart GNOME without rebooting the computer" status="complete">
+			<title>Restart GNOME without rebooting the computer</title>
+			<procedure>
+				<step>
+						<para>Save and close all open applications.</para>
+			          </step>
+			          <step>
+            				<para>Use the <keycombo>
+						<keycap>Ctrl</keycap>
+						<keycap>Alt</keycap>
+						<keycap>Backspace</keycap>
+						</keycombo>
+							 shortcut keys to restart GNOME.
+					</para>
+           			</step>
+           			<step>
+            				<para>If <keycombo>
+                <keycap>Ctrl</keycap>
+                <keycap>Alt</keycap>
+                <keycap>Backspace</keycap>
+							</keycombo>
+              is disabled, type
+						<screen>sudo /etc/init.d/gdm restart</screen>
+            </para>
+						<para>(See <xref linkend="disableCtrlAltBackspace"/> to disable <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>Backspace</keycap>
+							</keycombo>.)
+						</para>
+				</step>
+			</procedure>
+		</sect2>
+		<sect2 id="disableCtrlAltBackspace" xreflabel="Prevent the Ctrl-Alt-Backspace shortcut keys from restarting X" status="complete">
+			<title>Preventing the Ctrl-Alt-Backspace shortcut keys from restarting X</title>
+				<procedure>
+					<step>
+						<para>Make a backup copy of your existing <filename>/etc/X11/xorg.conf</filename> file:
+							<screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup</screen>
+						</para>
+					</step>
+					<step>
+					<para>Open <filename>/etc/X11/xorg.conf</filename> for editing:
+						<screen>sudo gedit /etc/X11/xorg.conf</screen>
+					</para>
+					</step>
+					<step>
+						<para>Add the following lines to the end of the file:
+							<programlisting>Section	"ServerFlags"
+Option	"DontZap"	"yes"
+EndSection</programlisting>
+						</para>
+					</step>
+					<step>
+						<para>Save the edited file (<ulink url="sample/xorg.conf_disablectrlaltbackspacegnome">an example</ulink>).</para>
+					</step>
+					<step>
+						<para>The change will take effect the next time you log in to GNOME. If you want the change to take effect immediately, restart GNOME manually. (See <xref linkend="restartgnomewithoutreboot"/>.)</para>
+					</step>
+				</procedure>
+		</sect2>
 	</sect1>
-<sect1 id="partitions-booting" status="writing">
+
+<sect1 id="partitions-booting" status="complete">
 	<title>Partitions and Booting</title>
-			<sect2 status="writing">
+			<sect2 status="complete">
 				<title>Graphical Partition Editor</title>
+					<para><application>Gparted</application> is a graphical tool to edit disk partitions.</para> 
 					<procedure>
 						<step>
 							<para>Install the <application>gparted</application> package (see <xref linkend="add-applications"/>).</para>
@@ -498,50 +472,40 @@ sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen>
 						</step>
 					</procedure>
 		</sect2>
-		<sect2 status="writing">
-			<title>Mount/unmount Windows partitions</title>
+		<sect2 status="complete">
+			<title>Make partitions available from Ubuntu</title>
+				<para>Windows and other partitions should be automatically available from any Ubuntu system. If they are not, you can enable them using the graphical disks tool.</para>
 				<procedure>
 					<step>
-						<para>Read <xref linkend="listpartitiontables"/>
-						</para>
+						<para>Open &disks;</para>
 					</step>
 					<step>
-						<para>First make a directory where it can be mounted</para><screen>
-sudo mkdir /media/windows</screen>
+						<para>Select the correct hard disk, and click the <guilabel>Partitions</guilabel> tab.</para>
 					</step>
 					<step>
-						<para>Next, run the following command to mount an NTFS Windows Partition and allow read-only access:</para><screen>
-sudo mount /dev/hda1 /media/windows/ -t ntfs -o umask=0222</screen>
-						<note>
-							<para>Replace <emphasis role="bold">/dev/hda1</emphasis> with the correct device name for your partition.
-							</para>
-							<para>If your Windows partition uses the FAT32 filesystem, replace <emphasis role="bold">ntfs</emphasis> with <emphasis role="bold">vfat</emphasis> in the above command.
-							</para>
-							<para>If you have a FAT32 filesystem, it is also safe to allow read-write access. To do this, change the value of <emphasis role="bold">umask</emphasis> to 0000.
-							</para>
-						</note>
+						<para>Select the relevant partition, and click <guilabel>Enable</guilabel>.</para>
 					</step>
 					<step>
-						<para>To unmount the partition, run the following command:</para><screen>
-sudo umount /media/windows/</screen>
+						<para>To unmount the partition, click <guilabel>Disable</guilabel>.</para>
 					</step>
 				</procedure>
 		</sect2>
-		<sect2 status="writing">
-			<title>Mount Windows partitions on boot-up</title>
+		<sect2 status="complete">
+			<title>Make partitions automatically available</title>
+				<para>Again, Windows and other partitions should be automatically available from Ubuntu. If they are not, the following procedure will make them automatically available:</para>
 				<procedure>
 					<step>
 						<para>Read <xref linkend="listpartitiontables"/>
 						</para>
 					</step>
 					<step>
-						<para>First make a directory where it can be mounted:</para>
+						<para>First make a directory where the partition can be made available (&quot;mounted&quot;):</para>
 							<screen>
 sudo mkdir /media/windows
 							</screen>
 					</step>
 					<step>
-						<para>Next, backup your configuration file for mounting drives and open the file in a text editor with administrative privileges:
+						<para>Next, backup your disk configuration file and open the file in a text editor with administrative privileges:
 						</para>
 						<screen>
 sudo cp /etc/fstab /etc/fstab_backup
@@ -563,12 +527,11 @@ sudo gedit /etc/fstab
 							url="sample/fstab_automountntfs">an example</ulink>)</para>
 					</step>
 					<step>
-						<para>Read <xref linkend="remountfstabwithoutreboot"
-							/></para>
+						<para>The changes will take effect when the computer is restarted.</para>
 					</step>
 				</procedure>
 		</sect2>
-		<sect2 status="writing">
+		<sect2 status="complete">
 			<title>Run a system command automatically at startup</title>
 				<para>Sometimes it can be useful to add a custom command to the startup process so that your computer executes it on every boot. To do this:</para>
 				<procedure>
@@ -588,8 +551,9 @@ sudo gedit /etc/fstab
 					</step>
 				</procedure>
 		</sect2>
-		<sect2 status="writing">
+		<sect2 status="complete">
 			<title>Change default Operating System at boot</title>
+				<para>To change the Operating System which starts by default when booting, it is necessary to edit the configuration file for booting.</para>
 				<procedure>
 					<step>
 						<para>Make a backup of your boot configuration file, and open it in a text editor:</para>
@@ -614,8 +578,9 @@ default 0
 					</step>
 				</procedure>
 		</sect2>
-		<sect2 status="writing">
+		<sect2 status="complete">
 			<title>Permanently disable/enable boot-up services</title>
+				<para>This requires administrative privileges (see <xref linkend="root-and-sudo"/>).</para>
 				<procedure>
 					<step>
 						<para>Run <application>Services Settings</application>:
@@ -627,7 +592,7 @@ default 0
 						</para>
 					</step>
 					<step>
-						<para>Ubuntu will ask for your password, enter it.</para>
+						<para>Enter your password.</para>
 					</step>
 					<step>
 						<para>Tick/untick the services you want running, then click <guibutton>OK</guibutton> when done.</para>
@@ -643,68 +608,11 @@ default 0
 					</step>
 				</procedure>
 		</sect2>
-		<sect2 status="writing">
-			<title>Clean /tmp/ folder contents on shutdown</title>
-				<procedure>
-					<step>
-						<para>
-							<screen>sudo cp /etc/init.d/sysklogd /etc/init.d/sysklogd_backup
-sudo gedit /etc/init.d/sysklogd</screen>
-						</para>
-					</step>
-					<step>
-						<para>Find this section:</para>
-						<programlisting>...
-stop)
-log_begin_msg "Stopping system log daemon..."
-start-stop-daemon --stop --quiet --oknodo --exec $binpath --pidfile $pidfile
-log_end_msg $?
-...</programlisting>
-					</step>
-					<step>
-						<para>Add the following line below it:</para>
-						<programlisting>rm -fr /tmp/* /tmp/.??*</programlisting>
-					</step>
-					<step>
-						<para>
-							Save the edited file (<ulink
-                                    url="sample/sysklogd_cleantmpfoldershutdown">an example</ulink>)
-						</para>
-					</step>
-				</procedure>
-		</sect2>
-		<sect2 status="writing">
-			<title>Change the timeout for boot menu</title>
-				<procedure>
-					<step>
-						<para>
-							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
-sudo gedit /boot/grub/menu.lst</screen>
-						</para>
-					</step>
-					<step>
-						<para>Find this line:</para>
-						<programlisting>...
-timeout 3
-...</programlisting>
-					</step>
-					<step>
-						<para>Replace with the following line:</para>
-						<programlisting>timeout X_seconds</programlisting>
-					</step>
-					<step>
-						<para>
-							Save the edited file (<ulink
-                                    url="sample/menu.list_increasedecreasetimeoutgrub">an example</ulink>)
-						</para>
-					</step>
-				</procedure>
-		</sect2>
 
 	</sect1>
-	<sect1 id="hardware" status="review">
+	<sect1 id="hardware" status="complete">
 		<title>Hardware</title>
-		<sect2 id="digital-cameras" status="review">
+		<sect2 id="digital-cameras" status="complete">
 			<title>Digital Cameras</title>
 				<para>Most USB digital cameras will be automatically detected by Ubuntu. Simply plug in and switch on your USB digital camera, Ubuntu will then ask you if you would like to import the photos from your camera. Click on <guibutton>Import</guibutton>, Ubuntu will then show you a preview of your photos. Choose a location to save your photos to, then click on <guibutton>Import</guibutton>, Ubuntu will then save your photos to your hard drive.</para>
 				<para>If you do not get the auto-import popup with your camera, it might be worth starting <application>gThumb</application> and trying 
@@ -715,105 +623,57 @@ timeout 3
 				</para>
 		</sect2>
 
-		<sect2 id="graphics-cards" status="writing">
+		<sect2 id="graphics-cards" status="complete">
 			<title>3D Graphic Cards</title>
-        	       	 <sect3 id="installnvidiadriver" xreflabel="3D Nvidia video card driver" status="writing">
+				<sect3 id="video-acceleration-introduction">
+					<title>Introduction to 3D Video Acceleration</title>
+					<para>Most video hardware should work automatically with Ubuntu. However with some types of video hardware, 3D acceleration (which is needed by some games) will not be supported automatically. This section details how to get this working with some popular video hardware.</para>
+					<para>The first step is to find out whether 3D acceleration is working.</para>
+					<procedure>
+						<step><para>To do this, enter in a terminal:<screen>glxinfo | grep rendering</screen></para></step>
+						<step><para>If 3D acceleration is working, the following will be displayed:<screen>direct rendering: Yes</screen></para></step>
+						<step><para>If not, follow the instructions in the following sections to activate 3D acceleration.</para></step>
+					</procedure>
+				</sect3>
+        	       	 <sect3 id="nvidia" xreflabel="3D Nvidia video card driver" status="complete">
         		        <title>3D Nvidia Video Card Driver</title>
+					<para>No Nvidia Video cards have 3D acceleration enabled automatically with Ubuntu, because the manufacturer does not release open source drivers. However, it is possible to activate 3D acceleration. The process depends on which type of video card you have.</para>
         		            <procedure>
+						<step><para><emphasis role="bold">If you have an older TNT, TNT2, TNT Ultra, GeForce1 or GeForce2 card,</emphasis> install the <application> nvidia-glx-legacy</application> and <application>nvidia-settings</application> packages from the <emphasis>Restricted</emphasis> repository (see <xref linkend="add-applications"/>).</para></step>
         		                <step>
-				<para>Install the <application>nvidia-glx</application> and <application>nvidia-settings</application> packages from the <emphasis>Restricted</emphasis> repository (see <xref linkend="add-applications"/>).
+				<para><emphasis role="bold">Alternatively, if you have a newer card,</emphasis> install the <application>nvidia-glx</application> package from the <emphasis>Restricted</emphasis> repository (see <xref linkend="add-applications"/>).
 				</para> 
                         </step>
                         <step>
-                            <para>Run:
+                            <para>To enable the new driver, run the following command in a terminal:
                                 <screen>
-sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup 
 sudo nvidia-glx-config enable </screen>
                             </para>
                         </step>
                         <step>
                             <para>You may adjust the settings of the new drivers by running the application <application>nvidia-settings</application> (see <xref linkend="run-application"/>). If you wish, add a menu entry for this program (see <xref linkend="menu-editing"/>).</para>
                         </step>
-                        <step>
-                            <para>Read <xref linkend="restartgnomewithoutreboot"/>
-                            </para>
-                        </step>
-                        <step>
-                            <para>
-                                <menuchoice>
-                                    <guimenu>Applications</guimenu>
-                                    <guisubmenu>System Tools</guisubmenu>
-                                    <guimenuitem>NVIDIA Settings</guimenuitem>
-                                </menuchoice>
-                            </para>
-                        </step>
                     </procedure>
             </sect3>
-            <sect3 status="writing">
-                <title>Disable the Nvidia Graphics Logo on Startup</title>
-                    <procedure>
-                        <step>
-                            <para>Read <xref linkend="installnvidiadriver"/>
-                            </para>
-                        </step>
-                        <step>
-                            <para>
-                                <screen>
-sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup 
-sudo gedit /etc/X11/xorg.conf</screen>
-                            </para>
-                        </step>
-                        <step>
-                            <para>Find this section:</para>
-                            <para>
-                                <programlisting>
-...
-Section "Device"
-Identifier	"NVIDIA Corporation NV11 [GeForce2 MX/MX 400]"
-Driver		"nvidia"
-BusID		"PCI:1:0:0"
-...</programlisting>
-                            </para>
-                        </step>
-                        <step>
-                            <para>Add the following line below it:</para>
-                            <para>
-                                <programlisting>
-Option  "NoLogo"</programlisting>
-                            </para>
-                        </step>
-                        <step>
-                            <para>Save the edited file ( <ulink
-                                    url="sample/xorg.conf_disablenvidialogo">an example</ulink>)</para>
-                        </step>
-                        <step>
-                            <para>Read <xref linkend="restartgnomewithoutreboot"/>
-                            </para>
-                        </step>
-                    </procedure>
-            </sect3>
-	<!-- unconfirmed ATI drivers, someone who owns an ATI card please confirm that this works -->
-            <sect3 id="installatidriver" status="writing">
+            <sect3 id="installatidriver" status="complete">
                 <title>3D ATI Video Card Driver</title>
+			<para>Many ATI video cards work well with Ubuntu automatically. To check that 3d acceleration works with your card, see <xref linkend="video-acceleration-introduction"/>. If it does not work, this procedure should activate it.</para>
 			<procedure>
                         <step>
  				<para>Install the <application>xorg-driver-fglrx</application> package from the <emphasis>Restricted</emphasis> repository (see <xref linkend="add-applications"/>).</para> 
                         </step>
 			<step>
-			    <para>Run these commands in a terminal:<screen>
-echo fglrx | sudo tee -a /etc/modules
-sudo depmod -a ; sudo modprobe fglrx
-sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup 
-sudo sed -i -e 's/"ati"/"fglrx"/' /etc/X11/xorg.conf</screen></para>
+			    <para>You now need to configure the computer to use the new driver so run this command in a terminal:<screen>
+sudo dpkg-reconfigure xserver-xorg</screen></para>
 			</step>
 			<step>
-			    <para>If you are using an NForce2-based motherboard you will also need to do the following:</para>
-			    <para><screen>
-sudo gedit /etc/X11/xorg.conf
-			    </screen></para>
-			    <para>Change <quote>Section "Device"</quote> add the following line:</para>
-			    <para><screen>
-  Option  "UseInternalAGPGART" "no"</screen></para>
+			    <para>When the dialogue appears and asks whether to do automatic detection of your video, pick <guibutton>Yes</guibutton>.</para>
+			</step>
+			<step>
+			    <para>When asked to select a driver, pick <guibutton>fglrx</guibutton>.</para>
+			</step>
+			<step>
+			    <para>Follow the remaining instructions as appropriate.</para>
 			</step>
 			<step>
 			    <para>Restart your machine for changes to take effect.</para>
@@ -821,9 +681,9 @@ sudo gedit /etc/X11/xorg.conf
 			</procedure>
 	    </sect3>
 	    </sect2>
-	    <sect2 status="writing">
-			<title>Manage Keyboard Layouts</title>
-				<para>This section deals with adding keyboards layouts to your system, and switching between them easily.</para>
+	    <sect2 status="complete">
+			<title>Keyboard Layouts</title>
+				<para>This section deals with adding keyboard layouts to your system, and switching between them easily.</para>
 			<sect3>
 				<title>Add a Layout</title>
 				<para>To add a keyboard layout to your system:</para>
@@ -863,17 +723,17 @@ sudo gedit /etc/X11/xorg.conf
 					</procedure>
 			</sect3>
 		</sect2>
-        <sect2 id="wireless-cards" status="writing">
+        <sect2 id="wireless-cards" status="complete">
             <title>Wireless Cards</title>
             <para>Many wireless cards are automatically detected by Ubuntu during installation. A complete listing of wireless cards which work with Ubuntu can be found on <ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsWirelessNetworkCards">Ubuntu Wiki</ulink>. Please add your wireless card to the list if it works with Ubuntu.</para> 
-            <para>Some cards may not work &quot;out of the box&quot; with Ubuntu. If this is the case, please look at the <ulink url="https://wiki.ubuntu.com/WirelessTroubleshootingGuide">Wireless Troubleshooting Guide</ulink> on the Ubuntu Wiki which is an excellent resource for troubleshooting wireless cards.
+            <para>Some cards may not work automatically with Ubuntu. If this is the case, please look at the <ulink url="https://wiki.ubuntu.com/WirelessTroubleshootingGuide">Wireless Troubleshooting Guide</ulink> on the Ubuntu Wiki which is an excellent resource for troubleshooting wireless cards.
             </para>
             <para>All information regarding wireless networking on Ubuntu is collected at <ulink url="https://wiki.ubuntu.com/WifiDocs">Wireless Networking Central</ulink> on the Ubuntu Wiki.
             </para>
         </sect2> 
-	    <sect2 id="modems" xreflabel="Modems" status="writing">
+	    <sect2 id="modems" xreflabel="Modems" status="complete">
 		<title>Modems</title>
-		<sect3 id="winmodems" status="writing">		
+		<sect3 id="winmodems" status="complete">		
 			<title>Winmodems</title>
 				<para>Most winmodems are not supported by Ubuntu, but drivers can be found that will enable the use of such modems. First you need to identify what chipset your winmodem is using:</para>
 				<para>
@@ -884,14 +744,14 @@ chmod +x scanModem
 sudo ./scanModem 
 gedit Modem/ModemData.txt</screen>
 				</para>
-				<para>Check the output in Gedit, it should list what modem chipset you have. Once you are aware of the chipset you have, see <ulink url="&linmodem;">&linmodem;</ulink> and follow the directions for your modem. More infomation can be found at <ulink url="https://wiki.ubuntu.com/SettingUpModems">SettingUpModems</ulink> on the Ubuntu Wiki.</para>
+				<para>Read this file, it should list what modem chipset you have. Once you are aware of the chipset you have, see <ulink url="&linmodem;">&linmodem;</ulink> and follow the directions for your modem. More infomation can be found at <ulink url="https://wiki.ubuntu.com/SettingUpModems">SettingUpModems</ulink> on the Ubuntu Wiki.</para>
 		</sect3>
-		<sect3 id="adsl" status="writing">
+		<sect3 id="adsl" status="complete">
 		<title>ADSL Modems</title>
-			<para>All PPPOE and router-style ADSL modems are supported by Ubuntu (that use ethernet for the connections), and some USB ADSL modems are supported too. For router-style ADSL modems, just connect it up, configure the modem as per your ISPs instructions and configure networking in Ubuntu. For information on PPPOE modems see <ulink url="https://wiki.ubuntu.com/ADSLPPPoE">ADSLPPoE</ulink> on the Ubuntu wiki.</para>
+			<para>All PPPOE and router-style ADSL modems are supported by Ubuntu (that use ethernet for the connections), and some USB ADSL modems are supported too. For router-style ADSL modems, just connect it up, configure the modem as per your ISPs instructions and configure networking in Ubuntu. For information on PPPOE modems see <ulink url="https://wiki.ubuntu.com/ADSLPPPoE">this guide</ulink> on the Ubuntu wiki.</para>
 		</sect3>
 	  </sect2>
-	  <sect2 id="printers" status="review">
+	  <sect2 id="printers" status="complete">
 	  	<title>Printers</title>
 	  		<para>Some printers will be automatically detected by Ubuntu; for those that are not, choose 
 	  			&printing;
@@ -905,54 +765,10 @@ gedit Modem/ModemData.txt</screen>
 	  		<para>There are some printers that need further setup. Search the databases at <ulink url="http://www.linuxprinting.org/">LinuxPrinting.org</ulink> or check the <ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsPrinters">Ubuntu Wiki&apos;s Printer page</ulink> for possible information on your printer.
 	  		</para>
 	  </sect2>
-	  <sect2 id="Handhelds" status="writing">
-		<title>Handhelds</title>
-		<sect3 status="writing">
-	            <title>PalmOS Devices</title>
-        	            <procedure>
-        	                <step>
-        	                    <para>
-                                <screen>
-sudo gedit /etc/udev/rules.d/10-custom.rules</screen>
-        	                    </para>
-        	                </step>
-                        <step>
-                            <para>Insert the following line into the new file:</para>
-                            <para>
-                                <programlisting>
-BUS="usb", SYSFS{product}="Palm Handheld*", KERNEL="ttyUSB*", NAME{ignore_remove}="pilot", MODE="666"</programlisting>
-                            </para>
-                        </step>
-                        <step>
-                            <para>Save the edited file (<ulink
-                                    url="sample/10-custom.rules_configurepalmosdevices">an example</ulink>)</para>
-                        </step>
-                        <step>
-                            <para>
-                                &palmos-devices;
-                            </para>
-                        </step>
-                        <step>
-                            <para>Follow the instructions on screen</para>
-                        </step>
-			<step>
-			    <para>Install the <application>J-Pilot</application> package from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>).</para> 
-                        </step>
-			<step>
-                            <para>
-                                <menuchoice>
-                                    <guimenu>Applications</guimenu>
-                                    <guisubmenu>Office</guisubmenu>
-                                    <guimenuitem>J-Pilot</guimenuitem>
-                                </menuchoice>
-			    </para>
-			</step>
-                    </procedure>
-            </sect3>
-	</sect2>
-	<sect2 id="other-hardware" status="review">
-	    <title>Other Hardware</title>
-	    <sect3 id="listpartitiontables" xreflabel="Check disk space and view the partition table" status="review">
+
+	<sect2 id="other-hardware" status="complete">
+	    <title>Other Tips</title>
+	    <sect3 id="listpartitiontables" xreflabel="Check disk space and view the partition table" status="complete">
                 <title>Check disk space usage and view the partition table</title>
                     <procedure>
                         <step>
@@ -966,7 +782,7 @@ BUS="usb", SYSFS{product}="Palm Handheld*", KERNEL="ttyUSB*", NAME{ignore_remove
                         </step>
                     </procedure>
             </sect3>
-            <sect3 status="review">
+            <sect3 status="complete">
                 <title>List devices</title>
                     <procedure>
                         <step>
@@ -986,38 +802,8 @@ BUS="usb", SYSFS{product}="Palm Handheld*", KERNEL="ttyUSB*", NAME{ignore_remove
                         </step>
                     </procedure>
             </sect3>
-            <sect3 status="review">
-                <title>Speed up CD/DVD-ROM access (enable DMA)</title>
-                    <procedure>
-                        <step>
-                            <para>Assuming that <filename class="devicefile"
-                                    >/dev/cdrom</filename> is the location of
-                                CD/DVD-ROM</para>
-                        </step>
-                        <step>
-                            <para>
-                                <screen>
-sudo hdparm -d1 /dev/cdrom 
-sudo cp /etc/hdparm.conf /etc/hdparm.conf_backup 
-sudo gedit /etc/hdparm.conf</screen>
-                            </para>
-                        </step>
-                        <step>
-                            <para>Append the following lines at the end of file:</para>
-                            <para>
-                                <programlisting>
-/dev/cdrom {
-dma = on
-}</programlisting>
-                            </para>
-                        </step>
-                        <step>
-                            <para>Save the edited file (<ulink
-                                    url="sample/hdparm.conf_speedupcddvdrom">an example</ulink>)</para>
-                        </step>
-                    </procedure>
-            </sect3>
-            <sect3 status="review">
+ 
+            <sect3 status="complete">
                 <title>Mount/unmount CD/DVD-ROMs manually, and show all
                         hidden and associated files/folders</title>
                     <procedure>
@@ -1042,33 +828,11 @@ sudo umount /media/cdrom0/</screen>
                         </step>
                     </procedure>
             </sect3>
-            <sect3 status="review">
-                    <title>Forcefully unmount CD/DVD-ROMs manually</title>
-                    <procedure>
-                        <step>
-                            <para>
-                                <screen>
-sudo eject</screen>
-                            </para>
-                        </step>
-                    </procedure>
-            </sect3>
-            <sect3 id="remountfstabwithoutreboot" xreflabel="Remount /etc/fstab without rebooting?" status="writing">
-                <title>Remount /etc/fstab without rebooting</title>
-                    <procedure>
-                        <step>
-                            <para>
-                                <screen>
-sudo mount -a</screen>
-                            </para>
-                        </step>
-                    </procedure>
-            </sect3>
 	</sect2>
       </sect1>
-      <sect1 id="networking" status="review">
+      <sect1 id="networking" status="complete">
 		<title>Networking</title>
-            <sect2 status="writing">
+            <sect2 status="complete">
                 <title>Change the Computer Name</title>
                     <procedure>
                         <step>
@@ -1087,11 +851,11 @@ sudo mount -a</screen>
                         </step>
                     </procedure>
             </sect2>
-	<sect2 id="networking-utils" status="review">
+	<sect2 id="networking-utils" status="complete">
 		<title>Networking Utilities</title>
-			<sect3 id="firestarter" status="review">
+			<sect3 id="firestarter" status="complete">
 				<title>Firestarter Firewall</title>
-						<para>A firewall protects a computer system from unauthorized access. It is not normally necessary to install a firewall on an Ubuntu system, because by default access to the system is closed. However, if you run any services which you allow other computers to access (for example, the Apache web server), it is advisable to install a firewall. <application>Firestarter</application> is a program which allows you to control a firewall through a graphical interface.
+						<para>A firewall protects a computer system from unauthorized access. It is not normally necessary to install a firewall on an Ubuntu system, because access to the system is closed by default. However, if you run any services which you allow other computers to access (for example, the Apache web server), it is advisable to install a firewall. <application>Firestarter</application> is a program which allows you to control a firewall through a graphical interface.
 						</para>
 					<procedure>
 						<step>
@@ -1104,7 +868,7 @@ sudo mount -a</screen>
 						</step>
 					</procedure>
 				</sect3>
-			<sect3 status="review">
+			<sect3 status="complete">
 				<title>Graphical Network Monitor</title>
 					<para>Etherape displays network activity among different hosts using circles of
 						varying size.</para>
@@ -1123,7 +887,7 @@ sudo mount -a</screen>
 						</step>
 					</procedure>
 			</sect3>	 
-			<sect3 status="review">
+			<sect3 status="complete">
 				<title>Network Traffic Analyzer</title>
 					<para>Ethereal is a network traffic analyzer/sniffer that captures packets
 						off the network in real time and displays the contents of them.</para>
