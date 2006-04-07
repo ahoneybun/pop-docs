@@ -19,12 +19,12 @@
 		concepts in this guide could be used to make binary packages for personal use, it
 		is designed for those people wanting to distribute their packages to and for
 		others. While it is also written with the &ubuntu; Linux distribution in mind, it
-		should also be useful for any .deb based distribution.</para>
+		should also be useful for any Debian-based distribution.</para>
 
-	<para>There are several reasons why you might want to learn how to package for Ubuntu.
+	<para>There are several reasons you might want to learn how to package for Ubuntu.
 		First, building and fixing &ubuntu; packages is a great way to contribute to the
 		&ubuntu; community. It is also a good way to learn how &ubuntu; and the
-		applications you have installed work, or maybe, you want to install a package that
+		applications you have installed work; or maybe you want to install a package that
 		is not in the &ubuntu; repositories. Hopefully after you have completed this guide
 		you will have the tools and knowledge you need to do all of these.</para>
 
@@ -33,15 +33,15 @@
 			
 		<para>This guide assumes that the reader has a reasonable knowledge of building
 			and installing software from source on Linux distributions. The guide also
-			uses the Command Line Interface (CLI) throughout so you should be comfortable
+			uses the Command Line Interface (CLI) throughout, so you should be comfortable
 			using a terminal. Below is a quick overview or review of some of the
-			prerequisite knowledge.</para>
+			requisite knowledge.</para>
 
 		<sect2>
 			<title>make</title> 
 			<para><emphasis role="bold">Description:</emphasis></para>
 		
-			<para>This a very important software building tool. GNU Make is used to render
+			<para>This a very important software building tool. GNU Make is used to transform
 				a complex compilation task into a trivial one. It is important that you
 				know how to use it, because we will store most of the information about
 				the packaging process in a Makefile.</para>
@@ -49,8 +49,8 @@
 
 			<para><emphasis role="bold">References:</emphasis></para>
 
-			<para>GNU Make has a well written <filename>man</filename> page and extensive
-				<filename>info</filename> documentation.  Documentation is also available
+			<para>GNU Make has a well-written <application>man</application> page and extensive
+				<application>info</application> documentation.  Documentation is also available
 				at the <ulink url="www.gnu.org/software/make/manual/make.html">GNU
 			</ulink> website.</para>
 
@@ -66,14 +66,15 @@
 				properly configured for your system. Standard Debian packaging tools use it
 				and so it is important that you know what the
 				<filename>configure</filename> script does. You do not need to know how to
-				create a <filename>configure</filename> script yourself as the software
-				author will do that, however, you may have to adjust it at some point to
-				get the &ubuntu; package to build correctly.</para>
+				create a <filename>configure</filename> script yourself, as the software
+				author (or <application>autoconf</application> will do that.  However, you 
+				may have to adjust it at some point to get a &ubuntu; package to build 
+				correctly.</para>
 
 			<para><emphasis role="bold">Quick Howto:</emphasis></para>
 
 			<para>First, get the <application>GNU Hello</application> source. From a
-				<application>Terminal</application>:</para>
+				terminal:</para>
 
 			<screen>
 wget http://ftp.gnu.org/gnu/hello/hello-2.1.1.tar.gz   # get the package
@@ -81,7 +82,7 @@ tar -xzf hello-2.1.1.tar.gz                            # unpack it
 cd hello-2.1.1/
 			</screen>
 
-			<para>Now, with <filename>./configure</filename> you can run the
+			<para>Now, with <command>./configure</command> you can run the
 				<filename>configure</filename> script to generate a Makefile that is
 				customized to your system.</para>
 
@@ -89,7 +90,7 @@ cd hello-2.1.1/
 				For instance, by default <application>GNU Hello</application> will install
 				to the <filename>/usr/local/</filename> directory. You could instead
 				install it somewhere else (a personal binary directory,
-				<filename>~/programs/</filename>)</para>
+				<filename>~/programs/</filename>, for example)</para>
 
 			<screen>./configure --prefix="$HOME/programs/"   # specify install dir.</screen>
 
@@ -114,10 +115,10 @@ cd hello-2.1.1/
 						listing of every package in the cache. This is especially helpful
 						in combination with a <application>grep</application> pipe such as
 						<application>apt-cache dump | grep foo</application> to search for
-						package <application>foo</application>.</para></listitem>
+						packages whose names or dependencies include <quote>foo</quote>.</para></listitem>
 
 				<listitem><para><emphasis role="bold">apt-cache policy</emphasis> - gives
-						an easy way to check which repo
+						an easy way to check which repository
 						(main/restricted/universe/multiverse) a package is coming
 						from.</para></listitem>
 
@@ -128,15 +129,15 @@ cd hello-2.1.1/
 						gives information about a source package.</para></listitem>
 
 				<listitem><para><emphasis role="bold">apt-cache rdepends </emphasis> -
-						shows reverse dependencies for package. That is, what packages
+						shows reverse dependencies for a package; that is, what packages
 						depend on the given packages.</para></listitem>
 
 				<listitem><para><emphasis role="bold">dpkg -S </emphasis> - gives the
 						binary package that a particular file belongs to. </para></listitem>
 
 				<listitem><para><emphasis role="bold">dpkg -l </emphasis> - lists the
-						installed packages. Similar to <application>apt-cache
-							dump</application> but for installed
+						installed packages. This is similar to <application>apt-cache
+							dump</application>, but for installed
 						packages.</para></listitem>
 	
 				<listitem><para><emphasis role="bold">dpkg -c </emphasis> - lists the
@@ -149,7 +150,7 @@ cd hello-2.1.1/
 
 				<listitem><para><emphasis role="bold">grep-dctrl</emphasis> - a special
 						<application>grep</application> package (not installed by default)
-						that can be used to search for various kinds information in
+						that can be used to search for various kinds of information in
 						packages.</para></listitem>
 
 			</itemizedlist>
@@ -162,16 +163,17 @@ cd hello-2.1.1/
 			<para>The <application>diff</application> program can be used to compare two
 				different files. It is primarily used to compare two files and to make
 				patches. A typical example might be <application>diff -ruN file.old
-					file.new &gt; file.diff</application> will create a diff (recursively if
-				directories are used) that shows the changes between the two files.</para>
+				file.new &gt; file.diff</application>.  This will create a diff 
+				(recursively if directories are used) that shows the changes, or
+				<quote>delta</quote>, between the two files.</para>
 
 			<para>The <application>patch</application> program is used to apply a patch
-				(usually created by <application>diff</application> or other similar
-				program) to a file or directory. To apply the patch created above we can
+				(usually created by <application>diff</application> or another similar
+				program) to a file or directory. To apply the patch created above, we can
 				do <application>patch -p0 &lt; file.diff</application>. The
 				<emphasis>-p</emphasis> tells <application>patch</application> how much it
-				should strip from the paths for the file names in the patch, in this case
-				nothing.</para>
+				should strip from the paths for the file names in the patch.  -p0 means to
+				strip nothing, or leave the path intact.</para>
 			
 		</sect2>
 

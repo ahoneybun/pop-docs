@@ -20,7 +20,7 @@
 		<para>Once you have created a source package (either a completely new package or
 			just an update/bugfix) you then you will probably want to distribute your
 			package so that other people can enjoy your hard work. The most effective way
-			to do that fo &ubuntu; is contribute your package to the Universe repository.
+			to do that for &ubuntu; is to contribute your package to the Universe repository.
 			The community developers that are responsible for the Universe repository are
 			known as Masters of the Universe (<ulink
 				url="https://wiki.ubuntu.com/MOTU">MOTU</ulink>). <ulink
@@ -33,13 +33,13 @@
 		
 			<para>First, you will need to have your <ulink
 					url="https://wiki.ubuntu.com/GPGKey">GPG Key</ulink> added to the REVU
-				keyring. This ensures that only real people upload to REVU and uploads can
-				be tracked.</para>
+				keyring. This ensures that your packages really come from you and helps track
+				uploads.</para>
 	
-			<para>To add your key send a <emphasis>signed</emphasis> email with your GnuPG
-				keyid, asking to be added to the REVU keyring, to
+			<para>To add your key, send a <emphasis>signed</emphasis> email with your GnuPG
+				key ID, asking to be added to the REVU keyring, to
 				<email>keyring@tiber.tauware.de</email>. One of the REVU admins will then
-				add you then to the uploaders keyring and reply to your email. You don't
+				add you to the uploaders keyring and reply to your email. You don't
 				need a password to upload packages, only to log in to the website and
 				reply to comments.</para>
 
@@ -53,7 +53,7 @@
 				<para>Uploading to REVU uses <application>dput</application>. The &ubuntu;
 					version of <application>dput</application> already knows about REVU so
 					you do not need to change any configuration files. Only upload signed
-					packages and unlike other repositories you should always include the
+					packages, and unlike other repositories, you should always include the
 					original tarball, otherwise reviewers will not be able to look at your
 					extracted source package. In order to do so, use the options "-S -sa"
 					with <application>debuild</application> or
@@ -89,10 +89,10 @@ Doing nothing for myapp_source.changes</screen>
 			
 				<para>After your first upload, you will be automatically registered to the
 					database and assigned a random password. On the <ulink
-						url="http://revu.tauware.de">REVU</ulink> website use the email
+						url="http://revu.tauware.de">REVU</ulink> website, use the email
 					address you used in the changelog file of your upload as the login and
 					press the 'recover password' link. You will be taken to a page that
-					has your encrypted password with instructions how to decrypt
+					has your encrypted password with instructions on how to decrypt
 					it.</para>
 				
 			</sect3>
@@ -132,7 +132,7 @@ Doing nothing for myapp_source.changes</screen>
 			<sect3 id="getting-help">
 				<title>Getting Help</title>
 				<para>If you need help on these steps or if you have more questions about REVU, you can
-					ask on #ubuntu-motu on the Freenode network.</para>
+					ask on #ubuntu-motu on the Freenode IRC network.</para>
 			</sect3>
 
 		</sect2>
@@ -141,9 +141,16 @@ Doing nothing for myapp_source.changes</screen>
 
 	<sect1 id="ubuntu-sync" status="review">
 		<title>Merges and Syncs</title>
+
+
+
+		<important><para><emphasis role="bold">Requirements:</emphasis>
+				build-essential, automake, gnupg, lintian, fakeroot,
+				patchutils, debhelper and <xref
+					linkend="gs-pbuilder"/>.</para></important>
 		
 		<para>&ubuntu; is based on the Debian Linux distribution and uses the same package
-			management system (APT). It the beginning of each &ubuntu; development cycle the
+			management system (APT). At the beginning of each &ubuntu; development cycle the
 			packages in &ubuntu; are updated to those in Debian unstable. However,
 			because &ubuntu; is not the same as Debian, some of the packages need to
 			be modified to work in &ubuntu;. There might also be bug fixes that &ubuntu;
@@ -154,11 +161,11 @@ Doing nothing for myapp_source.changes</screen>
 			There are more than 1000 such packages in the Universe repository.</para>
 		
 		<para>At the start of the development cycle a decision has to be made with regard
-			to these ubuntu versioned packages. Of course if the Debian version hasn't
+			to these Ubuntu versioned packages. Of course if the Debian version hasn't
 			changed since the last &ubuntu; release then nothing needs to be changed.
-			However, if there is a newer version of the package in Debian then one
-			of two things should happen. If all of the reasons that the ubuntu version
-			existed (bug fixes, dependencies, etc.) are fixed in the new Debian package
+			However, if there is a newer version of the package in Debian, then one
+			of two things should happen. If all of the reasons that the Ubuntu version
+			existed (bug fixes, dependencies, etc.) are fixed in the new Debian package,
 			then we can just take the Debian package directly. This is called a
 			<emphasis>sync</emphasis>. However, if the new Debian version has the same
 			issues that caused the ubuntu version to be made, then those changes need
@@ -166,15 +173,16 @@ Doing nothing for myapp_source.changes</screen>
 		</para>
 		<sect2 id="merge-tutorial">
 			<title>Merging Tutorial</title>
-			<para>The merging process involves looking at the changes to both the Debian
-				Ubuntu source packages and determining. Let's now look at an example.
-				Our example will be the classic CD burning program <application>xcdroast</application>.
+			<para>The merging process involves looking at the changes to both the Debian and
+				Ubuntu source packages and determining what has changed, and what changes are
+				Ubuntu-specific. Let's now look at an example.
+				Our example will be the classic CD burning program, <application>xcdroast</application>.
 			</para>
 			<para>To start, let's make a folder to hold our project and move there:</para>
 			<screen>
 mkdir ~/xcdroast
 cd ~/xcdroast</screen>
-			<para>Now let's download all of the source packages that are involved into
+			<para>Now let's download all of the source packages involved into
 				this directory:</para>
 			<itemizedlist>
 				<listitem><para>The <application>xcdroast</application> source tarball that is used
@@ -188,12 +196,12 @@ cd ~/xcdroast</screen>
 				<listitem>
 					<para>The &ubuntu; Breezy source package files:</para>
 					<itemizedlist>
-						<listitem>
-<para><ulink url="http://archive.ubuntu.com/ubuntu/pool/universe/x/xcdroast/xcdroast_0.98+0alpha15-1.1ubuntu1.dsc">
+						<listitem><para>
+<ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.dsc">
 		xcdroast_0.98+0alpha15-1.1ubuntu1.dsc</ulink></para>
 						</listitem>
 						<listitem><para>
-<ulink url="http://archive.ubuntu.com/ubuntu/pool/universe/x/xcdroast/xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz">
+<ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz">
 	xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz</ulink></para>
 						</listitem>
 					</itemizedlist>
@@ -202,11 +210,11 @@ cd ~/xcdroast</screen>
 					<para>The Debian source package files that the Breezy packages are derived from:</para>
 						<itemizedlist>
 							<listitem>
-<para><ulink url="http://snapshot.debian.net/archive/2004/08/10/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-1.1.diff.gz">
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.diff.gz">
 		xcdroast_0.98+0alpha15-1.1.diff.gz</ulink></para>
 							</listitem>
 							<listitem>
-<para><ulink url="http://snapshot.debian.net/archive/2004/08/10/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-1.1.dsc">
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.dsc">
 		xcdroast_0.98+0alpha15-1.1.dsc</ulink></para>
 							</listitem>
 						</itemizedlist>
@@ -216,11 +224,11 @@ cd ~/xcdroast</screen>
 						derived from:</para>
 					<itemizedlist>
 						<listitem>
-<para><ulink url="http://snapshot.debian.net/archive/2005/10/06/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-3.dsc">
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-3.dsc">
 		xcdroast_0.98+0alpha15-3.dsc</ulink></para>
 						</listitem>
 						<listitem>
-<para><ulink url="http://snapshot.debian.net/archive/2005/10/06/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15-3.diff.gz">
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-3.diff.gz">
 		xcdroast_0.98+0alpha15-3.diff.gz</ulink></para>
 						</listitem>
 					</itemizedlist>
@@ -232,15 +240,15 @@ cd ~/xcdroast</screen>
 					url="packages.ubuntu.com">packages.ubuntu.com</ulink>.</para></note>
 		<tip><para>A very useful tool to have when doing merges (or any Ubuntu packaging) is
 				<application>devscripts</application>. If you do not have that already
-				installed install it before procceding.</para></tip>
+				installed, install it before procceding.</para></tip>
 			
-			<para>By looking at the &ubuntu; changelog you should be able to know what to expect
-				the differences between the Ubuntu and Debian version that it was derived
-				from are going to be. For xcdroast the &ubuntu; changelog can be found at
+			<para>By looking at the &ubuntu; changelog you should be able to know what differences
+				to expect between the Ubuntu package and the Debian version that it was derived
+				from. For xcdroast, the &ubuntu; changelog can be found at
 	<ulink url="http://changelogs.ubuntu.com/changelogs/pool/universe/x/xcdroast/xcdroast_0.98+0alpha15-1.1ubuntu1/changelog">
 					changelogs.ubuntu.com</ulink>. It says that a .desktop file was fixed and properly
 				installed to fix a bug reported in
-				<ulink url="https://launchpad.net/distros/ubuntu/+source/xcdroast/+bug/2698">Malone</ulink>.
+				<ulink url="https://launchpad.net/malone/bugs/2698">Malone</ulink>.
 			</para>
 			
 			<para>Now let's see what the actual changes in the source packages are:</para>
@@ -289,11 +297,11 @@ less debian.debdiff</screen>
 			
 			<para>This will unzip the xcdroast_0.98+0alpha15.orig.tar.gz file to create a xcdroast-0.98+0alpha15
 				directory and apply the changes found in xcdroast_0.98+0alpha15-3.diff.gz.</para>
-			<para>Lets now go to the debian directory:</para>
+			<para>Let's now go to the debian directory:</para>
 			
 			<screen>cd xcdroast-0.98+0alpha15/debian/</screen>
 			
-			<para>One can see in rules that changes made by &ubuntu; were not applied to the new Debian version.
+			<para>One can see in <filename>rules</filename> that changes made by &ubuntu; were not applied to the new Debian version.
 				This means that:</para>
 			
 			<screen>cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps</screen>
@@ -309,11 +317,11 @@ install -D -m 644 $(CURDIR)/debian/xcdroast.desktop \
 install -D -m 644 $(CURDIR)/debian/xcdroast.xpm \
 	$(CURDIR)/debian/xcdroast/usr/share/pixmaps/xcdroast.xpm</screen>
 
-			<para>Now in dirs the following line needs to be added for the .desktop file to be installed:</para>
+			<para>Now in <filename>dirs</filename>, the following line needs to be added for the .desktop file to be installed:</para>
 			<screen>usr/share/applications</screen>
 			
-			<para>Now we need the actual .desktop file (<emphasis>xcdroast.desktop</emphasis>)
-				from the ubuntu.debdiff (or the ubuntu source package) we see that it is:</para>
+			<para>Now we need the actual .desktop file (saved as <emphasis>debian/xcdroast.desktop</emphasis>).
+				From the ubuntu.debdiff (or the Ubuntu source package), we see that it is:</para>
 			<screen>
 [Desktop Entry]
 Encoding=UTF-8
@@ -324,10 +332,10 @@ Icon=xcdroast.xpm
 Type=Application
 Categories=Application;AudioVideo;</screen>
 			
-			<para>The last change that needs to be made is in changelog. Not only do we need to
-				add what we have just done (resync to Debian) but we should also add in the
-				previous &ubuntu; changelog entries. To do this run dch -i -D dapper and put
-				something to the effect of:</para>
+			<para>The last change that needs to be made is in <filename>changelog</filename>. 
+				Not only do we need to add what we have just done (resync to Debian), but we 
+				should also add in the previous &ubuntu; changelog entries. To do this, run 
+				<application>dch -i -D dapper</application> and put something to the effect of:</para>
 			<screen>
 xcdroast (0.98+0alpha15-3<emphasis>ubuntu1</emphasis>) dapper; urgency=low
 
@@ -340,10 +348,10 @@ xcdroast (0.98+0alpha15-1.1ubuntu1) breezy; urgency=low
 
   * Fix and install existing .desktop file. (Closes Malone #2698)
 				
-  -- Barry deFreese &lt;bddebian@comcast.net&gt;  Sat,  1 Oct 2005 19:39:04 -0400</screen>
+  -- Captain Packager &lt;packager@coolness.com&gt;  Sat,  1 Oct 2005 19:39:04 -0400</screen>
 			<para>between the 0.98+0alpha15-1.1 and 0.98+0alpha15-2 log entries.</para>
 			
-			<para>Now you can build and test the new source pacakges. There are different ways to do this but one example is:</para>
+			<para>Now you can build and test the new source packages. There are different ways to do this, but one example is:</para>
 			<screen>
 cd ..
 debuild -S
@@ -353,8 +361,8 @@ sudo pbuilder build xcdroast_0.98+0alpha15-3ubuntu1.dsc</screen>
 			<para>This will build the source package and sign it and then build the .deb in a pbuilder
 				environment to make sure it builds correctly. Make sure to always test your packages
 				before submitting patches, etc. Now the last step is to make a debdiff that can be
-				submitted to a bug report or the MOTUs on the #ubuntu-motu irc channel. To do this
-				we want the difference between the Debian sid source package and the new &ubuntu; version:
+				submitted to a bug report or the MOTUs on the #ubuntu-motu irc channel. To do this,
+				we get the difference between the Debian sid source package and the new &ubuntu; version:
 			</para>
 			<screen>debdiff xcdroast_0.98+0alpha15-3.dsc xcdroast_0.98+0alpha15-3ubuntu1.dsc > \
 	xcdroast_0.98+0alpha15-3ubuntu1.debdiff</screen>
@@ -371,11 +379,11 @@ sudo pbuilder build xcdroast_0.98+0alpha15-3ubuntu1.dsc</screen>
 			<title>Build Dependencies</title>
 	
 			<para>Kubuntu programs are mostly KDE ones. Therefore, they need to
-				Build-Depend on <filename>kdelibs4-dev</filename> to build. Since KDE's
+				Build-Depend on <filename>kdelibs4-dev</filename>. Since KDE's
 				focus is to have programs interacting, some programs might also need to
 				Build-Depend on other parts of KDE, such as
 				<filename>kdepim-dev</filename> for example. Be sure to get the list of
-				necessary dependencies for your program.  </para>
+				necessary dependencies for your program.</para>
 	
 		</sect2>
 
@@ -387,7 +395,7 @@ sudo pbuilder build xcdroast_0.98+0alpha15-3ubuntu1.dsc</screen>
 				It is important to note that the general desktop files for KDE should go
 				to <filename>/usr/share/applications/kde/</filename>. The install path
 				for the desktop files should be fixed if they don't use this (except for
-				specific desktop files, such as service menus for example).  </para>
+				specific desktop files, such as service menus).  </para>
 			
 			<para>KDE desktop files also need specific entries to fit in the KMenu. A
 				minimal desktop file for a KDE program could be something like
@@ -404,7 +412,7 @@ Terminal=false
 Categories=Qt;KDE;Utility;</screen>
 
 			<para>Note that the Categories field must begin with Qt;KDE;. There are
-				specific desktop file entries for KDE programs and modules, that allow to
+				specific desktop file entries for KDE programs and modules that allow su to
 				declare the given programs as KCModules or autostart them when logging in.
 			</para>
 	
@@ -413,19 +421,19 @@ Categories=Qt;KDE;Utility;</screen>
 		<sect2 id="generating-pot-files">
 			<title>Generating .pot Files</title>
 
-			<para>The Ubuntu translation website <ulink
-					url="https://launchpad.net/rosetta/">Rosetta</ulink> now supports KDE,
+			<para>The Ubuntu translation website, <ulink
+					url="https://launchpad.net/rosetta/">Rosetta</ulink>, now supports KDE,
 				which means KDE packages need to support Rosetta by generating .pot
 				template files for translators. If you use <application>cdbs</application>
-				in Dapper your package should now do this automatically, build and check
+				in Dapper, your package should now automatically build and check
 				for a .pot file in po/ directory.</para>
 
 			<para>You will need the <ulink url="../files/kubuntu_01_kdepot.diff">kdepot
-					patch</ulink> (or similar, it may not apply exactly depending on the
+					patch</ulink> (or similar; it may not apply exactly depending on the
 				age of the admin directory).</para>
 
-			<para>If your package uses <application>debhelper</application>, or
-				<application>cdbs</application> and includes it's own kde.mk file you need
+			<para>If your package uses <application>debhelper</application> or
+				<application>cdbs</application> and includes its own kde.mk file, you need
 				to add the rules yourself.</para>
 
 			<para>For <application>cdbs</application> add these lines to your debian/rules:</para>
@@ -437,7 +445,7 @@ common-post-build-arch::
 
 clean::
         rm -rf po</screen>
-			<para>And for <application>debhelper</application> the following to the end of the
+			<para>And for <application>debhelper</application>, add the following to the end of the
 				<emphasis>install</emphasis> rule:</para>
 			<screen>
 mkdir -p po

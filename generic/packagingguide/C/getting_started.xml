@@ -17,26 +17,26 @@
 	<sect1 id="gs-tools" status="review" xreflabel="Packaging Tools">
 		<title>Packaging Tools</title>
 		
-		<para>There are many tools written specifically for packaging on Debian based
+		<para>There are many tools written specifically for packaging on Debian-based
 			systems. Many of them are not <emphasis>essential</emphasis> to creating
 			packages but are very helpful and often automate repetitive tasks. Their
-			<application>man</application> and <application>info</application> are good
-			source of information. However, the following is a list of packages that are
-			deemed necessary to begin packaging:</para>
+			<application>man</application> and <application>info</application> pages are 
+			good sources of information. However, the following is a list of packages 
+			that are deemed necessary to begin packaging:</para>
 
 		<variablelist>
 			<varlistentry>
 				<term><application>build-essential</application></term>
-				<listitem><para>a meta package that depends on
+				<listitem><para>a metapackage that depends on
 						<application>libc6-dev</application>,
 						<application>gcc</application>, <application>g++</application>,
 						<application>make</application>, and
-						<application>dpkg-dev</application>. The only one that you might
+						<application>dpkg-dev</application>. One that you might
 						not be familiar with is <application>dpkg-dev</application>. It
 						contains tools such as
 						<application>dpkg-buildpackage</application> and
 						<application>dpkg-source</application> that are used to create,
-						unpack and build source and binary packages.</para></listitem>
+						unpack, and build source and binary packages.</para></listitem>
 			</varlistentry>
 
 			<varlistentry>
@@ -50,7 +50,7 @@
 
 			<varlistentry><term><application>debhelper</application> and
 					<application>dh-make</application></term>
-				<listitem><para>this set of scripts helps .deb packagers by automating
+				<listitem><para>this set of scripts helps packagers by automating
 						common packaging tasks.  <application>dh-make</application> can be
 						used to do the initial "debianization" and provides many example
 						files.</para></listitem>
@@ -64,13 +64,13 @@
 						file.</para></listitem> </varlistentry>
 			
 			<varlistentry><term><application>gnupg</application></term>
-				<listitem><para>a complete and free replacement for PGP used to
+				<listitem><para>a complete and free replacement for PGP, used to
 						digitally sign files, including packages.</para></listitem>
 			</varlistentry>
 				
 			<varlistentry><term><application>fakeroot</application></term>
 				<listitem><para>simulates running a command with root privileges. This
-				is useful for creating binary packages while a regular user.</para></listitem>
+				is useful for creating binary packages as a regular user.</para></listitem>
 			</varlistentry>
 			
 			<varlistentry><term><application>lintian</application> and
@@ -82,9 +82,9 @@
 			</varlistentry>
 			
 			<varlistentry><term><application>pbuilder</application></term>
-				<listitem><para>constructs a chroot system, and builds a package inside
+				<listitem><para>constructs a chroot system and builds a package inside
 						the chroot. It is an ideal system to use to check that a package
-						has correct build-dependencies and to build clean packages to be
+						has correct build dependencies and to build clean packages to be
 						distributed and tested.</para></listitem> </varlistentry>
 		</variablelist>
 
@@ -96,11 +96,11 @@
 		
 		<para>Most users of a Debian-based distribution such as &ubuntu; will never have
 			to deal with the actual source code that is used to create all of the
-			applications on their computer. Instead, the source code is compiled into
+			applications on their computers. Instead, the source code is compiled into
 			<emphasis>binary</emphasis> packages from the <emphasis>source</emphasis>
 			package that contains both the source code itself and the rules for making the
 			binary package. So packagers upload the source packages with their changes to
-			the build systems that then compile the binary packages for each chip
+			the build systems that then compile the binary packages for each
 			architecture and distribute the binary .deb files to the apt mirrors.</para>
 
 	</sect1>
@@ -109,18 +109,24 @@
 		<title>The Personal Builder: pbuilder</title>
 		
 		<para>Using pbuilder as a package builder allows you to build the package from
-			within a chrooted environment. You can build binary packages without using
-			<application>pbuilder</application> but you must have all the build
+			within a chroot environment. You can build binary packages without using
+			<application>pbuilder</application>, but you must have all the build
 			dependencies installed on your system first. However, pbuilder allows the
 			packager to check the build dependencies because the package is built within a
-			minimal &ubuntu; installation and the build dependencies are downloaded
+			minimal &ubuntu; installation, and the build dependencies are downloaded
 			according to the <filename>debian/control</filename> file.</para>
 
 	<sect2>
 		<title>Installing and configuring a pbuilder environment</title>
 		
 		<para>The first, and perhaps most obvious, thing to do is install
-			<application>pbuilder</application>. Then you need to set up the
+			<application>pbuilder</application>. If you want to create a
+			<application>pbuilder</application> for a release newer than the
+			one you currently have installed you will need to manually
+			install the <application>debootstrap</application> .deb (from
+			<ulink
+				url="http://packages.ubuntu.com">packages.ubuntu.com</ulink>
+			from the newer release.  Then you need to set up the
 			<filename>/etc/pbuilderrc</filename> configuration file. </para>
 		
 		<screen>
@@ -138,17 +144,24 @@ OTHERMIRROR="deb http://archive.ubuntu.com/ubuntu dapper universe multiverse"
 		</screen>
 
 		<para>To avoid having <application>pbuilder</application> complain about
-			unauthenticated packages you have apt allow unauthenticated packages by:</para>
+			unauthenticated packages, you have apt allow unauthenticated packages by:</para>
 		<screen>sudo mkdir /etc/pbuilder/apt.config/
 sudo cp -a /etc/apt/* /etc/pbuilder/apt.config/
 echo "APT::Get::AllowUnauthenticated 1;" | \
 	sudo tee -a /etc/pbuilder/apt.config/apt.conf.d/allow-unauthenticated
 		</screen>
 
+		<para>It is important that the distribution in the
+			<filename>/etc/pbuilder/ap.config/sources.list</filename> is that
+			same as the distribution of the pbuilder you are trying to create
+			(<emphasis>i.e.</emphasis> you should have "dapper" in the
+			<filename>sources.list</filename> file if you want to create a
+			"dapper" pbuilder</para>
+		
 		<caution><para>You will need to remove the
 				<filename>99update-notifier</filename> file from the
 				<filename>/etc/pbuilder/apt.config/apt.conf.d/</filename> directory as
-				it can potentially break future pbuilder updates because
+				it can potentially break future pbuilder updates, because
 				<application>update-notifies</application> is not usually
 				installed.</para></caution>
 
@@ -189,12 +202,12 @@ echo "APT::Get::AllowUnauthenticated 1;" | \
 
 		<para>Or if you change something in the <filename>/etc/pbuilderrc</filename>
 			configuration file (or any pbuilder config file, for example
-			<filename>/etc/pbuilder/apt.config/sources.list</filename>) :</para>
+			<filename>/etc/pbuilder/apt.config/sources.list</filename>):</para>
 
 		<screen>sudo pbuilder update --override-config</screen>
 
 		<para>You can also use this update technique to change releases. Once the
-			development release has been released you can start building for the next
+			development version has been released, you can start building for the next
 			development releases by changing all of the occurrences of the previous
 			release name to the new one in <filename>/etc/pbuilderrc</filename> and
 			<filename>/etc/pbuilder/apt.config/sources.list</filename> and then
