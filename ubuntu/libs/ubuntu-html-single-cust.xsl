@@ -14,7 +14,7 @@
     <xsl:param name="body.font.master" select="10"/>
     <xsl:param name="html.stylesheet" select="'../../common/ubuntu-book.css'"/>
     <xsl:param name="shade.verbatim" select="0"/>
-    <xsl:param name="draft.mode" select="'yes'"/>
+    <xsl:param name="draft.mode" select="'no'"/>
 
 	<!--Navigation Graphics-->
 	<xsl:param name="navig.graphics" select="1"/>

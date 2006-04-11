@@ -26,7 +26,7 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format">
 <!-- PARAMETERS SECTION -->
 
 <!-- select draft mode, either yes or no -->
-<xsl:param name="draft.mode" select="'yes'"/>
+<xsl:param name="draft.mode" select="'no'"/>
 
 <!-- Give each section a number -->
 <xsl:param name="section.autolabel" select="0"></xsl:param>
