@@ -14,7 +14,6 @@
 <appendix id="appendix-chap" status="review">
 	<title>Appendix</title>
 
-
 	<sect1 id="appendix-resources" status="review">
 		<title>Additional Resources</title>
 	
@@ -77,25 +76,27 @@
 		<title>Chroot Environment</title>
 
 		<para> A chroot environment is commonly used for development-related
-			work and is basically like a virtual install of build-related
-			software. It is always a dh_installlogcheck good idea to do
-			development work in a chroot environment, as development work
+			work and is basically an install of build-related software. It is always
+			a good idea to do development work in a chroot environment, as it
 			often requires the installation of development packages (whose
-			main purpose is for building packages). An example of this is when
-			a certain application requires the development version of a
+			main purpose is for building packages). An example is when
+			a certain application requires the headers and development version of a
 			library to build (e.g.  <application>libabc-dev</application>).  A
 			normal user would not require the development version of
 			<application>libabc</application>. Thus it is better to install
-			such development packages in a chroot, so as to leave the normal
+			such development packages in a chroot, leaving the normal
 			operating environment clean and uncluttered. First, install the
 			required packages:</para>
 		
 		<screen>sudo apt-get install dchroot debootstrap</screen>
 
-		<important><para>Make sure to install the version of
-				<application>debootstrap</application> from the &ubuntu;
-				release you are trying to create the chroot
-				for.</para></important>
+		<important><para>Make sure to install at least the version of
+				<application>debootstrap</application> that is from the
+				&ubuntu; release for which you are trying to create the chroot.
+				You may have to download it from <ulink
+					url="http://packages.ubuntu.com">packages.ubuntu.com</ulink>
+				and manually install it with <application>dpkg
+					-i</application>.</para></important>
 		
 		<para>The next steps are to create, configure, and enter the chroot
 			environment.</para>
@@ -103,13 +104,18 @@
 		<screen>
 sudo mkdir /var/chroot
 echo "mychroot /var/chroot" | sudo tee -a /etc/dchroot.conf
-sudo debootstrap --variant=buildd dapper /var/chroot/ http://archive.ubuntu.com/ubuntu/
-sudo cp /etc/resolv.conf /var/chroot/etc/resolv.conf
+sudo debootstrap --variant=buildd dapper /var/chroot/ http://archive.ubuntu.com/ubuntu/</screen>
+		
+		<note><para>Creating a chroot environment will take some time as
+				<application>debootstrap</application> downloads and configures a
+				minimal &ubuntu; installation.</para></note>
+		
+		<screen>sudo cp /etc/resolv.conf /var/chroot/etc/resolv.conf
 sudo cp /etc/apt/sources.list /var/chroot/etc/apt/
 sudo chroot /var/chroot/</screen>
 
 		<para>In order to be able to use apt in the chroot, add Ubuntu sources to the chroot's
-			apt sources. For the moment ignore any warnings about package
+			apt sources. For the moment, ignore any warnings about package
 			authentication:</para>
 		
 		<screen>
@@ -123,7 +129,7 @@ apt-get install build-essential dh-make automake pbuilder gnupg lintian \
 apt-get update
 exit</screen>
 
-		<para>Run the following to configure locales:</para>
+		<para>Run the following command to configure locales:</para>
 		
 		<screen>
 sudo chroot /var/chroot/
@@ -178,10 +184,10 @@ sudo chroot /var/chroot/
 echo mychroot > /etc/debian_chroot
 exit</screen>
 
-		<para>Now when you want to use your chroot (you may omit the -c mychroot if
-			there's only one, or you just want the first one in
+		<para>Now use your chroot (you may omit the -c mychroot if
+			there's only one or you just want the first one in
 			<filename>/etc/dchroot.conf</filename>). The -d parameter means that your
-			environment will be preserved.  This is generally useful if you want chrooted
+			environment will be preserved.  This parameter is generally useful if you want chrooted
 			applications to seamlessly use your X server, your session manager,
 			etc.</para>
 		
@@ -197,8 +203,8 @@ exit</screen>
 				<term>Readme.Debian</term>
 				
 				<listitem><para>This file is used to document changes that you
-						have made to the original upstream source that othere
-						people might need to know about or information
+						have made to the original upstream source that other
+						people might need to know or information
 						specific to Debian or &ubuntu;.</para></listitem>
 				
 			</varlistentry>
@@ -209,8 +215,8 @@ exit</screen>
 				<listitem><para>If the package installs a configuration file,
 						when the package is upgraded
 						<application>dpkg</application> can prompt a user
-						whether to keep their version, if modified, or install
-						the new version for the package. Such configuration
+						whether to keep his or her version if modified or install
+						the new version. Such configuration
 						files should be listed in
 						<filename>conffiles</filename> (one per line).  Do not
 						list configuration files that are only modified by the
@@ -223,8 +229,8 @@ exit</screen>
 				<term>cron.d.ex</term>
 
 				<listitem><para>If your package requires regularly scheduled
-						tasks to operate properly, you an use this file to set
-						it up. If you use this file rename it to
+						tasks to operate properly, you can use this file to configure
+						it. If you use this file, rename it to
 						<filename>cron.d</filename>.</para></listitem>
 				
 			</varlistentry>
@@ -232,8 +238,8 @@ exit</screen>
 			<varlistentry>
 				<term>dirs</term>
 
-				<listitem><para>This file specifies the directories which are
-						need but the normal installation procedure
+				<listitem><para>This file specifies the directories that are
+						needed but the normal installation procedure
 						(<application>make install</application>application)
 						somehow doesn't create.</para></listitem>
 				
@@ -242,7 +248,7 @@ exit</screen>
 			<varlistentry>
 				<term>docs</term>
 
-				<listitem><para>This file specifies the file names of
+				<listitem><para>This file specifies the filenames of
 						documentation files that
 						<application>dh_installdocs</application> will install
 						into the temporary directory.</para></listitem>

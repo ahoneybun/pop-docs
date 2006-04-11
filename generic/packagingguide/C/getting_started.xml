@@ -27,11 +27,11 @@
 		<variablelist>
 			<varlistentry>
 				<term><application>build-essential</application></term>
-				<listitem><para>a metapackage that depends on
+				<listitem><para>is a metapackage that depends on
 						<application>libc6-dev</application>,
 						<application>gcc</application>, <application>g++</application>,
 						<application>make</application>, and
-						<application>dpkg-dev</application>. One that you might
+						<application>dpkg-dev</application>. One package that you might
 						not be familiar with is <application>dpkg-dev</application>. It
 						contains tools such as
 						<application>dpkg-buildpackage</application> and
@@ -41,7 +41,7 @@
 
 			<varlistentry>
 				<term><application>devscripts</application></term>
-				<listitem><para>contains many scripts that will make the packager's life
+				<listitem><para>contains many scripts that make the packager's maintenance work
 						much easier. Some of the more commonly used are
 						<application>debdiff</application>,
 						<application>dch</application>, <application>debuild</application>, and
@@ -50,22 +50,22 @@
 
 			<varlistentry><term><application>debhelper</application> and
 					<application>dh-make</application></term>
-				<listitem><para>this set of scripts helps packagers by automating
+				<listitem><para>are scripts that automate
 						common packaging tasks.  <application>dh-make</application> can be
 						used to do the initial "debianization" and provides many example
 						files.</para></listitem>
 			</varlistentry>
 				
-			<varlistentry><term><application>patch</application> and
-					<application>diff</application></term> <listitem><para>used to create
-						and apply patches. They are quite extensively used in packaging
+			<varlistentry><term><application>diff</application> and
+					<application>patch</application></term> <listitem><para>are used to create
+						and apply patches, respectively. They are used extensively in packaging
 						because it is easier, cleaner, and more efficient to represent
-						small changes as patches rather than have multiple copies of a
+						small changes as patches rather than to have multiple copies of a
 						file.</para></listitem> </varlistentry>
 			
 			<varlistentry><term><application>gnupg</application></term>
-				<listitem><para>a complete and free replacement for PGP, used to
-						digitally sign files, including packages.</para></listitem>
+				<listitem><para>is a complete and free replacement for PGP used to
+						digitally sign files (including packages).</para></listitem>
 			</varlistentry>
 				
 			<varlistentry><term><application>fakeroot</application></term>
@@ -75,9 +75,9 @@
 			
 			<varlistentry><term><application>lintian</application> and
 					<application>linda</application></term>
-				<listitem><para>dissect Debian packages and report bugs and policy
+				<listitem><para>dissect Debian packages and report bugs and Policy
 						violations. They contain automated checks for many aspects of
-						Debian policy as well as some checks for common
+						Debian Policy as well as for common
 						errors.</para></listitem>
 			</varlistentry>
 			
@@ -85,7 +85,7 @@
 				<listitem><para>constructs a chroot system and builds a package inside
 						the chroot. It is an ideal system to use to check that a package
 						has correct build dependencies and to build clean packages to be
-						distributed and tested.</para></listitem> </varlistentry>
+						tested and distributed.</para></listitem> </varlistentry>
 		</variablelist>
 
 	</sect1>
@@ -99,9 +99,10 @@
 			applications on their computers. Instead, the source code is compiled into
 			<emphasis>binary</emphasis> packages from the <emphasis>source</emphasis>
 			package that contains both the source code itself and the rules for making the
-			binary package. So packagers upload the source packages with their changes to
+			binary package. Packagers upload the source packages with their changes to
 			the build systems that then compile the binary packages for each
-			architecture and distribute the binary .deb files to the apt mirrors.</para>
+			architecture. A separate system distributes the generated binary .deb files and
+			source changes to the repository mirrors.</para>
 
 	</sect1>
 		
@@ -116,77 +117,59 @@
 			minimal &ubuntu; installation, and the build dependencies are downloaded
 			according to the <filename>debian/control</filename> file.</para>
 
+		<para>The following is a brief guide to installing, using, and
+			updating a pbuilder environment, however, there are many details
+			of <application>pbuilder</application> usage that are outside the
+			realm of this guide. The <application>pbuilder</application> man
+			page has lots of information and should be consulted if you
+			have problems or need more detailed information.</para>
+
 	<sect2>
 		<title>Installing and configuring a pbuilder environment</title>
 		
-		<para>The first, and perhaps most obvious, thing to do is install
+		<para>The first, and perhaps most obvious, thing to do is to install
 			<application>pbuilder</application>. If you want to create a
 			<application>pbuilder</application> for a release newer than the
-			one you currently have installed you will need to manually
+			one you currently have installed, you will need to manually
 			install the <application>debootstrap</application> .deb (from
 			<ulink
-				url="http://packages.ubuntu.com">packages.ubuntu.com</ulink>
-			from the newer release.  Then you need to set up the
-			<filename>/etc/pbuilderrc</filename> configuration file. </para>
+				url="http://packages.ubuntu.com">packages.ubuntu.com</ulink>)
+			from the newer release. To create a pbuilder execute:</para>
 		
 		<screen>
-# URL of package archive.				
-MIRRORSITE=http://archive.ubuntu.com/ubuntu # URL of package archive.
-			
-# Release you want to use.
-DISTRIBUTION=dapper 
-
-# Directory where pbuilder will look for apt configuration files.
-APTCONFDIR="/etc/pbuilder/apt.config/"
-
-# Other repositories you want pbuilder to use. In this case the Universe repos.
-OTHERMIRROR="deb http://archive.ubuntu.com/ubuntu dapper universe multiverse"
+sudo pbuilder create --distribution &lt;distro&gt; \
+	--othermirror "deb http://archive.ubuntu.com/ubuntu &lt;distro&gt; universe multiverse"
 		</screen>
 
-		<para>To avoid having <application>pbuilder</application> complain about
-			unauthenticated packages, you have apt allow unauthenticated packages by:</para>
-		<screen>sudo mkdir /etc/pbuilder/apt.config/
-sudo cp -a /etc/apt/* /etc/pbuilder/apt.config/
-echo "APT::Get::AllowUnauthenticated 1;" | \
-	sudo tee -a /etc/pbuilder/apt.config/apt.conf.d/allow-unauthenticated
-		</screen>
-
-		<para>It is important that the distribution in the
-			<filename>/etc/pbuilder/ap.config/sources.list</filename> is that
-			same as the distribution of the pbuilder you are trying to create
-			(<emphasis>i.e.</emphasis> you should have "dapper" in the
-			<filename>sources.list</filename> file if you want to create a
-			"dapper" pbuilder</para>
-		
-		<caution><para>You will need to remove the
-				<filename>99update-notifier</filename> file from the
-				<filename>/etc/pbuilder/apt.config/apt.conf.d/</filename> directory as
-				it can potentially break future pbuilder updates, because
-				<application>update-notifies</application> is not usually
-				installed.</para></caution>
-
-		<para>Once you have adjusted the <application>pbuilder</application>
-			configuration files you can create the pbuilder chroot by:</para>
-
-		<screen>sudo pbuilder create --distribution dapper</screen>
+		<para>where &lt;distro&gt; is the release you want
+			(<emphasis>dapper</emphasis> for instance) to create the pbuilder
+			for. If you would like to create more than one
+			<application>pbuilder</application> environment you can append the
+			<emphasis>--basetgz</emphasis> flag with the desired location for
+			the compressed <application>pbuilder</application> environment.
+			The default is <filename>/var/cache/pbuilder/base.tgz</filename>.
+			If you do choose to use <emphasis>--basetgz</emphasis> you will
+			need to use it with the other <application>pbuilder</application>
+			commands so <application>pbuilder</application> knows which
+			compressed build environment to use.</para>
 		
 		<note><para>Creating a pbuilder environment will take some time as
-				<application>debootstrap</application> is essentially making a minimal
+				<application>debootstrap</application> essentially downloads a minimal
 				&ubuntu; installation.</para></note>
 
 	</sect2>	
+	
 	<sect2>
 		<title>Using the pbuilder</title>
 		<para>Now that you have a running pbuilder you can build binary packages from
-			the source package by:</para>
+			the source package by invoking:</para>
 
 		<screen>sudo pbuilder build *.dsc</screen>
 
 		<para>This will build all the source packages in the current directory. The
 			resulting .debs and source packages can be found in
-			<filename>/var/cache/pbuilder/result/</filename> (default) or whatever you set the
-			<emphasis>BUILDRESULT</emphasis> variable to be in the
-			<filename>/etc/pbuilderrc</filename> configuration file.</para>
+			<filename>/var/cache/pbuilder/result/</filename> (which can be
+			changed with the <emphasis>--buildresult</emphasis> flag).</para>
 
 	</sect2>
 
@@ -196,25 +179,20 @@ echo "APT::Get::AllowUnauthenticated 1;" | \
 		<para>You should always have a current pbuilder whenever you are testing your
 			source packages, especially when you are building for a development
 			release that is rapidly changing, to ensure that the dependencies are
-			properly found. To update your pbuilder use:</para>
+			properly found. To update your pbuilder, use:</para>
 
 		<screen>sudo pbuilder update</screen>
 
-		<para>Or if you change something in the <filename>/etc/pbuilderrc</filename>
-			configuration file (or any pbuilder config file, for example
-			<filename>/etc/pbuilder/apt.config/sources.list</filename>):</para>
-
-		<screen>sudo pbuilder update --override-config</screen>
-
-		<para>You can also use this update technique to change releases. Once the
-			development version has been released, you can start building for the next
-			development releases by changing all of the occurrences of the previous
-			release name to the new one in <filename>/etc/pbuilderrc</filename> and
-			<filename>/etc/pbuilder/apt.config/sources.list</filename> and then
-			updating the pbuilder.</para>
+		<para></para>
 		
+		<para>If you would like to upgrade you pbuilder to a new release you
+			can use <application>pbuilder update</application> in combination
+			with the <emphasis>--distribution</emphasis> flag:</para>
+
+		<screen>sudo pbuilder update --distribution &lt;newdistro&gt; --override-config</screen>
+
 	</sect2>
-		
+	
 </sect1>
 
 </chapter>
