@@ -55,13 +55,73 @@ website: index
 
 	@echo "Building the Index Page . . ."
 
+index-all: index index-de index-es index-et index-fi index-fr index-id index-id index-it index-ko index-lt index-pt index-pt_BR index-ro index-sv index-tl
+
+	cp libs/index.css $(BASE)
+	cp ubuntu/libs/img/*png $(BASE)ubuntu/common/img/
+
 index:
 
 	xsltproc --stringparam root.filename "index" -o $(BASE) $(INDEXCHUNKXSL) website-index/C/website-index.xml
-	cp libs/index.css $(BASE)
+
 
 # This is an example target for translations, where "cc" is the country-code for the translation language.
-index-cc:
+index-de:
 
-	xsltproc --stringparam root.filename "index.cc" -o $(BASE) $(INDEXCHUNKXSL) website-index/cc/website-index.xml
-	cp libs/index.css $(BASE)
+	xsltproc --stringparam root.filename "index.de" -o $(BASE) $(INDEXCHUNKXSL) website-index/de/website-index.xml
+
+index-es:
+
+	xsltproc --stringparam root.filename "index.es" -o $(BASE) $(INDEXCHUNKXSL) website-index/es/website-index.xml
+
+index-et:
+
+	xsltproc --stringparam root.filename "index.et" -o $(BASE) $(INDEXCHUNKXSL) website-index/et/website-index.xml
+
+index-fi:
+
+	xsltproc --stringparam root.filename "index.fi" -o $(BASE) $(INDEXCHUNKXSL) website-index/fi/website-index.xml
+
+index-fr:
+
+	xsltproc --stringparam root.filename "index.fr" -o $(BASE) $(INDEXCHUNKXSL) website-index/fr/website-index.xml
+
+index-id:
+
+	xsltproc --stringparam root.filename "index.id" -o $(BASE) $(INDEXCHUNKXSL) website-index/id/website-index.xml
+
+index-it:
+
+	xsltproc --stringparam root.filename "index.it" -o $(BASE) $(INDEXCHUNKXSL) website-index/it/website-index.xml
+
+index-ko:
+
+	xsltproc --stringparam root.filename "index.ko" -o $(BASE) $(INDEXCHUNKXSL) website-index/ko/website-index.xml
+
+index-lt:
+
+	xsltproc --stringparam root.filename "index.lt" -o $(BASE) $(INDEXCHUNKXSL) website-index/lt/website-index.xml
+
+index-pt:
+
+	xsltproc --stringparam root.filename "index.pt" -o $(BASE) $(INDEXCHUNKXSL) website-index/pt/website-index.xml
+
+index-pt_BR:
+
+	xsltproc --stringparam root.filename "index.pt_BR" -o $(BASE) $(INDEXCHUNKXSL) website-index/pt_BR/website-index.xml
+
+index-ro:
+
+	xsltproc --stringparam root.filename "index.ro" -o $(BASE) $(INDEXCHUNKXSL) website-index/ro/website-index.xml
+
+index-sv:
+
+	xsltproc --stringparam root.filename "index.sv" -o $(BASE) $(INDEXCHUNKXSL) website-index/sv/website-index.xml
+
+index-tl:
+
+	xsltproc --stringparam root.filename "index.tl" -o $(BASE) $(INDEXCHUNKXSL) website-index/tl/website-index.xml
+
+index-zh_CN:
+
+	xsltproc --stringparam root.filename "index.zh_CN" -o $(BASE) $(INDEXCHUNKXSL) website-index/zh_CN/website-index.xml
