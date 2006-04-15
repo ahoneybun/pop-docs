@@ -19,25 +19,26 @@
 #    at /usr/share/common-licenses/GPL
 ####################################################################################
 
-tar -xzvf rosetta-serverguide.tar.gz
-rm -rf rosetta-serverguide/serverguide.pot
-for x in rosetta-serverguide/*; do
+tar -xzvf rosetta-packagingguide.tar.gz
+rm -rf rosetta-packagingguide/packagingguide.pot
+for x in rosetta-packagingguide/*; do
 	y=$(basename ${x} .po)
 	echo ${y}
 	mkdir -p ${y}
+	xml2po -e -p ${x} C/appendix.xml >${y}/appendix.xml
+	xml2po -e -p ${x} C/basic.xml >${y}/basic.xml
 	xml2po -e -p ${x} C/bookinfo.xml >${y}/bookinfo.xml
-	xml2po -e -p ${x} C/installation.xml >${y}/installation.xml
+	xml2po -e -p ${x} C/bugs.xml >${y}/bugs.xml
+	xml2po -e -p ${x} C/getting_started.xml >${y}/getting_started.xml
 	xml2po -e -p ${x} C/introduction.xml >${y}/introduction.xml
-	xml2po -e -p ${x} C/network-applications.xml >${y}/network-applications.xml
-	xml2po -e -p ${x} C/packaging.xml >${y}/packaging.xml
-	xml2po -e -p ${x} C/serverguide.xml >${y}/serverguide.xml
-	xml2po -e -p ${x} C/serverguide-C.omf >${y}/serverguide-${y}.omf
-	xml2po -e -p ${x} C/windows-networking.xml >${y}/windows-networking.xml
-	if [ ! -e ${y}/serverguide-${y}.omf ]; then
-		sed -e "s#\"C\"#\"${y}\"#;  s#/C/#/${y}/#" /serverguide-C.omf >${y}/serverguide-${y}.omf
+	xml2po -e -p ${x} C/packagingguide.xml >${y}/packagingguide.xml
+	xml2po -e -p ${x} C/packagingguide-C.omf >${y}/packagingguide-${y}.omf
+	xml2po -e -p ${x} C/ubuntu.xml >${y}/ubuntu.xml
+	if [ ! -e ${y}/packagingguide-${y}.omf ]; then
+		sed -e "s#\"C\"#\"${y}\"#;  s#/C/#/${y}/#" /packagingguide-C.omf >${y}/packagingguide-${y}.omf
 	fi
-	sed -i -e "s@/C/preface@/$y/preface@g" $y/serverguide.xml
-	../../validate.sh $y/serverguide.xml
+	sed -i -e "s@/C/preface@/$y/preface@g" $y/packagingguide.xml
+	../../validate.sh $y/packagingguide.xml
 done
 
-rm -rf rosetta-serverguide
+rm -rf rosetta-packagingguide

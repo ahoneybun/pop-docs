@@ -33,63 +33,66 @@
       <sect2 id="ethernet" status="complete">
         <title>Ethernet</title> 
           <para>
-            The primary tool for configuring and managing your ethernet devices is 
-			<application>ifconfig</application>.  If you run this command with no arguments, it will list your active
-			network devices along with any IPv4 and/or IPv6 addresses, MAC address, broadcast
-			address, subnet mask, and some statistical information.  If its only argument is the
-			name of a network device, it will display this information for only that device:
-			<screen>$ sudo ifconfig eth1
-eth1      Link encap:Ethernet  HWaddr 00:09:5B:8F:5B:23  
-          inet addr:192.168.0.1  Bcast:192.168.0.255  Mask:255.255.255.0
-          inet6 addr: fe80::209:5bff:fe8f:5b23/64 Scope:Link
-          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
-          RX packets:457859 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:565745 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:1000 
-          RX bytes:45254899 (43.1 Mb)  TX bytes:454524813 (433.4 Mb)
-          Interrupt:10 Base address:0x4f00</screen>
-			The -a switch will cause <application>ifconfig</application> to list all network devices,
-			including those that are down.  Any other usage is to configure a device.  For example,
-			if you want to assign a specific IP address to a device rather than having it dynamically
-			assigned via DHCP, you would issue a command such as this:
-			<screen>sudo ifconfig eth0 10.0.0.1</screen>
-			More than one IP address may be assigned to a physical network device through the use of
-			interface <emphasis>aliases</emphasis>.  For instance, if eth0 in the
-			example above also needed to be assigned the address 10.0.0.2, it would be accomplished
-			with the following command:
-			<screen>sudo ifconfig eth0:1 10.0.0.2</screen>
-			Interface aliases are sometimes referred to as virtual network interfaces, but note that
-			they are not recognized by the kernel as network devices, and tools like iptables must
-			refer to the physical device (eth0, in this case).
-			</para>
-			<para>
-			Please refer to the <application>ifconfig</application> man page or the <ulink
-			url="http://www.tldp.org/LDP/nag/nag.html">Network Administrator's Guide</ulink> for more
-			advanced usage.
-            </para>
-			<para>
-			Routing is an essential part of any network configuration.  Very advanced routing policies
-			can be defined using the <application>iproute2</application> package, but this document
-			will focus on the usage of the original <application>route</application> command.  See the
-			<application>ip</application> man page or the <ulink url="http://lartc.org/">Linux Advanced
-			Routing &amp; Traffic Control</ulink> howto for information on advanced routing.
-			</para>
-			<para>
-			If your network is not automatically configured via DHCP, you will need a <emphasis
-			role="italics">default gateway</emphasis> before you will have a functional network.
-			Assume your router's IP address is 192.168.0.1:
-			<screen>sudo route add default gw 192.168.0.1</screen>
-			Substitute your ISP's gateway IP address if the machine you're working on <emphasis
-			role="italics">is</emphasis> the router.  You may add other routes, for example if you have
-			multiple network devices connecting multiple networks.  For instance, your eth1 device may
-			connect to your 192.168.1.0 network, in which case it will need its own specific route:
-			<screen>sudo route add -net 192.168.1.0 netmask 255.255.255.0 dev eth1</screen>
-			In the above example, traffic addressed to the 192.168.1.0 network will be routed through eth1,
-			whatever its IP address happens to be.
-			</para>
-			<para>See the <application>route</application> man page for complete usage details.</para>
-          </sect2>
-        <sect2 id="managing-dns-entries" status="complete">
+		  Most ethernet configuration is centralized in a single file,
+		  <filename>/etc/network/interfaces</filename>.  If you have no ethernet devices, only
+		  the loopback interface will appear in this file, and it will look something like
+		  this:
+		  <screen># This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+address 127.0.0.1
+netmask 255.0.0.0</screen>
+		If you have only one ethernet device, eth0, and it gets its configuration from a DHCP server,
+		and it should come up automatically at boot, only two additional lines are required:
+		<screen>auto eth0
+iface eth0 inet dhcp</screen>
+		The first line specifies that the eth0 device should come up automatically when you boot.
+		The second line means that interface (<quote>iface</quote>) eth0 should have an IPv4 address
+		space (replace <quote>inet</quote> with <quote>inet6</quote> for an IPv6 device) and that
+		it should get its configuration automatically from DHCP.  Assuming your network and DHCP
+		server are properly configured, this machine's network should need no further configuration to
+		operate properly.  The DHCP server will provide the default gateway (implemented via the
+		<application>route</application> command), the device's IP address (implemented via the 
+		<application>ifconfig</application> command), and and DNS servers used on the network
+		(implemented in the <filename>/etc/resolv.conf</filename> file.)</para>
+		<para>To configure your ethernet device with a static IP address and custom configuration,
+		some more information will be required.  Suppose you want to assign the IP address
+		192.168.0.2 to the device eth1, with the typical netmask of 255.255.255.0.  Your default
+		gateway's IP address is 192.168.0.1.  You would enter something like this into
+		<filename>/etc/network/interfaces</filename>:
+		<screen>iface eth1 inet static
+	address 192.168.0.2
+	netmask 255.255.255.0
+	gateway 192.168.0.1</screen>
+		In this case, you will need to specify your DNS servers manually in
+		<filename>/etc/resolv.conf</filename>, which should look something like this:
+		<screen>search mydomain.com
+nameserver 192.168.0.1
+nameserver 4.2.2.2</screen>
+		The <emphasis role="italics">search</emphasis> directive will append mydomain.com
+		to hostname queries in an attempt to resolve names to your network.  For example,
+		if your network's domain is mydomain.com and you try to ping the host
+		<quote>mybox</quote>, the DNS query will be modified to <quote>mybox.mydomain.com</quote>
+		for resolution.  The <emphasis role="italics">nameserver</emphasis> directives
+		specifiy DNS servers to be used to resolve hostnames to IP addresses.  If you use
+		your own nameserver, enter it here.  Otherwise, ask your Internet Service Provider
+		for the primary and secondary DNS servers to use, and enter them into
+		<filename>/etc/resolv.conf</filename> as shown above.</para>
+		<para>Many more configurations are possible, including dialup PPP interfaces, IPv6
+		networking, VPN devices, etc.  Refer to <application>man 5 interfaces</application>
+		for more information and supported options.  Remember that
+		<filename>/etc/network/interfaces</filename> is used by the 
+		<application>ifup</application>/<application>ifdown</application> scripts as a
+		higher level configuration scheme than may be used in some other Linux distributions,
+		and that the traditional, lower level utilities such as <application>ifconfig</application>,
+		<application>route</application>, and <application>dhclient</application> are still
+		available to you for ad hoc configurations.
+		</para>
+      </sect2>
+      <sect2 id="managing-dns-entries" status="complete">
           <title>Managing DNS Entries</title>
             <para>This section explains how to configure the nameserver
             to use when resolving IP address to hostnames and vice
@@ -2773,6 +2776,7 @@ local   all         postgres                          md5 sameuser
 <screen>
 <command>sudo apt-get install postfix</command>
 </screen>
+		Simply press return when the installation process asks questions, the configuration will be done in greater detail in the next stage.
             </para>
         </sect3>
         <sect3 id="postfix-configuration" status="complete">
@@ -2830,7 +2834,7 @@ echo 'mech_list: plain login' >> /etc/postfix/sasl/smtpd.conf
 		</para>
 		</step>
 		<step><para>Next, configure the digital certificate 
-            for TLS.
+            for TLS. When asked questions, follow the instructions and answer appropriately.
 <screen>
 openssl genrsa -des3 -rand /etc/hosts -out smtpd.key 1024
 chmod 600 smtpd.key
@@ -2839,8 +2843,6 @@ openssl x509 -req -days 3650 -in smtpd.csr -signkey smtpd.key -out smtpd.crt
 openssl rsa -in smtpd.key -out smtpd.key.unencrypted
 mv -f smtpd.key.unencrypted smtpd.key
 openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650
-mkdir /etc/ssl/certs
-mkdir /etc/ssl/private
 mv smtpd.key /etc/ssl/private/
 mv smtpd.crt /etc/ssl/certs/
 mv cakey.pem /etc/ssl/private/
@@ -2895,6 +2897,9 @@ postconf -e 'myhostname = mail.example.com'
             It is based on <ulink
             url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>. However it is still necessary to set up SASL authentication before you can use SMTP.
             </para>
+	</sect3>
+	<sect3 id="sasl">
+	  <title>Configuring SASL</title>
             <para>
             The
             <application>libsasl2</application>,
@@ -2903,18 +2908,27 @@ postconf -e 'myhostname = mail.example.com'
             enable SMTP AUTH using SASL. You can install these applications if
             you have not installed them already.
 <screen>
+<command>apt-get install libsasl2 sasl2-bin</command>
+</screen>
+	    </para>
+	    <para>
+		A few changes are necessary to make it work properly. Because <application>Postfix</application> runs chrooted in <filename>/var/spool/postfix</filename>, <application>SASL</application> needs to be configured to run in the false root (<filename>/var/run/saslauthd</filename> becomes <filename>/var/spool/postfix/var/run/saslauthd</filename>):
+<screen>
 <command>mkdir -p /var/spool/postfix/var/run/saslauthd</command>
 <command>rm -rf /var/run/saslauthd</command>
 </screen>
-
-            To activate <application>saslauthd</application>, edit the file <filename>/etc/default/saslauthd</filename>, and change or add the START, PARAMS and MECHANISMS variables. The file should look like this:
+	    </para>
+	    <para>
+            To activate <application>saslauthd</application>, edit the file <filename>/etc/default/saslauthd</filename>, and change or add the START variable. In order to configure <application>saslauthd</application> to run in the false root, add the PWDIR, PIDFILE and PARAMS variables. Finally, configure the MECHANISMS variable to your liking. The file should look like this:
 
 <programlisting>
 # This needs to be uncommented before saslauthd will be run
 # automatically
 START=yes
 
-PARAMS="-m /var/spool/postfix/var/run/saslauthd"
+PWDIR="/var/spool/postfix/var/run/saslauthd"
+PARAMS="-m ${PWDIR}"
+PIDFILE="${PWDIR}/saslauthd.pid"
 
 # You must specify the authentication mechanisms you wish to use.
 # This defaults to "pam" for PAM support, but may also include
@@ -2934,22 +2948,10 @@ you are using on the server.
 </para>
 </note>
         <para>
-        Finally, edit the file
-        <filename>/etc/init.d/saslauthd</filename>. You can search and
-        comment the following line:
-
-<programlisting>
-dir=`dpkg-statoverride --list $PWDIR`
-</programlisting>
-
-Next, you can change the variables PWDIR, PIDFILE and add a new variable
-"dir" at the beginning of the file:
-
-<programlisting>
-PWDIR="/var/spool/postfix/var/run/${NAME}"
-PIDFILE="${PWDIR}/saslauthd.pid"
-dir="root sasl 755 ${PWDIR}"
-</programlisting>
+Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd</filename>. The saslauthd init script uses this setting to create the missing directory with the appropriate permissions and ownership:
+<screen>
+<command>dpkg-statoverride --force --update --add root sasl 755 /var/spool/postfix/var/run/saslauthd</command>
+</screen>
         </para>
         </sect3>
         <sect3 id="postfix-testing" status="complete">
