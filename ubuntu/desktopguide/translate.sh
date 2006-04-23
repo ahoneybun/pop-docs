@@ -21,10 +21,11 @@
 
 
 tar -xzvf rosetta-desktopguide.tar.gz
-
+rm rosetta-desktopguide/desktopguide.pot
 for x in rosetta-desktopguide/*; do
 	y=$(basename ${x} .po)
 	echo ${y}
+	rm -rf ${y}/
 	mkdir -p ${y}
 	xml2po -e -p ${x} C/desktopguide.xml >${y}/desktopguide.xml
 	xml2po -e -p ${x} C/getting-started.xml >${y}/getting-started.xml
@@ -35,12 +36,10 @@ for x in rosetta-desktopguide/*; do
 	xml2po -e -p ${x} C/desktopguide-C.omf >${y}/desktopguide-${y}.omf
 	xml2po -e -p ${x} C/config-system.xml >${y}/config-system.xml
 	xml2po -e -p ${x} C/common-tasks.xml >${y}/common-tasks.xml
-	mkdir -p ${y}/sample
-	cp C/sample/* ${y}/sample/
-	if [ ! -e ${y}/desktopguide-${y}.omf ]; then
-		sed -e "s#\"C\"#\"${y}\"#;  s#/C/#/${y}/#" C/desktopguide-C.omf >${y}/desktopguide-${y}.omf
-	fi
 	../../validate.sh ${y}/desktopguide.xml
+	sed -i -e s@\"C\"@\"${y}\"@g -e s@C/@${y}/@g ${y}/desktopguide-${y}.omf
+
 done
 
-rm -rf rosetta-desktopguide
+rm -rf rosetta-desktopguide*
+rm .xml2po.mo

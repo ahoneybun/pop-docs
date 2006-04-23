@@ -31,4 +31,4 @@ for x in rosetta-preface/*; do
 
 done
 
-rm -rf rosetta-preface
+rm -rf rosetta-preface*

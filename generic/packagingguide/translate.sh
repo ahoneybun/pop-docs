@@ -34,11 +34,10 @@ for x in rosetta-packagingguide/*; do
 	xml2po -e -p ${x} C/packagingguide.xml >${y}/packagingguide.xml
 	xml2po -e -p ${x} C/packagingguide-C.omf >${y}/packagingguide-${y}.omf
 	xml2po -e -p ${x} C/ubuntu.xml >${y}/ubuntu.xml
-	if [ ! -e ${y}/packagingguide-${y}.omf ]; then
-		sed -e "s#\"C\"#\"${y}\"#;  s#/C/#/${y}/#" /packagingguide-C.omf >${y}/packagingguide-${y}.omf
-	fi
 	sed -i -e "s@/C/preface@/$y/preface@g" $y/packagingguide.xml
+	sed -i -e s@\"C\"@\"${y}\"@g -e s@C/@${y}/@g ${y}/packagingguide-${y}.omf
 	../../validate.sh $y/packagingguide.xml
 done
 
-rm -rf rosetta-packagingguide
+rm -rf rosetta-packagingguide*
+rm .xml2po.mo

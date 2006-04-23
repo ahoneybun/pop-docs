@@ -33,11 +33,10 @@ for x in rosetta-serverguide/*; do
 	xml2po -e -p ${x} C/serverguide.xml >${y}/serverguide.xml
 	xml2po -e -p ${x} C/serverguide-C.omf >${y}/serverguide-${y}.omf
 	xml2po -e -p ${x} C/windows-networking.xml >${y}/windows-networking.xml
-	if [ ! -e ${y}/serverguide-${y}.omf ]; then
-		sed -e "s#\"C\"#\"${y}\"#;  s#/C/#/${y}/#" /serverguide-C.omf >${y}/serverguide-${y}.omf
-	fi
+	sed -i -e s@\"C\"@\"${y}\"@g -e s@C/@${y}/@g ${y}/serverguide-${y}.omf
 	sed -i -e "s@/C/preface@/$y/preface@g" $y/serverguide.xml
 	../../validate.sh $y/serverguide.xml
 done
 
-rm -rf rosetta-serverguide
+rm -rf rosetta-serverguide*
+rm .xml2po.mo
