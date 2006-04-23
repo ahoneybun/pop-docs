@@ -232,8 +232,8 @@ dg-C:
 	mkdir -p $(IMAGES)navig
 	cp -r ../common/navig/*.* $(IMAGES)navig
 	
-	mkdir -p $(DGBASE)C/sample
-	cp -r desktopguide/C/sample/* $(DGBASE)C/sample/
+	mkdir -p $(DGBASE)sample
+	cp -r desktopguide/sample/* $(DGBASE)sample/
 	
 	# copy style sheet and common images to build directory
 	mkdir -p ../build/ubuntu/common/img
@@ -273,8 +273,8 @@ server:
 	mkdir -p $(IMAGES)navig
 	cp -r ../common/navig/*.* $(IMAGES)navig
 	
-	mkdir -p $(SERVERBASE)C/sample
-	cp -r ../generic/serverguide/C/sample/* $(SERVERBASE)C/sample/
+	mkdir -p $(SERVERBASE)sample
+	cp -r ../generic/serverguide/sample/* $(SERVERBASE)sample/
 	
 	# copy style sheet and common images to build directory
 	mkdir -p ../build/ubuntu/common/img

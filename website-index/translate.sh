@@ -21,6 +21,7 @@
 
 
 tar -xzvf rosetta-website-index.tar.gz
+rm rosetta-website-index/website-index.pot
 
 for x in rosetta-website-index/*; do
 	y=$(basename ${x} .po)
@@ -31,4 +32,5 @@ for x in rosetta-website-index/*; do
 
 done
 
-rm -rf rosetta-website-index
+rm -rf rosetta-website-index*
+rm .xml2po.mo

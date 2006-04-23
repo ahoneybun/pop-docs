@@ -44,6 +44,10 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
 <!-- Use a sans-serif font -->
 <xsl:param name="body.font.family" select="'sans-serif'"/>
+<xsl:param name="body.font.master">11</xsl:param>
+<xsl:param name="body.font.size">
+ <xsl:value-of select="$body.font.master"/><xsl:text>pt</xsl:text>
+</xsl:param>
 
 <!-- Don't split words across lines (no end-of-line word breaks) -->
 <xsl:param name="hyphenate">false</xsl:param>
@@ -117,9 +121,9 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format">
 <!-- ***************  Links  *********************  -->
 <!-- ***************************************************  -->
 
-<!-- No stupid square brackets with urls in after links -->
+<!-- urls in square brackets after links -->
 
-<xsl:param name="ulink.show" select="0"></xsl:param>
+<xsl:param name="ulink.show" select="1"></xsl:param>
 
 <!-- Blue links -->
 
