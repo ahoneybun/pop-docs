@@ -5,7 +5,7 @@
 <!ENTITY project-name "Ubuntu Documentation Project">
 <!ENTITY ubuntu "<phrase>Ubuntu</phrase>">
 <!-- VERSIONS --><!ENTITY distro-version "Dapper Drake">
-<!ENTITY distro-rev "6.06">
+<!ENTITY distro-rev "6.06 LTS">
 <!ENTITY distro-release-date "June 2006">
 <!ENTITY linux-kernel-version "2.6.15">
 <!ENTITY gcc-version "4.0.3">
@@ -394,7 +394,7 @@
 	<title id="configuring-your-system">Konfigurowanie Systemu</title>
 	<para>Ten rozdział zawiera informacje na temat konfiguracji twojego systemu.</para>
 	<sect1 id="desktop-tips" status="complete">
-	  <title>Sztuczki w Środowisku Graficznym</title>
+	  <title>Sztuczki</title>
 		<para>Ten rozdział zawiera porady dotyczące użytkowania środowiska graficznego Ubuntu (zwanego <application>GNOME</application>) i menedżera plików (zwanego <application>Nautilus</application>).</para> 
 
 		<sect2 id="menu-editing" status="complete">
@@ -418,14 +418,14 @@
 
 		<sect2 id="run-application" status="complete">
 			<title>Ręczne Uruchamianie Programów</title>
-				<para>Czasami przydatne może się okazać uruchomienie programu ręcznie, na przykład kiedy program nie ma własnej pozycji w menu. Jest to łatwe do wykonania przez okno dialogowe <application>Uruchom program</application>.</para>
-				<para>Aplikacji z której korzystasz regularnie można stworzyć własną pozycję w menu w bardzo łatwy sposób. (patrz <xref linkend="menu-editing"/>)</para>
+				<para>Czasami przydatne może okazać się uruchomienie programu ręcznie, na przykład kiedy nie ma on własnej pozycji w menu. Jest to łatwe do wykonania przez okno dialogowe <application>Uruchom program</application>.</para>
+				<para>Dla aplikacji z której korzystasz regularnie można stworzyć własną pozycję w menu w bardzo łatwy sposób. (patrz <xref linkend="menu-editing"/>)</para>
 				<procedure>
 					<step>
 						<para>Otwórz okno dialogowe <application>Uruchom program</application> wpisując: <keycombo><keycap>Alt</keycap><keycap>F2</keycap></keycombo></para>
 					</step>
 					<step>
-						<para>Podaj nazwę programu którego chcesz uruchomić i naciśnij <keycap>Enter</keycap>.</para>
+						<para>Podaj nazwę programu który chcesz uruchomić i naciśnij <keycap>Enter</keycap>.</para>
 					</step>
 				</procedure>
 		</sect2>	
@@ -446,7 +446,7 @@
 		</sect2>
 		<sect2 status="complete">
 				<title>Automatyczne logowanie do GNOME podczas startu komputera</title>
-				<para>Istnieje możliwość automatycznego zalogowania użytkownika podczas uruchamiania komputera. Nie jest to zalecane dla większości komputerów, ponieważ jest nie jest to bezpieczne i może dać możliwość przeglądania twoich danych innym użytkownikom.</para>
+				<para>Istnieje możliwość automatycznego zalogowania użytkownika podczas uruchamiania komputera. Nie jest to zalecane dla większości komputerów, ponieważ nie jest bezpieczne i może dać możliwość przeglądania twoich danych innym użytkownikom.</para>
 				<procedure>
 					<step>
 						<para>
@@ -551,42 +551,31 @@
 			<para>Aby włączyć wsparcie dla otwierania plików z uprawnieniami administratora w menedżerze plików konieczne jest dodanie <emphasis>skryptu Nautilusa</emphasis>:</para>
 			<warning><para>Proszę zwrócić uwagę, że otwieranie plików z uprawnieniami administratora stanowi niebezpieczeństwo dla systemu. Zawsze upewnij się, że dobrze wiesz co otwierasz.</para></warning>
 			<procedure>
-				<step><para>Open a new file to edit in the relevant directory:
-						
-							<screen>gedit $HOME/.gnome2/nautilus-scripts/Open\ as\ Administrator</screen>
-					</para>
+				<step><para>Otwórz nowy plik i zmodyfikuj go w odpowiednim katalogu: <screen>gedit $HOME/.gnome2/nautilus-scripts/Otwórz\ jako\ administrator</screen></para>
 				</step>
 				<step>
-						<para>Insert the following lines into the new file:</para>
+						<para>Umieść następującą treść w tym nowym pliku:</para>
 						<programlisting>for uri in $NAUTILUS_SCRIPT_SELECTED_URIS; do
-gksudo "gnome-open $uri" &amp;
+gksudo "gnome-open $uri" 
 done</programlisting>
 				</step>
 				<step>
-						<para>Save the edited file (<ulink url="sample/nautilus_open_as_administrator">an example</ulink>)
-						</para>
+						<para>Zapisz zmodyfikowany plik (<ulink url="../sample/nautilus_open_as_administrator">przykład</ulink>)</para>
 				</step>
 				<step>
-						<para>Make the edited file executable:
-							<screen>chmod +x $HOME/.gnome2/nautilus-scripts/Open\ as\ Administrator</screen>
-						</para>
+						<para>Spraw, aby zmodyfikowany plik był wykonywalny: <screen>chmod +x $HOME/.gnome2/nautilus-scripts/Otwórz\ jako\ administrator</screen></para>
 				</step>
 				<step>
-						<para>You can now open files as root by right clicking on the file and selecting 					<menuchoice>
-								<guimenuitem>Scripts</guimenuitem>
-								<guimenuitem>Open as Administrator</guimenuitem>
-							</menuchoice>
-						</para>
+						<para>Możesz teraz otwierać pliki jako administrator klikając prawym przyciskiem na pliku i wybierając <menuchoice><guimenuitem>Skrypty</guimenuitem><guimenuitem>Otwórz jako administrator</guimenuitem></menuchoice></para>
 				</step>
 			</procedure>
 		</sect2>
      <sect2 id="fonts" status="complete">
-		<title>Install Extra Fonts</title>
-				<para>This section describes how to install extra fonts from the Ubuntu archives.</para>
+		<title>Instalowanie Dodatkowych Czcionek</title>
+				<para>Ten rozdział opisuje proces instalowania dodatkowych czcionek z archiwów Ubuntu.</para>
 				<procedure>
 						<step>
-							<para>For <emphasis role="bold">international fonts</emphasis>, install the following packages from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>):
-							</para>
+							<para>Aby skorzystać ze wsparcia <emphasis role="bold">czcionek międzynarodowych</emphasis>, zainstaluj poniższe pakiety z repozytorium <emphasis>Universe</emphasis> (patrz <xref linkend="add-applications"/>):</para>
 							<para>
 								<literallayout>xfonts-intl-arabic
 xfonts-intl-asian
@@ -600,462 +589,366 @@ xfonts-intl-phonetic
 							</para>
 						</step>
 						<step>
-							<para>For <emphasis role="bold">Microsoft TrueType core fonts</emphasis>, install the <application>msttcorefonts</application> package from the <emphasis>Multiverse</emphasis> repository (see <xref linkend="add-applications"/>).
-							</para>
+							<para>Aby skorzystać z czcionek <emphasis role="bold">Microsoft TrueType</emphasis>, zainstaluj pakiet <application>msttcorefonts</application> z repozytorium <emphasis>Multiverse</emphasis> (patrz <xref linkend="add-applications"/>).</para>
 						</step>
 						<step>
-							<para>For <emphasis role="bold">Ghostscript fonts</emphasis>, install the <application>gsfonts-x11</application> package (see <xref linkend="add-applications"/>).
-							</para>
+							<para>Aby skorzystać z czcionek <emphasis role="bold">Ghostscript</emphasis>, zainstaluj pakiet <application>gsfonts-x11</application> (patrz <xref linkend="add-applications"/>).</para>
 						</step>						<step>
-							<para>After installing any new font, rebuild the font information files by typing the following at a terminal prompt:
-							</para>
+							<para>Po instalacji nowej czcionki należy odbudować pliki informacyjne czcionek wpisując następujące polecenie w terminalu:</para>
 							<screen>sudo fc-cache -f -v</screen>
 						</step>
 					</procedure>
-			<para>If you prefer to download individual fonts by hand, you can install them simply and easily by opening a file manager, and typing <application>fonts:///</application> into the location bar (See <xref linkend="nautilus-location-bar"/>). Then you can simply drag the font you downloaded into the group of existing fonts.</para>
+			<para>Jeśli wolisz pobierać czcionki osobno, możesz je zainstalować za pomocą menedżera plików, wpisując <application>fonts:///</application> w pasku położenia (patrz <xref linkend="nautilus-location-bar"/>). Można wtedy przeciągnąć pobraną czcionkę i upuścić w grupie istniejących już czcionek.</para>
 		</sect2>
 		<sect2 status="complete">
-				<title>RAR Archiver</title>
+				<title>Archiwa RAR</title>
 					<procedure>
 						<step>
-							<para>Install the rar package from the <emphasis>Multiverse</emphasis> repository (see <xref linkend="add-applications"/>).</para>
+							<para>Zainstaluj pakiet <application>rar</application> z repozytorium <emphasis>Multiverse</emphasis> (patrz <xref linkend="add-applications"/>).</para>
 						</step>
 						<step>
-							<para>Run:
-							<screen>
-sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen>
-							</para>
+							<para>Uruchom: <screen>
+sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen></para>
 						</step>
 						<step>
-							<para>To open a rar file, double click on it.
-							</para>
+							<para>Aby otworzyć plik rar, kliknij na niego dwukrotnie.</para>
 						</step>
 					</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Advanced Desktop Applets</title>
-				<para><application>gDesklets</application> is a system for bringing mini programs (desklets), such as weather forecasts, news tickers, system information displays, or music player controls, onto your desktop, in a symbiotic relationship of eye candy and usefulness.</para>
+			<title>Zaawansowane Aplety na Biurko</title>
+				<para><application>gDesklets</application> to system dostarczający małe programy (desklety) na twoje biurko, takie jak prognoza pogody, powiadamiacze, informatory o stanie systemu, kontrolki odtwarzaczy muzycznych, tworząc symbiozę ładnego wyglądu z użytecznością.</para>
 				<procedure>
 					<step>
-							<para>Install the <application>gdesklets</application> and <application>gdesklets-data</application> packages from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>).
-							</para>
+							<para>Zainstaluj pakiety <application>gdesklets</application> i <application>gdesklets-data</application> z repozytorium <emphasis>Universe</emphasis> (patrz <xref linkend="add-applications"/>).</para>
 					</step>
 					<step>
-							<para>Choose: 
-								<menuchoice>
-									<guimenu>Applications</guimenu>
-									<guisubmenu>Accessories</guisubmenu>
-									<guimenuitem>gDesklets</guimenuitem>
-								</menuchoice>
-							</para>
+							<para>Wybierz: <menuchoice><guimenu>Aplikacje</guimenu><guisubmenu>Akcesoria</guisubmenu><guimenuitem>gDesklets</guimenuitem></menuchoice></para>
 					</step>
-					<step><para>For more information, visit the <ulink url="http://www.gdesklets.org/">gDesklets website</ulink></para>
+					<step><para>Więcej informacji znajdziesz na <ulink url="http://www.gdesklets.org/">stronie gDesklets</ulink>.</para>
 					</step>
 				</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Hide Recent Documents in the Places menu</title>
-				<para>To hide <guilabel>Recent Documents</guilabel> from the <guilabel>Places</guilabel> menu, open a terminal and run the command:</para><screen>chmod 400 ~/.recently-used</screen>
-				<para>To enable it again, run the command:</para><screen>chmod 600 ~/.recently-used</screen>
+			<title>Ukrywanie Ostatnich Dokumentów w menu Miejsca</title>
+				<para>Aby ukryć <guilabel>Ostatnie dokumenty</guilabel> z menu <guilabel>Miejsca</guilabel>, otwórz terminal i uruchom polecenie:</para><screen>chmod 400 ~/.recently-used</screen>
+				<para>Aby włączyć z powrotem, uruchom polecenie:</para><screen>chmod 600 ~/.recently-used</screen>
 		</sect2>
 		<sect2 status="complete">
-			<title>Show the Computer, Home, and Trash desktop icons in GNOME</title>
+			<title>Wyświetlenie ikon Komputera, Domu i Śmietnika na pulpicie w GNOME</title>
 				<procedure>
 					<step>
-						<para>Open the <application>Configuration Editor</application>, by running the program <filename>gconf-editor</filename> (see <xref linkend="run-application"/>).
-						</para>
+						<para>Otwórz <application>Edytor konfiguracji</application> uruchamiając program <filename>gconf-editor</filename> (patrz <xref linkend="run-application"/>).</para>
 					</step>
 					<step>
-						<para>Choose
-							<menuchoice>
-								<guimenu>apps</guimenu>
-								<guisubmenu>nautilus</guisubmenu>
-								<guimenuitem>desktop</guimenuitem>
-							</menuchoice>.
-						</para>
+						<para>Wybierz <menuchoice><guimenu>apps</guimenu><guisubmenu>nautilus</guisubmenu><guimenuitem>desktop</guimenuitem></menuchoice>.</para>
 					</step>
 					<step>
-						<para>Tick the box beside <guilabel>computer_icon_visible</guilabel>, <guilabel>home_icon_visible</guilabel>, and <guilabel>trash_icon_visible</guilabel>. The changes take effect immediately.
-						</para>
+						<para>Zaznacz kratki obok <guilabel>computer_icon_visible</guilabel>, <guilabel>home_icon_visible</guilabel>, oraz <guilabel>trash_icon_visible</guilabel>. Zmiany są zatwierdzane natychmiastowo.</para>
 					</step>
 				</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Change my preferred email client to Mozilla Thunderbird</title>
+			<title>Zmiana klienta poczty e-mail na Mozilla Thunderbird</title>
 			<procedure>
 				<step>
-						<para>Choose 
-<menuchoice>
-    <guimenu>System</guimenu>
-    <guimenuitem>Preferences</guimenuitem>
-    <guimenuitem>Preferred Applications</guimenuitem>
-</menuchoice>
-
-						</para>
+						<para>Wybierz <menuchoice><guimenu>System</guimenu><guimenuitem>Preferencje</guimenuitem><guimenuitem>Preferowane aplikacje</guimenuitem></menuchoice></para>
 				</step>
 				<step>
-						<para>Click on the <guibutton>Mail Reader</guibutton> tab, and select the <guilabel>Custom</guilabel> option. 	</para>
+						<para>W dolnej części panelu <guibutton>Internet</guibutton> znajduje się wysuwalne menu <guilabel>Czytnik poczty</guilabel>.</para>
 				</step>
 				<step>
-						<para>In the <guilabel>Command</guilabel> text box, type
-							<userinput>
-								<command>mozilla-thunderbird %s</command></userinput>, then close the dialog.
-						</para>
+						<para>Kliknij na listę i wybierz Mozilla Thunderbird.</para>
 				</step>
 			</procedure>
 		</sect2>
 		<sect2 id="restartgnomewithoutreboot" status="complete">
-			<title>Restart GNOME without rebooting the computer</title>
+			<title>Restartowanie GNOME bez ponownego uruchamiania komputera</title>
 			<procedure>
 				<step>
-						<para>Save and close all open applications.</para>
+						<para>Zapisz otwarte dokumenty i zamknij wszystke aplikacje.</para>
 			          </step>
 			          <step>
-            				<para>Use the <keycombo>
-						<keycap>Ctrl</keycap>
-						<keycap>Alt</keycap>
-						<keycap>Backspace</keycap>
-						</keycombo>
-							 shortcut keys to restart GNOME.
-					</para>
+            				<para>Użyj skrótu klawiszowego <keycombo><keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo> aby zrestartować GNOME.</para>
            			</step>
            			<step>
-            				<para>If <keycombo>
-                <keycap>Ctrl</keycap>
-                <keycap>Alt</keycap>
-                <keycap>Backspace</keycap>
-							</keycombo>
-              is disabled, type
-						<screen>sudo /etc/init.d/gdm restart</screen>
-            </para>
-						<para>(See <xref linkend="disableCtrlAltBackspace"/> to disable <keycombo>
-								<keycap>Ctrl</keycap>
-								<keycap>Alt</keycap>
-								<keycap>Backspace</keycap>
-							</keycombo>.)
-						</para>
+            				<para>Jeśli skrót klawiszowy <keycombo><keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo> jest wyłączona, wpisz <screen>sudo /etc/init.d/gdm restart</screen>.</para>
+						<para>(Patrz <xref linkend="disableCtrlAltBackspace"/>, aby wyłączyć <keycombo><keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo>.)</para>
 				</step>
 			</procedure>
 		</sect2>
 		<sect2 id="disableCtrlAltBackspace" status="complete">
-			<title>Preventing the Ctrl-Alt-Backspace shortcut keys from restarting X</title>
+			<title>Wyłączenie skrótu klawiszowego restarującego X (Ctrl-Alt-Backspace)</title>
 				<procedure>
 					<step>
-						<para>Make a backup copy of your existing <filename>/etc/X11/xorg.conf</filename> file:
-							<screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup</screen>
-						</para>
+						<para>Stwórz kopię zapasową pliku <filename>/etc/X11/xorg.conf</filename>: <screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_kopia</screen></para>
 					</step>
 					<step>
-					<para>Open <filename>/etc/X11/xorg.conf</filename> for editing:
-						<screen>sudo gedit /etc/X11/xorg.conf</screen>
-					</para>
+					<para>Otwórz do edycji <filename>/etc/X11/xorg.conf</filename>: <screen>gksudo gedit /etc/X11/xorg.conf</screen></para>
 					</step>
 					<step>
-						<para>Add the following lines to the end of the file:
-							<programlisting>Section	"ServerFlags"
+						<para>Dodaj następujące wiersze na końcu tego pliku: <programlisting>Section	"ServerFlags"
 Option	"DontZap"	"yes"
-EndSection</programlisting>
-						</para>
+EndSection</programlisting></para>
 					</step>
 					<step>
-						<para>Save the edited file (<ulink url="sample/xorg.conf_disablectrlaltbackspacegnome">an example</ulink>).</para>
+						<para>Zapisz zmodyfikowany plik (<ulink url="../sample/xorg.conf_disablectrlaltbackspacegnome">przykład</ulink>).</para>
 					</step>
 					<step>
-						<para>The change will take effect the next time you log in to GNOME. If you want the change to take effect immediately, restart GNOME manually. (See <xref linkend="restartgnomewithoutreboot"/>.)</para>
+						<para>Zmiany zostaną zastosowane przy następnym logowaniu do GNOME. Jeśli chcesz, aby zostały zastosowane natychmiast, zrestartuj GNOME ręcznie. (Patrz <xref linkend="restartgnomewithoutreboot"/>.)</para>
 					</step>
 				</procedure>
 		</sect2>
 	</sect1>
 
 <sect1 id="partitions-booting" status="complete">
-	<title>Partitions and Booting</title>
+	<title>Partycje i Uruchamianie</title>
 			<sect2 status="complete">
-				<title>Graphical Partition Editor</title>
-					<para><application>Gparted</application> is a graphical tool to edit disk partitions.</para> 
+				<title>Graficzny Edytor Partycji</title>
+					<para><application>Gparted</application> to graficzne narzędzie do edycji partycji dyskowych.</para> 
 					<procedure>
 						<step>
-							<para>Install the <application>gparted</application> package (see <xref linkend="add-applications"/>).</para>
+							<para>Zainstaluj pakiet <application>gparted</application> (patrz <xref linkend="add-applications"/>).</para>
 						</step>
 						<step>	
-							<para>You can run the application with 
-<menuchoice>
-	<guimenu>System</guimenu>
-	<guisubmenu>Administration </guisubmenu>
-	<guimenuitem>Gnome Partition Editor</guimenuitem>
-</menuchoice>
-.
-							</para>
+							<para>Możesz go uruchomić z <menuchoice><guimenu>System</guimenu><guisubmenu>Administracja</guisubmenu><guimenuitem>Gnome Partition Editor</guimenuitem></menuchoice> .</para>
 						</step>
 					</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Make partitions available from Ubuntu</title>
-				<para>Windows and other partitions should be automatically available from any Ubuntu system. If they are not, you can enable them using the graphical disks tool.</para>
+			<title>Udostępnianie partycje z Ubuntu</title>
+				<para>Partycje Windows i inne powinny być automatycznie dostępne z każdegu systemu Ubuntu. Jeśli nie są, można je udostępnić używając graficznego narzędzia do dysków.</para>
 				<procedure>
 					<step>
-						<para>Open 
-<menuchoice>
-    <guimenu>System</guimenu>
-    <guimenuitem>Administration</guimenuitem>
-    <guimenuitem>Disks</guimenuitem>
-</menuchoice>
-</para>
+						<para>Open <menuchoice><guimenu>System</guimenu><guimenuitem>Administracja</guimenuitem><guimenuitem>Menedżer dysków</guimenuitem></menuchoice></para>
 					</step>
 					<step>
-						<para>Select the correct hard disk, and click the <guilabel>Partitions</guilabel> tab.</para>
+						<para>Wybierz odpowiedni dysk twardy i kliknij na panel <guilabel>Partycje</guilabel>.</para>
 					</step>
 					<step>
-						<para>Select the relevant partition, and click <guilabel>Enable</guilabel>.</para>
+						<para>Wybierz odpowiednią partycję i kliknij na <guilabel>Włącz</guilabel>.</para>
 					</step>
 					<step>
-						<para>To unmount the partition, click <guilabel>Disable</guilabel>.</para>
+						<para>Aby odmontować partycję, kliknij na <guilabel>Wyłącz</guilabel>.</para>
 					</step>
 				</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Make partitions automatically available</title>
-				<para>Again, Windows and other partitions should be automatically available from Ubuntu. If they are not, the following procedure will make them automatically available:</para>
+			<title>Automatyczne udostępnianie partycji</title>
+				<para>Partycje Windows i inne powinny być automatycznie dostępne z Ubuntu. Jeśli nie są, następująca procedura je udostępni automatycznie:</para>
 				<procedure>
 					<step>
-						<para>Read <xref linkend="listpartitiontables"/>
-						</para>
+						<para>Patrz <xref linkend="listpartitiontables"/></para>
 					</step>
 					<step>
-						<para>First make a directory where the partition can be made available ("mounted"):</para>
+						<para>Najpierw utwórz katalog, w którym partycja ma być udostępniona ("zamontowana"):</para>
 							<screen>
 sudo mkdir /media/windows
 							</screen>
 					</step>
 					<step>
-						<para>Next, backup your disk configuration file and open the file in a text editor with administrative privileges:
-						</para>
+						<para>Następnie zrób kopię zapasową pliku konfiguracyjnego dysków  i otwórz go w edytorze tekstu z uprawnieniami administratora:</para>
 						<screen>
-sudo cp /etc/fstab /etc/fstab_backup
-sudo gedit /etc/fstab
+sudo cp /etc/fstab /etc/fstab_kopia
+gksudo gedit /etc/fstab
 						</screen>
 					</step>
 					<step>
-						<para>Append the following line at the end of file:
-							<programlisting>/dev/hda1 /media/windows ntfs umask=0222 0 0</programlisting>
-						</para>
+						<para>Dodaj nastepujący wiersz na końcu pliku: <programlisting>/dev/hda1 /media/windows ntfs umask=0222 0 0</programlisting></para>
 						<note>
-							<para>Replace <emphasis role="bold">/dev/hda1</emphasis> with the correct device name for your partition.</para>
-							<para>If your Windows partition uses the FAT32 filesystem, replace <emphasis role="bold">ntfs</emphasis> with <emphasis role="bold">vfat</emphasis> in the above command.</para>
-							<para>If you have a FAT32 filesystem, it is also safe to allow read-write access. To do this, change the value of <emphasis role="bold">umask</emphasis> to 0000.</para>
+							<para>Zamiana <emphasis role="bold">/dev/hda1</emphasis> na odpowiedną nazwę urządzenia dla twojej partycji.</para>
+							<para>Jeśli twoja partycja Windows używa systemu plików FAT32, zamień <emphasis role="bold">ntfs</emphasis> na <emphasis role="bold">vfat</emphasis> w przykładzie.</para>
+							<para>Jeśli masz system plików FAT32, bezpieczne jest także włączenie dostępu odczyt-zapis. Aby tego dokonać, zmień wartość <emphasis role="bold">umask</emphasis> na 0000.</para>
 						</note>
 					</step>
 					<step>
-						<para>Save the edited file (<ulink url="sample/fstab_automountntfs">an example</ulink>)</para>
+						<para>Zapisz zmodyfikowany plik (<ulink url="../sample/fstab_automountntfs">przykład</ulink>)</para>
 					</step>
 					<step>
-						<para>The changes will take effect when the computer is restarted.</para>
+						<para>Zmiany zostaną zastosowane po restarcie komputera.</para>
 					</step>
 				</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Run a system command automatically at startup</title>
-				<para>Sometimes it can be useful to add a custom command to the startup process so that your computer executes it on every boot. To do this:</para>
+			<title>Uruchamianie polecenia systemowego na starcie</title>
+				<para>Czasami przydatne okazuje się dodanie własnego polecenia w procesie uruchamiania, aby twój komputer je wykonywał przy każdym starcie. Aby tego dokonać:</para>
 				<procedure>
 					<step>
-						<para>Edit the <application>crontab</application> with administrative privileges (see <xref linkend="root-and-sudo"/>):</para>
+						<para>Zmodyfikuj <application>crontab</application> z uprawnieniami administratora (patrz <xref linkend="root-and-sudo"/>):</para>
 							<screen>sudo crontab -e</screen>
 					</step>
 					<step>
-						<para>Insert the following line:</para>
-							<screen>@reboot /home/user/command</screen>
+						<para>Dodaj następujący wiersz:</para>
+							<screen>@reboot /home/użytkownik/polecenie</screen>
 					<note>
-						<para>Replace <filename>/home/user/command</filename> with the full address to your command.</para>
+						<para>Zamień <filename>/home/użytkownik/polecenie</filename> pełną ścieżką do twojego polecenia.</para>
 					</note>
 					</step>
 					<step>
-						<para>Save the file and exit.</para>
+						<para>Zapisz plik i wyjdź.</para>
 					</step>
 				</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Change default Operating System at boot</title>
-				<para>To change the Operating System which starts by default when booting, it is necessary to edit the configuration file for booting.</para>
+			<title>Zmiana domyślnego Systemu Operacyjnego na starcie</title>
+				<para>Aby zmienić domyślnie uruchamiany System Operacyjny, konieczna jest modyfikacja pliku konfiguracji uruchamiania.</para>
 				<procedure>
 					<step>
-						<para>Make a backup of your boot configuration file, and open it in a text editor:</para>
-							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
-sudo gedit /boot/grub/menu.lst</screen>
+						<para>Stwórz kopię zapasową twojego pliku konfiguracji uruchamiania i otwórz go w edytorze tekstów:</para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_kopia
+gksudo gedit /boot/grub/menu.lst</screen>
 					</step>
 					<step>
-						<para>Find this line:</para>
+						<para>Wyszukaj ten wiersz:</para>
 						<programlisting>...
 default 0
 ...</programlisting>
 					</step>
 					<step>
-						<para>Replace with the following line:</para>
+						<para>Zamień na następujący wiersz:</para>
 						<programlisting>default X_sequence</programlisting>
 					</step>
 					<step>
-						<para>
-							Save the edited file (<ulink url="sample/menu.list_changedefaultosgrub">an example</ulink>)
-						</para>
+						<para>Zapisz zmodyfikowany plik (<ulink url="../sample/menu.list_changedefaultosgrub">przykład</ulink>)</para>
 					</step>
 				</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Permanently disable/enable boot-up services</title>
-				<para>This requires administrative privileges (see <xref linkend="root-and-sudo"/>).</para>
+			<title>Wyłączanie/włączanie usług na starcie</title>
+				<para>To wymaga uprawnień administratora (patrz <xref linkend="root-and-sudo"/>).</para>
 				<procedure>
 					<step>
-						<para>Run <application>Services Settings</application>:
-							<menuchoice>
-								<guimenu>System</guimenu>
-								<guisubmenu>Administration</guisubmenu>
-								<guimenuitem>Services</guimenuitem>
-							</menuchoice>.
-						</para>
+						<para>Uruchom <application>Usługi</application>: <menuchoice><guimenu>System</guimenu><guisubmenu>Administracja</guisubmenu><guimenuitem>Usługi</guimenuitem></menuchoice>.</para>
 					</step>
 					<step>
-						<para>Enter your password.</para>
+						<para>Podaj swoje hasło.</para>
 					</step>
 					<step>
-						<para>Tick/untick the services you want running, then click <guibutton>OK</guibutton> when done.</para>
+						<para>Zaznacz/odznacz kratki przy usługach, które chcesz uruchomić/wyłączyć, kliknij <guibutton>OK</guibutton>, gdy skończysz.</para>
 					</step>
 					<step>
-						<para>For greater control over the boot-up services, install the <application>bum</application> from the Universe repository (see <xref linkend="add-applications"/>) and run it:
-							<menuchoice>
-								<guimenu>System</guimenu>
-								<guisubmenu>Administration</guisubmenu>
-								<guimenuitem>Boot-up Manager</guimenuitem>
-							</menuchoice>.
-						</para>
+						<para>Aby mieć więcej kontroli nad usługami uruchamianymi na starcie, zainstaluj <application>bum</application> z repozytorium Universe (patrz <xref linkend="add-applications"/>) i uruchom: <menuchoice><guimenu>System</guimenu><guisubmenu>Administracja</guisubmenu><guimenuitem>Boot-up Manager</guimenuitem></menuchoice>.</para>
 					</step>
 				</procedure>
 		</sect2>
 
 	</sect1>
 	<sect1 id="hardware" status="complete">
-		<title>Hardware</title>
+		<title>Sprzęt</title>
 		<sect2 id="digital-cameras" status="complete">
-			<title>Digital Cameras</title>
-				<para>Most USB digital cameras will be automatically detected by Ubuntu. Simply plug in and switch on your USB digital camera, Ubuntu will then ask you if you would like to import the photos from your camera. Click on <guibutton>Import</guibutton>, Ubuntu will then show you a preview of your photos. Choose a location to save your photos to, then click on <guibutton>Import</guibutton>, Ubuntu will then save your photos to your hard drive.</para>
-				<para>If you do not get the auto-import popup with your camera, it might be worth starting <application>gThumb</application> and trying 
-					<menuchoice>
-						<guimenu>File</guimenu>
-						<guimenuitem>Import Photos...</guimenuitem>
-					</menuchoice>. See <xref linkend="gthumb"/> for more on <application>gThumb</application>. 
-				</para>
+			<title>Cyfrowe Aparaty Fotograficzne</title>
+				<para>Większość cyfrowych aparatów fotograficznych USB zostanie wykryta przez Ubuntu automatycznie. Po prostu podłącz do komputera i uruchom swój aparat USB, Ubuntu zapyta cię, czy chcesz zaimportować zdjęcia z aparatu. Kliknij na <guibutton>Importuj</guibutton>, Ubuntu pokaże podgląd twoich zdjęć. Wybierz położenie zapisu zdjęć i kliknij na <guibutton>Import</guibutton>, Ubuntu zapisze twoje zdjęcia na twardym dysku.</para>
+				<para>Jeśli wyskakujące okno importowania się nie pojawi, warto uruchomić <application>gThumb</application> i spróbować: <menuchoice><guimenu>Plik</guimenu><guimenuitem>Zaimportuj zdjęcia...</guimenuitem></menuchoice>. Patrz <xref linkend="gthumb"/> po więcej informacji o <application>gThumb</application>.</para>
 		</sect2>
 
 		<sect2 id="graphics-cards" status="complete">
-			<title>3D Graphic Cards</title>
+			<title>Karty Graficzne 3D</title>
 				<sect3 id="video-acceleration-introduction">
-					<title>Introduction to 3D Video Acceleration</title>
-					<para>Most video hardware should work automatically with Ubuntu. However with some types of video hardware, 3D acceleration (which is needed by some games) will not be supported automatically. This section details how to get this working with some popular video hardware.</para>
-					<para>The first step is to find out whether 3D acceleration is working.</para>
+					<title>Wstęp do Akceleracji 3D</title>
+					<para>Większość sprzętu wyświetlającego obraz powinna działać automatycznie w Ubuntu. Jednakże z pewnymi rodzajami sprzętu, akceleracja 3D (wymagana przez niektóre gry) nie będzie wspierana automatycznie. Ten rozdział opisuje proces uruchomienia akceleracji 3D w popularnych kartach graficznych.</para>
+					<para>Pierwszym krokiem jest sprawdzenie, czy akceleracja 3D działa.</para>
 					<procedure>
-						<step><para>To do this, enter in a terminal:<screen>glxinfo | grep rendering</screen></para></step>
-						<step><para>If 3D acceleration is working, the following will be displayed:<screen>direct rendering: Yes</screen></para></step>
-						<step><para>If not, follow the instructions in the following sections to activate 3D acceleration.</para></step>
+						<step><para>Aby to sprawdzić, wpisz w terminalu: <screen>glxinfo | grep rendering</screen></para></step>
+						<step><para>Jeśli akceleracja 3D działa, wyświetli się następujący tekst: <screen>direct rendering: Yes</screen></para></step>
+						<step><para>Jeśli się nie wyświetli, przeczytaj kolejne rozdziały, aby uruchomić akcelerację 3D.</para></step>
 					</procedure>
 				</sect3>
         	       	 <sect3 id="nvidia" status="complete">
-        		        <title>3D Nvidia Video Card Driver</title>
-					<para>No Nvidia Video cards have 3D acceleration enabled automatically with Ubuntu, because the manufacturer does not release open source drivers. However, it is possible to activate 3D acceleration. The process depends on which type of video card you have.</para>
+        		        <title>Sterownik 3D Karty Graficznej NVIDIA</title>
+					<para>Żadna karta NVIDIA nie ma standardowo uruchomionej akceleracji 3D w Ubuntu, ponieważ producent nie udostępnił otwartych sterowników. Jednakże uruchomienie akceleracji 3D jest możliwe. Proces uruchamiania zależy od rodzaju posiadanej karty.</para>
         		            <procedure>
-						<step><para><emphasis role="bold">If you have an older TNT, TNT2, TNT Ultra, GeForce1 or GeForce2 card,</emphasis> install the <application> nvidia-glx-legacy</application> and <application>nvidia-settings</application> packages from the <emphasis>Restricted</emphasis> repository (see <xref linkend="add-applications"/>).</para></step>
+						<step><para><emphasis role="bold">Jeśli masz kartę TNT, TNT2, TNT Ultra, GeForce1 lub GeForce2,</emphasis> zainstaluj pakiety <application> nvidia-glx-legacy</application> oraz <application>nvidia-settings</application> z repozytorium <emphasis>Restricted</emphasis> (patrz <xref linkend="add-applications"/>).</para></step>
         		                <step>
-				<para><emphasis role="bold">Alternatively, if you have a newer card,</emphasis> install the <application>nvidia-glx</application> package from the <emphasis>Restricted</emphasis> repository (see <xref linkend="add-applications"/>).
-				</para> 
+				<para><emphasis role="bold">Jeśli twoja karta jest nowsza,</emphasis> zainstaluj pakiet <application>nvidia-glx</application> z repozytorium <emphasis>Restricted</emphasis> (patrz <xref linkend="add-applications"/>).</para> 
                         </step>
                         <step>
-                            <para>To enable the new driver, run the following command in a terminal:
-                                <screen>
-sudo nvidia-glx-config enable </screen>
-                            </para>
+                            <para>Aby uruchomić nowy sterownik, uruchom następujące polecenie w terminalu: <screen>
+sudo nvidia-glx-config enable </screen></para>
                         </step>
                         <step>
-                            <para>You may adjust the settings of the new drivers by running the application <application>nvidia-settings</application> (see <xref linkend="run-application"/>). If you wish, add a menu entry for this program (see <xref linkend="menu-editing"/>).</para>
+                            <para>Możesz dopasować ustawienia nowych sterowników uruchamiając aplikację <application>nvidia-settings</application> (patrz <xref linkend="run-application"/>). Możesz także utworzyć pozycję w menu dla tego programu (patrz <xref linkend="menu-editing"/>).</para>
                         </step>
                     </procedure>
             </sect3>
             <sect3 id="installatidriver" status="complete">
-                <title>3D ATI Video Card Driver</title>
-			<para>Many ATI video cards work well with Ubuntu automatically. To check that 3d acceleration works with your card, see <xref linkend="video-acceleration-introduction"/>. If it does not work, this procedure should activate it.</para>
+                <title>Sterownik 3D Karty Graficznej ATI</title>
+			<para>Wiele kart ATI działa dobrze z Ubuntu automatycznie. Aby sprawdzić, czy działa akceleracja 3D, patrz <xref linkend="video-acceleration-introduction"/>. Jeśli nie działa, to poniższa procedura powinna ją aktywować.</para>
 			<procedure>
                         <step>
- 				<para>Install the <application>xorg-driver-fglrx</application> package from the <emphasis>Restricted</emphasis> repository (see <xref linkend="add-applications"/>).</para> 
+ 				<para>Zainstaluj pakiet <application>xorg-driver-fglrx</application> z repozytorium <emphasis>Restricted</emphasis> (patrz <xref linkend="add-applications"/>).</para> 
                         </step>
 			<step>
-			    <para>You now need to configure the computer to use the new driver so run this command in a terminal:<screen>
-sudo dpkg-reconfigure xserver-xorg</screen></para>
+			    <para>Teraz konieczna jest konfiguracja komputera, tak aby używał nowego sterownika, polecenie w terminalu: <screen>
+sudo aticonfig --initial</screen></para>
 			</step>
 			<step>
-			    <para>When the dialogue appears and asks whether to do automatic detection of your video, pick <guibutton>Yes</guibutton>.</para>
+			    <para>Można także ustawić domyślną nakładkę wideo na najpopularniejszą: <screen>
+sudo aticonfig --overlay-type=Xv</screen></para>
 			</step>
 			<step>
-			    <para>When asked to select a driver, pick <guibutton>fglrx</guibutton>.</para>
+			    <para>Więcej informacji o poszczególnych funkcjach uzyskasz wpisując: <screen>
+aticonfig --help</screen></para>
 			</step>
 			<step>
-			    <para>Follow the remaining instructions as appropriate.</para>
+			    <para>Po ustawienu żądanych opcji należy uruchomić komputer ponownie.</para>
 			</step>
 			<step>
-			    <para>Restart your machine for changes to take effect.</para>
+			    <para>Zrestartuj komputer, aby zatwierdzić zmiany.</para>
 			</step>
 			</procedure>
 	    </sect3>
 	    </sect2>
 	    <sect2 status="complete">
-			<title>Keyboard Layouts</title>
-				<para>This section deals with adding keyboard layouts to your system, and switching between them easily.</para>
+			<title>Układy Klawiatury</title>
+				<para>Ten rozdział opisuje dodawanie układów klawiatury do twojego systemu i łatwe przełączanie się między nimi.</para>
 			<sect3>
-				<title>Add a Layout</title>
-				<para>To add a keyboard layout to your system:</para>
+				<title>Dodawanie Układu</title>
+				<para>Aby dodać układ klawiatury do twojego systemu:</para>
 					<procedure>
 						<step>
-							<para>Go to <menuchoice><guimenu>System</guimenu><guisubmenu>Preferences</guisubmenu><guimenuitem>Keyboard</guimenuitem></menuchoice>
-							</para>
+							<para>Idź do <menuchoice><guimenu>System</guimenu><guisubmenu>Preferencje</guisubmenu><guimenuitem>Klawiatura</guimenuitem></menuchoice></para>
 						</step>
-						<step><para>Choose <guibutton>Layouts</guibutton></para></step>
-						<step><para>Press <guibutton>Add...</guibutton> to add further keyboard layouts. It is simpler to have two layouts; the maximum is currently four.</para></step>
-						<step><para>Close the dialogue.</para></step>
+						<step><para>Wybierz <guibutton>Układy</guibutton></para></step>
+						<step><para>Naciśnij <guibutton>Dodaj...</guibutton>, aby dodać dalsze układy klawiatury. Maksymalnie można mieć cztery.</para></step>
+						<step><para>Zamknij okno dialogowe.</para></step>
 					</procedure>
 			</sect3>
 			<sect3>
-				<title>Switch Keyboard Layouts</title>
-				<para>To switch between keyboard layouts, you can set a key combination:</para>
+				<title>Przełączanie Układów Klawiatury</title>
+				<para>Aby przełączać się miedzy układami klawiatury możesz ustalić skrót klawiszowy:</para>
 					<procedure>
 						<step>
-							<para>Go to <menuchoice><guimenu>System</guimenu><guisubmenu>Preferences</guisubmenu><guimenuitem>Keyboard</guimenuitem></menuchoice>
-							</para>
+							<para>Idź do <menuchoice><guimenu>System</guimenu><guisubmenu>Preferencje</guisubmenu><guimenuitem>Klawiatura</guimenuitem></menuchoice></para>
 						</step>
-						<step><para>To configure your layouts, choose <guibutton>Layout Options</guibutton></para></step>
-						<step><para>Expand the <guilabel>Group Shift/Lock behaviour</guilabel> option</para></step>
-						<step><para>Choose the key combination that enables you to switch between keyboard layouts. The default is by pressing both Alt keys at the same time. A common alternative is to use <keycombo><keycap>Alt</keycap><keycap>Shift</keycap></keycombo>.</para></step>
-						<step><para>Close the dialogue</para></step>
-						<step><para>You can now use your key combination to switch between keyboard layouts.</para></step>
+						<step><para>Aby skonfigurować układy, wybierz <guibutton>Opcje ułożenia</guibutton></para></step>
+						<step><para>Otwórz <guilabel>Group Shift/Lock behaviour</guilabel></para></step>
+						<step><para>Wybierz skrót klawiszowy który włączy możliwość przełączania się miedzy układami klawiatury. Domyślny to naciśnięcie obu klawiszy Alt jednocześnie. Rozwiązaniem alternatywnym jest użycie <keycombo><keycap>Alt</keycap><keycap>Shift</keycap></keycombo>.</para></step>
+						<step><para>Zamknij okno dialogowe</para></step>
+						<step><para>Możesz teraz skorzystać ze skrótu klawiszowego do przełączania się miedzy układami klawiatury.</para></step>
 					</procedure> 
 			</sect3>
 			<sect3>
-				<title>Keyboard Indicator</title>
-				<para>Alternatively add the <application>Keyboard Indicator applet</application> to your panel:</para>
+				<title>Wskaźnik Klawiatury</title>
+				<para>Można także dodać applet <application>Wskaźnik klawiatury</application> do panelu:</para>
 					<procedure>
-						<step><para>Right-click on an empty space on the panel where you want to add the applet</para></step>
-						<step><para>Click <guibutton>Add to Panel...</guibutton></para></step>
-						<step><para>Choose <guilabel>Keyboard Indicator</guilabel> from the Utilities section</para></step>
-						<step><para>You can now right-click on the <application>Keyboard Indicator</application> to manage your keyboard layouts.</para></step>
+						<step><para>Kliknij prawym przyciskiem na pustym obszarze na panelu, w miejscu gdzie chciałbyś dodać ten aplet</para></step>
+						<step><para>Kliknij <guibutton>Dodaj do panelu...</guibutton></para></step>
+						<step><para>Wybierz <application>Wskaźnik klawiatury</application> z sekcji Narzędzia.</para></step>
+						<step><para>Możesz teraz kliknąć prawym przyciskiem na <application>Wskaźnik klawiatury</application>, aby obsłużyć układy klawiatury.</para></step>
 					</procedure>
 			</sect3>
 		</sect2>
         <sect2 id="wireless-cards" status="complete">
-            <title>Wireless Cards</title>
-            <para>Many wireless cards are automatically detected by Ubuntu during installation. A complete listing of wireless cards which work with Ubuntu can be found on <ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsWirelessNetworkCards">Ubuntu Wiki</ulink>. Please add your wireless card to the list if it works with Ubuntu.</para> 
-            <para>Some cards may not work automatically with Ubuntu. If this is the case, please look at the <ulink url="https://wiki.ubuntu.com/WirelessTroubleshootingGuide">Wireless Troubleshooting Guide</ulink> on the Ubuntu Wiki which is an excellent resource for troubleshooting wireless cards.
-            </para>
-            <para>All information regarding wireless networking on Ubuntu is collected at <ulink url="https://wiki.ubuntu.com/WifiDocs">Wireless Networking Central</ulink> on the Ubuntu Wiki.
-            </para>
+            <title>Bezprzewodowe Karty Sieciowe</title>
+            <para>Wiele bezprzewodowych kart sieciowych jest wykrywana przez Ubuntu podczas instalacji. Pełna lista kart współpracujących z Ubuntu znajduje się na <ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsWirelessNetworkCards">Ubuntu Wiki</ulink>. Dodaj do listy swoją kartę jeśli i ona współpracuje z Ubuntu.</para> 
+            <para>Niektóre karty mogą nie współpracować z Ubuntu automatycznie. Jeśli coś takiego wystąpi, proszę zajrzeć do (ang.) <ulink url="https://wiki.ubuntu.com/WirelessTroubleshootingGuide">Przewodnika po Problemach z Bezprzewodowymi Kartami Seciowymi</ulink> na Ubuntu Wiki, jest to świetne źródło informacji o problemach.</para>
+            <para>Wszystkie informacje o sieciach bezprzewodowych z Ubuntu są gromadzone w (ang.) <ulink url="https://wiki.ubuntu.com/WifiDocs">Centrali Sieci Bezprzewodowych</ulink> na Ubuntu Wiki.</para>
         </sect2> 
 	    <sect2 id="modems" status="complete">
-		<title>Modems</title>
+		<title>Modemy</title>
 		<sect3 id="winmodems" status="complete">		
-			<title>Winmodems</title>
-				<para>Most winmodems are not supported by Ubuntu, but drivers can be found that will enable the use of such modems. First you need to identify what chipset your winmodem is using:</para>
+			<title>Winmodemy</title>
+				<para>Większość winmodemów nie jest wspierana przez Ubuntu, ale istnieją sterowniki do tego typu urządzeń. Najpierw trzeba się dowiedzieć jaki chipset jest używany przez winmodem:</para>
 				<para>
 <screen>
 wget -c <ulink url="http://linmodems.technion.ac.il/packages/scanModem.gz">http://linmodems.technion.ac.il/packages/scanModem.gz</ulink> 
@@ -1064,94 +957,71 @@ chmod +x scanModem
 sudo ./scanModem 
 gedit Modem/ModemData.txt</screen>
 				</para>
-				<para>Read this file, it should list what modem chipset you have. Once you are aware of the chipset you have, see <ulink url="http://www.linmodems.org/">http://www.linmodems.org/</ulink> and follow the directions for your modem. More infomation can be found at <ulink url="https://wiki.ubuntu.com/SettingUpModems">SettingUpModems</ulink> on the Ubuntu Wiki.</para>
+				<para>Przeczytaj ten plik, powinna się tam znajdować nazwa chipsetu modemu jaki posiadasz. Kiedy już dowiesz się o jaki chipset chodzi, zajrzyj na stronę <ulink url="http://www.linmodems.org/">http://www.linmodems.org/</ulink> i postępuj zgodnie z zawartymi instrukcjami dla twojego typu modemu. Więcej informacji znajduje się na (ang.) <ulink url="https://wiki.ubuntu.com/SettingUpModems">Uruchamianie Modemów</ulink> na Ubuntu Wiki.</para>
 		</sect3>
 		<sect3 id="adsl" status="complete">
-		<title>ADSL Modems</title>
-			<para>All PPPOE and router-style ADSL modems are supported by Ubuntu (that use ethernet for the connections), and some USB ADSL modems are supported too. For router-style ADSL modems, just connect it up, configure the modem as per your ISPs instructions and configure networking in Ubuntu. For information on PPPOE modems see <ulink url="https://wiki.ubuntu.com/ADSLPPPoE">this guide</ulink> on the Ubuntu wiki.</para>
+		<title>Modemy ADSL</title>
+			<para>Wszystkie modemy PPPoE i ADSL są wspierane przez Ubuntu (te, które używają połączenia Ethernet z komputerem), niektóre modemy USB ADSL też są wspierane. Modemy-routery ADSL trzeba tylko podłączyć i skonfigurować według instrukcji twojego dostawcy Internetu oraz ustawić sieć w Ubuntu. Informacje o modemach PPPoE znajduję na (ang.) <ulink url="https://wiki.ubuntu.com/ADSLPPPoE">tej stronie</ulink> na Ubuntu Wiki.</para>
 		</sect3>
 	  </sect2>
 	  <sect2 id="printers" status="complete">
-	  	<title>Printers</title>
-	  		<para>Some printers will be automatically detected by Ubuntu; for those that are not, choose 
-	  			
-<menuchoice>
-    <guimenu>System</guimenu>
-    <guimenuitem>Administration</guimenuitem>
-    <guimenuitem>Printing</guimenuitem>
-</menuchoice>
-
-			then choose 
-				<menuchoice>
-					<guimenu>Printer</guimenu>
-					<guimenuitem>Add Printer</guimenuitem>
-				</menuchoice>
-			and run the Printer Install Wizard.
-	  		</para>
-	  		<para>There are some printers that need further setup. Search the databases at <ulink url="http://www.linuxprinting.org/">LinuxPrinting.org</ulink> or check the <ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsPrinters">Ubuntu Wiki's Printer page</ulink> for possible information on your printer.
-	  		</para>
+	  	<title>Drukarki</title>
+	  		<para>Niektóre drukarki zostaną automatycznie wykryte przez Ubuntu; dla tych, które nie zostaną, wybierz <menuchoice><guimenu>System</guimenu><guimenuitem>Administracja</guimenuitem><guimenuitem>Printing (drukowanie)</guimenuitem></menuchoice> potem wybierz <menuchoice><guimenu>Printer</guimenu><guimenuitem>Add Printer</guimenuitem></menuchoice> i uruchom kreatora dodawania nowej drukarki.</para>
+	  		<para>Istnieją drukarki, przy których konieczna jest dodatkowa konfiguracja. Wyszukaj bazę danych <ulink url="http://www.linuxprinting.org/">LinuxPrinting.org</ulink> lub sprawdź (ang.) <ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsPrinters">stronę Drukarki w Ubuntu</ulink> w poszukiwaniu informacji o twojej drukarce.</para>
 	  </sect2>
 
 	<sect2 id="other-hardware" status="complete">
-	    <title>Other Tips</title>
+	    <title>Inne Porady</title>
 	    <sect3 id="listpartitiontables" status="complete">
-                <title>Check disk space usage and view the partition table</title>
+                <title>Sprawdzenie zużycia miejsca na dysku i wyświetlenie tablicy partycji</title>
                     <procedure>
                         <step>
-                            <para>Launch 
-<menuchoice>
-    <guimenu>System</guimenu>
-    <guimenuitem>Administration</guimenuitem>
-    <guimenuitem>Disks</guimenuitem>
-</menuchoice>
- </para>
+                            <para>Uruchom<menuchoice><guimenu>System</guimenu><guimenuitem>Administracja</guimenuitem><guimenuitem>Menedżer dysków</guimenuitem></menuchoice></para>
                         </step>
                         <step>
-                            <para>Select the <guibutton>Harddrive</guibutton>, then the <guibutton>Partitions</guibutton> tab</para>
+                            <para>Wybierz <guibutton>Dysk twardy</guibutton>, a potem panel <guibutton>Partycje</guibutton></para>
                         </step>
                         <step>
-                            <para>Each partition will be listed under <guilabel>Partition List</guilabel>, with disk space and mount point.</para>
+                            <para>Każda partycja będzie wyświetlona pod <guilabel>Lista partycji</guilabel>, z informacją o miejscu dyskowym i punkcie montowania.</para>
                         </step>
                     </procedure>
             </sect3>
             <sect3 status="complete">
-                <title>List devices</title>
+                <title>Wyświetlanie listy urządzeń</title>
                     <procedure>
                         <step>
-                            <para>To list mounted devices, run the following command in a terminal:</para>
+                            <para>Aby wyświetlić listę zamontowanych urządzeń, uruchom następujące polecenie w terminalu:</para>
                                <screen>mount</screen>
-			    <para>The listing shows the device (such as a hard disk partition), the mount point (where you access the files), the filesystem type and the mount options.</para>
-                            <para>This example shows the hda2 hard disk partition mounted as '/', with the filesystem type ext3. The partition is mounted with two options, one to allow the device to be read from and wrote to and the other to remount the device as read only in the event of any errors.</para>
+			    <para>Na liście wyświetli się urządzenie (np. partycję dysku twardego), punkt montowania (gdzie można uzyskać dostęp do plików), rodzaj systemu plików i opcje montowania.</para>
+                            <para>Ten przykład pokazuje partycję dysku twardego hda2 zamontowaną jako "/", z systemem plików ext3. Partycja jest zamontowana z dwiema opcjami, jedna zezwala na odczyt i zapis na urządzeniu, a druga nakazuje ponowne zamontowanie urządzenia jako tylko-do-odczytu jeśli wystąpią jakieś błędy.</para>
                             <screen><computeroutput>/dev/hda2 on / type ext3 (rw,errors=remount-ro)</computeroutput></screen>				
                         </step>
                         <step>
-                            <para>To list PCI devices:</para>
+                            <para>Aby wyświetlić listę urządzeń PCI:</para>
                                 <screen>lspci</screen>
                         </step>
                         <step>
-                            <para>To list USB devices:</para>
+                            <para>Aby wyświetlić listę urządzeń USB:</para>
                                 <screen>lsusb</screen>
                         </step>
                     </procedure>
             </sect3>
  
             <sect3 status="complete">
-                <title>Mount/unmount CD/DVD-ROMs manually, and show all
-                        hidden and associated files/folders</title>
+                <title>Montowanie/odmontowanie CD/DVD-ROM ręcznie, pokazanie wszystkich związanych ukrytych plików/folderów</title>
                     <procedure>
                         <step>
-                            <para>Assuming that <filename class="devicefile">/media/cdrom0/</filename> is the location
-                                of CD/DVD-ROM</para>
+                            <para>Zakładamy, że <filename class="devicefile">/media/cdrom0/</filename> to położenie CD/DVD-ROM</para>
                         </step>
                         <step>
-                            <para>To mount CD/DVD-ROM:</para>
+                            <para>Aby zamontować CD/DVD-ROM:</para>
                             <para>
                                 <screen>
 sudo mount /media/cdrom0/ -o unhide</screen>
                             </para>
                         </step>
                         <step>
-                            <para>To unmount CD/DVD-ROM:</para>
+                            <para>Aby odmontować CD/DVD-ROM:</para>
                             <para>
                                 <screen>
 sudo umount /media/cdrom0/</screen>
@@ -1162,9 +1032,9 @@ sudo umount /media/cdrom0/</screen>
 	</sect2>
       </sect1>
       <sect1 id="networking" status="complete">
-		<title>Networking</title>
+		<title>Ustawienia sieci</title>
             <sect2 status="complete">
-                <title>Change the Computer Name</title>
+                <title>Zmiana Nazwy Komputera</title>
                     <procedure>
                         <step>
                             <para>
@@ -1172,80 +1042,55 @@ sudo umount /media/cdrom0/</screen>
 <menuchoice>
     <guimenu>System</guimenu>
     <guimenuitem>Administracja</guimenuitem>
-    <guimenuitem>Networking</guimenuitem>
+    <guimenuitem>Ustawienia sieci</guimenuitem>
 </menuchoice>
 
                             </para>
                         </step>
                         <step>
-                            <para>Select the <guibutton>General</guibutton> tab.
-                                Enter the name of the computer in the
-                                    <guilabel>Hostname</guilabel> field.</para>
+                            <para>Wybierz panel <guibutton>Ogólne</guibutton>. Podaj nazwę komputera w polu <guilabel>Nazwa komputera</guilabel>.</para>
                         </step>
                         <step>
-                            <para>Click <guibutton>OK</guibutton>, close all
-                                open applications and reboot.</para>
+                            <para>Kliknij <guibutton>OK</guibutton>, zamknij wszystkie otwarte aplikacje i uruchom komputer ponownie.</para>
                         </step>
                     </procedure>
             </sect2>
 	<sect2 id="networking-utils" status="complete">
-		<title>Networking Utilities</title>
+		<title>Narzędzia Sieciowe</title>
 			<sect3 id="firestarter" status="complete">
-				<title>Firestarter Firewall</title>
-						<para>A firewall protects a computer system from unauthorized access. It is not normally necessary to install a firewall on an Ubuntu system, because access to the system is closed by default. However, if you run any services which you allow other computers to access (for example, the Apache web server), it is advisable to install a firewall. <application>Firestarter</application> is a program which allows you to control a firewall through a graphical interface.
-						</para>
+				<title>Firewall Firestarter</title>
+						<para>Firewall chroni komputer przed niepowołanym dostępem. Zazwyczaj instalacja firewalla w systemie Ubuntu nie jest konieczna, ponieważ dostęp do systemu jest domyślnie zabroniony. Jednakże, jeśli uruchomisz usługi, które dają dostęp innym komputerom (np. serwer Apache), instalacja firewalla jest zalecana. <application>Firestarter</application> to program pozwalający na obsługę firewalla przez interfejs graficzny.</para>
 					<procedure>
 						<step>
-							<para>Install the <application>Firestarter</application> package from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>).
-							</para>
+							<para>Zainstaluj pakiet <application>Firestarter</application> z repozytorium <emphasis>Universe</emphasis> (patrz <xref linkend="add-applications"/>).</para>
 						</step>
 						<step>
-							<para>After it is installed, run 
-<menuchoice>
-    <guimenu>Applications</guimenu>
-    <guimenuitem>System Tools</guimenuitem>
-    <guimenuitem>Firestarter</guimenuitem>
-</menuchoice>
- to configure your firewall. The firewall will now start in the background when your computer starts.
-							</para>
+							<para>Po instalacji uruchom <menuchoice><guimenu>System</guimenu><guimenuitem>Administracja</guimenuitem><guimenuitem>Firestarter</guimenuitem></menuchoice> aby skonfigurować swój firewall. Firewall będzie teraz uruchamiany przy każdym starcie komputera.</para>
 						</step>
 					</procedure>
 				</sect3>
 			<sect3 status="complete">
-				<title>Graphical Network Monitor</title>
-					<para>Etherape displays network activity among different hosts using circles of
-						varying size.</para>
+				<title>Graficzny Monitor Sieci</title>
+					<para>EtherApe wyświetla aktywność sieci pomiędzy różnymi hostami używając okręgów o zmiennych rozmiarach.</para>
 					<procedure>
 						<step>
-							<para>Install the <application>etherape</application> package from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>).</para>
+							<para>Zainstaluj pakiet <application>etherape</application> z repozytorium <emphasis>Universe</emphasis> (patrz <xref linkend="add-applications"/>).</para>
 						</step>
 						<step>
-							<para>Choose:
-								<menuchoice>
-									<guimenu>Applications</guimenu>
-									<guisubmenu>Internet</guisubmenu>
-									<guimenuitem>Etherape</guimenuitem>
-								</menuchoice>
-							</para>
+							<para>Wybierz: <menuchoice><guimenu>Aplikacje</guimenu><guisubmenu>Internet</guisubmenu><guimenuitem>Etherape</guimenuitem></menuchoice></para>
 						</step>
 					</procedure>
 			</sect3>	 
 			<sect3 status="complete">
-				<title>Network Traffic Analyzer</title>
-					<para>Ethereal is a network traffic analyzer/sniffer that captures packets
-						off the network in real time and displays the contents of them.</para>
+				<title>Analiza Ruchu w Siecie</title>
+					<para>Ethereal jest program do analizowania/podsłuchiwania ruchu w sieci, który wyłapuje pakiety z sieci w czasie rzeczywistym i wyświetla ich zawartość.</para>
 					<procedure>
 						<step>
-							<para>Install the <application>ethereal</application> package from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>).</para>
+							<para>Zainstaluj pakiet <application>ethereal</application> z repozytorium <emphasis>Universe</emphasis> (patrz <xref linkend="add-applications"/>).</para>
 						</step>
 						<step>
-							<para>Choose:
-								<menuchoice>
-									<guimenu>Applications</guimenu>
-									<guisubmenu>Internet</guisubmenu>
-									<guimenuitem>Ethereal</guimenuitem>
-								</menuchoice>
-							</para>
+							<para>Wybierz:
+<menuchoice><guimenu>Aplikacje</guimenu><guisubmenu>Internet</guisubmenu><guimenuitem>Ethereal</guimenuitem></menuchoice></para>
 						</step>
 					</procedure>
 			</sect3>

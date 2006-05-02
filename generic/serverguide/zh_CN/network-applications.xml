@@ -5,7 +5,7 @@
 <!ENTITY project-name "Ubuntu Documentation Project">
 <!ENTITY ubuntu "<phrase>Ubuntu</phrase>">
 <!-- VERSIONS --><!ENTITY distro-version "Dapper Drake">
-<!ENTITY distro-rev "6.06">
+<!ENTITY distro-rev "6.06 LTS">
 <!ENTITY distro-release-date "June 2006">
 <!ENTITY linux-kernel-version "2.6.15">
 <!ENTITY gcc-version "4.0.3">
@@ -403,70 +403,27 @@
           <para>Ubuntu 提供了许多图形化工具来配制您的网络设备。本文适用于服务器管理员并聚焦在命令行中管理您的网络。</para>
       <sect2 id="ethernet" status="complete">
         <title>以太网</title> 
-          <para>
-		  Most ethernet configuration is centralized in a single file,
-		  <filename>/etc/network/interfaces</filename>.  If you have no ethernet devices, only
-		  the loopback interface will appear in this file, and it will look something like
-		  this:
-		  <screen># This file describes the network interfaces available on your system
+          <para>大多数以太网配置都集中在单个文件 <filename>/etc/network/interfaces</filename> 中。如果您没有以太网设备，那么在该文件中将只出现环回口，该文件看上去类似这样：<screen># This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
 
 # The loopback network interface
 auto lo
 iface lo inet loopback
 address 127.0.0.1
-netmask 255.0.0.0</screen>
-		If you have only one ethernet device, eth0, and it gets its configuration from a DHCP server,
-		and it should come up automatically at boot, only two additional lines are required:
-		<screen>auto eth0
-iface eth0 inet dhcp</screen>
-		The first line specifies that the eth0 device should come up automatically when you boot.
-		The second line means that interface (<quote>iface</quote>) eth0 should have an IPv4 address
-		space (replace <quote>inet</quote> with <quote>inet6</quote> for an IPv6 device) and that
-		it should get its configuration automatically from DHCP.  Assuming your network and DHCP
-		server are properly configured, this machine's network should need no further configuration to
-		operate properly.  The DHCP server will provide the default gateway (implemented via the
-		<application>route</application> command), the device's IP address (implemented via the 
-		<application>ifconfig</application> command), and and DNS servers used on the network
-		(implemented in the <filename>/etc/resolv.conf</filename> file.)</para>
-		<para>To configure your ethernet device with a static IP address and custom configuration,
-		some more information will be required.  Suppose you want to assign the IP address
-		192.168.0.2 to the device eth1, with the typical netmask of 255.255.255.0.  Your default
-		gateway's IP address is 192.168.0.1.  You would enter something like this into
-		<filename>/etc/network/interfaces</filename>:
-		<screen>iface eth1 inet static
+netmask 255.0.0.0</screen> 如果您只有一个以太网设备 eth0，被配置成从 DHCP 服务器得到设置，并且在引导时自动激活，那么只需要再添加两行：<screen>auto eth0↵
+iface eth0 inet dhcp</screen> 第一行说明 eth0 将会在您启动时自动激活。第二行说明该接口 (<quote>iface</quote>) eth0 将有得到一个 IPv4 地址空间 (如果是一个 IPv6 的设备将须将 <quote>inet</quote> 用 <quote>inet6</quote> 代替) 并且它将自动从 DHCP 中自动获得它的配置。假定您的网络和 DHCP 服务都已经被正确配置，该机的网络将不需要更多的配置。DHCP 服务器将提供默认网关 (通过 <application>route</application> 命令来实现) 、设备的 IP 地址 (通过 <application>ifconfig</application> 命令来实现)以及网络使用的 DNS 服务器 (在 <filename>/etc/resolv.conf</filename> 文件中实现)。</para>
+		<para>要把您的以太网设备配置成静态 IP 地址和自定义配置的话，则要求更多的信息。假设您想指定 IP 地址 192.168.0.2 给设备 eth1，其掩码是 255.255.255.0。您的默认网关的 IP 地址是 192.168.0.1。您可以在 <filename>/etc/network/interfaces</filename> 中输入类似下面的语句：<screen>iface eth1 inet static
 	address 192.168.0.2
 	netmask 255.255.255.0
-	gateway 192.168.0.1</screen>
-		In this case, you will need to specify your DNS servers manually in
-		<filename>/etc/resolv.conf</filename>, which should look something like this:
-		<screen>search mydomain.com
+	gateway 192.168.0.1</screen> 在这个例子中，您将需要在 <filename>/etc/resolv.conf</filename> 中手工指定您的DNS服务器，看起来如下： <screen>search mydomain.com
 nameserver 192.168.0.1
-nameserver 4.2.2.2</screen>
-		The <emphasis role="italics">search</emphasis> directive will append mydomain.com
-		to hostname queries in an attempt to resolve names to your network.  For example,
-		if your network's domain is mydomain.com and you try to ping the host
-		<quote>mybox</quote>, the DNS query will be modified to <quote>mybox.mydomain.com</quote>
-		for resolution.  The <emphasis role="italics">nameserver</emphasis> directives
-		specifiy DNS servers to be used to resolve hostnames to IP addresses.  If you use
-		your own nameserver, enter it here.  Otherwise, ask your Internet Service Provider
-		for the primary and secondary DNS servers to use, and enter them into
-		<filename>/etc/resolv.conf</filename> as shown above.</para>
-		<para>Many more configurations are possible, including dialup PPP interfaces, IPv6
-		networking, VPN devices, etc.  Refer to <application>man 5 interfaces</application>
-		for more information and supported options.  Remember that
-		<filename>/etc/network/interfaces</filename> is used by the 
-		<application>ifup</application>/<application>ifdown</application> scripts as a
-		higher level configuration scheme than may be used in some other Linux distributions,
-		and that the traditional, lower level utilities such as <application>ifconfig</application>,
-		<application>route</application>, and <application>dhclient</application> are still
-		available to you for ad hoc configurations.
-		</para>
+nameserver 4.2.2.2</screen> <emphasis role="italics">search</emphasis> 语句在试图解析网络名时把 mydomain.com 添到主机名查询中。举个例子，如果您的网络域名是 mydomain.com 并且您试图去 ping 主机 <quote>mybox</quote>，DNS 查询将在解析时改为 <quote>mybox.mydomain.com</quote>。<emphasis role="italics">nameserver</emphasis> 语句指定用于将主机名解析成 IP 地址的的 DNS 服务器。如果您使用自己的名称服务器，在这里输入它。否则询问您的 Internet 服务供应商要使用的主、辅 DNS 服务器，并把它们如上所示输入到 <filename>/etc/resolv.conf</filename> 中。</para>
+		<para>配置更多的接口是可能的，包括拨号的 PPP 接口、IPv6 网络、VPN 设备等。更多信息和支持选项请参考 <application>man 5 interfaces</application>。记住 <application>ifup</application>/<application>ifdown</application> 脚本使用的<filename>/etc/network/interfaces</filename> 是比其他一些 Linux 发行版更高级的配置模式。传统的低级工具如<application>ifconfig</application>、<application>route</application> 和 <application>dhclient</application> 也为了 ad hoc 配置对您来说也是可用的。</para>
       </sect2>
       <sect2 id="managing-dns-entries" status="complete">
           <title>管理 DNS 记录</title>
             <para>本部分说明如何配置用来将IP地址解析成主机名或相反功能的名称服务，而不是说如何将整个系统配置成一个名称服务器。</para>
-            <para>要管理 DNS 记录，您可以从 <filename>/etc/resolv.conf</filename> 文件中添加、编辑或删除 DNS 名。</para>
+            <para>要管理 DNS 条目，您可以在 <filename>/etc/resolv.conf</filename> 文件中添加、编辑或删除 DNS 名称服务器。一个 <ulink url="../sample/resolv.conf">范例文件</ulink> 在下面给出：</para>
 <programlisting>
 search com
 nameserver 204.11.126.131
@@ -504,7 +461,6 @@ nameserver 208.185.179.218
             <para>TCP/IP 常用配置元素及其作用如下所示：<itemizedlist>
                <listitem>
                   <para><emphasis role="bold">IP 地址</emphasis> IP 地址是唯一标识字符串，它由四部分由点号分隔的，范围从 0 到 255 的十进制数组成。 每部分由8个比特表示，整个地址总长为32个比特。这种格式被称为 <emphasis>dotted quad notation</emphasis>。</para>
-                     <para>IP 地址根据组成地址的位数用类来定义相应的网络和主机范围。有四个主要地址类：A、B、C 和 D。A 类 IP 地址通常用于非常大的组织，其格式为 <emphasis>网络.主机.主机.主机</emphasis> 而更常用的 C 类地址则可用于较小的组织，经常被 Internet 服务供应商用于特别的主机用户。C 类地址类似 <emphasis>网络.网络.网络.主机</emphasis> D 类地址是特殊的，被称为 <emphasis>组播</emphasis> 地址。合法 IP 地址的例子如 127.0.0.1 和 82.211.81.166。</para>
                </listitem>
                <listitem>
                   <para><emphasis role="bold">掩码</emphasis> 子网掩码 (或简称<emphasis>掩码</emphasis>) 是一个局部位掩码，或用指定的 <emphasis>子网掩码</emphasis> 来将IP 地址中的网络分隔出来的一组标识。举个例子，在 C 类网络中，标准的掩码是 255.255.255.0 屏蔽了 IP 地址的前三个字节，并允许 IP 地址的最后一个字节指定子网中的主机。</para>
@@ -981,37 +937,14 @@ include "/etc/bind/named.conf.local";
 <command>sudo apt-get install cupsys cupsys-client cupsys-driver-gimpprint \ defoma fontconfig foomatic-db foomatic-filters libcupsimage2 \ libexpat1 libfontconfig1 libfreetype6 libgimpprint1 libjpeg62 \ libpaper1 libpng12-0 libpoppler0c2 libslp1 libtiff4 patch perl \ perl-modules ttf-bitstream-vera ucf</command>
 </screen>
           </para>
-          <para>
-          Upon authenticating with your user password, the packages should be downloaded
-		  and installed without error. Upon the conclusion of installation, the CUPS server 
-		  will be started automatically. For troubleshooting purposes, you can access CUPS 
-		  server errors via the error log file at: <filename>/var/log/cups/error_log</filename>.
-		  If the error log does not show enough information to troubleshoot any problems you
-		  encounter, the verbosity of the CUPS log can be increased by changing the <emphasis role="bold">LogLevel</emphasis> directive in the configuration file (discussed below)
-		  to "debug" or even "debug2", which logs everything, from the default of "info".  If 
-		  you make this change, remember to change it back once you've solved your problem, to 
-		  prevent the log file from becoming overly large.
-          </para>
+          <para>认证您的用户密码之后，这些包将被下载并正确安装。在安装结束之后，CUPS 服务器将自动开始。为了发现并修复问题，您可以通过错误日志文件 <filename>/var/log/cups/error_log</filename> 来查看 CUPS 服务器的错误。如果错误日志并没有显示足够的用于找到和解决您所遇问题的信息，通过将配置文件 (下面要讨论) 中将<emphasis role="bold">LogLevel</emphasis> 语句从缺省的 "info" 改为 "debug" 甚至是记录每件事的 "debug2"，以获得 CUPS 日志的详细信息。</para>
       </sect2>
       <sect2 id="cups-configuration" status="complete">
         <title>配置</title>
-          <para>
-            The Common UNIX Printing System server's behavior is configured through the 
-			directives contained in the file <filename>/etc/cups/cupsd.conf</filename>.  
-			The CUPS configuration file follows the same syntax as the primary configuration 
-			file for the Apache HTTP server, so users familiar with editing Apache's 
-			configuration file should feel at ease when editing the CUPS configuration 
-			file. Some examples of settings you may wish to change initially will be 
-			presented here.
-          </para>
+          <para>可以通过 <filename>/etc/cups/cupsd.conf</filename> 文件中的指令来配置通用 UNIX 打印系统服务器的行为的。CUPS 配置文件与 Apache HTTP 服务器的主配置文件语法相同，因此熟悉编辑 Apache 配置文件的用户在编辑 CUPS 配置文件时会感到相当容易。在这里将显示一些您可能想要改变初始值的设置范例。</para>
           <tip>
-               <para>Prior to editing the configuration file, you should make a copy of 
-			   the original file and protect it from writing, so you will have the original 
-			   settings as a reference, and to reuse as necessary.
-               </para>
-               <para>Copy the <filename>/etc/cups/cupsd.conf</filename> file and protect it 
-			   from writing with the following commands, issued at a terminal prompt:
-               </para>
+               <para>在编辑配置文件之前，您应该将原始文件做个副本并将其写保护，以便您可以将原始文件作为参考并在必要时重用它。</para>
+               <para>拷贝 <filename>/etc/cups/cupsd.conf</filename> 文件并对其写保护，可以在终端提示符后执行以下命令：</para>
                </tip>
                <para>
 <screen>
@@ -1021,15 +954,7 @@ include "/etc/bind/named.conf.local";
                </para>
           <itemizedlist>
                 <listitem>
-                <para>
-                <emphasis role="bold">ServerAdmin</emphasis>: To configure the email 
-				address of the designated administrator of the CUPS server, simply 
-				edit the <filename>/etc/cups/cupsd.conf</filename> configuration file 
-				with your preferred text editor, and modify the <emphasis role="italics">ServerAdmin</emphasis> line accordingly.  For example, 
-				if you are the Administrator for the CUPS server, and your e-mail 
-				address is 'bjoy@somebigco.com', then you would modify the ServerAdmin 
-				line to appear as such:
-                </para>
+                <para><emphasis role="bold">ServerAdmin</emphasis>：要配置指定 CUPS 服务器管理员的邮件地位，只需用你喜欢的文本编辑器简单编辑 <filename>/etc/cups/cupsd.conf</filename> 配置文件，并修改相应的 <emphasis role="italics">ServerAdmin</emphasis> 行即可。举个例子，如果您是 CUPS 服务器的管理员，并且您的邮件地址是'bjoy@somebigco.com'，那么您可以象下面这样修改 ServerAdmin 行：</para>
                 <para>
 <screen>
 ServerAdmin bjoy@somebigco.com
@@ -1037,65 +962,37 @@ ServerAdmin bjoy@somebigco.com
                 </para>
                 </listitem>
                 <listitem>
-                <para>
-                <emphasis role="bold">Listen</emphasis>: By default on Ubuntu, the CUPS 
-				server installation listens only on the loopback interface at IP address 
-				<emphasis>127.0.0.1</emphasis>. In order to instruct the 
-				CUPS server to listen on an actual network adapter's IP address, you must 
-				specify either a hostname, the IP address, or optionally, an IP 
-				address/port pairing via the addition of a Listen directive.  For example, 
-				if your CUPS server resides on a local network at the IP address <emphasis role="italics">192.168.10.250</emphasis> and you'd like to make it 
-				accessible to the other systems on this subnetwork, you would edit the 
-				<filename>/etc/cups/cups.d/ports.conf</filename> and add a Listen 
-				directive, as such:
-                </para>
+                <para><emphasis role="bold">Listen</emphasis>：在 Ubuntu 的缺省状态下，CUPS 服务器安装后只监听 IP 地址为 <emphasis>127.0.0.1</emphasis> 的环回接口。为了让 CUPS 服务器可以在网络适配器真正的 IP 地址上监听，您必须要么指定一个指定主机名、要么指定一个IP 地址，随您选择。可以通过 Listen 语句来添加一个 IP 地址/端口对。例如：如果您的 CUPS 服务器在一个局域网中，其 IP 地址为 <emphasis role="italics">192.168.10.250</emphasis>，您想要该子网中的其它系统能够访问它，您可以编辑 <filename>/etc/cups/cups.d/ports.conf</filename> 并如下所示添加一个 Listen 语句：</para>
                 <para>
 <screen>
-Listen 127.0.0.1:631           # existing loopback Listen
+Listen 127.0.0.1:631 # existing loopback Listen
 Listen /var/run/cups/cups.sock # existing socket Listen
-Listen 192.168.10.250:631      # Listen on the LAN interface, Port 631 (IPP)
+Listen 192.168.10.250:631 # Listen on the LAN interface, Port 631 (IPP)
 </screen>
                 </para>
-                <para>
-                In the example above, you may comment out or remove the reference to the 
-				Loopback address (127.0.0.1) if you do not wish <application>cupsd
-				</application> to listen on that interface, but would rather have it only 
-				listen on the Ethernet interfaces of the Local Area Network (LAN). To enable 
-				listening for all network interfaces for which a certain hostname is bound, 
-				including the Loopback, you could create a Listen entry for the hostname 
-				<emphasis>socrates</emphasis> as such:
-                </para>
+                <para>在上面的例子里，如果您不想 <application>cupsd </application> 监听环回地址 (127.0.0.1) ，您可能注释或删除了相关语句。但最好保留它以监听局域网 (LAN) 的以太网接口。为了能监听一个特定主机名所绑定的所有的网络接口，您可以为 <emphasis>socrates</emphasis> 主机名创建一个 Listen 条目，如下所示：</para>
                 <para>
 <screen>
-Listen socrates:631  # Listen on all interfaces for the hostname 'socrates'
+Listen socrates:631 # Listen on all interfaces for the hostname 'socrates'
 </screen>
                 </para> 
-				<para>or by omitting the Listen directive and using <emphasis>Port</emphasis> instead, as in:</para>
+				<para>或者忽略 Listen 语句并使用 <emphasis>Port</emphasis> 来代替，如：</para>
 <para>
 <screen>
-Port 631  # Listen on port 631 on all interfaces
+Port 631 # Listen on port 631 on all interfaces
 </screen>
 </para>
-                <para>
-                The CUPS server configuration file, <filename>/etc/cups/cupsd.conf</filename>,
-				contains several examples of possible Listen directives which are valid for use.
-                </para>
+                <para>CUPS 服务器配置文件 <filename>/etc/cups/cupsd.conf</filename> 包含了可能会被用到的几个 Listen 语句的范例。</para>
                 </listitem>
           </itemizedlist>
-                <para>
-                For more examples of configuration directives in the CUPS server 
-				configuration file, view the associated system manual page by entering the 
-				following command at a terminal prompt:
-               </para>
+                <para>关于 CUPS 服务器配置文件中配置语句的更多范例，通过在终端提示符后输入以下命令可以查阅相关的系统手册页：</para>
                <para>
 <screen>
 <command>man cupsd.conf</command>
 </screen>
                </para>
                                <note>
-                <para>
-                Whenever you make changes to the <filename>/etc/cups/cupsd.conf</filename> configuration file, you'll need to restart the CUPS server by typing the following command at a terminal prompt:
-                </para>
+                <para>无论您在什么时间修改了 <filename>/etc/cups/cupsd.conf</filename> 配置文件，您都需要重启 CUPS 服务，在终端提示符后键入以下命令：</para>
                 </note>
                 <para>
 <screen>
@@ -1106,289 +1003,100 @@ Port 631  # Listen on port 631 on all interfaces
       <sect2 id="cups-references" status="complete">
         <title>引用</title>
         <para>
-        <ulink url="http://www.cups.org/">CUPS Website</ulink>
+        <ulink url="http://www.cups.org/">CUPS 网络</ulink>
         </para>
         </sect2>
     </sect1>
 	<sect1 id="httpd" status="complete">
-		<title>HTTPD - Apache2 Web Server</title>
-      <para>Apache is the most commonly used Web Server on GNU/Linux systems. Web Servers are used
-          to serve Web Pages requested by client computers. Clients typically request and view
-          Web Pages using Web Browser applications such as <application>Firefox</application>,
-              <application>Opera</application>, or <application>Mozilla</application>.</para>
-      <para>Users enter a Uniform Resource Locator (URL) to point to a Web server by means of
-          its Fully Qualified Domain Name (FQDN) and a path to the required resource. For example, to view the home page of
-          the <ulink url="http://www.ubuntu.com">Ubuntu Web site</ulink> a user will enter only the FQDN. To request specific information about 
-              <ulink url="http://www.ubuntu.com/support/supportoptions/paidsupport">paid
-              support</ulink>, a user will enter the FQDN followed by a path.</para>
-      <para>The most common protocol used to transfer Web pages is the Hyper Text Transfer
-          Protocol (HTTP). Protocols such as Hyper Text Transfer Protocol over Secure Sockets Layer (HTTPS), and
-          File Transfer Protocol (FTP), a protocol for uploading and downloading files, are also
-          supported.</para>
-      <para>Apache Web Servers are often used in combination with the <application>MySQL</application>
-          database engine, the HyperText Preprocessor (<application>PHP</application>)
-          scripting language, and other popular scripting languages such as
-              <application>Python</application> and <application>Perl</application>. This
-          configuration is termed LAMP (Linux, Apache, MySQL and Perl/Python/PHP) and forms a
-          powerful and robust platform for the development and deployment of Web-based
-          applications.</para>
+		<title>HTTPD - Apache2 Web 服务器</title>
+      <para>Apache 是在 GNU/Linux 系统中最常用的 Web 服务器。Web 服务器为客户机所提交的网页请求服务。客户机一般通过网页浏览器如 <application>Firefox</application>、<application>Opera</application> 或 <application>Mozilla</application> 来请求和查看网页。</para>
+      <para>用户输入统一资源定位器 (URL) 来指向一个 Web 服务器，并通过完全限定域名 (FQDN) 和路径来请求资源。例如，要查看 <ulink url="http://www.ubuntu.com">Ubuntu 网站</ulink> 的主页，用户只需要输入 FQDN 即可。如果要请求关于 <ulink url="http://www.ubuntu.com/support/supportoptions/paidsupport">有偿技术支持</ulink> 的特定信息，用户将在 FQDN 后输入路径。</para>
+      <para>用于传输网页的最常用协议就是超文本传输协议 (HTTP)。也支持诸如基于安全套接层的超文本传输协议 (HTTPS) 以及用于上传和下载文件的文件传输协议 (FTP) 等协议。</para>
+      <para>Apache Web 服务器常与 <application>MySQL</application> 数据库引擎、超文本处理器 (<application>PHP</application>) 脚本语言及其他流行的脚本语言如<application>Python</application> 和 <application>Perl</application> 组合在一起。这一组合被称为 LAMP (Linux, Apache, MySQL and Perl/Python/PHP) ，并形成一个强大健壮的开发基于 Web 应用程序的开发平台。</para>
 <sect2 id="http-installation" status="complete">
   <title>安装</title>
-                  <para>The Apache2 web server is available in Ubuntu
-                  Linux. To install Apache2:</para>
+                  <para>Apache2 web 服务器在 Ubuntu Linux 中是可用的。要安装 Apache2：</para>
           <procedure><step>
-                	  <para>At a terminal prompt enter the following command:
-<screen>
+                	  <para>在终端提示符后输入下列命令：<screen>
 <command>sudo apt-get install apache2</command>
-</screen>
-             		  </para>
+</screen></para>
 			</step>
 	    </procedure>
       </sect2>
       <sect2 id="http-configuration" status="complete">
         <title>配置</title>
-          <para>
-          Apache is configured by placing <emphasis>directives</emphasis> in plain text
-          configuration files. The main configuration file is called 
-		  <filename>apache2.conf</filename>. In addition, other configuration files may be added
-          using the <emphasis>Include</emphasis> directive, and wildcards can be used to
-          include many configuration files. Any directive may be placed
-          in any of these configuration files. Changes to the main
-          configuration files are only recognized by Apache2 when it is
-          started or restarted.</para>
+          <para>Apache 可以在纯文本配置文件中通过 <emphasis>语句</emphasis> 来配置的。主配置文件叫 <filename>apache2.conf</filename>。此外，其外配置文件可以用 <emphasis>Include</emphasis> 语句来添加，也可以使用通配符来包含多个配置文件。任何语句都可能被放在这些配置文件的任何一个文件中。修改过的主配置文件只在 Apach2 启动或重启时才能被其识别。</para>
 
-          <para>The server also reads a file containing mime document types;
-          the filename is set by the <emphasis>TypesConfig</emphasis> directive, and is
-          <filename>mime.types</filename> by default.</para>
+          <para>服务器也查看包含 mime 文档类型的文件；该文件名通过 <emphasis>TypesConfig</emphasis> 设置，缺省情况下是<filename>mime.types</filename>。</para>
 
-          <para>The default Apache2 configuration file is <filename>/etc/apache2/apache2.conf</filename> .
-          You can edit this file to configure the Apache2 server. You can
-          configure the port number, document root, modules, log files, 
-          virtual hosts, etc.
-          </para>
+          <para>缺省的 Apache2 配置文件是 <filename>/etc/apache2/apache2.conf</filename>。您可以编辑该文件以配置 Apache2 服务器。您可以配置端口号、文档根目录、模块、日志文件及虚拟主机等。</para>
         <sect3 id="http-basic-settings" status="complete">
-          <title>Basic Settings</title>
-            <para>
-             This section explains Apache2 server essential configuration
-             parameters. Refer to the <ulink url="http://httpd.apache.org/docs/2.0/">Apache2
-             Documentation</ulink> for more details.</para>
+          <title>基本设置</title>
+            <para>本部分内容说明 Apache2 服务器基本的配置参数。详情请参阅 <ulink url="http://httpd.apache.org/docs/2.0/">Apache2 文档</ulink></para>
 
              <itemizedlist>
 
-             <listitem><para>
-             Apache2 ships with a virtual-host-friendly default configuration.
-			 That is, it is configured with a single default virtual host (using
-			 the <emphasis>VirtualHost</emphasis> directive) which can modified or used as-is if you
-			 have a single site, or used as a template for additional virtual hosts
-			 if you have multiple sites.  If left alone, the default virtual host
-			 will serve as your default site, or the site users will see if the
-			 URL they enter does not match the <emphasis>ServerName</emphasis> directive of any of your 
-			 custom sites.  To modify the default virtual host, edit the file
-			 <filename>/etc/apache2/sites-available/default</filename>.  If you
-			 wish to configure a new virtual host or site, copy that file into the
-			 same directory with a name you choose.  For example,
-			 <command>sudo cp /etc/apache2/sites-available/default /etc/apache2/sites-available/mynewsite</command>
-			 Edit the new file to configure the new site using some of the directives
-			 described below.
-            </para></listitem>
+             <listitem><para>Apache2 提供了一个友好虚拟主机的缺省配置。它配置成单个缺省虚拟主机 (使用 <emphasis>VirtualHost</emphasis> 语句) 。如果您有单个站点，可以修改或直接使用它。如果您有多个站点的话，可以将其作为其它虚拟主机的模板。如果对其不加理会，该缺省虚拟主机将会作为您的缺省网站提供服务，或者如果网站用户所输入的 URL 并没有匹配您任何所定义站点的 <emphasis>ServerName</emphasis> 语句时，将看到该虚拟主机内容。要修改缺省虚拟主机，可以编辑文件 <filename>/etc/apache2/sites-available/default</filename>。如果您希望配置一个新的虚拟主机或站点，在同一目录中将拷贝该文件并将新文件重命名为您所想要的文件名，如<command>sudo cp /etc/apache2/sites-available/default /etc/apache2/sites-available/mynewsite</command>。编辑新文件并用下面的所描述的语句来配置新的站点：</para></listitem>
 
-             <listitem><para>
-			 The <emphasis>ServerAdmin</emphasis> directive specifies the email address to be advertised
-			 for the server's administrator.  The default value is webmaster@localhost.
-			 This should be changed to an email address that is delivered to you (if you
-			 are the server's administrator).  If your website has a problem, Apache2
-			 will display an error message containing this email address to report the
-			 problem to.  Find this directive in your site's configuration file in
-			 /etc/apache2/sites-available.
-			 </para></listitem>
+             <listitem><para><emphasis>ServerAdmin</emphasis> 语句指定服务器管理员的邮件地址，缺省值是 webmaster@localhost。应该改成您的邮件地址 (如果您是服务器管理员的话)。如果您的网站有问题，Apache2 将显示包含该邮件地址的错误信息以便报告该问题。在 /etc/apache2/sites-available 目录中您网站的配置文件里可以找到该语句。</para></listitem>
 
-             <listitem><para>
-             The <emphasis>Listen</emphasis> directive specifies the port, and optionally the IP address,
-			 Apache2 should listen on. If the IP address is not specified, Apache2
-			 will listen on all IP addresses assigned to the machine it runs on.
-			 The default value for the Listen directive is 80.  Change this to
-			 127.0.0.1:80 to cause Apache2 to listen only on your loopback interface
-			 so that it will not be available to the Internet, to (for example) 81
-			 to change the port that it listens on, or leave it as is for normal
-			 operation.  This directive can be found and changed in its own file,
-			 <filename>/etc/apache2/ports.conf</filename>
-             </para></listitem>
+             <listitem><para><emphasis>Listen</emphasis> 语句指定端口以及可选的 IP 地址，Apache2 将在其上监听。如果 IP 地址没有被指定，Apache2 将监听所有指向其所运行机器上的 IP 地址。Listen 语句的缺省值是 80。把其改成 127.0.0.1:80 将使 Apache2 只在您的环回接口上临听以致于它相对于 Internet 不可用。也可改变其监听端口如81，或保持原样以便正常操作。该语句可以在它自己的文件 <filename>/etc/apache2/ports.conf</filename> 中发现并修改。</para></listitem>
 
-			 <listitem><para>
-			 The <emphasis>ServerName</emphasis> directive is optional and specifies what FQDN your
-			 site should answer to.  The default virtual host has no ServerName
-			 directive specified, so it will respond to all requests that do not
-			 match a ServerName directive in another virtual host.  If you have
-			 just acquired the domain name ubunturocks.com and wish to host it on
-			 your Ubuntu server, the value of the ServerName directive in your
-			 virtual host configuration file should be ubunturocks.com.  Add this
-			 directive to the new virtual host file you created earlier 
-			 (<filename>/etc/apache2/sites-available/mynewsite</filename>).
-			 
-			 <tip><para>You may also want your site to respond to www.ubunturocks.com, since
-				many users will assume the www prefix is appropriate.  Use the
-				<emphasis>ServerAlias</emphasis> directive for this.  You may also use wildcards in the
-				ServerAlias directive.  For example,
-				<command>ServerAlias *.ubunturocks.com</command>
-				will cause your site to respond to any domain request ending in
-				.ubunturocks.com.
-			 </para></tip>
-			 </para></listitem>
+			 <listitem><para>The <emphasis>ServerName</emphasis> 语句是可选的，它指明您站点要应答什么 FQDN。缺省虚拟主机没有指定 ServName，因为它要应答没有匹配其它虚拟主机 ServerName 语句的所有请求。如果您只获得 ubunturocks.com 域名并希望在您的 Ubuntu 服务器上只作它的主机，那么在您虚拟主机配置文件中的 ServerName 语句值应该是 ubunturocks.com。在您先前创建的新虚拟主机文件 (<filename>/etc/apache2/sites-available/mynewsite</filename>) 中添加该语句。<tip><para>您也可能要您的网站响应 www.ubunturocks.com 的请求，因为许多用户会假定 www 前缀是适当的。可以使用 <emphasis>ServerAlias</emphasis> 语句来解决这个问题。您也可以在 ServerAlias 中使用通配符。例如，<command>ServerAlias *.ubunturocks.com</command> 将使您的网站响应任何域名以 .ubunturocks.com 结尾的请求。</para></tip></para></listitem>
 
-			 <listitem><para>
-			 The <emphasis>DocumentRoot</emphasis> directive specifies where Apache should look for the
-			 files that make up the site.  The default value is /var/www.  No site
-			 is configured there, but if you uncomment the <emphasis>RedirectMatch</emphasis> directive
-			 in <filename>/etc/apache2/apache2.conf</filename> requests will be
-			 redirected to /var/www/apache2-default where the default Apache2 site
-			 awaits.  Change this value in your site's virtual host file, and
-			 remember to create that directory if necessary!
-			 </para></listitem>
+			 <listitem><para><emphasis>DocumentRoot</emphasis> 语句指定 Apache 将到哪儿去寻找站点文件，缺省值为 /var/www。没有站点配置在那里，但如果您反注释在 <filename>/etc/apache2/apache2.conf</filename> 中的 <emphasis>RedirectMatch</emphasis> 语句，请求将被重定向到 /var/www/apache2-default，那里是缺省的 Apache2 站点。在您站点的虚拟主机文件中改变该值，记住在必要时可以创建相应的目录！</para></listitem>
             </itemizedlist>
 
-			<tip><para>
-			The /etc/apache2/sites-available directory is <emphasis role="bold">
-			not</emphasis> parsed by Apache2.  Symbolic links in /etc/apache2/sites-enabled
-			point to "available" sites.  Use the a2ensite (Apache2
-			Enable Site) utility to create those symbolic links, like so:
-			<command>sudo a2ensite mynewsite</command>
-			where your site's configuration file is <filename>
-			/etc/apache2/sites-available/mynewsite</filename>.  Similarly, the
-			a2dissite utility should be used to disable sites.
-			</para></tip>
+			<tip><para>/etc/apache2/sites-available 目录并 <emphasis role="bold">不会</emphasis> 被 Apache2 解析。在 /etc/apache2/sites-enabled 的软链接指向 "可用的" 站点。使用 a2ensite (Apache2 启用站点) 工具可以创建这些软链接，如：<command>sudo a2ensite mynewsite</command> 这里您站点的配置文件是 <filename> /etc/apache2/sites-available/mynewsite</filename>。同样，a2dissite 工具将用来禁用站点。</para></tip>
 
         </sect3>
         <sect3 id="default-settings" status="complete">
-          <title>Default Settings</title>
-            <para>
-             This section explains configuration of the Apache2 server
-             default settings.  For example, if you add a virtual host, 
-             the settings you configure for the virtual host take
-             precedence for that virtual host. For a directive not
-             defined within the virtual host settings, the default
-             value is used.
-            </para>
+          <title>缺省设置</title>
+            <para>这部分内容说明 Apache2 服务器缺省设置的配置。举个例子，如果您添加一个虚拟主机，您为该虚拟主机配置的设置将优先于缺省虚拟主机。如果在该虚拟主机的设置中有个语句没有定义，那么将使用缺省值。</para>
 
             <itemizedlist>
             <listitem>
-            <para>
-             The <emphasis>DirectoryIndex</emphasis> is the default page served by the
-             server when a user requests an index of a directory by
-             specifying a forward slash (/) at the end of the directory
-             name.</para>
+            <para>当用户在目录名后使用斜杠 (/) 来请求一个目录索引时，The <emphasis>DirectoryIndex</emphasis> 将通过服务器提供缺省页服务。</para>
 
-             <para>For example, when a user requests the page
-             http://www.example.com/this_directory/, he or she will
-             get either the DirectoryIndex page if it exists, a
-             server-generated directory list if it does not and the
-			 Indexes option is specified, or a Permission Denied page
-			 if neither is true.  The server will try to
-             find one of the files listed in the DirectoryIndex
-             directive and will return the first one it finds. If it
-             does not find any of these files and if Options Indexes is
-             set for that directory, the server will generate and
-             return a list, in HTML format, of the subdirectories and
-             files in the directory.  The default value, found in
-			 <filename>/etc/apache2/apache2.conf</filename> is "
-			 index.html index.cgi index.pl index.php index.xhtml".
-			 Thus, if Apache2 finds a file in a requested directory
-			 matching any of these names, the first will be displayed.
-            </para>
+             <para>例如，当一个用户请求 http://www.example.com/this_directory/ 页时，他或她要么得到 DirectoryIndex 页，如果它存在的话；要么得到一个服务器生成的目录列表，如果它不存在且设置了 Indexes 选项的话；要么就得到一个无权访问页，如果它不存在且没有设置 Indexes 选项的话。服务器尝试找到在 DirectoryIndex 语句中所列文件之一，并返回它所找到的第一个。如果它没有找到任何一个文件且该目录设置了 Indexes 选项，服务器将生成并返回一个 HTML 格式的列表，包括该目录中的子目录和文件。缺省值可以在 <filename>/etc/apache2/apache2.conf</filename> 文件中找到，是 " index.html index.cgi index.pl index.php index.xhtml"。因此，如果 Apache2 在所请求的目录中找到任何一个匹配这些名字的文件，第一个将被显示。</para>
             </listitem>
 
             <listitem>
-            <para>
-             The <emphasis>ErrorDocument</emphasis> directive allows you to specify a file
-			 for Apache to use for specific error events.  For example,
-			 if a user requests a resource that does not exist, a 404
-			 error will occur, and per Apache2's default configuration,
-			 the file <filename>/usr/share/apache2/error/HTTP_NOT_FOUND.html.var
-			 </filename> will be displayed.  That file is not in the
-			 server's DocumentRoot, but there is an Alias directive in
-			 <filename>/etc/apache2/apache2.conf</filename> that redirects
-			 requests to the /error directory to /usr/share/apache2/error/.
-			 To see a list of the default ErrorDocument directives, use this
-			 command:
-			 <command>grep ErrorDocument /etc/apache2/apache2.conf</command>
-            </para>
+            <para><emphasis>ErrorDocument</emphasis> 语句允许您为 Apache 指定一个用于特定错误事件的文件。例如，如果用户请求的资源不存在，那么将引发 404 错误，而在 Apache2 的缺省配置中，文件 <filename>/usr/share/apache2/error/HTTP_NOT_FOUND.html.var </filename> 将被显示。该文件并不在服务器的 DocumentRoot 中，但在 <filename>/etc/apache2/apache2.conf</filename> 中有个别名语句将到 /error 目录的请求重定向到 /usr/share/apache2/error/ 中。要查看缺省的 ErrorDocument 语句列表，可以使用命令：<command>grep ErrorDocument /etc/apache2/apache2.conf</command></para>
             </listitem>
 
 
             <listitem>
-            <para>
-             By default, the server writes the transfer log to the file
-             /var/log/apache2/access.log. You can change this on a per-site
-			 basis in your virtual host configuration files with the <emphasis>CustomLog</emphasis>
-			 directive, or omit it to accept the default, specified in <filename>
-			 /etc/apache2/apache2.conf</filename>.  You may also specify the file
-			 to which errors are logged, via the <emphasis>ErrorLog</emphasis> directive, whose default
-			 is <filename>/var/log/apache2/error.log</filename>.  These are kept
-			 separate from the transfer logs to aid in troubleshooting problems
-			 with your Apache2 server.  You may also specify the <emphasis>LogLevel</emphasis> (the
-			 default value is "warn") and the <emphasis>LogFormat</emphasis> (see <filename>
-			 /etc/apache2/apache2.conf</filename> for the default value).
-			 </para>
+            <para>在缺省状态下，服务器将传输日志记录在文件 /var/log/apache2/access.log 中。您可以在您每个虚拟主机站点的配置文件上用 <emphasis>CustomLog</emphasis> 语句来改变它，或者忽略它以接受在 <filename> /etc/apache2/apache2.conf</filename> 中指定的缺省设置。您也可以通过 <emphasis>ErrorLog</emphasis> 语句来指定记录错误日志的文件，该文件缺省是 <filename>/var/log/apache2/error.log</filename>。这些都从传输日志中分离出来以便更好地在您的 Apache2 服务器中发现和解决问题。您也可以指定 <emphasis>LogLevel</emphasis> (缺省值是 "warn") 和 <emphasis>LogFormat</emphasis> (缺省值参见<filename> /etc/apache2/apache2.conf</filename>)</para>
             </listitem>
 
             <listitem>
-            <para>
-            Some options are specified on a per-directory basis rather than per-server.
-			Option is one of these directives.  A Directory stanza is enclosed in 
-			XML-like tags, like so:
-			<screen><command>&lt;Directory /var/www/mynewsite&gt;
+            <para>一些选项是基于每目录而非每服务器的。Option 是这些语句中的一个。Directory 段是被放在类 XML 标记中，如：<screen><command>&lt;Directory /var/www/mynewsite&gt;
 				...
-			&lt;/Directory&gt;</command></screen>
-			The Options directive within a Directory stanza accepts one or more of the
-			following values (among others), separated by spaces:
-            </para>
+			&lt;/Directory&gt;</command></screen> 在 Directory 段中的 Options 语句接受一个或更多下面的用空格分隔的值 (包括其它)：</para>
             <itemizedlist spacing="compact">
                 <listitem>
-                    <para><emphasis role="bold">ExecCGI</emphasis> - Allow
-                    execution of CGI scripts. CGI scripts are not
-                    executed if this option is not chosen.
-					<tip><para>Most files should not be executed as CGI scripts.  This
+                    <para><emphasis role="bold">ExecCGI</emphasis> - 允许执行 CGI 脚本。如果该选项没有设置，则 CGI 脚本将不能执行。<tip><para>Most files should not be executed as CGI scripts.  This
 					would be very dangerous.  CGI scripts should kept in a directory 
-					separate from and outside your DocumentRoot, and only only this
+					separate from and outside your DocumentRoot, and only this
 					directory should have the ExecCGI option set.  This is the default,
 					and the default location for CGI scripts is /usr/lib/cgi-bin.
-					</para></tip>
-					</para>
+					</para></tip></para>
                 </listitem>
                 <listitem>
-                    <para><emphasis role="bold">Includes</emphasis> - Allow server-side includes.
-					Server-side includes allow an HTML file to <emphasis>
-					include</emphasis> other files.  This is not a common option.  See
-					<ulink url="http://httpd.apache.org/docs/2.0/howto/ssi.html">the Apache2
-					SSI Howto</ulink> for mor information.</para>
+                    <para><emphasis role="bold">Includes</emphasis> - 允许服务器端包含。服务器端包含允许一个 HTML 文件<emphasis>包含</emphasis>其他文件。这不是一个常用选项。更多信息参见 <ulink url="http://httpd.apache.org/docs/2.0/howto/ssi.html">the Apache2 SSI 指南</ulink>。</para>
                 </listitem>
                 <listitem>
-                    <para><emphasis role="bold">IncludesNOEXEC</emphasis> - Allow server-side includes,
-                    but disable the #exec and #include commands in CGI
-                    scripts.</para>
+                    <para><emphasis role="bold">IncludesNOEXEC</emphasis> - 允许服务器端包含，但 CGI 脚本中的 #exec 和 #include 指令无效。</para>
                 </listitem>
                 <listitem>
-                    <para>
-                    <emphasis role="bold">Indexes</emphasis> - Display a formatted list of the
-                    directory's contents, if no DirectoryIndex (such as index.html) exists in the 
-					requested directory.
-					<caution><para>For security reasons, this should usually not be set, and certainly
-					should not be set on your DocumentRoot directory.  Enable this option carefully on
-					a per-directory basis only if you are certain you want users to see the entire
-					contents of the directory.</para></caution>
-                    </para>
+                    <para><emphasis role="bold">Indexes</emphasis> - 如果 DirectoryIndex (如 index.html) 在请求的目录没存在的话，按一定方式显示目录内容列表。</para>
                 </listitem>
                 <listitem>
-                    <para>
-                    <emphasis role="bold">Multiview</emphasis> - Support content-negotiated multiviews;
-                    this option is disabled by default for security reasons.  See the <ulink url="http://httpd.apache.org/docs/2.0/mod/mod_negotiation.html#multiviews">Apache2
-					documentation on this option</ulink>.
-                    </para>
+                    <para><emphasis role="bold">Multiview</emphasis> - 支持内容协商的多重视图；该选项在缺省状态下出于安全的考虑是被禁用的。参见 <ulink url="http://httpd.apache.org/docs/2.0/mod/mod_negotiation.html#multiviews">Apache2 关于该选项的文档</ulink>。</para>
                 </listitem>
                 <listitem>
-                    <para>
-                    <emphasis role="bold">SymLinksIfOwnerMatch</emphasis> - Only follow symbolic links
-                    if the target file or directory has the same owner as the link.
-                    </para>
+                    <para><emphasis role="bold">SymLinksIfOwnerMatch</emphasis> - 仅在软连接与其目的文件或目录拥有相同所有者时才使用。</para>
                 </listitem>
             </itemizedlist>
 
@@ -1397,118 +1105,47 @@ Port 631  # Listen on port 631 on all interfaces
         </sect3>
         <sect3 id="virtual-hosts-settings" status="complete">
 
-          <title>Virtual Hosts Settings</title>
-            <para>
-			Virtual hosts allow you to run different servers for different IP addresses, different host 
-			names, or different ports on the same machine. For example, you can run the website for 
-			http://www.example.com and http://www.anotherexample.com on the same Web server using virtual 
-			hosts. This option corresponds to the &lt;VirtualHost&gt; directive for the default virtual 
-			host and IP-based virtual hosts. It corresponds to the &lt;NameVirtualHost&gt; directive for 
-			a name-based virtual host.
-			</para>
+          <title>虚拟主机设置</title>
+            <para>虚拟主机允许您在同一台机器上相对不同的 IP 地址、主机名或不同端口号运行不同的服务器。例如，您可以运行使用虚拟主机在同一个 Web 服务器上运行网站 http://www.example.com 和 http://www.anotherexample.com。这一选项适用于缺省虚拟主机和基于 IP 的虚拟主机的 &lt;VirtualHost&gt; 语句，也适用于基于名称的虚拟主机的 &lt;NameVirtualHost&gt; 语句。</para>
 
-			<para>
-			The directives set for a virtual host only apply to that particular virtual host. If a 
-			directive is set server-wide and not defined within the virtual host settings, the default 
-			setting is used. For example, you can define a Webmaster email address and not define 
-			individual email addresses for each virtual host. 
-    		</para>
+			<para>虚拟主机的语句设置仅应用于特定的虚拟主机。如果一个语句在服务器范围中设置而没有在虚拟主机设置中定义，那么将使用缺省设置。例如，您可以定义网络管理员的邮件地址而无需为每个虚拟主机都分别定义邮件地址。</para>
  
- 			<para>
-			Set the DocumentRoot directive to the directory that contains the root document (such as 
-			index.html) for the virtual host. The default DocumentRoot is <filename>/var/www</filename>.
-			</para>
+ 			<para>为虚拟主机设置 DocumentRoot 语句到包含根文档 (如 index.html) 目录。缺省的 DocumentRoot 是 <filename>/var/www</filename>。</para>
 
-			<para>
-			The ServerAdmin directive within the VirtualHost stanza is email the address used in the 
-			footer of error pages if you choose to show a footer with an email address on the error pages.
-			</para>
+			<para>在 VirtualHost 段中的 ServerAadmin 语句是指用于错误页的页脚中的邮件地址，如果您想在错误页的页脚显示邮件地址的话。</para>
 
         </sect3>
         <sect3 id="server-settings" status="complete">
-          <title>Server Settings</title>
-            <para>
-This section explains how to configure basic server settings.</para>
-                    <para><emphasis role="bold">LockFile</emphasis> - The LockFile directive sets the path 
-					to the lockfile used when the server is compiled with either USE_FCNTL_SERIALIZED_ACCEPT 
-					or USE_FLOCK_SERIALIZED_ACCEPT. It must be stored on the local disk. It should be left 
-					to the default value unless the logs directory is located on an NFS share. If this is 
-					the case, the default value should be changed to a location on the local disk and to a 
-					directory that is readable only by root. </para>
+          <title>服务器设置</title>
+            <para>这部分内容说明如何配置基本的服务器设置。</para>
+                    <para><emphasis role="bold">LockFile</emphasis> - 当服务器编译时使用了 USE_FCNTL_SERIALIZED_ACCEPT 或 USE_FLOCK_SERIALIZED_ACCEPT 参数时，使用 LockFile 语句来设置 lockfile 的路径。它必须保存在本地磁盘上，它应该设置成缺省值，除非日志目录被定位在 NFS 共享上。如果是这种情况，缺省值应该被改为本地磁盘的位置并且其目录只对 root 用户可读。</para>
 
-					<para><emphasis role="bold">PidFile</emphasis> - The PidFile directive sets the file in which the server 
-					records its process ID (pid). This file should only be readable by root. In most cases, it should be left 
-					to the default value.</para>
+					<para><emphasis role="bold">PidFile</emphasis> - PidFile 语句设置服务器记录其进程 ID (pid) 的文件。该文件只对 root 用户可读。在大多数情况下，应该保留其缺省值。</para>
 
-<para><emphasis role="bold">User</emphasis> - The User directive sets the userid used by the server to answer requests. This 
-setting determines the server's access. Any files inaccessible to this user will also be inaccessible to your website's visitors. 
-The default value for User is www-data.  </para>
+<para><emphasis role="bold">User</emphasis> - 用户语句设置被服务器用于回应请求的用户 ID。该设置决定服务器的权限。一些该用户无法访问的文件也无法被您网站的访问者访问。用户缺省值是 www-data。</para>
             <warning>
-            <para>
- Unless you know exactly what you are doing, do not set the User directive to root. Using root as the User will create large security holes for your Web server.  </para>
+            <para>除非您的确知道您在做什么，否则请不要将 User 设为 root 用户。用 root 作为 User 的值将会在您的 Web 服务器中产生极大的安全漏洞。</para>
             </warning>
- <para>The Group directive is similar to the User directive. Group sets the group under which the server will answer requests. The default group is also www-data.</para>
+ <para>Group 语句同 User 语句相似。Group 设置被服务器用于回应请求的用户组。缺省的组也是 www-data。</para>
 
         </sect3>
         <sect3 id="apache-modules" status="complete">
-          <title>Apache Modules</title>
-              <para>
-
-              Apache is a modular server. This implies that only the most
-              basic functionality is included in the core server. Extended
-              features are available through modules which can be loaded
-              into Apache. By default, a base set of modules is included in
-              the server at compile-time. If the server is compiled to use
-              dynamically loaded  modules, then modules can be compiled
-              separately, and added at any time using the LoadModule
-              directive. Otherwise, Apache must be recompiled to add or
-              remove modules. Ubuntu compiles Apache2 to allow the dynamic
-			  loading of modules.  Configuration directives may be conditionally
-	      included on the presence of a particular module by enclosing
-              them in an &lt;IfModule&gt; block.
-
-              You can install additional Apache2 modules and use them
-              with your Web server. You can install Apache2
-              modules using the <application>apt-get</application>
-              command. For example, to install the Apache2 module
-              for MYSQL authentication, you can run the
-                following command from a terminal prompt:</para>
+          <title>Apache 模块</title>
+              <para>Apache 是一个模块化的服务器。这就意味着在核心服务器中只包括最基本的功能。扩展功能可以通过被引导进 Apache 的模块来实现。缺省情况下，基本模块是在编译时被包含进服务器的。如果服务器编译成可以动态引导模块，那么模块可以单独编译，并在任何时候使用 LoadModule 语句来添加。否则，Apache 必须在添加或删除模块时重新编译。Ubuntu 编译 Apache2 时是允许动态引导模块的。配置语句通过将已有模块放置 &lt;IfModule&gt; 块中以便有条件地包含在配置语句中。您可以在您的 Web 服务器上安装和使用额外的 Apache2 模块。您可以用 <application>apt-get</application>  命令来安装 Apache2 模块。如安装 MYSQL 认证的 Apach2 模块，您可以在终端提示符中运行以下命令：</para>
                 
                 <para>
 <screen>
 <command>sudo apt-get install libapache2-mod-auth-mysql</command>
 </screen>
                 </para>
-                <para>
-                Once you install the module, the module will
-                be available in the
-                <filename>/etc/apache2/mods-available</filename> directory. You can use
-              the <application>a2enmod</application> command to
-              enable a module. You can use
-              the <application>a2dismod</application> command to
-              disable a module. Once you enable the module,
-              the module will be available in the
-              the <filename>/etc/apache2/mods-enabled</filename> directory.
-              </para>
+                <para>一旦您安装了模块，模块将出现在 <filename>/etc/apache2/mods-available</filename> 目录中。您可以使用 <application>a2enmod</application> 命令来启用模块。您也可以使用 <application>a2dismod</application> 命令来禁用模块。一旦您启用该模块，该模块将在 <filename>/etc/apache2/mods-enabled</filename> 目录中出现。</para>
         </sect3>
       </sect2>
       <sect2 id="https-configuration" status="complete">
-        <title>HTTPS Configuration</title>
-          <para>
-           The <application>mod_ssl</application> module adds
-           an important feature to the Apache2 server - the ability to
-           encrypt communications.  Thus, when your browser is
-           communicating using SSL encryption, the
-           https:// prefix is used at the beginning of the Uniform
-           Resource Locator (URL) in the browser navigation bar.
-          </para>
+        <title>HTTPS 配置</title>
+          <para>The <application>mod_ssl</application> 模块为 Apache2 服务器添加了一个重要的功能 - 通讯加密的能力。因此，当您的浏览器要用 SSL 加密通讯时，需要在浏览器导航栏中在输入的统一资源定位器 (URL) 的开始处使用 https:// 前缀。</para>
 
-          <para>
-          The <application>mod_ssl</application> module is available in
-          <application>apache2-common</application> package. If you have
-          installed this package, you can run the following command from a terminal prompt to
-          enable the <application>mod_ssl</application> module:
-          </para>
+          <para><application>mod_ssl</application> 模块已经包含在 <application>apache2-common</application> 软件包中。如果您安装该软件包，您可以在终端提示符之后执行下列命令启用 <application>mod_ssl</application> 模块：</para>
 
           <para>
 <screen>
@@ -1516,118 +1153,53 @@ The default value for User is www-data.  </para>
 </screen>
           </para>
         <sect3 id="certificates-and-security" status="complete">
-          <title>Certificates and Security</title>
-            <para>
-              To set up your secure server, use public key cryptography to
-              create a public and private key pair. In most cases, you
-              send your certificate request (including your public key),
-              proof of your company's identity, and payment to a
-              Certificate Authority (CA). The
-              CA verifies the certificate request and your identity, and
-              then sends back a certificate for your secure server. 
-            </para>
-             <para>
-             Alternatively, you can create your own self-signed
-             certificate. Note, however, that self-signed certificates
-             should not be used in most production environments.
-             Self-signed certificates are not automatically accepted by
-             a user's browser.  Users are prompted by the browser to
-             accept the certificate and create the secure connection.
-             </para>
+          <title>证书和安全</title>
+            <para>要设置您的安全服务器，使用公共钥创建一对公钥私钥对。大多数情况下，您发送您的证书请求 (包括您的公钥)，您公司证明材料以及费用到一个证书颁发机构 (CA)。CA 检证证书请求及您的身份，然后将证书发回您的安全服务器。</para>
+             <para>还有种办法就是您可以创建您自己签署的证书。然而请注意自己签置的证书不应该用于生产环境。自已签署的证书不会被用户浏览器自动接受。浏览器将提示用户接受证书并创建一个安全的连接。</para>
 
-             <para>
-              Once you have a self-signed certificate or a signed
-              certificate from the CA of your choice, you need to
-              install it on your secure server.
-             </para>
+             <para>一旦您有一个自己签署的证书或一个您选择的 CA 签署的证书，您需要将它安装在您的安全服务器上。</para>
         </sect3>
         <sect3 id="types-of-certificates" status="complete">
-          <title>Types of Certificates</title>
-            <para>
-             You need a key and a certificate to operate your secure
-             server, which means that you can either generate a
-             self-signed certificate or purchase a CA-signed
-             certificate.  A CA-signed certificate provides two important
-              capabilities for your server:
-            </para>
+          <title>证书类型</title>
+            <para>您需要一个钥匙和一个证书来操作您的安全服务器，这意味着您可以生成自己签署的证书或购买 CA 签署的证书。由 CA 签署的证书为您的服务器提供两个重要的功能：</para>
 
             <itemizedlist>
             <listitem>
-            <para>
-            Browsers (usually) automatically recognize the certificate
-            and allow a secure connection to be made without prompting
-            the user.
-            </para>
+            <para>浏览器 (通常) 会自动地识别证书并且在不提示用户的情况下允许创建一个安全连接。</para>
             </listitem>
             <listitem>
-            <para>
-             When a CA issues a signed certificate, it is
-             guaranteeing the identity of the organization that is
-             providing the web pages to the browser.
-            </para>
+            <para>当一个 CA 生成一个签署过的证书，它为提供网页给浏览器的组织提供身份担保。</para>
             </listitem>
             </itemizedlist>
 
-            <para>
-             Most Web browsers that support SSL have a list of CAs whose
-             certificates they automatically accept. If a browser
-             encounters a certificate whose authorizing CA is not in the
-             list, the browser asks the user to either accept or decline
-             the connection.
-            </para>
-            <para>
-             You can generate a self-signed certificate for your secure server, but
-            be aware that a self-signed certificate does not provide the same
-            functionality as a CA-signed certificate. A self-signed certificate is
-            not automatically recognized by most Web browsers, and a self-signed
-            certificate does not provide any guarantee concerning the identity of
-            the organization that is providing the website. A CA-signed certificate
-            provides both of these important capabilities for a secure server. 
-            The process of getting a certificate from a CA is fairly
-            easy. A quick overview is as follows:
-            </para>
+            <para>多数支持 SSL 的 Web 浏览器都有一个 CA 列表，它们的证书会被自动接受。如果一个浏览器遇到一个其授权 CA 并不在列表中的证书，浏览器将询问用户是否接受或拒绝连接。</para>
+            <para>您可以为您的安全服务器生成一个自己签署的证书，但要知道自己签署的证书并不提供与 CA 签署的证书相同的功能。自己签署的证书不会被多数 Web 浏览器自动识别，而且自己签署的证书也不为任何提供网站的组织提供担保。CA 签署的证书为安全服务器提供所有这些重要的功能。从 CA 得到证书的过程相当容易。下面简要介绍一下：</para>
 
             <orderedlist>
             <listitem>
-               <para>Create a private and public encryption key pair.</para>
+               <para>创建一个私有和公共密钥对</para>
             </listitem>
             <listitem>
-                 <para>Create a certificate request based on the public key. The
-              certificate request contains information about your server and the
-              company hosting it.</para>
+                 <para>基于公钥创建一个证书请求。证书请求包含您服务器及公司信息。</para>
             </listitem>
             <listitem>
-                 <para>Send the certificate request, along with documents proving your
-              identity, to a CA. We cannot tell you which certificate authority to
-              choose. Your decision may be based on your past experiences, or on the
-              experiences of your friends or colleagues, or purely on monetary
-              factors.</para>
+                 <para>发送证书请求，并随之提供您的身份文档到一个 CA。我们不能告诉您选择哪个证书颁发机构。您可以基于您以往的经验或您朋友或同事的经验或纯粹基于经济因素来决定。</para>
 
-                    <para>Once you have decided upon a CA, you need to follow the
-              instructions they provide on how to obtain a certificate
-              from them.</para>
+                    <para>一旦您选定一家 CA，您需要根据他们所提供的规程来从他们那里获得证书。</para>
             </listitem>
             <listitem>
-               <para>When the CA is satisfied that you are indeed who you claim to be,
-            they send you a digital certificate.</para>
+               <para>当 CA 确定您确实如您所声称的那样时，他们将发给您一个数字证书。</para>
             </listitem>
             <listitem>
-               <para>Install this certificate on your secure server, and begin handling
-            secure transactions. </para>
+               <para>在您的安全服务器上安装该证书，并开始进行安全事务处理</para>
             </listitem>
             </orderedlist>
 
-            <para>Whether you are getting a certificate from a CA or generating your own
-            self-signed certificate, the first step is to generate a key.
-            </para>
+            <para>无论您是从一家 CA 那儿获得证书或是生成您自己签署的证书，第一步就是生成钥匙。</para>
         </sect3>
         <sect3 id="generating-a-csr" status="complete">
-          <title>Generating a Certificate Signing Request (CSR)</title>
-            <para>
-            To generate the Certificate Signing Request (CSR), you should create your
-            own key. You can run the following command from a terminal prompt to create the
-            key:
-            </para>
+          <title>生成一个证书签署请求 (CSR)</title>
+            <para>要生成证书签署请求 (CSR)，您应该创建您自己的钥匙。您可以在终端提示符后运行以下命令以创建钥匙：</para>
 
             <para>
 <screen>
@@ -1643,50 +1215,24 @@ e is 65537 (0x10001)
 Enter pass phrase for server.key:
 </programlisting>
 
-        <para>
-        You can now enter your passphrase. For best security, it should
-        at least contain eight characters. The minimum length when
-		specifying -des3 is four characters. It should include numbers
-        and/or punctuation and not be a word in a dictionary. Also
-        remember that your passphrase is case-sensitive. 
-        </para>
+        <para>您现在可以输入您的 passphrase。为了最大程度的安全，它至少应该包含八个字符。当指定 -des3 时最小长度为四个字符。它应该包含数字和/或标点符号，并且不应该是字典中的单词。也请记住您的 passphrase 是大小写敏感的。</para>
 
-        <para>
-        Re-type the passphrase to verify. Once you have re-typed it
-        correctly, the server key is generated and stored in
-        <filename>server.key</filename> file.
-        </para>
+        <para>再次输入 passphrase 核对。一旦您再次输入正确的话，服务器密钥就生成了并保存在 <filename>server.key</filename> 文件中。</para>
 
         <warning>
-        <para>
-        You can also run your secure web server without a passphrase.
-        This is convenient because you will not need to enter the
-        passphrase every time you start your secure web server. But it
-        is highly insecure and a compromise of the key means a
-        compromise of the server as well.
-        </para>
+        <para>您也可以不用 passphrase 来运行您的安全 Web 服务器。这样比较方便，因为在您启动您的安全 Web 服务器时您不需要每次都输入 passphrase。但它也是相当不安全的，钥匙的风险也同样意味着服务器的风险。</para>
         </warning>
 
-        <para>
-        In any case, you can choose to run your secure web server without
-        a passphrase by leaving out the -des3 switch in the generation
-        phase or by issuing the following command at a terminal prompt:
-        </para>
+        <para>在任何情况下，您都可以选择不用 passphrase 来运行您的安全 Web 服务器，这可以通过在生成时不带 -des3 参数来实现或者通过在终端提示符后执行以下命令：</para>
 
         <para>
 <screen>
 <command>openssl rsa -in server.key -out server.key.insecure</command>
 </screen>
         </para>
-        <para>
-        Once you run the above command, the insecure key will be stored
-        in the <filename>server.key.insecure</filename> file. You can use this
-        file to generate the CSR without passphrase.
-        </para>
+        <para>一旦您运行上述命令，不安全的钥匙将被保存在 <filename>server.key.insecure</filename> 文件中。您可以使用该文件来生成没有 passphrase 的 CSR。</para>
 
-        <para>
-        To create the CSR, run the following command at a terminal prompt:
-        </para>
+        <para>要创建 CSR，可以在终端提示符后运行以下命令：</para>
 
         <para>
 <screen>
@@ -1694,22 +1240,12 @@ Enter pass phrase for server.key:
 </screen>
         </para>
 
-        <para>It will prompt you enter the passphrase. If you enter the
-        correct passphrase, it will prompt you to enter Company Name,
-        Site Name, Email Id, etc. Once you enter all these details, your
-        CSR will be created and it will be stored in the
-        <filename>server.csr</filename> file. You can submit this CSR file
-        to a CA for processing. The CAN will use this CSR file and issue
-        the certificate. On the other hand, you can create self-signed
-        certificate using this CSR.</para>
+        <para>它将提示您输入 passphrase。如果您输入正确的 passphrase，它将提示您输入公司名、站点名、邮件ID等。一旦您输入了所有内容，您的 CSR 将被创建并被保存在 <filename>server.csr</filename> 文件中。您可以提交该 CSR 文件给一家 CA 去处理。CA 将使用该 CSR 并颁发证书。但是，您也可以使用该 CSR 生成自己签署的证书。</para>
 
         </sect3>
         <sect3 id="creating-a-self-signed-certificate" status="complete">
-          <title>Creating a Self-Signed Certificate</title>
-            <para>
-            To create the self-signed certificate, run the
-            following command at a terminal prompt:
-            </para>
+          <title>创建一个自己签署的证书</title>
+            <para>要创建自己签署的证书，在终端提示符下运行以下命令：</para>
 
             <para>
 <screen>
@@ -1717,39 +1253,22 @@ Enter pass phrase for server.key:
 </screen>
             </para>
 
-            <para>The above command will prompt you to enter the
-            passphrase. Once you enter the correct passphrase, your
-            certificate will be created and it will be stored in the
-            <filename>server.crt</filename> file.  </para>
+            <para>上述命令将提示您输入 passphrase。一旦您输入正确的 passphrase，您的证书将被创建并将保存在 <filename>server.crt</filename> 文件中。</para>
         <warning>
-        <para>
-            If your secure server is to be used in a production environment, you
-            probably need a CA-signed certificate.  It is not
-            recommended to use self-signed certificate.
-        </para>
+        <para>如果您的安全服务器被用在生产环境中，你也许需要 CA 签署的证书。并不推荐使用自己签署的证书。</para>
         </warning>
         </sect3>
         <sect3 id="installing-the-certificate" status="complete">
-          <title>Installing the Certificate</title>
+          <title>安装证书</title>
 
-            <para>You can install the key file
-            <filename>server.key</filename> and certificate file
-            <filename>server.crt</filename> or the certificate file issued
-            by your CA by running following commands at a terminal prompt:
-            </para>
+            <para>您可以安装钥匙文件 <filename>server.key</filename> 和证书文件 <filename>server.crt</filename> 或由您的 CA 颁发的证书文件，在终端提示符后运行以下命令：</para>
             <para>
 <screen>
 <command>sudo cp server.crt /etc/ssl/certs</command>
 <command>sudo cp server.key /etc/ssl/private</command>
 </screen>
             </para>
-            <para>
-            You should add the following four lines to the
-            <filename>/etc/apache2/sites-available/default</filename>
-            file or the configuration file for your secure virtual
-			host. You should place them in the <emphasis>VirtualHost</emphasis> section. They
-            should be placed under the <emphasis>DocumentRoot</emphasis> line:
-            </para>
+            <para>您要添加以下四行到 <filename>/etc/apache2/sites-available/default</filename> 文件或您安全虚拟主机的配置文件。您要将它们放在 <emphasis>VirtualHost</emphasis> 部分。他们应该放在 <emphasis>DocumentRoot</emphasis> 行下面：</para>
 <programlisting>
 SSLEngine on
 
@@ -1759,76 +1278,44 @@ SSLCertificateFile /etc/ssl/certs/server.crt
 SSLCertificateKeyFile /etc/ssl/private/server.key
 </programlisting>
           
-            <para>
-            HTTPS should listen on port number 443. You should add the
-            following line to the <filename>/etc/apache2/ports.conf</filename>
-            file:
-            </para>
+            <para>HTTPS 在 443 端口监听。您可以将下面一行添加到 <filename>/etc/apache2/ports.conf</filename> 文件中：</para>
 <programlisting>
 Listen 443
 </programlisting>
 
         </sect3>
         <sect3 id="accessing-the-server" status="complete">
-          <title>Accessing the Server</title>
-            <para>
-            Once you install your certificate, you should restart your
-            web server. You can run the following command at a terminal prompt to
-            restart your web server:
-            </para>
+          <title>访问服务器</title>
+            <para>一旦您安装了您的证书，您应该重启您的 Web 服务器。您可以在终端提示符后运行以下命令以重启您的 web 服务器：</para>
             <para>
 <screen>            
 <command>sudo /etc/init.d/apache2 restart</command>
 </screen>
             </para>
-        <note><para>
-        You should remember and enter the passphrase every time you
-        start your secure web server.
-        </para></note>
+        <note><para>您应该记住并在每次您启动您的安全 web 服务器时输入 passphrase。</para></note>
 
-            <para>You will be prompted to enter the passphrase. Once you
-            enter the correct passphrase, the secure web server will be
-            started. You can access the secure server pages by typing
-            https://your_hostname/url/ in your
-            browser address bar.</para>
+            <para>您将被提示输入 passphrase。一旦您输入正常的 passphrase，将启动安全 web 服务器。您可以通过在您的浏览器地址栏上输入 https://your_hostname/url/ 来访问安全服务器的页面。</para>
 
         </sect3>
       </sect2>
       <sect2 id="http-references" status="complete">
         <title>引用</title>
           <para>
-          <ulink url="http://httpd.apache.org/docs/2.0/">Apache2
-          Documentation</ulink>
+          <ulink url="http://httpd.apache.org/docs/2.0/">Apache2 文档</ulink>
           </para>
           <para>
-          <ulink url="http://www.modssl.org/docs/">Mod SSL
-          Documentation</ulink>
+          <ulink url="http://www.modssl.org/docs/">Mod SSL 文档</ulink>
           </para>
       </sect2>
     </sect1>
 	
 	<sect1 id="squid" status="complete">
-		<title>Squid - Proxy Server</title>
-          <para>
-          Squid is a full-featured web proxy cache server application which provides proxy and cache services for Hyper Text
-          Transport Protocol (HTTP), File Transfer Protocol (FTP), and other popular network protocols.  Squid can implement
-          caching and proxying of Secure Sockets Layer (SSL) requests and caching of Domain Name Server (DNS) lookups, and perform
-          transparent caching. Squid also supports a wide variety of caching protocols, such as Internet Cache Protocol, (ICP)
-          the Hyper Text Caching Protocol, (HTCP) the Cache Array Routing Protocol (CARP), and the Web Cache Coordination 
-          Protocol. (WCCP) 
-          </para>
-          <para>
-          The Squid proxy cache server is an excellent solution to a variety of proxy and caching server needs, and scales from
-          the branch office to enterprise level networks while providing extensive, granular access control mechanisms and
-          monitoring of critical parameters via the Simple Network Management Protocol (SNMP).  When selecting a computer system
-          for use as a dedicated Squid proxy, or caching servers, ensure your system is configured with a large amount of physical
-          memory, as Squid maintains an in-memory cache for increased performance.
-          </para>
+		<title>Squid - 代理服务器</title>
+          <para>Squid 是一个全功能的 web 代理与缓存服务器应用程序，它为超文本传输协议 (HTTP)、文件传输协议 (FTP) 以及其他流行网络协议提供代理和缓存服务。Squid 可以实现安全套接层 (SSL) 请求的缓存和代理、域名服务器 (DNS) 的缓存以及进行传输缓存。Squid 也支持大量不同的缓存协议，如 Internet 缓存协议 (ICP)、超文本缓存协议 (HTCP)、缓存阵列路由协议 (CARP) 以及 Web 缓存协同协议 (WCCP)。</para>
+          <para>Squid 代理缓存服务器对于不同的代理和缓存服务器需求来说是一个极好的解决方案，它适用于从分支机构到企业级的网络，访问控制机制的粒度以及通过简单网络管理协议 (SNMP) 对临界参数的监视。当选择计算机系统用于 Squid 代理或缓存服务器时，请确保您的系统配置大量的物理内存以便 Squid 可以使用内存进行缓存以提高性能。</para>
       <sect2 id="squid-installation" status="complete">
         <title>安装</title>
-          <para>
-            At a terminal prompt, enter the following command to install the Squid server:
-          </para>
+          <para>在终端提示符后输入下列命令安装 Squid 服务器：</para>
           <para>
 <screen>
 <command>sudo apt-get install squid squid-common</command>
@@ -1837,17 +1324,10 @@ Listen 443
       </sect2>
       <sect2 id="squid-configuration" status="complete">
         <title>配置</title>
-          <para>
-            Squid is configured by editing the directives contained within the <filename>/etc/squid/squid.conf</filename> configuration file.
-            The following examples illustrate some of the directives which may be modified to affect the behavior of the Squid server.
-            For more in-depth configuration of Squid, see the References section. 
-          </para>
+          <para>Squid 可以通过编辑在 <filename>/etc/squid/squid.conf</filename> 配置文件中的语句来进行配置。下面的范例说明一些语句的修改可能对 Squid 服务器的影响。更多 Squid 的配置可以参阅参考章节。</para>
              <tip>
-               <para>Prior to editing the configuration file, you should make a copy of the original file and protect it 
-               from writing so you will have the original settings as a reference, and to re-use as necessary.
-               </para>
-               <para>Copy the <filename>/etc/squid/squid.conf</filename> file and protect it from writing with the following commands entered at a terminal prompt:
-               </para>
+               <para>在编辑配置文件之前，您应该生成一份原始文件副本并对其进行写保护，以便您可以将原始文件作为参考并在必要时重用它。</para>
+               <para>要拷贝 <filename>/etc/squid/squid.conf</filename> 文件并对其进行写保护，可以在终端提示符后使用以下命令：</para>
 	     </tip>
                <para>
 <screen>
@@ -1858,71 +1338,31 @@ Listen 443
 	        <para>
            <itemizedlist>
                <listitem>
-                  <para>
-                  To set your Squid server to listen on TCP port 8888 instead of the default TCP port 3128, change
-                  the http_port directive as such:
-                  </para>
-                  <para>
-                  http_port 8888
-                  </para>
+                  <para>要将您的 Squid 服务器监听 TCP 端口 8888 以代替缺省的 TCP 端口 3128，可以如下所示修改 http_port 语句：</para>
+                  <para>http_port 8888</para>
                </listitem>
 	            <listitem>
-                  <para>
-                  Change the visible_hostname directive in order to give the Squid server a specific hostname.  This hostname
-                  does not necessarily need to be the computer's hostname. In this example it is set to <emphasis>weezie</emphasis>
-                  </para>
-                  <para>
-                  visible_hostname weezie
-                  </para>
+                  <para>改变 visible_hostname 语句是为了给 Squid 服务器一个特定的主机名。该主机名并必是计算机的主机名。在本范例中它被设为 <emphasis>weezie</emphasis>。</para>
+                  <para>visible_hostname weezie</para>
                </listitem>
                <listitem>
-                  <para>
-                     Again, Using Squid's access control, you may configure use of Internet services proxied by Squid
-                     to be available only users with certain Internet Protocol (IP) addresses.  For example, we willll illustrate access 
-                     by users of the 192.168.42.0/24 subnetwork only:
-                  </para>
-                  <para>
-                     Add the following to the <emphasis role="bold">bottom</emphasis> of the ACL section of your <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
-                  <para>
-                     acl fortytwo_network src 192.168.42.0/24
-                  </para>
-                  <para>
-                     Then, add the following to the <emphasis role="bold">top</emphasis> of the http_access section of your
-                     <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
-                  <para>
-                     http_access allow fortytwo_network
-                  </para>
+                  <para>此外，使用 Squid 访问控制，您可以通过 Squid 代理将 Internet 服务配置成仅限于有确定网际协议 (IP) 地址的用户使用。例如，我们将举例说明只让 192.168.42.0/24 子网的用户访问：</para>
+                  <para>将下列语句添加到您 <filename>/etc/squid/squid.conf</filename> 文件 ACL 部分的 <emphasis role="bold">底部</emphasis>：</para>
+                  <para>acl fortytwo_network src 192.168.42.0/24</para>
+                  <para>然后添加下列语句到你 <filename>/etc/squid/squid.conf</filename> 文件 http_access 部分的 <emphasis role="bold">顶部</emphasis>：</para>
+                  <para>http_access allow fortytwo_network</para>
                </listitem>
                <listitem>
-                  <para>
-                     Using the excellent access control features of Squid, you may configure use of Internet services proxied by Squid
-                     to be available only during normal business hours.  For example, we'll illustrate access by employees of a business
-                     which is operating between 9:00AM and 5:00PM, Monday through Friday, and which uses the 10.1.42.0/42 subnetwork:
-                  </para>
-                  <para>
-                     Add the following to the <emphasis role="bold">bottom</emphasis> of the ACL section of your <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
-                  <para>
-                     acl biz_network src 10.1.42.0/24
-                     acl biz_hours time M T W T F 9:00-17:00
-                  </para>
-                  <para>
-                     Then, add the following to the <emphasis role="bold">top</emphasis> of the http_access section of your
-                     <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
-                  <para>
-                     http_access allow biz_network biz_hours
-                  </para>
+                  <para>使用 Squid 卓越的访问控制功能，您可以通过 Squid 代理将 Internet 服务配置成仅限于在正常商务时间使用。例如，我们将举例说明只允许来自 10.1.42.0/24 子网的商务雇员在周一到周五的上午 9:00 到 下午 5:00 时间段内访问：</para>
+                  <para>将下列语句添加到您 <filename>/etc/squid/squid.conf</filename> 文件 ACL 部分的 <emphasis role="bold">底部</emphasis>：</para>
+                  <para>acl biz_network src 10.1.42.0/24 acl biz_hours time M T W T F 9:00-17:00</para>
+                  <para>然后添加下列语句到你 <filename>/etc/squid/squid.conf</filename> 文件 http_access 部分的 <emphasis role="bold">顶部</emphasis>：</para>
+                  <para>http_access allow biz_network biz_hours</para>
                </listitem>
           </itemizedlist>
           </para>
           <note>
-	  <para>
-          After making changes to the <filename>/etc/squid/squid.conf</filename> file, save the file and restart the <application>squid</application> 
-          server application to effect the changes using the following command entered at a terminal prompt:
-          </para>
+	  <para>在修改 <filename>/etc/squid/squid.conf</filename> 文件后，保存该文件并重启 <application>squid</application> 服务器应用程序以使改动生效。可以在终端提示符后使用下列命令：</para>
           </note>
           <para>
 <screen>
@@ -1933,35 +1373,22 @@ Listen 443
       <sect2 id="squid-references" status="complete">
       <title>引用</title>
       <para>
-      <ulink url="http://www.squid-cache.org/">Squid Website</ulink>
+      <ulink url="http://www.squid-cache.org/">Squid 网站</ulink>
       </para>
       </sect2>
     </sect1>
 	<sect1 id="version-control-system" status="complete">
-		<title>Version Control System</title>
-          <para>
-Version control is the art of managing changes to information. It has long been a critical tool for programmers, who typically spend their time making small changes to software and then undoing those changes the next day. But the usefulness of version control software extends far beyond the bounds of the software development world. Anywhere you can find people using computers to manage information that changes often, there is room for version control.</para>
+		<title>版本控制系统</title>
+          <para>版本控制是管理改动信息的技术。它对于程序员而言一直是重要的工具，他们经常花时间对程序进行小改动之后又在第二天改回来。但版本控制软件的用途却远远超出了软件开发的界线。无论何处您可以发现人们使用计算机去管理那些经常变动的信息，那里都有使用版本控制的空间。</para>
 <para>
           </para>
       <sect2 id="subversion" status="complete">
         <title>Subversion</title>
-          <para>
-Subversion is an open source version control system. Using Subversion, you can record the history of source files and documents. It manages files and directories over time. A tree of files is placed into a central repository. The repository is much like an ordinary file server, except that it remembers every change ever made to files and directories.
-          </para>
+          <para>Subversion 是一个开源的版本控制系统。使用 Subversion，您可以记录源文件和文档的历史。它管理文件和目录。文件树被放入了中心库中。库更象是一个普通的文件服务器，除了它可以记住对文件和目录的每次改变。</para>
         <sect3 id="subversion-installation" status="complete">
           <title>安装</title>
-            <para>
-To access Subversion repository using the HTTP protocol, you must install and 
-configure a web server. Apache2 is proven to work with Subversion. Please 
-refer to the HTTP subsection in the Apache2 section to install and configure 
-Apache2.  To access the Subversion repository using the HTTPS protocol, you 
-must install and configure a digital certificate in your Apache 2 web server. 
-Please refer to the HTTPS subsection in the Apache2 section to install and 
-configure the digital certificate.
-						</para>
-						<para>
-		To install Subversion, run the following command from a terminal prompt:
-            </para>
+            <para>要通过 HTTP 协议来访问 Subversion 库，您必须安装和配置一个 web 服务器。Apache2 被证明可以和 Subversion 一起工作。请参考 Apache2 章节的 HTTP 小节以安装和配置 Apache2。要使用 HTTPS 协议访问 Subversion 库，您必须在您的 Apache2 web 服务器上安装和配置数字证书。请参考  Apache2 章节的 HTTPS 小节以安装和配置数据证书。</para>
+						<para>要安装 Subversion，可以在终端提示符后运行以下命令：</para>
 	    <para>
 <screen>
 <command>sudo apt-get install subversion libapache2-svn</command>
@@ -1970,12 +1397,11 @@ configure the digital certificate.
 
         </sect3>
         <sect3 id="subversion-configuration" status="complete">
-          <title>Server Configuration</title>
-            <para>
-	This step assumes you have installed above mentioned packages on your system. This section explains how to create a Subversion repository and access the project.</para>
+          <title>服务器配置</title>
+            <para>这一步假定您已经在您的系统上安装了上面提及的包。本部分内容说明如何创建一个 Subversion 库和访问项目。</para>
 			<sect4 id="create-svn-repos" status="complete">
-				<title>Create Subversion Repository</title>
-<para>The Subversion repository can be created using the following command from a terminal prompt:</para>
+				<title>创建 Subversion 库</title>
+<para>Subversion 库可以在终端提示符后使用以下命令创建：</para>
 
         <para>
 <screen>
@@ -1986,78 +1412,68 @@ configure the digital certificate.
 
         </sect3>
         <sect3 id="access-methods" status="complete">
-          <title>Access Methods</title>
-<para>Subversion repositories can be accessed (checked out) through many 
-different methods --on local disk, or through various network protocols. 
-A repository location, however, is always a URL. The table describes how 
-different URL schemas map to the available access methods.</para>
-				<table><title>Access Methods</title>
+          <title>访问方式</title>
+<para>Subversion 库可以通过许多不同的方式如通过在本地磁盘或不同的网络协议来访问 (checked out)。然而，库的位置经常是一个 URL。下表描述了不同的URL模式如何映射相应的访问方式。</para>
+				<table><title>访问方式</title>
 
 					<tgroup cols="2">
 						<colspec colname="1"/>
 						<colspec colname="2"/>
 						<thead>
 							<row>
-								<entry><para>Schema</para></entry>
-								<entry><para>Access Method</para></entry>
+								<entry><para>模式</para></entry>
+								<entry><para>访问方式</para></entry>
 							</row>
 						</thead>
 						<tbody>
 							<row>
 								<entry><para>file://</para></entry>
-								<entry><para>direct repository access (on local disk)</para></entry>
+								<entry><para>直接访问库 (在本地磁盘)</para></entry>
 							</row>
 							<row>
 								<entry><para>http://</para></entry>
-								<entry><para>Access via WebDAV protocol to Subversion-aware Apache2 web server</para></entry>
+								<entry><para>通过 WebDAV 协议访问带有 Subversion 的 Apache2 web 服务器。</para></entry>
 							</row>
 							<row>
 								<entry><para>https://</para></entry>
-								<entry><para>Same as http://, but with SSL encryption</para></entry>
+								<entry><para>与 http:// 相同，但有 SSL 加密</para></entry>
 							</row>
 							<row>
 								<entry><para>svn://</para></entry>
-								<entry><para>Access via custom protocol to an svnserve server</para></entry>
+								<entry><para>通过自身协议访问 svnserve 服务</para></entry>
 							</row>
 							<row>
 								<entry><para>svn+ssh://</para></entry>
-								<entry><para>Same as svn://, but through an SSH tunnel</para></entry>
+								<entry><para>与 svn:// 一样，但使用 SSH 遂道</para></entry>
 							</row>
 						</tbody>
 					</tgroup>
 				</table>
 
-				<para>
-In this section, we will see how to configure Subversion for all 
-these access methods. Here, we cover the basics. For more advanced 
-usage details, refer to the <ulink url="http://svnbook.red-bean.com/">svn book</ulink>.
-				</para>
+				<para>在本部分，我们将看到如何为所有这些访问方式来配置 Subversion。这里，我们只介绍基本用法。更多详细、高级用法请参阅<ulink url="http://svnbook.red-bean.com/">svn 书</ulink></para>
 			<sect4 id="direct-repos-access" status="complete">
-				<title>Direct repository access (file://)</title>
-<para> This is the simplest of all access methods. It does not 
-require any Subversion server process to be running. This access 
-method is used to access Subversion from the same machine. The 
-syntax of the command, entered at a terminal prompt, is as follows:</para>
+				<title>直接访问库 (file://)</title>
+<para>这是所有访问方式中最简单的。它不要求运行任何 Subversion 服务器进程。该访问方式用于在同一台机器上访问 Subversion。在终端提示符后输入的命令如下所示：</para>
 
         <para>
 <screen>
 <command>svn co file:///path/to/repos/project</command>
 </screen>
         </para>
-  <para>or</para>
+  <para>或</para>
 	<para>
 <screen>
 <command>svn co file://localhost/path/to/repos/project</command>
 </screen>
         </para>
 	<note>
-		<para>If you do not specify the hostname, there are three forward slashes (///) -- two for the protocol (file, in this case) plus the leading slash in the path. If you specify the hostname, you must use two forward slashes (//).</para>
+		<para>如果您没有指定主机名，则需要三个斜杠 (///) -- 其中两个是协议的 (这里是 file)，另一个是路径前的。如果您指定了主机名，那么您必须使用双个斜杠 (//)。</para>
 	</note>
-		<para>The repository permissions depend on filesystem permissions. If the user has read/write permission, he can checkout from and commit to the repository.</para>
+		<para>库权限依赖于文件系统的权限。如果用户有读/写权限，他可以从库中检出或者提交到库。</para>
 			</sect4>
 			<sect4 id="access-via-webdav" status="complete">
-				<title>Access via WebDAV protocol (http://)</title>
-<para> To access the Subversion repository via WebDAV protocol, you must configure your Apache 2 web server. You must add the following snippet in your <filename>/etc/apache2/apache2.conf</filename> file:</para>
+				<title>通过 WebDAV 协议 (http://) 访问</title>
+<para>要通过 WebDAV 协议访问 Subversion，您必须配置您的 Apache2 web 服务器。您必须在您的 <filename>/etc/apache2/apache2.conf</filename> 文件中添加下面一小段：</para>
 
 	<programlisting> &lt;Location /svn&gt;
   DAV svn
@@ -2069,73 +1485,37 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
   Require valid-user
   &lt;/LimitExcept&gt;
   &lt;/Location&gt; </programlisting>
-  <para>Next, you must create the <filename>/etc/subversion/passwd</filename> 
-  file. This file contains user authentication details. To add an entry, i.e. 
-  to add a user, you can run the following command from a terminal prompt:</para>
+  <para>接下来，您必须创建 <filename>/etc/subversion/passwd</filename> 文件。该文件包含用户认证细节。要添加一个条目，如添加一个用户，您可以在终端提示符后运行下列命令：</para>
 	<para>
 <screen>
 <command>htpasswd2 /etc/subversion/passwd user_name</command>
 </screen>
         </para>
-	<para>This command will prompt you to enter the password. Once you enter the password, the user is added. Now, to access the repository you can run the following command:</para>
+	<para>该命令将提示您输入密码。一旦您输入密码。该用户将被添加。现在您可以运行下列命令来访问库：</para>
         <screen><command>svn co http://servername/svn</command></screen>
 	<warning>
-		<para>
-			The password is transmitted as plain text. If you are worried about password snooping, you are advised to use SSL encryption. For details, please refer next section.
-		</para>
+		<para>该密码是以纯文本传输的。如果您担心密码被截取，建议您使用 SSL 加密。相关细节，请参考下一章节。</para>
 	</warning>
 			</sect4>
 			<sect4 id="access-via-webdav-with-ssl" status="complete">
-				<title>Access via WebDAV protocol with SSL encryption (https://)</title>
-					<para> 
-						Accessing Subversion repository via WebDAV protocol with SSL 
-						encryption (https://) is similar to http:// except that you 
-						must install and configure the digital certificate in your 
-						Apache2 web server.
-					</para>
+				<title>通过带有 SSL 加密的 WebDAV 协议来访问 (https://)</title>
+					<para>通过带 SSL 加密的 WebDAV 协议 (https://)  访问也使用 http:// 类似，只是您必须在您的 Apache2 web 服务器中安装和配置数字证书。</para>
 
-					<para>
-						You can install a digital certificate issued by a signing 
-						authority like Verisign. Alternatively, you can install your 
-						own self-signed certificate.
-					</para>
-					<para>
-						This step assumes you have installed and configured a digital 
-						certificate in your Apache 2 web server. Now, to access the 
-						Subversion repository, please refer to the above section! 
-						The access methods are exactly the same, except the protocol. 
-						You must use https:// to access the Subversion repository.
-					</para>
+					<para>您可以安装由证书签署机构如 Verisign 颁发的数字证书。或者，您也可以安装自己签署的证书。</para>
+					<para>这一步假设您已经在您的 Apache2 web 服务器中安装和配置了数字证书。现在要访问 Subversion 库，请参考上一章节！除了所用协议之外访问方式完全相同。您必须使用 https:// 来访问 Subversion 库。</para>
 
 			</sect4>
 			<sect4 id="access-via-custom-protocol" status="complete">
-				<title>Access via custom protocol (svn://)</title>
-					<para> 
-					Once the Subversion repository is created, you can configure the 
-					access control. You can edit the <filename>
-					/path/to/repos/project/conf/svnserve.conf</filename> file to 
-					configure the access control.  For example, to set up 
-					authentication, you can uncomment the following lines in the 
-					configuration file: </para>
+				<title>通过自身协议访问 (svn://)</title>
+					<para>一旦 Subversion 库被创建，您就可以配置访问控制了。您可以通过编辑 <filename> /path/to/repos/project/conf/svnserve.conf</filename> 文件来配置访问控制了。例如，要设置认证，您可以在配置文件中反注释下列行：</para>
 					<programlisting># [general]
 # password-db = passwd</programlisting>
 
-					<para>
-					After uncommenting the above lines, you can maintain the user 
-					list in the passwd file. So, edit the file <filename>passwd
-					</filename> in the same directory and add the new user. The 
-					syntax is as follows:
-					</para>
+					<para>在反注释上面几行之后，您可以在 passwd 文件中维护用户列表。因此编辑同一目录中的文件 <filename>passwd </filename>并添加新用户。其语法如下：</para>
 					<programlisting>username = password</programlisting>
-					<para>
-					For more details, please refer to the file.
-					</para>
+					<para>更多细节，请参考该文件。</para>
 
-					<para>
-					Now, to access Subversion via the svn:// custom protocol, either 
-					from the same machine or a different machine, you can run 
-					svnserver using svnserve command. The syntax is as follows:
-					</para>
+					<para>现在要从本机或不同机器通过 svn:// 自身协议来访问 Subversion，您可以使用 svnserve 命令来运行 svnserver。其语法如下：</para>
 					<programlisting>$ svnserve -d --foreground -r /path/to/repos
 # -d -- daemon mode
 # --foreground -- run in foreground (useful for debugging)
@@ -2144,112 +1524,58 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
 For more usage details, please refer to:
 $ svnserve --help</programlisting>
 
-					<para>Once you run this command, Subversion starts listening on default port (3690). To access the project repository, you must run the following command from a terminal prompt: </para>
+					<para>一旦您运行该命令，将启动 Subversion 并在缺省端口 (3690) 监听。要访问项目库，您必须在终端提示符后运行下列命令：</para>
 					<para>
 <screen>
 <command>svn co svn://hostname/project project --username user_name</command>
 </screen>
                                         </para>
-					<para>Based on server configuration, it prompts for password. Once 
-					you are authenticated, it checks out the code from Subversion 
-					repository.  To synchronize the project repository with the local 
-					copy, you can run the <command>update</command> sub-command. The 
-					syntax of the command, entered at a terminal prompt, is as follows:
-					</para>
+					<para>根据服务器的配置，出现密码提示。一旦您认证通过，将从 Subversion 库检出代码。要让本地副本同步项目库，您可以运行 <command>update</command> 子命令。在终端提示符后的命令语法如下所示：</para>
 					<para>
 <screen>
 <command>cd project_dir ; svn update</command>
 </screen>
                                         </para>
-					<para>For more details about using each Subversion sub-command, you 
-					can refer to the manual. For example, to learn more about the co 
-					(checkout) command, please run the following command from a 
-					terminal prompt:</para>
+					<para>关于 Subversion 子命令的更多细节，您可以参考手册。如为了学到关于 co (checkout) 命令的细节，请在终端提示符后运行下列命令：</para>
                     <para><screen><command>svn co help</command></screen></para>
 
 			</sect4>
 			<sect4 id="access-via-custom-protocol-with-ssl" status="complete">
-				<title>Access via custom protocol with SSL encryption (svn+ssh://)</title>
-					<para> The configuration and server process is same as in the
-					svn:// method. For details, please refer to the above section. 
-					This step assumes you have followed the above step and started 
-					the	Subversion server using <application>svnserve</application>  
-					command.</para>
+				<title>通过带有 SSL 加密的自身协议 (svn+ssh://) 访问</title>
+					<para>配置和服务器处理与用 svn:// 方式是相同的。详情请参考上面的章节。这一步假定您已经完成了上面的步骤并用 <application>svnserve</application> 命令启动了 Subversion 服务器。</para>
 
-					<para>It is also assumed that the ssh server is running on that 
-					machine and that it is allowing incoming connections. To confirm, 
-					please try to login to that machine using ssh. If you can login, 
-					everything is perfect. If you cannot login, please address it 
-					before continuing further.</para>
+					<para>它也假定 ssh 服务器已经在该机上运行并允许连接。为了确认，请尝试使用 ssh 登录该机器。如果您可以登录，一切就绪。如果不能登录，请在继续之前解决它。</para>
 
-					<para>The svn+ssh:// protocol is used to access the Subversion 
-					repository using SSL encryption. The data transfer is encrypted 
-					using this method. To access the project repository (for example 
-					with a checkout), you must use the following command syntax: 
-                                        </para>
+					<para>svn+ssh:// 协议使用 SSL 加密来访问 Subversion 库。使用这种方式进行的数据传输是加密的。要访问项目库 (如 checkout)，您必须使用下面的命令语法：</para>
                                         <para>
 <screen>
 <command>svn co svn+ssh://hostname/var/svn/repos/project</command>
 </screen>
                                         </para>
 
-					<note><para> You must use the full path (/path/to/repos/project) 
-					to access the Subversion repository using this access method. 
-					</para></note>
-					<para>
-					Based on server configuration, it prompts for password. You must 
-					enter the password you use to login via ssh. Once you are 
-					authenticated, it checks out the code from the Subversion 
-					repository.
-					</para>
+					<note><para>使用这种访问方式您必须使用全路径 (/path/to/repos/project) 来访问 Subversion 库。</para></note>
+					<para>根据服务器配置，它将提示输入密码。在使用 ssh 登录时您必须输入密码。一旦您被认证通过之后，它将从 Subversion 库中检出代码。</para>
 			</sect4>
 			</sect3>
 
       </sect2>
       <sect2 id="cvs-server" status="complete">
-        <title>CVS Server</title> 
-          <para>
-          CVS is a version control system. You can use it to record the
-          history of source files.
-          </para>
+        <title>CVS 服务器</title> 
+          <para>CVS 是一个版本控制系统。您可以使用它来记录源文件的历史。</para>
         <sect3 id="cvs-installation" status="complete">
           <title>安装</title>
-            <para>
-              At a terminal prompt, enter the following command to install
-              <application>cvs</application>:
-
-<screen>
+            <para>在终端提示符后输入下列命令来安装 <application>cvs</application>：<screen>
 <command>sudo apt-get install cvs</command>
-</screen>
-
-After you install <application>cvs</application>, you should install
-<application>xinetd</application> to start/stop the cvs server. At the
-prompt, enter the following command to install
-<application>xinetd</application>:
-
-<screen>
+</screen> 在您安装 <application>cvs</application>之后，您将安装 <application>xinetd</application> 来启动和停用 cvs 服务器。在提示符后输入下列命令以安装
+<application>xinetd</application>：<screen>
 <command>sudo apt-get install xinetd</command>
-</screen>
-            </para>
+</screen></para>
         </sect3>
         <sect3 id="cvs-configuration" status="complete">
           <title>配置</title>
-            <para>
-            Once you install cvs, the repository will be automatically
-            initialized. By default, the repository resides under the
-            <application>/var/lib/cvs</application> directory. You can
-            change this path by running following command:
-
-<screen>
+            <para>一旦您安装 cvs，将会自动初始化库。缺省状态下，库存放在 <application>/var/lib/cvs</application> 目录下。您可以通过运行以下命令来改变该路径：<screen>
 <command>cvs -d /your/new/cvs/repo init</command>
-</screen>
-
-Once the initial repository is set up, you can configure
-<application>xinetd</application> to start the CVS server. 
-You can copy the following lines to the <filename>
-/etc/xinetd/cvspserver</filename> file.
-
-<programlisting>
+</screen> 一旦库开始建立，您可以配置 <application>xinetd</application> 来启动 CVS 服务器。您可以拷贝以下行到 <filename> /etc/xinetd/cvspserver</filename> 文件。<programlisting>
 service cvspserver
 {
      port = 2401
@@ -2262,26 +1588,12 @@ service cvspserver
      server_args = -f --allow-root /var/lib/cvs pserver
      disable = no
 }
-</programlisting>
-
-<note>
-<para>
-Be sure to edit the repository if you have changed the default
-repository (<application>/var/lib/cvs</application>) directory.
-</para>
-</note>
-
-Once you have configured <application>xinetd</application> you 
-can start the cvs server by running following command:
-
-<screen>
+</programlisting><note>
+<para>如果你改变缺省的库目录 (<application>/var/lib/cvs</application>) 那么您必须要编辑库。</para>
+</note> 一旦您配置好 <application>xinetd</application> ，您就可以运行以下命令来启动 cvs 服务器了：<screen>
 <command>sudo /etc/init.d/xinetd start</command>
-</screen>
-            </para>
-            <para>
-            You can confirm that the CVS server is running by issuing 
-			the following command:
-            </para>
+</screen></para>
+            <para>您可以执行以下命令来确定 CVS 服务器正在运行：</para>
 
             <para>
 <screen>
@@ -2289,102 +1601,55 @@ can start the cvs server by running following command:
 </screen>
             </para>
 
-            <para>
-            When you run this command, you should see the following line
-            or something similar:
-            </para>
+            <para>当您运行该命令时，您可以看到类似下面的行：</para>
 
 <programlisting>
-tcp        0      0 *:cvspserver            *:* LISTEN 
+↵
+tcp 0 0 *:cvspserver *:* LISTEN ↵ 
 </programlisting>
 
-        <para>
-From here you can continue to add users, add new projects,
-and manage the CVS server. 
-        </para>
+        <para>在这里您可以继续添加用户，添加新的项目以及管理 CVS 服务器</para>
         <warning>
-<para>
-          CVS allows the user to add users independently of the
-underlying OS installation. Probably the easiest way is to use the Linux
-Users for CVS, although it has potential security issues. Please refer
-to the CVS manual for details.
-</para>
+<para>CVS 允许用户添加独立于 OS 安装的用户。也许最容易的方式就是让 CVS 使用 Linux 的用户，虽然它有潜在的安全隐患。详细请参考 CVS 手册。</para>
         </warning>
 
         </sect3>
         <sect3 id="cvs-add-projects" status="complete">
-          <title>Add Projects</title>
-            <para>
-            This section explains how to add new project to the CVS 
-			repository. Create the directory and add necessary document 
-			and source files to the directory. Now, run the following 
-			command to add this project to CVS repository:
-<screen>
+          <title>添加项目</title>
+            <para>本部分内容说明如何在 CVS 库中添加新项目。创建目录以及该目录所需的文档和源文件。现在运行下列命令将该项目添加到 CVS 库中：<screen>
 <command>cd your/project</command>
 <command>cvs import -d :pserver:username@hostname.com:/var/lib/cvs -m "Importing my project to CVS repository" . new_project start</command>
-</screen>
-
-<tip>
-<para>
-You can use the CVSROOT environment variable to store the CVS root directory.
-Once you export the CVSROOT environment variable, you can avoid using -d option to
-above cvs command.
-</para>
-</tip>
-The string <emphasis>new_project</emphasis> is a vendor
-tag, and <emphasis>start</emphasis> is a release tag.
-They serve no purpose in this context, but since CVS requires them, they
-must be present.
-
-<warning>
-<para>
-When you add a new project, the CVS user you use must have write access to the
-CVS repository (<application>/var/lib/cvs</application>). By default, the
-<application>src</application> group has write access to the CVS
-repository. So, you can add the user to this group, and he can then add and
-manage projects in the CVS repository.
-</para>
-</warning>
-            </para>
+</screen><tip>
+<para>您可以使用 CVSROOT 环境变量来保存 CVS 根目录。一旦您导出 CVSROOT 环境变量，您可以在上面的 cvs 命令中避免使用 －d 选项。</para>
+</tip> 字符串 <emphasis>new_project</emphasis> 是一个 vendor 标签，<emphasis>start</emphasis> 是一个版本标签。它们在此没有任何用处，但由于 CVS 要求要有它们，所以它们必须出现。<warning>
+<para>当您新添项目时，您所用的 CVS 用户必须对 CVS 库 (<application>/var/lib/cvs</application>) 有写权限。缺省状态下，<application>src</application> 组有对 CVS 库的写权限，因此，您可以添加用户到该组，然后就该用户就可以在 CVS 库中添加和管理项目了。</para>
+</warning></para>
         </sect3>
       </sect2>
       <sect2 id="version-control-ref" status="complete">
         <title>引用</title> 
-				<para><ulink url="http://subversion.tigris.org/">Subversion Home Page</ulink></para>
-				<para><ulink url="http://svnbook.red-bean.com/">Subversion Book</ulink></para>
-				<para><ulink url="http://ximbiot.com/cvs/manual/cvs-1.11.21/cvs_toc.html">CVS Manual</ulink></para>
+				<para><ulink url="http://subversion.tigris.org/">Subversion 主页</ulink></para>
+				<para><ulink url="http://svnbook.red-bean.com/">Subversion 书 (使用Subversion进行版本控制)</ulink></para>
+				<para><ulink url="http://ximbiot.com/cvs/manual/cvs-1.11.21/cvs_toc.html">CVS 手册</ulink></para>
       </sect2>
     </sect1>
 	<sect1 id="databases" status="complete">
-		<title>Databases</title>
-          <para>
-            Ubuntu provides two Database servers. They are:
-            <itemizedlist spacing="compact">
+		<title>数据库</title>
+          <para>Ubuntu 提供两个数据库服务器。它们是：<itemizedlist spacing="compact">
                 <listitem>
                     <para><application><trademark>MySQL</trademark></application></para>
                 </listitem>
                 <listitem>
                     <para><application>PostgreSQL</application></para>
                 </listitem>
-            </itemizedlist>
-            They are available in the main repository. This section
-            explains how to install and configure these database
-            servers.
-          </para>
+            </itemizedlist> 它们位于主软件库中。该部分内容说明如何安装和配置这些数据库服务器。</para>
       <sect2 id="mysql" status="complete">
         <title>MySQL</title>
-          <para>
-          MySQL is a fast, multi-threaded, multi-user, and robust SQL
-          database server. It is intended for mission-critical, 
-		  heavy-load production systems as well as for embedding into 
-		  mass-deployed software.
-          </para>
+          <para>MySQL 是一个快速、多线程、多用户、强大的 SQL 数据库服务器。它旨在成为能用于大型应用、高负载的生产系统以及大规模部署的软件。</para>
 
         <sect3 id="mysql-installation" status="complete">
           <title>安装</title>
-            <para>
-            To install MySQL, run the following command from a terminal prompt:
-            </para>
+            <para>要安装 MySQL，可以在终端提示符后运行下列命令：</para>
 
             <para>
 <screen>
@@ -2392,11 +1657,7 @@ manage projects in the CVS repository.
 </screen>
             </para>
 
-            <para>
-            Once the installation is complete, the MySQL server should be
-            started automatically. You can run the following command from a terminal prompt to
-            check whether the MySQL server is running:
-            </para>
+            <para>一旦安装完成，MySQL 服务器应该自动启动。您可以在终端提示符后运行以下命令来检查 MySQL 服务器是否正在运行：</para>
 
             <para>
 <screen>
@@ -2404,15 +1665,12 @@ manage projects in the CVS repository.
 </screen>
             </para>
 
-            <para>
-            When you run this command, you should see the following line
-            or something similar:
-            </para>
+            <para>当您运行该命令时，您可以看到类似下面的行：</para>
 
 <programlisting>
-tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
+tcp 0 0 localhost.localdomain:mysql *:* LISTEN -
 </programlisting>
-	<para>If the server is not running correctly, you can type the following command to start it:</para>
+	<para>如果服务器不能正常运行，您可以通过下列命令启动它：</para>
             <para>
 <screen>
 <command>sudo /etc/init.d/mysql restart</command>
@@ -2422,11 +1680,7 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
         </sect3>
         <sect3 id="mysql-configuration" status="complete">
           <title>配置</title>
-            <para>
-            By default, the administrator password is not set. Once you
-            install MySQL, the first thing you must do is to configure
-            the MySQL administrator password. To do this, run the following commands:
-            </para>
+            <para>缺省状态下，管理员密码是没有设置的。一旦您安装了 MySQL，您必须要做的第一件事就是配置 MySQL 的管理员密码。要做到这一点，可以运行以下命令：</para>
             <para>
 <screen>
 <command>sudo mysqladmin -u root password newrootsqlpassword</command>
@@ -2438,26 +1692,15 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
 </screen>
             </para>
 
-            <para>
-            You can edit the <filename>/etc/mysql/my.cnf</filename> file to configure the basic
-            settings -- log file, port number, etc. Refer to
-            <filename>/etc/mysql/my.cnf</filename> file for more details.
-            </para>
+            <para>您可以编辑 <filename>/etc/mysql/my.cnf</filename> 文件来进行基本设置 -- 日志文件、端口号等。详情请参考 <filename>/etc/mysql/my.cnf</filename> 文件。</para>
         </sect3>
       </sect2>
       <sect2 id="postgresql" status="complete">
         <title>PostgreSQL</title> 
-          <para>
-          PostgreSQL is an object-relational database system that has
-          the features of traditional commercial database systems with
-          enhancements to be found in next-generation DBMS systems.
-          </para>
+          <para>PostgreSQL 是一个面向对象的数据库系统，它有着传统商业数据库系统和下一代 DBMS 系统所增进的功能。</para>
         <sect3 id="postgresql-installation" status="complete">
           <title>安装</title>
-            <para>
-            To install PostgreSQL, run the following command in the
-            command prompt:
-            </para>
+            <para>要安装 PostgreSQL，可以在命令提示符后运行下列命令：</para>
 
             <para>
 <screen>
@@ -2465,156 +1708,82 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
 </screen>
             </para>
 
-            <para>
-            Once the installation is complete, you should configure the
-            PostgreSQL server based on your needs, although the default
-            configuration is viable.</para>
+            <para>一旦安装完成，您就要按您的需要配置 PostgreSQL 服务器，尽管缺省配置已经可以使它可以正常运行了。</para>
             
         </sect3>
         <sect3 id="postgresql-configuration" status="complete">
           <title>配置</title>
-            <para>By default, connection via TCP/IP is disabled.
-            PostgreSQL supports multiple client authentication methods.
-            By default, IDENT authentication method is used.  Please
-            refer <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">
-			the PostgreSQL Administrator's Guide</ulink>.</para>
+            <para>缺省状态下，通过 TCP/IP 的连接是被禁用的。PostgreSQL 支持多客户认证方式。其中 IDENT 认证方式被默认使用。请参考  <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">PostgreSQL 管理员指南</ulink>。</para>
             
-            <para>The following discussion assumes that you wish to enable 
-			TCP/IP connections and use the MD5 method for client 
-			authentication. PostgreSQL configuration files are stored in the
-            <filename>/etc/postgresql/&lt;version&gt;/main</filename>
-            directory. For example, if you install PostgreSQL 7.4, the
-            configuration files are stored in the
-            <filename>/etc/postgresql/7.4/main</filename> directory.
-            </para>
+            <para>接下来的讨论假定您希望启用 TCP/IP 连接并对客户认证使用 MD5 模式。PostgreSQL 配置文件被保存在 <filename>/etc/postgresql/&lt;version&gt;/main /etc/postgresql/7.4/main</filename></para>
             
             <tip>
-            <para>
-             To configure <application>ident</application>
-             authentication, add entries to the <filename>/etc/postgresql/7.4/main/pg_ident.conf</filename>
-             file.
-            </para>
+            <para>要配置 <application>ident</application> 认证，请在 <filename>/etc/postgresql/7.4/main/pg_ident.conf</filename> 文件中添加以下几条：</para>
             </tip>
 
-            <para>To enable TCP/IP connections, edit the file <filename>/etc/postgresql/7.4/main/postgresql.conf</filename></para>
+            <para>要启用 TCP/IP 连接，编辑文件 <filename>/etc/postgresql/7.4/main/postgresql.conf</filename>。</para>
 
-            <para>Locate the line <emphasis>#tcpip_socket =
-            false</emphasis> and change it to
-            <emphasis>tcpip_socket =
-            true</emphasis>. You may
-            also edit all other parameters, if you know what you are doing! 
-			For details, refer to the configuration file or to the PostgreSQL documentation.
-            </para>
+            <para>找到 <emphasis>#tcpip_socket = false</emphasis> 行并将其改为 <emphasis>tcpip_socket = true</emphasis>。如果您知道您正在做什么，那么您也可以编辑其他所有参数。详情请参考配置文件或 PostgreSQL 文档。</para>
 
-            <para>By default, the user credentials are not set for
-            <emphasis>MD5</emphasis> client
-            authentication. So, first it is necessary to configure the PostgreSQL server to use
-            <emphasis>trust</emphasis> client
-            authentication, connect to the database,
-            configure the password, and revert the configuration back to use
-            <emphasis>MD5</emphasis> client authentication.
-            To enable <emphasis>trust</emphasis> client
-            authentication, edit the file <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename></para>
+            <para>缺省状态下，没有为 <emphasis>MD5</emphasis> 客户端认证设置用户证书。因此，首先必须将 PostgreSQL
+ 服务器配置成使用 <emphasis>trust</emphasis> 客户端认证，用以连接数据库。配置密码并将配置恢复成使用 <emphasis>MD5</emphasis> 客户端认证。要启用 <emphasis>trust</emphasis> 客户端认证，可编辑文件 <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename></para>
 
-            <para>Comment out all the existing lines which use
-            <emphasis>ident</emphasis> and
-            <emphasis>MD5</emphasis>
-            client authentication and add the following
-            line:</para>
+            <para>注释所有使用 <emphasis>ident</emphasis> 和 <emphasis>MD5</emphasis> 客户端认证的行并添加下列行：</para>
 <programlisting>
-local   all         postgres                          trust sameuser
+local all postgres trust sameuser
 </programlisting>
 
-            <para>Then, run the following command to
-            start the PostgreSQL server:
-            </para>
+            <para>然后运行下列命令启动 PostgreSQL 服务器：</para>
             <para>
 <screen>
 <command>sudo /etc/init.d/postgresql start</command>
 </screen>
             </para>
-            <para>Once the PostgreSQL server is successfully started, run the following command at a terminal prompt to connect to the default
-            PostgreSQL template database</para>
+            <para>一旦 PostgreSQL 服务器成功启动，在终端提示符后运行下面的命令以连接缺省的 PostgreSQL 模板数据库。</para>
 
             <para>
 <screen>
 <command>psql -U postgres -d template1</command>
 </screen>
             </para>
-            <para>The above command connects to PostgreSQL
-            database <emphasis>template1</emphasis> as user
-            <emphasis>postgres</emphasis>. Once you connect to the PostgreSQL
-            server, you will be at a SQL prompt. You can run the
-            following SQL command at the <application>psql</application> prompt to configure the
-            password for the user <emphasis role="italics">postgres</emphasis>.</para>
+            <para>上面的命令是以用户 <emphasis>postgres</emphasis> 的身份连接 PostgreSQL 的 <emphasis>template1</emphasis>  数据库。一旦您连到 PostgreSQL 服务器，您将会在 SQL 提示符下。您可以在 <application>psql</application> 提示符中运行下列命令来为用户 <emphasis role="italics">postgres</emphasis> 配置密码。</para>
 
             <para>
 <screen>
 <command>template1=# ALTER USER postgres with encrypted password 'your_password';</command>
 </screen>
             </para>
-            <para>After configuring the password, edit the file
-            <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename> to use
-            <emphasis>MD5</emphasis> authentication:</para>
-            <para>Comment the recently added <emphasis role="italics">trust</emphasis> line and add the following
-            line: </para>
+            <para>在配置密码后，编辑文件 <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename> 以使用 <emphasis>MD5</emphasis> 认证：</para>
+            <para>注释掉最近添加的 <emphasis role="italics">trust</emphasis> 行并添加下面行：</para>
 
 <programlisting>
-local   all         postgres                          md5 sameuser
+local all postgres md5 sameuser
 </programlisting>
             <warning>
-            <para>
-             The above configuration is not complete by any means. Please
-             refer <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">
-			 the PostgreSQL Administrator's Guide</ulink> to configure more parameters.
-            </para>
+            <para>无论如何上面配置并不完整。更多的配置参数请参考 <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html"> PostgreSQL 管理员指南</ulink>。</para>
             </warning>
         </sect3>
       </sect2>
     </sect1>
 	<sect1 id="email-services" status="complete">
-		<title>Email Services</title>
-          <para>
-            The process of getting an email from one person to another over a network or
-			the Internet involves many systems working together.  Each of these systems
-			must be correctly configured for the process to work.  The sender uses a <emphasis>Mail
-			User Agent</emphasis> (MUA), or email client, to send the message through one or more
-			<emphasis>Mail Transfer Agents</emphasis> (MTA), the last of which will hand it off to a 				<emphasis>Mail Delivery Agent</emphasis> (MDA) for delivery to the 
-			recipient's mailbox, from which it
-			will be retrieved by the recipient's email client, usually via a POP3 or IMAP server.
-          </para>
+		<title>邮件服务</title>
+          <para>在网络或 Internet 上从一个人得到邮件给另一个人的处理过程包含许多系统的协同工作。这些系统中的每一个都必须配置正确以便可以正常工作。发送者使用一个 <emphasis>邮件用户代理</emphasis> (MUA)，或邮件客户端通过一个或多个 <emphasis>邮件传输代理</emphasis> (MTA) 来发送信息，最后一个将信息送到 <emphasis>邮件投递代理</emphasis> (MDA) 以便将其投递到接受者的收件箱中。该信息将会被接受者邮件客户端检索到，通常是通过 POP3 或 IMAP 服务器。</para>
       <sect2 id="postfix" status="complete">
         <title>Postfix</title>
-          <para>
-            <application>Postfix</application> is the default Mail Transfer Agent (MTA) in Ubuntu. It
-            attempts to be fast and easy to administer and secure. It is
-            compatible with the MTA <application>sendmail</application>. This section explains how
-            to install and configure <application>postfix</application>. It also explains how to
-            set it up as an SMTP server using a secure connection (for sending emails securely).
-          </para>
+          <para><application>Postfix</application> 是 Ubuntu 中缺省的邮件传输代理 (MTA)。它试图变得快捷、易于管理和安全。它与 MTA <application>sendmail</application> 兼容。这部分内容说明如何安装和配置 <application>postfix</application>。还说明如何将它设置成使用安全连接的 SMTP 服务器 (为了安全发送邮件)。</para>
         <sect3 id="postfix-installation" status="complete">
           <title>安装</title>
-            <para>
-            To install <application>postfix</application> with SMTP-AUTH and Transport Layer
-            Security (TLS), run the following command:
-<screen>
+            <para>要安装带有 SMTP-AUTH 和 传输层安全 (TLS) 的 <application>postfix</application>，运行下列命令：<screen>
 <command>sudo apt-get install postfix</command>
-</screen>
-		Simply press return when the installation process asks questions, the configuration will be done in greater detail in the next stage.
-            </para>
+</screen> 当安装进程提问时简单地按回车，下面将详细说明相关配置。</para>
         </sect3>
         <sect3 id="postfix-configuration" status="complete">
-          <title>Basic Configuration</title>
-            <para>
-            To configure <application>postfix</application>, run the following command:
-<screen>
+          <title>基本配置</title>
+            <para>要配置 <application>postfix</application>，运行下列命令：<screen>
 <command>sudo dpkg-reconfigure postfix</command>
-</screen>
-            The user interface will be displayed. On each screen, select the following
-            values:
-            <itemizedlist spacing="compact">
+</screen> 用户界面将显示。在每一屏中，选择下列值：<itemizedlist spacing="compact">
             <listitem><para>Ok</para></listitem>
-            <listitem><para>Internet Site</para></listitem>
+            <listitem><para>Internet 站点</para></listitem>
             <listitem><para>NONE</para></listitem>
             <listitem><para>mail.example.com</para></listitem>
             <listitem><para>mail.example.com, localhost.localdomain, localhost</para></listitem>
@@ -2623,29 +1792,17 @@ local   all         postgres                          md5 sameuser
             <listitem><para>Yes</para></listitem>
             <listitem><para>0</para></listitem>
             <listitem><para>+</para></listitem>
-            <listitem><para>all</para></listitem>
-            </itemizedlist>
-            </para>
+            <listitem><para>全部</para></listitem>
+            </itemizedlist></para>
             <note>
-            <para>
-            Replace mail.example.com with your mail server hostname.
-            </para>
+            <para>把 mail.example.com 作为您的邮件服务器的主机名。</para>
             </note>
 	 </sect3>
         <sect3 id="postfix-smtp-authentication" status="complete">
-          <title>SMTP Authentication</title>
-            <para>The next steps are to configure
-            <application>postfix</application> to use SASL for SMTP
-            AUTH. Rather than editing the configuration file directly, 
-	     you can use the <command>postconf</command> command to configure
-            all <application>postfix</application> parameters.  The
-            configuration parameters will be stored in
-            <filename>/etc/postfix/main.cf</filename> file. Later if you
-            wish to re-configure a particular parameter, you can either
-            run the command or change it manually in the file.</para>
+          <title>SMTP 认证</title>
+            <para>下一步是为 <application>postfix</application> 的 SMTP AUTH 配置使用 SASL。与其直接编辑配置，不如使用 <command>postconf</command> 命令配置所有 <application>postfix</application> 参数。配置参数被保存在 <filename>/etc/postfix/main.cf</filename> 文件中。如果您希望更新配置一项参数，您可以运行命令或手工在文件中修改。</para>
 	<procedure>
-		<step><para>Configure Postfix to do SMTP AUTH using SASL (saslauthd):
-<screen>
+		<step><para>配置 Postfix 使用 SASL (saslauthd) 的 SMTP AUTH ：<screen>
 postconf -e 'smtpd_sasl_local_domain ='
 postconf -e 'smtpd_sasl_auth_enable = yes'
 postconf -e 'smtpd_sasl_security_options = noanonymous'
@@ -2654,12 +1811,9 @@ postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permit_myn
 postconf -e 'inet_interfaces = all'
 echo 'pwcheck_method: saslauthd' &gt;&gt; /etc/postfix/sasl/smtpd.conf
 echo 'mech_list: plain login' &gt;&gt; /etc/postfix/sasl/smtpd.conf
-</screen>
-		</para>
+</screen></para>
 		</step>
-		<step><para>Next, configure the digital certificate 
-            for TLS. When asked questions, follow the instructions and answer appropriately.
-<screen>
+		<step><para>接下来为 TLS 配置数字证书。当被询问问题时，按照提示并适当回答。<screen>
 openssl genrsa -des3 -rand /etc/hosts -out smtpd.key 1024
 chmod 600 smtpd.key
 openssl req -new -key smtpd.key -out smtpd.csr
@@ -2671,16 +1825,10 @@ mv smtpd.key /etc/ssl/private/
 mv smtpd.crt /etc/ssl/certs/
 mv cakey.pem /etc/ssl/private/
 mv cacert.pem /etc/ssl/certs/
-</screen>
-		</para>
-		<note><para>You can get the digital
-            certificate from a certificate authority. Alternatively, you
-            can create the certificate yourself. Refer to 
-			<xref linkend="creating-a-self-signed-certificate"/> for more 
-			details.</para></note>
+</screen></para>
+		<note><para>您可以从证书颁发机构得到数字证书。或者您可以创建您自己的证书。详情参考 <xref linkend="creating-a-self-signed-certificate"/>。</para></note>
 		</step>
-		<step><para>Configure Postfix to do TLS encryption for both incoming and outgoing mail:
-<screen>
+		<step><para>配置 Postfix 对接收或发送邮件进行 TLS 加密：<screen>
 postconf -e 'smtpd_tls_auth_only = no'
 postconf -e 'smtp_use_tls = yes'
 postconf -e 'smtpd_use_tls = yes'
@@ -2693,57 +1841,25 @@ postconf -e 'smtpd_tls_received_header = yes'
 postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
 postconf -e 'tls_random_source = dev:/dev/urandom'
 postconf -e 'myhostname = mail.example.com'
-</screen>
-		</para>
+</screen></para>
 		</step>
 		</procedure>
             <note>
-            <para>
-            After you run all the commands, the SMTP AUTH is configured
-            with <application>postfix</application>. The self-signed
-            cerficiate is created for TLS and it is configured with
-            <application>postfix</application>.
-            </para>
+            <para>在您运行所有命令之后，<application>postfix</application> 的 SMTP AUTH 将被配置。将为 TLS 创建自己签署的证书并与 <application>postfix</application> 一起配置。</para>
             </note>
-            <para>
-            Now, the file <filename>/etc/postfix/main.cf</filename>
-            should look like <ulink url="sample/postfix_configuration">this</ulink>.
-		</para>
-		<para>
-            The postfix initial configuration is complete. Run
-            the following command to start postfix daemon:
-            <screen><command>sudo /etc/init.d/postfix start</command></screen>
-
-            Now the <application>postfix</application> daemon is installed, configured and run
-            successfully. <application>Postfix</application> supports SMTP AUTH as defined in
-            <ulink url="ftp://ftp.isi.edu/in-notes/rfc2554.txt">RFC2554</ulink>.
-            It is based on <ulink url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>. However it is still necessary to set up SASL authentication before you can use SMTP.
-            </para>
+            <para>现在文件 <filename>/etc/postfix/main.cf</filename> 看上去就象 <ulink url="../sample/postfix_configuration">这样</ulink>。</para>
+		<para>postfix 初始配置完成。运行下列命令以开始 postfix 守护程序：<screen><command>sudo /etc/init.d/postfix start</command></screen> 现在 <application>postfix</application> 已经被安装、配置及成功运行。<application>Postfix</application> 支持在 <ulink url="ftp://ftp.isi.edu/in-notes/rfc2554.txt">RFC2554</ulink> 中定义的 SMTP AUTH。它基于 <ulink url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>。无论如何在您使用 SMTP 之前必须设置 SASL 认证。</para>
 	</sect3>
 	<sect3 id="sasl">
-	  <title>Configuring SASL</title>
-            <para>
-            The
-            <application>libsasl2</application>,
-            <application>sasl2-bin</application> and
-            <application>libsasl2-modules</application> are necessary to
-            enable SMTP AUTH using SASL. You can install these applications if
-            you have not installed them already.
-<screen>
+	  <title>配置 SASL</title>
+            <para><application>libsasl2</application>、<application>sasl2-bin</application> 和 <application>libsasl2-modules</application> 对于使用 SASL 的 SMTP AUTH 是必需的。如果您没有安装它们的话，您可以安装这些应用程序。<screen>
 <command>apt-get install libsasl2 sasl2-bin</command>
-</screen>
-	    </para>
-	    <para>
-		A few changes are necessary to make it work properly. Because <application>Postfix</application> runs chrooted in <filename>/var/spool/postfix</filename>, <application>SASL</application> needs to be configured to run in the false root (<filename>/var/run/saslauthd</filename> becomes <filename>/var/spool/postfix/var/run/saslauthd</filename>):
-<screen>
+</screen></para>
+	    <para>要让其正常工作的话做一些改动是必须的。因为 <application>Postfix</application> 是被 chroot 在 <filename>/var/spool/postfix</filename> 中运行，<application>SASL</application> 需要被配置在假根目录中运行 (从 <filename>/var/run/saslauthd</filename> 到 <filename>/var/spool/postfix/var/run/saslauthd</filename>)：<screen>
 <command>mkdir -p /var/spool/postfix/var/run/saslauthd</command>
 <command>rm -rf /var/run/saslauthd</command>
-</screen>
-	    </para>
-	    <para>
-            To activate <application>saslauthd</application>, edit the file <filename>/etc/default/saslauthd</filename>, and change or add the START variable. In order to configure <application>saslauthd</application> to run in the false root, add the PWDIR, PIDFILE and PARAMS variables. Finally, configure the MECHANISMS variable to your liking. The file should look like this:
-
-<programlisting>
+</screen></para>
+	    <para>要激活 <application>saslauthd</application>，编辑文件 <filename>/etc/default/saslauthd</filename>，并修改或添加 START 变量。为了将 <application>saslauthd</application> 配置成在假根目录中运行，添加 PWDIR、PIDFILE 和 PARAMS 变量。最终，随您所好配置 MECHANISMS 变量。该文件看起来象这样：<programlisting>
 # This needs to be uncommented before saslauthd will be run
 # automatically
 START=yes
@@ -2758,256 +1874,107 @@ PIDFILE="${PWDIR}/saslauthd.pid"
 # MECHANISMS="pam shadow"
 
 MECHANISMS="pam"
-</programlisting>
-            </para>
+</programlisting></para>
 <note>
-<para>
-If you prefer, you can use <emphasis role="strong">shadow</emphasis>
-instead of <emphasis role="strong">pam</emphasis>. This will use MD5
-hashed password transfer and is perfectly secure. The username and
-password needed to authenticate will be those of the users on the system
-you are using on the server.
-</para>
+<para>如果您喜欢，您可以使用 <emphasis role="strong">shadow</emphasis> 代替 <emphasis role="strong">pam</emphasis>。这将使用 MD5 哈希密码传输并更为安全。需要认证的用户名和密码将是您正在服务器上使用系统的那些用户。</para>
 </note>
-        <para>
-Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd</filename>. The saslauthd init script uses this setting to create the missing directory with the appropriate permissions and ownership:
-<screen>
+        <para>接下来更新 <filename>/var/spool/portfix/var/run/saslauthd</filename> 的 dpkg "state"。saslauthd 初始化脚本将使用该设置来创建有着适当权限和所有权的目录：<screen>
 <command>dpkg-statoverride --force --update --add root sasl 755 /var/spool/postfix/var/run/saslauthd</command>
-</screen>
-        </para>
+</screen></para>
         </sect3>
         <sect3 id="postfix-testing" status="complete">
-          <title>Testing</title>
-            <para>
-          SMTP AUTH configuration is complete. Now it is time to start
-          and test the setup. You can run the following command to start
-          the SASL daemon:
-            <screen><command>sudo /etc/init.d/saslauthd start</command></screen>
-
-          To see if SMTP-AUTH and TLS work properly, run the following
-          command:
-            <screen><command>telnet mail.example.com 25</command></screen>
-          After you have established the connection to the postfix mail
-          server, type:
-            <screen>ehlo mail.example.com</screen>
-          If you see the following lines among others, then everything
-          is working perfectly. Type <command>quit</command> to exit.
-<programlisting>
+          <title>测试</title>
+            <para>SMTP AUTH 配置完成。现在是启动并测试设置的时候了。您可以运行下列命令来启动 SASL 守护程序：<screen><command>sudo /etc/init.d/saslauthd start</command></screen> 要查看 SMTP-AUTH 和 TLS 是否正常工作，运行下列命令：<screen><command>telnet mail.example.com 25</command></screen> 在您建立到 postfix 邮件服务器连接之后，输入：<screen>ehlo mail.example.com</screen> 如果您看到包括下列行时，那么一切工作正常。输入 <command>quit</command> 退出。<programlisting>
 250-STARTTLS
 250-AUTH LOGIN PLAIN
 250-AUTH=LOGIN PLAIN
 250 8BITMIME
-</programlisting>
-        </para>
+</programlisting></para>
         </sect3>
       </sect2>
       <sect2 id="exim4" status="complete">
         <title>Exim4</title>
-          <para>
-            <application>Exim4</application> is is another Message Transfer
-            Agent (MTA) developed at the University of Cambridge for use
-            on Unix systems connected to the internet. Exim can be
-            installed in place of <application>sendmail</application>,
-            although the configuration of
-            <application>exim</application> is quite different to
-            that of <application>sendmail</application>.
-          </para>
+          <para><application>Exim4</application> 是另一个由剑桥大学开发的用于连接 Internet 的 Unix 系统上的消息传输代理 (MTA)。安装Exim可以代替 <application>sendmail</application>，虽然 <application>exim</application> 的配置与 <application>sendmail</application> 是非常不同。</para>
         <sect3 id="exim4-installation" status="complete">
           <title>安装</title>
-            <para>
-            To install <application>exim4</application>, run the following command:
-<screen>
+            <para>要安装 <application>exim4</application>，运行下列命令： <screen>
 <command>sudo apt-get install exim4 exim4-base exim4-config</command>
-</screen>
-            </para>
+</screen></para>
         </sect3>
         <sect3 id="exim4-configuration" status="complete">
           <title>配置</title>
-            <para>
-            To configure <application>exim4</application>, run the following command:
-<screen>
+            <para>要配置 <application>exim4</application>，运行下列命令： <screen>
 <command>sudo dpkg-reconfigure exim4-config</command>
-</screen>
-            The user interface will be displayed. The user interface
-            lets you configure many parameters. For example, In
-            <application>exim4</application> the configuration files are
-            split among multiple files. If you wish to have them in one
-            file you can configure accordingly in this user interface.
-            </para>
+</screen> 用户界面将显示。该用户界面让您配置许多参数。例如，在 <application>exim4</application> 中配置文件被分成多个文件。如果您希望将它们放在一个文件中，您可以根据该用户界面进行配置。</para>
 
-            <para>
-            All the parameters you configure in the user interface are
-            stored in
-            <filename>/etc/exim4/update-exim4.conf.conf</filename> file.
-            If you wish to re-configure, either you re-run the
-            configuration wizard or manually edit this file
-            using your favourite editor. Once you configure, you can run
-            the following command to generate the master configuration
-            file:
-<screen>
+            <para>您在用户界面配置的所有参数被保存在 <filename>/etc/exim4/update-exim4.conf.conf</filename> 文件。如果您希望重新配置，您可以重新运行配置向导或用您喜欢的编辑器手工编辑该文件。一旦您配置好了，您可以运行下列命令来生成主配置文件：<screen>
 <command>sudo update-exim4.conf</command>
-</screen>
-            The master configuration file, is generated and
-            it is stored in
-            <filename>/var/lib/exim4/config.autogenerated</filename>. 
-            
-            <warning>
-            <para>
-            At any time, you should not edit the master configuration
-            file,
-            <filename>/var/lib/exim4/config.autogenerated</filename>
-            manually. It is updated automatically every time you run
-            <command>update-exim4.conf</command>
-            </para>
-            </warning>
-            You can run
-            the following command to start
-            <application>exim4</application> daemon.
-<screen>
+</screen> 生成主配置文件且被保存在 <filename>/var/lib/exim4/config.autogenerated</filename>. <warning>
+            <para>在任何时候，你都不要手工编辑主配置文件 <filename>/var/lib/exim4/config.autogenerated</filename>。它在每次您运行 <command>update-exim4.conf</command> 之后会自动更新。</para>
+            </warning> 您可以运行下列命令以启动 <application>exim4</application> 守护程序。 <screen>
 <command>sudo /etc/init.d/exim4 start</command>
-</screen>
-            <emphasis role="strong">TODO:</emphasis> This section should
-            cover configuring SMTP AUTH with exim4. 
-            </para>
+</screen><emphasis role="strong">TODO:</emphasis> 该内容将覆盖 exim4 的 SMTP AUTH 配置。</para>
         </sect3>
       </sect2>
       <sect2 id="dovecot-server" status="complete">
-        <title>Dovecot Server</title> 
-          <para>
-          <application>Dovecot</application> is a Mail Delivery Agent, written with security
-          primarily in mind. It supports the major mailbox formats: mbox
-          or Maildir. This section explain how to set it up as an imap or
-          pop3 server.
-          </para>
+        <title>Dovecot 服务器</title> 
+          <para><application>Dovecot</application> 是一个主要出于安全考虑编写的邮件投递代理。它支持主要收件箱格式：mbox 或 Maidir。这部分说明如何将它设为一个 imap 或 pop3 服务器。</para>
         <sect3 id="dovecot-installation" status="complete">
           <title>安装</title>
-            <para>
-            To install <application>dovecot</application>, run the following command in the
-            command prompt:
-<screen>
+            <para>要安装 <application>dovecot</application>，在命令提示符中运行下列命令：<screen>
 <command>sudo apt-get install dovecot-common dovecot-imapd dovecot-pop3d</command>
-</screen>
-            </para>
+</screen></para>
         </sect3>
         <sect3 id="dovecot-configuration" status="complete">
           <title>配置</title>
-            <para>
-            To configure <application>dovecot</application>, you can edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename>. You can
-            choose the protocol you use. It could be pop3, pop3s (pop3
-            secure), imap and imaps (imap secure). A description of these protocols is beyond the scope of this guide. For further information, refer to the wikipedia articles on <ulink url="http://en.wikipedia.org/wiki/POP3">POP3</ulink> and
-            <ulink url="http://en.wikipedia.org/wiki/Internet_Message_Access_Protocol">IMAP</ulink>.
-            </para>
+            <para>要配置 <application>dovecot</application>，您可以编辑文件 <filename>/etc/dovecot/dovecot.conf</filename>。您可以选择您所使用的协议。它可以是 pop3、pop3 (安全 pop3)、imap 和 imaps (安全 imap)。对这些协议的说明是超出该指南范围的。更多信息请参考 wikipedia 关于 <ulink url="http://en.wikipedia.org/wiki/POP3">POP3</ulink> 和 <ulink url="http://en.wikipedia.org/wiki/Internet_Message_Access_Protocol">IMAP</ulink> 的文章。</para>
 
-            <para>
-            IMAPS and POP3S are more secure that the simple IMAP and
-            POP3 because they use SSL encryption to connect. Once you
-            have chosen the protocol, amend the following line in the file
-            <filename>/etc/dovecot/dovecot.conf</filename>:
-<programlisting>
+            <para>IMAPS 和 POP3S 比简单 IMAP 和 POP3 更安全，因为他们使用 SSL 加密连接。一旦您选择了协议，修改在文件 <filename>/etc/dovecot/dovecot.conf</filename> 中的下列行：<programlisting>
 protocols = pop3 pop3s imap imaps
-</programlisting>
-
-            It enables the protocols when <application>dovecot</application> is started. Next, add the following line in pop3 section in the file <filename>/etc/dovecot/dovecot.conf</filename>:
-<programlisting>
+</programlisting> 当 <application>dovecot</application> 启动时协议开始生效。接下来在文件 <filename>/etc/dovecot/dovecot.conf</filename> 的 pop3 部分添加下列行：<programlisting>
 pop3_uidl_format = %08Xu%08Xv
-</programlisting>
-
-            Next, choose the mailbox you use. <application>Dovecot</application> supports
-            <emphasis role="strong">maildir</emphasis> and <emphasis role="strong">mbox</emphasis> formats. These are the most
-            commonly used mailbox formats. They both have their own
-            benefits and they are discussed on <ulink url="http://dovecot.org/doc/configuration.txt">the dovecot website</ulink>.
-            </para>
-            <para>
-            Once you have chosen your mailbox type, edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename> and change
-            the following line:
-<programlisting>
+</programlisting>。然后选择您所用的收件箱。<application>Dovecot</application> 支持 <emphasis role="strong">maildir</emphasis> 和 <emphasis role="strong">mbox</emphasis> 格式。大多数通常使用 mailbox 格式。它们都有自己的优点，并且在 <ulink url="http://dovecot.org/doc/configuration.txt">dovecot 网站</ulink> 上讨论。</para>
+            <para>一旦您选择了您的收件箱格式后，就可以编辑文件 <filename>/etc/dovecot/dovecot.conf</filename> 并修改下列行：<programlisting>
 default_mail_env = maildir:~/Maildir # (for maildir)
-or
+或
 default_mail_env = mbox:~/mail:INBOX=/var/spool/mail/%u # (for mbox)
-</programlisting>
-            </para>
+</programlisting></para>
 <note>
-<para>
-You should configure your Mail Trasport Agent (MTA) to transfer the
-incoming mail to this type of mailbox if it is different from the one
-you have configured.
-</para>
+<para>如果接收到的邮件类型与您已经配置不同，那么您要配置您的邮件传输代理 (MTA) 用来将该邮件传输到这种类型的收件箱中。</para>
 </note>
-          <para>
-          Once you have configured dovecot, start the <application>dovecot</application> daemon
-          in order to test your setup:
-
-          <screen><command>sudo /etc/init.d/dovecot start</command></screen>
-
-          If you have enabled imap, or pop3, you can also try to log in
-          with the commands <command>telnet localhost pop3</command> or
-          <command>telnet localhost</command> imap2. If you see
-          something like the following, the installation has been
-          successful:
-<programlisting>
+          <para>一旦您已经配置好了 dovecot，启动 <application>dovecot</application> 守护程序以测试您的设置：<screen><command>sudo /etc/init.d/dovecot start</command></screen> 如果您启用 imap 或 pop3，您也可以试着用命令 <command>telnet localhost pop3</command> 或 <command>telnet localhost imap2</command> 登录。如果您看到类似下面的东西，那么安装就成功了：<programlisting>
 bhuvan@rainbow:~$ telnet localhost pop3
 Trying 127.0.0.1...
 Connected to localhost.localdomain.
 Escape character is '^]'.
 +OK Dovecot ready.
-</programlisting>
-          </para>
+</programlisting></para>
         </sect3>
         <sect3 id="dovecot-ssl" status="complete">
-          <title>Dovecot SSL Configuration</title>
-            <para>
-            To configure <application>dovecot</application> to use SSL, you can edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename> and amend
-            following lines:
-<programlisting>
+          <title>Dovecot SSL 配置</title>
+            <para>要配置 <application>dovecot</application> 使用 SSL，您可以编辑文件 <filename>/etc/dovecot/dovecot.conf</filename> 并修改下列行：<programlisting>
 ssl_cert_file = /etc/ssl/certs/dovecot.pem
 ssl_key_file = /etc/ssl/private/dovecot.pem
 ssl_disable = no
 disable_plaintext_auth = no
-</programlisting>
-
-          The <emphasis role="strong">cert</emphasis> and <emphasis role="strong">key</emphasis> files are created automatically
-          by <application>dovecot</application> when you install it. Please note that these keys
-          are not signed and will give "bad signature" errors when
-          connecting from a client. To avoid this, you can use
-          commercial certificates, or even better, you can use your own
-          SSL certificates.
-          </para>
+</programlisting> 当您安装 <application>dovecot</application> 时，会通过它自动创建 <emphasis role="strong">cert</emphasis> 和 <emphasis role="strong">key</emphasis> 文件。请注意这些钥匙没被签名并会在客户端连接时给出 "bad signature" 的错误。要避免这一点，您可以使用商业证书，甚至更好，使用您自己签署的 SSL 证书。</para>
 	</sect3>
 	<sect3>
-	  <title>Firewall Configuration for an Email Server</title>
-          <para>
-          To access your mail server from another computer, you must
-          configure your firewall to allow connections to the server on
-          the necessary ports.
-            <itemizedlist>
+	  <title>邮件服务器的防火墙配置</title>
+          <para>要从另一台计算机访问您的邮件服务器，您必须配置您的防火墙以允许连接服务器必要的端口。<itemizedlist>
             <listitem><para>IMAP - 143</para></listitem>
             <listitem><para>IMAPS - 993</para></listitem>
             <listitem><para>POP3 - 110</para></listitem>
             <listitem><para>POP3S - 995</para></listitem>
-            </itemizedlist>
-          </para>
+            </itemizedlist></para>
         </sect3>
       </sect2>
       <sect2 id="mailman" status="complete">
         <title>Mailman</title> 
-          <para>
-          Mailman is an open source program for managing electronic mail
-          discussions and e-newsletter lists. Many open source mailing
-          lists (including all the <ulink url="http://lists.ubuntu.com">Ubuntu mailing lists</ulink>) use
-          Mailman as their mailing list software. It is powerful and easy
-          to install and maintain.
-          </para>
+          <para>Mailman 是一个管理电子邮件讨论及电子通讯列表的开源程序。许多开源的邮件列表 (包括所有的 <ulink url="http://lists.ubuntu.com">Ubuntu 邮件列表</ulink>)使用 Mailman 作为他们的邮件列表软件。它是强大的且易于安装和维护。</para>
         <sect3 id="mailman-installation" status="complete">
           <title>安装</title>
-            <para>
-            Mailman provides a web interface for the administrators
-            and users. So, it requires apache with mod_perl support.
-            Mailman uses an external mail server to send and receive 
-			emails. It works perfectly with the following mail servers:
-            </para>
+            <para>Mailman 为管理员和用户提供一个 web 界面。因此，它要求 apache 要有 mod_perl 的支持。Mailman 使用外部邮件服务器来发送和接收邮件。它可以与下列邮件服务器很好的工作：</para>
             <para>
             <itemizedlist spacing="compact">
                 <listitem>
@@ -3025,44 +1992,27 @@ disable_plaintext_auth = no
             </itemizedlist>
             </para>
 
-            <para>
-            We will see how to install mailman, the apache web server 
-			and the Exim mail server. If you wish to install mailman
-            with a different mail server, please refer to the references
-            section. 
-            </para>
+            <para>我们将看到如何安装 mailman、apache web 服务器和 Exim 邮件服务器。如果您希望安装 mailman 和一个不同的邮件服务器，请参考参考部分。</para>
           <sect4 id="mailman-apache2">
             <title>Apache2</title>
-              <para>
-                To install apache2 you refer to <xref linkend="http-installation"/>.
-              </para>
+              <para>要安装 apache2 您可以参考 <xref linkend="http-installation"/>。</para>
           </sect4>
           <sect4 id="mailman-exim4">
             <title>Exim4</title>
-              <para>
-              To install Exim4 you run the following commands at a terminal prompt:
-<screen>
-<command>sudo apt-get install exim4</command>
-<command>sudo apt-get install exim4-base</command>
-<command>sudo apt-get install exim4-config</command>
-</screen>
-
-Once exim4 is installed, the configuration files are stored in
-the <filename>/etc/exim4</filename> directory. In ubuntu, by default, the exim4 configuration files are
-split across different files. You can change this behavior by changing
-the following variable in the <filename>/etc/exim4/update-exim4.conf</filename> file:
-
-              <itemizedlist spacing="compact">
+              <para>要安装 Exim4 您可以在终端提示符后运行下列命令：<screen>↵
+<command>sudo apt-get install exim4</command>↵
+<command>sudo apt-get install exim4-base</command>↵
+<command>sudo apt-get install exim4-config</command>↵
+</screen> 一旦安装好 exim4，配置文件被保存在 <filename>/etc/exim4</filename> 目录中。缺省情况下，在 ubuntu 中，exim4 配置文件被分成不同的文件。您可以通过配置 <filename>/etc/exim4/update-exim4.conf</filename> 中的下列变量来改变这一现状：<itemizedlist spacing="compact">
               <listitem>
                 <para><application>dc_use_split_config='true'</application></para>
               </listitem>
-              </itemizedlist>
-              </para>
+              </itemizedlist></para>
           </sect4>
           <sect4 id="mailman-mailman">
             <title>Mailman</title>
               <para>
-              To install Exim4, run following command at a terminal prompt:
+              To install <application>Mailman</application>, run following command at a terminal prompt:
 <screen>
 <command>sudo apt-get install mailman</command> 
 </screen>
@@ -3078,86 +2028,50 @@ group. The mailman process will be owned by this user.
         </sect3>
         <sect3 id="mailman-configuration" status="complete">
           <title>配置</title>
-            <para>
-            This section assumes you have successfully installed
-            <application>mailman</application>,
-            <application>apache2</application>, and
-            <application>exim4</application>. Now you just need
-            to configure them. 
-            </para>
+            <para>本节假定您已经成功安装 <application>mailman</application>、<application>apache2</application>  和<application>exim4</application>。现在您只需要配置它们。</para>
           <sect4 id="mailman-conf-apache2">
             <title>Apache2</title>
-              <para>
-              Once apache2 is installed, you can add the following lines in
-              the <filename>/etc/apache2/apache2.conf</filename> file:
-<programlisting>
+              <para>一旦 apache2 安装之后，您可以在 <filename>/etc/apache2/apache2.conf</filename> 文件添加下列行：<programlisting>
 Alias /images/mailman/ "/usr/share/images/mailman/"
 Alias /pipermail/ "/var/lib/mailman/archives/public/"
-</programlisting>
-
-Mailman uses apache2 to render its CGI scripts. The mailman CGI scripts
-are installed in the <application>/usr/lib/cgi-bin/mailman</application>
-directory. So, the mailman url will be
-http://hostname/cgi-bin/mailman/. You can make changes to the
-<filename>/etc/apache2/apache2.conf</filename> file if you wish to
-change this behavior.
-              </para>
+</programlisting> Mailman 使用 apache2 来运行它的 CGI 脚本。mailman 的 CGI 脚本被安装在 <application>/usr/lib/cgi-bin/mailman</application> 目录中。因此 mailman 的 url 将是 http://hostname/cgi-bin/mailman/。如果您希望改变这一状况，您可以修改 <filename>/etc/apache2/apache2.conf</filename> 文件。</para>
           </sect4>
 
           <sect4 id="mailman-conf-exim4">
             <title>Exim4</title>
-              <para>
-              Once Exim4 is installed, you can start the Exim server using the following
-              command from a terminal prompt:
-<screen>
-<command>sudo apt-get /etc/init.d/exim4 start</command>
-</screen>
-
-In order to make mailman work with exim4, you need to configure exim4.
-As mentioned earlier, by default, exim4 uses multiple configuration
-files of different types. For details, please refer to the <ulink url="http://www.exim.org">Exim</ulink> website.  To run mailman, we
-should add new a configuration file to the following configuration
-types: 
-              <itemizedlist spacing="compact">
+              <para>一旦 Exim4 安装之后，您可以在终端提示符后使用下列命令启动 Exim 服务器：<screen>↵
+<command>sudo apt-get /etc/init.d/exim4 start</command>↵
+</screen> 为了使 mailman 可以和 exim4 一起工作，您需要配置 exim4。正如先前所说的那样，在缺省状态下 exim4 使用不同类型的多个配置文件。详情请参考 <ulink url="http://www.exim.org">Exim</ulink> 网站。要运行 mailman，我们可以新建一个配置文件到下列配置类型：<itemizedlist spacing="compact">
               <listitem>
-                <para>Main</para>
+                <para>主</para>
               </listitem>
               <listitem>
-                <para>Transport</para>
+                <para>传输</para>
               </listitem>
               <listitem>
-                <para>Router</para>
+                <para>路由器</para>
               </listitem>
-              </itemizedlist>
-              Exim creates a master configuration file by sorting all
-              these mini configuration files. So, the order of these
-              configuration files is very important.
-              </para>
+              </itemizedlist> Exim 按这些小的配置文件顺序创建出一个主配置文件。因此这些配置文件的顺序是非常重要的。</para>
           </sect4>
           <sect4 id="mailman-conf-main">
-            <title>Main</title>
-              <para>
-              All the configuration files belonging to the main type are
-              stored in the
-              <filename>/etc/exim4/conf.d/main/</filename> directory. You can add
-              the following content to a new file, named <filename>04_exim4-config_mailman</filename>:
-
-<programlisting>
-# start
-# Home dir for your Mailman installation -- aka Mailman's prefix
-# directory.
-# On Ubuntu this should be "/var/lib/mailman"
-# This is normally the same as ~mailman
-MM_HOME=/var/lib/mailman
-#
-# User and group for Mailman, should match your --with-mail-gid
-# switch to Mailman's configure script.  Value is normally "mailman"
-MM_UID=list
-MM_GID=list
-#
-# Domains that your lists are in - colon separated list
-# you may wish to add these into local_domains as well
-domainlist mm_domains=hostname.com
+            <title>主</title>
+              <para>所有隶属于主类别的配置文件都被保存在 <filename>/etc/exim4/conf.d/main/</filename> 目录中。您可以将下面的内容添加到一个名为 <filename>04_exim4-config_mailman</filename> 的新文件中：<programlisting>
+↵
+# start↵
+# Home dir for your Mailman installation -- aka Mailman's prefix↵
+# directory.↵
+# On Ubuntu this should be "/var/lib/mailman"↵
+# This is normally the same as ~mailman↵
+MM_HOME=/var/lib/mailman↵
+#↵
+# User and group for Mailman, should match your --with-mail-gid↵
+# switch to Mailman's configure script. Value is normally "mailman"↵
+MM_UID=list↵
+MM_GID=list↵
+#↵
+# Domains that your lists are in - colon separated list↵
+# you may wish to add these into local_domains as well↵
+domainlist mm_domains=hostname.com↵
 #
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #
@@ -3171,18 +2085,11 @@ MM_WRAP=MM_HOME/mail/mailman
 # verifying list addresses)
 MM_LISTCHK=MM_HOME/lists/${lc::$local_part}/config.pck
 # end
-</programlisting>
-          </para>
+</programlisting></para>
           </sect4>
           <sect4 id="mailman-conf-transport">
-            <title>Transport</title>
-              <para>
-All the configuration files belonging to transport type are stored in
-the <filename>/etc/exim4/conf.d/transport/</filename> directory. You
-can add the following content to a new file named <filename>
-40_exim4-config_mailman</filename>:
-
-<programlisting>
+            <title>传输</title>
+              <para>所有隶属于传输类型的文件被保存在 <filename>/etc/exim4/conf.d/transport/</filename> 目录中。您可以将下面的内容添加到一个名为 <filename>40_exim4-config_mailman</filename> 的新文件中：<programlisting>
   mailman_transport:
    driver = pipe
    command = MM_WRAP \
@@ -3194,16 +2101,11 @@ can add the following content to a new file named <filename>
     home_directory = MM_HOME
     user = MM_UID
     group = MM_GID
-</programlisting>
-              </para>
+</programlisting></para>
           </sect4>
           <sect4 id="mailman-conf-router">
-            <title>Router</title>
-              <para>
-All the configuration files belonging to router type are stored in the
-<filename>/etc/exim4/conf.d/router/</filename> directory. You can add the following content
-in to a new file named <filename>101_exim4-config_mailman</filename>:
-<programlisting>
+            <title>路由器</title>
+              <para>所有隶属于路由类的所有配置文件都被保存在 <filename>/etc/exim4/conf.d/router/</filename> 目录中。您可以将下列内容添加到名为 <filename>101_exim4-config_mailman</filename> 的新文件中：<programlisting>
   mailman_router:
    driver = accept
    require_files = MM_HOME/lists/$local_part/config.pck
@@ -3211,39 +2113,19 @@ in to a new file named <filename>101_exim4-config_mailman</filename>:
    local_part_suffix = -bounces : -bounces+* : \
                        -confirm+* : -join : -leave : \
                        -owner : -request : -admin
-   transport = mailman_transport
-</programlisting>
-
-              </para>
+   transport = mailman_transport↵
+</programlisting></para>
 <warning>
-<para>
-The order of main and transport configuration files can be in any order.
-But, the order of router configuration files must be the same.
-This particular file must appear before the
-<application>200_exim4-config_primary</application> file.
-These two configuration files contain same type of information. The
-first file takes the precedence. For more details, please refer to the
-references section.
-</para>
+<para>主类和传输类的配置文件的顺序可以随意。但路由类的配置文件的顺序必须相同。该文件必须在 <application>200_exim4-config_primary</application> 文件之前出现。如果两个配置文件包含相同类型的信息。第一个文件优先。详情请参阅参考部分。</para>
 </warning>
           </sect4>
           <sect4 id="mailman-conf-mailman">
             <title>Mailman</title>
-              <para>
-Once mailman is installed, you can run it using the following command:
-<screen>
+              <para>安装 mailman 之后，您可以使用下列命令来运行它：<screen>
 <command>sudo /etc/init.d/mailman start</command>
-</screen>
-
-Once mailman is installed, you should create the default mailing list.
-Run the following command to create the mailing list:
-
-
-<screen>
+</screen> 一旦 mailman 安装，您必须创建缺省的邮件列表。运行下列命令以创建邮件列表：<screen>
 <command>sudo /usr/sbin/newlist mailman</command>
-</screen>
-
-<programlisting>
+</screen><programlisting>
   Enter the email address of the person running the list: bhuvan at ubuntu.com
   Initial mailman password:
   To finish creating your mailing list, you must edit your <filename>/etc/aliases</filename> (or
@@ -3251,85 +2133,45 @@ Run the following command to create the mailing list:
   `newaliases' program:
 
   ## mailman mailing list
-  mailman:              "|/var/lib/mailman/mail/mailman post mailman"
-  mailman-admin:        "|/var/lib/mailman/mail/mailman admin mailman"
-  mailman-bounces:      "|/var/lib/mailman/mail/mailman bounces mailman"
-  mailman-confirm:      "|/var/lib/mailman/mail/mailman confirm mailman"
-  mailman-join:         "|/var/lib/mailman/mail/mailman join mailman"
-  mailman-leave:        "|/var/lib/mailman/mail/mailman leave mailman"
-  mailman-owner:        "|/var/lib/mailman/mail/mailman owner mailman"
-  mailman-request:      "|/var/lib/mailman/mail/mailman request mailman"
-  mailman-subscribe:    "|/var/lib/mailman/mail/mailman subscribe mailman"
-  mailman-unsubscribe:  "|/var/lib/mailman/mail/mailman unsubscribe mailman"
-
+  mailman: "|/var/lib/mailman/mail/mailman post mailman"
+  mailman-admin: "|/var/lib/mailman/mail/mailman admin mailman"
+  mailman-bounces: "|/var/lib/mailman/mail/mailman bounces mailman"
+  mailman-confirm: "|/var/lib/mailman/mail/mailman confirm mailman"
+  mailman-join: "|/var/lib/mailman/mail/mailman join mailman"
+  mailman-leave: "|/var/lib/mailman/mail/mailman leave mailman"
+  mailman-owner: "|/var/lib/mailman/mail/mailman owner mailman"
+  mailman-request: "|/var/lib/mailman/mail/mailman request mailman"
+  mailman-subscribe: "|/var/lib/mailman/mail/mailman subscribe mailman"
+  mailman-unsubscribe: "|/var/lib/mailman/mail/mailman unsubscribe mailman"
+↵
   Hit enter to notify mailman owner...
 
   # 
-</programlisting>
-
-We have configured exim to recognize all emails from mailman. So, it is
-not mandatory to make any new entries in
-<filename>/etc/aliases</filename>.  If you have made any changes
-to the configuration files, please ensure that you restart those
-services before continuing to next section.
-</para>
+</programlisting> 我们已经把 exim 配置成可以识别所有来自 mailman 的邮件。因此并不需要在 <filename>/etc/aliases</filename> 中添加任何新的条目。如果您对配置文件做了改动，请确保您在进入下一章节之前重启了这些服务。</para>
           </sect4>
         </sect3>
         <sect3 id="mailman-admin" status="complete">
-          <title>Administration</title>
-<para>
-We assume you have a default installation. The
-mailman cgi scripts are still in
-<application>/usr/lib/cgi-bin/mailman/</application> directory.  Mailman
-provides a web based administration facility. To access this page, point
-your browser to the following url: 
+          <title>管理</title>
+<para>我们假定您已经进行了缺省安装。mailman 的 cgi 脚本应该在 <application>/usr/lib/cgi-bin/mailman/</application> 目录中。Mailman 提供了一个基于 web 管理工具。可以在您的浏览器输入下列 url 访问该页：</para>
+<para>http://hostname/cgi-bin/mailman/admin</para>
 
-</para>
-<para>
-http://hostname/cgi-bin/mailman/admin
-</para>
-
-<para>
-The default mailing list, <emphasis>mailman</emphasis>,
-will appear in this screen. If you click the mailing list name, it
-will ask for your authentication password.  If you enter the correct
-password, you will be able to change administrative settings of this
-mailing list.
-
-You can create a new mailing list using command line utility
-(<command>/usr/sbin/newlist</command>).
-Alternatively, you can create a new mailing list using web interface. 
-</para>
+<para>缺省的邮件列表 <emphasis>mailman</emphasis> 将出现在屏幕上。如果您点击邮件列表名，它将询问您的认证密码。如果您输入了正确的密码，您将可以改变该邮件列表的管理设置。您可以使用命令行工具 (<command>/usr/sbin/newlist</command>) 创建一个新的邮件列表，您也可以使用 web 界面来创建新的邮件列表。</para>
         </sect3>
         <sect3 id="mailman-users" status="complete">
-          <title>Users</title>
-<para>
-Mailman provides a web based interface for users. To access this page,
-point your browser to the following url:
-</para>
+          <title>用户</title>
+<para>Mailman 为用户提供了一个 web 界面，可以在您的浏览器中输入下列 url 来访问该页：</para>
 
-<para>
-http://hostname/cgi-bin/mailman/listinfo
-</para>
+<para>http://hostname/cgi-bin/mailman/listinfo</para>
 
-<para>
-The default mailing list, <emphasis>mailman</emphasis>,
-will appear in this screen. If you
-click the mailing list name, it will display the subscription form. You
-can enter your email address, name (optional), and password to subscribe.
-An email invitation will be sent to you. You can follow the
-instructions in the email to subscribe.
-</para>
+<para>缺省邮件列表 <emphasis>mailman</emphasis> 将出现在屏幕上。如果您点击邮件列表名，它将显示订阅表单。您可以输入您的邮件地址、姓名 (可选)及密码来订阅。一个邀请邮件将发送给您。您可以根据该邮件的指示完成订阅。</para>
         </sect3>
         <sect3 id="mailman-references" status="complete">
           <title>引用</title>
 <para>
-<ulink url="http://www.list.org/mailman-install/index.html"> GNU Mailman
-- Installation Manual</ulink>
+<ulink url="http://www.list.org/mailman-install/index.html">GNU Mailman - 安装手册</ulink>
 </para>
 <para>
-<ulink url="http://www.exim.org/howto/mailman21.html">HOWTO - Using Exim
-4 and Mailman 2.1 together</ulink>
+<ulink url="http://www.exim.org/howto/mailman21.html">指南 - 一起使用 Exim 4 和 Mailman 2.1</ulink>
 </para>
         </sect3>
       </sect2>

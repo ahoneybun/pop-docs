@@ -5,7 +5,7 @@
 <!ENTITY project-name "Ubuntu Documentation Project">
 <!ENTITY ubuntu "<phrase>Ubuntu</phrase>">
 <!-- VERSIONS --><!ENTITY distro-version "Dapper Drake">
-<!ENTITY distro-rev "6.06">
+<!ENTITY distro-rev "6.06 LTS">
 <!ENTITY distro-release-date "June 2006">
 <!ENTITY linux-kernel-version "2.6.15">
 <!ENTITY gcc-version "4.0.3">
@@ -395,41 +395,20 @@
 <!ENTITY language "&EnglishAmerican;">
 ]>
 <chapter id="windows-networking" status="complete">
-	<title>Windows Networking</title>
-  <para>Computer networks are often comprised of diverse systems, and while operating a network
-  made up entirely of Ubuntu desktop and server computers would certainly be fun, some network environments
-  must consist of both Ubuntu and <trademark class="registered">Microsoft</trademark> 
-  <trademark class="registered">Windows</trademark> systems working together in harmony.  
-  This section of the <phrase>Ubuntu</phrase> Server Guide introduces principles and tools used in 
-  configuring your Ubuntu Server for sharing network resources with Windows computers.
-  </para>
+	<title>Siete Windows</title>
+  <para>Počítačové siete často pozostávajú z rozličných systémov a aj keď prevádzka siete vytvorenej čisto z pracovných staních a serverov Ubuntu by bola isto zábava, niektoré sieťové prostredia musia pozostávať aj zo systémov Ubuntu a <trademark class="registered">Microsoft</trademark><trademark class="registered">Windows</trademark> spolupracujúcich v harmónii. Táto sekcia Sprievodcu servera <phrase>Ubuntu</phrase> predstavuje princípy a nástroje používané pri nastavovaní vášho Ubuntu servera pre zdieľanie sieťových zdrojov s počítačmi Windows.</para>
 	<sect1 id="windows-networking-introduction" status="complete">
 		<title>Úvod</title>
-          <para>
-          Successfully networking your Ubuntu system with Windows clients involves providing and integrating with services 
-          common to Windows environments. Such services assist the sharing of data and information about the computers 
-          and users involved in the network, and may be classified under three major categories of functionality:
-          </para>
+          <para>Úspešné prepojenie sietí vášho Ubuntu systému s klientami Windows zahŕňa poskytovanie a integráciu služieb bežných pre prostredia Windows. Také služby pomáhajú zdieľať dáta a informácie o počítačoch a používateľoch v sieti a môžu byť klasifikované do troch hlavných kategórii funkčnosti:</para>
           <itemizedlist>
              <listitem>
-             <para>
-             <emphasis role="bold">File and Printer Sharing Services</emphasis>. Using the Server Message Block (SMB) protocol to facilitate
-             the sharing of files, folders, volumes, and the sharing of printers throughout the network.
-             </para>
+             <para><emphasis role="bold">Služby zdieľania súborov a tlačiarní</emphasis>. Použitie protokolu Server Message Block (SMB)  na uľahčenie zdieľania súborov, priečinkov, oddielov a zdieľanie tlačiarní po celej sieti.</para>
              </listitem>
              <listitem>
-             <para>
-             <emphasis role="bold">Directory Services</emphasis>. Sharing vital information about the computers and users of the network
-             with such technologies as the Lightweight Directory Access Protocol (LDAP) and Microsoft
-             <trademark class="registered">Active Directory</trademark>.
-             </para>
+             <para><emphasis role="bold">Služby Directory</emphasis>. Zdieľanie dôležitých informácií o počítačoch a používateľoch siete s takými technológiami ako Lightweight Directory Access Protocol (LDAP) a Microsoft <trademark class="registered">Active Directory</trademark>.</para>
              </listitem>
              <listitem>
-             <para>
-             <emphasis role="bold">Authentication and Access</emphasis>. Establishing the identity of a computer or user of the network and 
-             determining the information the computer or user is authorized to access using such principles and technologies as
-             file permissions, group policies, and the Kerberos authentication service.
-             </para>
+             <para><emphasis role="bold">Oprávnenie a prístup</emphasis>. Vytvorenie identity počítača alebo používateľa siete a určenie informácií, ku ktorým je počítač alebo používateľ oprávnený pristupovať pomocou takých princípov a technológií ako prístupové práva s súborom, politika skupín a overovacia služba Kerberos.</para>
              </listitem>
           </itemizedlist>
           <para>Fortunately, your Ubuntu system may provide all such facilities to Windows clients and share network resources among them.  
@@ -457,13 +436,9 @@
 </screen>
            </para>
             <tip>
-               <para>Prior to editing the configuration file, you should make a copy of the original file and protect it 
-               from writing so you will have the original settings as a reference and to re-use as necessary.
-             </para>
+               <para>Pred úpravou konfiguračného súboru by ste si mali urobiť kópiu pôvodného súboru a ochrániť ho voči zápisu, takže sa budete môct odvolať na pôvodné nastavenia a podľa potreby ich znovu použiť.</para>
             </tip>
-           <para>
-          Backup the <filename>/etc/samba/smb.conf</filename> file:
-          </para>
+           <para>Zálohovať súbor <filename>/etc/samba/smb.conf</filename>:</para>
              <para>
 <screen>
 <command>sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.original</command>
@@ -526,23 +501,16 @@
                  the values:
                  </para>
                  <para>
-                 <emphasis role="bold">realm = DOMAIN_NAME</emphasis>
+                 <emphasis role="bold">doména = NAZOV_DOMÉNY</emphasis>
                  </para>
                  <para>
-                 <emphasis role="bold">security = ADS</emphasis>
+                 <emphasis role="bold">bezpečnosť = ADS</emphasis>
                  </para>
-                 <para>
-                 to the file, and save the file.  
-                 </para>
+                 <para>do súboru a uložiť.</para>
                     <tip>
-                       <para>Be sure to replace the token DOMAIN_NAME in the example above with the actual name of your specific
-                       Windows Domain.
-                       </para>
+                       <para>Nezabudnite nahradiť NAZOV_DOMÉNY v hore uvedenom príklade platným názvom vašej špecifickej Windows domény.</para>
                     </tip>
-                 <para>
-                 You will need to restart the SAMBA daemons to effect these changes.  Restart the SAMBA
-                 daemons with the following command entered at a terminal prompt:
-                 </para>
+                 <para>Budete musieť reštartovať SAMBA démony, aby sa tieto zmeny uskutočnili. Reštartovať SAMBA démony následujúcim príkazom uvedenom vo výzve terminálu:</para>
                     <para>
 <screen>
 <command>sudo /etc/init.d/samba restart</command>
@@ -568,13 +536,11 @@
             </para>
                <para>
 <screen>
-<command>sudo smbpasswd -a -m COMPUTER_NAME</command>
+<command>sudo smbpasswd -a -m NÁZOV_POČITAČA</command>
 </screen>
                </para>
                   <tip>
-                      <para>Be sure to replace the token COMPUTER_NAME in the example above with the actual name of the specific
-                      computer you wish to add a machine account for.
-                      </para>
+                      <para>Nezabudnite nahradiť NÁZOV_POČITAČA v hore uvedenom príklade platným názvom vášho špecifického počítača, pre ktorý su želáte pridať konto.</para>
                    </tip>
         </sect3>
         <sect3 id="file-permissions" status="complete">

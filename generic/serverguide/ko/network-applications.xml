@@ -5,7 +5,7 @@
 <!ENTITY project-name "Ubuntu Documentation Project">
 <!ENTITY ubuntu "<phrase>Ubuntu</phrase>">
 <!-- VERSIONS --><!ENTITY distro-version "Dapper Drake">
-<!ENTITY distro-rev "6.06">
+<!ENTITY distro-rev "6.06 LTS">
 <!ENTITY distro-release-date "June 2006">
 <!ENTITY linux-kernel-version "2.6.15">
 <!ENTITY gcc-version "4.0.3">
@@ -396,94 +396,34 @@
 ]>
 <chapter id="networking" status="complete">
 	<title>네트워킹</title>
-  <para>Networks consist of two or more devices, such as computer systems, printers, and related
-        equipment which are connected by either physical cabling wireless links for the
-        purpose of sharing and distributing information among the connected devices. 
-  </para>
-  <para>This section of the Ubuntu Server Guide provides general and specific information pertaining
-        to networking, including an overview of network concepts and detailed discussion of popular
-        network protocols and server applications.
-  </para>
+  <para>네트워크는 연결된 장치 간에 정보를 공유하고 배포할 목적으로 실제 케이블 또는 무선 링크로 연결된 컴퓨터 시스템, 프린터, 그리고 관련되는 장비와 같은 두 개 이상의 장치로 구성 됩니다.</para>
+  <para>우분투 서버 안내서의 이 영역은 네트워크 개념의 개괄적인 설명과 잘 알려진 네트워크 프로토콜과 서버 프로그램의 자세한 논의를 포함하는, 네트워킹에 속하는 일반적이고 특정한 정보를 제공 합니다.</para>
 	<sect1 id="network-configuration" status="complete">
 		<title>네트워크 설정</title>
-          <para>
-            Ubuntu ships with a number of graphical utilities to configure your network devices.
-			This document is geared toward server administrators and will focus on managing your
-			network on the command line.
-          </para>
+          <para>우분투는 여러분의 네트워크 장치를 설정할 수 있는 몇 가지 그래픽 유틸리티를 제공 합니다. 이 문서는 서버 관리자를 위하여 작성되었고 명령어 라인에서 여러분의 네트워크를 관리하는 것에 중점 합니다.</para>
       <sect2 id="ethernet" status="complete">
         <title>이더넷</title> 
-          <para>
-		  Most ethernet configuration is centralized in a single file,
-		  <filename>/etc/network/interfaces</filename>.  If you have no ethernet devices, only
-		  the loopback interface will appear in this file, and it will look something like
-		  this:
-		  <screen># This file describes the network interfaces available on your system
+          <para>대부분 이더넷 설정은 <filename>/etc/network/interfaces</filename> 파일 하나에 중앙화 되었습니다. 만약 여러분이 이더넷 장치를 가지고 있지 않다면, 이 파일에는 오직 loopback 인터페이스만 보일 것이고, 그것은 다음과 비슷하게 보일 겁니다: <screen># This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
 
 # The loopback network interface
 auto lo
 iface lo inet loopback
 address 127.0.0.1
-netmask 255.0.0.0</screen>
-		If you have only one ethernet device, eth0, and it gets its configuration from a DHCP server,
-		and it should come up automatically at boot, only two additional lines are required:
-		<screen>auto eth0
-iface eth0 inet dhcp</screen>
-		The first line specifies that the eth0 device should come up automatically when you boot.
-		The second line means that interface (<quote>iface</quote>) eth0 should have an IPv4 address
-		space (replace <quote>inet</quote> with <quote>inet6</quote> for an IPv6 device) and that
-		it should get its configuration automatically from DHCP.  Assuming your network and DHCP
-		server are properly configured, this machine's network should need no further configuration to
-		operate properly.  The DHCP server will provide the default gateway (implemented via the
-		<application>route</application> command), the device's IP address (implemented via the 
-		<application>ifconfig</application> command), and and DNS servers used on the network
-		(implemented in the <filename>/etc/resolv.conf</filename> file.)</para>
-		<para>To configure your ethernet device with a static IP address and custom configuration,
-		some more information will be required.  Suppose you want to assign the IP address
-		192.168.0.2 to the device eth1, with the typical netmask of 255.255.255.0.  Your default
-		gateway's IP address is 192.168.0.1.  You would enter something like this into
-		<filename>/etc/network/interfaces</filename>:
-		<screen>iface eth1 inet static
+netmask 255.0.0.0</screen> 만약 여러분이 오직 하나의 이더넷 장치, eth0를 가지고 있고, 그것이 DHCP 서버에서 설정을 가지고 부트 시에 자동으로 올라와야 한다면, 다음의 두 줄이 더해지는 것이 필요 합니다: <screen>auto eth0
+iface eth0 inet dhcp</screen> 첫 번째 줄은 eth0 장치가 여러분이 부팅을 할 때 자동적으로 올라와야 한다는 것을 지정 합니다. 두 번째 줄은, 인터페이스 (<quote>iface</quote>) eth0는 IPv4 주소 체계를 (IPv6 장치를 위해서는 <quote>inet</quote> 를 <quote>inet6</quote> 로 대체함) 가지고 DHCP에서 자동적으로 그 장치의 설정을 가져야 한다는 것을, 의미 합니다. 여러분의 네트워크와 DHCP 서버가 올바르게 설정되었음을 가정하고, 이 기계의 네트워크는 올바르게 동작하기 위해 더 이상의 설정을 필요로 하지 않습니다. DHCP 서버는 기본 설정 게이트웨이(<application>route</application> 명령을 통하여 이행되는), 장치의 IP 주소(<application>ifconfig</application> 명령을 통하여 이행되는), 그리고 네트워크 상에서 사용되는 DNS 서버를(<filename>/etc/resolv.conf</filename> 파일에 이행되는) 제공 합니다.</para>
+		<para>여러분의 이더넷 장치를 고정 IP 주소와 여러분에 맞는 설정값으로 설정을 하려면, 몇 가지 정보가 더 필요 합니다. eth1 장치에 192.168.0.2 IP 주소를, 일반적인 255.255.255.0 netmask와 함께 지정하기를 원한다고 생각해 봅니다. 여러분의 기본 설정 게이트웨이의 IP 주소는 192.168.0.1 입니다. <filename>/etc/network/interfaces</filename> 파일에 다음과 같이 입력을 합니다: <screen>iface eth1 inet static
 	address 192.168.0.2
 	netmask 255.255.255.0
-	gateway 192.168.0.1</screen>
-		In this case, you will need to specify your DNS servers manually in
-		<filename>/etc/resolv.conf</filename>, which should look something like this:
-		<screen>search mydomain.com
+	gateway 192.168.0.1</screen> 이 경우에는, <filename>/etc/resolv.conf</filename> 파일에 여러분의 DNS 서버를 수동으로 지정하는 것이 필요하고, 이것과 비슷할 겁니다: <screen>search mydomain.com
 nameserver 192.168.0.1
-nameserver 4.2.2.2</screen>
-		The <emphasis role="italics">search</emphasis> directive will append mydomain.com
-		to hostname queries in an attempt to resolve names to your network.  For example,
-		if your network's domain is mydomain.com and you try to ping the host
-		<quote>mybox</quote>, the DNS query will be modified to <quote>mybox.mydomain.com</quote>
-		for resolution.  The <emphasis role="italics">nameserver</emphasis> directives
-		specifiy DNS servers to be used to resolve hostnames to IP addresses.  If you use
-		your own nameserver, enter it here.  Otherwise, ask your Internet Service Provider
-		for the primary and secondary DNS servers to use, and enter them into
-		<filename>/etc/resolv.conf</filename> as shown above.</para>
-		<para>Many more configurations are possible, including dialup PPP interfaces, IPv6
-		networking, VPN devices, etc.  Refer to <application>man 5 interfaces</application>
-		for more information and supported options.  Remember that
-		<filename>/etc/network/interfaces</filename> is used by the 
-		<application>ifup</application>/<application>ifdown</application> scripts as a
-		higher level configuration scheme than may be used in some other Linux distributions,
-		and that the traditional, lower level utilities such as <application>ifconfig</application>,
-		<application>route</application>, and <application>dhclient</application> are still
-		available to you for ad hoc configurations.
-		</para>
+nameserver 4.2.2.2</screen> <emphasis role="italics">search</emphasis> 지시자는 여러분의 네트워크 상의 이름을 해결하기 위한 시도를 할 때 mydomain.com을 호스트 이름 질의에 추가하게 됩니다. 예를 들어, 만약 여러분의 네트워크 도메인이 mydomain.com 이고, 여러분이 호스트 <quote>mybox</quote> 에 ping을 시도하면, 그 DNS 질의는 이름의 파악을 위하여 <quote>mybox.mydomain.com</quote> 으로 변경 됩니다. <emphasis role="italics">nameserver</emphasis> 지시자는 호스트 이름을 IP 주소로 해결하기 위하여 사용되는 DNS 서버를 지정 합니다. 만약 여러분 소유의 네임서버를 사용하면, 그것을 여기에 입력 하십시오. 그렇지 않다면, 여러분의 인터넷 서비스 제공자에게 사용할 우선(primary) 그리고 이차(secondary) DNS 서버를 문의하고, 그것들을 위에 보인 것과 같이 <filename>/etc/resolv.conf</filename> 파일에 입력 합니다.</para>
+		<para>다이얼업 PPP 인터페이스, IPv6 네트워킹, VPN 장치, 기타 등등을 포함하는 많은 다른 설정들이 가능합니다. 더 많은 정보와 지원되는 선택 사항들은 <application>man 5 interfaces</application> 를 참조 하십시오. 기억해야 할 것은,  <filename>/etc/network/interfaces</filename> 파일은 <application>ifup</application>/<application>ifdown</application> 스크립트에 의하여 사용되고, 그것들은 다른 리눅스 배포판에서 사용되는 것보다 높은 수준의(역주:사용의 편의를 기했다는 의미) 설정 체계 입니다. <application>ifconfig</application>, <application>route</application>, 그리고 <application>dhclient</application> 와 같은 전통적이고, 낮은 수준의(역주:명령어 라인에 직접 입력해야 한다는 의미) 유틸리티는 여전히 ad hoc 설정을 위하여 사용 가능 합니다.</para>
       </sect2>
       <sect2 id="managing-dns-entries" status="complete">
           <title>DNS 항목 관리</title>
-            <para>This section explains how to configure the nameserver
-            to use when resolving IP address to hostnames and vice
-            versa. It does not explain how to configure the system as a name
-            server.
-            </para>
-            <para>
-            To manage DNS entries, you can add, edit, or remove DNS names
-            from the <filename>/etc/resolv.conf</filename> file. A <ulink url="sample/resolv.conf">sample file</ulink> is given below:
-            </para>
+            <para>이 영역은 IP 주소를 호스트 이름으로 파악을 하고 또 그 반대로 알아내는데 사용하는 네임서버를 어떻게 설정하는지에 대한 설명을 합니다. 이것은 시스템을 하나의 네임 서버로 어떻게 구축하는지를 설명하지는 않습니다.</para>
+            <para>DNS 항목을 관리하려면, 여러분은 <filename>/etc/resolv.conf</filename> 파일에서 DNS 이름을 추가, 편집 또는 삭제할 수 있습니다. <ulink url="../sample/resolv.conf">예제 파일</ulink>이 아래와 같이 주어집니다:</para>
 <programlisting>
 search com
 nameserver 204.11.126.13
@@ -492,311 +432,96 @@ nameserver 64.125.134.132
 nameserver 208.185.179.218
 </programlisting>
             
-            <para>
-             The <application>search</application> key specifies the string
-             which will be appended to an incomplete hostname. Here, we
-             have mentioned it as <application>com</application>. So, when we
-             run: <command>ping ubuntu</command> it would be interpreted
-             as <command>ping ubuntu.com</command>.
-            </para> 
+            <para><application>search</application> 키는 불완전한 호스트 이름에 더하여지는 문자를 지정 합니다. 여기에, 우리는 그것을 <application>com</application> 으로 언급하였습니다. 그러므로, 우리가 다음과 수행할 때: <command>ping ubuntu</command> 은 <command>ping ubuntu.com</command> 으로 해석되어 집니다.</para> 
 
-            <para>
-            The <application>nameserver</application> key specifies the
-            nameserver IP address. It will be used to resolve the given
-            IP address or hostname. This file can have multiple nameserver
-            entries. The nameservers will be used by the network query
-            in the same order.
-            </para>
+            <para><application>nameserver</application> 키는 네임서버 IP 주소를 지정 합니다. 그것은 주어진 IP 주소 또는 호스트 이름을 해결하기 위하여 사용 됩니다. 이 파일은 복수 개의 nameserver 항목을 가질 수 있습니다. 네임서버들은 적힌 것과 같은 순서로 네트워크 질의에 사용 됩니다.</para>
 
             <warning>
-            <para>
-            If the DNS server names are retrieved dynamically from DHCP
-            or PPPOE (retrieved from your ISP), do not add nameserver
-            entries in this file. It will be updated automatically.
-           </para>
+            <para>만약 DNS 서버 이름이 동적으로 DHCP 또는 PPPOE (여러분의 ISP에서) 읽혀졌다면, 이 파일에 nameserver 항목을 추가하지 마십시오. 그것은 자동적으로 업데이트 됩니다.</para>
             </warning>
 
         </sect2>
         <sect2 id="managing-hosts" status="complete">
           <title>호스트 관리</title>
-            <para>
-            To manage hosts, you can add, edit, or remove hosts from
-            <filename>/etc/hosts</filename> file. The file contains IP
-            addresses and their corresponding hostnames.  When your
-            system tries to resolve a hostname to an IP address or
-            determine the hostname for an IP address, it refers to the
-            <filename>/etc/hosts</filename> file before using the name
-            servers.  If the IP address is listed in the
-            <filename>/etc/hosts</filename> file, the name servers are
-            not used.  This behavior can be modified by editing <filename>
-			/etc/nsswitch.conf</filename> at your peril.
-            </para>
+            <para>호스트를 관리하기 위하여, 여러분은 <filename>/etc/hosts</filename> 파일에서 호스트를 추가, 편집 또는 삭제할 수 있습니다. 그 파일은 IP 주소와 그에 대응하는 호스트 이름을 가집니다. 여러분의 시스템이 호스트 이름으로 IP 주소를 해결하거나 IP 주소로 호스트 이름을 결정할 때, 그것은 네임서버를 사용하기 전에 <filename>/etc/hosts</filename> 파일을 참조 합니다. 만약 그 IP 주소가 <filename>/etc/hosts</filename> 파일 내에 열거되었다면, 네임서버는 사용되지 않습니다. 이 동작은 여러분이 위험을 감수하는 것을 전제로 <filename> /etc/nsswitch.conf</filename> 파일을 편집하는 것으로 변경될 수 있습니다.</para>
 
-            <para>
-            If your network contains computers whose IP
-            addresses are not listed in DNS, it is recommended that you
-            add them to the <filename>/etc/hosts</filename> file.
-            </para>
+            <para>만약 여러분의 네트워크이 DNS에 나열되지 않은 IP 주소를 가지는 컴퓨터들을 가지고 있다면, 그것들을 <filename>/etc/hosts</filename> 파일에 추가하는 것을 권장 합니다.</para>
         </sect2>
     </sect1>
 	<sect1 id="tcpip" status="complete">
 		<title>TCP/IP</title>
-          <para>
-            The Transmission Control Protocol and Internet Protocol (TCP/IP) is a standard 
-			set of protocols developed in the late 1970s by the Defense Advanced Research 
-			Projects Agency (DARPA) as a means of communication between different types of 
-			computers and computer networks. TCP/IP is the driving force of the Internet, 
-			and thus it is the most popular set of network protocols on Earth. 
-          </para>
+          <para>Transmission Control Protocol and Internet Protocol (TCP/IP) 는 1970년대 후반에 Defense Advanced Research Projects Agency (DARPA) 에 의하여 개발된 프로토콜의 표준화된 규격이고 다른 종류의 컴퓨터와 컴퓨터 네트워크 간에 통신을 하기 위한 수단 입니다. TCP/IP 는 인터넷을 주도하는 힘이고, 그러므로 그것은 지구상의 네트워크 프로토콜 중에 가장 인기있는 규약 입니다.</para>
       <sect2 id="tcpip-introduction" status="complete">
         <title>TCP/IP 소개</title> 
-          <para>
-            The two protocol components of TCP/IP deal with different aspects of computer networking.
-            <emphasis>Internet Protocol</emphasis>, the "IP" of TCP/IP is a 
-			connectionless protocol which deals only with network packet routing using the <emphasis role="italics">IP datagram</emphasis> as the basic unit of networking information.  The 
-			IP datagram consists of a header followed by a message.  The <emphasis>
-			Transmission Control Protocol</emphasis> is the "TCP" of TCP/IP and enables network hosts 
-			to establish connections which may be used to exchange data streams.  TCP also guarantees 
-			that the data between connections is delivered and that it arrives at one network host in 
-			the same order as sent from another network host.
-          </para>
+          <para>TCP/IP의 두 가지 프로토콜 요소는 컴퓨터 네트워킹의 다른 측면을 다룹니다. <emphasis>Internet Protocol</emphasis>, TCP/IP의 "IP"는 네트워크 정보의 기본 단위로서 <emphasis role="italics">IP datagram</emphasis> 을 사용하는 네트워크 패킷 라우팅만을 다루는 접속이 없는 프로토콜 입니다. TCP/IP의 "TCP" 는 <emphasis> Transmission Control Protocol</emphasis> 이고, 네트워크 호스트들이 데이터 스트림을 교환하기 위하여 사용될 수 있는 접속을 이루기 위해 활성화 합니다. TCP는 또한 접속들 간에 자료가 한 네트워크 호스트에서 주고 받는 것과 마찬가지로 다른 네트워크 호스트에서 보내지는 것도 보장 합니다.</para>
           </sect2>
         <sect2 id="tcpip-configuration" status="complete">
           <title>TCP/IP 설정</title>
-            <para>
-            The TCP/IP protocol configuration consists of several elements which must be set by 
-			editing the appropriate configuration files, or deploying solutions such as the Dynamic 
-			Host Configuration Protocol (DHCP) server which in turn, can be configured to provide the 
-			proper TCP/IP configuration settings to network clients automatically. These 
-			configuration values must be set correctly in order to facilitate the proper network 
-			operation of your Ubuntu system.
-            </para>
-            <para>
-            The common configuration elements of TCP/IP and their purposes are as follows:
-            <itemizedlist>
+            <para>TCP/IP 프로토콜 설정은, 해당 설정 파일들을 편집하거나, 적당한 TCP/IP 설정 값을 네트워크 클라이언트에게 자동적으로 제공하기 위하여 사용하는 Dynamic Host Configuration Protocol (DHCP) 서버와 같은 솔루션을 적용하는 것에 의해, 반드시 지정되는 여러가지 요소로 구성 합니다. 이 설정 값들은 여러분의 우분투 시스템의 적절한 네트워크 동작의 편의를 위하여 반드시 정확하게 지정되어야 합니다.</para>
+            <para>TCP/IP의 공통적인 설정 요소와 그들의 목적은 다음과 같습니다: <itemizedlist>
                <listitem>
-                  <para>
-                  <emphasis role="bold">IP address</emphasis> The IP address is a unique
-                  identifying string expressed as four decimal numbers ranging from zero (0)
-                  to two-hundred and fifty-five (255), separated by periods,
-                  with each of the four numbers representing eight (8) bits of the address for a
-                  total length of thirty-two (32) bits for the whole address. This format is called
-                  <emphasis>dotted quad
-                  notation</emphasis>.</para>
-                     <para>
-                     IP addresses are defined in <emphasis>classes</emphasis> whereby the
-                     bits making up an address correspond to network and host ranges.  There are four
-                     principal address classes: A, B, C, and D. Class A IP addresses would typically be
-                     used in very large organizations and have the format 
-                     <emphasis>network.host.host.host</emphasis> whereas
-                     the more common Class C address could be used in smaller organizations and is
-                     often used for individual host subscribers to Internet Service Providers. A Class
-                     C address would resemble <emphasis>network.network.network.host</emphasis>
-                     Class D addresses are special in that they are known as 
-                     <emphasis>Multicast</emphasis> addresses.
-                     Some examples of valid IP addresses are 127.0.0.1 and 82.211.81.166.
-                     </para>
+                  <para><emphasis role="bold">IP address</emphasis> IP 주소는, 점으로 구분되는 네 개의 0부터 255까지의 십진수 범위의 숫자들이고, 각각의 네 숫자는 전체 주소를 위한 총 32 bits의 8 bits 주소를 표현하는, 유일한 식별자 입니다. 이러한 형식은 <emphasis>dotted quad notation</emphasis> 라 불립니다.</para>
                </listitem>
                <listitem>
-                  <para>
-                  <emphasis role="bold">Netmask</emphasis> The Subnet Mask (or simply,
-                  <emphasis>netmask</emphasis>) is a local bit mask, or set of flags
-                  which separate the portions of an IP address significant to the network from the
-                  bits significant to the <emphasis>subnetwork</emphasis>.  For example,
-                  in a Class C network, the standard netmask is 255.255.255.0 which masks the first
-                  three bytes of the IP address and allows the last byte of the IP address to
-                  remain available for specifying hosts on the subnetwork.
-                  </para>
+                  <para><emphasis role="bold">Netmask</emphasis> 서브넷 마스크는 (또는 간략하게, <emphasis>netmask</emphasis>) 네트워크 상의 비트 마스크, 또는 네트워크에 중요한 IP 주소에서 <emphasis>subnetwork</emphasis> 에 중요한 비트를 구분하는 부분인 플랙의 집합 입니다. 예를 들어, 클래스 C 네트워크에서, 표준 netmask는 255.255.255.0 이고, IP 주소의 첫 3 바이트는 차폐하고 IP 주소의 마지막 바이트는 서브 네트워크 상의 호스트를 지정하기 위해 사용하도록 남겨지는 것을 허용 합니다.</para>
                </listitem>
                <listitem>
-                  <para>
-                  <emphasis role="bold">Network Address</emphasis> The Network Address represents the
-                  bytes comprising the network portion of an IP address.  For example, the host 12.128.1.2
-                  in a Class A network would use 12.0.0.0 as the network address, which uses twelve (12)
-                  to represent the first byte of the IP address, (the network part) and zeroes (0) 
-                  in all of the remaining three bytes to represent the potential host values.  Network
-                  hosts using the very common private and non-routable IP addresses such as 192.168.1.100
-                  would in turn use a Network Address of 192.168.1.0, which specifies the first three
-                  bytes of the Class C 192.168.1 network and a zero (0) for all the possible hosts on the
-                  network.
-                  </para>
+                  <para><emphasis role="bold">Network Address</emphasis> 네트워크 주소는 IP 주소의 네크워크 부분을 구성하는 바이트를 표현 합니다. 예를 들어, 클래스 A 네트워크 내의 12.128.1.2 호스트는 네트워크 주소로 12.0.0.0을 사용하고, 그 IP 주소의 첫 번째 바이트인 12가 그것을 표현 합니다 (네트워크 부분). 0으로 표시되는 남겨진 세 바이트는 가능한 호스트 값을 표시하기 위해서 입니다. 아주 일반적인 사적 그리고 라우팅을 할 수 없는 192.168.1.100과 같은 IP 주소를 사용하는 네트워크 호스트는 192.168.1.0의 네트워크 주소를 사용하는 것이고, 클래스 C 인 192.168.1 네트워크와 그 네트워크 상에서 가능한 모든 호스트를 위한 마지막 자리의 0을 지정하는 것 입니다.</para>
                </listitem>
                <listitem>
-                  <para>
-                  <emphasis role="bold">Broadcast Address</emphasis> The Broadcast Address is an IP address
-                  which allows network data to be sent simultaneously to all hosts on a given subnetwork rather
-                  than specifying a particular network host.  The standard general broadcast address for IP networks is
-                  255.255.255.255, but this broadcast address cannot be used to send a broadcast message to
-                  every host on the Internet because routers block it.  A more appropriate broadcast address
-                  is set to match a specific subnetwork.  For example, on the popular private Class C IP network,
-                  192.168.1.0, the broadcast address should be configured as 192.168.1.255. Broadcast messages are
-                  typically produced by network protocols such as the Address Resolution Protocol (ARP) and the 
-                  Routing Information Protocol (RIP).             
-                  </para>
+                  <para><emphasis role="bold">브로드캐스트 주소</emphasis> 브로드캐스트 주소는 특정 네트워크 호스트를 지정하는 대신에 주어진 서브네트워크 상의 모든 호스트들에게 일제히 네트워크 데이터가 보내지는 것을 허용하는 IP 주소 입니다. IP 네트워크를 위한 표준화된 일반적 브로드캐스트 주소는 255.255.255.255 이지만, 이 브로드캐스트 주소는 라우터에 의하여 막히기 때문에 인터넷 상의 모든 호스트로 브로드캐스트 메세지를 보내는데 사용할 수는 없습니다. 좀 더 적당한 브로드캐스트 주소는 특정 서브네트워크에 일치하도록 지정을 합니다. 예를 들어, 잘 알려진 사설 C 클래스 IP 네트워크, 192.168.1.0 상의 브로드캐스트 주소는 192.168.1.255로 설정되어야 합니다. 브로드캐스트 메세지는 Address Resolution Protocol (ARP) 와 Routing Information Protocol (RIP) 같은 네트워크 프로토콜에 의하여 일반적으로 생산이 됩니다.</para>
                </listitem>
                <listitem>
-                  <para>
-                  <emphasis role="bold">Gateway Address</emphasis> A Gateway Address is the IP address through which
-                  a particular network, or host on a network, may be reached.  If one network host wishes to communicate
-                  with another network host, and that host is not located on the same network, then a 
-                  <emphasis>gateway</emphasis> must be used. In many cases, the Gateway Address will be that
-                  of a router on the same network, which will in turn pass traffic on to other networks or hosts, such as
-                  Internet hosts.  The value of the Gateway Address setting must be correct, or your system will not be able
-                  to reach any hosts beyond those on the same network.                  
-                  </para>
+                  <para><emphasis role="bold">게이트웨이 주소</emphasis> 게이트웨이 주소는 특정 네트워크 또는 네트워크 상의 호스트로 접근하기 위하여 통해야 하는 IP 주소 입니다. 만약 한 네트워크 호스트가 같은 네트워크 상에 위치하지 않은 다른 네트워크 호스트와 통신을 하기를 원한다면, 하나의 <emphasis>게이트웨이</emphasis>를 반드시 사용하여야 합니다. 많은 경우에, 게이트웨이 주소는 같은 네트워크 상의 라우터의 주소가 되고, 인터넷 호스트와 같은 다른 네트워크 또는 호스트로 트래픽을 넘기는데도 사용이 됩니다. 게이트웨이 주소 설정 값은 반드시 정확하여야 하고, 그렇지 않다면 여러분의 시스템은 같은 네트워크 밖에 있는 어떠한 호스트로도 접근을 하는 것이 불가능 합니다.</para>
                </listitem>
                <listitem>
-                  <para>
-                  <emphasis role="bold">Nameserver Address</emphasis> Nameserver Addresses represent the IP addresses of
-                  Domain Name Service (DNS) systems, which resolve network hostnames into IP addresses.  There are three levels of
-                  Nameserver Addresses, which may be specified in order of precedence: The 
-                  <emphasis>Primary</emphasis>
-                  Nameserver, the <emphasis>Secondary</emphasis> Nameserver, and the 
-                  <emphasis>Tertiary</emphasis>
-                  Nameserver. In order for your system to be able to resolve network hostnames into their
-                  corresponding IP addresses, you must specify valid Nameserver Addresses which you are authorized to use
-                  in your system's TCP/IP configuration.  In many cases these addresses can and will be provided by your
-                  network service provider, but many free and publicly accessible Nameservers are available for use, such as
-                  the Level3 (Verizon) servers with IP addresses from
-                  4.2.2.1 to 4.2.2.6. </para>
+                  <para><emphasis role="bold">네임서버 주소</emphasis> 네임서버 주소는 도메인 네임 서비스(DNS)의 IP 주소를 나타내고, 네트워크 호스트 이름을 IP 주소로 알아내는 역할을 합니다. 네임서버 주소의 세 가지 수준이 있고, 그것을 중요도의 순서로 지정하면: <emphasis>우선(일차)</emphasis> 네임서버, <emphasis>이차</emphasis> 네임서버, 그리고 <emphasis>삼차</emphasis> 네임서버 입니다. 여러분의 시스템이 네트워크 호스트 이름으로 그들에 대응하는 IP 주소를 알아내기 위해서는, 여러분은 시스템의 TCP/IP 설정에 여러분이 사용할 수 있게 허가된 올바른 네임서버 주소를 반드시 지정을 해야 합니다. 많은 경우에 이 네임서버 주소는 여러분의 네트워크 서비스 제공자에 의해서 제공될 수 있고 제공되어 지지만, 많은 무료 그리고 공개적으로 접근이 가능한 4.2.2.1 에서 4.2.2.6 까지의 IP 주소를 가지는 Level3 (Verizon) 서버와 같은 네임서버들이 사용가능 합니다.</para>
                      <tip>
-                        <para>
-                        The IP address, Netmask, Network Address, Broadcast Address, and Gateway Address
-                        are typically specified via the appropriate directives in the file  <filename>/etc/network/interfaces</filename>. The Nameserver Addresses are typically specified via  <emphasis>nameserver</emphasis> 
-                        directives in the file <filename>/etc/resolv.conf</filename>. For more information, 
-                        view the system manual page for <filename>interfaces</filename> or <filename>resolv.conf</filename> respectively, with the following commands typed at a terminal prompt:
-                        </para>
+                        <para>IP 주소, 넷마스크, 네트워크 주소, 브로드캐스트 주소, 그리고 게이트웨이 주소는 전형적으로 <filename>/etc/network/interfaces</filename> 파일 내에 해당 지시자를 사용하여 지정 됩니다. 네임서버 주소는 <filename>/etc/resolv.conf</filename> 파일 내에 <emphasis>nameserver</emphasis> 지시자를 통해 일반적으로 지정 됩니다. 더 많은 정보는, 터미널 프롬프트에서 다음의 명령을 사용하여, <filename>interfaces</filename> 또는 <filename>resolv.conf</filename> 를 위한 시스템 지침서를 읽어 보십시오:</para>
                      </tip>
-                    <para>
-                    Access the system manual page for <filename>interfaces</filename> with the following command:
-                    </para>
+                    <para><filename>interfaces</filename> 를 위한 시스템 매뉴얼 페이지는 다음의 명령으로 접근 합니다:</para>
                     <para>
 <screen>
 <command>man interfaces</command>
 </screen>
                     </para>
-                    <para>
-                    Access the system manual page for <filename>resolv.conf</filename> with the following command:
-                    </para>
+                    <para><filename>resolv.conf</filename> 를 위한 시스템 매뉴얼 페이지는 다음의 명령으로 접근 합니다:</para>
                     <para>
 <screen><command>man resolv.conf</command></screen>
                     </para>
                </listitem>
-            </itemizedlist>
-            </para>
+            </itemizedlist></para>
         </sect2>
         <sect2 id="ip-routing" status="complete">
           <title>IP 라우팅</title>
-            <para>
-              IP routing is a means of specifying and discovering paths in a TCP/IP network along which
-              network data may be sent.  Routing uses a set of <emphasis>routing tables</emphasis>
-              to direct the forwarding of network data packets from their source to the destination, often
-              via many intermediary network nodes known as <emphasis>routers</emphasis>.
-              IP Routing is the principal mode of path discovery on the Internet.  There are two primary forms of
-              IP Routing: <emphasis>Static Routing</emphasis> and 
-              <emphasis>Dynamic Routing.</emphasis>
-            </para>
-            <para>
-            Static routing involves manually adding IP routes to the system's routing table, and this is usually
-            done by manipulating the routing table with the <application>route</application> command. Static routing enjoys
-            many advantages over dynamic routing, such as simplicity of implementation on smaller networks, 
-            predictability (the routing table is always computed in advance, and thus the route is precisely the 
-            same each time it used), and low overhead on other routers and network links due to the lack of a
-            dynamic routing protocol.  However, static routing does present some disadvantages as well.  For example,
-            static routing is limited to small networks and does not scale well.  Static routing also fails completely
-            to adapt to network outages and failures along the route due to the fixed nature of the route. 
-            </para>
-            <para>
-            Dynamic Routing depends on large networks with multiple possible IP routes from a source to a destination
-            and makes use of special routing protocols, such as the Router Information Protocol (RIP), which handle
-            the automatic adjustments in routing tables that make dynamic routing possible.  Dynamic routing
-            has several advantages over static routing, such as superior scalability and the ability to adapt
-            to failures and outages along network routes. Additionally, there is less manual configuration of the
-            routing tables, since routers learn from one another about their existence and available routes. This trait
-            also eliminates the possibility of introducing mistakes in the routing tables via human error.
-            Dynamic routing is not perfect, however, and presents disadvantages such as heightened complexity and
-            additional network overhead from router communications, which does not immediately benefit the end users,
-            but still consumes network bandwidth.
-            </para>
+            <para>IP 라우팅은 네트워크 데이터가 보내지는 TCP/IP 네트워크 상에서 경로를 지정하고 찾기 위한 수단 입니다. 라우팅은 보내는 곳에서 받는 곳으로 네트워크 데이터 패킷을 전달하기 위한 지시를 위하여 <emphasis>routing tables</emphasis> 의 집합을 사용하고, 종종 <emphasis>routers</emphasis> 라고 알려진 네트워크 상의 많은 중간 지점을 경유 합니다. IP 라우팅의 두 가지 주요 형태가 있습니다: <emphasis>Static Routing(정적 라우팅)</emphasis> 과 <emphasis>Dynamic Routing(동적 라우팅)</emphasis></para>
+            <para>정적 라우팅은 시스템의 라우팅 테이블에 손수 IP 라우트를 추가하는 것을 필요로 하고, 이것은 <application>route</application> 명령으로 라우팅 테이블을 조작하는 것으로 대개 마쳐지게 됩니다. 정적 라우팅은 동적 라우팅에 비해 많은 장점을 가집니다. 규모가 작은 네트워크 상의 단순한 적용, 예측 가능함(라우팅 테이블은 언제나 미리 계산이 되고, 그래서 경로는 그것이 사용되는 같은 각각의 시간을 예측할 수 있음), 그리고 동적 라우팅 프로토콜을 사용하지 않음에 기인하는 다른 라우터와 네트워크 링크에 낮은 오버헤드 등이 장점이 됩니다. 하지만, 정적 라우팅은 역시 단점도 가지고 있습니다. 예를 들어, 정적 라우팅은 규모가 작은 네트워크에 제한적이고 확장이 용이하지 않습니다. 또한, 경로를 고정한 특성 때문에, 정적 라우팅이 완전히 실패하면 네트워크 중단과 실패로 이어지게 됩니다.</para>
+            <para>동적 라우팅은 보낸 곳에서 받는 곳까지 복수의 가능한 IP 라우트를 가지는 규모카 큰 네트웨크에 의존하고, 동적 라우팅이 가능하도록 라우팅 테이블의 자동 조정을 처리하는 Router Information Protocol (RIP) 과 같은 특별한 라우팅 프로토콜을 사용 합니다. 동적 라우팅은 정적 라우팅에 비해 여러가지 장점을 가집니다. 휼륭한 확장성, 네트워크 라우터의 실패와 중단에 적응하는 능력 등이 장점 입니다. 추가하여, 라우터가 다른 라우터의 존재와 가능한 경로를 스스로 배우기 때문에, 라우팅 테이블의 수작업 설정을 줄여 줍니다. 이 특성은 또한 작업자의 오류로 인한 라우팅 테이블의 실수가 일어나는 가능성을 제거 합니다. 하지만, 동적 라우팅은 완벽하지 않고, 계층적으로 복잡함과 라우터 통신의 추가적인 네트워크 오버헤드(최종 사용자에게는 직접적으로 이득을 주지않고 네트워크의 밴드위드를 소모하는)와 같은 단점을 가집니다.</para>
         </sect2>
         <sect2 id="tcp-and-udp" status="complete">
           <title>TCP와 UDP</title>
-            <para>
-              TCP is a connection-based protocol, offering error correction and guaranteed delivery of
-              data via what is known as <emphasis>flow control</emphasis>. Flow control
-              determines when the flow of a data stream needs to be stopped, and previously sent data
-              packets should to be re-sent due to problems such as <emphasis>collisions</emphasis>,
-              for example, thus ensuring complete and accurate delivery of the data.  TCP is typically
-              used in the exchange of important information such as database transactions. 
-            </para>
-            <para>
-              The User Datagram Protocol (UDP), on the other hand, is a <emphasis>connectionless</emphasis>
-              protocol which seldom deals with the transmission of important data because it lacks flow
-              control or any other method to ensure reliable delivery of the data.  UDP is commonly used
-              in such applications as audio and video streaming, where it is considerably faster than
-              TCP due to the lack of error correction and flow control, and where the loss of a few packets
-			  is not generally catastrophic.
-            </para>
+            <para>TCP는 접속 기반 프로토콜이고, 에러 교정과 <emphasis>flow control</emphasis> (흐름 제어)로 알려진 데이터의 배달을 보장하는 것을 제공 합니다. 흐름 제어는 데이터 스트림의 흐름이 중단되는 것이 필요한 때와, 예를 들어, 데이타의 완전하고 정확한 배달을 확신하기 위하여, <emphasis>collisions</emphasis> 과 같은 문제들로 인하여 재전송을 해야하는 이전의 보내진 패킷을 결정합니다. TPC는 전형적으로 데이타베이스 트랜잭션과 같은 중요한 정보를 교환하는 데에 사용되어 집니다.</para>
+            <para>한편, User Datagram Protocol (UDP)는, <emphasis>connectionless</emphasis></para>
         </sect2>
         <sect2 id="icmp" status="complete">
           <title>ICMP</title>
-            <para>
-              The Internet Control Messaging Protocol (ICMP) is an extension to the Internet Protocol (IP) as defined
-              in the Request For Comments (RFC) #792 and supports network packets containing control, error, and
-              informational messages.  ICMP is used by such network applications as the <application>ping</application>
-              utility, which can determine the availability of a network host or device.  Examples of some error messages
-              returned by ICMP which are useful to both network hosts and devices such as routers, include 
-              <emphasis>Destination Unreachable</emphasis> and <emphasis>Time Exceeded</emphasis>.
-            </para>
+            <para>Internet Control Messaging Protocol (ICMP)는 Request For Comments (RFC) #792에 정의된 바와 같이 Internet Protocol (IP)의 확장이고, 제어, 에러 그리고 정보 메세지를 포함하는 네트워크 패킷을 지원 합니다. ICMP는 <application>ping</application> 유틸리티와 같은 네트워크 프로그램에서 사용되고, 네트워크 호스트 또는 장치의 사용 가능함을 결정할 수 있습니다. ICMP에 의해 되돌려지는 몇 가지 에러 메세지의 예는 네트워크 호스트와 라우터와 같은 장치 모두에게 유용하고, <emphasis>Destination Unreachable</emphasis> 과 <emphasis>Time Exceeded</emphasis> 를 포함 합니다.</para>
         </sect2>
         <sect2 id="daemons" status="complete">
           <title>데몬</title>
-            <para>
-              Daemons are special system applications which typically execute continuously in the background and
-              await requests for the functions they provide from other applications.  Many daemons are network-centric; that is,
-              a large number of daemons executing in the background on an Ubuntu system may provide network-related functionality.
-              Some examples of such network daemons include the <emphasis>Hyper Text Transport Protocol Daemon</emphasis> 
-              (httpd), which provides web server functionality; the <emphasis>Secure SHell Daemon</emphasis> (sshd), which
-              provides secure remote login shell and file transfer capabilities; and the <emphasis>Internet Message Access 
-              Protocol Daemon</emphasis> (imapd), which provides E-Mail services.
-            </para>
+            <para>데몬은 전형적으로 백그라운드에서 계속적으로 실행되는 그리고 다른 프로그램에서 데몬이 제공하는 기능을 위한 요청을 기다리는 특별한 시스템 응용 프로그램 입니다. 많은 데몬들은 네트워크 중심이고, 우분투 시스템 상의 백그라운드에서 수행되는 많은 수의 데몬들은 네트워크와 관련된 기능을 제공 합니다. 이러한 네트워크 데몬의 몇 가지 예는 웹 서버 기능을 제공하는 <emphasis>Hyper Text Transport Protocol Daemon</emphasis> (httpd), 보안 원격 로그인 쉘과 파일 전송 능력을 제공하는 <emphasis>Secure SHell Daemon</emphasis> (sshd), 그리고 이메일 서비스를 제공하는 <emphasis>Internet Message Access Protocol Daemon</emphasis> (imapd) 등을 포함 합니다.</para>
         </sect2>
     </sect1>
 	<sect1 id="firewall-configuration" status="help">
 		<title>방화벽 설정</title>
-          <para>
-             The Linux kernel includes the <emphasis>Netfilter</emphasis> subsystem,
-			 which is used to manipulate or decide the fate of network traffic headed into or through
-			 your server.  All modern Linux firewall solutions use this system for packet filtering.
-          </para>
+          <para>리눅스 커널은 <emphasis>Netfilter</emphasis> 서브 시스템을 포함하고, 이것은 여러분 서버로 오는 또는 경유하는 네트워크 트래픽을 조작하거나 운명을 결정하는데 사용 됩니다. 모든 현대적인 리눅스 방화벽 솔루션은 패킷을 걸러내기 위하여 이 시스템을 사용 합니다.</para>
         <sect2 id="firewall-introduction" status="help">
           <title>방화벽 소개</title>
-            <para>
-              The kernel's packet filtering system would be of little use to administrators without
-			  a userspace interface to manage it.  This is the purpose of iptables.  When a packet
-			  reaches your server, it will be handed off to the Netfilter subsystem for acceptance,
-			  manipulation, or rejection based on the rules supplied to it from userspace via
-			  iptables.  Thus, iptables is all you need to manage your firewall if you're familiar
-			  with it, but many frontends are available to simplify the task.
-            </para>
+            <para>커널의 패킷 필터링 시스템은 그것을 관리하기 위한 사용자 공간의 인터페이스가 없이 시스템 관리자가 약간의 작업을 하는 것이 필요 합니다. 이것은 iptables의 목적 입니다. 패킷이 여러분의 서버에 도착할 때, 패킷은 iptables를 통하여 사용자 공간에서 패킷에 제공되는 규칙에 근거하여 패킷의 수용, 조작 또는 거절을 위한 Netfilter 서브 시스템을 거치게 됩니다. 그러므로, iptables는, 만약 여러분이 그것에 익숙하다면, 여러분의 방화벽을 관리하기 위하여 필요한 전부이고, 작업을 단순화하기 위한 많은 프론트엔드들이 있습니다.</para>
         </sect2>
         <sect2 id="ip-masquerading" status="help">
           <title>IP 마스커레이딩</title>
-            <para>
-              The purpose of IP Masquerading is to allow machines with private, non-routable IP
-			  addresses on your network to access the Internet through the machine doing the
-			  masquerading.  Traffic from your private network destined for the Internet must be
-			  manipulated for replies to be routable back to the machine that made the request.
-			  To do this, the kernel must modify the <emphasis>source</emphasis>
-			  IP address of each packet so that replies will be routed back to it, rather than
-			  to the private IP address that made the request, which is impossible over the 
-			  Internet.  Linux uses <emphasis>Connection Tracking</emphasis>
-			  (conntrack) to keep track of which connections belong to which machines and reroute
-			  each return packet accordingly.  Traffic leaving your private network is thus
-			  "masqueraded" as having originated from your Ubuntu gateway machine.
-			  This process is referred to in Microsoft documentation as Internet
-			  Connection Sharing.
-            </para>
+            <para>IP 마스커레이딩(Masquerading:가장)의 목적은 여러분의 네트워크 상의 사설, 라우팅이 안되는 IP 주소를 가진 기계들이 IP의 가장을 통하여 인터넷을 접근하는 것을 허용하기 위해서 입니다. 여러분의 사설 네트워크에서 인터넷을 목적지로 하는 트래픽은 반드시, 그 요청을 만든 기계로 경로가 되돌아갈 수 있는 응답들을 위하여, 조작되어져야 합니다. 이것을 하기 위하여, 커널은 반드시 각각의 패킷의 <emphasis>source</emphasis> IP 어드레스를 변경하고, 그러므로 응답은 인터넷에서 사용 가능하지 않은 요청을 만든 사설 IP 주소 대신에 변경된 것에 따라 다시 되돌아오게 됩니다. 리눅스는 기계가 속하는 접속과 되돌와오는 패킷을 적절하게 재경로하는 것을 추적하기 위하여 <emphasis>접속 추적</emphasis> (conntrack)을 사용 합니다. 그러므로 여러분의 사설 네트워크를 떠난 트래픽은 여러분의 우분투 게이트웨이 기계로 향할 때 "가장"이 됩니다. 이 절차는 인터넷 접속 공유로 마이크로소프트의 문서에서는 알려져 있습니다.</para>
 			<para>
               This can be accomplished with a single iptables rule, which may differ slightly
 			  based on your network configuration:
@@ -804,15 +529,11 @@ nameserver 208.185.179.218
 			  The above command assumes that your private address space is 192.168.0.0/16 and
 			  that your Internet-facing device is ppp0.  The syntax is broken down as follows:
 			  <itemizedlist>
-				  <listitem><para> -t nat -- the rule is to go into the nat table</para></listitem>
-				  <listitem><para> -A POSTROUTING -- the rule is to be appended (-A) to the POSTROUTING 
-				  chain</para></listitem>
-				  <listitem><para> -s 192.168.0.0/16 -- the rule applies to traffic originating from the
-				  specified address space</para></listitem>
-				  <listitem><para> -o ppp0 -- the rule applies to traffic scheduled to be routed through
-				  the specified network device</para></listitem>
-				  <listitem><para> -j MASQUERADE -- traffic matching this rule is to "jump"
-				  (-j) to the MASQUERADE target to be manipulated as described above</para></listitem>
+				  <listitem><para>-t nat -- nat 테이블로 가기 위한 규칙</para></listitem>
+				  <listitem><para>-A POSTROUTING -- POSTROUTING chain에 덧붙이는(-A) 규칙</para></listitem>
+				  <listitem><para>-s 192.168.0.0/16 --  지정된 주소 공간에서 향하는 트래픽에 적용하는 규칙</para></listitem>
+				  <listitem><para>-o ppp0 -- 지정된 네트워크 장치를 통하여 경유하도록 스케쥴된 트래픽에 적용하는 규칙</para></listitem>
+				  <listitem><para>-j MASQUERADE -- 위에 설명된 대로 이 규칙에 일치하는 트래픽은 조작되기 위한 MASQUERADE 타켓으로 "jump" (-j)</para></listitem>
 			  </itemizedlist>
 			</para>
 			<para>
@@ -914,17 +635,13 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
           </sect2>
         <sect2 id="openssh-installation">
         <title>설치</title>
-        <para>
-        Installation of the OpenSSH client and server applications is simple. To install the OpenSSH client applications on your Ubuntu system, use this command at a terminal prompt:
-        </para>
+        <para>OpenSSH 클라이언트와 서버 프로그램의 설치는 간단 합니다. 우분투 시스템에 OpenSSH 클라이언트 프로그램을 설치하려면, 다음의 명령을 터미널 프롬프트에서 사용 합니다:</para>
            <para>
 <screen>
 <command>sudo apt-get install openssh-client</command>
 </screen>
            </para>
-        <para>
-        To install the OpenSSH server application, and related support files, use this command at a terminal prompt:
-        </para>
+        <para>OpenSSH 서버 프로그램과 관련되는 지원 파일을 설치하려면, 다음의 명령을 터미널 프롬프트에서 사용 합니다:</para>
            <para>
 <screen>
 <command>sudo apt-get install openssh-server</command>
@@ -947,11 +664,8 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
             settings and authentication modes. The following are examples of configuration directives that can be changed by editing the <filename>/etc/ssh/ssh_config</filename> file.
             </para>
             <tip>
-               <para>Prior to editing the configuration file, you should make a copy of the original file and protect it 
-               from writing so you will have the original settings as a reference and to reuse as necessary.
-               </para>
-               <para>Copy the <filename>/etc/ssh/sshd_config</filename> file and protect it from writing with the following commands, issued at a terminal prompt:
-               </para>
+               <para>설정 파일을 편집하기 전에, 원래의 파일을 복사본을 만들고 쓰기에서 그것을 보호해야만 합니다. 그래서 원래의 설정을 참고로 그리고 필요한 경우 재사용할 수 있습니다.</para>
+               <para><filename>/etc/ssh/sshd_config</filename> 파일을 복사하고 쓰기에서 그것을 보호하려면, 터미널 프롬프트에서 다음의 명령을 입력 합니다:</para>
 	    </tip>
                <para>
 <screen>
@@ -959,54 +673,31 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
 <command>sudo chmod a-w /etc/ssh/sshd_config.original</command>
 </screen>
                </para> 
-            <para>
-            The following are examples of configuration directives you may change:
-            </para>
+            <para>다음은 여러분이 변경할 수 있는 설정 지시자의 예 입니다:</para>
            <itemizedlist>
                <listitem>
-               <para>
-               To set your OpenSSH to listen on TCP port 2222 instead of the default TCP port 22, change
-               the Port directive as such:
-               </para>
+               <para>여러분의 OpenSSH가 기본 설정된 TCP 포트 22 대신에 TCP 포트 2222를 사용하게 하려면, 다음과 같이 Port 지시자를 변경 합니다:</para>
                <para>Port 2222</para>
                </listitem>
 	<listitem>
-            <para>
-            To have <application>sshd</application> allow public key-based login credentials, simply add or modify the line:
-            </para>
+            <para><application>sshd</application> 가 공개 키 기반의 로그인 신뢰서를 허용하게 하려면, 간단히 이 줄을 더하거나 변경 합니다:</para>
                <para>PubkeyAuthentication yes</para>
-            <para>
-            in the <filename>/etc/ssh/sshd_config</filename> file, or if already present, ensure the line is not commented out.
-            </para>
+            <para><filename>/etc/ssh/sshd_config</filename> 파일 내에 있고, 만약 이미 있다면, 그 줄의 주석처리 해제하는 것을 확신 하십시오.</para>
             </listitem>
             <listitem>
-             <para>
-             To make your OpenSSH server display the contents of the <filename>/etc/issue.net</filename> file as a pre-login
-             banner, simply add or modify the line:
-             </para>
+             <para>여러분의 OpenSSH 서버가 선-로그인 배너로 <filename>/etc/issue.net</filename> 파일의 내용을 표시하게 만드려면, 간단히 이 줄을 더하거나 변경 합니다:</para>
                <para>Banner /etc/issue.net</para>
-               <para>
-               in the <filename>/etc/ssh/sshd_config</filename> file.
-               </para>
+               <para><filename>/etc/ssh/sshd_config</filename> 파일 내에 있습니다.</para>
              </listitem>
              </itemizedlist>
-	    <para>
-            After making changes to the <filename>/etc/ssh/sshd_config</filename> file, save the file, and restart the <application>sshd</application> 
-            server application to effect the changes using the following command at a terminal prompt:
-            </para>
+	    <para><filename>/etc/ssh/sshd_config</filename> 파일에 변경을 만든 후에, 그 파일을 저장하고, 변경의 효과를 가지려면 다음 명령을 터미널 프롬프트에서 사용하여 <application>sshd</application> 서버 프로그램을 재시작 합니다:</para>
                <para>
 <screen>
 <command>sudo /etc/init.d/ssh restart</command>
 </screen>
                </para>
 		<warning>
-                           <para>
-                           Many other configuration directives for <application>sshd</application> are available for changing the server application's
-                           behavior to fit your needs. Be advised, however, if your only method of access to a server is <application>ssh</application>,
-                           and you make a mistake in configuring <application>sshd</application> via the <filename>/etc/ssh/sshd_config</filename> file, you may find you
-                           are locked out of the server upon restarting it, or that the <application>sshd</application> server refuses to start due
-                           to an incorrect configuration directive, so be extra careful when editing this file on a remote server.
-                           </para>
+                           <para><application>sshd</application> 를 위한 많은 다른 설정 지시자는 여러분의 필요에 맞게 그 서버 프로그램의 동작을 변경하는 것을 위하여 사용가능 합니다. 그러나, 만약 여러분이 서버를 접근할 수 있는 오직 한 가지 방법이 <application>ssh</application> 이고, <filename>/etc/ssh/sshd_config</filename> 파일을 통해 <application>sshd</application> 를 설정하는데 실수를 하였다면, 서버를 재시작할 때 잠겨지거나 <application>sshd</application> 서버가 부정확한 설정 지시자 때문에 시작하는 것이 거부될 수 있음을 조언 합니다. 그러므로 원격 서버 상의 이 파일을 편집할 때는 정말로 조심스럽게 하시기 바랍니다.</para>
                         </warning>
         </sect2>
    <sect2 id="openssh-references" status="complete">
@@ -1021,12 +712,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
      </sect1>
 	<sect1 id="ftp-server" status="complete">
         <title>FTP 서버</title> 
-            <para>File Transfer Protocol (FTP) is a TCP protocol for uploading and downloading
-                files between computers. FTP works on a client/server model. The server component is
-                called an <emphasis>FTP daemon</emphasis>. It continuously listens for FTP requests
-                from remote clients. When a request is received, it manages the the login and sets up
-                the connection. For the duration of the session it executes any of commands sent by
-                the FTP client.</para>
+            <para>파일 전송 프로토콜 (FTP)는 컴퓨터들 간에 파일을 올리고 내려받기 위한 TCP 프로토콜 입니다. FTP는 클라이언트/서버 모델로 동작을 합니다. 서버 구성 요소는 <emphasis>FTP 데몬</emphasis>으로 불립니다. 그것은 원격지 클라이언트에서의 FTP 요청을 계속적으로 듣습니다. 요청이 접수될 때, 그것은 로그인을 관리하고 접속을 만들어 줍니다. 세션이 지속되는 동안 그것은 FTP 클라이언트에서 보내지는 어떠한 명령도 실행을 합니다.</para>
             <para>FTP 서버로 접근하는 것은 다음의 두 가지 방법으로 관리할 수 있습니다:</para>
             <itemizedlist spacing="compact">
                 <listitem>
@@ -1046,12 +732,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
             sessions.</para>
             <sect2 id="vsftpd-ftp-server-installation" status="complete">
                 <title>vsftpd - FTP 서버 설치</title>
-                    <para>vsftpd is an FTP daemon available in
-                    Ubuntu. It is easy to install, set up, and
-                    maintain.  To install <application>vsftpd</application> you
-                can run the following command:
-                <screen> <command>sudo apt-get install vsftpd</command> </screen>
-                </para>
+                    <para>vsftpd 는 우분투에서 사용할 수 있는 FTP 데몬 입니다. 이것은 설치, 설정, 그리고 관리하기가 쉽습니다. <application>vsftpd</application> 를 설치하려면 다음의 명령을 실행 합니다: <screen> <command>sudo apt-get install vsftpd</command> </screen></para>
 
                 </sect2>
             <sect2 id="vsftpd-ftp-server-configuration" status="complete">
@@ -1098,31 +779,15 @@ anonymous_enable=NO
                 page, <command>man 5 vsftpd.conf</command> for
                 details of each parameter. 
                 </para>
-                <para> 
-                Once you configure <application>vsftpd</application> you
-                can start the daemon. You can run following command to
-                run the <application>vsftpd</application> daemon:
-                  <screen> <command>sudo /etc/init.d/vsftpd start</command> </screen>
-                </para>
-				<note><para>
-				Please note that the defaults in the configuration file are
-				set as they are for security reasons.  Each of the above
-				changes makes the system a little less secure, so make them
-				only if you need them.
-				</para></note>
+                <para><application>vsftpd</application> 를 설정했으면 데몬을 시작할 수 있습니다. <application>vsftpd</application> 데몬을 시작하려면 다음의 명령을 실행 합니다: <screen> <command>sudo /etc/init.d/vsftpd start</command> </screen></para>
+				<note><para>설정 파일에 기본 설정된 것은 보안의 사유를 위하여 지정된 것임을 주의 하십시오. 위의 변경된 각각은 시스템을 덜 보안적으로 할 수 있으므로, 그것들이 꼭 필요한 경우에만 변경을 하십시오.</para></note>
                 </sect2>
     </sect1>
 	<sect1 id="network-file-system" status="complete">
 		<title>네트워크 파일 시스템 (NFS)</title>
-          <para>
-          NFS allows a system to share directories and files with others
-          over a network. By using NFS, users and programs can access
-          files on remote systems almost as if they were local files.
-          </para>
+          <para>NFS는 네트워크 상의 다른 사람과 디렉토리와 파일을 공유하는 시스템을 허용 합니다. NFS를 사용하는 것으로, 사용자와 프로그램은 원격지 시스템 상의 파일을 로컬 파일을 사용하는 것과 거의 비슷하게 접근할 수 있습니다.</para>
 
-          <para>
-          Some of the most notable benefits that NFS can provide are:
-          </para>
+          <para>NFS가 제공하는 가장 주목할 만한 혜택의 몇 가지는 다음과 같습니다:</para>
 
           <itemizedlist>
           <listitem>
@@ -1147,10 +812,7 @@ network.</para>
       <sect2 id="nfs-installation" status="complete">
         <title>설치</title>
       
-          <para>
-          At a terminal prompt enter the following command to install the NFS
-          Server:
-          </para>
+          <para>NFS 서버를 설치하기 위하여 다음의 명령을 터미널 프롬프트에서 입력 합니다:</para>
           <para>
 <screen>
 <command>sudo apt-get install nfs-kernel-server</command>
@@ -1159,10 +821,7 @@ network.</para>
       </sect2>
       <sect2 id="nfs-configuration" status="complete">
         <title>설정</title>
-          <para>
-          You can configure the directories to be exported by adding them to
-          the <filename>/etc/exports</filename> file. For example:
-          </para>
+          <para><filename>/etc/exports</filename> 파일에 디렉토리를 추가하는 것으로 내보낼 디렉토리를 설정할 수 있습니다. 예는:</para>
           <para>
 <screen>
 /ubuntu *(ro,sync,no_root_squash)
@@ -1170,15 +829,9 @@ network.</para>
 </screen>
           </para>
 
-          <para>
-          You can replace * with one of the hostname formats. Make the
-          hostname declaration as specific as possible so unwanted
-          systems cannot access the NFS mount.
-          </para>
+          <para>호스트 이름 형식의 하나를 *로 대체할 수 있습니다. 호스트 이름 정의를 가능한 지정하여 원하지 않는 시스템이 NFS 마운트를 접근할 수 없도록 합니다.</para>
 
-          <para>
-          To start the NFS server, you can run the following command at a terminal prompt:
-          </para>
+          <para>NFS 서버를 시작하기 위하여, 다음의 명령을 터미널 프롬프트에서 실행할 수 있습니다:</para>
           <para>
 <screen>
 <command>sudo /etc/init.d/nfs-kernel-server start</command>
@@ -1187,21 +840,14 @@ network.</para>
       </sect2>
       <sect2 id="nfs-client-configuration" status="complete">
         <title>NFS  클라이언트 설정</title>
-          <para>
-          Use the <application>mount</application> command to mount a shared NFS directory from
-          another machine, by typing a command line similar to the following at a terminal prompt:
-          </para>
+          <para>다른 기계에서 공유된 NFS 디렉토리를 마운트하려면 <application>mount</application> 명령을 사용하고, 터미널 프롬프트에서 다음의 명령과 비슷하게(각자의 경우에 맞게) 명령을 입력 합니다:</para>
           <para>
 <screen>
 <command>sudo mount example.hostname.com:/ubuntu /local/ubuntu</command>
 </screen>
 </para>
       <warning>
-      <para>
-      The mount point directory <filename>/local/ubuntu</filename> must
-      exist. There should be no files or subdirectories in the
-      <filename>/local/ubuntu</filename> directory.
-      </para>
+      <para>마운트 위치 디렉토리 <filename>/local/ubuntu</filename> 반드시 있어야 합니다. <filename>/local/ubuntu</filename> 디렉토리 내에는 파일 또는 서브 디렉토리가 없어야만 합니다.</para>
       </warning>
 
       <para>
@@ -1212,10 +858,7 @@ network.</para>
        share is to be mounted.
       </para>
 
-      <para>
-      The general syntax for the line in <filename>/etc/fstab</filename>
-      file is as follows:
-      </para>
+      <para><filename>/etc/fstab</filename> 파일 내의 그 줄을 위한 일반적인 문법은 다음과 같습니다:</para>
       
       <para>
 <programlisting>
@@ -1235,10 +878,10 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
                 manually configuring each network host. Computers configured to be DHCP clients have
                 no control over the settings they receive from the DHCP server, and the configuration
                 is transparent to the computer's user.</para>
-            <para>The most common settings provided by a DHCP server to DHCP clients include:</para>
+            <para>DHCP 서버에 의하여 DHCP 클라이언트로 제공되는 가장 공통적인 설정은 다음과 같습니다:</para>
             <itemizedlist spacing="compact">
                 <listitem>
-                    <para>IP-Address and Netmask</para>
+                    <para>IP 주소와 넷마스크</para>
                 </listitem>
                 <listitem>
                     <para>DNS</para>
@@ -1247,7 +890,7 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
                     <para>WINS</para>
                 </listitem>
             </itemizedlist>
-            <para>However, a DHCP server can also supply configuration properties such as:</para>
+            <para>그러나, DHCP 서버는 다음과 같은 설정 값도 또한 공급을 할 수 있습니다:</para>
             <itemizedlist spacing="compact">
                 <listitem>
                     <para>호스트 이름</para>
@@ -1265,13 +908,8 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
                     <para>인쇄 서버</para>
                 </listitem>
             </itemizedlist>
-            <para>The advantage of using DHCP is that changes to the network, for example a change
-                in the address of the DNS server, need only be changed at the DHCP server, and all
-                network hosts will be reconfigured the next time their DHCP clients poll the
-                DHCP server. As an added advantage, it is also easier to integrate new computers into
-                the network, as there is no need to check for the availability of an IP address.
-                Conflicts in IP address allocation are also reduced.</para>
-            <para>A DHCP server can provide configuration settings using two methods:</para>
+            <para>DHCP 사용의 장점은 네트워크가 변경될 때 입니다. 예를 들어, DNS 서버의 주소가 변경되었을 때, DHCP 서버에서만 그 변경이 필요하고, 모든 네트워크 호스트는 DHCP 클라이언트가 DHCP 서버를 읽는 다음 시점에 재 설정됩니다. 이 장점에 더하여, 네트워크에 새로운 컴퓨터를 통합하는 것도 또한 쉽고, IP 주소의 사용 가능성을 점검할 필요가 없습니다. IP 주소의 할당 시 충돌이 일어나는 것도 또한 줄어듭니다.</para>
+            <para>DHCP 서버는 다음의 두 가지 방법을 사용하여 설정 값을 제공할 수 있습니다:</para>
             <variablelist>
                 <varlistentry>
                     <term>맥 어드레스</term>
@@ -1302,14 +940,13 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
                 are easy to install and configure and will be automatically started at system boot.</para>
       <sect2 id="dhcp-installation" status="complete">
         <title>설치</title>
-          <para>At a terminal prompt, enter the following command to install
-                  <application>dhcpd</application>:</para>
+          <para>터미널 프롬프트에서, <application>dhcpd</application> 를 설치하기 위하여 다음의 명령을 입력 합니다:</para>
           <para>
 <screen>
 <command>sudo apt-get install dhcpd</command>
 </screen>
           </para>
-          <para>You will see the following output, which explains what to do next:</para>
+          <para>여러분은 다음의 출력을 보게 되고, 그것은 다음에 무엇을 해야하는지를 설명 합니다:</para>
           <screen>
 Please note that if you are installing the DHCP server for the first
 time you need to configure. Please stop (/etc/init.d/dhcp
@@ -1329,8 +966,7 @@ Starting DHCP server: dhcpd failed to start - check syslog for diagnostics.  </s
         <title>설정</title>
             <para>The error message the installation ends with might be a little confusing, but the
                 following steps will help you configure the service:</para>
-            <para>Most commonly, what you want to do is assign an IP address randomly. This can be
-                done with settings as follows:</para>
+            <para>아주 일반적으로, 여러분은 IP 주소를 불규칙적으로 지정하는 것을 원할 수 있습니다. 이것은 다음과 같이 설정하는 것으로 마칠 수 있습니다:</para>
             <screen>
 # Sample /etc/dhcpd.conf
 # (add your comments here) 
@@ -1353,12 +989,10 @@ range 192.168.1.150 192.168.1.200;
                 client that it should use 255.255.255.0 as its subnet mask, 192.168.1.255 as its
                 broadcast address, 192.168.1.254 as the router/gateway and 192.168.1.1 and
                 192.168.1.2 as its DNS servers. </para>
-            <para>If you need to specify a WINS server for your Windows clients, you will need to
-                include the netbios-name-servers option, e.g.</para>
+            <para>만약 여러분의 윈도우즈 클라이언트를 위하여 WINS 서버를 지정할 필요가 있다면, 에를 들어, netbios-name-servers 옵션을 포함하는 것이 필요 합니다.</para>
             <screen>
 option netbios-name-servers 192.168.1.1; </screen>
-            <para>Dhcpd configuration settings are taken from the DHCP mini-HOWTO, which can be found
-                    <ulink url="http://www.tldp.org/HOWTO/DHCP/index.html">here</ulink>. </para>
+            <para>Dhcpd 설정 값은 DHCP 미니-하우투에서 취해졌고, 그것은 <ulink url="http://www.tldp.org/HOWTO/DHCP/index.html">여기</ulink>에서 찾을 수 있습니다.</para>
       </sect2>
       <sect2 id="dhcp-references" status="complete">
         <title>참조</title>
@@ -1379,8 +1013,7 @@ option netbios-name-servers 192.168.1.1; </screen>
             <!-- things to do: IPv6-->
       <sect2 id="dns-installation" status="complete">
         <title>설치</title>
-          <para>At a terminal prompt, enter the following command to install
-                  <application>dns</application>:</para>
+          <para>터미널 프롬프트에서, <application>dns</application>를 설치하기 위하여 다음의 명령을 입력 합니다:</para>
           <para>
 <screen>
 <command>sudo apt-get install bind</command>
@@ -1456,11 +1089,7 @@ include "/etc/bind/named.conf.local";
           relative to this directory.
           </para>
 
-          <para>
-          The file named <filename>/etc/bind/db.root</filename> 
-          describes the root name servers in the world. The servers
-          change over time and must be maintained now and then.
-          </para>
+          <para><filename>/etc/bind/db.root</filename> 파일은 세상의 루트 네임 서버들을 기술 합니다. 그 서버들은 시간이 지남에 따라 변경되고 반드시 지금이나 나중에 관리유지 되어야 합니다.</para>
 
           <para>
           The <application>zone</application> section defines a master
@@ -1476,9 +1105,7 @@ include "/etc/bind/named.conf.local";
 <command>sudo /etc/init.d/bind start</command>
 </screen>
            </para>
-          <para>You can refer to the
-          documentation mentioned in the references section for details.
-          </para>
+          <para>상세한 것은 참조 편에 언급된 문서를 참고할 수 있습니다.</para>
       </sect2>
       <sect2 id="dns-references" status="complete">
         <title>참조</title>
@@ -1538,13 +1165,8 @@ include "/etc/bind/named.conf.local";
 			presented here.
           </para>
           <tip>
-               <para>Prior to editing the configuration file, you should make a copy of 
-			   the original file and protect it from writing, so you will have the original 
-			   settings as a reference, and to reuse as necessary.
-               </para>
-               <para>Copy the <filename>/etc/cups/cupsd.conf</filename> file and protect it 
-			   from writing with the following commands, issued at a terminal prompt:
-               </para>
+               <para>설정 파일을 편집하기 전에, 원래의 파일의 복사본을 만들고 쓰기에서 그것을 보호해야만 합니다. 그래서 여러분은 원래의 설정을 참조하거나 그리고 필요한 경우 재사용 할 수 있습니다.</para>
+               <para><filename>/etc/cups/cupsd.conf</filename> 파일을 복사하고 쓰기에서 그것을 보호하려면, 터미널 프롬프트에서 다음의 명령을 입력 합니다:</para>
                </tip>
                <para>
 <screen>
@@ -1609,26 +1231,17 @@ Listen socrates:631 # Listen on all interfaces for the hostname 'socrates'
 Port 631 # Listen on port 631 on all interfaces
 </screen>
 </para>
-                <para>
-                The CUPS server configuration file, <filename>/etc/cups/cupsd.conf</filename>,
-				contains several examples of possible Listen directives which are valid for use.
-                </para>
+                <para>CUPS 서버 설정 파일, <filename>/etc/cups/cupsd.conf</filename> 는, 올바르게 사용하는 몇 가지 가능한 Listen 지시자에 대한 예제를 가지고 있습니다.</para>
                 </listitem>
           </itemizedlist>
-                <para>
-                For more examples of configuration directives in the CUPS server 
-				configuration file, view the associated system manual page by entering the 
-				following command at a terminal prompt:
-               </para>
+                <para>CUPS 서버 설정 파일 내의 설정 지시자에 대한 더 많은 예제는, 터미널 프롬프트에서 다음의 명령을 입력하여 관계된 시스템 매뉴얼 페이지를 읽어 보십시오:</para>
                <para>
 <screen>
 <command>man cupsd.conf</command>
 </screen>
                </para>
                                <note>
-                <para>
-                Whenever you make changes to the <filename>/etc/cups/cupsd.conf</filename> configuration file, you'll need to restart the CUPS server by typing the following command at a terminal prompt:
-                </para>
+                <para><filename>/etc/cups/cupsd.conf</filename> 설정 파일에 변경을 만드는 어느 때에나, 터미널 프롬프트에서 다음의 명령을 입력하여 CUPS 서버를 재시작 하는 것이 필요 합니다:</para>
                 </note>
                 <para>
 <screen>
@@ -1667,14 +1280,11 @@ Port 631 # Listen on port 631 on all interfaces
           applications.</para>
 <sect2 id="http-installation" status="complete">
   <title>설치</title>
-                  <para>The Apache2 web server is available in Ubuntu
-                  Linux. To install Apache2:</para>
+                  <para>아파치2 웹 서버는 우분투 리눅스에서 사용 가능합니다. 아파치2를 설치하려면:</para>
           <procedure><step>
-                	  <para>At a terminal prompt enter the following command:
-<screen>
+                	  <para>터미널 프롬프트에서 다음의 명령을 입력 합니다: <screen>
 <command>sudo apt-get install apache2</command>
-</screen>
-             		  </para>
+</screen></para>
 			</step>
 	    </procedure>
       </sect2>
@@ -1690,21 +1300,12 @@ Port 631 # Listen on port 631 on all interfaces
           configuration files are only recognized by Apache2 when it is
           started or restarted.</para>
 
-          <para>The server also reads a file containing mime document types;
-          the filename is set by the <emphasis>TypesConfig</emphasis> directive, and is
-          <filename>mime.types</filename> by default.</para>
+          <para>서버는 또한 <emphasis>TypesConfig</emphasis> 지시자에 의해 정해지는 파일 이름과 그리고 기본으로 <filename>mime.types</filename>인 mime 문서 종류를 가지는 파일을 읽을 수 있습니다.</para>
 
-          <para>The default Apache2 configuration file is <filename>/etc/apache2/apache2.conf</filename> .
-          You can edit this file to configure the Apache2 server. You can
-          configure the port number, document root, modules, log files, 
-          virtual hosts, etc.
-          </para>
+          <para>기본 아파치2 설정 파일은 <filename>/etc/apache2/apache2.conf</filename> 입니다. 아파치2 서버를 설정하기 위하여 이 파일을 편집할 수 잇습니다. 포트 번호, 문서 루트, 모듈, 로그 파일, 가상 호스트, 기타 등등을 설정할 수 있습니다.</para>
         <sect3 id="http-basic-settings" status="complete">
           <title>기본적인 설정</title>
-            <para>
-             This section explains Apache2 server essential configuration
-             parameters. Refer to the <ulink url="http://httpd.apache.org/docs/2.0/">Apache2
-             Documentation</ulink> for more details.</para>
+            <para>이 영역은 아파치2 서버의 필수적인 설정 파라미터를 설명 합니다. 더 자세한 것은 <ulink url="http://httpd.apache.org/docs/2.0/">아파치2 문서</ulink>를 참조 합니다.</para>
 
              <itemizedlist>
 
@@ -1876,39 +1477,21 @@ Port 631 # Listen on port 631 on all interfaces
             </para>
             <itemizedlist spacing="compact">
                 <listitem>
-                    <para><emphasis role="bold">ExecCGI</emphasis> - Allow
-                    execution of CGI scripts. CGI scripts are not
-                    executed if this option is not chosen.
-					<tip><para>Most files should not be executed as CGI scripts.  This
+                    <para><emphasis role="bold">ExecCGI</emphasis> - CGI 스크립트의 실행을 허용 합니다. 만약 이 선택사항이 선택되지 않았다면 CGI 스크립트는 수행될 수 없습니다. <tip><para>Most files should not be executed as CGI scripts.  This
 					would be very dangerous.  CGI scripts should kept in a directory 
-					separate from and outside your DocumentRoot, and only only this
+					separate from and outside your DocumentRoot, and only this
 					directory should have the ExecCGI option set.  This is the default,
 					and the default location for CGI scripts is /usr/lib/cgi-bin.
-					</para></tip>
-					</para>
+					</para></tip></para>
                 </listitem>
                 <listitem>
-                    <para><emphasis role="bold">Includes</emphasis> - Allow server-side includes.
-					Server-side includes allow an HTML file to <emphasis>
-					include</emphasis> other files.  This is not a common option.  See
-					<ulink url="http://httpd.apache.org/docs/2.0/howto/ssi.html">the Apache2
-					SSI Howto</ulink> for mor information.</para>
+                    <para><emphasis role="bold">Includes</emphasis> - 서버 측의 includes를 허용 합니다. 서버 측 includes는 <emphasis> include</emphasis> 파일들로 HTML 파일을 허용 합니다. 이것은 일반적인 선택 사항이 아닙니다. 더 많은 정보는 <ulink url="http://httpd.apache.org/docs/2.0/howto/ssi.html">아파치2 SSI 하우투</ulink>를 보십시오.</para>
                 </listitem>
                 <listitem>
-                    <para><emphasis role="bold">IncludesNOEXEC</emphasis> - Allow server-side includes,
-                    but disable the #exec and #include commands in CGI
-                    scripts.</para>
+                    <para><emphasis role="bold">IncludesNOEXEC</emphasis> - 서버측 includes를 허용하지만, CGI 스크립트 내의 #exec과 #include 명령을 사용하지 못하도록 합니다.</para>
                 </listitem>
                 <listitem>
-                    <para>
-                    <emphasis role="bold">Indexes</emphasis> - Display a formatted list of the
-                    directory's contents, if no DirectoryIndex (such as index.html) exists in the 
-					requested directory.
-					<caution><para>For security reasons, this should usually not be set, and certainly
-					should not be set on your DocumentRoot directory.  Enable this option carefully on
-					a per-directory basis only if you are certain you want users to see the entire
-					contents of the directory.</para></caution>
-                    </para>
+                    <para><emphasis role="bold">Indexes</emphasis> - 요청된 디렉토리내에 DirectoryIndex가 (index.html과 같은) 없다면, 디렉토리 내용물의 형식화된 목록을 보여 줍니다.</para>
                 </listitem>
                 <listitem>
                     <para>
@@ -1952,16 +1535,12 @@ Port 631 # Listen on port 631 on all interfaces
 			index.html) for the virtual host. The default DocumentRoot is <filename>/var/www</filename>.
 			</para>
 
-			<para>
-			The ServerAdmin directive within the VirtualHost stanza is email the address used in the 
-			footer of error pages if you choose to show a footer with an email address on the error pages.
-			</para>
+			<para>ServerAdmin 지시자는 VirtualHost 절에 포함되는, 에러 페이지에서 이메일 주소와 함께 바닥글을 보여주는 것을 선택하였다면, 에러 페이지의 바닥글에 사용되는 이메일 주소 입니다.</para>
 
         </sect3>
         <sect3 id="server-settings" status="complete">
           <title>서버 설정</title>
-            <para>
-This section explains how to configure basic server settings.</para>
+            <para>이 영역은 어떻게 기본적인 서버 설정을 하는지를 설명 합니다.</para>
                     <para><emphasis role="bold">LockFile</emphasis> - The LockFile directive sets the path 
 					to the lockfile used when the server is compiled with either USE_FCNTL_SERIALIZED_ACCEPT 
 					or USE_FLOCK_SERIALIZED_ACCEPT. It must be stored on the local disk. It should be left 
@@ -1977,10 +1556,9 @@ This section explains how to configure basic server settings.</para>
 setting determines the server's access. Any files inaccessible to this user will also be inaccessible to your website's visitors. 
 The default value for User is www-data.  </para>
             <warning>
-            <para>
- Unless you know exactly what you are doing, do not set the User directive to root. Using root as the User will create large security holes for your Web server.  </para>
+            <para>여러분이 하는 것을 정확히 알지 않는 한, User 지시자를 root로 지정하지 마십시오. User로 root를 사용하는 여러분의 웹 서버에 거대한 보안 구멍을 만들게 됩니다.</para>
             </warning>
- <para>The Group directive is similar to the User directive. Group sets the group under which the server will answer requests. The default group is also www-data.</para>
+ <para>Group 지시자는 User 지시자와 비슷합니다. Group은 서버가 요청을 대답하는 그룹을 지정 합니다. 기본 설정된 그룹은 또한 www-data 입니다.</para>
 
         </sect3>
         <sect3 id="apache-modules" status="complete">
@@ -3224,7 +2802,7 @@ postconf -e 'myhostname = mail.example.com'
             </note>
             <para>
             Now, the file <filename>/etc/postfix/main.cf</filename>
-            should look like <ulink url="sample/postfix_configuration">this</ulink>.
+            should look like <ulink url="../sample/postfix_configuration">this</ulink>.
 		</para>
 		<para>
             The postfix initial configuration is complete. Run
@@ -3238,7 +2816,7 @@ postconf -e 'myhostname = mail.example.com'
             </para>
 	</sect3>
 	<sect3 id="sasl">
-	  <title>Configuring SASL</title>
+	  <title>SASL 설정하기</title>
             <para>
             The
             <application>libsasl2</application>,
@@ -3495,17 +3073,12 @@ disable_plaintext_auth = no
 	</sect3>
 	<sect3>
 	  <title>이메일 서버를 위한 방화벽 설정</title>
-          <para>
-          To access your mail server from another computer, you must
-          configure your firewall to allow connections to the server on
-          the necessary ports.
-            <itemizedlist>
+          <para>다른 컴퓨터에서 메일 서버를 접근하려면, 필요한 포트로 서버로의 접속을 허용하도록 방화벽을 반드시 설정해야만 합니다. <itemizedlist>
             <listitem><para>IMAP - 143</para></listitem>
             <listitem><para>IMAPS - 993</para></listitem>
             <listitem><para>POP3 - 110</para></listitem>
             <listitem><para>POP3S - 995</para></listitem>
-            </itemizedlist>
-          </para>
+            </itemizedlist></para>
         </sect3>
       </sect2>
       <sect2 id="mailman" status="complete">
@@ -3550,9 +3123,7 @@ disable_plaintext_auth = no
             </para>
           <sect4 id="mailman-apache2">
             <title>아파치2</title>
-              <para>
-                To install apache2 you refer to <xref linkend="http-installation"/>.
-              </para>
+              <para>아파치2를 설치하는 것은 <xref linkend="http-installation"/> 을 참조 하십시오.</para>
           </sect4>
           <sect4 id="mailman-exim4">
             <title>Exim4</title>
@@ -3579,7 +3150,7 @@ the following variable in the <filename>/etc/exim4/update-exim4.conf</filename> 
           <sect4 id="mailman-mailman">
             <title>Mailman</title>
               <para>
-              To install Exim4, run following command at a terminal prompt:
+              To install <application>Mailman</application>, run following command at a terminal prompt:
 <screen>
 <command>sudo apt-get install mailman</command> 
 </screen>
@@ -3840,8 +3411,7 @@ instructions in the email to subscribe.
 <ulink url="http://www.list.org/mailman-install/index.html">GNU Mailman - 설치 매뉴얼</ulink>
 </para>
 <para>
-<ulink url="http://www.exim.org/howto/mailman21.html">HOWTO - Using Exim
-4 and Mailman 2.1 together</ulink>
+<ulink url="http://www.exim.org/howto/mailman21.html">하우투 - Exim 4와 Mailman 2.1을 함께 사용하기</ulink>
 </para>
         </sect3>
       </sect2>

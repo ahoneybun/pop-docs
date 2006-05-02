@@ -5,7 +5,7 @@
 <!ENTITY project-name "Ubuntu Documentation Project">
 <!ENTITY ubuntu "<phrase>Ubuntu</phrase>">
 <!-- VERSIONS --><!ENTITY distro-version "Dapper Drake">
-<!ENTITY distro-rev "6.06">
+<!ENTITY distro-rev "6.06 LTS">
 <!ENTITY distro-release-date "June 2006">
 <!ENTITY linux-kernel-version "2.6.15">
 <!ENTITY gcc-version "4.0.3">
@@ -395,40 +395,23 @@
 <!ENTITY language "&EnglishAmerican;">
 ]>
 <chapter id="windows-networking" status="complete">
-	<title>Windowsnätverk</title>
+	<title>Windows-nätverk</title>
   <para>Datornätverk består ofta av flera olika system, och även om det vore trevligt att administrera ett nätverk som endast bestod av skrivbordsdatorer och servrar med Ubuntu måste somliga nätverk bestå av både Ubuntusystem och <trademark class="registered">Microsoft</trademark><trademark class="registered">Windows</trademark>-system som arbetar tillsammans i harmoni. Den här sektionen av <phrase>Ubuntus</phrase> serverguide introducerar principer och verktyg som används till att konfigurera din Ubuntuserver till att dela nätverksresurser med Windowsdatorer.</para>
 	<sect1 id="windows-networking-introduction" status="complete">
 		<title>Introduktion</title>
-          <para>
-          Successfully networking your Ubuntu system with Windows clients involves providing and integrating with services 
-          common to Windows environments. Such services assist the sharing of data and information about the computers 
-          and users involved in the network, and may be classified under three major categories of functionality:
-          </para>
+          <para>För att använda Ubuntusystem tillsammans med Windowsklienter måste man använda tjänster som är vanliga i Windowsmiljöer. Sådana tjänster hjälper till att dela data och information om datorer och användare som är anslutna till nätverket. Dessa tjänster kan delas in tre huvudsakliga kategorier:</para>
           <itemizedlist>
              <listitem>
              <para><emphasis role="bold">Fil- och skrivardelning</emphasis>. Använder protokollet Server Message Block (SMB) för att dela filer, mappar, enheter och skrivare i nätverket.</para>
              </listitem>
              <listitem>
-             <para>
-             <emphasis role="bold">Directory Services</emphasis>. Sharing vital information about the computers and users of the network
-             with such technologies as the Lightweight Directory Access Protocol (LDAP) and Microsoft
-             <trademark class="registered">Active Directory</trademark>.
-             </para>
+             <para><emphasis role="bold">Katalogtjänster</emphasis>. Delar kritisk information om datorer och användare i nätverket med hjälp av tekniker som Lightweight Directory Access Protocol (LDAP) och Microsoft <trademark class="registered">Active Directory</trademark>.</para>
              </listitem>
              <listitem>
-             <para>
-             <emphasis role="bold">Authentication and Access</emphasis>. Establishing the identity of a computer or user of the network and 
-             determining the information the computer or user is authorized to access using such principles and technologies as
-             file permissions, group policies, and the Kerberos authentication service.
-             </para>
+             <para><emphasis role="bold">Autentisering och tillgång</emphasis>. Säkerställer identiteten hos en dator eller användare i nätverket och avgör vilken information som dator eller användaren har tillåtelse att nå med hjälp av policys och tekniker som filrättigheter, gruppolicys och autentiseringstjänsten Kerberos.</para>
              </listitem>
           </itemizedlist>
-          <para>Fortunately, your Ubuntu system may provide all such facilities to Windows clients and share network resources among them.  
-          One of the principle pieces of software your Ubuntu system includes for Windows networking is the SAMBA suite of SMB server applications
-           and tools.  This section of the <phrase>Ubuntu</phrase> Server Guide will briefly introduce the installation and limited configuration of the SAMBA
-           suite of server applications and utilities.  Additional, detailed documentation and information on SAMBA is beyond the scope of this
-           documentation, but exists on the <ulink url="http://www.samba.org">SAMBA website</ulink>.
-          </para>
+          <para>Som tur är kan ditt Ubuntusystem erbjuda alla sådana funktioner för att dela nätverksresurser med Windowsklienter. Ett av de viktigaste programmen ditt Ubuntusystem har för kommunikation med Windowssystem är programsviten SAMBA med program och verktyg för SMB-protokollet. Den här delen utav <phrase>Ubuntus</phrase> serverguide kommer kortfattat introducera installation och begränsad konfiguration av programsviten SAMBA. Detaljerad dokumentation och information om SAMBA kommer inte att tas upp i denna guide men går att nå på <ulink url="http://www.samba.org">SAMBAs webbsida</ulink>.</para>
     </sect1>
 	<sect1 id="installing-samba" status="complete">
 		<title>Installera SAMBA</title>
@@ -441,46 +424,26 @@
     </sect1>
 	<sect1 id="configuring-samba" status="complete">
 		<title>Konfigurera SAMBA</title>
-          <para>
-           You may configure the SAMBA server by editing the <filename>/etc/samba/smb.conf</filename> file to change the default settings or add new
-           settings. More information about each setting is available in the comments of the <filename>/etc/samba/smb.conf</filename> file or by
-           viewing the <filename>/etc/samba/smb.conf</filename> manual page from the prompt with the following command typed at a terminal prompt: 
-           </para>
+          <para>Du kan konfigurera SAMBA-servern genom att redigera filen <filename>/etc/samba/smb.conf</filename>. Varje rad innehåller olika inställningar. Mer information om de olika inställningarna går att hitta i kommentarerna i filen eller genom att läsa manualsidan till filen som du får fram genom att skriva följande kommando i en terminalprompt:</para>
            <para>
 <screen>
 <command>man smb.conf</command>
 </screen>
            </para>
             <tip>
-               <para>Prior to editing the configuration file, you should make a copy of the original file and protect it 
-               from writing so you will have the original settings as a reference and to re-use as necessary.
-             </para>
+               <para>Innan du redigerar konfigurationsfilen bör du se till att göra en kopia av originalfilen och skrivskydda den, så att du har kvar originalinställningarna dels som referens, och dels för återanvändning ifall det blir nödvändigt.</para>
             </tip>
-           <para>
-          Backup the <filename>/etc/samba/smb.conf</filename> file:
-          </para>
+           <para>Säkerhetskopiera filen <filename>/etc/samba/smb.conf</filename>:</para>
              <para>
 <screen>
 <command>sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.original</command>
 </screen>
              </para> 
-          <para>
-          Now, edit the <filename>/etc/samba/smb.conf</filename> file and make your changes.
-          </para> 
+          <para>Nu kan du redigera <filename>/etc/samba/smb.conf</filename> och göra de ändringar du vill göra.</para> 
       <sect2 id="windows-networking-server" status="complete">
         <title>Server</title>
-          <para>
-            In addition to the SAMBA suite of file and printer sharing server applications, Ubuntu also includes 
-            other powerful server applications designed to provide additional network server functionality to Windows clients
-            similar to the functionality provided by actual Windows servers.  For example, Ubuntu offers centralized
-            management of network resources such as computers and users via Directory Services, and facilitates the identification,
-            and authorization of computers and users via Authentication Services.
-           </para>
-           <para>
-            The following sections will discuss SAMBA and the supporting technologies, such as Lightweight Directory Access Protocol
-            (LDAP) server, and Kerberos authentication server in more detail. You will also learn about some of the available configuration
-            directives available the SAMBA configuration file which facilitate network integration with Windows clients and servers.
-           </para>
+          <para>Som ett komplement till SAMBA-sviten av fil- och skrivardelningsprogram innehåller även Ubuntu andra kraftfulla serverprogram, som är designade för att ge dig extra nätverksserverfunktioner för Windowsklienter som liknar de som finns i faktiska windowsservrar. Till exempel erbjuder Ubuntu centraliserad hantering av nätverksresurser, som datorerer och användare, via katalogtjänster, och tillåter identifiering och auktorisering av datorer via autentieringstjänster.</para>
+           <para>Följande delar kommer att ta upp SAMBA och tillhörande tekniker såsom Lightweight Directory Access Protocol (LDAP) och Kerberos i mer detalj. Du kommer också lära dig om några av de konfigurationsdirektiv som går att använda i SAMBAs konfigurationsfil som låter dig integrera ditt Ubuntusystem med Windowsklienter och -servrar.</para>
         <sect3 id="active-directory" status="complete">
           <title>Active Directory</title>
             <para>

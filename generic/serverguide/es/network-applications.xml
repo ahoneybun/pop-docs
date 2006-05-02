@@ -5,7 +5,7 @@
 <!ENTITY project-name "Ubuntu Documentation Project">
 <!ENTITY ubuntu "<phrase>Ubuntu</phrase>">
 <!-- VERSIONS --><!ENTITY distro-version "Dapper Drake">
-<!ENTITY distro-rev "6.06">
+<!ENTITY distro-rev "6.06 LTS">
 <!ENTITY distro-release-date "June 2006">
 <!ENTITY linux-kernel-version "2.6.15">
 <!ENTITY gcc-version "4.0.3">
@@ -403,70 +403,27 @@
           <para>Ubuntu viene con varias utilidades gráficas para configurar sus dispositivos de red. Este documento es una herramienta para los administradores de servidores y esta enfocada para manejar su red en línea de comandos.</para>
       <sect2 id="ethernet" status="complete">
         <title>Ethernet</title> 
-          <para>
-		  Most ethernet configuration is centralized in a single file,
-		  <filename>/etc/network/interfaces</filename>.  If you have no ethernet devices, only
-		  the loopback interface will appear in this file, and it will look something like
-		  this:
-		  <screen># This file describes the network interfaces available on your system
+          <para>La mayoría de la configuración de Ethernet está centralizada en un único archivo, <filename>/etc/network/interfaces</filename>. Si usted no tiene dispositivos Ethernet, en este archivo sólo aparecerá el dispositivo loopback, y tendrá un aspecto parecido a éste: <screen># This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
 
 # The loopback network interface
 auto lo
 iface lo inet loopback
 address 127.0.0.1
-netmask 255.0.0.0</screen>
-		If you have only one ethernet device, eth0, and it gets its configuration from a DHCP server,
-		and it should come up automatically at boot, only two additional lines are required:
-		<screen>auto eth0
-iface eth0 inet dhcp</screen>
-		The first line specifies that the eth0 device should come up automatically when you boot.
-		The second line means that interface (<quote>iface</quote>) eth0 should have an IPv4 address
-		space (replace <quote>inet</quote> with <quote>inet6</quote> for an IPv6 device) and that
-		it should get its configuration automatically from DHCP.  Assuming your network and DHCP
-		server are properly configured, this machine's network should need no further configuration to
-		operate properly.  The DHCP server will provide the default gateway (implemented via the
-		<application>route</application> command), the device's IP address (implemented via the 
-		<application>ifconfig</application> command), and and DNS servers used on the network
-		(implemented in the <filename>/etc/resolv.conf</filename> file.)</para>
-		<para>To configure your ethernet device with a static IP address and custom configuration,
-		some more information will be required.  Suppose you want to assign the IP address
-		192.168.0.2 to the device eth1, with the typical netmask of 255.255.255.0.  Your default
-		gateway's IP address is 192.168.0.1.  You would enter something like this into
-		<filename>/etc/network/interfaces</filename>:
-		<screen>iface eth1 inet static
+netmask 255.0.0.0</screen> Si tiene sólo un dispositivo Ethernet, eth0, y éste obtiene su configuración desde un servidor DHCP, y se debe activar automáticamente durante el arranque del sistema, sólo se deben añadir dos líneas adicionales: <screen>auto eth0
+iface eth0 inet dhcp</screen> La primera línea especifica que el dispositivo eth0 debe activarse automáticamente durante el arranque del equipo. La segunda línea significa que la interfaz (<quote>iface</quote>) eth0 debe tener un espacio de direcciones IPv4 (sustituya <quote>inet</quote> por <quote>inet6</quote> en un dispositivo IPv6) y que debe obtener su configuración automáticamente desde un servidor DHCP. Suponiendo que tanto su red como su servidor DHCP están correctamente configurados, la red de este equipo no necesitaría más configuración adicional para poder funcionar. El servidor DHCP le proporcionará la pasarela (gateway) predeterminada (implementada mediante la orden <application>route</application>), la dirección IP del dispositivo (implementada mediante la orden <application>ifconfig</application>), y los servidores DNS usados en la red (implementados en el archivo <filename>/etc/resolv.conf</filename>.)</para>
+		<para>Para configurar su dispositivo Ethernet con una dirección IP estática y una configuración personalizada, se requiere más información. Suponga que desea asignar la dirección IP 192.168.0.2 al dispositivo eth1, con la clásica máscara de red 255.255.255.0. La dirección IP de su pasarela predeterminada es 192.168.0.1. En tal caso, podría poner algo semejante a ésto en <filename>/etc/network/interfaces</filename>: <screen>iface eth1 inet static
 	address 192.168.0.2
 	netmask 255.255.255.0
-	gateway 192.168.0.1</screen>
-		In this case, you will need to specify your DNS servers manually in
-		<filename>/etc/resolv.conf</filename>, which should look something like this:
-		<screen>search mydomain.com
+	gateway 192.168.0.1</screen> En este caso, necesitará especificar sus servidores DNS manualmente en <filename>/etc/resolv.conf</filename>, que tendría entonces el siguiente aspecto: <screen>search midominio.com
 nameserver 192.168.0.1
-nameserver 4.2.2.2</screen>
-		The <emphasis role="italics">search</emphasis> directive will append mydomain.com
-		to hostname queries in an attempt to resolve names to your network.  For example,
-		if your network's domain is mydomain.com and you try to ping the host
-		<quote>mybox</quote>, the DNS query will be modified to <quote>mybox.mydomain.com</quote>
-		for resolution.  The <emphasis role="italics">nameserver</emphasis> directives
-		specifiy DNS servers to be used to resolve hostnames to IP addresses.  If you use
-		your own nameserver, enter it here.  Otherwise, ask your Internet Service Provider
-		for the primary and secondary DNS servers to use, and enter them into
-		<filename>/etc/resolv.conf</filename> as shown above.</para>
-		<para>Many more configurations are possible, including dialup PPP interfaces, IPv6
-		networking, VPN devices, etc.  Refer to <application>man 5 interfaces</application>
-		for more information and supported options.  Remember that
-		<filename>/etc/network/interfaces</filename> is used by the 
-		<application>ifup</application>/<application>ifdown</application> scripts as a
-		higher level configuration scheme than may be used in some other Linux distributions,
-		and that the traditional, lower level utilities such as <application>ifconfig</application>,
-		<application>route</application>, and <application>dhclient</application> are still
-		available to you for ad hoc configurations.
-		</para>
+nameserver 4.2.2.2</screen>  La directiva <emphasis role="italics">search</emphasis> añadirá midominio.com a todas las consultas de nombres de host para intentar resolver nombres en su red. Por ejemplo, si el dominio de su red es midominio.com e intenta hacer un ping al host <quote>mipc</quote>, la consulta DNS se transformará en una consulta a <quote>mipc.midominio.com</quote> para su resolución. Las directivas <emphasis role="italics">nameserver</emphasis> especifican los servidores DNS que se usarán para resolver nombres de hosts en direcciones IP. Si usa su propio servidor de nombres, introdúzcalo aquí. En caso contrario, pregunte a su proveedor de Internet qué servidores DNS primario y secundario debe utilizar, e introdúzcalos en <filename>/etc/resolv.conf</filename> como se acaba de explicar.</para>
+		<para>Es posible realizar muchas más configuraciones, incluyendo interfaces de marcación analógica PPP, redes IPv6, dispositivos VPN, etc. Acuda a <application>man 5 interfaces</application> para obtener más información y las opciones soportadas. Recuerde que los scripts <application>ifup</application>/<application>ifdown</application> usan <filename>/etc/network/interfaces</filename> como un esquema de configuración de más alto nivel que el utilizado en otras distribuciones de Linux, y que las tradicionales utilidades de más bajo nivel como <application>ifconfig</application>, <application>route</application> y <application>dhclient</application> todavía se encuentran disponibles para realizar configuraciones más puntuales.</para>
       </sect2>
       <sect2 id="managing-dns-entries" status="complete">
           <title>Manejando Entradas DNS</title>
             <para>Esta sección explica cómo configurar el servidor de nombres que se usará para resolver direcciones IP en nombres de host, y viceversa. No explica cómo configurar el sistema como un servidor de nombres.</para>
-            <para>Para manejar entradas DNS, usted puede añadir, editar, o borrar nombres DNS del archivo <filename>/etc/resolv.conf</filename> . Se da un <ulink url="sample/resolv.conf">archivo de ejemplo</ulink> debajo:</para>
+            <para>Para administrar los DNS, puedes agregar, editar o eliminar los servidores DNS desde el archivo <filename>/etc/resolv.conf</filename>. Un <ulink url="../sample/resolv.conf">archivo de ejemplo</ulink> se muestra a continuación:</para>
 <programlisting>
 ↵
 search com↵
@@ -508,106 +465,29 @@ nameserver 208.185.179.218↵
           <para>El Transmission Control Protocol and Internet Protocol (TCP/IP) es un juego de protocolos estandard desarrollados a finales de los 70 por el Defense Advanced Research Projects Agency (DARPA) como una forma de comunicarse entre diferentes tipo de ordenadores y redes. TCP/IP es el impulsor de Internet, y es el más popular juego de protocolos de red de la Tierra.</para>
       <sect2 id="tcpip-introduction" status="complete">
         <title>Introducción a TCP/IP</title> 
-          <para>
-            The two protocol components of TCP/IP deal with different aspects of computer networking.
-            <emphasis>Internet Protocol</emphasis>, the "IP" of TCP/IP is a 
-			connectionless protocol which deals only with network packet routing using the <emphasis role="italics">IP datagram</emphasis> as the basic unit of networking information.  The 
-			IP datagram consists of a header followed by a message.  The <emphasis>
-			Transmission Control Protocol</emphasis> is the "TCP" of TCP/IP and enables network hosts 
-			to establish connections which may be used to exchange data streams.  TCP also guarantees 
-			that the data between connections is delivered and that it arrives at one network host in 
-			the same order as sent from another network host.
-          </para>
+          <para>Los dos protocolos componentes del TCP/IP se encargan de aspectos diferentes en las redes de ordenadores. El <emphasis>Protocolo Internet</emphasis> (Internet Protocol), el «IP» del TCP/IP, es un protocolo sin conexión que se ocupa únicamente del encaminamiento de los paquetes a través de la red usando el <emphasis role="italics">datagrama IP</emphasis> como unidad básica de información en la red. Los datagramas IP constan de una cabecera seguida de un mensaje. El <emphasis>Protocolo de Control de Transmisión</emphasis> (Transmission Control Protocol) es el «TCP» del TCP/IP y permite que los hosts de la red puedan establecer conexiones que se utilizarán para intercambiar flujos de datos. El TCP también garantiza la entrega de los datos a través de las conexiones y que éstos llegarán al host de destino en el mismo orden en que fueron enviados desde el host de origen.</para>
           </sect2>
         <sect2 id="tcpip-configuration" status="complete">
           <title>Configuración TCP/IP</title>
-            <para>
-            The TCP/IP protocol configuration consists of several elements which must be set by 
-			editing the appropriate configuration files, or deploying solutions such as the Dynamic 
-			Host Configuration Protocol (DHCP) server which in turn, can be configured to provide the 
-			proper TCP/IP configuration settings to network clients automatically. These 
-			configuration values must be set correctly in order to facilitate the proper network 
-			operation of your Ubuntu system.
-            </para>
+            <para>La configuración del protocolo TCP/IP consta de varios elementos que deben establecerse editando los archivos de configuración apropiados, o utilizando soluciones como el servidor de Protocolo de Configuración Dinámica de Hosts (Dynamic Host Configuration Protocol, DHCP) que, de hecho, puede configurarse para proporcionar automáticamente las opciones de configuración TCP/IP adecuadas para los clientes de la red. Esos valores de configuración deben establecerse adecuadamente para poder facilitar el correcto funcionamiento de la red en su sistema Ubuntu.</para>
             <para>Los elementos de configuración comunes del TCP/IP y sus propositos son los siguientes: <itemizedlist>
                <listitem>
                   <para><emphasis role="bold">Dirección IP</emphasis> La dirección IP es una cadena de identificación única expresada como cuatro números decimales que van desde 0 hasta 255, separados por puntos, donde cada uno de los cuatro números representan 8 bits de la dirección, de un total de 32 bits para la dirección completa. Este formato se denomina <emphasis>notación cuádruple con puntos</emphasis>.</para>
-                     <para>
-                     IP addresses are defined in <emphasis>classes</emphasis> whereby the
-                     bits making up an address correspond to network and host ranges.  There are four
-                     principal address classes: A, B, C, and D. Class A IP addresses would typically be
-                     used in very large organizations and have the format 
-                     <emphasis>network.host.host.host</emphasis> whereas
-                     the more common Class C address could be used in smaller organizations and is
-                     often used for individual host subscribers to Internet Service Providers. A Class
-                     C address would resemble <emphasis>network.network.network.host</emphasis>
-                     Class D addresses are special in that they are known as 
-                     <emphasis>Multicast</emphasis> addresses.
-                     Some examples of valid IP addresses are 127.0.0.1 and 82.211.81.166.
-                     </para>
                </listitem>
                <listitem>
-                  <para>
-                  <emphasis role="bold">Netmask</emphasis> The Subnet Mask (or simply,
-                  <emphasis>netmask</emphasis>) is a local bit mask, or set of flags
-                  which separate the portions of an IP address significant to the network from the
-                  bits significant to the <emphasis>subnetwork</emphasis>.  For example,
-                  in a Class C network, the standard netmask is 255.255.255.0 which masks the first
-                  three bytes of the IP address and allows the last byte of the IP address to
-                  remain available for specifying hosts on the subnetwork.
-                  </para>
+                  <para><emphasis role="bold">Máscara de red</emphasis> La máscara de red (o máscara de subred) es una máscara local de bits, o conjunto de indicadores, que separan, en una dirección IP, la parte correspondiente a la red de la parte correspondiente a la <emphasis>subred</emphasis>. Por ejemplo, en una red de Clase C, la máscara de red estándar es 255.255.255.0, lo que enmascara los tres primeros bytes de la dirección IP y deja disponible el último byte de la dirección IP para poder especificar hosts en la subred.</para>
                </listitem>
                <listitem>
-                  <para>
-                  <emphasis role="bold">Network Address</emphasis> The Network Address represents the
-                  bytes comprising the network portion of an IP address.  For example, the host 12.128.1.2
-                  in a Class A network would use 12.0.0.0 as the network address, which uses twelve (12)
-                  to represent the first byte of the IP address, (the network part) and zeroes (0) 
-                  in all of the remaining three bytes to represent the potential host values.  Network
-                  hosts using the very common private and non-routable IP addresses such as 192.168.1.100
-                  would in turn use a Network Address of 192.168.1.0, which specifies the first three
-                  bytes of the Class C 192.168.1 network and a zero (0) for all the possible hosts on the
-                  network.
-                  </para>
+                  <para><emphasis role="bold">Dirección de red</emphasis> La dirección de red representa los bytes que componen la porción de red de una dirección IP. Por ejemplo, el host 12.128.1.2 en una red de Clase A debe usar 12.0.0.0 como dirección de red, en el que el doce (12) representa el primer byte de la dirección IP, (la parte de red) y los ceros (0) en los restantes tres bytes representan los posibles valores de host. Los hosts de una red que use direcciones IP privadas no enrutables tan comunes como 192.168.1.100 deberán usar la dirección de red 192.168.1.0, que especifica los tres primeros bytes de la red de clase C 192.168.1 y el cero (0) para todos los posibles hosts de la red.</para>
                </listitem>
                <listitem>
-                  <para>
-                  <emphasis role="bold">Broadcast Address</emphasis> The Broadcast Address is an IP address
-                  which allows network data to be sent simultaneously to all hosts on a given subnetwork rather
-                  than specifying a particular network host.  The standard general broadcast address for IP networks is
-                  255.255.255.255, but this broadcast address cannot be used to send a broadcast message to
-                  every host on the Internet because routers block it.  A more appropriate broadcast address
-                  is set to match a specific subnetwork.  For example, on the popular private Class C IP network,
-                  192.168.1.0, the broadcast address should be configured as 192.168.1.255. Broadcast messages are
-                  typically produced by network protocols such as the Address Resolution Protocol (ARP) and the 
-                  Routing Information Protocol (RIP).             
-                  </para>
+                  <para><emphasis role="bold">Dirección de difusión (broadcast)</emphasis> La dirección de difusión es una dirección IP que permite enviar datos a todos los hosts de una misma subred simultáneamente, en lugar de especificar uno por uno cada host de la red. La dirección de difusión general estándar para las redes IP es 255.255.255.255, pero esta dirección de difusión no se puede usar para enviar un mensaje de difusión a todos los hosts de Internet porque los routers lo bloquean. Se puede establecer una dirección de difusión más apropiada cuadrándola con una subred específica. Por ejemplo, en la populare rede IP privada de Clase C, 192.168.1.0, la dirección de difusión debería configurarse como 192.168.1.255. Los mensajes de difusión son producidos normalmente por los protocolos de red como el Protocolo de Resolución de Direcciones (Address Resolution Protocol, ARP), y el Protocolo de Información de Encaminamiento (Routing Information Protocol, RIP).</para>
                </listitem>
                <listitem>
-                  <para>
-                  <emphasis role="bold">Gateway Address</emphasis> A Gateway Address is the IP address through which
-                  a particular network, or host on a network, may be reached.  If one network host wishes to communicate
-                  with another network host, and that host is not located on the same network, then a 
-                  <emphasis>gateway</emphasis> must be used. In many cases, the Gateway Address will be that
-                  of a router on the same network, which will in turn pass traffic on to other networks or hosts, such as
-                  Internet hosts.  The value of the Gateway Address setting must be correct, or your system will not be able
-                  to reach any hosts beyond those on the same network.                  
-                  </para>
+                  <para><emphasis role="bold">Dirección de pasarela o «puerta de enlace» (gateway)</emphasis> Una dirección de pasarela es la dirección IP a través de la cual se puede alcanzar una red, o un host concreto dentro de una red. Si el host de una determinada red desea comunicarse con otro host, y éste host no está en la misma red que el primero, se deberá usar una <emphasis>pasarela</emphasis>. En muchos casos, la dirección de pasarela será la dirección de un router de la red, que será el encargado de pasar el tráfico a otras redes o hosts, como por ejemplo los hosts de Internet. El valor de la dirección de pasarela debe ser correcto, o de lo contrario su sistema no será capaz de alcanzar ningún host que esté fuera de su red.</para>
                </listitem>
                <listitem>
-                  <para>
-                  <emphasis role="bold">Nameserver Address</emphasis> Nameserver Addresses represent the IP addresses of
-                  Domain Name Service (DNS) systems, which resolve network hostnames into IP addresses.  There are three levels of
-                  Nameserver Addresses, which may be specified in order of precedence: The 
-                  <emphasis>Primary</emphasis>
-                  Nameserver, the <emphasis>Secondary</emphasis> Nameserver, and the 
-                  <emphasis>Tertiary</emphasis>
-                  Nameserver. In order for your system to be able to resolve network hostnames into their
-                  corresponding IP addresses, you must specify valid Nameserver Addresses which you are authorized to use
-                  in your system's TCP/IP configuration.  In many cases these addresses can and will be provided by your
-                  network service provider, but many free and publicly accessible Nameservers are available for use, such as
-                  the Level3 (Verizon) servers with IP addresses from
-                  4.2.2.1 to 4.2.2.6. </para>
+                  <para><emphasis role="bold">Dirección del servidor de nombres (nameserver)</emphasis> Las direcciones de los servidores de nombres representan direcciones IP de sistemas DNS (Domain Name Service, Servicio de Nombre de Dominio), encargados de convertir («resolver») nombres de hosts en direcciones IP. Hay tres niveles de direcciones de servidores de nombres, que se especifican por orden de preferencia: el servidor de nombres <emphasis>primario</emphasis>, el servidor de nombres <emphasis>secundario</emphasis> y el servidor de nombres <emphasis>terciario</emphasis>. Para que su sistema sea capaz de resolver nombres de hosts en sus correspondientes direcciones IP, debe especificar en la configuración TCP/IP de su sistema las direcciones válidas de servidores de nombre que usted esté autorizado a usar. En muchos casos, esas direcciones pueden y deben ser proporcionadas por su proveedor de servicios de red (o su proveedor de Internet), aunque existen muchos servidores de nombre gratuitos y accesibles públicamente disponibles para su uso, como por ejemplo los servidores de Level3 (Verizon), cuyas direcciones IP van del 4.2.2.1 al 4.2.2.6.</para>
                      <tip>
                         <para>La dirección IP, la máscara de red, la dirección de red, la dirección de broadcast (difusión) y la dirección de gateway (pasarela) se especifican normalmente por medio de las directivas apropiadas en el archivo <filename>/etc/network/interfaces</filename>. Las direcciones de los servidores de nombres se especifican normalmente por medio de las directivas <emphasis>nameserver</emphasis> en el archivo <filename>/etc/resolv.conf</filename>. Para más información, vea la página de manual para <filename>interfaces</filename> o <filename>resolv.conf</filename>, respectivamente, con las siguientes órdenes tecleadas en la línea de órdenes de una terminal:</para>
                      </tip>
@@ -626,79 +506,22 @@ nameserver 208.185.179.218↵
         </sect2>
         <sect2 id="ip-routing" status="complete">
           <title>Enrutamiento IP</title>
-            <para>
-              IP routing is a means of specifying and discovering paths in a TCP/IP network along which
-              network data may be sent.  Routing uses a set of <emphasis>routing tables</emphasis>
-              to direct the forwarding of network data packets from their source to the destination, often
-              via many intermediary network nodes known as <emphasis>routers</emphasis>.
-              IP Routing is the principal mode of path discovery on the Internet.  There are two primary forms of
-              IP Routing: <emphasis>Static Routing</emphasis> and 
-              <emphasis>Dynamic Routing.</emphasis>
-            </para>
-            <para>
-            Static routing involves manually adding IP routes to the system's routing table, and this is usually
-            done by manipulating the routing table with the <application>route</application> command. Static routing enjoys
-            many advantages over dynamic routing, such as simplicity of implementation on smaller networks, 
-            predictability (the routing table is always computed in advance, and thus the route is precisely the 
-            same each time it used), and low overhead on other routers and network links due to the lack of a
-            dynamic routing protocol.  However, static routing does present some disadvantages as well.  For example,
-            static routing is limited to small networks and does not scale well.  Static routing also fails completely
-            to adapt to network outages and failures along the route due to the fixed nature of the route. 
-            </para>
-            <para>
-            Dynamic Routing depends on large networks with multiple possible IP routes from a source to a destination
-            and makes use of special routing protocols, such as the Router Information Protocol (RIP), which handle
-            the automatic adjustments in routing tables that make dynamic routing possible.  Dynamic routing
-            has several advantages over static routing, such as superior scalability and the ability to adapt
-            to failures and outages along network routes. Additionally, there is less manual configuration of the
-            routing tables, since routers learn from one another about their existence and available routes. This trait
-            also eliminates the possibility of introducing mistakes in the routing tables via human error.
-            Dynamic routing is not perfect, however, and presents disadvantages such as heightened complexity and
-            additional network overhead from router communications, which does not immediately benefit the end users,
-            but still consumes network bandwidth.
-            </para>
+            <para>El encaminamiento IP es una manera de especificar y descubrir caminos en una red TCP/IP por los cuales se pueden enviar datos dentro de la red. El encaminamiento usa un conjunto de <emphasis>tablas de enrutamiento</emphasis> (routing tables) para dirigir el envío de los paquetes de datos desde su origen hasta su destino, a menudo usando muchos nodos intermedios conocidos como <emphasis>encaminadores</emphasis> o «routers». El encaminamiento IP es la forma principal de descubrir caminos dentro de Internet. Hay dos formas básicas de encaminamiento IP: <emphasis>encaminamiento estático</emphasis> y <emphasis>encaminamiento dinámico</emphasis>.</para>
+            <para>El encaminamiento estático supone añadir manualmente las rutas IP en la tabla de encaminamiento del sistema, y esto se hace normalmente manipulando la tabla de encaminamiento con la orden <application>route</application>. El encaminamiento estático tiene muchas ventajas sobre el encaminamiento dinámico, como la simplicidad de implementación sobre redes pequeñas, la predecibilidad (la tabla de encaminamiento siempre se calcula por adelantado, y por tanto la ruta siempre es la misma cada vez que se usa), y la baja sobrecarga en otros routers y enlaces de red por la inexistencia de un protocolo de encaminamiento dinámico. Sin embargo, el encaminamiento estático también presenta algunos inconvenientes. Por ejemplo, está limitado a redes pequeñas y no escala adecuadamente. El encaminamiento estático también fracasa completamente al intentar adaptarse a pérdidas de la red y a fallos a lo largo de la ruta debido a la naturaleza inmutable de la misma.</para>
+            <para>El encaminamiento dinámico depende de redes grandes con muchas rutas IP posibles desde un origen hacia un destino, y hace uso de protocolos especiales de encaminamiento, como el Protocolo de Información del Router (Router Information Protocol, RIP), que gestina los ajustes automáticos en las tablas de encaminamiento que hacen posible el encaminamiento dinámico. El encaminamiento dinámico tiene varias ventajas sobre el encaminamiento estático, como su superior escalabilidad y la capacidad de adaptarse a los fallos y las pérdidas producidos a lo largo de las rutas de la red. Además, tiene una configuración menos manual de las tablas de encaminamiento, puesto que los routers aprenden unos de otros sobre la existencia y la disponibilidad de las rutas. Esta característica también elimina la posibilidad de introducir fallos en las tablas de encaminamiento provocadas por un error humano. El encaminamiento dinámico no es perfecto, sin embargo, y presenta inconvenientes como su mayor complejidad y la sobrecarga adicional de la red debida a las comunicaciones entre los routers, que no benefician inmediatamente a los usuarios finales, y que además consume ancho de banda de la red.</para>
         </sect2>
         <sect2 id="tcp-and-udp" status="complete">
           <title>TCP y UDP</title>
-            <para>
-              TCP is a connection-based protocol, offering error correction and guaranteed delivery of
-              data via what is known as <emphasis>flow control</emphasis>. Flow control
-              determines when the flow of a data stream needs to be stopped, and previously sent data
-              packets should to be re-sent due to problems such as <emphasis>collisions</emphasis>,
-              for example, thus ensuring complete and accurate delivery of the data.  TCP is typically
-              used in the exchange of important information such as database transactions. 
-            </para>
-            <para>
-              The User Datagram Protocol (UDP), on the other hand, is a <emphasis>connectionless</emphasis>
-              protocol which seldom deals with the transmission of important data because it lacks flow
-              control or any other method to ensure reliable delivery of the data.  UDP is commonly used
-              in such applications as audio and video streaming, where it is considerably faster than
-              TCP due to the lack of error correction and flow control, and where the loss of a few packets
-			  is not generally catastrophic.
-            </para>
+            <para>El TCP es un protocolo orientado a conexión, que ofrece corrección de errores y garantiza la entrega de los datos mediante el denominado <emphasis>control de flujo</emphasis>. El control de flujo determina cuándo se tiene que parar el flujo de una corriente de datos, y cuándo se deben reenviar los datos enviados previamente debido a problemas tales como <emphasis>colisiones</emphasis>, por ejemplo, asegurando así la entrega completa y precisa de los datos. El TCP se usa habitualmente en el intercambio de información importante, como transacciones de bases de datos.</para>
+            <para>El Protocolo de Datagramas de Usuario (User Datagram Protocol, UDP), por otro lado, es un protocolo <emphasis>sin conexión</emphasis> que raramente se usa en la transmisión ed datos importantes ya que carece de control de flujo o de cualquier otro método para garantizar la fiabilidad en la entrega de los datos. El UDP se usa habitualmente en aplicaciones de «streaming» de audio y vídeo, donde resulta considerablemente más rápido que el TCP por carecer de corrección de errores y control de flujo, y donde la pérdida de unos cuantos paquetes no suele resultar catastrófico.</para>
         </sect2>
         <sect2 id="icmp" status="complete">
           <title>ICMP</title>
-            <para>
-              The Internet Control Messaging Protocol (ICMP) is an extension to the Internet Protocol (IP) as defined
-              in the Request For Comments (RFC) #792 and supports network packets containing control, error, and
-              informational messages.  ICMP is used by such network applications as the <application>ping</application>
-              utility, which can determine the availability of a network host or device.  Examples of some error messages
-              returned by ICMP which are useful to both network hosts and devices such as routers, include 
-              <emphasis>Destination Unreachable</emphasis> and <emphasis>Time Exceeded</emphasis>.
-            </para>
+            <para>El Protocolo de Mensajería de Control de Internet (Internet Control Messaging Protocol, ICMP), es una extensión del Protocolo de Internet (Internet Protocol, IP) definida en el documento Request For Comments (RFC) #792, y que soporta paquetes de red que contienen mensajes de control, error e información. El ICMP se usa en aplicaciones de red como la utilidad <application>ping</application>, que comprueba la disponibilidad de un host o dispositivo en la red. Como ejemplos de mensajes error devueltos por el ICMP que resultan de utilidad en hosts de red y dispositivos como routers, tenemos <emphasis>Destination Unreachable</emphasis> (Destino Inalcanzable) y <emphasis>Time Exceeded</emphasis> (Tiempo Excedido).</para>
         </sect2>
         <sect2 id="daemons" status="complete">
           <title>Demonios</title>
-            <para>
-              Daemons are special system applications which typically execute continuously in the background and
-              await requests for the functions they provide from other applications.  Many daemons are network-centric; that is,
-              a large number of daemons executing in the background on an Ubuntu system may provide network-related functionality.
-              Some examples of such network daemons include the <emphasis>Hyper Text Transport Protocol Daemon</emphasis> 
-              (httpd), which provides web server functionality; the <emphasis>Secure SHell Daemon</emphasis> (sshd), which
-              provides secure remote login shell and file transfer capabilities; and the <emphasis>Internet Message Access 
-              Protocol Daemon</emphasis> (imapd), which provides E-Mail services.
-            </para>
+            <para>Los demonios (daemons) son aplicaciones especiales del sistema que normalmente se ejecutan continuamente en segundo plano esperando peticiones provenientes de otras aplicaciones que deseen usar las funciones que proporcionan. Muchos demonios están centrados en la red; es decir, muchos de los demonios que se ejecutan en segundo plano en un sistema Ubuntu pueden proporcionar funcionalidades relacionadas con la red. Algunos ejemplos de tales demonios de red incluyen el <emphasis>demonio de protocolo de transporte de hipertexto</emphasis> (httpd), que proporciona funcionalidades de servidor web; el <emphasis>demonio de intérprete seguro</emphasis> (sshd), que proporciona capacidades seguras de sesiones interactivas remotas y transferencia de archivos; y el <emphasis>demonio de protocolo de acceso a mensajes de Internet</emphasis> (imapd), que proporcona servicios de correo electrónico.</para>
         </sect2>
     </sect1>
 	<sect1 id="firewall-configuration" status="help">
@@ -710,99 +533,28 @@ nameserver 208.185.179.218↵
         </sect2>
         <sect2 id="ip-masquerading" status="help">
           <title>Enmascaramiento IP</title>
-            <para>
-              The purpose of IP Masquerading is to allow machines with private, non-routable IP
-			  addresses on your network to access the Internet through the machine doing the
-			  masquerading.  Traffic from your private network destined for the Internet must be
-			  manipulated for replies to be routable back to the machine that made the request.
-			  To do this, the kernel must modify the <emphasis>source</emphasis>
-			  IP address of each packet so that replies will be routed back to it, rather than
-			  to the private IP address that made the request, which is impossible over the 
-			  Internet.  Linux uses <emphasis>Connection Tracking</emphasis>
-			  (conntrack) to keep track of which connections belong to which machines and reroute
-			  each return packet accordingly.  Traffic leaving your private network is thus
-			  "masqueraded" as having originated from your Ubuntu gateway machine.
-			  This process is referred to in Microsoft documentation as Internet
-			  Connection Sharing.
-            </para>
-			<para>
-              This can be accomplished with a single iptables rule, which may differ slightly
-			  based on your network configuration:
-			  <screen>sudo iptables -t nat -A POSTROUTING -s 192.168.0.0/16 -o ppp0 -j MASQUERADE</screen>
-			  The above command assumes that your private address space is 192.168.0.0/16 and
-			  that your Internet-facing device is ppp0.  The syntax is broken down as follows:
-			  <itemizedlist>
+            <para>El propósito del Enmascaramiento IP (IP Masquerading) es permitir que máquinas con direcciones IP privadas no enrutables de una red accedan a Internet a través de la máquina que realiza el enmascaramiento. Se debe manipular el tráfico que va de su red privada con destino a Internet, para que las respuestas puedan encaminarse adecuadamente a la máquina que hizo la petición. Para ello, el núcleo debe modificar la dirección IP <emphasis>fuente</emphasis> de cada paquete de forma que las respuestas se encaminen hacia ella, en lugar de encaminarla hacia la dirección IP privada que hizo la petición, lo que resulta imposible en Internet. Linux usa Seguimiento de Conexión (<emphasis>Connection Tracking, conntrack)</emphasis> para llevar la cuenta de qué conexiones pertenencen a qué máquinas, y reencaminar adecuadamente cada paquete de retorno. El tráfico que sale de su red privada es, por consiguiente, «enmascarada» dando la sensación de que se ha originado en la máquina Ubuntu que hace de pasarela. Este proceso se denomina Compartición de Conexiones de Internet (Internet Connection Sharing) en la documentación de Microsoft.</para>
+			<para>Esto se puede conseguir con una sóla regla de iptables, que puede variar ligeramente en función de la configuración de su red: <screen>sudo iptables -t nat -A POSTROUTING -s 192.168.0.0/16 -o ppp0 -j MASQUERADE</screen> La orden anterior supone que su espacio de direcciones privadas es 192.168.0.0/16 y que el dispositivo que conecta con Internet es ppp0. La sintaxis se descompone de la siguiente forma: <itemizedlist>
 				  <listitem><para>-t nat -- la regla es para ir a la tabla nat</para></listitem>
 				  <listitem><para>-A POSTROUTING -- la regla es para añadir (-A) a la cadena POSTROUTING</para></listitem>
 				  <listitem><para>-s 192.168.0.0/16 -- la regla se aplica al tráfico originado desde la dirección específica</para></listitem>
 				  <listitem><para>-o ppp0 -- la regla se aplica al tráfico programado para ser enrutado a través del dispositivo de red especificado</para></listitem>
-				  <listitem><para> -j MASQUERADE -- traffic matching this rule is to "jump"
-				  (-j) to the MASQUERADE target to be manipulated as described above</para></listitem>
-			  </itemizedlist>
-			</para>
-			<para>
-              Each chain in the filter table (the default table, and where most or all packet
-			  filtering occurs) has a default <emphasis>policy</emphasis> of
-			  ACCEPT, but if you are creating a firewall in addition to a gateway device, you
-			  may have set the policies to DROP or REJECT, in which case your masqueraded
-			  traffic needs to be allowed through the FORWARD chain for the above rule to work:
-			  <screen>sudo iptables -A FORWARD -s 192.168.0.0/16 -o ppp0 -j ACCEPT
-sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED -i ppp0 -j ACCEPT</screen>
-			  The above commands will allow all connections from your local network to the
-			  Internet and all traffic related to those connections to return to the machine
-			  that initiated them.
-			</para>
+				  <listitem><para>-j MASQUERADE -- el tráfico que se ajuste a esta regla «saltará» («jump», -j) al destino MASQUERADE para ser manipulado como se describió anteriormente</para></listitem>
+			  </itemizedlist></para>
+			<para>Cada cadena en la tabla de filtrado (la tabla predeterminada, y donde ocurren la mayoría de los filtrados de paquetes) tiene una <emphasis>política</emphasis> predeterminada de ACCEPT, pero si está creando un firewall además de un dispositivo de pasarela, debería establecer las políticas a DROP o REJECT, en cuyo caso necesitará habilitar su tráfico enmascarado a través de la cadena FORWARD para que la regla anterior funcione: <screen>sudo iptables -A FORWARD -s 192.168.0.0/16 -o ppp0 -j ACCEPT
+sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED -i ppp0 -j ACCEPT</screen> Las órdenes anteriores permitirán todas las conexiones que vayan de su red local a Internet, así como el retorno a la máquina que las inició de todo el tráfico relacionado con esas conexiones.</para>
         </sect2>
         <sect2 id="firewall-tools" status="help">
           <title>Herramientas</title>
-            <para>
-              There are many tools available to help you construct a complete firewall without
-			  intimate knowledge of iptables.  For the GUI-inclined, 
-			  <application>Firestarter</application> is quite popular and easy to use, and
-			  <application>fwbuilder</application> is very powerful and will look familiar 
-			  to an administrator who has used a commercial firewall utility such as Checkpoint 
-			  FireWall-1.  If you prefer a command-line tool with plain-text configuration files, 
-			  <application>Shorewall</application> is a very powerful solution to help you 
-			  configure an advanced firewall for any network.  If your network is relatively 
-			  simple, or if you don't have a network, <application>ipkungfu</application> should 
-			  give you a working firewall "out of the box" with zero configuration, 
-			  and will allow you to easily set up a more advanced firewall by editing simple, 
-			  well-documented configuration files.  Another interesting tool is 
-			  <application>fireflier</application>, which is designed to be a desktop firewall 
-			  application.  It is made up of a server (fireflier-server) and your choice of GUI 
-			  clients (GTK or QT), and behaves like many popular interactive firewall 
-			  applications for Windows.
-            </para>
+            <para>Hay muchas herramientas disponibles que pueden ayudarle a construir un completo firewall sin necesidad de conocer iptables en profundidad. Para los que se inclinan por una solución gráfica, <application>Firestarter</application> es muy popular y fácil de usar, y <application>fwbuilder</application> es muy potente y tiene un aspecto familiar para aquellos administradores que hayan usado herramientas comerciales de firewall como Checkpoint FireWall-1. Si prefiere una utilidad de línea de órdenes con archivos de configuración en texto plano, <application>Shorewall</application> es una solución muy potente para ayudarle a configurar un firewall avanzado para cualquier red. Si su red es relativamente simple, o no dispone de red, <application>ipkungfu</application> le proporcionará un firewall funcional con desde el principio sin necesidad de configuración, y le permitirá crear fácilmente un firewall más avanzado editando archivos de configuración sencillos y bien documentados. Otra herramienta interesante es <application>fireflier</application>, diseñado para ser una aplicación firewall de escritorio. Está formada por un servidor (fireflier-server) y una selección de clientes GUI (GTK o QT), y se comporta de manera muy similar a muchas aplicaciones interactivas de firewall para Windows.</para>
         </sect2>
         <sect2 id="firewall-logs" status="help">
           <title>Logs</title>
-            <para>
-              Firewall logs are essential for recognizing attacks, troubleshooting your
-			  firewall rules, and noticing unusual activity on your network.  You must include
-			  logging rules in your firewall for them to be generated, though, and logging
-			  rules must come before any applicable terminating rule (a rule with a target
-			  that decides the fate of the packet, such as ACCEPT, DROP, or REJECT).  For
-			  example:
-			  <screen>sudo iptables -A INPUT -m state --state NEW -p tcp --dport 80 -j LOG --log-prefix "NEW_HTTP_CONN: "</screen>
-			  A request on port 80 from the local machine, then, would generate a log in dmesg
-			  that looks like this:
-			</para>
+            <para>Los registros del firewall son esenciales para reconocer ataques, corregir problemas en las reglas de su firewall, y observar actividades inusuales en su red. Debe incluir reglas de registro en su firewall para poder activarlos, y las reglas de registro deben aparecer antes de cualquier otra regla final aplicable (una regla con un objetivo que decide el destino del paquete, como ACCEPT, DROP o REJECT). Por ejemplo, <screen>sudo iptables -A INPUT -m state --state NEW -p tcp --dport 80 -j LOG --log-prefix "NEW_HTTP_CONN: "</screen> Una petición al puerto 80 desde la máquina local, por tanto, podría generar un registro en dmesg con el siguiente aspecto:</para>
 			<para>
 			  <programlisting>[4304885.870000] NEW_HTTP_CONN: IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=58288 DF PROTO=TCP SPT=53981 DPT=80 WINDOW=32767 RES=0x00 SYN URGP=0</programlisting>
 			</para>
-			<para>
-              The above log will also appear in <filename>/var/log/messages</filename>,
-			  <filename>/var/log/syslog</filename>, and <filename>/var/log/kern.log</filename>.
-			  This behavior can be modified by editing <filename>/etc/syslog.conf</filename>
-			  appropriately or by installing and configuring <application>ulogd</application>
-			  and using the ULOG target instead of LOG.  The <application>ulogd</application>
-			  daemon is a userspace server that listens for logging instructions from the kernel
-			  specifically for firewalls, and can log to any file you like, or even to a
-			  <application>PostgreSQL</application> or <application>MySQL</application>
-			  database.  Making sense of your firewall logs can be simplified by using a log
-			  analyzing tool such as <application>fwanalog</application>, <application>
-			  fwlogwatch</application>, or <application>lire</application>.
-            </para>
+			<para>El registro anterior también aparecerá en <filename>/var/log/messages</filename>, <filename>/var/log/syslog</filename> y <filename>/var/log/kern.log</filename>. Este comportamiento se puede cambiar editando apropiadamente el archivo <filename>/etc/syslog.conf</filename>, o instalando y configurando <application>ulogd</application> y utilizando el objetivo ULOG en lugar del LOG. El demonio <application>ulogd</application> es un servidor en espacio de usuario, que escucha las instrucciones de registro que provienen del núcleo y que sean específicamente para firewalls, y puede registrar cualquier archivo que desee, o incluso a una base de datos <application>PostgreSQL</application> o <application>MySQL</application>. Se puede simplificar la interpretación del significado de los registros del firewall usando una herramienta de análisis de registros como <application>fwanalog</application>, <application> fwlogwatch</application> o <application>lire</application>.</para>
         </sect2>
     </sect1>
 	<sect1 id="openssh-server" status="complete">
@@ -811,17 +563,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
         <title>Introducción</title> 
            <para>Esta sección de la Guía de Servidores de <phrase>Ubuntu</phrase> introduce una potente colección de herramientas para el control remoto y la transferencia de datos de ordenadores en red, llamados <emphasis>OpenSSH</emphasis>. También pruede aprender algo sobre los parámetros de configuración posibles del servidor OpenSSH y como cambiarlos en un sistema Ubuntu.</para>
           <para>OpenSSH es una versión libre del protocolo Secure Shell (SSH) que es una familia de herramientas para control remoto o transferencia de ficheros entre ordenadores. Las herramientas utilizadas para realizar estas funciones, eran el <application>telnet</application> o el <application>rcp</application>, que son inseguras y transmiten el password de los usuarios en texto plano cuando son usadas. OpenSSH provee un demonio y clientes para facilitar un seguro y encriptado control remoto y operaciones de transferencia de fichero, reemplaza efectivamente las herramientas heredadas.</para>
-          <para>
-            The OpenSSH server component, <application>sshd</application>, listens continuously for
-            client connections from any of the client tools. When a connection request occurs,
-            <application>sshd</application> sets up the correct connection depending on the type
-            of client tool connecting. For example, if the remote computer is connecting with the
-            <application>ssh</application> client application, the OpenSSH server sets up a remote
-            control session after authentication. If a remote user connects to an OpenSSH server with
-            <application>scp</application>, the OpenSSH server daemon initiates a secure copy of files
-            between the server and client after authentication. OpenSSH can use many authentication
-            methods, including plain password, public key, and <application>Kerberos</application> tickets.
-            </para>
+          <para>El componente servidor OpenSSH , <application>sshd</application>, escucha continuamente a la espera de conexiones de clientes desde cualquiera de las herramientas cliente. Cuando aparece una petición conexión, <application>sshd</application> establece la conexión correcta dependiendo del tipo de herramienta cliente que está conectándose. Por ejemplo, si el equipo remoto se está conectando con la aplicación cliente <application>ssh</application>, el servidor OpenSSH establecerá una sesión de control remoto tras la autenticación. Si el usuario remoto se conecta al servidor OpenSSH con <application>scp</application>, el demonio del servidor OpenSSH iniciará una copia segura de archivos entre el servidor y el cliente tras la autenticación. OpenSSH puede usar muchos métodos de autenticación, incluyendo contraseñas planas, claves públicas y tickets de <application>Kerberos</application></para>
           </sect2>
         <sect2 id="openssh-installation">
         <title>Instalación</title>
@@ -864,9 +606,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
                <para>Port 2222</para>
                </listitem>
 	<listitem>
-            <para>
-            To have <application>sshd</application> allow public key-based login credentials, simply add or modify the line:
-            </para>
+            <para>Para hacer que <application>sshd</application> permita credenciales de inicio de sesión basados en clave pública, simplemente añada o modifique la línea:</para>
                <para>PubkeyAuthentication yes</para>
             <para>en el archivo <filename>/etc/ssh/sshd_config</filename> , si está presente, asegurese que la línea no esta comentada.</para>
             </listitem>
@@ -883,13 +623,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
 </screen>
                </para>
 		<warning>
-                           <para>
-                           Many other configuration directives for <application>sshd</application> are available for changing the server application's
-                           behavior to fit your needs. Be advised, however, if your only method of access to a server is <application>ssh</application>,
-                           and you make a mistake in configuring <application>sshd</application> via the <filename>/etc/ssh/sshd_config</filename> file, you may find you
-                           are locked out of the server upon restarting it, or that the <application>sshd</application> server refuses to start due
-                           to an incorrect configuration directive, so be extra careful when editing this file on a remote server.
-                           </para>
+                           <para>Existen muchas otras directivas de configuración disponibles para <application>sshd</application> que cambian el comportamiento de la aplicación servidor para ajustarlo a sus necesidades. No obstante, si su único método de acceso a un servidor es <application>ssh</application>, y comete un error al configurar <application>sshd</application> por medio del archivo <filename>/etc/ssh/sshd_config</filename>, puede conseguir que el servidor se cierre durante el reinicio del mismo, o que el servidor <application>sshd</application> no quiera iniciarse debido a una directiva de configuración incorrecta, por lo que debe ser extremadamente cuidadoso cuando edite este fichero desde un servidor remoto.</para>
                         </warning>
         </sect2>
    <sect2 id="openssh-references" status="complete">
@@ -1083,12 +817,7 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
                     <para>Servidor de Impresión</para>
                 </listitem>
             </itemizedlist>
-            <para>The advantage of using DHCP is that changes to the network, for example a change
-                in the address of the DNS server, need only be changed at the DHCP server, and all
-                network hosts will be reconfigured the next time their DHCP clients poll the
-                DHCP server. As an added advantage, it is also easier to integrate new computers into
-                the network, as there is no need to check for the availability of an IP address.
-                Conflicts in IP address allocation are also reduced.</para>
+            <para>La ventaja de usar DHCP es que un cambio en la red (por ejemplo, un cambio en la dirección del servidor DNS), sólo supone un cambio en el servidor DHCP, ya que todos los hosts de la red se reconfigurarán automáticamente la próxima vez que sus clientes DHCP soliciten la configuración al servidor DHCP. Como una ventaja añadida, también es más fácil integrar nuevos ordenadores en la red, ya que no es necesario comprobar la disponibilidad de la dirección IP. Los conflictos de direcciones IP también se reducen.</para>
             <para>Un servidor DHCP puede proporcionar parámetros de configuración usando dos métodos:</para>
             <variablelist>
                 <varlistentry>
@@ -1098,23 +827,13 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
                     </listitem>
                 </varlistentry>
                 <varlistentry>
-                    <term>Address Pool</term>
+                    <term>Depósito de direcciones</term>
                     <listitem>
-                        <para>This method entails defining a pool (sometimes also called a range or
-                            scope) of IP addresses from which DHCP clients are supplied their
-                            configuration properties dynamically and on a fist come first serve
-                            basis. When a DHCP client is no longer on the network for a specified
-                            period, the configuration is expired and released back to the address
-                            pool for use by other DHCP Clients.</para>
+                        <para>Este método define un depósito (también llamado a veces rango o ámbito) de direcciones IP que serán suministradas a los clientes DHCP de forma dinámica como parte de sus opciones de configuración, y en una política de «primero en llegar, primero en ser servido». Cuando un cliente DHCP deja de estar en la red durante un periodo de tiempo especificado, la configuración expira y retorna al depósito de direcciones para que pueda ser utilizada por otros clientes DHCP.</para>
                     </listitem>
                 </varlistentry>
             </variablelist>
-            <para>Ubuntu is shipped with both DHCP server and client. The server is
-                    <application>dhcpd</application> (dynamic host configuration protocol daemon).
-                The client provided with Ubuntu is
-                <application>dhclient</application> and should be
-                installed on all computers required to be automatically configured. Both programs
-                are easy to install and configure and will be automatically started at system boot.</para>
+            <para>Ubuntu viene equipado con un cliente DHCP y un servidor DHCP. El servidor es <application>dhcpd</application> (dynamic host configuration protocol daemon). El cliente suministrado por Ubuntu es <application>dhclient</application> y se debe instalar en los equipos que necesiten ser configurados automáticamente. Ambos programas son fáciles de instalar y de configurar, y deberían iniciarse automáticamente durante el arranque del sistema.</para>
       <sect2 id="dhcp-installation" status="complete">
         <title>Instalación</title>
           <para>En un terminal, introduzca el siguiente comando para instalar el <application>dhcpd</application>:</para>
@@ -1125,17 +844,18 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
           </para>
           <para>Usted podrá ver la siguiente salida, que explica que hacer después:</para>
           <screen>
-Please note that if you are installing the DHCP server for the first
-time you need to configure. Please stop (/etc/init.d/dhcp
-stop) the DHCP server daemon, edit /etc/dhcpd.conf to suit your needs
-and particular configuration, and restart the DHCP server daemon
+Por favor, tenga en cuenta que si está instalando el servidor DHCP por
+primera vez, necesitará configurarlo. Por favor, detenga el demonio
+del servidor DHCP (/etc/init.d/dhcp stop), edite /etc/dhcpd.conf para
+adaptarlo a sus necesidades, y reinice el demonio del servidor DHCP
 (/etc/init.d/dhcp start).
 
-You also need to edit /etc/default/dhcp to specify the interfaces dhcpd
-should listen to. By default it listens to eth0.
+También necesitará editar /etc/default/dhcp para especificar las
+interfaces que dhcpd deberá escuchar. De forma predeterminada,
+escucha en eth0.
 
-NOTE: dhcpd's messages are being sent to syslog. Look there for
-diagnostics messages.
+NOTA: Los mensajes de dhcpd se enviarán a syslog. Localice allí los
+mensajes de diagnóstico.
 
 Starting DHCP server: dhcpd failed to start - check syslog for diagnostics.  </screen>
       </sect2>
@@ -1159,13 +879,7 @@ subnet 192.168.1.0 netmask 255.255.255.0 {↵
 range 192.168.1.10 192.168.1.100;↵
 range 192.168.1.150 192.168.1.200;↵
 } </screen>
-            <para>This will result in the DHCP server giving a client an IP address from the range
-                192.168.1.10-192.168.1.100 or 192.168.1.150-192.168.1.200. It will lease an IP
-                address for 600 seconds if the client doesn't ask for a specific time frame. Otherwise
-                the maximum (allowed) lease will be 7200 seconds. The server will also "advise" the
-                client that it should use 255.255.255.0 as its subnet mask, 192.168.1.255 as its
-                broadcast address, 192.168.1.254 as the router/gateway and 192.168.1.1 and
-                192.168.1.2 as its DNS servers. </para>
+            <para>Esto hará que el servidor DHCP proporcione a un cliente una dirección IP dentro del rango 192.168.1.10 - 192.168.1.100 ó 192.168.1.150 - 192.168.1.200. La concesión de la dirección IP durará 600 segundos, si el cliente no ha solicitado un intervalo de tiempo específico. En caso contrario, la concesión máxima permitida será de 7200 segundos. El servidor también «aconsejará» al cliente que use 255.255.255.0 como su máscara de subred, 192.168.1.255 como su dirección de difusión, 192.168.1.254 como la dirección del router/pasarela, y 192.168.1.1 y 192.168.1.2 como sus servidores DNS.</para>
             <para>Si necesita especificar un servidor WINS para sus clientes Windows, necesitará incluir la opción netbios-name-servers option, p.e.</para>
             <screen>
 ↵
@@ -1181,13 +895,7 @@ option netbios-name-servers 192.168.1.1; </screen>
     </sect1>
 	<sect1 id="dns" status="complete">
 		<title>Servicio de nombre de dominio (DNS)</title>
-            <para>Domain Name Service (DNS) is an Internet service that maps IP addresses and fully
-                qualified domain names (FQDN) to one another. In this way, DNS alleviates the need to
-                remember IP addresses. Computers that run DNS are called
-                <emphasis>name
-                servers</emphasis>. Ubuntu ships with <application>BIND</application> (Berkley
-                Internet Naming Daemon), the most common program used for maintaining a name
-                server on GNU/Linux.</para>
+            <para>El Servicio de Nombres de Dominio (Domain Name Service, DNS) es un servicio de Internet que hace corresponder direcciones IP con nombres de dominio totalmente cualificados (FQDN). De esta forma, DNS nos evita tener que recordar direcciones IP. Los ordenadores que relizan DNS se denominan <emphasis>servidores de nombres</emphasis>. Ubuntu viene equipado con <application>BIND</application> (Berkley Internet Naming Daemon, Demonio de Nombres de Internet de Berkley), el programa usado más comúnmente para gestionar un servidor de nombres en GNU/Linux.</para>
             <!-- things to do: IPv6-->
       <sect2 id="dns-installation" status="complete">
         <title>Instalación</title>
@@ -1283,26 +991,11 @@ include "/etc/bind/named.conf.local";↵
     </sect1>
 	<sect1 id="cups" status="complete">
 		<title>CUPS - Servidor de Impresión</title>
-          <para>
-            The primary mechanism for Ubuntu printing and print services is the 
-			<emphasis role="bold">Common UNIX Printing System</emphasis> (CUPS). 
-			This printing system is a freely available, portable printing layer 
-			which has become the new standard for printing in most GNU/Linux 
-			distributions.
-          </para>
-          <para>
-          CUPS manages print jobs and queues and provides network printing using 
-		  the standard Internet Printing Protocol (IPP), while offering support 
-		  for a very large range of printers, from dot-matrix to laser and many 
-		  in between.  CUPS also supports PostScript Printer Description (PPD) and 
-		  auto-detection of network printers, and features a simple web-based 
-		  configuration and administration tool. 
-          </para>
+          <para>El mecanismo principal de impresión y de servicios de impresión en Ubuntu es el <emphasis>Sistema de Impresión Común de UNIX</emphasis> (Common UNIX Printing System, CUPS). Este sistema de impresión es una capa de impresión libre y portable que se ha convertido en el nuevo estándar de impresión en la mayoría de las distribuciones ed GNU/Linux.</para>
+          <para>CUPS gestiona los trabajos y tareas de impresión, y proporciona impresión de red utilizando el Protocolo estándar de Impresión en Internet (IPP), que dispone de soporte para una gran gama de impresoras, desde matriciales hasta láser. CUPS también soporta PostScript Printer Description (PPD) y autodetección de impresoras de red, y dispone de una sencilla herramienta basada en web para la configuración y administración.</para>
       <sect2 id="cups-installation" status="complete">
         <title>Instalación</title>
-          <para>
-            To install CUPS on your Ubuntu computer, simply use <application>sudo</application> with the the <application>apt-get</application> command and give the packages to install as the first parameter. A complete CUPS install has many package dependencies, but they may all be specified on the same command line.  Enter the following at a terminal prompt to install CUPS:
-          </para>
+          <para>Para instalar CUPS en su equipo Ubuntu, simplemente use <application>sudo</application> con la orden <application>apt-get</application> y proporcione como primer parámtro el nombre de los paquetes a instalar. Una instalación completa de CUPS tiene muchas dependencias de paquetes, pero pueden especificarse todas ellas en la misma línea de órdenes. Introduzca lo siguiente en la línea de órdenes de una terminal para instalar CUPS:</para>
           <para>
 <screen>
 <command>sudo apt-get install cupsys cupsys-client cupsys-driver-gimpprint \ defoma fontconfig foomatic-db foomatic-filters libcupsimage2 \ libexpat1 libfontconfig1 libfreetype6 libgimpprint1 libjpeg62 \ libpaper1 libpng12-0 libpoppler0c2 libslp1 libtiff4 patch perl \ perl-modules ttf-bitstream-vera ucf</command>
@@ -1322,15 +1015,7 @@ include "/etc/bind/named.conf.local";↵
       </sect2>
       <sect2 id="cups-configuration" status="complete">
         <title>Configuración</title>
-          <para>
-            The Common UNIX Printing System server's behavior is configured through the 
-			directives contained in the file <filename>/etc/cups/cupsd.conf</filename>.  
-			The CUPS configuration file follows the same syntax as the primary configuration 
-			file for the Apache HTTP server, so users familiar with editing Apache's 
-			configuration file should feel at ease when editing the CUPS configuration 
-			file. Some examples of settings you may wish to change initially will be 
-			presented here.
-          </para>
+          <para>El comportamiento del servidor CUPS se configura a través de las directivas contenidas en el archivo <filename>/etc/cups/cupsd.conf</filename>. El archivo de configuración de CUPS tiene la misma sintaxis que el archivo principal de configuración del servidor HTTP Apache, por lo que los usuarios acostumbrados a editar el archivo de configuración de Apache se sentirán como en su casa cuando editen el archivo de configuración de CUPS. Se presentarán aquí algunos ejemplos de opciones que usted puede desear cambiar inicialmente.</para>
           <tip>
                <para>Antes de editar un fichero de configuración, debe hacer una copia del archivo original y protegerla contra escritura, así tendrá la configuración original como referencia, y podrá reusarla si fuera necesario.</para>
                <para>Copie el archivo <filename>/etc/cups/cupsd.conf</filename> y protejalo contra escritura con los siguientes comandos, introduzcalos en un terminal:</para>
@@ -1380,18 +1065,10 @@ Listen /var/run/cups/cups.sock # existing socket Listen↵
 Listen 192.168.10.250:631 # Listen on the LAN interface, Port 631 (IPP)↵
 </screen>
                 </para>
-                <para>
-                In the example above, you may comment out or remove the reference to the 
-				Loopback address (127.0.0.1) if you do not wish <application>cupsd
-				</application> to listen on that interface, but would rather have it only 
-				listen on the Ethernet interfaces of the Local Area Network (LAN). To enable 
-				listening for all network interfaces for which a certain hostname is bound, 
-				including the Loopback, you could create a Listen entry for the hostname 
-				<emphasis>socrates</emphasis> as such:
-                </para>
+                <para>En el ejemplo anterior, debe comentar o borrar la referencia a la dirección de loopback (127.0.0.1) si no desea que <application>cupsd</application> escuche por esa interfaz, sino sólo por la interfaz Ethernet de la red local (LAN). Para activar la escucha por todas las interfases de red en las que se haya establecido un nombre de host, incluyendo el loopback, debería crear una entrada listen para el nombre de host <emphasis>socrates</emphasis> así:</para>
                 <para>
 <screen>
-Listen socrates:631  # Listen on all interfaces for the hostname 'socrates'
+Listen·socrates:631··#·Escuchando en todos los interfaces para la máquina·'socrates'
 </screen>
                 </para> 
 				<para>o omitiendo la directiva Listen y usando <emphasis>Port</emphasis> en su lugar, como en:</para>
@@ -1411,9 +1088,7 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
 </screen>
                </para>
                                <note>
-                <para>
-                Whenever you make changes to the <filename>/etc/cups/cupsd.conf</filename> configuration file, you'll need to restart the CUPS server by typing the following command at a terminal prompt:
-                </para>
+                <para>Una vez haya realizado cambios en el archivo de configuración <filename>/etc/cups/cupsd.conf</filename>, necesitará reiniciar el servidor CUPS tecleando la siguiente orden en la línea de órdenes de una terminal:</para>
                 </note>
                 <para>
 <screen>
@@ -1456,25 +1131,13 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
       </sect2>
       <sect2 id="http-configuration" status="complete">
         <title>Configuración</title>
-          <para>
-          Apache is configured by placing <emphasis>directives</emphasis> in plain text
-          configuration files. The main configuration file is called 
-		  <filename>apache2.conf</filename>. In addition, other configuration files may be added
-          using the <emphasis>Include</emphasis> directive, and wildcards can be used to
-          include many configuration files. Any directive may be placed
-          in any of these configuration files. Changes to the main
-          configuration files are only recognized by Apache2 when it is
-          started or restarted.</para>
+          <para>Apache se configura colocando <emphasis>directivas</emphasis> en archivos de configuración de texto plano. El archivo principal de configuración se llama <filename>apache2.conf</filename>. Además, se pueden añadir otros archivos de configuración mediante la directiva <emphasis>Include</emphasis>, y se pueden usar comodines para incluir muchos archivos de configuración. Todas las directivas deben colocarse en alguno de esos archivos de configuración. Apache2 sólo reconocerá los cambios realizados en los archivos principales de configuración cuando se inicie o se reinicie.</para>
 
           <para>The server also reads a file containing mime document types;
           the filename is set by the <emphasis>TypesConfig</emphasis> directive, and is
           <filename>mime.types</filename> by default.</para>
 
-          <para>The default Apache2 configuration file is <filename>/etc/apache2/apache2.conf</filename> .
-          You can edit this file to configure the Apache2 server. You can
-          configure the port number, document root, modules, log files, 
-          virtual hosts, etc.
-          </para>
+          <para>El archivo de configuración predeterminado de Apache2 es <filename>/etc/apache2/apache2.conf</filename>. Puede editar este archivo para configurar el servidor Apache2. Podrá configurar el número de puerto, la raíz de documentos, los módulos, los archivos de registros, los hosts virtuales, etc.</para>
         <sect3 id="http-basic-settings" status="complete">
           <title>Configuración Básica</title>
             <para>Esta sección explica los parámetros de configuración esenciales para el servidor Apache2. Remitase a la <ulink url="http://httpd.apache.org/docs/2.0/">Documentación de Apache2 Documentation</ulink> para más detalles.</para>
@@ -1577,11 +1240,7 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
 
             <itemizedlist>
             <listitem>
-            <para>
-             The <emphasis>DirectoryIndex</emphasis> is the default page served by the
-             server when a user requests an index of a directory by
-             specifying a forward slash (/) at the end of the directory
-             name.</para>
+            <para>El <emphasis>DirectoryIndex</emphasis> es la página servida por defecto por el servidor cuando un usuario solicita el índice de un directorio añadiendo la barra de división (/) al final del nombre del directorio.</para>
 
              <para>For example, when a user requests the page
              http://www.example.com/this_directory/, he or she will
@@ -1637,21 +1296,15 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
             </listitem>
 
             <listitem>
-            <para>
-            Some options are specified on a per-directory basis rather than per-server.
-			Option is one of these directives.  A Directory stanza is enclosed in 
-			XML-like tags, like so:
-			<screen><command>&lt;Directory /var/www/mynewsite&gt;
-				...
-			&lt;/Directory&gt;</command></screen>
-			The Options directive within a Directory stanza accepts one or more of the
-			following values (among others), separated by spaces:
-            </para>
+            <para>Algunas opciones son especificadas por directorio en lugar de por servidor. Una de estas directivas es Option. Un parrafo Directory es encerrado entre etiquetas XML, como estas:
+<screen><command>&lt;Directory /var/www/mynewsite&gt;↵
+				...↵
+			&lt;/Directory&gt;</command></screen> La directiva Options dentro del parrafo Directory acepta un o más de los siguientes valores (entre otros), separados por espacios:</para>
             <itemizedlist spacing="compact">
                 <listitem>
                     <para><emphasis role="bold">ExecCGI</emphasis> - Permite la ejecución de scripts CGI. Los scripts CGI no serán ejecutados si esta opción no fue escojida. <tip><para>Most files should not be executed as CGI scripts.  This
 					would be very dangerous.  CGI scripts should kept in a directory 
-					separate from and outside your DocumentRoot, and only only this
+					separate from and outside your DocumentRoot, and only this
 					directory should have the ExecCGI option set.  This is the default,
 					and the default location for CGI scripts is /usr/lib/cgi-bin.
 					</para></tip></para>
@@ -1682,10 +1335,7 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
                     </para>
                 </listitem>
                 <listitem>
-                    <para>
-                    <emphasis role="bold">SymLinksIfOwnerMatch</emphasis> - Only follow symbolic links
-                    if the target file or directory has the same owner as the link.
-                    </para>
+                    <para><emphasis role="bold">SymLinksIfOwnerMatch</emphasis> - Solo seguirá enlaces simbólicos si el directorio de destino es del mismo usuario que el enlace.</para>
                 </listitem>
             </itemizedlist>
 
@@ -1694,7 +1344,7 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
         </sect3>
         <sect3 id="virtual-hosts-settings" status="complete">
 
-          <title>Virtual Hosts Settings</title>
+          <title>Configuración de Servidores Virtuales</title>
             <para>
 			Virtual hosts allow you to run different servers for different IP addresses, different host 
 			names, or different ports on the same machine. For example, you can run the website for 
@@ -1711,10 +1361,7 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
 			individual email addresses for each virtual host. 
     		</para>
  
- 			<para>
-			Set the DocumentRoot directive to the directory that contains the root document (such as 
-			index.html) for the virtual host. The default DocumentRoot is <filename>/var/www</filename>.
-			</para>
+ 			<para>Establezca la directiva DocumentRoot apuntando al directorio que contenga el documento raíz (como el index.html) para el host virtual. El DocumentRoot por defecto es <filename>/var/www</filename>.</para>
 
 			<para>
 			The ServerAdmin directive within the VirtualHost stanza is email the address used in the 
@@ -1742,11 +1389,11 @@ The default value for User is www-data.  </para>
             <warning>
             <para>Hasta que no sepa exactamente lo que esta haciendo, no ponga en la directiva User al root. Usar el root como usuario puede crear grandes agujeros de seguridad en su servidor Web.</para>
             </warning>
- <para>The Group directive is similar to the User directive. Group sets the group under which the server will answer requests. The default group is also www-data.</para>
+ <para>La directiva Group es similar a la directiva User. Group establece el grupo sobre el que el servidor aceptará las peticiones. El grupo por defecto es también www-data.</para>
 
         </sect3>
         <sect3 id="apache-modules" status="complete">
-          <title>Apache Modules</title>
+          <title>Módulos de Apache</title>
               <para>
 
               Apache is a modular server. This implies that only the most
@@ -1774,36 +1421,14 @@ The default value for User is www-data.  </para>
 <command>sudo apt-get install libapache2-mod-auth-mysql</command>
 </screen>
                 </para>
-                <para>
-                Once you install the module, the module will
-                be available in the
-                <filename>/etc/apache2/mods-available</filename> directory. You can use
-              the <application>a2enmod</application> command to
-              enable a module. You can use
-              the <application>a2dismod</application> command to
-              disable a module. Once you enable the module,
-              the module will be available in the
-              the <filename>/etc/apache2/mods-enabled</filename> directory.
-              </para>
+                <para>Una vez instalado el módulo, este estará disponible en el directorio <filename>/etc/apache2/mods-available</filename>. Puede utilizar el comando <application>a2enmod</application> para activar el módulo. Puede utilizar el comando <application>a2dismod</application> para desactivar el módulo. Una vez que active el módulo, este estará disponible en el directorio <filename>/etc/apache2/mods-enabled</filename>.</para>
         </sect3>
       </sect2>
       <sect2 id="https-configuration" status="complete">
         <title>Configuración HTTPS</title>
-          <para>
-           The <application>mod_ssl</application> module adds
-           an important feature to the Apache2 server - the ability to
-           encrypt communications.  Thus, when your browser is
-           communicating using SSL encryption, the
-           https:// prefix is used at the beginning of the Uniform
-           Resource Locator (URL) in the browser navigation bar.
-          </para>
+          <para>El módulo <application>mod_ssl</application> añade una importante característica al servidor Apache2 - la habilidad de encriptar las comunicaciones. De esta forma, cuando su navegador se esta comunicando utilizando la encriptación SSL, se utilizará el prefijo https:// al principio del Localizador de Recursos Uniformes (URL) en la barra de direcciones del navegador.</para>
 
-          <para>
-          The <application>mod_ssl</application> module is available in
-          <application>apache2-common</application> package. If you have
-          installed this package, you can run the following command from a terminal prompt to
-          enable the <application>mod_ssl</application> module:
-          </para>
+          <para>El módulo <application>mod_ssl</application> esta disponible en el paquete <application>apache2-common</application>. Si tiene instalado este paquete, podrá ejecutar el siguiente comando en un terminal para activar el módulo <application>mod_ssl</application>:</para>
 
           <para>
 <screen>
@@ -1837,7 +1462,7 @@ The default value for User is www-data.  </para>
              </para>
         </sect3>
         <sect3 id="types-of-certificates" status="complete">
-          <title>Types of Certificates</title>
+          <title>Tipos de Certificados</title>
             <para>
              You need a key and a certificate to operate your secure
              server, which means that you can either generate a
@@ -1848,11 +1473,7 @@ The default value for User is www-data.  </para>
 
             <itemizedlist>
             <listitem>
-            <para>
-            Browsers (usually) automatically recognize the certificate
-            and allow a secure connection to be made without prompting
-            the user.
-            </para>
+            <para>Los navegadores (habitualmente) reconocen automáticamente el certificado y permiten establecer una conexión segura sin preguntar al usuario.</para>
             </listitem>
             <listitem>
             <para>
@@ -1884,7 +1505,7 @@ The default value for User is www-data.  </para>
 
             <orderedlist>
             <listitem>
-               <para>Create a private and public encryption key pair.</para>
+               <para>Crear dos llaves encriptadas pública y privada.</para>
             </listitem>
             <listitem>
                  <para>Create a certificate request based on the public key. The
@@ -2006,7 +1627,7 @@ Enter pass phrase for server.key:↵
 
             <para>
 <screen>
-<command>openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt</command>
+<command>openssl·x509·-req·-days·365·-in·server.csr·-signkey·server.key·-out·server.crt</command>
 </screen>
             </para>
 
@@ -2072,10 +1693,7 @@ Listen 443↵
 <command>sudo /etc/init.d/apache2 restart</command>
 </screen>
             </para>
-        <note><para>
-        You should remember and enter the passphrase every time you
-        start your secure web server.
-        </para></note>
+        <note><para>Debería memorizar e introducir su contraseña cada vez que inicie una sesión segura en su navegador.</para></note>
 
             <para>You will be prompted to enter the passphrase. Once you
             enter the correct passphrase, the secure web server will be
@@ -2088,33 +1706,18 @@ Listen 443↵
       <sect2 id="http-references" status="complete">
         <title>Referencias</title>
           <para>
-          <ulink url="http://httpd.apache.org/docs/2.0/">Apache2
-          Documentation</ulink>
+          <ulink url="http://httpd.apache.org/docs/2.0/">Documentación de Apache2</ulink>
           </para>
           <para>
-          <ulink url="http://www.modssl.org/docs/">Mod SSL
-          Documentation</ulink>
+          <ulink url="http://www.modssl.org/docs/">Documentación de Mod SSL</ulink>
           </para>
       </sect2>
     </sect1>
 	
 	<sect1 id="squid" status="complete">
-		<title>Squid - Proxy Server</title>
-          <para>
-          Squid is a full-featured web proxy cache server application which provides proxy and cache services for Hyper Text
-          Transport Protocol (HTTP), File Transfer Protocol (FTP), and other popular network protocols.  Squid can implement
-          caching and proxying of Secure Sockets Layer (SSL) requests and caching of Domain Name Server (DNS) lookups, and perform
-          transparent caching. Squid also supports a wide variety of caching protocols, such as Internet Cache Protocol, (ICP)
-          the Hyper Text Caching Protocol, (HTCP) the Cache Array Routing Protocol (CARP), and the Web Cache Coordination 
-          Protocol. (WCCP) 
-          </para>
-          <para>
-          The Squid proxy cache server is an excellent solution to a variety of proxy and caching server needs, and scales from
-          the branch office to enterprise level networks while providing extensive, granular access control mechanisms and
-          monitoring of critical parameters via the Simple Network Management Protocol (SNMP).  When selecting a computer system
-          for use as a dedicated Squid proxy, or caching servers, ensure your system is configured with a large amount of physical
-          memory, as Squid maintains an in-memory cache for increased performance.
-          </para>
+		<title>Servidor proxy Squid</title>
+          <para>Squid es una completa aplicación servidor proxy caché web que proporciona servicios de proxy y caché para Hyper Text Transport Protocol (HTTP), File Transfer Protocol (FTP) y otros protocolos populares de red. Squid puede servir de caché y de proxy para las peticiones Secure Sockets Layer (SSL) y de caché para las consultas de Domain Name Server (DNS), y proporciona servicios de caché transparente. Squid también soporta una amplia variedad de protocolos de caché, como el Internet Cache Protocol (ICP), el Hyper Text Caching Protocol (HTCP), el Cache Array Routing Protocol (CARP), y el Web Cache Coordination Protocol (WCCP).</para>
+          <para>El servidor proxy caché Squid es una solución excelente para una amplia variedad de necesidades de proxy y de caché, y escala desde redes de oficina hasta redes a nivel empresarial al tiempo que proporciona extensos y granulares mecanismos de control de acceso y monitorización de parámetros críticos a través del Simple Network Management Protocol (SNMP). Cuando elija un ordenador para su uso como proxy Squid dedicado, o como servidor de caché, asegúrese de que su sistema dispone de una gran cantidad de memoria física, puesto que Squid mantiene una caché en memoria para mejorar el rendimiento.</para>
       <sect2 id="squid-installation" status="complete">
         <title>Instalación</title>
           <para>En un terminal, introduzca el siguiente comando para instalar el servidor Squid:</para>
@@ -2126,17 +1729,10 @@ Listen 443↵
       </sect2>
       <sect2 id="squid-configuration" status="complete">
         <title>Configuración</title>
-          <para>
-            Squid is configured by editing the directives contained within the <filename>/etc/squid/squid.conf</filename> configuration file.
-            The following examples illustrate some of the directives which may be modified to affect the behavior of the Squid server.
-            For more in-depth configuration of Squid, see the References section. 
-          </para>
+          <para>Squid se configura editando las directivas contenidas en el archivo de configuración <filename>/etc/squid/squid.conf</filename>. Los siguientes ejemplos ilustran algunas de las directivas que puede modificar para alterar el comportamiento del servidor Squid. Para una configuración más en profundidad, consulte la sección Referencias.</para>
              <tip>
-               <para>Prior to editing the configuration file, you should make a copy of the original file and protect it 
-               from writing so you will have the original settings as a reference, and to re-use as necessary.
-               </para>
-               <para>Copy the <filename>/etc/squid/squid.conf</filename> file and protect it from writing with the following commands entered at a terminal prompt:
-               </para>
+               <para>Antes de editar el archivo de configuración, debería hacer una copia del archivo original y protegerlo contra escritura de forma que tenga las opciones originales como referencia y pueda reutilizarlas si fuese necesario.</para>
+               <para>Copie el archivo·<filename>/etc/squid/squid.conf</filename>·y protejalo contra escritura introduciendo el siguiente comando en un terminal:</para>
 	     </tip>
                <para>
 <screen>
@@ -2148,58 +1744,33 @@ Listen 443↵
            <itemizedlist>
                <listitem>
                   <para>Para que su servidor Squid escuche en el puerto TCP 8888 en lugar del puerto TCP 3128 que usa por defecto, cambie la directiva http_port como sigue:</para>
-                  <para>
-                  http_port 8888
-                  </para>
+                  <para>http_port·8888</para>
                </listitem>
 	            <listitem>
                   <para>
                   Change the visible_hostname directive in order to give the Squid server a specific hostname.  This hostname
                   does not necessarily need to be the computer's hostname. In this example it is set to <emphasis>weezie</emphasis>
                   </para>
-                  <para>
-                  visible_hostname weezie
-                  </para>
+                  <para>visible_hostname·weezie</para>
                </listitem>
                <listitem>
-                  <para>
-                     Again, Using Squid's access control, you may configure use of Internet services proxied by Squid
-                     to be available only users with certain Internet Protocol (IP) addresses.  For example, we willll illustrate access 
-                     by users of the 192.168.42.0/24 subnetwork only:
-                  </para>
-                  <para>
-                     Add the following to the <emphasis role="bold">bottom</emphasis> of the ACL section of your <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
+                  <para>De nuevo, usando el control de acceso de Squid, puede configurar que el uso de los servicios de Internet delegados por Squid esté sólo disponible para aquellos usuarios que tengan unas determinadas direcciones IP. Por ejemplo, ilustraremos el acceso sólo de aquellos usuarios que pertenezcan a la subred 192.168.42.0/24:</para>
+                  <para>Añada lo siguiente al <emphasis role="bold">final</emphasis> de la sección ACL de su archivo <filename>/etc/squid/squid.conf</filename>:</para>
                   <para>acl fortytwo_network src 192.168.42.0/24</para>
-                  <para>
-                     Then, add the following to the <emphasis role="bold">top</emphasis> of the http_access section of your
-                     <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
+                  <para>Después, añada lo siguiente al <emphasis role="bold">principio</emphasis> de la sección http_access de su archivo <filename>/etc/squid/squid.conf</filename>:</para>
                   <para>http_access allow fortytwo_network</para>
                </listitem>
                <listitem>
-                  <para>
-                     Using the excellent access control features of Squid, you may configure use of Internet services proxied by Squid
-                     to be available only during normal business hours.  For example, we'll illustrate access by employees of a business
-                     which is operating between 9:00AM and 5:00PM, Monday through Friday, and which uses the 10.1.42.0/42 subnetwork:
-                  </para>
-                  <para>
-                     Add the following to the <emphasis role="bold">bottom</emphasis> of the ACL section of your <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
+                  <para>Usando las excelentes capacidades de control de acceso de Squid, puede configurar el uso de los servicios de Internet delegados por Squid para que sólo estén disponibles durante las horas normales de trabajo. Por ejemplo, ilustraremos el acceso de los empleados de un negocio que opera entre las 9 de la mañana y las 5 de la tarde, de lunes a viernes, y que usan la subred 10.1.42.0/42:</para>
+                  <para>Añada lo siguiente al <emphasis role="bold">final</emphasis> de la sección ACL de su archivo <filename>/etc/squid/squid.conf</filename>:</para>
                   <para>acl biz_network src 10.1.42.0/24 acl biz_hours time M T W T F 9:00-17:00</para>
-                  <para>
-                     Then, add the following to the <emphasis role="bold">top</emphasis> of the http_access section of your
-                     <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
+                  <para>Después, añada lo siguiente al <emphasis role="bold">principio</emphasis> de la sección http_access de su archivo <filename>/etc/squid/squid.conf</filename>:</para>
                   <para>http_access allow biz_network biz_hours</para>
                </listitem>
           </itemizedlist>
           </para>
           <note>
-	  <para>
-          After making changes to the <filename>/etc/squid/squid.conf</filename> file, save the file and restart the <application>squid</application> 
-          server application to effect the changes using the following command entered at a terminal prompt:
-          </para>
+	  <para>Después de hacer los cambios en el archivo <filename>/etc/squid/squid.conf</filename>, guarde el archivo y reinicie el servidor <application>squid</application> para que los cambios surtan efecto, usando la siguiente orden que deberá introducir en la línea de órdenes de una terminal:</para>
           </note>
           <para>
 <screen>
@@ -2236,9 +1807,7 @@ must install and configure a digital certificate in your Apache 2 web server.
 Please refer to the HTTPS subsection in the Apache2 section to install and 
 configure the digital certificate.
 						</para>
-						<para>
-		To install Subversion, run the following command from a terminal prompt:
-            </para>
+						<para>Para instalar Subversion, ejecute la siguiente orden en la línea de órdenes de una terminal:</para>
 	    <para>
 <screen>
 <command>sudo apt-get install subversion libapache2-svn</command>
@@ -2247,11 +1816,11 @@ configure the digital certificate.
 
         </sect3>
         <sect3 id="subversion-configuration" status="complete">
-          <title>Server Configuration</title>
+          <title>Configuración del servidor</title>
             <para>
 	This step assumes you have installed above mentioned packages on your system. This section explains how to create a Subversion repository and access the project.</para>
 			<sect4 id="create-svn-repos" status="complete">
-				<title>Create Subversion Repository</title>
+				<title>Crear un repositorio de Subversion</title>
 <para>The Subversion repository can be created using the following command from a terminal prompt:</para>
 
         <para>
@@ -2282,7 +1851,7 @@ different URL schemas map to the available access methods.</para>
 						<tbody>
 							<row>
 								<entry><para>file://</para></entry>
-								<entry><para>direct repository access (on local disk)</para></entry>
+								<entry><para>acceso directo al repositorio (en disco local)</para></entry>
 							</row>
 							<row>
 								<entry><para>http://</para></entry>
@@ -2290,7 +1859,7 @@ different URL schemas map to the available access methods.</para>
 							</row>
 							<row>
 								<entry><para>https://</para></entry>
-								<entry><para>Same as http://, but with SSL encryption</para></entry>
+								<entry><para>Igual que http://, pero con cifrado SSL</para></entry>
 							</row>
 							<row>
 								<entry><para>svn://</para></entry>
@@ -2333,7 +1902,7 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
 		<para>The repository permissions depend on filesystem permissions. If the user has read/write permission, he can checkout from and commit to the repository.</para>
 			</sect4>
 			<sect4 id="access-via-webdav" status="complete">
-				<title>Access via WebDAV protocol (http://)</title>
+				<title>Acceso·via·protocolo WebDAV·(http://)</title>
 <para> To access the Subversion repository via WebDAV protocol, you must configure your Apache 2 web server. You must add the following snippet in your <filename>/etc/apache2/apache2.conf</filename> file:</para>
 
 	<programlisting> &lt;Location /svn&gt;
@@ -2351,15 +1920,13 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
   to add a user, you can run the following command from a terminal prompt:</para>
 	<para>
 <screen>
-<command>htpasswd2 /etc/subversion/passwd user_name</command>
+<command>htpasswd2·/etc/subversion/passwd·user_name</command>
 </screen>
         </para>
 	<para>This command will prompt you to enter the password. Once you enter the password, the user is added. Now, to access the repository you can run the following command:</para>
         <screen><command>svn co http://servername/svn</command></screen>
 	<warning>
-		<para>
-			The password is transmitted as plain text. If you are worried about password snooping, you are advised to use SSL encryption. For details, please refer next section.
-		</para>
+		<para>La contraseña se transmite como texto plano. Si le preocupa que puedan interceptar su contraseña, se le recomienda que use cifrado SSL. Para más detalles, consulte la siguiente sección.</para>
 	</warning>
 			</sect4>
 			<sect4 id="access-via-webdav-with-ssl" status="complete">
@@ -2403,10 +1970,8 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
 					</filename> in the same directory and add the new user. The 
 					syntax is as follows:
 					</para>
-					<programlisting>username = password</programlisting>
-					<para>
-					For more details, please refer to the file.
-					</para>
+					<programlisting>username·=·password</programlisting>
+					<para>Para más detalles, por favor consulte el archivo.</para>
 
 					<para>
 					Now, to access Subversion via the svn:// custom protocol, either 
@@ -2466,7 +2031,7 @@ $ svnserve --help</programlisting>
                                         </para>
                                         <para>
 <screen>
-<command>svn co svn+ssh://hostname/var/svn/repos/project</command>
+<command>svn·co·svn+ssh://hostname/var/svn/repos/project</command>
 </screen>
                                         </para>
 
@@ -2484,7 +2049,7 @@ $ svnserve --help</programlisting>
 
       </sect2>
       <sect2 id="cvs-server" status="complete">
-        <title>CVS Server</title> 
+        <title>Servidor CVS</title> 
           <para>CVS es un sistema de control de versiones. Puede usarlo para grabar el historial de un fichero fuente.</para>
         <sect3 id="cvs-installation" status="complete">
           <title>Instalación</title>
@@ -2553,10 +2118,7 @@ can start the cvs server by running following command:
 <command>sudo /etc/init.d/xinetd start</command>
 </screen>
             </para>
-            <para>
-            You can confirm that the CVS server is running by issuing 
-			the following command:
-            </para>
+            <para>Puede confirmar que el servidor CVS se está ejecutando introduciendo la siguiente orden:</para>
 
             <para>
 <screen>
@@ -2583,72 +2145,37 @@ to the CVS manual for details.
 
         </sect3>
         <sect3 id="cvs-add-projects" status="complete">
-          <title>Add Projects</title>
-            <para>
-            This section explains how to add new project to the CVS 
-			repository. Create the directory and add necessary document 
-			and source files to the directory. Now, run the following 
-			command to add this project to CVS repository:
-<screen>
-<command>cd your/project</command>
-<command>cvs import -d :pserver:username@hostname.com:/var/lib/cvs -m "Importing my project to CVS repository" . new_project start</command>
-</screen>
-
-<tip>
-<para>
-You can use the CVSROOT environment variable to store the CVS root directory.
-Once you export the CVSROOT environment variable, you can avoid using -d option to
-above cvs command.
-</para>
-</tip>
-The string <emphasis>new_project</emphasis> is a vendor
-tag, and <emphasis>start</emphasis> is a release tag.
-They serve no purpose in this context, but since CVS requires them, they
-must be present.
-
-<warning>
-<para>
-When you add a new project, the CVS user you use must have write access to the
-CVS repository (<application>/var/lib/cvs</application>). By default, the
-<application>src</application> group has write access to the CVS
-repository. So, you can add the user to this group, and he can then add and
-manage projects in the CVS repository.
-</para>
-</warning>
-            </para>
+          <title>Añadir proyectos</title>
+            <para>Esta sección explica cómo añadir un nuevo proyecto al repositorio CVS. Cree el directorio y meta en él los documentos y códigos fuente necesarios. Después, ejecute la siguiente orden para añadir el proyecto al repositorio CVS: <screen>
+<command>cd su/proyecto</command>
+<command>cvs import -d :pserver:nombreusuario@nombrehost.com:/var/lib/cvs -m "Importando mi proyecto al repositorio CVS" . nuevo_proyecto start</command>
+</screen><tip>
+<para>Puede usar la variable de entorno CVSROOT para guardar el directorio raíz CVS. Una vez haya exportado la variable de entorno CVSROOT, podrá evitar usar la opción -d en las órdenes cvs de arriba.</para>
+</tip> La cadena <emphasis>nuevo_proyecto</emphasis> es una etiqueta de vendedor, y <emphasis>start</emphasis> es una etiqueta de publicación. No tienen importancia en este contexto, pero como CVS los requiere, deben estar presentes. <warning>
+<para>Cuando añada un nuevo proyecto, el usuario CVS que utilice deberá tener acceso de escritura al repositorio CVS (<application>/var/lib/cvs</application>). De forma predeterminada, el grupo <application>src</application> tiene acceso de escritura al repositorio CVS. Por tanto, puede añadir el usuario a este grupo, y así él podrá añadir y gestionar proyectos en el repositorio CVS.</para>
+</warning></para>
         </sect3>
       </sect2>
       <sect2 id="version-control-ref" status="complete">
         <title>Referencias</title> 
-				<para><ulink url="http://subversion.tigris.org/">Subversion Home Page</ulink></para>
-				<para><ulink url="http://svnbook.red-bean.com/">Subversion Book</ulink></para>
+				<para><ulink url="http://subversion.tigris.org/">Página web de Subversion</ulink></para>
+				<para><ulink url="http://svnbook.red-bean.com/">Libro de Subversion</ulink></para>
 				<para><ulink url="http://ximbiot.com/cvs/manual/cvs-1.11.21/cvs_toc.html">Manual de CVS</ulink></para>
       </sect2>
     </sect1>
 	<sect1 id="databases" status="complete">
 		<title>Bases de Datos</title>
-          <para>
-            Ubuntu provides two Database servers. They are:
-            <itemizedlist spacing="compact">
+          <para>Ubuntu proporciona dos servidores de bases de datos. Son: <itemizedlist spacing="compact">
                 <listitem>
                     <para><application><trademark>MySQL</trademark></application></para>
                 </listitem>
                 <listitem>
                     <para><application>PostgreSQL</application></para>
                 </listitem>
-            </itemizedlist>
-            They are available in the main repository. This section
-            explains how to install and configure these database
-            servers.
-          </para>
+            </itemizedlist> Están disponibles en el repositorio Main. Esta sección explica cómo instalar y configurar estos servidores de bases de datos.</para>
       <sect2 id="mysql" status="complete">
         <title>MySQL</title>
-          <para>
-          MySQL is a fast, multi-threaded, multi-user, and robust SQL
-          database server. It is intended for mission-critical, 
-		  heavy-load production systems as well as for embedding into 
-		  mass-deployed software.
-          </para>
+          <para>MySQL es un rápido y robusto servidor de bases de datos SQL multi-hilo y multi-usuario.</para>
 
         <sect3 id="mysql-installation" status="complete">
           <title>Instalación</title>
@@ -2660,11 +2187,7 @@ manage projects in the CVS repository.
 </screen>
             </para>
 
-            <para>
-            Once the installation is complete, the MySQL server should be
-            started automatically. You can run the following command from a terminal prompt to
-            check whether the MySQL server is running:
-            </para>
+            <para>Cuando se complete la instalación, el servidor MySQL deberá iniciarse automáticamente. Puede ejecutar la siguiente orden en la línea de órdenes de una terminal para comprobar si se está funcionando el servidor MySQL:</para>
 
             <para>
 <screen>
@@ -2675,9 +2198,9 @@ manage projects in the CVS repository.
             <para>Cuando ejecute este comando, deberá ver la siguiente línea o algo similar:</para>
 
 <programlisting>
-tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
+tcp 0 0 localhost.localdomain:mysql *:* LISTEN -
 </programlisting>
-	<para>If the server is not running correctly, you can type the following command to start it:</para>
+	<para>Si el servidor no se está ejecutando correctamente, puede teclear la siguiente orden para arrancarlo:</para>
             <para>
 <screen>
 <command>sudo /etc/init.d/mysql restart</command>
@@ -2687,14 +2210,10 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
         </sect3>
         <sect3 id="mysql-configuration" status="complete">
           <title>Configuración</title>
-            <para>
-            By default, the administrator password is not set. Once you
-            install MySQL, the first thing you must do is to configure
-            the MySQL administrator password. To do this, run the following commands:
-            </para>
+            <para>La contraseña del administrador no está establecida de forma predeterminada. Una vez que haya instalado MySQL, lo primero que debe hacer es establecer la contraseña del administrador de MySQL. Para ello, ejecute las siguientes órdenes:</para>
             <para>
 <screen>
-<command>sudo mysqladmin -u root password newrootsqlpassword</command>
+<command>sudo mysqladmin -u root contraseña nuevacontraseñasqlderoot</command>
 </screen>
             </para>
             <para>
@@ -2703,26 +2222,15 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
 </screen>
             </para>
 
-            <para>
-            You can edit the <filename>/etc/mysql/my.cnf</filename> file to configure the basic
-            settings -- log file, port number, etc. Refer to
-            <filename>/etc/mysql/my.cnf</filename> file for more details.
-            </para>
+            <para>Puede cambiar el archivo <filename>/etc/mysql/my.cnf</filename> para configurar las opciones básicas -- archivo de registro, número de puerto, etc. Diríjase al archivo <filename>/etc/mysql/my.cnf</filename> para más detalles.</para>
         </sect3>
       </sect2>
       <sect2 id="postgresql" status="complete">
         <title>PostgreSQL</title> 
-          <para>
-          PostgreSQL is an object-relational database system that has
-          the features of traditional commercial database systems with
-          enhancements to be found in next-generation DBMS systems.
-          </para>
+          <para>PostgreSQL es un sistema de bases de datos objeto-relacional que combina las características de un sistema de gestión de bases de datos comercial tradicional con las mejoras que se suelen encontrar en sistemas de gestión de bases de datos de nueva generación.</para>
         <sect3 id="postgresql-installation" status="complete">
           <title>Instalación</title>
-            <para>
-            To install PostgreSQL, run the following command in the
-            command prompt:
-            </para>
+            <para>Para instalar PostgreSQL, ejecute la siguiente orden en la línea de órdenes de una terminal:</para>
 
             <para>
 <screen>
@@ -2730,62 +2238,26 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
 </screen>
             </para>
 
-            <para>
-            Once the installation is complete, you should configure the
-            PostgreSQL server based on your needs, although the default
-            configuration is viable.</para>
+            <para>Cuando se haya completado la instalación, podrá configurar el servidor PostgreSQL en base a sus necesidades, aunque la configuración predeterminada es viable.</para>
             
         </sect3>
         <sect3 id="postgresql-configuration" status="complete">
           <title>Configuración</title>
-            <para>By default, connection via TCP/IP is disabled.
-            PostgreSQL supports multiple client authentication methods.
-            By default, IDENT authentication method is used.  Please
-            refer <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">
-			the PostgreSQL Administrator's Guide</ulink>.</para>
+            <para>Las conexiones TCP/IP están deshabilitadas de forma predeterminada. PostgreSQL soporta varios métodos de autenticación del cliente. El método de autenticación predeterminado es IDENT. Por favor, para más información lea <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html"> la Guía del administrador de PostgreSQL</ulink>.</para>
             
-            <para>The following discussion assumes that you wish to enable 
-			TCP/IP connections and use the MD5 method for client 
-			authentication. PostgreSQL configuration files are stored in the
-            <filename>/etc/postgresql/&lt;version&gt;/main</filename>
-            directory. For example, if you install PostgreSQL 7.4, the
-            configuration files are stored in the
-            <filename>/etc/postgresql/7.4/main</filename> directory.
-            </para>
+            <para>La siguiente explicación asume que desa activar las conexiones TCP/IP y que usa el método de autenticación MD5 para la autenticación del cliente. Los archivos de configuración de PostgreSQL se almacenan en el directorio <filename>/etc/postgresql/&lt;version&gt;/main</filename>. Por ejemplo, si instala PostgreSQL 7.4, los archivos de configuración se guardarán en el directorio <filename>/etc/postgresql/7.4/main</filename>.</para>
             
             <tip>
-            <para>
-             To configure <application>ident</application>
-             authentication, add entries to the <filename>/etc/postgresql/7.4/main/pg_ident.conf</filename>
-             file.
-            </para>
+            <para>Para configurar la autenticación <application>ident</application>, debe añadir unas entradas al archvivo de configuración <filename>/etc/postgresql/7.4/main/pg_ident.conf</filename>.</para>
             </tip>
 
-            <para>To enable TCP/IP connections, edit the file <filename>/etc/postgresql/7.4/main/postgresql.conf</filename></para>
+            <para>Para habilitar las conexiones TCP/IP, debe editar el archivo <filename>/etc/postgresql/7.4/main/postgresql.conf</filename>.</para>
 
-            <para>Locate the line <emphasis>#tcpip_socket =
-            false</emphasis> and change it to
-            <emphasis>tcpip_socket =
-            true</emphasis>. You may
-            also edit all other parameters, if you know what you are doing! 
-			For details, refer to the configuration file or to the PostgreSQL documentation.
-            </para>
+            <para>Busque la línea <emphasis>#tcpip_socket = false</emphasis> y cámbiela por <emphasis>tcpip_socket = true</emphasis>. También puede editar todos los demás parámetros, si sabe lo que está haciendo. Para más detalles, recurra al archivo de configuración o a la documentación de PostgreSQL.</para>
 
-            <para>By default, the user credentials are not set for
-            <emphasis>MD5</emphasis> client
-            authentication. So, first it is necessary to configure the PostgreSQL server to use
-            <emphasis>trust</emphasis> client
-            authentication, connect to the database,
-            configure the password, and revert the configuration back to use
-            <emphasis>MD5</emphasis> client authentication.
-            To enable <emphasis>trust</emphasis> client
-            authentication, edit the file <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename></para>
+            <para>De forma predeterminada, las credenciales del usuario no están establecidas para autenticación de cliente <emphasis>MD5</emphasis>. Por ello, primero es necesario configurar el servidor PostgreSQL para que use la autenticación de cliente <emphasis>trust</emphasis>, conectarse a la base de datos, establecer la contraseña, y revertir la configuración de nuevo autenticación de cliente <emphasis>MD5</emphasis>. Para habilitar la autenticación de cliente <emphasis>trust</emphasis>, edite el archivo <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename></para>
 
-            <para>Comment out all the existing lines which use
-            <emphasis>ident</emphasis> and
-            <emphasis>MD5</emphasis>
-            client authentication and add the following
-            line:</para>
+            <para>Comente todas las líneas que usen las autenticaciones de cliente <emphasis>ident</emphasis> y <emphasis>MD5</emphasis>, y añada la siguiente línea:</para>
 <programlisting>
 ↵
 local all postgres trust sameuser↵
@@ -2797,114 +2269,68 @@ local all postgres trust sameuser↵
 <command>sudo /etc/init.d/postgresql start</command>
 </screen>
             </para>
-            <para>Once the PostgreSQL server is successfully started, run the following command at a terminal prompt to connect to the default
-            PostgreSQL template database</para>
+            <para>Una vez que haya iniciando con éxito el servidor PostgreSQL, ejecute la siguiente orden en la línea de órdenes de una terminal para conectar con la base de datos plantilla predeterminada de PostgreSQL</para>
 
             <para>
 <screen>
 <command>psql -U postgres -d template1</command>
 </screen>
             </para>
-            <para>The above command connects to PostgreSQL
-            database <emphasis>template1</emphasis> as user
-            <emphasis>postgres</emphasis>. Once you connect to the PostgreSQL
-            server, you will be at a SQL prompt. You can run the
-            following SQL command at the <application>psql</application> prompt to configure the
-            password for the user <emphasis role="italics">postgres</emphasis>.</para>
+            <para>La orden anterior conecta con la base de datos de PostgreSQL <emphasis>template1</emphasis> como usuario <emphasis>postgres</emphasis>. Una vez haya conectado con el servidor PostgreSQL, se encontrará en una línea de órdenes SQL. Puede ejecutar la siguiente orden SQL en la línea de órdenes de <application>psql</application> para establecer la contraseña del usuario <emphasis role="italics">postgres</emphasis>.</para>
 
             <para>
 <screen>
-<command>template1=# ALTER USER postgres with encrypted password 'your_password';</command>
+<command>template1=# ALTER USER postgres with encrypted password 'su_contraseña';</command>
 </screen>
             </para>
-            <para>After configuring the password, edit the file
-            <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename> to use
-            <emphasis>MD5</emphasis> authentication:</para>
-            <para>Comment the recently added <emphasis role="italics">trust</emphasis> line and add the following
-            line: </para>
+            <para>Cuando haya establecido la contraseña, edite el archivo <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename> para usar la autenticación <emphasis>MD5</emphasis>:</para>
+            <para>Comente la línea <emphasis role="italics">trust</emphasis> añadida recientemente, y añada la siguiente línea:</para>
 
 <programlisting>
-local   all         postgres                          md5 sameuser
+local all postgres md5 sameuser
 </programlisting>
             <warning>
-            <para>
-             The above configuration is not complete by any means. Please
-             refer <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">
-			 the PostgreSQL Administrator's Guide</ulink> to configure more parameters.
-            </para>
+            <para>La configuración anterior no está completa de ningún modo. Por favor, consulte la <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html"> Guía del administrador de PostgreSQL</ulink> para configurar más parámetros.</para>
             </warning>
         </sect3>
       </sect2>
     </sect1>
 	<sect1 id="email-services" status="complete">
-		<title>Email Services</title>
-          <para>
-            The process of getting an email from one person to another over a network or
-			the Internet involves many systems working together.  Each of these systems
-			must be correctly configured for the process to work.  The sender uses a <emphasis>Mail
-			User Agent</emphasis> (MUA), or email client, to send the message through one or more
-			<emphasis>Mail Transfer Agents</emphasis> (MTA), the last of which will hand it off to a 				<emphasis>Mail Delivery Agent</emphasis> (MDA) for delivery to the 
-			recipient's mailbox, from which it
-			will be retrieved by the recipient's email client, usually via a POP3 or IMAP server.
-          </para>
+		<title>Servicios de correo electrónico</title>
+          <para>El proceso de enviar un correo electrónico de una persona a otra a través de una red o de Internet involucra muchos sistemas trabajando juntos. Todos esos sistemas deben estar configurados correctamente para que el proceso funcione. El remitente usa un <emphasis>Agente de Usuario de Correo</emphasis> (Mail User Agent, MUA), o cliente de correo, para enviar el mensaje a través de uno o varios <emphasis>Agentes de Transferencia de Correo</emphasis> (Mail Transport Agent, MTA), el último de los cuales actuará de <emphasis>Agente de Entrega de Correo</emphasis> (Mail Delivery Agent, MDA) para entregarlo en el buzón del destinatario, y que luego pueda ser recuperado usando el cliente de correo del destinatario, normalmente por medio de un servidor POP3 o IMAP.</para>
       <sect2 id="postfix" status="complete">
         <title>Postfix</title>
-          <para>
-            <application>Postfix</application> is the default Mail Transfer Agent (MTA) in Ubuntu. It
-            attempts to be fast and easy to administer and secure. It is
-            compatible with the MTA <application>sendmail</application>. This section explains how
-            to install and configure <application>postfix</application>. It also explains how to
-            set it up as an SMTP server using a secure connection (for sending emails securely).
-          </para>
+          <para><application>Postfix</application> es el Agente de Transferencia de Correo (Mail Transfer Agent, MTA) predeterminado en Ubuntu. Su objetivo es ser rápido, seguro y fácil de administrar. Es compatible con el MTA <application>sendmail</application>. Esta sección explica cómo instalar y configurar <application>postfix</application>. También explica cómo configurar un servidor SMTP usando una conexión segura (para enviar correos electrónicos de forma segura).</para>
         <sect3 id="postfix-installation" status="complete">
           <title>Instalación</title>
-            <para>
-            To install <application>postfix</application> with SMTP-AUTH and Transport Layer
-            Security (TLS), run the following command:
-<screen>
+            <para>Para instalar <application>postfix</application> con SMTP-AUTH y Transport Layer Security (TLS), ejecute la siguiente orden: <screen>
 <command>sudo apt-get install postfix</command>
-</screen>
-		Simply press return when the installation process asks questions, the configuration will be done in greater detail in the next stage.
-            </para>
+</screen> Cuando el proceso de instalación le haga preguntas, simplemente pulse Intro; la configuración se hará con más detalle en la siguiente etapa.</para>
         </sect3>
         <sect3 id="postfix-configuration" status="complete">
           <title>Configuración Básica</title>
-            <para>
-            To configure <application>postfix</application>, run the following command:
-<screen>
+            <para>Para configurar <application>postfix</application>, ejecute la siguiente orden: <screen>
 <command>sudo dpkg-reconfigure postfix</command>
-</screen>
-            The user interface will be displayed. On each screen, select the following
-            values:
-            <itemizedlist spacing="compact">
+</screen> Se mostrará la interfaz de usuario. En cada pantalla, seleccione los siguientes valores: <itemizedlist spacing="compact">
             <listitem><para>Ok</para></listitem>
-            <listitem><para>Internet Site</para></listitem>
+            <listitem><para>Sitio de Internet</para></listitem>
             <listitem><para>NONE</para></listitem>
             <listitem><para>mail.example.com</para></listitem>
             <listitem><para>mail.example.com, localhost.localdomain, localhost</para></listitem>
             <listitem><para>No</para></listitem>
             <listitem><para>127.0.0.0/8</para></listitem>
-            <listitem><para>Yes</para></listitem>
+            <listitem><para>Sí</para></listitem>
             <listitem><para>0</para></listitem>
             <listitem><para>+</para></listitem>
             <listitem><para>all</para></listitem>
-            </itemizedlist>
-            </para>
+            </itemizedlist></para>
             <note>
             <para>Reemplace mail.example.com con el nombre de máquina de su servidor de correo.</para>
             </note>
 	 </sect3>
         <sect3 id="postfix-smtp-authentication" status="complete">
           <title>Autentificación SMTP</title>
-            <para>The next steps are to configure
-            <application>postfix</application> to use SASL for SMTP
-            AUTH. Rather than editing the configuration file directly, 
-	     you can use the <command>postconf</command> command to configure
-            all <application>postfix</application> parameters.  The
-            configuration parameters will be stored in
-            <filename>/etc/postfix/main.cf</filename> file. Later if you
-            wish to re-configure a particular parameter, you can either
-            run the command or change it manually in the file.</para>
+            <para>El siguiente paso es configurar <application>postfix</application> para que use SASL con SMTP AUTH. En lugar de editar directamente el archivo de configuración, puede usar la orden <command>postconf</command> para configurar todos los parámetros de <application>postfix</application>. Los parámetros de configuración se almacenarán en el archivo <filename>/etc/postfix/main.cf</filename>. Posteriormente, si  desea reconfigurar un parámetro en particular, podrá ejecutar la misma orden o cambiar el parámetro manualmente en el archivo.</para>
 	<procedure>
 		<step><para>Configurar Postfix para hacer SMTP AUTH usando SASL (saslauthd): <screen>↵
 postconf -e 'smtpd_sasl_local_domain ='↵
@@ -2917,9 +2343,7 @@ echo 'pwcheck_method: saslauthd' &gt;&gt; /etc/postfix/sasl/smtpd.conf↵
 echo 'mech_list: plain login' &gt;&gt; /etc/postfix/sasl/smtpd.conf↵
 </screen></para>
 		</step>
-		<step><para>Next, configure the digital certificate 
-            for TLS. When asked questions, follow the instructions and answer appropriately.
-<screen>
+		<step><para>A continuación, configure el certificado digital para TLS. Cuando se le pregunte, siga las instrucciones y responda adecuadamente. <screen>
 openssl genrsa -des3 -rand /etc/hosts -out smtpd.key 1024
 chmod 600 smtpd.key
 openssl req -new -key smtpd.key -out smtpd.csr
@@ -2931,16 +2355,10 @@ mv smtpd.key /etc/ssl/private/
 mv smtpd.crt /etc/ssl/certs/
 mv cakey.pem /etc/ssl/private/
 mv cacert.pem /etc/ssl/certs/
-</screen>
-		</para>
-		<note><para>You can get the digital
-            certificate from a certificate authority. Alternatively, you
-            can create the certificate yourself. Refer to 
-			<xref linkend="creating-a-self-signed-certificate"/> for more 
-			details.</para></note>
+</screen></para>
+		<note><para>Puede conseguir el certificado digital solicitándosela a una autoridad de certificación. También puede crear el certificado usted mismo. Vea <xref linkend="creating-a-self-signed-certificate"/> para más detalles.</para></note>
 		</step>
-		<step><para>Configure Postfix to do TLS encryption for both incoming and outgoing mail:
-<screen>
+		<step><para>Configurar Postfix para hacer cifrado TLS con el correo entrante y saliente: <screen>
 postconf -e 'smtpd_tls_auth_only = no'
 postconf -e 'smtp_use_tls = yes'
 postconf -e 'smtpd_use_tls = yes'
@@ -2952,58 +2370,26 @@ postconf -e 'smtpd_tls_loglevel = 1'
 postconf -e 'smtpd_tls_received_header = yes'
 postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
 postconf -e 'tls_random_source = dev:/dev/urandom'
-postconf -e 'myhostname = mail.example.com'
-</screen>
-		</para>
+postconf -e 'myhostname = mail.ejemplo.com'
+</screen></para>
 		</step>
 		</procedure>
             <note>
-            <para>
-            After you run all the commands, the SMTP AUTH is configured
-            with <application>postfix</application>. The self-signed
-            cerficiate is created for TLS and it is configured with
-            <application>postfix</application>.
-            </para>
+            <para>Una vez que haya ejecutado todas las órdenes, tendrá configurado el SMTP AUTH en <application>postfix</application>. El certificado auto-firmado se crea para el TLS y se configura con <application>postfix</application>.</para>
             </note>
-            <para>
-            Now, the file <filename>/etc/postfix/main.cf</filename>
-            should look like <ulink url="sample/postfix_configuration">this</ulink>.
-		</para>
-		<para>
-            The postfix initial configuration is complete. Run
-            the following command to start postfix daemon:
-            <screen><command>sudo /etc/init.d/postfix start</command></screen>
-
-            Now the <application>postfix</application> daemon is installed, configured and run
-            successfully. <application>Postfix</application> supports SMTP AUTH as defined in
-            <ulink url="ftp://ftp.isi.edu/in-notes/rfc2554.txt">RFC2554</ulink>.
-            It is based on <ulink url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>. However it is still necessary to set up SASL authentication before you can use SMTP.
-            </para>
+            <para>Ahora,·el archivo·<filename>/etc/postfix/main.cf</filename>·debería parecerse a </para>
+		<para>La configuración inicial de postfix se ha completado. Ejecute la siguiente orden para arrancar el demonio de postfix: <screen><command>sudo /etc/init.d/postfix start</command></screen> Ahora, el demonio <application>postfix</application> está instalado y configurado, y se está ejecutando con éxito. <application>Postfix</application> soporta SMTP AUTH como se define en <ulink url="ftp://ftp.isi.edu/in-notes/rfc2554.txt">RFC2554</ulink>. Está basado en <ulink url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>. Sin embargo, todavía es necesario configurar la autenticación SASL para poder usar SMTP.</para>
 	</sect3>
 	<sect3 id="sasl">
-	  <title>Configuring SASL</title>
-            <para>
-            The
-            <application>libsasl2</application>,
-            <application>sasl2-bin</application> and
-            <application>libsasl2-modules</application> are necessary to
-            enable SMTP AUTH using SASL. You can install these applications if
-            you have not installed them already.
-<screen>
+	  <title>Configuración de SASL</title>
+            <para>Los paquetes <application>libsasl2</application>, <application>sasl2-bin</application> y <application>libsasl2-modules</application> son necesarios para habilitar el SMTP AUTH usando SASL. Puede instalar estas aplicaciones si no las tenía ya instaladas. <screen>
 <command>apt-get install libsasl2 sasl2-bin</command>
-</screen>
-	    </para>
-	    <para>
-		A few changes are necessary to make it work properly. Because <application>Postfix</application> runs chrooted in <filename>/var/spool/postfix</filename>, <application>SASL</application> needs to be configured to run in the false root (<filename>/var/run/saslauthd</filename> becomes <filename>/var/spool/postfix/var/run/saslauthd</filename>):
-<screen>
+</screen></para>
+	    <para>Se necesitan unos pocos cambios para hacer que funcione apropiadamente. Como <application>Postfix</application> se ejecuta «enjaulado» con chroot en <filename>/var/spool/postfix</filename>, es necesario configurar <application>SASL</application> para ejecutarlo en un raíz falso (<filename>/var/run/saslauthd</filename> se convierte en <filename>/var/spool/postfix/var/run/saslauthd</filename>): <screen>
 <command>mkdir -p /var/spool/postfix/var/run/saslauthd</command>
 <command>rm -rf /var/run/saslauthd</command>
-</screen>
-	    </para>
-	    <para>
-            To activate <application>saslauthd</application>, edit the file <filename>/etc/default/saslauthd</filename>, and change or add the START variable. In order to configure <application>saslauthd</application> to run in the false root, add the PWDIR, PIDFILE and PARAMS variables. Finally, configure the MECHANISMS variable to your liking. The file should look like this:
-
-<programlisting>
+</screen></para>
+	    <para>Para activar <application>saslauthd</application>, edite el archivo <filename>/etc/default/saslauthd</filename> y cambie o añada la variable START. Con idea de configurar <application>saslauthd</application> para que se pueda ejecutar en un falso raíz, añada las variables PWDIR, PIDFILE y PARAMS. Finalmente, configure la variable MECHANISMS a su gusto. El archivo debe tener el siguiente aspecto: <programlisting>
 ↵
 # This needs to be uncommented before saslauthd will be run↵
 # automatically↵
@@ -3019,23 +2405,13 @@ PIDFILE="${PWDIR}/saslauthd.pid"↵
 # MECHANISMS="pam shadow"↵
 ↵
 MECHANISMS="pam"↵
-</programlisting>
-            </para>
+</programlisting></para>
 <note>
-<para>
-If you prefer, you can use <emphasis role="strong">shadow</emphasis>
-instead of <emphasis role="strong">pam</emphasis>. This will use MD5
-hashed password transfer and is perfectly secure. The username and
-password needed to authenticate will be those of the users on the system
-you are using on the server.
-</para>
+<para>Si lo prefiere, puede usar <emphasis role="strong">shadow</emphasis> en lugar de <emphasis role="strong">pam</emphasis>. De esta forma, se transferirán contraseñas cifradas con MD5, lo que resultará más seguro. El nombre de usuario y la contraseña que haya que autenticar serán los de los usuarios del sistema que esté usando en el servidor.</para>
 </note>
-        <para>
-Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd</filename>. The saslauthd init script uses this setting to create the missing directory with the appropriate permissions and ownership:
-<screen>
+        <para>A continuación, actualice el «estado» de dpkg de <filename>/var/spool/portfix/var/run/saslauthd</filename>. El script de inicialización de saslauthd usa esta opción para crear el directorio que falta con los permisos y propietario adecuados: <screen>
 <command>dpkg-statoverride --force --update --add root sasl 755 /var/spool/postfix/var/run/saslauthd</command>
-</screen>
-        </para>
+</screen></para>
         </sect3>
         <sect3 id="postfix-testing" status="complete">
           <title>Comprobando</title>
@@ -3131,7 +2507,7 @@ Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd<
         </sect3>
       </sect2>
       <sect2 id="dovecot-server" status="complete">
-        <title>Dovecot Server</title> 
+        <title>Servidor Dovecot</title> 
           <para>
           <application>Dovecot</application> is a Mail Delivery Agent, written with security
           primarily in mind. It supports the major mailbox formats: mbox
@@ -3219,16 +2595,17 @@ Escape character is '^]'.↵
           </para>
         </sect3>
         <sect3 id="dovecot-ssl" status="complete">
-          <title>Dovecot SSL Configuration</title>
+          <title>Configuración Dovecot SSL</title>
             <para>
             To configure <application>dovecot</application> to use SSL, you can edit the file
             <filename>/etc/dovecot/dovecot.conf</filename> and amend
             following lines:
 <programlisting>
-ssl_cert_file = /etc/ssl/certs/dovecot.pem
-ssl_key_file = /etc/ssl/private/dovecot.pem
-ssl_disable = no
-disable_plaintext_auth = no
+↵
+ssl_cert_file = /etc/ssl/certs/dovecot.pem↵
+ssl_key_file = /etc/ssl/private/dovecot.pem↵
+ssl_disable = no↵
+disable_plaintext_auth = no↵
 </programlisting>
 
           The <emphasis role="strong">cert</emphasis> and <emphasis role="strong">key</emphasis> files are created automatically
@@ -3240,18 +2617,13 @@ disable_plaintext_auth = no
           </para>
 	</sect3>
 	<sect3>
-	  <title>Firewall Configuration for an Email Server</title>
-          <para>
-          To access your mail server from another computer, you must
-          configure your firewall to allow connections to the server on
-          the necessary ports.
-            <itemizedlist>
+	  <title>Configuración del firewall para un servidor de correo</title>
+          <para>Para acceder a su servidor de correo desde otro equipo, deberá configurar su firewall para que permita conexiones al servidor a través de los puertos necesarios. <itemizedlist>
             <listitem><para>IMAP - 143</para></listitem>
             <listitem><para>IMAPS - 993</para></listitem>
             <listitem><para>POP3 - 110</para></listitem>
             <listitem><para>POP3S - 995</para></listitem>
-            </itemizedlist>
-          </para>
+            </itemizedlist></para>
         </sect3>
       </sect2>
       <sect2 id="mailman" status="complete">
@@ -3265,12 +2637,7 @@ disable_plaintext_auth = no
           </para>
         <sect3 id="mailman-installation" status="complete">
           <title>Instalación</title>
-            <para>
-            Mailman provides a web interface for the administrators
-            and users. So, it requires apache with mod_perl support.
-            Mailman uses an external mail server to send and receive 
-			emails. It works perfectly with the following mail servers:
-            </para>
+            <para>Mailman suministra un interface web para administradores y usuarios. Por lo tanto, requiere apache con soporte mod_perl. Mailman usa un servidor de correo externo para enviar y recibir emails. Funciona perfectamente con los siguientes servidores de correo:</para>
             <para>
             <itemizedlist spacing="compact">
                 <listitem>
@@ -3288,44 +2655,27 @@ disable_plaintext_auth = no
             </itemizedlist>
             </para>
 
-            <para>
-            We will see how to install mailman, the apache web server 
-			and the Exim mail server. If you wish to install mailman
-            with a different mail server, please refer to the references
-            section. 
-            </para>
+            <para>Veremos como instalar mailman, el servidor web apache y el servidor de correo Exim. Si desea instalar mailman con un servidor de correo diferente, remitase a las secciones que lo referencian.</para>
           <sect4 id="mailman-apache2">
             <title>Apache2</title>
-              <para>
-                To install apache2 you refer to <xref linkend="http-installation"/>.
-              </para>
+              <para>Para instalar apache2 remitase a <xref linkend="http-installation"/>.</para>
           </sect4>
           <sect4 id="mailman-exim4">
             <title>Exim4</title>
-              <para>
-              To install Exim4 you run the following commands at a terminal prompt:
-<screen>
-<command>sudo apt-get install exim4</command>
-<command>sudo apt-get install exim4-base</command>
-<command>sudo apt-get install exim4-config</command>
-</screen>
-
-Once exim4 is installed, the configuration files are stored in
-the <filename>/etc/exim4</filename> directory. In ubuntu, by default, the exim4 configuration files are
-split across different files. You can change this behavior by changing
-the following variable in the <filename>/etc/exim4/update-exim4.conf</filename> file:
-
-              <itemizedlist spacing="compact">
+              <para>Para instalar Exim4 ejecute los siguiente comandos en un terminal: <screen>↵
+<command>sudo apt-get install exim4</command>↵
+<command>sudo apt-get install exim4-base</command>↵
+<command>sudo apt-get install exim4-config</command>↵
+</screen> Una vez que exim4 este instalado, los archivos de configuración son guardados en el directorio <filename>/etc/exim4</filename>. En ubuntu, por defecto, los archivos de configuración de  exim4 son divididos en distintos archivos. Puede cambiar este comportamiento cambiando la siguiente variable en el archivo <filename>/etc/exim4/update-exim4.conf</filename>: <itemizedlist spacing="compact">
               <listitem>
                 <para><application>dc_use_split_config='true'</application></para>
               </listitem>
-              </itemizedlist>
-              </para>
+              </itemizedlist></para>
           </sect4>
           <sect4 id="mailman-mailman">
             <title>Mailman</title>
               <para>
-              To install Exim4, run following command at a terminal prompt:
+              To install <application>Mailman</application>, run following command at a terminal prompt:
 <screen>
 <command>sudo apt-get install mailman</command> 
 </screen>
@@ -3341,21 +2691,16 @@ group. The mailman process will be owned by this user.
         </sect3>
         <sect3 id="mailman-configuration" status="complete">
           <title>Configuración</title>
-            <para>
-            This section assumes you have successfully installed
-            <application>mailman</application>,
-            <application>apache2</application>, and
-            <application>exim4</application>. Now you just need
-            to configure them. 
-            </para>
+            <para>Esta sección asume que instaló con éxito <application>mailman</application>, <application>apache2</application>, y <application>exim4</application>. Ahora solo necesita configurarlos.</para>
           <sect4 id="mailman-conf-apache2">
             <title>Apache2</title>
               <para>
               Once apache2 is installed, you can add the following lines in
               the <filename>/etc/apache2/apache2.conf</filename> file:
 <programlisting>
-Alias /images/mailman/ "/usr/share/images/mailman/"
-Alias /pipermail/ "/var/lib/mailman/archives/public/"
+↵
+Alias /images/mailman/ "/usr/share/images/mailman/"↵
+Alias /pipermail/ "/var/lib/mailman/archives/public/"↵
 </programlisting>
 
 Mailman uses apache2 to render its CGI scripts. The mailman CGI scripts
@@ -3369,19 +2714,9 @@ change this behavior.
 
           <sect4 id="mailman-conf-exim4">
             <title>Exim4</title>
-              <para>
-              Once Exim4 is installed, you can start the Exim server using the following
-              command from a terminal prompt:
-<screen>
-<command>sudo apt-get /etc/init.d/exim4 start</command>
-</screen>
-
-In order to make mailman work with exim4, you need to configure exim4.
-As mentioned earlier, by default, exim4 uses multiple configuration
-files of different types. For details, please refer to the <ulink url="http://www.exim.org">Exim</ulink> website.  To run mailman, we
-should add new a configuration file to the following configuration
-types: 
-              <itemizedlist spacing="compact">
+              <para>Una vez que Exim4 este instalado, puede ejecutar el servidor Exim usando el siguiente comando en un  terminal: <screen>↵
+<command>sudo apt-get /etc/init.d/exim4 start</command>↵
+</screen> Para hacer que mailman mailman funcione con exim4, necesita configurar exim4. Como se menciono antes, por defecto, exim4 usa multiples archivos de configuración de diferentes tipos. Para más detalles, remitase al sitio web de <ulink url="http://www.exim.org">Exim</ulink>. Para ejecutar mailman, deberiamos de añadir un archivo de configuración con el siguiente tipo de configuración: <itemizedlist spacing="compact">
               <listitem>
                 <para>Principal</para>
               </listitem>
@@ -3391,21 +2726,11 @@ types:
               <listitem>
                 <para>Enrutamiento</para>
               </listitem>
-              </itemizedlist>
-              Exim creates a master configuration file by sorting all
-              these mini configuration files. So, the order of these
-              configuration files is very important.
-              </para>
+              </itemizedlist> Exim crea un archivo principal de configuración ordenando todos los miniarchivos de configuración. Por lo tanto, el orden de estos archivos de configuración es muy importante.</para>
           </sect4>
           <sect4 id="mailman-conf-main">
             <title>Principal</title>
-              <para>
-              All the configuration files belonging to the main type are
-              stored in the
-              <filename>/etc/exim4/conf.d/main/</filename> directory. You can add
-              the following content to a new file, named <filename>04_exim4-config_mailman</filename>:
-
-<programlisting>
+              <para>Todos los archivos de configuración pertenecientes al tipo principal son guardados en el directorio <filename>/etc/exim4/conf.d/main/</filename>. Puede añadir el contenido siguiente a un archivo nuevo, llamado <filename>04_exim4-config_mailman</filename>: <programlisting>
 ↵
 # start↵
 # Home dir for your Mailman installation -- aka Mailman's prefix↵
@@ -3435,8 +2760,7 @@ MM_WRAP=MM_HOME/mail/mailman↵
 # verifying list addresses)↵
 MM_LISTCHK=MM_HOME/lists/${lc::$local_part}/config.pck↵
 # end↵
-</programlisting>
-          </para>
+</programlisting></para>
           </sect4>
           <sect4 id="mailman-conf-transport">
             <title>Transporte</title>
@@ -3495,93 +2819,50 @@ references section.
           </sect4>
           <sect4 id="mailman-conf-mailman">
             <title>Mailman</title>
-              <para>
-Once mailman is installed, you can run it using the following command:
-<screen>
-<command>sudo /etc/init.d/mailman start</command>
-</screen>
-
-Once mailman is installed, you should create the default mailing list.
-Run the following command to create the mailing list:
-
-
-<screen>
-<command>sudo /usr/sbin/newlist mailman</command>
-</screen>
-
-<programlisting>
-  Enter the email address of the person running the list: bhuvan at ubuntu.com
-  Initial mailman password:
-  To finish creating your mailing list, you must edit your <filename>/etc/aliases</filename> (or
-  equivalent) file by adding the following lines, and possibly running the
-  `newaliases' program:
-
-  ## mailman mailing list
-  mailman:              "|/var/lib/mailman/mail/mailman post mailman"
-  mailman-admin:        "|/var/lib/mailman/mail/mailman admin mailman"
-  mailman-bounces:      "|/var/lib/mailman/mail/mailman bounces mailman"
-  mailman-confirm:      "|/var/lib/mailman/mail/mailman confirm mailman"
-  mailman-join:         "|/var/lib/mailman/mail/mailman join mailman"
-  mailman-leave:        "|/var/lib/mailman/mail/mailman leave mailman"
-  mailman-owner:        "|/var/lib/mailman/mail/mailman owner mailman"
-  mailman-request:      "|/var/lib/mailman/mail/mailman request mailman"
-  mailman-subscribe:    "|/var/lib/mailman/mail/mailman subscribe mailman"
-  mailman-unsubscribe:  "|/var/lib/mailman/mail/mailman unsubscribe mailman"
-
-  Hit enter to notify mailman owner...
-
-  # 
-</programlisting>
-
-We have configured exim to recognize all emails from mailman. So, it is
-not mandatory to make any new entries in
-<filename>/etc/aliases</filename>.  If you have made any changes
-to the configuration files, please ensure that you restart those
-services before continuing to next section.
-</para>
+              <para>Una vez que mailman esta instalado, puede ejecutarlo usantdo el comando: <screen>↵
+<command>sudo /etc/init.d/mailman start</command>↵
+</screen> Una vez que mailman esta instalado, puede crear la lista de correo por defecto. Ejecute el siguiente comando para crear esta lista: <screen>↵
+<command>sudo /usr/sbin/newlist mailman</command>↵
+</screen><programlisting>
+  ↵
+  Enter the email address of the person running the list: bhuvan at ubuntu.com↵
+  Initial mailman password:↵
+  To finish creating your mailing list, you must edit your <filename>/etc/aliases</filename> (or↵
+  equivalent) file by adding the following lines, and possibly running the↵
+  `newaliases' program:↵
+↵
+  ## mailman mailing list↵
+  mailman: "|/var/lib/mailman/mail/mailman post mailman"↵
+  mailman-admin: "|/var/lib/mailman/mail/mailman admin mailman"↵
+  mailman-bounces: "|/var/lib/mailman/mail/mailman bounces mailman"↵
+  mailman-confirm: "|/var/lib/mailman/mail/mailman confirm mailman"↵
+  mailman-join: "|/var/lib/mailman/mail/mailman join mailman"↵
+  mailman-leave: "|/var/lib/mailman/mail/mailman leave mailman"↵
+  mailman-owner: "|/var/lib/mailman/mail/mailman owner mailman"↵
+  mailman-request: "|/var/lib/mailman/mail/mailman request mailman"↵
+  mailman-subscribe: "|/var/lib/mailman/mail/mailman subscribe mailman"↵
+  mailman-unsubscribe: "|/var/lib/mailman/mail/mailman unsubscribe mailman"↵
+↵
+  Hit enter to notify mailman owner...↵
+↵
+  # ↵ 
+</programlisting> Hemos configurado exim para que reconozca todos los emails del mailman. Por lo tanto, no es obligatorio que introduzca nuevas entradas en <filename>/etc/aliases</filename>. Si usted hace algún cambio en los archivos de configuración, asegurese que reinicia esos servicios antes de continuar con la siguiente sección.</para>
           </sect4>
         </sect3>
         <sect3 id="mailman-admin" status="complete">
           <title>Administración</title>
-<para>
-We assume you have a default installation. The
-mailman cgi scripts are still in
-<application>/usr/lib/cgi-bin/mailman/</application> directory.  Mailman
-provides a web based administration facility. To access this page, point
-your browser to the following url: 
-
-</para>
+<para>Asumimos que tiene una instalación por defecto. El cgi script del mailman todavía esta en el directorio <application>/usr/lib/cgi-bin/mailman/</application>. Mailman tiene la facilidad de poder administrase por web. Para acceder a esta página, introduzca la siguiente url en su navegador:</para>
 <para>http://nombrehost/cgi-bin/mailman/admin</para>
 
-<para>
-The default mailing list, <emphasis>mailman</emphasis>,
-will appear in this screen. If you click the mailing list name, it
-will ask for your authentication password.  If you enter the correct
-password, you will be able to change administrative settings of this
-mailing list.
-
-You can create a new mailing list using command line utility
-(<command>/usr/sbin/newlist</command>).
-Alternatively, you can create a new mailing list using web interface. 
-</para>
+<para>La lista de correo por defecto, <emphasis>mailman</emphasis>, aparecerá en su pantalla. Si hace click en el nombre de la lista, se le preguntará la password de autentificación. Si introduce la password correcta, será capaz de cambiar las configuraciones administrativas de la lista de correo. Puede crear una nueva lista usando una utilidad de la línea de comandos (<command>/usr/sbin/newlist</command>). Adicionalmente, puede crear nuevas listas de correo usando el interface web.</para>
         </sect3>
         <sect3 id="mailman-users" status="complete">
           <title>Usuarios</title>
-<para>
-Mailman provides a web based interface for users. To access this page,
-point your browser to the following url:
-</para>
+<para>Mailman posee un interface de usuario web. Para acceder a esta página, introduzca la siguiente url en su navegador:</para>
 
 <para>http://nombrehost/cgi-bin/mailman/listinfo</para>
 
-<para>
-The default mailing list, <emphasis>mailman</emphasis>,
-will appear in this screen. If you
-click the mailing list name, it will display the subscription form. You
-can enter your email address, name (optional), and password to subscribe.
-An email invitation will be sent to you. You can follow the
-instructions in the email to subscribe.
-</para>
+<para>La lista de correo por defecto, <emphasis>mailman</emphasis>, aparecerá en esta pantalla. Si hace click sobre el nombre, se le mostrará un formulario de suscripción. Puede introducir su dirección de correo, nombre (opcional), y password para suscribirse. Le será enviado un email de invitación. Puede seguir las instrucciones de este email para suscribirse.</para>
         </sect3>
         <sect3 id="mailman-references" status="complete">
           <title>Referencias</title>
@@ -3589,8 +2870,7 @@ instructions in the email to subscribe.
 <ulink url="http://www.list.org/mailman-install/index.html">GNU Mailman - Manual de Instalación</ulink>
 </para>
 <para>
-<ulink url="http://www.exim.org/howto/mailman21.html">HOWTO - Using Exim
-4 and Mailman 2.1 together</ulink>
+<ulink url="http://www.exim.org/howto/mailman21.html">COMO - Usando juntos Exim4 y Mailman 2.1</ulink>
 </para>
         </sect3>
       </sect2>

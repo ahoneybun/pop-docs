@@ -26,7 +26,6 @@ rm rosetta-about-ubuntu/about-ubuntu.pot
 for x in rosetta-about-ubuntu/*; do
 	y=$(basename ${x} .po)
 	echo ${y}
-	rm -rf ${y}/
 	mkdir -p ${y}
 	xml2po -e -p ${x} C/about-ubuntu.xml >${y}/about-ubuntu.xml
 	xml2po -e -p ${x} C/about-ubuntu-C.omf >${y}/about-ubuntu-${y}.omf

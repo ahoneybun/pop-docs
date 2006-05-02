@@ -5,7 +5,7 @@
 <!ENTITY project-name "Ubuntu Documentation Project">
 <!ENTITY ubuntu "<phrase>Ubuntu</phrase>">
 <!-- VERSIONS --><!ENTITY distro-version "Dapper Drake">
-<!ENTITY distro-rev "6.06">
+<!ENTITY distro-rev "6.06 LTS">
 <!ENTITY distro-release-date "June 2006">
 <!ENTITY linux-kernel-version "2.6.15">
 <!ENTITY gcc-version "4.0.3">
@@ -412,10 +412,10 @@
           </para>
           <itemizedlist>
              <listitem>
-             <para><emphasis role="bold">Servizi per la Condivisione di File e Stampanti</emphasis>. Utilizzo del protocollo Server Message Block (SMB) per agevolare la condivisione di file, cartelle, dischi rigidi, stampanti presenti nella rete.</para>
+             <para><emphasis role="bold">Servizi per la Condivisione di File e Stampanti</emphasis>. Utilizzo del protocollo SMB (Server Message Block) per agevolare la condivisione di file, cartelle, dischi rigidi e stampanti presenti nella rete.</para>
              </listitem>
              <listitem>
-             <para><emphasis role="bold">Servizi di Directory</emphasis>. La condivisione di informazioni vitali sui computer e sugli utenti della rete con l'uso di tecnologie e protocolli quali Lightweight Directory Access Protocol (LDAP) e Microsoft <trademark class="registered">Active Directory</trademark>.</para>
+             <para><emphasis role="bold">Servizi di directory</emphasis>. La condivisione di informazioni vitali sui computer e sugli utenti della rete con l'uso di tecnologie e protocolli quali LDAP (Lightweight Directory Access Protocol) e Microsoft <trademark class="registered">Active Directory</trademark>.</para>
              </listitem>
              <listitem>
              <para>
@@ -425,11 +425,11 @@
              </para>
              </listitem>
           </itemizedlist>
-          <para>Fortunatamente Ubuntu è in grado di fornire queste funzionalità ai client Windows, permettendone la condivisione di risorse in rete. SAMBA è il principale strumento di condivisione per un server che comprenda applicazioni e strumenti per Windows. Questa sezione della guida ad <phrase>Ubuntu</phrase> lato server introduce l'utente all'installazione ed alla configurazione base di SAMBA. Fornire maggiori dettagli su SAMBA va oltre lo scopo di questa guida, ma tali informazioni possono essere reperite sul <ulink url="http://www.samba.org">sito di SAMBA</ulink>.</para>
+          <para>Fortunatamente Ubuntu è in grado di fornire queste funzionalità ai client Windows permettendo la condivisione di risorse. SAMBA è il principale strumento di condivisione per un server che comprenda applicazioni e strumenti per Windows. Questa sezione della Guida ad <phrase>Ubuntu</phrase> sul server introduce l'utente all'installazione e alla configurazione base di SAMBA. Fornire maggiori dettagli su SAMBA va oltre lo scopo di questa guida, tali informazioni possono essere reperite sul <ulink url="http://www.samba.org">sito di SAMBA</ulink>.</para>
     </sect1>
 	<sect1 id="installing-samba" status="complete">
-		<title>Installazione di SAMBA</title>
-          <para>Al prompt digitare l'istruzione che segue per installare le applicazioni di SAMBA:</para>
+		<title>Installare SAMBA</title>
+          <para>Al prompt digitare il seguente comando per installare le applicazioni di SAMBA:</para>
           <para>
 <screen>
 <command>sudo apt-get install samba</command>
@@ -476,10 +476,10 @@
            </para>
         <sect3 id="active-directory" status="complete">
           <title>Active Directory</title>
-            <para>Active Directory è un'implementazione proprietaria della Microsoft dei Servizi di Directory in grado di fornire i mezzi necessari a condividere le informazioni sugli utenti e sulle risorse della rete. Oltre ad offrire una sorgente centralizzata per queste informazioni, Active Directory agisce come autorità centrale per l'autenticazione nella rete. Active Directory combina le funzionalità di servizi di directory specializzati, in modo tale da semplificare l'integrazione, la gestione e la sicurezze delle risorse di rete. La suite SAMBA può essere configurata per utilizzare i servizi di Active Directory forniti da un controller di dominio Windows.</para>
+            <para>Active Directory è un'implementazione proprietaria di Microsoft di Directory Services in grado di fornire i mezzi necessari a condividere le informazioni sugli utenti e sulle risorse della rete. Oltre a offrire una sorgente centralizzata per queste informazioni, Active Directory agisce come autorità centrale per l'autenticazione nella rete. Active Directory combina le funzionalità di servizi di directory specializzati, in modo tale da semplificare l'integrazione, la gestione e la sicurezze delle risorse di rete. La suite SAMBA può essere configurata per utilizzare i servizi di Active Directory forniti da un Windows Domain Controller.</para>
             <sect4 id="ldap" status="complete">
               <title>LDAP</title>
-              <para>Il server LDAP fornisce, in maniera molto simile ai servizi Microsoft Active Directory, le funzionalità dei Servizi di Directory ai computer Windows: questi servizi forniscono i mezzi per descrivere, localizzare e gestire le risorse della rete. L'implementazione libera di LDAP disponibile in Ubuntu si chiama <emphasis role="italic">OpenLDAP</emphasis>. I demoni del server responsabili della gestione delle richieste della directory OpenLDAP e della distribuzione dei dati custoditi in un server LDAP in un altro sistema Ubuntu si chiamano <application>slapd</application> e <application>slurpd</application>. OpenLDAP può essere utilizzato insieme a SAMBA per fornire servizi di Directory e la condivisione di File e Stampanti, più o meno nello stesso modo con il quale un controller di dominio Windows interagisce con un server SAMBA compilato con il supporto LDAP.</para>
+              <para>Il server LDAP fornisce, in maniera molto simile ai servizi Microsoft Active Directory, le funzionalità dei Directory Services ai computer Windows: questi servizi forniscono i mezzi per descrivere, localizzare e gestire le risorse della rete. L'implementazione libera di LDAP disponibile in Ubuntu si chiama <emphasis role="italic">OpenLDAP</emphasis>. I demoni del server responsabili della gestione delle richieste della directory OpenLDAP e della distribuzione dei dati custoditi in un server LDAP in un altro sistema Ubuntu si chiamano <application>slapd</application> e <application>slurpd</application>. OpenLDAP può essere utilizzato in combinazione con SAMBA per fornire Directory Services e la condivisione di file e stampanti, più o meno nello stesso modo con il quale un Windows Domain Controller interagisce con un server SAMBA compilato con il supporto LDAP.</para>
             </sect4>
             <sect4 id="kerberos" status="complete">
               <title>Kerberos</title>
@@ -497,16 +497,14 @@
                  the values:
                  </para>
                  <para>
-                 <emphasis role="bold">realm = DOMAIN_NAME</emphasis>
+                 <emphasis role="bold">realm = NOME_DOMINIO</emphasis>
                  </para>
                  <para>
                  <emphasis role="bold">security = ADS</emphasis>
                  </para>
-                 <para>al file, il quale deve essere poi salvato.</para>
+                 <para>al file, e quindi salvarlo.</para>
                     <tip>
-                       <para>Be sure to replace the token DOMAIN_NAME in the example above with the actual name of your specific
-                       Windows Domain.
-                       </para>
+                       <para>Assicurarsi di sostiutire il token NOME_DOMINIO, utilizzato nell'esempio precedente, con il nome del dominio Windows.</para>
                     </tip>
                  <para>
                  You will need to restart the SAMBA daemons to effect these changes.  Restart the SAMBA
@@ -520,7 +518,7 @@
             </sect4>
         </sect3>
         <sect3 id="computer-accounts" status="complete">
-          <title>Account del Computer</title>
+          <title>Account del computer</title>
             <para>
               Computer Accounts are used in Directory Services to uniquely identify computer systems participating in a network,
               and are even treated in the same manner as users in terms of security.  Computer accounts may have passwords just
@@ -561,9 +559,9 @@
                   <emphasis role="bold">read list = @planning</emphasis>
                </para>
                <para>
-                  <emphasis role="bold">write list = @authors, richard</emphasis>
+                  <emphasis role="bold">write list = @authors, mario</emphasis>
                </para>
-             <para>Salvare il file <filename>/etc/samba/smb.conf</filename> per effettuare le modifiche.</para>
+             <para>Salvare il file <filename>/etc/samba/smb.conf</filename> affinché i cambiamenti abbiano effetto.</para>
             <para>Another possible permission is to declare <emphasis role="italic">administrative</emphasis> permissions to a particular
             shared resource.  Users having administrative permissions may read, write, or modify any information contained in the resource
             the user has been given explicit administrative permissions to.  For example, if you wanted to give the user
@@ -573,7 +571,7 @@
                <para>
                   <emphasis role="bold">admin users = melissa</emphasis>
                </para>
-             <para>Salvare il file <filename>/etc/samba/smb.conf</filename> per effettuare le modifiche.</para>
+             <para>Salvare il file <filename>/etc/samba/smb.conf</filename> affinché i cambiamenti abbiano effetto.</para>
         </sect3>
       </sect2>
       <sect2 id="windows-networking-clients" status="complete">
@@ -587,7 +585,7 @@
             </para>
                 <para>
 <screen>
-<command>smbclient //bill/documents -U &lt;username&gt;</command>
+<command>smbclient //bill/documenti -U &lt;nomeutente&gt;</command>
 </screen>
                 </para>
             <para>
@@ -609,7 +607,7 @@ man smbclient
             </para>
                 <para>
 <screen>
-<command>mount -t smbfs -o username=dlightman //development/project-code /mnt/pcode</command>
+<command>mount -t smbfs -o username=giuseppe //sviluppo/codice-progetto /mnt/pcode</command>
 </screen>
                 </para>
                 <para>You will then be prompted for the user password, and after successfully authenticating, the contents of the shared resource
@@ -642,11 +640,10 @@ man smbclient
                     Nuova password SMB:
                     </computeroutput>
                  </para>
-              <para>Bisogna allora digitare la password da assegnare al nuovo utente, l'applicazione  <application>smbpasswd</application> ne chiederà la conferma:</para>
+              <para>È necessario digitare la password da assegnare al nuovo utente, l'applicazione  <application>smbpasswd</application> ne chiederà la conferma:</para>
                     <para>
                     <computeroutput>
-                    ↵
-                    Ridigitare la nuova password SMB:↵
+                    Ridigitare la nuova password SMB:
                     </computeroutput>
                      </para>
                <para>
@@ -666,11 +663,8 @@ man smbclient
               configured for access by both groups, whereas all other users will have only access to resources explicitly allowing the group they are
               part of.
             </para>
-            <para>
-            When defining groups in the SAMBA configuration file, <filename>/etc/samba/smb.conf</filename> the recognized syntax is to preface the group name with an
-            "@" symbol.  For example, if you wished to define a group named <emphasis role="italic">sysadmin</emphasis> in a certain section of the
-            <filename>/etc/samba/smb.conf</filename>, you would do so by entering the group name as <emphasis role="bold">@sysadmin</emphasis>.
-            </para>
+            <para>Nella definizione dei gruppi nel file di configurazione di SAMBA, <filename>/etc/samba/smb.conf</filename>, è necessario far precedere il nome del gruppo dal simbolo «@». Se, ad esempio, l'utente desiderasse definire un gruppo chiamato <emphasis role="italic">sysadmin</emphasis> in una certa sezione del file <filename>/etc/samba/smb.conf</filename>, dovrebbe nominare il grippo: 
+<emphasis role="bold">@sysadmin</emphasis>.</para>
         </sect3>
         <sect3 id="group-policy" status="complete">
           <title>Group Policy</title>
@@ -683,7 +677,7 @@ man smbclient
                <para>
                <emphasis role="bold">workgroup = LEVELONE</emphasis>
                </para>
-            <para>Affiché le modifiche abbiano effetto bisogna riavviare il daemon SAMBA.</para>
+            <para>Affiché le modifiche abbiano effetto bisogna riavviare il demone SAMBA.</para>
             <para>
             Other important global policy settings include the <emphasis role="italic">server string</emphasis> which defines the NETBIOS
             server name reported by your Ubuntu system to other machines on the Windows-based network.  This is the name your Ubuntu system

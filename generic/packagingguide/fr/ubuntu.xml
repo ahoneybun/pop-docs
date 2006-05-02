@@ -5,7 +5,7 @@
 <!ENTITY project-name "Ubuntu Documentation Project">
 <!ENTITY ubuntu "<phrase>Ubuntu</phrase>">
 <!-- VERSIONS --><!ENTITY distro-version "Dapper Drake">
-<!ENTITY distro-rev "6.06">
+<!ENTITY distro-rev "6.06 LTS">
 <!ENTITY distro-release-date "June 2006">
 <!ENTITY linux-kernel-version "2.6.15">
 <!ENTITY gcc-version "4.0.3">
@@ -396,7 +396,7 @@
 	<sect1 id="ubuntu-upload" status="complete">
 		<title>Téléverser et vérifier</title>
 
-		<para>Une fois que vous avez créé un paquet source (soit un paquet entièrement nouveau, soit une mise à jour ou une correction de bogue), vous voulez probablement distribuer votre paquet afin que d'autres personnes puissent profiter de votre dur labeur. La manière la plus efficace de faire cela dans <phrase>Ubuntu</phrase> est de faire rentrer votre paquet dans le dépôt Univers. Les développeurs de la communauté qui sont responsables du dépôt Univers sont appelés les Maîtres de l'Univers (Masters of the Universe en anglais, ou <ulink url="https://wiki.ubuntu.com/MOTU">MOTUs</ulink>). <ulink url="http://revu.tauware.de">REVU</ulink> est un outil en ligne qui permet aux contributeurs de téléverser leurs paquets sources afin que d'autres personnes puisse les voir et que les MOTUs puissent les réviser de manière organisée.</para>
+		<para>Une fois que vous avez créé un paquet source (soit un paquet entièrement nouveau, soit une mise à jour ou une correction de bogue), vous voulez probablement distribuer votre paquet afin que d'autres personnes puissent profiter de votre travail. La manière la plus efficace d'y arriver avec <phrase>Ubuntu</phrase> est de faire rentrer votre paquet dans le dépôt Univers. Les développeurs de la communauté qui sont responsables du dépôt Univers sont appelés les Maîtres de l'Univers (Masters of the Universe en anglais, ou <ulink url="https://wiki.ubuntu.com/MOTU">MOTUs</ulink>). <ulink url="http://revu.tauware.de">REVU</ulink> est un outil en ligne qui permet aux contributeurs de téléverser leurs paquets sources afin que d'autres personnes puisse les voir et que les MOTUs puissent les réviser de manière organisée.</para>
 
 		<sect2 id="contribute-as-uploader">
 			<title>Contribuer comme téléverseur</title>
@@ -473,9 +473,7 @@ Doing nothing for myapp_source.changes</screen>
 
 
 
-		<important><para><emphasis role="bold">Requirements:</emphasis>
-				build-essential, automake, gnupg, lintian, fakeroot,
-				patchutils, debhelper and <xref linkend="gs-pbuilder"/>.</para></important>
+		<important><para><emphasis role="bold">Requis :</emphasis> build-essential, automake, gnupg, lintian, fakeroot, patchutils, debhelper et <xref linkend="gs-pbuilder"/>.</para></important>
 		
 		<para><phrase>Ubuntu</phrase> est basé sur la distribution Linux Debian et utilise le même système de gestion de paquets (APT). Au début de chaque cycle de développement d'<phrase>Ubuntu</phrase>, les paquets dans <phrase>Ubuntu</phrase> sont mis à jour en utilisant ceux de la branche instable de Debian. Cependant, du fait de la différence entre <phrase>Ubuntu</phrase> et Debian, certains paquets doivent être modifiés pour fonctionner dans <phrase>Ubuntu</phrase>. Il est également possible que des bogues aient été corrigés par les développeurs d'<phrase>Ubuntu</phrase> dans les paquets. Vous pouvez déterminer si c'est le cas en notant la version du paquet. Si la version du paquet inclus le mot « ubuntu » (par exemple gimp-2.2.9-3ubuntu2), cela signifie que les développeurs d'<phrase>Ubuntu</phrase> l'ont modifié, et qu'il ne s'agit donc plus du paquet Debian d'origine. Il y a plus de 1000 paquets dans ce cas dans le dépôt Univers.</para>
 		
@@ -625,12 +623,7 @@ debuild -S
 cd ..
 sudo pbuilder build xcdroast_0.98+0alpha15-3ubuntu1.dsc</screen>
 			
-			<para>This will recreate the source package, sign it with your default GPG key, and build the package in a pbuilder
-				environment to make sure it builds correctly. Make sure to always test your packages
-				before submitting patches. The last step is to make a debdiff that can be
-				attached to an existing bug report or given to the MOTUs in the #ubuntu-motu IRC channel. To do this,
-				we get the difference between the Debian unstable source package and the new <phrase>Ubuntu</phrase> version:
-			</para>
+			<para>Ceci va recréer le paquet source, le signer avec votre clef GPG par défaut, et construire le paquet dans un environnement pbuilder pour s'assurer qu'il se construit correctement. Assurez-vous de toujours tester vos paquets avant de soumettre des patches. La dernière étape est de faire un debdiff qui puisse être attaché à un rapport de bug existant ou envoyé aux MOTUs via le salon IRC #ubuntu-motu. Pour ce faire, nous prenons les différences entre le paquet source Debian unstable et la nouvelle version <phrase>Ubuntu</phrase> :</para>
 			<screen>debdiff xcdroast_0.98+0alpha15-3.dsc xcdroast_0.98+0alpha15-3ubuntu1.dsc &gt; \
 	xcdroast_0.98+0alpha15-3ubuntu1.debdiff</screen>
 		</sect2>
@@ -644,24 +637,14 @@ sudo pbuilder build xcdroast_0.98+0alpha15-3ubuntu1.dsc</screen>
 		<sect2 id="build-dependencies">
 			<title>Dépendences de construction</title>
 	
-			<para>Kubuntu programs are mostly KDE ones. Therefore, they need to
-				Build-Depend on <filename>kdelibs4-dev</filename>. Since KDE's
-				focus is to have programs interacting, some programs might also need to
-				Build-Depend on other parts of KDE, such as
-				<filename>kdepim-dev</filename>. Be sure to get the list of
-				necessary dependencies for your program.</para>
+			<para>Les programmes de Kubuntu sont principalement des programmes de KDE. Leur dépendance de construction (Build-Depends) doit donc inclure <filename>kdelibs4-dev</filename>. Puisque KDE insiste sur le caractère d'interaction entre les programmes, certains programmes peuvent également avoir des dépendances de constructions sur d'autres parties de KDE, comme <filename>kdepim-dev</filename>. Assurez-vous de bien lister toutes les dépendances nécessaire pour votre programme.</para>
 	
 		</sect2>
 
 		<sect2 id="desktop-files">
 			<title>Fichiers desktop</title>
 		
-			<para>KDE has some specific paths. Most settings for KDE are installed in either
-				<filename>/etc/kde3/</filename> or <filename>/usr/share/apps/</filename>.
-				It is important to note that the general desktop files for KDE should go
-				to <filename>/usr/share/applications/kde/</filename>. The install path
-				for the desktop files should be fixed if they do not use this (except for
-				desktop files like service menus).  </para>
+			<para>KDE utiliser des chemins spécifiques. La plupart des réglages de KDE sont localisés soit dans <filename>/etc/kde3</filename>, soit dans <filename>/usr/share/apps/</filename>. Il est important de noter que la plupart des fichiers desktop de KDE vont dans <filename>/usr/share/applications/kde/</filename>. Le chemin d'installation des fichiers desktop doit être corrigé si il ne correspond pas à celui-ci (à l'exception des fichiers desktop comme les menus de services).</para>
 			
 			<para>Les fichiers desktop de KDE nécessitent aussi des entrées spécifiques pour être l'insertion du programme dans le menu K. Un fichier desktop minimal pour un programme KDE pourrait ressembler à :</para>
 				
@@ -684,9 +667,7 @@ Categories=Qt;KDE;Utility;</screen>
 
 			<para>Le site Internet de traduction d'<phrase>Ubuntu</phrase>, <ulink url="https://launchpad.net/rosetta/">Rosetta</ulink>, inclut maintenant KDE. Cela signifie que les paquets KDE doivent supporter Rosetta en générant des fichiers <filename>.pot</filename> pour les traducteurs. Si vous utilisez <application>cdbs</application> dans Dapper, votre paquet devrait construire un fichier <filename>.pot</filename> dans le dossier <filename>po/</filename> et le vérifier automatiquement.</para>
 
-			<para>You will need the <ulink url="../files/kubuntu_01_kdepot.diff">kdepot
-					patch</ulink> (or similar; it may not apply cleanly depending on the
-				age of the admin directory).</para>
+			<para>Vous aurez besoin du <ulink url="../files/kubuntu_01_kdepot.diff">patch de kdepot</ulink> (ou similaire; il est possible que ce patch ne s'applique pas correctement selon l'âge du répertoire admin).</para>
 
 			<para>Si votre paquet utilise <application>debhelper</application> ou <application>cdbs</application> et inclut son propre fichier <filename>kde.mk</filename>, vous devez ajouter les règles vous-même.</para>
 
@@ -699,12 +680,11 @@ common-post-build-arch::
 
 clean::
         rm -rf po</screen>
-			<para>For <application>debhelper</application>, add the following to the end of the
-				<emphasis>install</emphasis> rule:</para>
+			<para>Dans le cas de <application>debhelper</application>, ajoutez ceci à la fin de la règle <emphasis>install</emphasis> :</para>
 			<screen>
 mkdir -p po
 XGETTEXT=/usr/bin/kde-xgettext sh admin/cvs.sh extract-messages</screen>
-			<para>Also for <application>debhelper</application>, add the following to the <emphasis>clean</emphasis> rule:</para>
+			<para>Également pour <application>debhelper</application>, ajoutez ceci à la règle <emphasis>clean</emphasis> :</para>
 			<screen>
 rm -f po/*.pot</screen>
 		</sect2>
