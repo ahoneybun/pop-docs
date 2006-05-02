@@ -5,7 +5,7 @@
 <!ENTITY project-name "Ubuntu Documentation Project">
 <!ENTITY ubuntu "<phrase>Ubuntu</phrase>">
 <!-- VERSIONS --><!ENTITY distro-version "Dapper Drake">
-<!ENTITY distro-rev "6.06">
+<!ENTITY distro-rev "6.06 LTS">
 <!ENTITY distro-release-date "June 2006">
 <!ENTITY linux-kernel-version "2.6.15">
 <!ENTITY gcc-version "4.0.3">
@@ -392,177 +392,101 @@
 ]>
 <chapter id="package-management" status="complete">
 	<title>패키지 관리</title>
-        <para>Ubuntu features a comprehensive package management system for the installation, upgrade, configuration, and removal of software.  In addition to providing access to an organized base of over 17,000 software packages for your Ubuntu computer, the package management facilities also feature dependency resolution capabilities and software update checking.
-        </para>
-        <para>
-        Several tools are available for interacting with Ubuntu's package management system, from simple command-line utilities which may be easily automated by system administrators, to a simple graphical interface which is easy to use by those new to Ubuntu.
-        </para>
+        <para>우분투는 소프트웨어의 설치, 업그레이드, 설정 그리고 제거를 위한 포괄적인 패키지 관리 시스템을 가지고 있습니다. 여러분의 우분투 시스템을 위한 17,000개가 넘는 소프트웨어 패키지의 조직화된 기반으로의 접근을 제공하는 것에 더하여, 그 패키지 관리는 또한 의존성을 해결하는 능력과 소프트웨어 업데이트 검사를 하는 편리함도 가지고 있습니다.</para>
+        <para>우분투의 패키지 관리 시스템과 상호 작용하는 여러가지, 시스템 관리자에 의해 쉽게 자동화될 수 있는 간단한 명령어-라인 유틸리티에서 부터 우분투를 새롭게 접하는 사용자들이 쉽게 사용할 수 있는 간단한 그래픽 인터페이스 까지의, 도구들이 사용하게 준비되어 있습니다.</para>
   <sect1 id="package-management-introduction" status="complete">
 	<title>소개</title>
-        <para>
-        Ubuntu's package management system is derived from the same system used by the Debian GNU/Linux distribution.  The package files contain all of the necessary files, meta-data, and instructions to implement a particular functionality or software application on your Ubuntu computer.
-        </para>
-        <para>
-        Debian package files typically have the extension '.deb', and typically exist in <emphasis role="italics">repositories</emphasis> which are collections of packages found on various media, such as CD-ROM discs, or online.  Packages are normally of the pre-compiled binary format; thus installation is quick and requires no compiling of software.
-        </para>
-        <para>
-        Many complex packages use the concept of <emphasis role="italics">dependencies</emphasis>.  Dependencies are additional packages required by the principal package in order to function properly.  For example, the speech synthesis package <application>Festival</application> depends upon the package <application>festvox-kalpc16k</application>, which is a package supplying one of the voices used by the application.  In order for <application>Festival</application> to function, all of the dependencies must be installed in conjunction with the principal Festival package. The software management tools in Ubuntu will do this automatically.
-        </para>
+        <para>우분투의 패키지 관리 시스템은 데비안 GNU/Linux 배포판에서 사용되는 같은 시스템에서 파생 되었습니다. 패키지 파일은 모든 필요한 파일, 메타 데이타, 그리고 특정 기능 또는 여러분의 우분투 컴퓨터 상의 소프트웨어 프로그램의 이행을 위한 명령 지시들을 가지고 있습니다.</para>
+        <para>데비안 패키지 파일은 전형적으로 .deb 확장자를 가지고, 일반적으로 <emphasis role="italics">저장소</emphasis> 에 존재 합니다. 저장소는 CD-ROM 디스크 또는 온라인과 같은 다양한 매체에서 찾을 수 있는 패키지의 수집들 입니다. 패키지는 보통 바이너리 형태로 미리 컴파일이 되므로 설치는 빠르게 하고 소프트웨어의 컴파일을 필요로 하지 않습니다.</para>
+        <para>많은 복잡한 패키지는 <emphasis role="italics">의존성</emphasis> 이라는 개념을 사용 합니다. 의존성은 어떤 기능이 제대로 동작하기 위하여 원래의 패키지가 필요로 하는 추가적인 패키지를 뜻 합니다. 예를 들어, speech synthesis 패키지인 <application>Festival</application> 은 <application>festvox-kalpc16k</application> 라는 패키지에 의존하고, 그것은 그 프로그램에서 사용되는 목소리 중의 하나를 공급하는 패키지 입니다. <application>Festival</application> 이 기능하기 위하여, 모든 의존성은 원래의 Festival 패키지와 결합하여 반드시 설치되어야 합니다. 우분투의 소프트웨어 관리 도구는 이러한 것을 자동으로 합니다.</para>
   </sect1>
   <sect1 id="apt-get" status="complete">
 	<title>Apt-Get</title>
-        <para>
-        The <application>apt-get</application> command is a powerful command-line tool used to work with Ubuntu's <emphasis>Advanced Packaging Tool</emphasis> (APT) performing such functions as installation of new software packages, upgrade of existing software packages, updating of the package list index, and even upgrading the entire Ubuntu system.
-        </para>
-        <para>
-        Being a simple command-line tool, <application>apt-get</application> has numerous advantages over other package management tools available in Ubuntu for server administrators.  Some of these advantages include ease of use over simple terminal connections (SSH) and the ability to be used in system administration scripts, which can in turn be automated by the <application>cron</application> scheduling utility.
-        </para>
-        <para>
-        Some examples of popular uses for the <application>apt-get</application> utility:
-        <itemizedlist>
+        <para><application>apt-get</application> 명령은, 새로운 소프트웨어 패키지의 설치, 존재하는 소프트웨어 패키지의 업그레이드, 패키지 목록 인덱스의 업데이트, 그리고 심지어 전체 우분투 시스템의 업그레이드를 수행하는 우분투의 <emphasis>Advanced Packaging Tool</emphasis> (APT) 에 사용되는, 강력한 명령어-라인 도구 입니다.</para>
+        <para>단순한 명령어-라인 도구로서, <application>apt-get</application> 은 서버 관리자를 위하여 우분투 내에서 사용할 수 있는 다른 패키지 관리 도구들에 비해 많은 장점을 가지고 있습니다. 이러한 장점의 몇 가지는 간단한 터미널 연결(SSH)로 쉽게 사용할 수 있는 것과 <application>cron</application> 스케쥴링 유틸리티에 의해 자동화 할 수 있도록 시스템 관리 스크립트에서 사용될 수 있다는 것 입니다.</para>
+        <para><application>apt-get</application> 유틸리티의 몇 가지 잘 알려진 사용 예는: <itemizedlist>
                <listitem>
-                <para>
-                <emphasis role="bold">Install a Package</emphasis>: Installation of packages using the <application>apt-get</application> tool is quite simple.  For example, to install the network scanner <emphasis role="italics">nmap</emphasis>, type the following:
-<screen>
+                <para><emphasis role="bold">패키지 설치</emphasis>: <application>apt-get</application> 을 사용하여 패키지를 설치하는 것은 아주 간단 합니다. 예를 들어, 네트워크 스캐너인 <emphasis role="italics">nmap</emphasis> 을 설치하려면, 다음을 입력 합니다: <screen>
 <command>sudo apt-get install nmap</command>
-</screen>
-                </para>
+</screen></para>
                 </listitem>
                 <listitem>
-                <para>
-                <emphasis role="bold">Remove a Package</emphasis>: Removal of a package or packages is also a straightforward and simple process. To remove the nmap package installed in the previous example, type the following:
-<screen>
+                <para><emphasis role="bold">패키지 삭제</emphasis>: 패키지(들)을 삭제하는 것도 또한 직선적이고 간단한 작업 입니다. 이전 예제에서 설치하였던 nmap 패키지를 삭제하려면, 다음을 입력 합니다: <screen>
 <command>sudo apt-get remove nmap</command>
-</screen>
-                </para>
+</screen></para>
                 <tip>
-                <para><emphasis role="bold">Multiple Packages</emphasis>: You may specify multiple packages to be installed or removed, separated by spaces.
-                </para>
+                <para><emphasis role="bold">복수 패키지</emphasis>: 설치나 삭제를 위해 복수의 패키지를 지정할 때는, 공백(스페이스 키로)으로 구분 합니다.</para>
                 </tip>
                 </listitem>
                 <listitem>
-                <para>
-                <emphasis role="bold">Update the Package Index</emphasis>: The APT package index is essentially a database of available packages from the repositories defined in the <filename>/etc/apt/sources.list</filename> file.  To update the local package index with the latest changes made in repositories, type the following:
-<screen>
+                <para><emphasis role="bold">패키지 인덱스 업데이트</emphasis>: APT 패키지 인덱스는 <filename>/etc/apt/sources.list</filename> 파일에 지정된 저장소에서 사용 가능한 패키지들의 필수적인 데이타베이스 입니다. 저장소에 최근의 변경된 것으로 로컬(여러분의 컴퓨터에 저장되는) 패키지 인덱스를 업데이트 하려면, 다음을 입력 합니다: <screen>
 <command>sudo apt-get update</command>
-</screen>
-                </para>
+</screen></para>
                 </listitem>
                 <listitem>
-                <para>
-                <emphasis role="bold">Upgrade Packages</emphasis>: Over time, updated versions of packages currently installed on your computer may become available from the package repositories (for example security updated).  To upgrade your system, first update your package index as outlined above, and then type:
-<screen>
+                <para><emphasis role="bold">패키지 업그레이드</emphasis>: 시간에 걸쳐, 여러분의 컴퓨터에 현재 설치된 패키지의 업데이트된 버전이 패키지 저장소에 사용 가능하게 있을 수 있습니다. (예를 들어 보안 업데이트) 여러분의 시스템을 업그레이드 하려면, 위에 적힌대로 우선은 여러분의 패키지 인덱스를 업데이트 하고, 다음을 입력 합니다: <screen>
 <command>sudo apt-get upgrade</command>
-</screen>
-                </para>
-                <para>
-                If a package needs to install or remove new dependencies when being upgraded, it will not be upgraded by the <emphasis>upgrade</emphasis> command. For such an upgrade, it is necessary to use the <emphasis role="italics">dist-upgrade</emphasis> command.
-                </para>
-                <para>
-                Also, you may upgrade your entire Ubuntu system from one revision to another with dist-upgrade.  For example, to upgrade from Ubuntu version 5.10 to version 6.06, you would first ensure the version 6.06 repositories replace the existing 5.10 repositories in your computer's <filename>/etc/apt/sources.list</filename>, then simply issue the <application>apt-get update</application> command as detailed above, and finally, perform the actual upgrade by typing:
-<screen>
+</screen></para>
+                <para>만약 패키지가 업그레이드 중에 의존되는 패키지를 설치하거나 삭제하는 것이 필요하면, 그것은 <emphasis>upgrade</emphasis> 명령에 의하여 업그레이드 되지 않습니다. 이러한 업그레이드를 위해, <emphasis role="italics">dist-upgrade</emphasis> 명령을 사용하는 것이 필요 합니다.</para>
+                <para>또한, dist-upgrade 명령으로 여러분의 우분투 시스템 전체를 하나의 버전에서 다른 버전으로 업그레이드 할 수 있습니다. 예를 들어, 우분투 5.10 버전에서 6.06 LTS 버전으로 업그레이드 하려면, 우선 여러분 컴퓨터의 <filename>/etc/apt/sources.list</filename> 파일 내의 기존의 5.10 저장소를 6.06 LTS 저장소로 대체하는 것을 확신하고,  위에 설명한 <application>apt-get update</application> 명령을 간단히 입력하고, 마지막으로 실제 업그레이드는 다음의 명령을 입력하는 것으로 수행할 수 있습니다: <screen>
 <command>sudo apt-get dist-upgrade</command>
-</screen>               
-                </para>
-                <para>
-                After a fairly considerable amount of time, your computer will be upgraded to the new revision. Typically, some post-upgrade steps would be required as detailed in the upgrade notes for the revision you are upgrading to.
-                </para>
-                <para>
-                Actions of the <application>apt-get</application> command, such as installation and removal of packages, are logged in the /var/log/dpkg.log log file.
-                </para>
+</screen></para>
+                <para>모든 패키지 업그레이드에 필요한 상당한 시간이 흐른 후, 여러분의 컴퓨터는 새 버전으로 업그레이드 될 것 입니다. 전형적으로, 몇 가지 업그레이드 후에 해야 하는 절차는 업그레이드 한 버전을 위한 업그레이드 노트에 상세히 설명됩니다.</para>
+                <para><application>apt-get</application> 명령의 행위는, 즉 패키지의 설치와 삭제와 같은, /var/log/dpkg.log 로그 파일에 기록이 됩니다.</para>
                 </listitem>
-        </itemizedlist>
-        </para>
-		<para>For further information about the use of <application>APT</application>, read the comprehensive <ulink url="http://www.debian.org/doc/user-manuals#apt-howto">Debian APT User Manual</ulink> or type: <screen>apt-get help</screen></para>
+        </itemizedlist></para>
+		<para><application>APT</application> 사용에 대한 더 많은 정보는, 광범위한 <ulink url="http://www.debian.org/doc/user-manuals#apt-howto">데비안 APT 사용자 지침서</ulink> 를 읽거나 다음을 입력 하십시오: <screen>apt-get help</screen></para>
   </sect1>
 
   <sect1 id="aptitude" status="complete">
 	<title>Aptitude</title>
-        <para>
-        <application>Aptitude</application> is a menu-driven, text-based front-end to the <emphasis>Advanced Packaging Tool</emphasis> (APT) system. Many of the common package management functions, such as installation, removal, and upgrade, are performed in <application>Aptitude</application> with single-key commands, which are typically lowercase letters.
-        </para>
-        <para>
-        <application>Aptitude</application> is best suited to use in a non-graphical terminal environment to ensure proper functioning of the command keys.  You may start <application>Aptitude</application> 
-as a normal user with the following command at a terminal prompt:
-<screen>
+        <para><application>Aptitude</application> 는 메뉴 방식이고, <emphasis>Advanced Packaging Tool</emphasis> (APT) 시스템의 텍스트 기반 프론트 엔드 입니다. 설치, 삭제, 그리고 업그레이드와 같은 많은 일반적인 패키지 관리 기능을 <application>Aptitude</application> 에서는 단일 키 명령, 보통 소문자를 사용하여 수행할 수 있습니다.</para>
+        <para><application>Aptitude</application> 는 그래픽 환경이 아닌 터미널 환경에서 명령어 키의 적절한 기능을 확신하기 위해 사용하는데 가장 잘 맞습니다. 일반 사용자로 터미널 프롬프트에서 다음의 명령을 입력하여 <application>Aptitude</application> 를 실행할 수 있습니다: <screen>
 <command>sudo aptitude</command>
-</screen>
-        </para>
-        <para>
-        When <application>Aptitude</application> starts, you will see a menu bar at the top of the screen and two panes below the menu bar.  The top pane contains package categories, such as <emphasis role="italics">New Packages</emphasis> and <emphasis role="italics">Not Installed Packages</emphasis>. The bottom pane contains information related to the packages and package categories.
-        </para>
-        <para>Using <application>Aptitude</application> for package management is relatively straightforward, and the user interface makes common tasks simple to perform.  The following are examples of popular package management functions as performed in <application>Aptitude</application>:
-        </para>
+</screen></para>
+        <para><application>Aptitude</application>를 시작하고, 여러분은 화면의 가장 위에 메뉴 막대를, 그 메뉴 막대 밑에 두 개의 부분 창을 보게 됩니다. 윗쪽의 부분 창은 <emphasis role="italics">새 패키지</emphasis> 와 <emphasis role="italics">설치되지 않은 패키지</emphasis> 와 같은 패키지 분류를 가집니다. 아래의 부분 창은 패키지와 패키지 분류에 관련된 정보를 가집니다.</para>
+        <para>패키지 관리를 위하여 <application>Aptitude</application> 를 사용하는 것은 비교적 직관적이고, 사용자 인터페이스는 단순하게 수행할 수 있도록 자주쓰는 작업을 모았습니다. 다음의 예는 <application>Aptitude</application> 에서 수행되는 잘 알려진 패키지 관리 기능들 입니다:</para>
         <itemizedlist>
                <listitem>
-                <para><emphasis role="bold">Install Packages</emphasis>: To install a package, locate the package via the Not Installed Packages package category, for example, by using the keyboard arrow keys and the <keycap>ENTER</keycap> key, and highlight the package you wish to install.  After highlighting the package you wish to install, press the <keycap>+</keycap> key, and the package entry should turn <emphasis role="italics">green</emphasis>, indicating it has been marked for installation. Now press <keycap>g</keycap> to be presented with a summary of package actions.  Press <keycap>g</keycap> again, and you will be prompted to become root to complete the installation. Press <keycap>ENTER</keycap> which will result in a Password: prompt.  Enter your user password to become root. Finally, press <keycap>g</keycap> once more and you'll be prompted to download the package.  Press <keycap>ENTER</keycap> on the <emphasis role="italics">Continue</emphasis> prompt, and downloading and installation of the package will commence.
-                </para>
+                <para><emphasis role="bold">패키지 설치</emphasis>: 패키지를 설치하려면, 설치되지 않은 패키지 분류를 통하여 패키지에 위치하고, 예를 들어, 키보드의 화살표 키와 <keycap>ENTER</keycap> 키를 사용하여, 설치하고자 하는 패키지를 선택(하이라이팅으로 강조됨) 합니다. 설치하고자 하는 패키지의 선택 후, <keycap>+</keycap> 키를 누르면, 그 패키지 항목은 <emphasis role="italics">녹색</emphasis> 으로 색상이 바뀌고, 이것은 설치를 위하여 표시되었음을 알려 줍니다. 이제 패키지 동작의 요약을 보이기 위해 <keycap>g</keycap> 키를 누릅니다. 다시 한번 <keycap>g</keycap> 키를 누르면, 설치를 끝내기 위해 root가 되기위한 프롬프트를 보게 됩니다. <keycap>ENTER</keycap> 키를 누르면 암호 프롬프트를 보게되고, 여러분의 사용자 암호를 입력하여 root(시스템 관리를 하는 사용자)가 됩니다. 마지막으로, <keycap>g</keycap> 키를 한 번 더 누르고 패키지의 다운로드를 알리는 프롬프트를 보게 됩니다. <emphasis role="italics">계속</emphasis> 프롬프트에서 <keycap>ENTER</keycap> 키를 누르면, 패키지의 내려받기와 설치가 시작 됩니다.</para>
                </listitem>
                <listitem>
-                <para><emphasis role="bold">Remove Packages</emphasis>: To remove a package, locate the package via the Installed Packages package category, for example, by using the keyboard arrow keys and the <keycap>ENTER</keycap> key, and highlight the package you wish to remove.  After highlighting the package you wish to install, press the <keycap>-</keycap> key, and the package entry should turn <emphasis role="italics">pink</emphasis>, indicating it has been marked for removal. Now press <keycap>g</keycap> to be presented with a summary of package actions.  Press <keycap>g</keycap> again, and you will be prompted to become root to complete the installation. Press <keycap>ENTER</keycap> which will result in a Password: prompt.  Enter your user password to become root. Finally, press <keycap>g</keycap> once more, and you'll be prompted to download the package.  Press <keycap>ENTER</keycap> on the <emphasis role="italics">Continue</emphasis> prompt, and removal of the package will commence.
-                </para>
+                <para><emphasis role="bold">패키지 삭제</emphasis>: 패키지를 삭제하려면, 설치된 패키지 분류를 통하여 패키지에 위치하고, 예를 들어, 키보드의 화살표 키와 <keycap>ENTER</keycap> 키를 사용하여, 삭제하고자 하는 패키지를 선택 합니다. 삭제하고자 하는 패키지의 선택 후, <keycap>-</keycap> 키를 누르면, 그 패키지 항목은 <emphasis role="italics">분홍색</emphasis> 으로 색상이 바뀌고, 이것은 삭제를 위하여 표시되었음을 알려 줍니다. 이제 패키지 동작의 요약을 보이기 위해 <keycap>g</keycap> 키를 누릅니다. 다시 한번 <keycap>g</keycap> 키를 누르면, 삭제를 끝내기 위해 root가 되기위한 프롬프트를 보게 됩니다. <keycap>ENTER</keycap> 키를 누르면 암호 프롬프트를 보게되고, 여러분의 사용자 암호를 입력하여 root가 됩니다. 마지막으로, <keycap>g</keycap> 키를 한 번 더 누르고 패키지의 삭제를 알리는 프롬프트를 보게 됩니다. <emphasis role="italics">계속</emphasis> 프롬프트에서 <keycap>ENTER</keycap> 키를 누르면, 패키지의 삭제가 시작 됩니다.</para>
                </listitem>
                <listitem>
-                <para><emphasis role="bold">Update Package Index</emphasis>: To update the package index, simply press the <keycap>u</keycap> key and you will be prompted to become root to complete the installation. Press <keycap>ENTER</keycap> which will result in a Password: prompt.  Enter your user password to become root. Updating of the package index will commence.  Press <keycap>ENTER</keycap> on the OK prompt when the download dialog is presented to complete the process.
-                </para>
+                <para><emphasis role="bold">패키지 인덱스 업데이트</emphasis>: 패키지 인덱스를 업데이트 하려면, 간단히 <keycap>u</keycap> 키를 누르고, 업데이트를 끝내기 위해 root가 되기위한 프롬프트를 보게 됩니다. <keycap>ENTER</keycap> 키를 누르면 암호 프롬프트를 보게되고, 여러분의 사용자 암호를 입력하여 root가 됩니다. 패키지 인덱스를 업데이트하는 것이 시작 됩니다. 프로세스를 끝내기 위해 내려받기 대화창이 보여질 때 확인 프롬프트에서 <keycap>ENTER</keycap> 키를 누릅니다.</para>
                </listitem>
                <listitem>
-                <para><emphasis role="bold">Upgrade Packages</emphasis>: To upgrade packages,  perform the update of the package index as detailed above, and then press the <keycap>U</keycap> key to mark all upgradeable packages. Now press <keycap>g</keycap> whereby you'll be presented with a summary of package actions.  Press <keycap>g</keycap> again, and you will be prompted to become root to complete the installation. Press <keycap>ENTER</keycap> which will result in a Password: prompt.  Enter your user password to become root. Finally, press <keycap>g</keycap> once more, and you'll be prompted to download the package.  Press <keycap>ENTER</keycap> on the <emphasis role="italics">Continue</emphasis> prompt, and upgrade of the packages will commence.
-                </para>
+                <para><emphasis role="bold">패키지 업그레이드</emphasis>: 패키지를 업그레이드 하려면, 위에 설명한 패키지 인덱스의 업데이트를 먼저 수행을 하고, 모든 업그레이드 가능한 패키지를 표시하기 위하여 <keycap>U</keycap> 키를 누릅니다. 이제 패키지 동작의 요약을 보이기 위해 <keycap>g</keycap> 키를 누릅니다. 다시 한번 <keycap>g</keycap> 키를 누르면, 설치를 끝내기 위해 root가 되기위한 프롬프트를 보게 됩니다. 여러분의 사용자 암호를 넣고 root가 됩니다. 마지막으로, 패키지의 내려받기를 위하여 <keycap>g</keycap> 키를 한 번 더 누릅니다. <emphasis role="italics">계속</emphasis> 프롬프트에서 <keycap>ENTER</keycap> 키를 누르면, 패키지의 업그레이드가 시작 됩니다.</para>
                </listitem>
         </itemizedlist>
-        <para>The first column of information displayed in the package list in the top pane, when actually viewing packages lists the current state of the package, and uses the following key to describe the state of the package:
-        <itemizedlist>
+        <para>위쪽 부분 창의 패키지 목록에 보여진 정보의 첫 항목(행)은, 패키지의 현재 상태를 패키지 목록에 실제 보이는 것이고, 패키지 상태를 기술하는 것은 다음의 키를 사용 합니다:<itemizedlist>
         <listitem>
-        <para>
-        <emphasis role="bold">i</emphasis>: Installed package.
-        </para>
+        <para><emphasis role="bold">i</emphasis>: 설치된 패키지.</para>
         </listitem>
         <listitem>
-        <para>
-        <emphasis role="bold">c</emphasis>: Package not installed, but package configuration remains on system
-        </para>
+        <para><emphasis role="bold">c</emphasis>: 설치되지 않은 패키지이지만, 설정이 시스템에 남아있는 패키지</para>
         </listitem><listitem>
-        <para>
-        <emphasis role="bold">p</emphasis>: Purged from system
-        </para>
+        <para><emphasis role="bold">p</emphasis>: 시스템에서 깨끗히 삭제된 패키지</para>
         </listitem><listitem>
-        <para>
-        <emphasis role="bold">v</emphasis>: Virtual package
-        </para>
+        <para><emphasis role="bold">v</emphasis>: 가상 패키지</para>
         </listitem><listitem>
-        <para>
-        <emphasis role="bold">B</emphasis>: Broken package
-        </para>
+        <para><emphasis role="bold">B</emphasis>: 잘못된 패키지</para>
         </listitem><listitem>
-        <para>
-        <emphasis role="bold">u</emphasis>: Unpacked files, but package not yet configured
-        </para>
+        <para><emphasis role="bold">u</emphasis>: 풀려진 파일, 그러나 아직 설정이 안된 패키지</para>
         </listitem><listitem>
-        <para>
-        <emphasis role="bold">C</emphasis>: Half-configured- Configuration failed and requires fix
-        </para>
+        <para><emphasis role="bold">C</emphasis>: 반쯤 설정됨- 설정이 실패하였고 고치는 것이 필요함</para>
         </listitem><listitem>
-        <para>
-        <emphasis role="bold">H</emphasis>: Half-installed- Removal failed and requires fix
-        </para>
+        <para><emphasis role="bold">H</emphasis>: 반쯤 설치됨- 삭제가 실패하였고 고치는 것이 필요함</para>
         </listitem>
-        </itemizedlist>
-        </para>
-        <para>To exit Aptitude, simply press the <keycap>q</keycap> key and confirm you wish to exit. Many other functions are available from the Aptitude menu by pressing the <keycap>F10</keycap> key.
-        </para>
+        </itemizedlist></para>
+        <para>Aptitude를 종료하려면, 간단히 <keycap>q</keycap> 키를 누르고 종료한다는 것을 확인 합니다. 많은 다른 기능들은 Aptitude 메뉴에서 <keycap>F10</keycap> 키를 눌러 보실 수 있습니다.</para>
   </sect1>
 	<sect1 id="configuration" status="complete">
 		<title>설정</title>
-          <para>
-          Configuration of the <emphasis>Advanced Packaging Tool</emphasis> (APT) system repositories is stored in the /etc/apt/sources.list configuration file. An example of this file is referenced here, along with information on adding or removing repository references from the file.
-          </para>
-          <para>
-          <ulink url="sample/sources.list">Here</ulink> is a simple example of a typical <filename>/etc/apt/sources.list</filename> file.
-          </para>
-          <para>
-          You may edit the file to enable repositories or disable them.  For example, to disable the requirement of inserting the Ubuntu CD-ROM whenever package operations occur, simply comment out the appropriate line for the CD-ROM, which appears at the top of the file:
-          </para>
+          <para><emphasis>Advanced Packaging Tool</emphasis> (APT) 시스템 저장소에 대한 설정은 /etc/apt/sources.list 설정 파일에 저장 됩니다. 여기에 참조하는 것은 그 파일의 한 예이고, 그 파일에서 저장소를 추가 또는 삭제하는 것에 대한 정보를 보여 줍니다.</para>
+          <para><ulink url="../sample/sources.list">Here</ulink> 는 전형적인 <filename>/etc/apt/sources.list</filename> 파일의 간단한 예 입니다.</para>
+          <para>여러분은 저장소를 활성화 또는 비활성화 하기 위하여 그 파일을 편집할 수 있습니다. 예를 들어, 패키지에 대한 동작이 일어날 때마다 우분투 CD-ROM의 삽입이 필요한 것을 비활성화 시키려면, 그 파일의 맨 위에 보여지는, CD-ROM를 위해 사용되는 그 줄을 간단히 주석처리 합니다:</para>
           <para>
 <screen>
 # no more prompting for CD-ROM please
@@ -573,21 +497,13 @@ as a normal user with the following command at a terminal prompt:
     </sect1>
 	<sect1 id="extra-repositories" status="complete">
 		<title>추가 저장소</title>
-          <para>
-          In addition to the officially supported package repositories available for Ubuntu, there exist additional community-maintained repositories which add thousands more potential packages for installation.  Two of these additional repositories are most popular, and are the <emphasis>Universe</emphasis> and <emphasis>Multiverse</emphasis> repositories. These repositories are not officially supported by Ubuntu, which is why they are not enabled by default, but they generally provide packages which are safe for use with your Ubuntu computer. 
-          </para>
-		  <note><para>Packages in the Multiverse repository often have licensing issues that prevent them from being distributed with a free operating system, and they may be illegal in your locality.</para></note>
+          <para>우분투를 위하여 공식적으로 지원되는 패키지 저장소에 더하여, 설치를 위한 수천 개가 넘는 가능한 패키지를 추가하는 커뮤니티가 관리하는 추가적인 저장소가 있습니다. 가장 알려진 두 가지 추가적인 저장소는, <emphasis>Universe</emphasis> 와 <emphasis>Multiverse</emphasis> 저장소 입니다. 이 저장소들은 우분투에 의하여 공식적으로 지원이 되는 것은 아니고 그러므로 기본 설정으로 활성화되어 있지 않지만, 그것들은 일반적으로 여러분의 우분투 컴퓨터에서 안전하게 사용할 수 있는 패키지를 제공 합니다.</para>
+		  <note><para>Multiverse 저장소 내의 패키지들은 종종 자유 운영 체계와 함께 배포하는 것을 막는 사용허가의 문제를 가지고 있고, 여러분의 지역에 따라 불법일 수도 있습니다.</para></note>
           <warning>
-          <para>
-          Be advised that neither the <emphasis>Universe</emphasis> or <emphasis>Multiverse</emphasis> repositories contain officially supported packages. In particular, there may not be security updates for these packages.
-          </para>
+          <para><emphasis>Universe</emphasis> 또는 <emphasis>Multiverse</emphasis> 저장소는 공식적으로 지원되는 패키지를 가지고 있지 않음을 충고 합니다. 특정 예로, 그 패키지들을 위한 보안 업데이트가 없을 수도 있습니다.</para>
           </warning>
-          <para>
-          Many other package sources are available, sometimes even offering only one package, as in the case of package sources provided by the developer of a single application.  You should always be very careful and cautious when using non-standard package sources, however.  Research the source and packages carefully before performing any installation, as some package sources and their packages could render your system unstable or non-functional in some respects.
-          </para>
-          <para>
-          To enable the <emphasis>Universe</emphasis> and <emphasis>Multiverse</emphasis> repositories, edit the <filename>/etc/apt/sources.list</filename> file and uncomment the appropriate lines:
-          </para>
+          <para>많은 다른 패키지 소스도 사용 가능하고, 때로는 하나의 프로그램 개발자에 의해 제공되는 패키지 소스의 경우, 오직 하나의 패키지만을 심지어 제공하는 경우도 있습니다. 하지만, 표준화되지 않은 패키지 소스를 사용할 때는, 여러분은 매우 조심하고 주의를 기울여야 합니다. 몇 개의 패키지 소스와 그들의 패키지는 어떤 측면에서는 여러분의 시스템을 불안정하게 하거나 또는 동작하지 않도록 할 수 있으므로, 설치를 수행하기 전에 소스와 패키지를 조심스럽게 조사해 보십시오.</para>
+          <para><emphasis>Universe</emphasis> 와 <emphasis>Multiverse</emphasis> 저장소를 사용 가능하게 하려면, <filename>/etc/apt/sources.list</filename> 파일을 편집하기 위하여 열고 해당 줄의 주석을 해제 합니다:</para>
           <para>
 <screen>
 # We want Multiverse and Universe repositories, please

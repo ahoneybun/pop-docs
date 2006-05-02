@@ -25,7 +25,6 @@ rm rosetta-desktopguide/desktopguide.pot
 for x in rosetta-desktopguide/*; do
 	y=$(basename ${x} .po)
 	echo ${y}
-	rm -rf ${y}/
 	mkdir -p ${y}
 	xml2po -e -p ${x} C/desktopguide.xml >${y}/desktopguide.xml
 	xml2po -e -p ${x} C/getting-started.xml >${y}/getting-started.xml

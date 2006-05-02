@@ -5,7 +5,7 @@
 <!ENTITY project-name "Ubuntu Documentation Project">
 <!ENTITY ubuntu "<phrase>Ubuntu</phrase>">
 <!-- VERSIONS --><!ENTITY distro-version "Dapper Drake">
-<!ENTITY distro-rev "6.06">
+<!ENTITY distro-rev "6.06 LTS">
 <!ENTITY distro-release-date "June 2006">
 <!ENTITY linux-kernel-version "2.6.15">
 <!ENTITY gcc-version "4.0.3">
@@ -455,7 +455,7 @@ cd ..</screen>
 				as a regular user, because then you can edit files in the source package
 				without needing root privileges.</para></note>
 		
-		<para>What the <application>apt-get source</application> command does is:</para>
+		<para>Was der <application>apt-get source</application> Befehlt bewirkt ist Folgendes:</para>
 		
 		<orderedlist>
 
@@ -465,18 +465,14 @@ cd ..</screen>
 					author(s), and a .diff.gz file containing patches applied against the
 					source code with the packaging information.</para></listitem>
 
-			<listitem><para>Untar the .orig.tar.gz file into the current directory.
-			</para></listitem>
+			<listitem><para>Entpacken sie die .orig.tar.gz Datei in das aktuelle Verzeichnis.</para></listitem>
 
 			<listitem><para>Apply the gunzipped .diff.gz to the unpacked source
 					directory.</para></listitem>
 
 			</orderedlist>
 
-		<para>If you manually download the source package (.dsc, .orig.tar.gz, and
-			.diff.gz files), you can unpack them in the same way <application>apt-get
-				source</application> does by using <application>dpkg-source</application>
-			as follows:</para>
+		<para>Wenn Sie manuell Quellpakete herunterladen (.dsc, .orig.tar.gz, and .diff.gz files),können Sie diese auf die gleiche Weise entpacken, wie es <application>apt-get source</application> tut, indem Sie <application>dpkg-source</application> wie folgt verwenden:</para>
 		<para><screen>dpkg-source -x *.dsc</screen></para>
 
 		<para>The first thing you will need to do is make a copy of the
@@ -494,10 +490,7 @@ cd ..</screen>
 cp hello-2.1.1.tar.gz hello_2.1.1.orig.tar.gz
 tar -xzvf hello_2.1.1.orig.tar.gz</screen>
 
-		<warning><para>The underscore, "_", between the package name (hello) and the
-				version (2.1.1), as opposed to a hyphen, "-", is very important. Your
-				source package will incorrectly be built as a Debian native
-				package.</para></warning>
+		<warning><para>Der Unterstrich "_" zwischen dem Paketnamen (hello) und der Versionsnummer (2.1.1), im Gegensatz zu einem Bindestrich "-", ist sehr wichtig. Ihr Quellpaket würde nicht richtig als ein  natives Debain Paket kompiliert werden.</para></warning>
 
 		<para>We now have a <filename>hello-2.1.1</filename> directory
 			containing the source files. Now we need to create the customary
@@ -536,19 +529,16 @@ package (version) distribution; urgency=urgency
 
 -- maintainer name &lt;email address&gt;[two spaces]  date</screen>
 
-			<para>The format (especially of the date) is important. The date
-				should be in RFC822 format, which can be obtained from the
-				<application>822-date</application> program.</para>
+			<para>Die Formatierung (vor allem die des Datums) ist wichtig. Das Datum sollte in dem RFC822 Format sein, welches über das Programm <application>822-date</application> erlangt werden kann.</para>
 
-			<para>Here is a sample <filename>changelog</filename> file for
-				<application>hello</application>:</para>
+			<para>Hier ist eine Beispiel für eine <filename>changelog</filename> Datei für das <application>hello</application> Programm:</para>
 
 			<screen>
 hello (2.1.1-1) dapper; urgency=low
 
-   * New upstream release with lots of bug fixes.
+  * Ganz tolle neue Version mit 5 Kilo Bugfixes.
 
--- Captain Packager &lt;packager@coolness.com&gt;  Wed,  5 Apr 2006 22:38:49 -0700</screen>
+-- Paket_Kapitän &lt;packager@coolness.de&gt; Sat, 22 Apr 2006 13:52:49 -0700</screen>
 
 			<para>Notice that the version has a -1 appended to it, or
 				what is called the Debian revision, which is used so that the
@@ -569,8 +559,7 @@ hello (2.1.1-1) dapper; urgency=low
 					(<emphasis>e.g.</emphasis>,
 					<filename>2.1.1-0ubuntu1</filename>).</para></note>
 		
-			<para>Now look at the <filename>changelog</filename> for the
-				<phrase>Ubuntu</phrase> source package that we downloaded earlier:</para>
+			<para>Nun schauen Sie sich das <filename>changelog</filename> für das <phrase>Ubuntu</phrase> Quellpaket an, die wir vorher heruntergeladen haben:</para>
 
 			<screen>
 less ../../ubuntu/hello-2.1.1/debian/changelog</screen>
@@ -588,84 +577,50 @@ less ../../ubuntu/hello-2.1.1/debian/changelog</screen>
 		</sect2>
 
 		<sect2>
-			<title>control</title>
-			<para>The control file contains the information that the package
-				manager (such as <application>apt-get</application>,
-				<application>synaptic</application>, and
-				<application>aptitude</application>) uses, build-time dependencies,
-				maintainer information, and much more.</para>
+			<title>Die "control" Datei</title>
+			<para>Die control Datei enthält die Informationen, die der Paketmanager (so wie zum Beispiel <application>apt-get</application>, <application>synaptic</application>, und <application>aptitude</application>) braucht: Abhängigkeiten, Hinweise zur Instandhaltung, und noch viel mehr.</para>
 			<para>For the <phrase>Ubuntu</phrase> <application>hello</application> package,
 				the control file looks something like:</para>
 			<para><screen>Source: hello
 Section: devel
 Priority: optional
-Maintainer: Captain Packager &lt;packager@coolness.com&gt; 
+Maintainer: Paket_Kapitän &lt;packager@coolness.de&gt; 
 Standards-Version: 3.6.1
-
 Package: hello
 Architecture: any
 Depends: ${shlibs:Depends}
 Description: The classic greeting, and a good example
- The GNU hello program produces a familiar, friendly greeting.  It
+ The GNU hello program produces a familiar, friendly greeting. It
  allows non-programmers to use a classic computer science tool which
- would otherwise be unavailable to them.
+ would otherwise be unavailable to them.↵
  .
  Seriously, though: this is an example of how to do a Debian
- package.
+ package.↵
  It is the Debian version of the GNU Project's `hello world' program
  (which is itself an example for the GNU Project).</screen></para>
 
-			<para>Create <filename>control</filename> using the
-				information above (making sure to provide your information for
-				the <emphasis>Maintainer</emphasis> field).</para>
+			<para>Erstellen sie die <filename>control</filename> Datei mit den Informationen von oben (stellen Sie sicher,dass Sie ihre Information in dem <emphasis>Maintainer</emphasis> - Feld eintragen).</para>
 			
-			<para>The first paragraph gives information about the source package. Let us
-				go through each line: </para>
+			<para>Der erste Abschnitt gibt uns Informationen über das Quellpaket. Schauen wir uns jede Zeile einzeln einmal an:</para>
 			<itemizedlist>
 				
-				<listitem><para><emphasis role="bold">Source:</emphasis> This is the name
-						of the source package, in this case,
-						<emphasis>hello</emphasis>.</para></listitem>
+				<listitem><para><emphasis role="bold">Source:</emphasis> Das ist der Name des Quellpakets, in diesem Fall, <emphasis>hello</emphasis>.</para></listitem>
 
-				<listitem><para><emphasis role="bold">Section:</emphasis> The apt
-						repositories are split up into sections for ease of browsing and
-						categorization of software. In this case,
-						<application>hello</application> belongs in the
-						<emphasis>devel</emphasis> section.</para></listitem>
+				<listitem><para><emphasis role="bold">Section:</emphasis> Die apt-Repositories sind in verschiedene Sektionen aufgeteilt um das Durchsuchen zu erleichtern: in unserem Fall wäre das: <application>hello</application> gehört in die <emphasis>devel</emphasis> Sektion.</para></listitem>
 
-				<listitem><para><emphasis role="bold">Priority:</emphasis> This sets the
-						importance of the package to users. It should be one of the
-						following:</para>
+				<listitem><para><emphasis role="bold">Priority:</emphasis> Das setzt die Wichtigkeit des Paketes für die Benutzer fest. Es sollte eines von den folgenden sein:</para>
 
 					<itemizedlist>
 					
-						<listitem><para><emphasis role="bold">Required</emphasis> -
-								packages that are essential for the system to work
-								properly. If they are removed it is highly likely that your
-								system will break in an unrecoverable
-								way.</para></listitem>
+						<listitem><para><emphasis role="bold">Required</emphasis> - Ein Paket, das unabdingbar für das System ist, um richtig zu arbeiten. Wenn diese entfernt werden, ist die Wahrscheinlichkeit sehr hoch, dass ihr System irreperabel beschädigt wird.</para></listitem>
 						
-						<listitem><para><emphasis role="bold">Important</emphasis> -
-								minimal set of packages for a usable system. Removing these
-								packages will not produce an unrecoverable breakage of your system, but
-								they are generally considered important tools without which any
-								Linux installation would be incomplete. Note: This does not
-								include things like Emacs or even the X Window
-								System.</para></listitem>
+						<listitem><para><emphasis role="bold">Important</emphasis> - Die minimalen Pakete für ein brauchbares System. Entfernen dieser Pakete wird nicht zu einem schwerwiegenden Fehler führen, aber sie werden generell als wichtige Werkzeuge angesehen, ohne die jede Linux-Installation nicht komplett wäre. HINWEIS: Dazu zählen nicht Dinge wie Emacs oder sogar das X Window-System.</para></listitem>
 						
-						<listitem><para><emphasis role="bold">Standard</emphasis> -
-								Somewhat self explanatory.</para></listitem>
+						<listitem><para><emphasis role="bold">Standard</emphasis> - Eigentlich selbsterklärend.</para></listitem>
 						
-						<listitem><para><emphasis role="bold">Optional</emphasis> - in
-								essence this category is for non-required packages, or
-								the bulk of packages. However, these packages should
-								not conflict with each other.</para></listitem>
+						<listitem><para><emphasis role="bold">Optional</emphasis> - Im Wesentlichen ist diese Kategorie für Pakete die nicht unbedingt gebraucht werden -- die meisten Pakete sind solche. Jedoch sollten sie nicht untereinander Kompatibilitätskonflikte verursachen.</para></listitem>
 						
-						<listitem><para><emphasis role="bold">Extra</emphasis> - packages
-								that may conflict with packages in one of the above
-								categories. Also used for specialized packages that would
-								only be useful to people who already know the
-								purpose of the package.</para></listitem>
+						<listitem><para><emphasis role="bold">Extra</emphasis> - Pakete, die mit anderen Paketen der oben genannten Kategorien Konflikte verursachen könnten. Wird auch für spezielle Pakete gebraucht, die nur für Leute nützlich sind, die schon wissen was der Zweck des Pakets ist.</para></listitem>
 					
 					</itemizedlist>
 				</listitem>
@@ -774,7 +729,7 @@ Description: The classic greeting, and a good example
 		</sect2>
 
 		<sect2>
-			<title>copyright</title>
+			<title>Copyright</title>
 
 			<para>This file gives the copyright information. Generally, copyright information
 				is found in the <filename>COPYING</filename> file in the program's source
@@ -797,10 +752,7 @@ License:
 
 </screen>
 
-			<para>As one can imagine, <application>hello</application> is
-				released under the GPL license. In this case it is easiest to
-				just copy the <filename>copyright</filename> file from the
-				<phrase>Ubuntu</phrase> package:</para>
+			<para>Wie man sich denken kann, wird <application>hello</application> unter der GPL Lizenz herausgegeben. In diesem Fall ist es das einfachste, einfach die<filename>copyright</filename> Datei aus dem  <phrase>Ubuntu</phrase> Paket zu kopieren:</para>
 
 			<screen>
 cp ../../ubuntu/hello-2.1.1/debian/copyright .</screen>
@@ -819,18 +771,14 @@ cp ../../ubuntu/hello-2.1.1/debian/copyright .</screen>
 		<sect2 id="basic-scratch-rules">
 			<title>rules</title>
 			
-			<para>The <filename>rules</filename> file is an executable
-				Makefile that has rules for building the binary package from
-				the source packages. For <application>hello</application>, it
-				will be easier to use the <filename>rules</filename>
-				from the <phrase>Ubuntu</phrase> package:</para>
+			<para>Die <filename>rules</filename> Datei sit eine ausführbare Makefile die die Regeln enthält, um das Binärpaket von dem Quellpaket zu erstellen. Für <application>hello</application> wird es am Leichtesten sein, die <filename>rules</filename> Datei von dem <phrase>Ubuntu</phrase> Paket zu verwenden:</para>
 
 			<screen>#!/usr/bin/make -f
 # Sample debian/rules file - for GNU Hello.
 # Copyright 1994,1995 by Ian Jackson.
 # I hereby give you perpetual unlimited permission to copy,
 # modify and relicense this file, provided that you do not remove
-# my name from the file itself.  (I assert my moral right of
+# my name from the file itself. (I assert my moral right of
 # paternity under the Copyright, Designs and Patents Act 1988.)
 # This file may have to be extensively modified
 
@@ -860,13 +808,13 @@ clean:
         -$(MAKE) -i distclean
         rm -rf *~ debian/tmp debian/*~ debian/files* debian/substvars
 
-binary-indep:   checkroot build
+binary-indep: checkroot build
         $(checkdir)
 # There are no architecture-independent files to be uploaded
-# generated by this package.  If there were any they would be
+# generated by this package. If there were any they would be
 # made here.
 
-binary-arch:    checkroot build
+binary-arch: checkroot build
         $(checkdir)
         rm -rf debian/tmp
         install -d debian/tmp/DEBIAN $(docdir)
@@ -899,8 +847,7 @@ checkroot:
 .PHONY: binary binary-arch binary-indep clean checkroot
 </screen>
 
-			<para>Let us go through this file in some detail. One of the first
-				parts you will see is the declaration of some variables:</para>
+			<para>Lasst uns diese Datei im Detail einmal anschauen. Eine der ersten Sachen die Sie bemerkt haben werden ist die Deklaration von einigen Variablen:</para>
 			<screen>package = hello
 docdir = debian/tmp/usr/share/doc/$(package)
 
@@ -1034,9 +981,7 @@ cp ../../ubuntu/hello-2.1.1/debian/prerm .</screen>
 				will build but it cannot be uploaded until it is
 				signed.</para>
 			
-			<para>In addition to the source package, we can also build the
-				binary package with
-				<application>pbuilder</application>:</para>
+			<para>Zusätzlich zu dem Quellpaket, können wir das Binärpaket auch mit <application>pbuilder</application> erstellen:</para>
 			
 			<para><screen>sudo pbuilder build ../*.dsc</screen></para>
 
@@ -1047,8 +992,7 @@ cp ../../ubuntu/hello-2.1.1/debian/prerm .</screen>
 				environment, so all the build-time dependencies are
 				determined by the <filename>control</filename> file.</para>
 			
-			<para>We can check the source package for common
-mistakes using <application>lintian</application>:</para>
+			<para>Wir können das Quellpaket auf häufige Fehler prüfen, indem wir <application>lintian</application> benutzen:</para>
 			
 			<screen>cd ..
 lintian -i *.dsc</screen>
@@ -1058,7 +1002,7 @@ lintian -i *.dsc</screen>
 	</sect1>
 
 	<sect1 id="basic-debhelper" status="complete">
-		<title>Packaging with Debhelper</title>
+		<title>Paket mithilfe von Debhelper erstellen</title>
 		
 		<important><para><emphasis role="bold">Requirements:</emphasis> The
 				requirements from the <xref linkend="basic-scratch"/> section
@@ -1110,8 +1054,7 @@ cd ..</screen>
 
 		<screen>cd hello-2.1.1</screen>
 
-		<para>To create the initial "debianization" of the source we will use
-			<application>dh_make</application>.</para>
+		<para>Um die anfängliche "Debian-isierung" des Quellcodes zu realisieren werden wir <application>dh_make</application> einsetzten.</para>
 
 		<screen>
 dh_make -e your.maintainer@address -f ../hello-2.1.1.tar.gz
@@ -1125,32 +1068,24 @@ Type of package: single binary, multiple binary, library, kernel module or cdbs?
 
 		<screen>
 Maintainer name : Captain Packager
-Email-Address   : packager@coolness.com
-Date            : Thu,  6 Apr 2006 10:07:19 -0700
-Package Name    : hello
-Version         : 2.1.1
-License         : blank
+Email-Address : packager@coolness.com
+Date : Thu, 6 Apr 2006 10:07:19 -0700
+Package Name : hello
+Version : 2.1.1
+License : blank
 Type of Package : Single
 Hit &lt;enter&gt; to confirm: <emphasis role="bold">Enter</emphasis></screen>
 
-		<caution><para>Only run <application>dh_make -e</application> once. If
-		you run it again after you do it the first time, it will not work
-		properly. If you want to change it or made a mistake, remove the
-		source directory and untar the upstream tarball afresh. Then you can
-		migrate into the source directory and try again.</para></caution>
+		<caution><para>Führen Sie nur einmal <application>dh_make -e</application> aus. Wenn Sie es nach dem ersten Ausführen nochmal aufrufen, wird es nicht richtig arbeiten. Um eine Änderung vorzunehmen oder ein Fehler auszumerzen, entfernen Sie das Quellverzeichnis und entpacken Sie den Upstream Tarball erneut. Dann können Sie in das Quellverzeichnis übergehen und es nochmal probieren.</para></caution>
 		
 		<para>Running <application>dh_make -e</application> does two
 			things:</para>
 
 		<orderedlist> 
 			
-			<listitem><para>Creates the
-					<filename>hello_2.1.1.orig.tar.gz</filename> file in the parent
-					directory,</para></listitem>
+			<listitem><para>Es erstellt die <filename>hello_2.1.1.orig.tar.gz</filename> Datei in dem Stammverzeichnis,</para></listitem>
 
-			<listitem><para>Creates the basic files needed in
-					<filename>debian/</filename> and many template files
-					(.ex) that may be needed.</para></listitem>
+			<listitem><para>erstellt die essentiellen Dateien die für <filename>debian/</filename> gebraucht werden und viele Vorlagen (.ex), die Sie eventuell gebrauchen könnten.</para></listitem>
 			
 		</orderedlist>
 
@@ -1245,14 +1180,9 @@ cp ../../ubuntu/hello-debhelper-2.1.1/debian/postinst .
 cp ../../ubuntu/hello-debhelper-2.1.1/debian/prerm .
 cp ../../ubuntu/hello-debhelper-2.1.1/debian/rules.</screen>
 
-		<para>The last file we need to look at is <filename>rules</filename>,
-			where the power of
-			<application>debhelper</application> scripts can be seen. The
-			<application>debhelper</application> version of
-			<filename>rules</filename> is somewhat smaller (54 lines as
-			opposed to 72 lines in the version from <xref linkend="basic-scratch-rules"/>).</para>
+		<para>Die letzte Datei die wir uns anschauen ist die <filename>rules</filename> Datei, an der man die Macht von <application>debhelper</application> Skripten sehen kann. Die <application>debhelper</application> Version von <filename>rules</filename> ist ein bisschen kleiner (54 Zeilen statt 72 Zeilen in der Version von <xref linkend="basic-scratch-rules"/>).</para>
 
-		<para>The <application>debhelper</application> version looks like:</para>
+		<para>Die <application>debhelper</application> Version sieht folgendermaßen aus:</para>
 
 		<screen> #!/usr/bin/make -f
 
@@ -1349,8 +1279,7 @@ binary: binary-indep binary-arch
 			
 			<para><screen>sudo pbuilder build ../*.dsc</screen></para>
 
-			<para>and finally check the source package for common mistakes using
-				<application>lintian</application>:</para>
+			<para>und zu guter Letzt: Prüfen Sie mit <application>lintian</application> das Quellpaket auf häufige Fehler:</para>
 			
 			<screen>cd ..
 lintian -i *.dsc</screen>
@@ -1360,7 +1289,7 @@ lintian -i *.dsc</screen>
 	</sect1>
 
 	<sect1 id="basic-cdbs" status="complete">
-		<title>Packaging With CDBS</title>
+		<title>pakete mit CDBS erstellen</title>
 
 		<para>CDBS is a tool that uses debhelper to make building and maintaining Debian
 			packages even easier. It has many advantages:</para>
@@ -1378,13 +1307,13 @@ lintian -i *.dsc</screen>
 				<listitem><para>Its classes have been well tested, so you can
 				avoid dirty hacks to solve common problems</para></listitem>
 				
-				<listitem><para>Switching to CDBS is easy</para></listitem>
+				<listitem><para>Zu CDBS zu wechseln ist leicht</para></listitem>
 				
-				<listitem><para>It is extensible</para></listitem>
+				<listitem><para>Es ist erweiterbar</para></listitem>
 			</itemizedlist>
 		
 		<sect2>
-			<title>Using CDBS in packages</title>
+			<title>CDBS in Paketen verweden</title>
 		
 			<para>Using CDBS for <phrase>Ubuntu</phrase> packages is very easy. After adding 
 				<application>cdbs</application> to the Build-Depends in 
@@ -1455,16 +1384,15 @@ include /usr/share/cdbs/1/class/autotools.mk</screen>
 		</sect2>
 		
 		<sect2>
-			<title>More information on CDBS</title>
+			<title>Weitere Informationen über CDBS</title>
 		
-			<para>For more information on CDBS, see Marc Dequènes's guide at <ulink url="https://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml">https://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml</ulink>.
-			</para>
+			<para>Wenn Sie mehr Informationen über CDBS bekommen wollen, sollten Sie sich Marc Dequènes Anleitung einmal ansehen: <ulink url="https://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml">https://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml</ulink>.</para>
 		
 		</sect2>
 	</sect1>
 		
 	<sect1 id="basic-updating" status="complete">
-		<title>Updating Packages</title>
+		<title>Pakete aktualisieren</title>
 
 			<para>If you have been around Linux distributions for any amount
 				of time, you have realized that there are sometimes bugs in
@@ -1495,8 +1423,7 @@ include /usr/share/cdbs/1/class/autotools.mk</screen>
 				stored in the <filename>debian/patches/</filename> directory
 				and have a special format.</para>
 
-			<para>To create a <application>dpatch</application>, perform the
-				following steps sequentially.</para>
+			<para>Um eine <application>dpatch</application> zu erzeugen, führen Sie die folgenden Schritte nacheinander aus:</para>
 
 			<para>Create a temporary work space and two copies of the current
 				source directory:</para>
@@ -1579,10 +1506,10 @@ debdiff &lt;oldpackage&gt;.deb &lt;newpackage&gt;.deb &gt; package.debdiff
 	</sect1>
 
 	<sect1 id="basic-mistakes" status="complete">
-		<title>Common Mistakes</title>
+		<title>Häufige Fehler</title>
 			
 		<sect2 id="basic-ex_files">
-			<title>dh_make Example Files</title>
+			<title>dh_make Beispieldateien</title>
 			
 			<para>When you use dh_make to create the initial "debianization", example files
 				for various tasks are created in the <filename>debian/</filename>
@@ -1593,7 +1520,7 @@ debdiff &lt;oldpackage&gt;.deb &lt;newpackage&gt;.deb &gt; package.debdiff
 		</sect2>
 
 		<sect2 id="basic-orig-tarball">
-			<title>Changing the Original Tarball</title>
+			<title>Den originalen Tarball verändern</title>
 
 			<para>There are two types of source packages, native and non-native.
 				A native package is one that is specific to <phrase>Ubuntu</phrase>/Debian. It has the
@@ -1607,18 +1534,17 @@ debdiff &lt;oldpackage&gt;.deb &lt;newpackage&gt;.deb &gt; package.debdiff
 				contains all the differences (<filename>debian/</filename> directory and
 				patches) from the original source tarball.</para>
 
-			<para>Here is a list of potential problems that can occur if you change the
-				original tarball:</para>
+			<para>Hier ist eine Liste von potentiellen Problemen, die auftreten können wenn Sie den originalen Tarball verändern:</para>
 		
 			<orderedlist>
 
-				<listitem><para>Reproducibility</para>
+				<listitem><para>Wiederholbarkeit</para>
 
 					<para>If you take just the .diff.gz and .dsc, you or someone else has
 						no means to reproduce the changes in the
 						original tarball.</para></listitem>
 
-				<listitem><para>Upgradeability</para>
+				<listitem><para>Erweiterbarkeit</para>
 		
 					<para>It is much easier to upgrade to a new upstream (from the author)
 						version if the .orig.tar.gz is preserved and there is a clear
@@ -1685,8 +1611,7 @@ debdiff &lt;oldpackage&gt;.deb &lt;newpackage&gt;.deb &gt; package.debdiff
 								.tar.bz2 and <application>gzip -9 </application> the
 								resulting tar.</para></listitem>
 							
-						<listitem><para>The md5sums of the .tar you provide and the
-								original .tar must match!</para></listitem>
+						<listitem><para>Die MD5 Prüfsummen der .tar Datei die sie bereitstellen und die der originalen .tar Datei müssen übereinstimmen!</para></listitem>
 	
 						<listitem><para>Eventually provide a get-orig-source rule in
 								debian/rules that does this conversion
@@ -1703,7 +1628,7 @@ debdiff &lt;oldpackage&gt;.deb &lt;newpackage&gt;.deb &gt; package.debdiff
 	
 			</itemizedlist>
 
-			<para><emphasis role="bold">The following are <emphasis>not</emphasis> reasons to
+			<para><emphasis role="bold">The following are <emphasis>nicht</emphasis> reasons to
 					change the original tarball:</emphasis></para>
 			
 			<itemizedlist>
@@ -1719,7 +1644,7 @@ debdiff &lt;oldpackage&gt;.deb &lt;newpackage&gt;.deb &gt; package.debdiff
 						<listitem><para>The directory inside the tarball is not named
 								&lt;upstream&gt;-&lt;version&gt;.</para></listitem>
 				
-						<listitem><para>There is no subdirectory inside the tarball.</para></listitem>
+						<listitem><para>Es existiert kein Unterverzeichnis in dem Tarballs</para></listitem>
 					</itemizedlist>
 			
 				</listitem>
@@ -1756,9 +1681,9 @@ debdiff &lt;oldpackage&gt;.deb &lt;newpackage&gt;.deb &gt; package.debdiff
 		</sect2>
 
 		<sect2>
-			<title>Copyright Information</title>
+			<title>Urherberrechtsinformationen</title>
 
-			<para>The <filename>debian/copyright</filename> file should contain:</para>
+			<para>Die Datei <filename>debian/copyright</filename> sollte folgendes enthalten:</para>
 			
 			<itemizedlist>
 				

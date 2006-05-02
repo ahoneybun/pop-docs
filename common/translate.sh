@@ -32,3 +32,4 @@ for x in rosetta-preface/*; do
 done
 
 rm -rf rosetta-preface*
+rm .xml2po.mo

@@ -5,7 +5,7 @@
 <!ENTITY project-name "Ubuntu Documentation Project">
 <!ENTITY ubuntu "<phrase>Ubuntu</phrase>">
 <!-- VERSIONS --><!ENTITY distro-version "Dapper Drake">
-<!ENTITY distro-rev "6.06">
+<!ENTITY distro-rev "6.06 LTS">
 <!ENTITY distro-release-date "June 2006">
 <!ENTITY linux-kernel-version "2.6.15">
 <!ENTITY gcc-version "4.0.3">
@@ -435,13 +435,13 @@ cd ..</screen>
 		<para>만약 여러분이 소스 패키지를 (.dsc, .orig.tar.gz, and .diff.gz files) 수동으로 내려 받았다면, 다음과 같이 <application>dpkg-source</application> 를 사용하여 <application>apt-get source</application> 가 하는 같은 방법으로 패키지를 압축 풀 수 있습니다:</para>
 		<para><screen>dpkg-source -x *.dsc</screen></para>
 
-		<para>여러분이 해야할 첫 번째 일은 다음의 형식으로 원래 (때로는 "업스트림"으로 불리는) tarball의 복사본을 만드는 것 입니다: <filename>&lt;packagename&gt;_&lt;version&gt;.orig.tar.gz</filename> 이 단계는 두 가지 일을 합니다. 첫 번째, 이것은 소스 코드 두 본을 만듭니다. 만약 작업하는 복사본을 실수로 변경하거나 삭제하였다면, 여러분은 내려받은 것을 사용할 수 있습니다. 두 번째, 이것은 절대적으로 필요하지 않는 한 원래의 소스 tarball을 변경하는 것은 좋지 않은 패키징 작업으로 여겨 집니다. 사유는 <xref linkend="basic-mistakes"/> 를 보십시오.</para>
+		<para>여러분이 해야할 첫 번째 일은 다음의 형식으로 원래 (때로는 "업스트림"으로 불리는) tarball의 복사본을 만드는 것 입니다: <filename>&lt;packagename&gt;_&lt;version&gt;.orig.tar.gz  </filename></para>
 
 		<screen>
 cp hello-2.1.1.tar.gz hello_2.1.1.orig.tar.gz
 tar -xzvf hello_2.1.1.orig.tar.gz</screen>
 
-		<warning><para>패키지 이름(hello)와 버전(2.1.1) 사이에 있는 언더스크어 "_" 는 하이픈 "-"과 대조되고, 매우 중요 합니다. 하이픈 일때는 여러분의 소스 패키지는 데비안 패키지에 맞지 않게 잘못 만들어 됩니다.</para></warning>
+		<warning><para>패키지 이름(hello)와 버전(2.1.1) 사이에 있는 언더스코어 "_" 는 하이픈 "-"과 대조되고, 매우 중요 합니다. 하이픈 일때는 여러분의 소스 패키지는 데비안 패키지에 맞지 않게 잘못 만들어 됩니다.</para></warning>
 
 		<para>우리는 이제 소스 파일을 포함하는 <filename>hello-2.1.1</filename> 디렉토리를 가졌습니다. 이제 우리는 패키지 정보를 저장하고, 프로그램 소스 파일에서 분리하여 패키징 파일을 허용하는 우리가 정의한 <application>debian</application> 디렉토리를 만들 필요가 있습니다.</para>
 
@@ -1119,12 +1119,7 @@ include /usr/share/cdbs/1/class/autotools.mk</screen>
 	<sect1 id="basic-updating" status="complete">
 		<title>패키지 업데이트 하기</title>
 
-			<para>If you have been around Linux distributions for any amount
-				of time, you have realized that there are sometimes bugs in
-				programs. In the Debian and <phrase>Ubuntu</phrase> distributions, bugs are
-				often fixed through the packaging by patching the source code.
-				Sometimes there are bugs in the packaging itself that can
-				cause difficulties.</para>
+			<para>만약 여러분이 어느 정도의 시간 동안 리눅스 배포판을 사용하였다면, 여러분은 때때로 프로그램들에 버그가 있다는 것을 깨달았을 겁니다. 데비안과 <phrase>우분투</phrase> 배포판에서는, 버그는 소스 코드를 패칭하는 것으로 패키징을 통해 종종 고쳐지게 됩니다. 때로는 패키징 자체에 있는 버그가 문제를 일으키기도 합니다.</para>
 
 			<para>To patch the program's source code, you could simply download
 				the current <phrase>Ubuntu</phrase> source package (with
@@ -1141,12 +1136,7 @@ include /usr/share/cdbs/1/class/autotools.mk</screen>
 				contains your changes. A problem with this approach is that
 				the distinction between source and patches is unclear.</para>
 
-			<para>A solution to this problem is to separate the changes to the
-				source code into individual patches stored in the
-				<filename>debian</filename> directory. One such patch system
-				is called <application>dpatch</application>. The patches are
-				stored in the <filename>debian/patches/</filename> directory
-				and have a special format.</para>
+			<para>이 문제의 해결책은 소스 코드의 변경을 각각의 <filename>debian</filename> 디렉토리로 저장할 패치들로 나누는 것 입니다. 하나의 이러한 패치 시스템은 <application>dpatch</application> 로 불려집니다. 패치들은 <filename>debian/patches/</filename> 디렉토리에 저장되고 특별한 형식을 가지고 있습니다.</para>
 
 			<para><application>dpatch</application> 를 만들기 위해, 다음의 단계를 순서적으로 수행 합니다.</para>
 
@@ -1184,11 +1174,7 @@ rm -rf tmp
 
 			<note><para>여러분은 또한 <application>dpatch-edit-patch</application> 를 사용하여 이미 존재하는 패치를 편집할 수 있습니다.</para></note>
 			
-		<para>Once all the changes have been made, a changelog entry added,
-			and <application>dpatch</application> added to the
-			<filename>debian/control</filename> file (if needed), then you can
-			rebuild the source package with <application>debuild
-				-S</application>.</para>
+		<para>모든 변경이 만들어지고, changelog 항목도 추가되고, (필요한 경우) <application>dpatch</application> 도 <filename>debian/control</filename> 파일에 더해진 후, 여러분은 <application>debuild -S</application> 를 가지고 소스 패키지를 다시 만들 수 있습니다.</para>
 
 		<para>To get your fixed source package uploaded to the <phrase>Ubuntu</phrase>
 			repositories, you will need to get your source package sponsored by
@@ -1224,28 +1210,14 @@ debdiff &lt;oldpackage&gt;.deb &lt;newpackage&gt;.deb &gt; package.debdiff
 		<sect2 id="basic-ex_files">
 			<title>dh_make 예제 파일</title>
 			
-			<para>When you use dh_make to create the initial "debianization", example files
-				for various tasks are created in the <filename>debian/</filename>
-				directory. The templates have a .ex extension. If you want to use one,
-				rename it to remove the extension. If you do not need it, remove it to
-				keep the <filename>debian/</filename> directory clean.</para>
+			<para>여러분이 초기 "데비안화"를 만들기 위하여 dh_make를 사용할 때, 다양한 작업을 위한 예제 파일은 <filename>debian/</filename> 디렉토리에 만들어 집니다. 그 양식들은 .ex 확장자를 가지고 있습니다. 만약 여러분이 하나를 사용하기를 원한다면, 그것은 확장자를 제거하여 이름을 변경 하십시오. 만약 그것이 필요하지 않다면, <filename>debian/</filename> 디렉토리를 깨끗하게 유지하기 위하여 그것을 삭제 하십시오.</para>
 
 		</sect2>
 
 		<sect2 id="basic-orig-tarball">
 			<title>원래의 Tarball 변경 하기</title>
 
-			<para>There are two types of source packages, native and non-native.
-				A native package is one that is specific to <phrase>Ubuntu</phrase>/Debian. It has the
-				<application>debian/</application> directory containing the packaging
-				information and any changes to the source included in the tarball (usually
-				&lt;packagename&gt;_&lt;version&gt;.tar.gz). Non-native packages are more
-				common. A non-native package splits
-				the source package into a &lt;packagename&gt;_&lt;version&gt;.orig.tar.gz
-				tarball that is identical (hopefully including md5sum) to the source
-				tarball downloaded from the project's homepage and a .diff.gz file that
-				contains all the differences (<filename>debian/</filename> directory and
-				patches) from the original source tarball.</para>
+			<para>소스 패키지에는 두 종류가 있습니다, 네이티브와 네이티브가 아닌 것(non-native). 네이티브 패키지는 <phrase>Ubuntu</phrase>/Debian 이 지정된 것 입니다. 그것은 패키징 정보와 tarball에 포함된 소스에 대한 어떤 변경들도 <application>debian/</application> 디렉토리에 가지고 있습니다. (항상 &lt;packagename&gt;_&lt;version&gt;.tar.gz) Non-native는 보다 일반적 입니다. 한 non-native는 소스 패키지를 프로젝트의 홈페이지에서 내려받은 소스 tarball과 동일한 하나의 &lt;packagename&gt;_&lt;version&gt;.orig.tar.gz tarball (희망적으로 md5sum도 포함하는)과 원래의 소스 tarball외에 모든 차이들을(<filename>debian/</filename> 디렉토리와 패치) 가지는 하나의 .diff.gz 파일로 분리 합니다.</para>
 
 			<para>만약 여러분이 원래의 tarball을 변경 한다면 일어날 수 있는 가능한 위험에 대한 목록이 여기에 있습니다:</para>
 		
@@ -1335,9 +1307,7 @@ debdiff &lt;oldpackage&gt;.deb &lt;newpackage&gt;.deb &gt; package.debdiff
 				
 				<listitem><para>잘못된 디렉토리 레이아웃</para>
 					
-					<note><para><application>dpkg-source</application> is quite flexible
-							and manages to produce the correct directory layout even
-							if:</para></note>
+					<note><para><application>dpkg-source</application> 는 아주 유연하고, 심지어 다음의 경우에도 정확한 디렉토리 레이아웃을 생산하는 것을 관리 합니다:</para></note>
 						
 					<itemizedlist>
 						

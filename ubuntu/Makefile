@@ -47,12 +47,15 @@ wOS=../libs/writeOwnerStatus.xsl
 
 UBUNTUCHUNKXSL=libs/ubuntu-html-chunk-cust.xsl
 UBUNTUSINGLEXSL=libs/ubuntu-html-single-cust.xsl
-PDFSTYLE=../libs/ubuntu-pdf.xsl
+PDFSTYLE=../libs/pdf/ubuntu-pdf.xsl
+LULUSTYLE=../libs/pdf/ubuntu-pdf-lulu.xsl
 
 # Base gnome directories for output from processor
 BASE=../build/ubuntu/
 
 PDFBASE=../build/pdf/ubuntu/
+
+LULUBASE=../build/lulu/ubuntu/
 
 STBASE=../build/ubuntu/status/
 
@@ -89,7 +92,7 @@ all: au dg sg server package status rn
 	cp libs/img/*png ../build/ubuntu/common/img/
 
 # This is here to select what to build for the .deb package.
-gdeb: server dg
+gdeb: 
 
 # This builds all the guides in PDF format. You need to install Java, Apache Fop, the Jimi imaging library, and other horrible non-free things to make this work
 
@@ -252,6 +255,16 @@ dg-pdf:
 	rm $(PDFBASE)C/desktopguide.fo
 	rm -rf $(PDFBASE)C/images
 
+dg-lulu:
+
+	mkdir -p $(LULUBASE)C/images
+	cp -r ../common/admon-lulu/*.png $(LULUBASE)C/images/
+
+	xsltproc --xinclude -o $(LULUBASE)C/desktopguide.fo $(LULUSTYLE) desktopguide/C/desktopguide.xml
+	fop.sh -c ../libs/pdf/userconfig.xml -fo $(LULUBASE)C/desktopguide.fo -pdf $(LULUBASE)C/desktopguide.pdf
+	rm $(LULUBASE)C/desktopguide.fo
+	rm -rf $(LULUBASE)C/images
+
 ## Server Guide
 server:
 	@echo "--- Building the Ubuntu Server Guide . . ."
@@ -293,6 +306,16 @@ server-pdf:
 	fop.sh -fo $(PDFBASE)C/serverguide.fo -pdf $(PDFBASE)C/serverguide.pdf
 	rm $(PDFBASE)C/serverguide.fo
 	rm -rf $(PDFBASE)C/images
+
+server-lulu:
+
+	mkdir -p $(LULUBASE)C/images
+	cp -r ../common/admon-lulu/*.png $(LULUBASE)C/images/
+
+	xsltproc --xinclude -o $(LULUBASE)C/serverguide.fo $(LULUSTYLE) ../generic/serverguide/C/serverguide.xml
+	fop.sh -c ../libs/pdf/userconfig.xml -fo $(LULUBASE)C/serverguide.fo -pdf $(LULUBASE)C/serverguide.pdf
+	rm $(LULUBASE)C/serverguide.fo
+	rm -rf $(LULUBASE)C/images
 
 ## Packaging Guide
 package:
@@ -336,6 +359,16 @@ package-pdf:
 	fop.sh -fo $(PDFBASE)C/packagingguide.fo -pdf $(PDFBASE)C/packagingguide.pdf
 	rm $(PDFBASE)C/packagingguide.fo
 	rm -rf $(PDFBASE)C/images
+
+package-lulu:
+
+	mkdir -p $(LULUBASE)C/images
+	cp -r ../common/admon-lulu/*.png $(LULUBASE)C/images/
+
+	xsltproc --xinclude -o $(LULUBASE)C/packagingguide.fo $(LULUSTYLE) ../generic/packagingguide/C/packagingguide.xml
+	fop.sh -c ../libs/pdf/userconfig.xml -fo $(LULUBASE)C/packagingguide.fo -pdf $(LULUBASE)C/packagingguide.pdf
+	rm $(LULUBASE)C/packagingguide.fo
+	rm -rf $(LULUBASE)C/images
 
 clean:
 	rm -rf $(BASE)

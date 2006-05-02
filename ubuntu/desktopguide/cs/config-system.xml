@@ -5,7 +5,7 @@
 <!ENTITY project-name "Ubuntu Documentation Project">
 <!ENTITY ubuntu "<phrase>Ubuntu</phrase>">
 <!-- VERSIONS --><!ENTITY distro-version "Dapper Drake">
-<!ENTITY distro-rev "6.06">
+<!ENTITY distro-rev "6.06 LTS">
 <!ENTITY distro-release-date "June 2006">
 <!ENTITY linux-kernel-version "2.6.15">
 <!ENTITY gcc-version "4.0.3">
@@ -607,415 +607,312 @@
 						</para>
 				</step>
 				<step>
-					<para>To access remote servers easily through <application>Nautilus</application>, add a permanent bookmark to the server by selecting
-		 					<menuchoice>
-								<guimenu>Places</guimenu>
-								<guisubmenu>Connect to Server...</guisubmenu>
-							</menuchoice> and entering the details for the remote server.
-					</para>
+					<para>Pro přístup na vzdálený server pomocí <application>Nautilus</application>, přidejte záložku na server výběrem <menuchoice><guimenu>Místa</guimenu><guisubmenu>Připojit k serveru...</guisubmenu></menuchoice> a vložte detaily pro vzdálený server.</para>
 				</step>
 			</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Change the default "Open with" program for a file type</title>
+			<title>Změna výchozího nastavení pro "Otevřít s"</title>
 			<procedure>
 				<step>
-						<para>In <application>Nautilus</application>, right click on the file and choose 
-							<menuchoice>
-								<guimenu>Properties</guimenu>
-							</menuchoice> 
-							from the menu that appears. The <guilabel>Properties</guilabel> dialog opens.</para>
+						<para>V <application>Nautilusu</application>, klikněte pravým tlačítkem na soubor a vyberte <menuchoice><guimenu>Vlastnosti</guimenu></menuchoice> z zobrayeného menu. Dialog <guilabel>Vlastnosti</guilabel> se otevře.</para>
 				</step>
 				<step>
-						<para>Click on the <guibutton>Open With</guibutton> tab. A list of applications appears.
-						</para>
+						<para>Klikněte na záložku <guibutton>Otevřít s</guibutton>. Zobrazí se seznam aplikací.</para>
 				</step>
 				<step>
-						<para>Select the default application you want for the file type. If the application is not on the list, use the <guibutton>Add</guibutton> button to add the application to the list.
-						</para>
+						<para>vyberte výchozí aplikaci pro daný soubor. Jestliže požadovaná aplikace není na seznamu, použijte tlačítko <guibutton>Přidat</guibutton> pro její přidání.</para>
 				</step>
 			</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Open files with administrative privileges from the file manager</title>
-			<para>To enable support for opening files with administrative privileges from the file manager, you need to add a <emphasis>Nautilus script</emphasis>:
-			</para>
-			<warning><para>Please note that opening files with administrative privileges constitutes a security risk. Always ensure that you are familiar with the file that you are opening.</para></warning>
+			<title>Otevírat soubory s administrátorskými právy v souborovém manažeru</title>
+			<para>Pro povolení otevírání souborů s administrátorskými právy v souborovém manažeru, potřebujete přidat <emphasis>Nautilus skript</emphasis>:</para>
+			<warning><para>Prosím mějte na paměti, že otevírání souborů s administrátorskými právy je zdrojem bezpečtnostních rizik. Vždy zajistěte, že seznámen se souborem, který se pokoušíte otevřít.</para></warning>
 			<procedure>
-				<step><para>Open a new file to edit in the relevant directory:
-						
-							<screen>gedit $HOME/.gnome2/nautilus-scripts/Open\ as\ Administrator</screen>
-					</para>
+				<step><para>Otevřít nový soubor k editaci v relevantním adresáři: <screen>gedit $HOME/.gnome2/nautilus-scripts/Open\ as\ Administrator</screen></para>
 				</step>
 				<step>
-						<para>Insert the following lines into the new file:</para>
-						<programlisting>for uri in $NAUTILUS_SCRIPT_SELECTED_URIS; do
-gksudo "gnome-open $uri" &amp;
+						<para>Vložte následující řádky do nového souboru:</para>
+						<programlisting>for uri in $NAUTILUS_SCRIPT_SELECTED_URIS; do↵
+gksudo "gnome-open $uri" &amp;↵
 done</programlisting>
 				</step>
 				<step>
-						<para>Save the edited file (<ulink url="sample/nautilus_open_as_administrator">an example</ulink>)
-						</para>
+						<para>Uložte soubor (<ulink url="../sample/nautilus_open_as_administrator">například</ulink>)</para>
 				</step>
 				<step>
-						<para>Make the edited file executable:
-							<screen>chmod +x $HOME/.gnome2/nautilus-scripts/Open\ as\ Administrator</screen>
-						</para>
+						<para>Změnte soubor tak, aby byl spustitelný: <screen>chmod +x $HOME/.gnome2/nautilus-scripts/Open\ as\ Administrator</screen></para>
 				</step>
 				<step>
-						<para>You can now open files as root by right clicking on the file and selecting 					<menuchoice>
-								<guimenuitem>Scripts</guimenuitem>
-								<guimenuitem>Open as Administrator</guimenuitem>
-							</menuchoice>
-						</para>
+						<para>Od teď můžete soubory otvírat pravým-kliknutím na soubor a vybráním <menuchoice><guimenuitem>Skripty</guimenuitem><guimenuitem>Otevřít jako administrátor</guimenuitem></menuchoice></para>
 				</step>
 			</procedure>
 		</sect2>
      <sect2 id="fonts" status="complete">
-		<title>Install Extra Fonts</title>
-				<para>This section describes how to install extra fonts from the Ubuntu archives.</para>
+		<title>Instalovat dodatečné fonty</title>
+				<para>Sekce popisuje, jak instalovat dodatečné fonty z Ubuntu archívů.</para>
 				<procedure>
 						<step>
-							<para>For <emphasis role="bold">international fonts</emphasis>, install the following packages from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>):
-							</para>
+							<para>Pro <emphasis role="bold">mezinárodní fonty</emphasis>, instalujte následující balíčky z repozitáře <emphasis>Universe</emphasis> (viz. <xref linkend="add-applications"/>):</para>
 							<para>
-								<literallayout>xfonts-intl-arabic
-xfonts-intl-asian
-xfonts-intl-chinese
-xfonts-intl-chinese-big
-xfonts-intl-european
-xfonts-intl-japanese 
-xfonts-intl-japanese-big
-xfonts-intl-phonetic
+								<literallayout>xfonts-intl-arabic↵
+xfonts-intl-asian↵
+xfonts-intl-chinese↵
+xfonts-intl-chinese-big↵
+xfonts-intl-european↵
+xfonts-intl-japanese ↵
+xfonts-intl-japanese-big↵
+xfonts-intl-phonetic↵
 								</literallayout>
 							</para>
 						</step>
 						<step>
-							<para>For <emphasis role="bold">Microsoft TrueType core fonts</emphasis>, install the <application>msttcorefonts</application> package from the <emphasis>Multiverse</emphasis> repository (see <xref linkend="add-applications"/>).
-							</para>
+							<para>Pro <emphasis role="bold">Microsoft TrueType fonty</emphasis>, instalujte balíček <application>msttcorefonts</application> z repozitáře <emphasis>Multiverse</emphasis> (viz. <xref linkend="add-applications"/>).</para>
 						</step>
 						<step>
-							<para>For <emphasis role="bold">Ghostscript fonts</emphasis>, install the <application>gsfonts-x11</application> package (see <xref linkend="add-applications"/>).
-							</para>
+							<para>Pro <emphasis role="bold">Ghostscript fonty</emphasis>, instalujte balíček <application>gsfonts-x11</application> (viz. <xref linkend="add-applications"/>).</para>
 						</step>						<step>
-							<para>After installing any new font, rebuild the font information files by typing the following at a terminal prompt:
-							</para>
+							<para>Po instalaci nového fontu, obnovte informace o fontech napsáním následujícího v terminálu:</para>
 							<screen>sudo fc-cache -f -v</screen>
 						</step>
 					</procedure>
-			<para>If you prefer to download individual fonts by hand, you can install them simply and easily by opening a file manager, and typing <application>fonts:///</application> into the location bar (See <xref linkend="nautilus-location-bar"/>). Then you can simply drag the font you downloaded into the group of existing fonts.</para>
+			<para>Jestliže prefurejete stažení fontů ručně, můžete je jednoduše nainstalovat otevřením souborového manažeru a napsáním <application>fonts:///</application> do navigačního řádku (viz. <xref linkend="nautilus-location-bar"/>). Pak jednoduše přetáhněte stažený font do skupiny existujících fontů.</para>
 		</sect2>
 		<sect2 status="complete">
-				<title>RAR Archiver</title>
+				<title>RAR archivátor</title>
 					<procedure>
 						<step>
-							<para>Install the rar package from the <emphasis>Multiverse</emphasis> repository (see <xref linkend="add-applications"/>).</para>
+							<para>Naistalujte rar balíček z repozitáře <emphasis>Multiverse</emphasis> (viz. <xref linkend="add-applications"/>).</para>
 						</step>
 						<step>
-							<para>Run:
-							<screen>
-sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen>
-							</para>
+							<para>Spusťte: <screen>↵
+sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen></para>
 						</step>
 						<step>
-							<para>To open a rar file, double click on it.
-							</para>
+							<para>Pro otevření raru, dvoj-klikněte na něj</para>
 						</step>
 					</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Advanced Desktop Applets</title>
-				<para><application>gDesklets</application> is a system for bringing mini programs (desklets), such as weather forecasts, news tickers, system information displays, or music player controls, onto your desktop, in a symbiotic relationship of eye candy and usefulness.</para>
+			<title>Pokročilé desktopové aplety</title>
+				<para><application>gDesklets</application> je systém pro mini programy (desklety), jako jsou předpověď počasí, novinky, zobrazení systémových informací nebo ovládání přehrávače, na desktopu, v symbiotickém vztahu očí a účelnosti.</para>
 				<procedure>
 					<step>
-							<para>Install the <application>gdesklets</application> and <application>gdesklets-data</application> packages from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>).
-							</para>
+							<para>Nainstalujte balíčky <application>gdesklets</application> a <application>gdesklets-data</application> z repozitáře <emphasis>Universe</emphasis> (viz. <xref linkend="add-applications"/>).</para>
 					</step>
 					<step>
-							<para>Choose: 
-								<menuchoice>
-									<guimenu>Applications</guimenu>
-									<guisubmenu>Accessories</guisubmenu>
-									<guimenuitem>gDesklets</guimenuitem>
-								</menuchoice>
-							</para>
+							<para>Vyberte:
+<menuchoice><guimenu>Aplikace</guimenu><guisubmenu>Příslušenství</guisubmenu><guimenuitem>gDesklets</guimenuitem></menuchoice></para>
 					</step>
-					<step><para>For more information, visit the <ulink url="http://www.gdesklets.org/">gDesklets website</ulink></para>
+					<step><para>Pro další informace navštivte <ulink url="http://www.gdesklets.org/">gDesklets website</ulink></para>
 					</step>
 				</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Hide Recent Documents in the Places menu</title>
-				<para>To hide <guilabel>Recent Documents</guilabel> from the <guilabel>Places</guilabel> menu, open a terminal and run the command:</para><screen>chmod 400 ~/.recently-used</screen>
-				<para>To enable it again, run the command:</para><screen>chmod 600 ~/.recently-used</screen>
+			<title>Skrytí Nedavných dokumentů v menu</title>
+				<para>Pro skrytí nabídky <guilabel>Nedávné dokumenty</guilabel> v menu <guilabel>Místa</guilabel>, otevřete terminál a spusťte příkaz:</para><screen>chmod 400 ~/.recently-used</screen>
+				<para>Pro obnovení dostupnosti spusťte příkaz:</para><screen>chmod 600 ~/.recently-used</screen>
 		</sect2>
 		<sect2 status="complete">
-			<title>Show the Computer, Home, and Trash desktop icons in GNOME</title>
+			<title>Zobrazení ikon Počítač, Domů a Koš v GNOME</title>
 				<procedure>
 					<step>
-						<para>Open the <application>Configuration Editor</application>, by running the program <filename>gconf-editor</filename> (see <xref linkend="run-application"/>).
-						</para>
+						<para>Otevřete <application>Editor konfigurace</application>, spuštěním programu <filename>gconf-editor</filename> (viz. <xref linkend="run-application"/>).</para>
 					</step>
 					<step>
-						<para>Choose
-							<menuchoice>
-								<guimenu>apps</guimenu>
-								<guisubmenu>nautilus</guisubmenu>
-								<guimenuitem>desktop</guimenuitem>
-							</menuchoice>.
-						</para>
+						<para>Vyberte <menuchoice><guimenu>apps</guimenu><guisubmenu>nautilus</guisubmenu><guimenuitem>desktop</guimenuitem></menuchoice>.</para>
 					</step>
 					<step>
-						<para>Tick the box beside <guilabel>computer_icon_visible</guilabel>, <guilabel>home_icon_visible</guilabel>, and <guilabel>trash_icon_visible</guilabel>. The changes take effect immediately.
-						</para>
+						<para>Zaškrtněte <guilabel>computer_icon_visible</guilabel>, <guilabel>home_icon_visible</guilabel> a <guilabel>trash_icon_visible</guilabel>. Změny se projeví okamžitě.</para>
 					</step>
 				</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Change my preferred email client to Mozilla Thunderbird</title>
+			<title>Změna mého preferovaného emailového klienta na Mozilla Thunderbird</title>
 			<procedure>
 				<step>
-						<para>Choose 
-<menuchoice>
-    <guimenu>System</guimenu>
-    <guimenuitem>Preferences</guimenuitem>
-    <guimenuitem>Preferred Applications</guimenuitem>
-</menuchoice>
-
-						</para>
+						<para>Vyberte <menuchoice><guimenu>Systém</guimenu><guimenuitem>Preferences</guimenuitem><guimenuitem>Preferované aplikace</guimenuitem></menuchoice></para>
 				</step>
 				<step>
-						<para>Click on the <guibutton>Mail Reader</guibutton> tab, and select the <guilabel>Custom</guilabel> option. 	</para>
+						<para>Klikněte na záložku <guibutton>Mailový program</guibutton>, a vyberte <guilabel>Uživatelské</guilabel> volby.</para>
 				</step>
 				<step>
-						<para>In the <guilabel>Command</guilabel> text box, type
-							<userinput>
-								<command>mozilla-thunderbird %s</command></userinput>, then close the dialog.
-						</para>
+						<para>V <guilabel>Příkazovém</guilabel> řádku, napište <userinput>↵
+								<command>mozilla-thunderbird %s</command></userinput>, pak zavřete dialog.</para>
 				</step>
 			</procedure>
 		</sect2>
 		<sect2 id="restartgnomewithoutreboot" status="complete">
-			<title>Restart GNOME without rebooting the computer</title>
+			<title>Restart GNOME bez restartu počítače</title>
 			<procedure>
 				<step>
-						<para>Save and close all open applications.</para>
+						<para>Uložit a zavřít otevřené aplikace.</para>
 			          </step>
 			          <step>
-            				<para>Use the <keycombo>
-						<keycap>Ctrl</keycap>
-						<keycap>Alt</keycap>
-						<keycap>Backspace</keycap>
-						</keycombo>
-							 shortcut keys to restart GNOME.
-					</para>
+            				<para>Použijte klávesovou zkratku <keycombo><keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo> pro restart GNOME.</para>
            			</step>
            			<step>
-            				<para>If <keycombo>
-                <keycap>Ctrl</keycap>
-                <keycap>Alt</keycap>
-                <keycap>Backspace</keycap>
-							</keycombo>
-              is disabled, type
-						<screen>sudo /etc/init.d/gdm restart</screen>
-            </para>
-						<para>(See <xref linkend="disableCtrlAltBackspace"/> to disable <keycombo>
-								<keycap>Ctrl</keycap>
-								<keycap>Alt</keycap>
-								<keycap>Backspace</keycap>
-							</keycombo>.)
-						</para>
+            				<para>Jestliže je <keycombo><keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo> nedostupný, napište <screen>sudo /etc/init.d/gdm restart</screen></para>
+						<para>(Viz. <xref linkend="disableCtrlAltBackspace"/> pro zakázání <keycombo><keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo>.)</para>
 				</step>
 			</procedure>
 		</sect2>
 		<sect2 id="disableCtrlAltBackspace" status="complete">
-			<title>Preventing the Ctrl-Alt-Backspace shortcut keys from restarting X</title>
+			<title>Zamezení Ctrl-Alt-Backspace v restartu X</title>
 				<procedure>
 					<step>
-						<para>Make a backup copy of your existing <filename>/etc/X11/xorg.conf</filename> file:
-							<screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup</screen>
-						</para>
+						<para>Vytvořte záložní kopii <filename>/etc/X11/xorg.conf</filename> : <screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup</screen></para>
 					</step>
 					<step>
-					<para>Open <filename>/etc/X11/xorg.conf</filename> for editing:
-						<screen>sudo gedit /etc/X11/xorg.conf</screen>
-					</para>
+					<para>Otevřete <filename>/etc/X11/xorg.conf</filename> pro eidtaci: <screen>gksudo gedit /etc/X11/xorg.conf</screen></para>
 					</step>
 					<step>
-						<para>Add the following lines to the end of the file:
-							<programlisting>Section	"ServerFlags"
-Option	"DontZap"	"yes"
-EndSection</programlisting>
-						</para>
+						<para>Vložte následující řádky na konec souboru: <programlisting>Section	"ServerFlags"↵
+Option	"DontZap"	"yes"↵
+EndSection</programlisting></para>
 					</step>
 					<step>
-						<para>Save the edited file (<ulink url="sample/xorg.conf_disablectrlaltbackspacegnome">an example</ulink>).</para>
+						<para>Uložte editovaný soubor (<ulink url="../sample/xorg.conf_disablectrlaltbackspacegnome">např.</ulink>).</para>
 					</step>
 					<step>
-						<para>The change will take effect the next time you log in to GNOME. If you want the change to take effect immediately, restart GNOME manually. (See <xref linkend="restartgnomewithoutreboot"/>.)</para>
+						<para>Změna se projeví při dalším nalogování do GNOME. Jestliže chcete, aby se změna projevila okamžitě, restartujte GNOME ručně. (viz. <xref linkend="restartgnomewithoutreboot"/>.)</para>
 					</step>
 				</procedure>
 		</sect2>
 	</sect1>
 
 <sect1 id="partitions-booting" status="complete">
-	<title>Partitions and Booting</title>
+	<title>Oddíly a bootování</title>
 			<sect2 status="complete">
-				<title>Graphical Partition Editor</title>
-					<para><application>Gparted</application> is a graphical tool to edit disk partitions.</para> 
+				<title>Grafický editor oddílů</title>
+					<para><application>Gparted</application> je grafický nástroj pro editaci diskových oddílů.</para> 
 					<procedure>
 						<step>
-							<para>Install the <application>gparted</application> package (see <xref linkend="add-applications"/>).</para>
+							<para>Nainstalujte balíček <application>gparted</application> (viz. <xref linkend="add-applications"/>).</para>
 						</step>
 						<step>	
-							<para>You can run the application with 
-<menuchoice>
-	<guimenu>System</guimenu>
-	<guisubmenu>Administration </guisubmenu>
-	<guimenuitem>Gnome Partition Editor</guimenuitem>
-</menuchoice>
-.
-							</para>
+							<para>Aplikaci můžete spustit pomocí <menuchoice><guimenu>Systém</guimenu><guisubmenu>Správa </guisubmenu><guimenuitem>Editor oddílů pro Gnome</guimenuitem></menuchoice> .</para>
 						</step>
 					</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Make partitions available from Ubuntu</title>
-				<para>Windows and other partitions should be automatically available from any Ubuntu system. If they are not, you can enable them using the graphical disks tool.</para>
+			<title>Vytvořit oddíly dostupné z Ubuntu</title>
+				<para>Windowsovské  a jiné oddíly by měli být automaticky dostupné z Ubuntu. Jestliže tomu tak není, můžete použít grafický diskový nástroj.</para>
 				<procedure>
 					<step>
-						<para>Open 
-<menuchoice>
-    <guimenu>System</guimenu>
-    <guimenuitem>Administration</guimenuitem>
-    <guimenuitem>Disks</guimenuitem>
-</menuchoice>
-</para>
+						<para>Otevřete <menuchoice><guimenu>Systém</guimenu><guimenuitem>Správa</guimenuitem><guimenuitem>Disky</guimenuitem></menuchoice></para>
 					</step>
 					<step>
-						<para>Select the correct hard disk, and click the <guilabel>Partitions</guilabel> tab.</para>
+						<para>Vyberte správný hard disk, a kliněte na <guilabel>Oddíly</guilabel>.</para>
 					</step>
 					<step>
-						<para>Select the relevant partition, and click <guilabel>Enable</guilabel>.</para>
+						<para>Vyberte příslušný oddíl a klikněte na <guilabel>Povolit</guilabel>.</para>
 					</step>
 					<step>
-						<para>To unmount the partition, click <guilabel>Disable</guilabel>.</para>
+						<para>Pro odpojení oddílu klikněte na <guilabel>Zakázat</guilabel>.</para>
 					</step>
 				</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Make partitions automatically available</title>
-				<para>Again, Windows and other partitions should be automatically available from Ubuntu. If they are not, the following procedure will make them automatically available:</para>
+			<title>Vytvořit oddíly automaticky dostupné</title>
+				<para>Windowsovské a jiné oddíly by měly být v Ubuntu dostupné automaticky. Jestliže tomu tak není, následující postup to zajistí:</para>
 				<procedure>
 					<step>
-						<para>Read <xref linkend="listpartitiontables"/>
-						</para>
+						<para>Čtěte <xref linkend="listpartitiontables"/></para>
 					</step>
 					<step>
-						<para>First make a directory where the partition can be made available ("mounted"):</para>
+						<para>Nejprve vytvořte adresář v kterém bude oddíl dostupný ("připojený"):</para>
 							<screen>
-sudo mkdir /media/windows
+↵
+sudo mkdir /media/windows↵
 							</screen>
 					</step>
 					<step>
-						<para>Next, backup your disk configuration file and open the file in a text editor with administrative privileges:
-						</para>
+						<para>Dále, zálohujte soubor s konfigurací disků a otevřete ho s administrátorskými právy:</para>
 						<screen>
-sudo cp /etc/fstab /etc/fstab_backup
-sudo gedit /etc/fstab
+↵
+sudo cp /etc/fstab /etc/fstab_backup↵
+gksudo gedit /etc/fstab↵
 						</screen>
 					</step>
 					<step>
-						<para>Append the following line at the end of file:
-							<programlisting>/dev/hda1 /media/windows ntfs umask=0222 0 0</programlisting>
-						</para>
+						<para>Vložte následující řádek na konec souboru: <programlisting>/dev/hda1 /media/windows ntfs umask=0222 0 0</programlisting></para>
 						<note>
-							<para>Replace <emphasis role="bold">/dev/hda1</emphasis> with the correct device name for your partition.</para>
-							<para>If your Windows partition uses the FAT32 filesystem, replace <emphasis role="bold">ntfs</emphasis> with <emphasis role="bold">vfat</emphasis> in the above command.</para>
-							<para>If you have a FAT32 filesystem, it is also safe to allow read-write access. To do this, change the value of <emphasis role="bold">umask</emphasis> to 0000.</para>
+							<para>Nahraďte <emphasis role="bold">/dev/hda1</emphasis> správným jménem oddílu.</para>
+							<para>Jestliže Windows oddíl používá FAT32 jako souborový systém, nahraďte <emphasis role="bold">ntfs</emphasis> za <emphasis role="bold">vfat</emphasis> ve výše uvedeném příkazu .</para>
+							<para>Jestliže máte souborový systém FAT32, je také bezpečné povolit čtění i zápis. Abyste to mohli provést, změnte hodnotu <emphasis role="bold">umask</emphasis> na 0000.</para>
 						</note>
 					</step>
 					<step>
-						<para>Save the edited file (<ulink url="sample/fstab_automountntfs">an example</ulink>)</para>
+						<para>Uložte editovaný soubor (<ulink url="../sample/fstab_automountntfs">např.</ulink>)</para>
 					</step>
 					<step>
-						<para>The changes will take effect when the computer is restarted.</para>
+						<para>Změny se projeví po restartu počítače.</para>
 					</step>
 				</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Run a system command automatically at startup</title>
-				<para>Sometimes it can be useful to add a custom command to the startup process so that your computer executes it on every boot. To do this:</para>
+			<title>Spuštění systémových příkazů automaticky při startu</title>
+				<para>Někdy může být užitečné přidat vlastní příkazy do startovacího procesu, tak že je bude počítač provádět při každém zavádění. Uděláte to takto:</para>
 				<procedure>
 					<step>
-						<para>Edit the <application>crontab</application> with administrative privileges (see <xref linkend="root-and-sudo"/>):</para>
+						<para>Editujte <application>crontab</application> s administrátorskými právy (viz. <xref linkend="root-and-sudo"/>):</para>
 							<screen>sudo crontab -e</screen>
 					</step>
 					<step>
-						<para>Insert the following line:</para>
+						<para>Vložte následující řádek:</para>
 							<screen>@reboot /home/user/command</screen>
 					<note>
-						<para>Replace <filename>/home/user/command</filename> with the full address to your command.</para>
+						<para>Nahraďte <filename>/home/user/command</filename> za úplnou cestu k vašemu příkazu</para>
 					</note>
 					</step>
 					<step>
-						<para>Save the file and exit.</para>
+						<para>Uložte soubor a ukončete editaci.</para>
 					</step>
 				</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Change default Operating System at boot</title>
-				<para>To change the Operating System which starts by default when booting, it is necessary to edit the configuration file for booting.</para>
+			<title>Změna výchozí Systému při zavádění</title>
+				<para>Pro změnu Systému, který bude startovat jako výchozí při zavádění, je nutné  změnit konfigurační soubor pro zavádění.</para>
 				<procedure>
 					<step>
-						<para>Make a backup of your boot configuration file, and open it in a text editor:</para>
-							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
-sudo gedit /boot/grub/menu.lst</screen>
+						<para>Vytvořte zálohu konfiguračního souboru pro zavádění a otevřete ho v textovém editoru:</para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup↵
+gksudo gedit /boot/grub/menu.ls</screen>
 					</step>
 					<step>
-						<para>Find this line:</para>
-						<programlisting>...
-default 0
+						<para>Najděte tuto řádku:</para>
+						<programlisting>...↵
+default 0↵
 ...</programlisting>
 					</step>
 					<step>
-						<para>Replace with the following line:</para>
+						<para>Nahraďte ji následující:</para>
 						<programlisting>default X_sequence</programlisting>
 					</step>
 					<step>
-						<para>
-							Save the edited file (<ulink url="sample/menu.list_changedefaultosgrub">an example</ulink>)
-						</para>
+						<para>Uložte editovaný soubor (<ulink url="../sample/menu.list_changedefaultosgrub">an example</ulink>)</para>
 					</step>
 				</procedure>
 		</sect2>
 		<sect2 status="complete">
-			<title>Permanently disable/enable boot-up services</title>
-				<para>This requires administrative privileges (see <xref linkend="root-and-sudo"/>).</para>
+			<title>Trvalé zakázání/povolení zaváděných služeb</title>
+				<para>Toto vyžaduje administrátorská práva (viz. <xref linkend="root-and-sudo"/>).</para>
 				<procedure>
 					<step>
-						<para>Run <application>Services Settings</application>:
-							<menuchoice>
-								<guimenu>System</guimenu>
-								<guisubmenu>Administration</guisubmenu>
-								<guimenuitem>Services</guimenuitem>
-							</menuchoice>.
-						</para>
+						<para>Spusťte <application>Nastavení služeb</application>:
+<menuchoice><guimenu>Systém</guimenu><guisubmenu>Správa</guisubmenu><guimenuitem>Služby</guimenuitem></menuchoice>.</para>
 					</step>
 					<step>
-						<para>Enter your password.</para>
+						<para>Vložte své heslo.</para>
 					</step>
 					<step>
-						<para>Tick/untick the services you want running, then click <guibutton>OK</guibutton> when done.</para>
+						<para>Zaškrtnšte/odškrtněte služby které spouštět, pak klikněte na <guibutton>OK</guibutton>.</para>
 					</step>
 					<step>
-						<para>For greater control over the boot-up services, install the <application>bum</application> from the Universe repository (see <xref linkend="add-applications"/>) and run it:
-							<menuchoice>
-								<guimenu>System</guimenu>
-								<guisubmenu>Administration</guisubmenu>
-								<guimenuitem>Boot-up Manager</guimenuitem>
-							</menuchoice>.
-						</para>
+						<para>Pro větší kontrolu nad službami při zavádění, instalujte <application>bum</application> z repozitáře Universe (viz. <xref linkend="add-applications"/>) a spusťte ji:
+<menuchoice><guimenu>Systém</guimenu><guisubmenu>Správa</guisubmenu><guimenuitem>Správce zavádění</guimenuitem></menuchoice>.</para>
 					</step>
 				</procedure>
 		</sect2>
@@ -1024,118 +921,108 @@ default 0
 	<sect1 id="hardware" status="complete">
 		<title>Hardware</title>
 		<sect2 id="digital-cameras" status="complete">
-			<title>Digital Cameras</title>
-				<para>Most USB digital cameras will be automatically detected by Ubuntu. Simply plug in and switch on your USB digital camera, Ubuntu will then ask you if you would like to import the photos from your camera. Click on <guibutton>Import</guibutton>, Ubuntu will then show you a preview of your photos. Choose a location to save your photos to, then click on <guibutton>Import</guibutton>, Ubuntu will then save your photos to your hard drive.</para>
-				<para>If you do not get the auto-import popup with your camera, it might be worth starting <application>gThumb</application> and trying 
-					<menuchoice>
-						<guimenu>File</guimenu>
-						<guimenuitem>Import Photos...</guimenuitem>
-					</menuchoice>. See <xref linkend="gthumb"/> for more on <application>gThumb</application>. 
-				</para>
+			<title>Digitální fotoaparáty</title>
+				<para>Mnoho USB digitálních fotoaparátů bude Ubuntu automaticky detekováno. Jednoduše připojte a zapněte USB digitální fotoaparát, Ubuntu se zeptá, zda chcete načíst fotky z fotoaparátu. Kilkněte na <guibutton>Načíst</guibutton>, Ubuntu ukáže náhled na fotky. Vyberte umístění, kam chcete uložit fotky, pak klikněte na <guibutton>Načíst</guibutton>, Ubuntu uloží fotky na disk.</para>
+				<para>Jestliže se nezobrazí okno o auto-importu, spusťte <application>gThumb</application> a zkuste <menuchoice><guimenu>Soubor</guimenu><guimenuitem>Načíst fotky...</guimenuitem></menuchoice>. Viz. <xref linkend="gthumb"/> pro více informací o <application>gThumb</application>.</para>
 		</sect2>
 
 		<sect2 id="graphics-cards" status="complete">
-			<title>3D Graphic Cards</title>
+			<title>3D gafické karty</title>
 				<sect3 id="video-acceleration-introduction">
-					<title>Introduction to 3D Video Acceleration</title>
-					<para>Most video hardware should work automatically with Ubuntu. However with some types of video hardware, 3D acceleration (which is needed by some games) will not be supported automatically. This section details how to get this working with some popular video hardware.</para>
-					<para>The first step is to find out whether 3D acceleration is working.</para>
+					<title>Úvod do 3D akcelerace</title>
+					<para>Mnoho karet by mělo v Ubuntu pracovat automaticky. Ačkoli s některými kartami, 3D akcelerace (je vyžadována některými hrami) nebude podporována automaticky. Tenot odstavec popisuje jak, ji zprovoznit s některými kartami.</para>
+					<para>První krok je zjistit zda 3D akcelerace pracuje.</para>
 					<procedure>
-						<step><para>To do this, enter in a terminal:<screen>glxinfo | grep rendering</screen></para></step>
-						<step><para>If 3D acceleration is working, the following will be displayed:<screen>direct rendering: Yes</screen></para></step>
-						<step><para>If not, follow the instructions in the following sections to activate 3D acceleration.</para></step>
+						<step><para>Pro to je třeba napsat v terminálu:<screen>glxinfo | grep rendering</screen></para></step>
+						<step><para>Jestliže 3D akcelerace pracuje, následující bude zobrazeno:<screen>direct rendering: Yes</screen></para></step>
+						<step><para>Jestliže ne, pomocí instrukcí v následujícím odstavci aktivujte 3D akceleraci.</para></step>
 					</procedure>
 				</sect3>
         	       	 <sect3 id="nvidia" status="complete">
-        		        <title>3D Nvidia Video Card Driver</title>
-					<para>No Nvidia Video cards have 3D acceleration enabled automatically with Ubuntu, because the manufacturer does not release open source drivers. However, it is possible to activate 3D acceleration. The process depends on which type of video card you have.</para>
+        		        <title>3D Nvidia karty</title>
+					<para>Nvidia karty nemají 3D akceleraci v Ubuntu automaticky povolenou, protože výrobce nevytváří open source ovladače. Přesto je možné 3D akceleraci aktivovat. Postup závisí na typu karty.</para>
         		            <procedure>
-						<step><para><emphasis role="bold">If you have an older TNT, TNT2, TNT Ultra, GeForce1 or GeForce2 card,</emphasis> install the <application> nvidia-glx-legacy</application> and <application>nvidia-settings</application> packages from the <emphasis>Restricted</emphasis> repository (see <xref linkend="add-applications"/>).</para></step>
+						<step><para><emphasis role="bold">Jestliže máte starší TNT, TNT2, TNT Ultra, GeForce1 nebo GeForce2 kartu,</emphasis> instaujte balíčky <application> nvidia-glx-legacy</application> a <application>nvidia-settings</application> z repozitáře <emphasis>Restricted</emphasis> (viz. <xref linkend="add-applications"/>).</para></step>
         		                <step>
-				<para><emphasis role="bold">Alternatively, if you have a newer card,</emphasis> install the <application>nvidia-glx</application> package from the <emphasis>Restricted</emphasis> repository (see <xref linkend="add-applications"/>).
-				</para> 
+				<para><emphasis role="bold">Alternativně, jestliže máte novější kartu,</emphasis> instaujte balíček <application>nvidia-glx</application> z repozitáře <emphasis>Restricted</emphasis> (viz. <xref linkend="add-applications"/>).</para> 
                         </step>
                         <step>
-                            <para>To enable the new driver, run the following command in a terminal:
-                                <screen>
-sudo nvidia-glx-config enable </screen>
-                            </para>
+                            <para>Pro povolení nového ovladače, spusťte následující příkaz v konzoli: <screen>↵
+sudo nvidia-glx-config enable </screen></para>
                         </step>
                         <step>
-                            <para>You may adjust the settings of the new drivers by running the application <application>nvidia-settings</application> (see <xref linkend="run-application"/>). If you wish, add a menu entry for this program (see <xref linkend="menu-editing"/>).</para>
+                            <para>Nastavit nový ovladač můžete aplikací <application>nvidia-settings</application> (viz. <xref linkend="run-application"/>). Jestliže chcete, přidejte pro program položku v menu (viz. <xref linkend="menu-editing"/>).</para>
                         </step>
                     </procedure>
             </sect3>
             <sect3 id="installatidriver" status="complete">
-                <title>3D ATI Video Card Driver</title>
-			<para>Many ATI video cards work well with Ubuntu automatically. To check that 3d acceleration works with your card, see <xref linkend="video-acceleration-introduction"/>. If it does not work, this procedure should activate it.</para>
+                <title>3D ATI karty</title>
+			<para>Mnoho ATI karet pracuje v Ubuntu automaticky dobře. Kontrola zda 3d akcelerace pracuje viz. <xref linkend="video-acceleration-introduction"/>. Jestliže nepracuje, tento postup by ji měl aktivovat.</para>
 			<procedure>
                         <step>
- 				<para>Install the <application>xorg-driver-fglrx</application> package from the <emphasis>Restricted</emphasis> repository (see <xref linkend="add-applications"/>).</para> 
+ 				<para>Instalujte balíček <application>xorg-driver-fglrx</application> z repozitáře <emphasis>Restricted</emphasis> (viz. <xref linkend="add-applications"/>).</para> 
                         </step>
 			<step>
-			    <para>You now need to configure the computer to use the new driver so run this command in a terminal:<screen>
+			    <para>Nyní potřebujete nakonfigurovat počítač, aby používal nový ovladač, takže v terminálu napište:<screen>↵
 sudo dpkg-reconfigure xserver-xorg</screen></para>
 			</step>
 			<step>
-			    <para>When the dialogue appears and asks whether to do automatic detection of your video, pick <guibutton>Yes</guibutton>.</para>
+			    <para>Poté co se objeví dialog a zeptá se, zda má automatikcy detekovat kartu, vyberte <guibutton>Ano</guibutton>.</para>
 			</step>
 			<step>
-			    <para>When asked to select a driver, pick <guibutton>fglrx</guibutton>.</para>
+			    <para>Poté se zeptá na výběr ovladače, vyberte <guibutton>fglrx</guibutton>.</para>
 			</step>
 			<step>
-			    <para>Follow the remaining instructions as appropriate.</para>
+			    <para>Držte se zbývajících instrukcí.</para>
 			</step>
 			<step>
-			    <para>Restart your machine for changes to take effect.</para>
+			    <para>Restartuje počítač, aby se změna projevila.</para>
 			</step>
 			</procedure>
 	    </sect3>
 	    </sect2>
 	    <sect2 status="complete">
-			<title>Keyboard Layouts</title>
-				<para>This section deals with adding keyboard layouts to your system, and switching between them easily.</para>
+			<title>Rozvržení klávesnice</title>
+				<para>Tato část popisuje přidání rozvržení klávesnice v systému a přepínání mezi nimi.</para>
 			<sect3>
-				<title>Add a Layout</title>
-				<para>To add a keyboard layout to your system:</para>
+				<title>Přidat rozvržení</title>
+				<para>Pro přidání rozvržení klávesnice:</para>
 					<procedure>
 						<step>
-							<para>Go to <menuchoice><guimenu>System</guimenu><guisubmenu>Preferences</guisubmenu><guimenuitem>Keyboard</guimenuitem></menuchoice>
-							</para>
+							<para>Jděte na <menuchoice><guimenu>Systém</guimenu><guisubmenu>Nastavení</guisubmenu><guimenuitem>Klávesnice</guimenuitem></menuchoice></para>
 						</step>
-						<step><para>Choose <guibutton>Layouts</guibutton></para></step>
-						<step><para>Press <guibutton>Add...</guibutton> to add further keyboard layouts. It is simpler to have two layouts; the maximum is currently four.</para></step>
-						<step><para>Close the dialogue.</para></step>
+						<step><para>Vyberte <guibutton>Rozvržení</guibutton></para></step>
+						<step><para>Stiskněte <guibutton>Přidat...</guibutton> pro přidání dalších rozvržení. Jednoduší je mít dvě rozvržení; maximum je aktuálně čtyři.</para></step>
+						<step><para>Zavřete dialog.</para></step>
 					</procedure>
 			</sect3>
 			<sect3>
-				<title>Switch Keyboard Layouts</title>
-				<para>To switch between keyboard layouts, you can set a key combination:</para>
+				<title>Přepínání rozvržení</title>
+				<para>Pro přepínání mezi rozvrženími, můžete nastavit klávesovou zkratku:</para>
 					<procedure>
 						<step>
-							<para>Go to <menuchoice><guimenu>System</guimenu><guisubmenu>Preferences</guisubmenu><guimenuitem>Keyboard</guimenuitem></menuchoice>
-							</para>
+							<para>Jděte na <menuchoice><guimenu>Systém</guimenu><guisubmenu>Nastavení</guisubmenu><guimenuitem>Klávesnice</guimenuitem></menuchoice></para>
 						</step>
-						<step><para>To configure your layouts, choose <guibutton>Layout Options</guibutton></para></step>
-						<step><para>Expand the <guilabel>Group Shift/Lock behaviour</guilabel> option</para></step>
-						<step><para>Choose the key combination that enables you to switch between keyboard layouts. The default is by pressing both Alt keys at the same time. A common alternative is to use <keycombo><keycap>Alt</keycap><keycap>Shift</keycap></keycombo>.</para></step>
-						<step><para>Close the dialogue</para></step>
-						<step><para>You can now use your key combination to switch between keyboard layouts.</para></step>
+						<step><para>Pro konfiguraci rozvržení, vyberte <guibutton>Volby rozvržení</guibutton></para></step>
+						<step><para>Rozviňte <guilabel>Chování skupiny Shift/Lock</guilabel></para></step>
+						<step><para>Vyberte klávesovou zkratku, kterou budete přepínat mezi rozvrženími. Výchozí je stisknutí Alt současně. Alternativa je používat <keycombo><keycap>Alt</keycap><keycap>Shift</keycap></keycombo>.</para></step>
+						<step><para>Zavřete dialog</para></step>
+						<step><para>Odteď můžete používejte klávesovou zkratku pro přepínání mezi rozvrženími.</para></step>
 					</procedure> 
 			</sect3>
 			<sect3>
-				<title>Keyboard Indicator</title>
-				<para>Alternatively add the <application>Keyboard Indicator applet</application> to your panel:</para>
+				<title>Indikátor klávesnice</title>
+				<para>Alternativně přidejte <application>aplet Indikátor klávesnice</application> na panel:</para>
 					<procedure>
-						<step><para>Right-click on an empty space on the panel where you want to add the applet</para></step>
-						<step><para>Click <guibutton>Add to Panel...</guibutton></para></step>
-						<step><para>Choose <guilabel>Keyboard Indicator</guilabel> from the Utilities section</para></step>
-						<step><para>You can now right-click on the <application>Keyboard Indicator</application> to manage your keyboard layouts.</para></step>
+						<step><para>Pravým klikněte na prázdné místo na panelu, kde chcete přidat applet</para></step>
+						<step><para>Klikněte <guibutton>Přidejte na panel...</guibutton></para></step>
+						<step><para>Vyberte <guilabel>Indikátor klávesnice</guilabel> ze sekce Pomůcky</para></step>
+						<step><para>Můžete pravým-kliknutím na <application>Indikátor klávesnice</application> spravovat rozvržení.</para></step>
 					</procedure>
 			</sect3>
 		</sect2>
         <sect2 id="wireless-cards" status="complete">
-            <title>Wireless Cards</title>
+            <title>Bezdrátové karty</title>
             <para>Many wireless cards are automatically detected by Ubuntu during installation. A complete listing of wireless cards which work with Ubuntu can be found on <ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsWirelessNetworkCards">Ubuntu Wiki</ulink>. Please add your wireless card to the list if it works with Ubuntu.</para> 
             <para>Some cards may not work automatically with Ubuntu. If this is the case, please look at the <ulink url="https://wiki.ubuntu.com/WirelessTroubleshootingGuide">Wireless Troubleshooting Guide</ulink> on the Ubuntu Wiki which is an excellent resource for troubleshooting wireless cards.
             </para>
@@ -1143,108 +1030,88 @@ sudo dpkg-reconfigure xserver-xorg</screen></para>
             </para>
         </sect2> 
 	    <sect2 id="modems" status="complete">
-		<title>Modems</title>
+		<title>Modemy</title>
 		<sect3 id="winmodems" status="complete">		
-			<title>Winmodems</title>
-				<para>Most winmodems are not supported by Ubuntu, but drivers can be found that will enable the use of such modems. First you need to identify what chipset your winmodem is using:</para>
+			<title>Winmodemy</title>
+				<para>Mnoho winmodemů není v Ubuntu podporováno, ale můžete nalézt ovladače pro jejich používání. Nejprve potřebujete identifikovat jaký chipset winmodem používá:</para>
 				<para>
 <screen>
-wget -c <ulink url="http://linmodems.technion.ac.il/packages/scanModem.gz">http://linmodems.technion.ac.il/packages/scanModem.gz</ulink> 
-gunzip -c scanModem.gz &gt; scanModem 
-chmod +x scanModem
-sudo ./scanModem 
+↵
+wget -c <ulink url="http://linmodems.technion.ac.il/packages/scanModem.gz">http://linmodems.technion.ac.il/packages/scanModem.gz</ulink> ↵
+gunzip -c scanModem.gz &gt; scanModem ↵
+chmod +x scanModem↵
+sudo ./scanModem ↵
 gedit Modem/ModemData.txt</screen>
 				</para>
-				<para>Read this file, it should list what modem chipset you have. Once you are aware of the chipset you have, see <ulink url="http://www.linmodems.org/">http://www.linmodems.org/</ulink> and follow the directions for your modem. More infomation can be found at <ulink url="https://wiki.ubuntu.com/SettingUpModems">SettingUpModems</ulink> on the Ubuntu Wiki.</para>
+				<para>Přečtěte si soubor, měl by obsahovat chipset modemu, který máte. Až to zjistíte, přejděte na <ulink url="http://www.linmodems.org/">http://www.linmodems.org/</ulink> a následujte instrukce pro Váš modem. Další informace naleznete na Ubuntu Wiki <ulink url="https://wiki.ubuntu.com/SettingUpModems">SettingUpModems</ulink></para>
 		</sect3>
 		<sect3 id="adsl" status="complete">
-		<title>ADSL Modems</title>
-			<para>All PPPOE and router-style ADSL modems are supported by Ubuntu (that use ethernet for the connections), and some USB ADSL modems are supported too. For router-style ADSL modems, just connect it up, configure the modem as per your ISPs instructions and configure networking in Ubuntu. For information on PPPOE modems see <ulink url="https://wiki.ubuntu.com/ADSLPPPoE">this guide</ulink> on the Ubuntu wiki.</para>
+		<title>ADSL modemy</title>
+			<para>Všechny PPPOE a routerové ADSL modemy jsou podporovány Ubuntu (používají ethernetové připojení), a některé USB ADSL modemy jsou také podporovány. Pro routerové ADSL modemy, připojte ho, konfigurujte modem podle instrukcí poskytovatele připojení a konfigurujte siť v Ubuntu. Pro informace o PPPOE modemech navštivte <ulink url="https://wiki.ubuntu.com/ADSLPPPoE">this guide</ulink> na Ubuntu wiki.</para>
 		</sect3>
 	  </sect2>
 	  <sect2 id="printers" status="complete">
-	  	<title>Printers</title>
-	  		<para>Some printers will be automatically detected by Ubuntu; for those that are not, choose 
-	  			
-<menuchoice>
-    <guimenu>System</guimenu>
-    <guimenuitem>Administration</guimenuitem>
-    <guimenuitem>Printing</guimenuitem>
-</menuchoice>
-
-			then choose 
-				<menuchoice>
-					<guimenu>Printer</guimenu>
-					<guimenuitem>Add Printer</guimenuitem>
-				</menuchoice>
-			and run the Printer Install Wizard.
-	  		</para>
-	  		<para>There are some printers that need further setup. Search the databases at <ulink url="http://www.linuxprinting.org/">LinuxPrinting.org</ulink> or check the <ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsPrinters">Ubuntu Wiki's Printer page</ulink> for possible information on your printer.
-	  		</para>
+	  	<title>Tiskárny</title>
+	  		<para>Některé tiskárny budou v Ubuntu automatikcy detekovány; pro ty co ne, vyberte <menuchoice><guimenu>Systém</guimenu><guimenuitem>Správa</guimenuitem><guimenuitem>Tisk</guimenuitem></menuchoice> pak vyberte <menuchoice><guimenu>Tiskárna</guimenu><guimenuitem>Přidat tiskárnu</guimenuitem></menuchoice> a spusťte průvodce Instalace tiskárny.</para>
+	  		<para>Některé tiskárny potřebují další nastavení. Prohledejte databázi na <ulink url="http://www.linuxprinting.org/">LinuxPrinting.org</ulink> nebo zkontrolujte <ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsPrinters">Ubuntu Wiki's Printer page</ulink> pro možné informace a Vaší tiskárně.</para>
 	  </sect2>
 
 	<sect2 id="other-hardware" status="complete">
-	    <title>Other Tips</title>
+	    <title>Jiné tipy</title>
 	    <sect3 id="listpartitiontables" status="complete">
-                <title>Check disk space usage and view the partition table</title>
+                <title>Kontrola využití disku a prohlídka tabulky oddílů</title>
                     <procedure>
                         <step>
-                            <para>Launch 
-<menuchoice>
-    <guimenu>System</guimenu>
-    <guimenuitem>Administration</guimenuitem>
-    <guimenuitem>Disks</guimenuitem>
-</menuchoice>
- </para>
+                            <para>Spusťte <menuchoice><guimenu>Systém</guimenu><guimenuitem>Správa</guimenuitem><guimenuitem>Disky</guimenuitem></menuchoice></para>
                         </step>
                         <step>
-                            <para>Select the <guibutton>Harddrive</guibutton>, then the <guibutton>Partitions</guibutton> tab</para>
+                            <para>Vyberte <guibutton>Pevný disk</guibutton>, pak záložku <guibutton>Oddíly</guibutton></para>
                         </step>
                         <step>
-                            <para>Each partition will be listed under <guilabel>Partition List</guilabel>, with disk space and mount point.</para>
+                            <para>Každý oddíl bude vylistován v <guilabel>Seznam oddílů</guilabel>, s diskovým prostorem a připojovacím bodem.</para>
                         </step>
                     </procedure>
             </sect3>
             <sect3 status="complete">
-                <title>List devices</title>
+                <title>Seznam zařízení</title>
                     <procedure>
                         <step>
-                            <para>To list mounted devices, run the following command in a terminal:</para>
+                            <para>Pro seznam připojených zařízení, spusťte následující příkaz v terminálu:</para>
                                <screen>mount</screen>
-			    <para>The listing shows the device (such as a hard disk partition), the mount point (where you access the files), the filesystem type and the mount options.</para>
-                            <para>This example shows the hda2 hard disk partition mounted as '/', with the filesystem type ext3. The partition is mounted with two options, one to allow the device to be read from and wrote to and the other to remount the device as read only in the event of any errors.</para>
+			    <para>Seznam ukazuje zařízení (jako diskových oddílů), připojovací bod (v kterém přistupujte k souborům), typ souborového systému a volby připojení.</para>
+                            <para>Tento příklad ukazuje oddíl hda2 připojený jako '/', se souborovým systémem ext3. Oddíl je připojen s dvěmi volbami, jedna dovoluje čtení a zápis a druhá znovu připojí zařízení v případě chyby.</para>
                             <screen><computeroutput>/dev/hda2 on / type ext3 (rw,errors=remount-ro)</computeroutput></screen>				
                         </step>
                         <step>
-                            <para>To list PCI devices:</para>
-                                <screen>lspci</screen>
+                            <para>Pro seznam PCI zařízení:</para>
+                                <screen>lscpi</screen>
                         </step>
                         <step>
-                            <para>To list USB devices:</para>
+                            <para>Pro seznam USB zařízení:</para>
                                 <screen>lsusb</screen>
                         </step>
                     </procedure>
             </sect3>
  
             <sect3 status="complete">
-                <title>Mount/unmount CD/DVD-ROMs manually, and show all
-                        hidden and associated files/folders</title>
+                <title>Připojení/odpojení CD/DVD-ROMů ručně a zobrazení všech skrytých a asociovaných souborů/adresářů</title>
                     <procedure>
                         <step>
-                            <para>Assuming that <filename class="devicefile">/media/cdrom0/</filename> is the location
-                                of CD/DVD-ROM</para>
+                            <para>Předokládáme, že <filename class="devicefile">/media/cdrom0/</filename> je lokace CD/DVD-ROMu</para>
                         </step>
                         <step>
-                            <para>To mount CD/DVD-ROM:</para>
+                            <para>Pro připojení CD/DVD-ROM:</para>
                             <para>
                                 <screen>
+↵
 sudo mount /media/cdrom0/ -o unhide</screen>
                             </para>
                         </step>
                         <step>
-                            <para>To unmount CD/DVD-ROM:</para>
+                            <para>Pro odpojení CD/DVD-ROM:</para>
                             <para>
                                 <screen>
+↵
 sudo umount /media/cdrom0/</screen>
                             </para>
                         </step>
@@ -1253,9 +1120,9 @@ sudo umount /media/cdrom0/</screen>
 	</sect2>
       </sect1>
       <sect1 id="networking" status="complete">
-		<title>Networking</title>
+		<title>Sítě</title>
             <sect2 status="complete">
-                <title>Change the Computer Name</title>
+                <title>Změna jména počítače</title>
                     <procedure>
                         <step>
                             <para>
@@ -1263,80 +1130,54 @@ sudo umount /media/cdrom0/</screen>
 <menuchoice>
     <guimenu>System</guimenu>
     <guimenuitem>Administration</guimenuitem>
-    <guimenuitem>Networking</guimenuitem>
+    <guimenuitem>Sítě</guimenuitem>
 </menuchoice>
 
                             </para>
                         </step>
                         <step>
-                            <para>Select the <guibutton>General</guibutton> tab.
-                                Enter the name of the computer in the
-                                    <guilabel>Hostname</guilabel> field.</para>
+                            <para>Vyberte záůožku <guibutton>Obecné</guibutton>. Vložte jméno do políčka <guilabel>Hostname</guilabel>.</para>
                         </step>
                         <step>
-                            <para>Click <guibutton>OK</guibutton>, close all
-                                open applications and reboot.</para>
+                            <para>Klikněte na <guibutton>OK</guibutton>, zavřete všechny otevřené aplikace a restartuje.</para>
                         </step>
                     </procedure>
             </sect2>
 	<sect2 id="networking-utils" status="complete">
-		<title>Networking Utilities</title>
+		<title>Síťové pomůcky</title>
 			<sect3 id="firestarter" status="complete">
-				<title>Firestarter Firewall</title>
-						<para>A firewall protects a computer system from unauthorized access. It is not normally necessary to install a firewall on an Ubuntu system, because access to the system is closed by default. However, if you run any services which you allow other computers to access (for example, the Apache web server), it is advisable to install a firewall. <application>Firestarter</application> is a program which allows you to control a firewall through a graphical interface.
-						</para>
+				<title>Firestarter firewall</title>
+						<para>Firewall chrání počítač před neautorizovaným přístupem. Normálně není nutné instalovat v Ubuntu firewall, protože přístup je uzavřen defaultně. Nicméně, jestliže spouštíte služby, které dovolují přístup do počítače (např. Apache server), je vhodné naistalovat firewall. <application>Firestarter</application> umožňuje spravovat firewall pomocí grafického rozhraní.</para>
 					<procedure>
 						<step>
-							<para>Install the <application>Firestarter</application> package from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>).
-							</para>
+							<para>Instalujte balíček <application>Firestarter</application> z repozitáře <emphasis>Universe</emphasis> (viz. <xref linkend="add-applications"/>).</para>
 						</step>
 						<step>
-							<para>After it is installed, run 
-<menuchoice>
-    <guimenu>Applications</guimenu>
-    <guimenuitem>System Tools</guimenuitem>
-    <guimenuitem>Firestarter</guimenuitem>
-</menuchoice>
- to configure your firewall. The firewall will now start in the background when your computer starts.
-							</para>
+							<para>Po instalaci, spusťte <menuchoice><guimenu>Aplikace</guimenu><guimenuitem>Systémové nástroje</guimenuitem><guimenuitem>Firestarter</guimenuitem></menuchoice> abyste nakonfiguroval firewall. Firewall se bude spouštět na pozadí při startu počítače.</para>
 						</step>
 					</procedure>
 				</sect3>
 			<sect3 status="complete">
-				<title>Graphical Network Monitor</title>
-					<para>Etherape displays network activity among different hosts using circles of
-						varying size.</para>
+				<title>Grafické sledování sítě</title>
+					<para>Etherape zobrazuje síťovou aktivitu mezi různými hosty pomocí kruhů různých velikostí.</para>
 					<procedure>
 						<step>
-							<para>Install the <application>etherape</application> package from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>).</para>
+							<para>Instalujte balíček <application>etherape</application> z repozitáře <emphasis>Universe</emphasis> (viz. <xref linkend="add-applications"/>).</para>
 						</step>
 						<step>
-							<para>Choose:
-								<menuchoice>
-									<guimenu>Applications</guimenu>
-									<guisubmenu>Internet</guisubmenu>
-									<guimenuitem>Etherape</guimenuitem>
-								</menuchoice>
-							</para>
+							<para>Vyberte: <menuchoice><guimenu>Aplikace</guimenu><guisubmenu>Internet</guisubmenu><guimenuitem>Etherape</guimenuitem></menuchoice></para>
 						</step>
 					</procedure>
 			</sect3>	 
 			<sect3 status="complete">
-				<title>Network Traffic Analyzer</title>
-					<para>Ethereal is a network traffic analyzer/sniffer that captures packets
-						off the network in real time and displays the contents of them.</para>
+				<title>Analyzátor síťového provozu</title>
+					<para>Ethereal je analyzátor/"štěnice", která zachycuje pakety na síti v reálném čase a zobrazuje jejich obsah.</para>
 					<procedure>
 						<step>
-							<para>Install the <application>ethereal</application> package from the <emphasis>Universe</emphasis> repository (see <xref linkend="add-applications"/>).</para>
+							<para>Instalujte balíček <application>ethereal</application> z repozitáře <emphasis>Universe</emphasis> (viz. <xref linkend="add-applications"/>).</para>
 						</step>
 						<step>
-							<para>Choose:
-								<menuchoice>
-									<guimenu>Applications</guimenu>
-									<guisubmenu>Internet</guisubmenu>
-									<guimenuitem>Ethereal</guimenuitem>
-								</menuchoice>
-							</para>
+							<para>Vyberte: <menuchoice><guimenu>Aplikace</guimenu><guisubmenu>Internet</guisubmenu><guimenuitem>Ethereal</guimenuitem></menuchoice></para>
 						</step>
 					</procedure>
 			</sect3>

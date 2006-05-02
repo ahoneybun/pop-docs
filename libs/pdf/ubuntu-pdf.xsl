@@ -152,8 +152,6 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format">
 <!-- How maximaly deep should be each TOC? -->
 <xsl:param name="toc.max.depth" select="2" />
 
-<!-- Get rid of annoying white page after titlepage -->
-
 <!-- **************** Miscellaneous Fixes ****************** -->
 
 <!-- Some custom spacing for lists -->
@@ -167,6 +165,7 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format">
   <xsl:attribute name="space-after.maximum">1em</xsl:attribute>
 </xsl:attribute-set>
 
+<!-- Get rid of annoying white page after titlepage -->
 <xsl:template name="book.titlepage.separator"/>
 
 </xsl:stylesheet>
