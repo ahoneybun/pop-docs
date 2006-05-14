@@ -124,6 +124,7 @@
 <!ENTITY kernel "http://www.kernel.org">
 <!ENTITY google "http://www.google.com">
 <!ENTITY kdelook " http://www.kde-look.org">
+<!ENTITY lulu-store "http://www.lulu.com/ubuntu-doc">
 <!-- this entity controls the url for addons--><!ENTITY java-download "http://java.sun.com/j2se/1.5.0/download.jsp">
 <!ENTITY skype-deb "skype_1.2.0.17-1_i386.deb">
 <!ENTITY skype-download "http://www.skype.com/go/getskype-linux-deb">
@@ -430,27 +431,11 @@
 	<sect1 id="appendix-chroot" status="complete" xreflabel="chroot">
 		<title>Chroot 환경</title>
 
-		<para> A chroot environment is commonly used for development-related
-			work and is basically an install of build-related software. It is always
-			a good idea to do development work in a chroot environment, as it
-			often requires the installation of development packages (whose
-			main purpose is for building packages). An example is when
-			a certain application requires the headers and development version of a
-			library to build (e.g.  <application>libabc-dev</application>).  A
-			normal user would not require the development version of
-			<application>libabc</application>. Thus it is better to install
-			such development packages in a chroot, leaving the normal
-			operating environment clean and uncluttered. First, install the
-			required packages:</para>
+		<para>chroot 환경은 개발과 관련된 작업을 위하여 일반적으로 사용이 되고 기본적으로 빌드 관련된 소프트웨어의 설치 입니다. chroot 환경에서 개발 작업을 하는 것은 언제나 좋은 생각이고, 그것은 자주 개발 패키지의 설치를 요구 합니다. (주요 목적이 패키지를 만들기 위해서 입니다.) 하나의 예는, 특정 프로그램은 헤더와 라이브러리의 개발 버전을 (예를 들어, <application>libabc-dev</application>) 요구 합니다. 보통의 사용자는 <application>libabc</application> 의 개발 버전을 필요로 하지 않습니다. 그러므로 chroot 내에 그러한 개발 패키지를 설치하는 것이 좋고, 보통의 작업 환경은 깨끗하고 정돈되게 남겨 둡니다. 우선은 필요한 패키지를 설치 합니다:</para>
 		
 		<screen>sudo apt-get install dchroot debootstrap</screen>
 
-		<important><para>Make sure to install at least the version of
-				<application>debootstrap</application> that is from the
-				<phrase>Ubuntu</phrase> release for which you are trying to create the chroot.
-				You may have to download it from <ulink url="http://packages.ubuntu.com">packages.ubuntu.com</ulink>
-				and manually install it with <application>dpkg
-					-i</application>.</para></important>
+		<important><para>chroot 환경을 만들기 위하여 <phrase>우분투</phrase> 릴리스에서 최소한 <application>debootstrap</application> 버전을 설치하는 것을 확인 하십시오. 그것을 <ulink url="http://packages.ubuntu.com">packages.ubuntu.com</ulink> 에서 내려받고 <application>dpkg -i</application> 를 사용하여 수작업으로 설치할 수 있습니다.</para></important>
 		
 		<para>다음 단계는 chroot 환경을 만들고, 설정하고, 진입하는 것 입니다.</para>
 		
@@ -494,10 +479,7 @@ sudo sed 's/\([^:]*\):[^:]*:/\1:*:/' /etc/shadow | sudo tee /var/chroot/etc/shad
 sudo cp /etc/group /var/chroot/etc/
 sudo cp /etc/hosts /var/chroot/etc/</screen>
 
-		<para>To enable sudo, set up your root password and the first sudo user in the
-			admin group (for the chroot environment). In the following commands,
-			substitute "&lt;user&gt;" with the username that will be used in the chroot
-			environment:</para>
+		<para>sudo를 사용하려면, 여러분의 root 패스워드와 관리자 그룹(chroot 환경을 위한)에 첫 번째 sudo 사용자로 만듭니다. chroot 환경에서 "&lt;user&gt;" 대신에 여러분의 사용자 이름을 넣고 다음 명령을 사용 합니다:</para>
 		
 		<screen>
 sudo cp /etc/sudoers /var/chroot/etc/
@@ -528,12 +510,7 @@ sudo chroot /var/chroot/
 echo mychroot &gt; /etc/debian_chroot
 exit</screen>
 
-		<para>Now use your chroot (you may omit the -c mychroot if
-			there's only one or you just want the first one in
-			<filename>/etc/dchroot.conf</filename>). The -d parameter means that your
-			environment will be preserved.  This parameter is generally useful if you want chrooted
-			applications to seamlessly use your X server, your session manager,
-			etc.</para>
+		<para>이제 여러분의 chroot를 사용 합니다. (아마도 혼자이거나 <filename>/etc/dchroot.conf</filename> 내의 첫 번째 사용자가 되기를 원한다면 -c mychroot를 제외할 수 있습니다.) -d 파라미터는 여러분의 환경이 예약되었다는 의미 입니다. 이 파라미터는 chroot된 프로그램이 X 서버, 세션 관리자 등을 끊임없이 사용한다면 보통 유용 합니다.</para>
 		
 		<screen>dchroot -c mychroot -d</screen>
 	
@@ -553,16 +530,7 @@ exit</screen>
 			<varlistentry>
 				<term>conffiles.ex</term>
 				
-				<listitem><para>If the package installs a configuration file,
-						when the package is upgraded
-						<application>dpkg</application> can prompt a user
-						whether to keep his or her version if modified or install
-						the new version. Such configuration
-						files should be listed in
-						<filename>conffiles</filename> (one per line).  Do not
-						list configuration files that are only modified by the
-						package or have to be set up by the user to
-						work.</para></listitem>
+				<listitem><para>만약 패키지가 설정 파일을 설치한다면,  패키지가 업그레이드될 때 <application>dpkg</application>는 변경된 사용자의 버전을 간직할 것인지 또는 새 버전을 설치할 것인지를 사용자에게 물어볼 수 있습니다. 이러한 설정 파일은 한줄에 하나씩 <filename>conffiles</filename> 파일 내에 반드시 나열되어야 합니다. 패키지에 의해서만 변경된 설정 파일이나 사용자에 의해 작업을 하여 설정되어야 하는 파일은 나열하지 마십시오.</para></listitem>
 				
 			</varlistentry>
 

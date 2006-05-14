@@ -124,6 +124,7 @@
 <!ENTITY kernel "http://www.kernel.org">
 <!ENTITY google "http://www.google.com">
 <!ENTITY kdelook " http://www.kde-look.org">
+<!ENTITY lulu-store "http://www.lulu.com/ubuntu-doc">
 <!-- this entity controls the url for addons--><!ENTITY java-download "http://java.sun.com/j2se/1.5.0/download.jsp">
 <!ENTITY skype-deb "skype_1.2.0.17-1_i386.deb">
 <!ENTITY skype-download "http://www.skype.com/go/getskype-linux-deb">
@@ -522,116 +523,36 @@ nameserver 208.185.179.218
         <sect2 id="ip-masquerading" status="help">
           <title>IP 마스커레이딩</title>
             <para>IP 마스커레이딩(Masquerading:가장)의 목적은 여러분의 네트워크 상의 사설, 라우팅이 안되는 IP 주소를 가진 기계들이 IP의 가장을 통하여 인터넷을 접근하는 것을 허용하기 위해서 입니다. 여러분의 사설 네트워크에서 인터넷을 목적지로 하는 트래픽은 반드시, 그 요청을 만든 기계로 경로가 되돌아갈 수 있는 응답들을 위하여, 조작되어져야 합니다. 이것을 하기 위하여, 커널은 반드시 각각의 패킷의 <emphasis>source</emphasis> IP 어드레스를 변경하고, 그러므로 응답은 인터넷에서 사용 가능하지 않은 요청을 만든 사설 IP 주소 대신에 변경된 것에 따라 다시 되돌아오게 됩니다. 리눅스는 기계가 속하는 접속과 되돌와오는 패킷을 적절하게 재경로하는 것을 추적하기 위하여 <emphasis>접속 추적</emphasis> (conntrack)을 사용 합니다. 그러므로 여러분의 사설 네트워크를 떠난 트래픽은 여러분의 우분투 게이트웨이 기계로 향할 때 "가장"이 됩니다. 이 절차는 인터넷 접속 공유로 마이크로소프트의 문서에서는 알려져 있습니다.</para>
-			<para>
-              This can be accomplished with a single iptables rule, which may differ slightly
-			  based on your network configuration:
-			  <screen>sudo iptables -t nat -A POSTROUTING -s 192.168.0.0/16 -o ppp0 -j MASQUERADE</screen>
-			  The above command assumes that your private address space is 192.168.0.0/16 and
-			  that your Internet-facing device is ppp0.  The syntax is broken down as follows:
-			  <itemizedlist>
+			<para>이것은 하나의 iptables 규칙을 가지고 완수할 수 있고, 여러분의 네트워크 설정에 따라 약간 다를 수 있습니다: <screen>sudo iptables -t nat -A POSTROUTING -s 192.168.0.0/16 -o ppp0 -j MASQUERADE</screen> 위의 명령은 여러분의 사설 주소 공간이 192.168.0.0/16 이고 인터넷을 사용하는 장치가 ppp0 라고 가정을 합니다. 문법은 다음과 같이 나누어질 수 있습니다: <itemizedlist>
 				  <listitem><para>-t nat -- nat 테이블로 가기 위한 규칙</para></listitem>
 				  <listitem><para>-A POSTROUTING -- POSTROUTING chain에 덧붙이는(-A) 규칙</para></listitem>
 				  <listitem><para>-s 192.168.0.0/16 --  지정된 주소 공간에서 향하는 트래픽에 적용하는 규칙</para></listitem>
 				  <listitem><para>-o ppp0 -- 지정된 네트워크 장치를 통하여 경유하도록 스케쥴된 트래픽에 적용하는 규칙</para></listitem>
 				  <listitem><para>-j MASQUERADE -- 위에 설명된 대로 이 규칙에 일치하는 트래픽은 조작되기 위한 MASQUERADE 타켓으로 "jump" (-j)</para></listitem>
-			  </itemizedlist>
-			</para>
-			<para>
-              Each chain in the filter table (the default table, and where most or all packet
-			  filtering occurs) has a default <emphasis>policy</emphasis> of
-			  ACCEPT, but if you are creating a firewall in addition to a gateway device, you
-			  may have set the policies to DROP or REJECT, in which case your masqueraded
-			  traffic needs to be allowed through the FORWARD chain for the above rule to work:
-			  <screen>sudo iptables -A FORWARD -s 192.168.0.0/16 -o ppp0 -j ACCEPT
-sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED -i ppp0 -j ACCEPT</screen>
-			  The above commands will allow all connections from your local network to the
-			  Internet and all traffic related to those connections to return to the machine
-			  that initiated them.
-			</para>
+			  </itemizedlist></para>
+			<para>필터 테이블 (대부분 또는 모든 패킷 필터링이 일어나는 기본 설정 테이블) 내의 각 체인은 ACCEPT <emphasis>정책</emphasis> 을 기본값으로 갖지만, 만약 여러분이 게이트웨이 장치에 추가로 방화벽을 설정한다면, DROP 또는 REJECT 정책을 지정할 수 있고, 그 경우에는 여러분의 가장된 트래픽은 위의 규칙이 동작을 하기 위하여 FORWARD 체인을 통하는 것이 허용되어야 합니다: <screen>sudo iptables -A FORWARD -s 192.168.0.0/16 -o ppp0 -j ACCEPT↵
+sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED -i ppp0 -j ACCEPT</screen> 위의 명령은 여러분의 로컬 네트워크에서 인터넷으로 가는 모든 접속과 그 접속에 관련되는 모든 트래픽이 위의 규칙을 시작한 (즉 여러분의) 기계로 되돌아오는 것을 허용 합니다.</para>
         </sect2>
         <sect2 id="firewall-tools" status="help">
           <title>도구</title>
-            <para>
-              There are many tools available to help you construct a complete firewall without
-			  intimate knowledge of iptables.  For the GUI-inclined, 
-			  <application>Firestarter</application> is quite popular and easy to use, and
-			  <application>fwbuilder</application> is very powerful and will look familiar 
-			  to an administrator who has used a commercial firewall utility such as Checkpoint 
-			  FireWall-1.  If you prefer a command-line tool with plain-text configuration files, 
-			  <application>Shorewall</application> is a very powerful solution to help you 
-			  configure an advanced firewall for any network.  If your network is relatively 
-			  simple, or if you don't have a network, <application>ipkungfu</application> should 
-			  give you a working firewall "out of the box" with zero configuration, 
-			  and will allow you to easily set up a more advanced firewall by editing simple, 
-			  well-documented configuration files.  Another interesting tool is 
-			  <application>fireflier</application>, which is designed to be a desktop firewall 
-			  application.  It is made up of a server (fireflier-server) and your choice of GUI 
-			  clients (GTK or QT), and behaves like many popular interactive firewall 
-			  applications for Windows.
-            </para>
+            <para>두려운 iptables의 지식이 없이도 완전하게 방화벽을 구축할 수 있도록 도와주는 여러가지 도구들이 있습니다. GUI로 편하게 사용할 수 있는 것은, <application>Firestarter</application> 가 아주 유명하고 사용하기도 쉽고, <application>fwbuilder</application> 는 매우 강력하고 Checkpoint FireWall-1과 같은 상업용 방화벽을 사용해 본 시스템 관리자에게 익숙하게 보일 겁니다. 평범한 텍스트 설정 파일을 가지는 명령어 라인 도구를 선호한다면, <application>Shorewall</application> 은 어떠한 네트워크를 위해서도 우수한 방화벽을 설정할 수 있도록 도와주는 매우 강력한 솔루션 입니다. 만약 여러분의 네트워크가 비교적 간단하거나, 또는 네트워크를 가지고 있지 않다면, <application>ipkungfu</application> 를 사용하면 따로 설정하는 것 없이 설치시 바로 동작하는 방화벽을 제공할 것이고, 좀더 발전된 방화벽을 설정하는 것은 간단하고 문서화가 잘 된 설정 파일을 편집하는 것으로 쉽게 만들 수 있습니다. 또다른 흥미로운 도구는 <application>fireflier</application> 이고, 데스크탑 방화벽 프로그램으로 고안된 것 입니다. 이것은 서버 (fireflier-server) 와 여러분이 선택하는 GUI 클라이언트 (GTK 또는 QT) 로 구성되고, 윈도우즈를 위한 많은 유명한 상호작용 방화벽과 같이 동작을 합니다.</para>
         </sect2>
         <sect2 id="firewall-logs" status="help">
           <title>로그</title>
-            <para>
-              Firewall logs are essential for recognizing attacks, troubleshooting your
-			  firewall rules, and noticing unusual activity on your network.  You must include
-			  logging rules in your firewall for them to be generated, though, and logging
-			  rules must come before any applicable terminating rule (a rule with a target
-			  that decides the fate of the packet, such as ACCEPT, DROP, or REJECT).  For
-			  example:
-			  <screen>sudo iptables -A INPUT -m state --state NEW -p tcp --dport 80 -j LOG --log-prefix "NEW_HTTP_CONN: "</screen>
-			  A request on port 80 from the local machine, then, would generate a log in dmesg
-			  that looks like this:
-			</para>
+            <para>방화벽 로그는 공격, 방화벽 규칙의 문제 파악, 그리고 여러분 네트워크 상의 비정상적인 행동을 알아낼 수 있는 필수적인 것 입니다. 여러분은 반드시 방화벽 설정에 로그가 만들어지도록 로그 규칙을 포함시키고, 로그 규칙은 어떠한 적용된 끝내기 규칙 (타겟을 가지고 ACCEPT, DROP, 또는 REJECT와 같이 패킷의 운명을 결정하는 규칙) 전에 반드시 오도록 해야 합니다. 예를 들어: <screen>sudo iptables -A INPUT -m state --state NEW -p tcp --dport 80 -j LOG --log-prefix "NEW_HTTP_CONN: "</screen> 로컬 기계에서 포트 80 번의 요청은 dmesg 내의 로그로 만들어지고 다음과 같이 보일 겁니다:</para>
 			<para>
 			  <programlisting>[4304885.870000] NEW_HTTP_CONN: IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=58288 DF PROTO=TCP SPT=53981 DPT=80 WINDOW=32767 RES=0x00 SYN URGP=0</programlisting>
 			</para>
-			<para>
-              The above log will also appear in <filename>/var/log/messages</filename>,
-			  <filename>/var/log/syslog</filename>, and <filename>/var/log/kern.log</filename>.
-			  This behavior can be modified by editing <filename>/etc/syslog.conf</filename>
-			  appropriately or by installing and configuring <application>ulogd</application>
-			  and using the ULOG target instead of LOG.  The <application>ulogd</application>
-			  daemon is a userspace server that listens for logging instructions from the kernel
-			  specifically for firewalls, and can log to any file you like, or even to a
-			  <application>PostgreSQL</application> or <application>MySQL</application>
-			  database.  Making sense of your firewall logs can be simplified by using a log
-			  analyzing tool such as <application>fwanalog</application>, <application>
-			  fwlogwatch</application>, or <application>lire</application>.
-            </para>
+			<para>위의 로그는 또한 <filename>/var/log/messages</filename>, <filename>/var/log/syslog</filename>, 그리고 <filename>/var/log/kern.log</filename> 파일에도 나타납니다. 이 동작은 <filename>/etc/syslog.conf</filename> 파일을 적당하게 편집하거나, <application>ulogd</application> 를 설치/설정하고 LOG 대신에 ULOG 타켓을 사용하는 것으로 변경될 수 있습니다.  <application>ulogd</application> 데몬은 사용자 공간의 서버이고 특별히 방화벽을 위한 커널에서 오는 로깅 지시를 듣고, 여러분이 원하는 어떠한 파일, 또는 심지어 <application>PostgreSQL</application> 과 <application>MySQL</application> 데이타베이스로 기록을 할 수 있습니다. 방화벽 로그를 알아보기 쉽게 꾸미는 것은 <application>fwanalog</application>, <application> fwlogwatch</application>, 또는 <application>lire</application> 같은 로그 분석 도구를 사용하는 것으로 간단해 질 수 있습니다.</para>
         </sect2>
     </sect1>
 	<sect1 id="openssh-server" status="complete">
 		<title>OpenSSH 서버</title>
       <sect2 id="openssh-introduction">
         <title>소개</title> 
-           <para>
-            This section of the <phrase>Ubuntu</phrase> Server Guide introduces a powerful collection of tools
-            for the remote control of networked computers and transfer of data between networked 
-            computers, called <emphasis>OpenSSH</emphasis>. You will also learn
-            about some of the configuration settings possible with the OpenSSH server application and
-            how to change them on your Ubuntu system. 
-          </para>
-          <para>
-            OpenSSH is a freely available version of the Secure Shell (SSH) protocol family of 
-            tools for remotely controlling a computer or transferring files between computers.
-            Traditional tools used to accomplish these functions, such as <application>telnet</application>
-            or <application>rcp</application>, are insecure and transmit the user's password in
-            cleartext when used. OpenSSH provides a server daemon and client tools to facilitate
-            secure, encrypted remote control and file transfer operations, effectively replacing
-            the legacy tools.
-          </para>
-          <para>
-            The OpenSSH server component, <application>sshd</application>, listens continuously for
-            client connections from any of the client tools. When a connection request occurs,
-            <application>sshd</application> sets up the correct connection depending on the type
-            of client tool connecting. For example, if the remote computer is connecting with the
-            <application>ssh</application> client application, the OpenSSH server sets up a remote
-            control session after authentication. If a remote user connects to an OpenSSH server with
-            <application>scp</application>, the OpenSSH server daemon initiates a secure copy of files
-            between the server and client after authentication. OpenSSH can use many authentication
-            methods, including plain password, public key, and <application>Kerberos</application> tickets.
-            </para>
+           <para><phrase>우분투</phrase> 서버 안내서의 이 영역은 네트워킹된 컴퓨터의 원격 조정하고 자료를 전송할 수 있는 강력한 도구의 모음인, <emphasis>OpenSSH</emphasis> 를 소개 합니다. OpenSSH 서버 프로그램에서 가능한 몇 가지 설정 값에 대한 것과 여러분의 우분투 시스템에서 어떻게 그것을 변경하는 지를 알게 됩니다.</para>
+          <para>OpenSSH는 원겨으로 컴퓨터를 조종하거나 컴퓨터 간의 파일을 전송하기 위한 Secure Shell (SSH) 프토토콜 도구들의 자유롭게 사용할 수 있는 버전 입니다. 이러한 기능을 가지는 전통적인 도구들로는, <application>telnet</application> 이나 <application>rcp</application> 가 있지만, 보안이 적용되지 않고 사용될 때 사용자의 암호를 들여다 볼수 있는 텍스트로 전송 합니다. OpenSSH는, 이러한 전통적인 도구들을 효과적으로 대체하는, 서버 데몬과 보안, 암호화된 원격 조종과 파일 전송 동작 기능을 가지는 클라이언트 도구들을 제공 합니다.</para>
+          <para>OpenSSH 서버 구성 요소는, <application>sshd</application> 이고, 어떠한 클라이언트 도구이던 클라이언트 접속을 위하여 끊임없이 듣습니다. 접속 요청이 일어났을 때, <application>sshd</application> 는 연결하는 클라이언트 도구의 종류에 따라 올바른 접속을 만듭니다. 예를 들어, 원격 컴퓨터가 <application>ssh</application> 클라이언트 프로그램을 가지고 접속을 한다면, 그 OpenSSH 서버는 인증 후에 원격 조종 세션을 만듭니다. 만약 원격 사용자가 <application>scp</application> 를 가지고 OpenSSH 서버를 연결하면, 그 OpenSSH 서버 데몬은 인증 후에 서버와 클라이언트 간에 안전한 파일 복사를 시작 합니다. OpenSSH는 일반 암호, 공개 키, 그리고 <application>Kerberos</application> 티켓을 포함하는 여러가지 인증 방법을 사용할 수 있습니다.</para>
           </sect2>
         <sect2 id="openssh-installation">
         <title>설치</title>
@@ -650,19 +571,13 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
         </sect2>
         <sect2 id="openssh-configuration">
           <title>설정</title>
-            <para>
-              You may configure the default behavior of the OpenSSH server application, <application>sshd</application>, by editing the file <filename>/etc/ssh/sshd_config</filename>. For information about the configuration directives used in this file, you may
-              view the appropriate manual page with the following command, issued at a terminal prompt:
-            </para>
+            <para>여러분은 OpenSSH 서버 프로그램, <application>sshd</application>, 의 기본 동작을 <filename>/etc/ssh/sshd_config</filename> 파일을 편집하는 것으로 설정할 수 있습니다. 이 파일에서 사용되는 설정 지시자에 대한 정보는, 터미널 프롬프트에서 다음의 명령을 입력하여 해당 매뉴얼 페이지를 보십시오:</para>
                <para>
 <screen>
 <command>man sshd_config</command>
 </screen>
                </para>
-            <para>
-            There are many directives in the <application>sshd</application> configuration file controlling such things as communications
-            settings and authentication modes. The following are examples of configuration directives that can be changed by editing the <filename>/etc/ssh/ssh_config</filename> file.
-            </para>
+            <para><application>sshd</application> 설정 파일에는 통신 설정과 인증 모드 등을 조종하기 위한 많은 지시자들이 있습니다. 다음은 <filename>/etc/ssh/ssh_config</filename> 파일을 편집하는 것으로 변경할 수 있는 설정 지시자들의 예 입니다.</para>
             <tip>
                <para>설정 파일을 편집하기 전에, 원래의 파일을 복사본을 만들고 쓰기에서 그것을 보호해야만 합니다. 그래서 원래의 설정을 참고로 그리고 필요한 경우 재사용할 수 있습니다.</para>
                <para><filename>/etc/ssh/sshd_config</filename> 파일을 복사하고 쓰기에서 그것을 보호하려면, 터미널 프롬프트에서 다음의 명령을 입력 합니다:</para>
@@ -722,14 +637,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
                     <para>인증</para>
                 </listitem>
             </itemizedlist>
-            <para>In the Anonymous mode, remote clients can access the FTP server by using the
-                default user account called 'anonymous" or "ftp" and
-                sending an email address as the password. In the Authenticated mode a user must
-                have an account and a password. User access to the FTP server directories and files is
-                dependent on the permissions defined for the account used at login. As a general
-                rule, the FTP daemon will hide the root directory of the FTP server and change it to
-                the FTP Home directory. This hides the rest of the file system from remote
-            sessions.</para>
+            <para>익명 모드에서는, 원격 클라이언트는 "anonymous" 또는 "ftp" 로 불리는 기본 설정 사용자 계정을 사용하고 암호는 이메일 주소를 보내는 것으로 FTP 서버를 접근할 수 있습니다. 인증 모드에서는, 사용자는 반드시 계정과 암호를 가지고 있어야 합니다. 사용자는 FTP 서버 디렉토리와 파일을 로그인 시에 사용되는 계정을 위하여 지정된 접근 권한에 따라 접근할 수 있습니다. 일반적인 규칙으로, FTP 데몬은 FTP 서버의 루트 디렉토리를 감추고 FTP 홈 디렉토리로 그것을 바꿉니다. 이것은 파일 시스템의 여타 부분도 원격 세션에게는 감춥니다.</para>
             <sect2 id="vsftpd-ftp-server-installation" status="complete">
                 <title>vsftpd - FTP 서버 설치</title>
                     <para>vsftpd 는 우분투에서 사용할 수 있는 FTP 데몬 입니다. 이것은 설치, 설정, 그리고 관리하기가 쉽습니다. <application>vsftpd</application> 를 설치하려면 다음의 명령을 실행 합니다: <screen> <command>sudo apt-get install vsftpd</command> </screen></para>
@@ -737,48 +645,17 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
                 </sect2>
             <sect2 id="vsftpd-ftp-server-configuration" status="complete">
                 <title>vsftpd - FTP 서버 설정</title>
-                <para>
-                You can edit the vsftpd configuration file,
-                <filename>/etc/vsftpd.conf</filename>, to
-                change the default settings.
-
-                By default only anonymous FTP is
-                allowed. If you wish to disable this option, you
-                should change the following line:
-<programlisting>
+                <para>기본 설정된 값을 변경하기 위하여 vsftpd 설정 파일, <filename>/etc/vsftpd.conf</filename> 을 편집할 수 있습니다. 기본 설정은 오직 익명 FTP 만이 허용 됩니다. 만약 이 선택 사항을 비 사용하려면, 다음의 줄을 반드시 변경하여야 합니다: <programlisting>
 anonymous_enable=YES
-</programlisting>
-                to
-<programlisting>
+</programlisting> to <programlisting>
 anonymous_enable=NO
-</programlisting>
-                By default, local system users are not allowed to
-                login to FTP server. To change this setting, you
-                should uncomment the following line:
-<programlisting>
+</programlisting> 기본 설정 값으로, 로컬 시스템(FTP 서버가 실행되는 시스템) 사용자는 FTP 서버로 로그인 하는 것이 허용되지 않습니다. 이 설정 값을 변경하려면, 다음 줄의 주석을 해제하여야만 합니다: <programlisting>
 #local_enable=YES
-</programlisting>
-                By default, users are allowed to download files
-                from FTP server. They are not allowed to upload
-                files to FTP server. To change this setting, you
-                should uncomment the following line:
-<programlisting>
+</programlisting> 기본 설정으로, 사용자는 FTP 서버에서 파일을 내려받는 것은 허용이 되지만, FTP 서버로 파일을 올리는 것은 허용되지 않습니다. 이 설정 값을 변경하려면, 다음 줄의 주석을 해제하여야만 합니다: <programlisting>
 #write_enable=YES
-</programlisting>
-                Similarly, by default, the anonymous users are not
-                allowed to upload files to FTP server. To change
-                this setting, you should uncomment the following
-                line:
-<programlisting>
+</programlisting> 비슷하게, 기본 설정으로, 익명 사용자는 FTP 서버로 파일을 업로드하는 것이 허용되지 않습니다. 이 설정 값을 변경하려면, 다음 줄의 주석을 해제하여야만 합니다: <programlisting>
 #anon_upload_enable=YES
-</programlisting>
-                The configuration file consists of many
-                configuration parameters. The information about
-                each parameter is available in the configuration
-                file. Alternatively, you can refer to the man
-                page, <command>man 5 vsftpd.conf</command> for
-                details of each parameter. 
-                </para>
+</programlisting> 설정 파일은 많은 설정 파라미터들로 이루어 집니다. 각각의 파라미터에 대한 정보는 그 설정 파일 내에 사용가능 합니다. 다른 방법으로는, <command>man 5 vsftpd.conf</command> 하여 각 파라미터의 자세한 것을 man 페이지에서 참조 하십시오.</para>
                 <para><application>vsftpd</application> 를 설정했으면 데몬을 시작할 수 있습니다. <application>vsftpd</application> 데몬을 시작하려면 다음의 명령을 실행 합니다: <screen> <command>sudo /etc/init.d/vsftpd start</command> </screen></para>
 				<note><para>설정 파일에 기본 설정된 것은 보안의 사유를 위하여 지정된 것임을 주의 하십시오. 위의 변경된 각각은 시스템을 덜 보안적으로 할 수 있으므로, 그것들이 꼭 필요한 경우에만 변경을 하십시오.</para></note>
                 </sect2>
@@ -791,21 +668,14 @@ anonymous_enable=NO
 
           <itemizedlist>
           <listitem>
-      <para>Local workstations use less disk space because commonly used data
-can be stored on a single machine and still remain accessible to others
-over the network.</para>
+      <para>로컬 워크스테이션은 공통적으로 사용되는 데이터가 단일 기계에 저장되고 네트워크 상의 다른 것을 여전히 접근할 수 있기 때문에 보다 적은 디스크 공간을 사용 합니다.</para>
           </listitem>
           <listitem>
-      <para>There is no need for users to have separate home directories on
-every network machine. Home directories could be set up on the NFS
-server and made available throughout the network.</para>
+      <para>사용자가 모든 네트워크 기계들에 분리된(각각의) 홈 디렉토리를 가질 필요가 없습니다. 홈 디렉토리는 NFS 서버 상에 만들어질 수 있고 네트워크를 통하여 사용할 수 있습니다.</para>
           </listitem>
           <listitem>
 
-      <para>Storage devices such as floppy disks, CDROM drives, and USB
-Thumb drives can be used by other machines on the network. This may
-reduce the number of removable media drives throughout the
-network.</para>
+      <para>플로티 디스크, CDROM 드라이브, 그리고 USB 드라이브와 같은 저장 장치들은 네트워크 상의 다른 기계에 의하여 사용될 수 있습니다. 이것은 네트워크 전체의 탈착실 미디어 드라이브의 숫자를 줄일지도 모릅니다.</para>
           </listitem>
           </itemizedlist>
 
@@ -850,13 +720,7 @@ network.</para>
       <para>마운트 위치 디렉토리 <filename>/local/ubuntu</filename> 반드시 있어야 합니다. <filename>/local/ubuntu</filename> 디렉토리 내에는 파일 또는 서브 디렉토리가 없어야만 합니다.</para>
       </warning>
 
-      <para>
-       An alternate way to mount an NFS share from another machine is to
-       add a line to the <filename>/etc/fstab</filename> file. The line must state the
-       hostname of the NFS server, the directory on the server being
-       exported, and the directory on the local machine where the NFS
-       share is to be mounted.
-      </para>
+      <para>다른 기계에서 NFS 공유를 마운트하는 다른 방법은 <filename>/etc/fstab</filename> 파일에 한 줄을 더하는 것 입니다. 그 줄은 NFS 서버의 호스트 이름, 내보내지는 서버 상의 디렉토리, NFS 공유가 마운트되는 로컬 기계 상의 디렉토리를 반드시 기술 합니다.</para>
 
       <para><filename>/etc/fstab</filename> 파일 내의 그 줄을 위한 일반적인 문법은 다음과 같습니다:</para>
       
@@ -873,11 +737,7 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
     </sect1>
 	<sect1 id="dhcp" status="complete">
 		<title>동적 호스트 설정 프로토콜 (DHCP)</title>
-            <para>The Dynamic Host Configuration Protocol (DHCP) is a network service that enables host
-                computers to be automatically assigned settings from a server as opposed to
-                manually configuring each network host. Computers configured to be DHCP clients have
-                no control over the settings they receive from the DHCP server, and the configuration
-                is transparent to the computer's user.</para>
+            <para>동적 호스트 설정 프로토콜 (DHCP) 는, 각각의 네트워크 호스트를 수작업으로 설정하는 것과는 반대로, 서버에서 자동으로 호스트 컴퓨터에 설정값을 지정할 수 있도록 해주는 네트워크 서비스 입니다. 설정된 컴퓨터는 DHCP 클라이언트가 되고 DHCP 서버에서 받은 설정값을 조작할 수 없고, 그 설정은 컴퓨터의 사용자에게 투명 합니다.</para>
             <para>DHCP 서버에 의하여 DHCP 클라이언트로 제공되는 가장 공통적인 설정은 다음과 같습니다:</para>
             <itemizedlist spacing="compact">
                 <listitem>
@@ -914,30 +774,17 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
                 <varlistentry>
                     <term>맥 어드레스</term>
                     <listitem>
-                        <para>This method entails using DHCP to identify the unique hardware address
-                            of each network card connected to the network and then continually
-                            supplying a constant configuration each time the DHCP client makes a
-                            request to the DHCP server using that network device.</para>
+                        <para>이 방법은, 네트워크로 연결되는 각각의 네트워크 카드의 유일한 하드웨어 주소를 식별하기 위하여 DHCP를 사용하는 것과, DHCP 클라이언트가 네트워크 장치를 사용하는 DHCP 서버로의 요청을 만드는 매번 일정한 설정을 공급하는 것을, 수반 합니다.</para>
                     </listitem>
                 </varlistentry>
                 <varlistentry>
                     <term>어드레스 풀</term>
                     <listitem>
-                        <para>This method entails defining a pool (sometimes also called a range or
-                            scope) of IP addresses from which DHCP clients are supplied their
-                            configuration properties dynamically and on a fist come first serve
-                            basis. When a DHCP client is no longer on the network for a specified
-                            period, the configuration is expired and released back to the address
-                            pool for use by other DHCP Clients.</para>
+                        <para>이 방법은, 동적으로 그리고 먼저 오는 것이 먼저 수행되는 기본으로 설정 속성이 공급되는 DHCP 클라이언트에서 IP 주소의 풀 (때때로 한계 또는 범위로 불리는)을 지정하는 것을 수반 합니다. DHCP 클라이언트가 지정한 기간 동안 네트워크 상에 더 이상 있지 않을 때, 설정은 만료되고 다른 DHCP 클라이언트에 의해 사용되도록 주소 풀로 되돌려집니다.</para>
                     </listitem>
                 </varlistentry>
             </variablelist>
-            <para>Ubuntu is shipped with both DHCP server and client. The server is
-                    <application>dhcpd</application> (dynamic host configuration protocol daemon).
-                The client provided with Ubuntu is
-                <application>dhclient</application> and should be
-                installed on all computers required to be automatically configured. Both programs
-                are easy to install and configure and will be automatically started at system boot.</para>
+            <para>우분투는 DHCP 서버와 클라이언트 모두를 제공 합니다. 서버는 <application>dhcpd</application> (dynamic host configuration protocol daemon) 입니다. 우분투와 함께 제공되는 클라이언트는 <application>dhclient</application> 이고 요구되는 모든 컴퓨터에 설치되고 자동으로 설정 됩니다. 두 프로그램 모두 설치와 설정이 쉽고 시스템이 부팅할 때 자동적으로 시작 됩니다.</para>
       <sect2 id="dhcp-installation" status="complete">
         <title>설치</title>
           <para>터미널 프롬프트에서, <application>dhcpd</application> 를 설치하기 위하여 다음의 명령을 입력 합니다:</para>
@@ -964,8 +811,7 @@ Starting DHCP server: dhcpd failed to start - check syslog for diagnostics.  </s
       </sect2>
       <sect2 id="dhcp-configuration" status="complete">
         <title>설정</title>
-            <para>The error message the installation ends with might be a little confusing, but the
-                following steps will help you configure the service:</para>
+            <para>설치를 끝내는 오류 메세지는 약간 혼란을 줄 수 있는데, 다음의 절차를 수행해서 그 서비스를 설정 하십시오:</para>
             <para>아주 일반적으로, 여러분은 IP 주소를 불규칙적으로 지정하는 것을 원할 수 있습니다. 이것은 다음과 같이 설정하는 것으로 마칠 수 있습니다:</para>
             <screen>
 # Sample /etc/dhcpd.conf
@@ -982,13 +828,7 @@ subnet 192.168.1.0 netmask 255.255.255.0 {
 range 192.168.1.10 192.168.1.100;
 range 192.168.1.150 192.168.1.200;
 } </screen>
-            <para>This will result in the DHCP server giving a client an IP address from the range
-                192.168.1.10-192.168.1.100 or 192.168.1.150-192.168.1.200. It will lease an IP
-                address for 600 seconds if the client doesn't ask for a specific time frame. Otherwise
-                the maximum (allowed) lease will be 7200 seconds. The server will also "advise" the
-                client that it should use 255.255.255.0 as its subnet mask, 192.168.1.255 as its
-                broadcast address, 192.168.1.254 as the router/gateway and 192.168.1.1 and
-                192.168.1.2 as its DNS servers. </para>
+            <para>이것은 DHCP 서버가 클라이언트에 192.168.1.10-192.168.1.100 또는 192.168.1.150-192.168.1.200 범위 내의 한 IP 주소를 주는 결과를 가집니다. 그 주소는, 만약 클라이언트가 특정한 시간 간격을 요청하지 않는다면, 600 초 동안 대여되는 IP 주소 입니다. 한편, 최대한 (허용되는) 대여 기간은 7200 초 입니다. 서버는 또한 클라이언트가 서브넷 마스크로 255.255.255.0, 브로트캐스트 주소로 192.168.1.255, 라우터/게이트웨이 주소로 192.168.1.254, 그리고 DNS 서버로 192.168.1.1과 192.168.1.2를 사용할 것을 "충고" 합니다.</para>
             <para>만약 여러분의 윈도우즈 클라이언트를 위하여 WINS 서버를 지정할 필요가 있다면, 에를 들어, netbios-name-servers 옵션을 포함하는 것이 필요 합니다.</para>
             <screen>
 option netbios-name-servers 192.168.1.1; </screen>
@@ -1003,13 +843,7 @@ option netbios-name-servers 192.168.1.1; </screen>
     </sect1>
 	<sect1 id="dns" status="complete">
 		<title>도메인 네임 서비스 (DNS)</title>
-            <para>Domain Name Service (DNS) is an Internet service that maps IP addresses and fully
-                qualified domain names (FQDN) to one another. In this way, DNS alleviates the need to
-                remember IP addresses. Computers that run DNS are called
-                <emphasis>name
-                servers</emphasis>. Ubuntu ships with <application>BIND</application> (Berkley
-                Internet Naming Daemon), the most common program used for maintaining a name
-                server on GNU/Linux.</para>
+            <para>도메인 네임 서비스 (DNS) 는 IP 주소와 완전히 주어진 도메인 이름(FQDN)을 다른 네임 서비스로 지도처럼 나타내는 인터넷 서비스 입니다. 이 방법으로, DNS는 IP 주소를 기억하는 필요를 완화 시킵니다. DNS를 실행하는 컴퓨터들은 <emphasis>네임 서버</emphasis>라 불리웁니다. 우분투는 GNU/Linux 상에서 네임 서버 관리를 위하여 가장 일반적으로 사용되는 프로그램인, <application>BIND</application> (Berkley Internet Naming Daemon) 를 제공 합니다.</para>
             <!-- things to do: IPv6-->
       <sect2 id="dns-installation" status="complete">
         <title>설치</title>
@@ -1022,13 +856,7 @@ option netbios-name-servers 192.168.1.1; </screen>
       </sect2>
       <sect2 id="dns-configuration" status="complete">
         <title>설정</title>
-          <para>
-          The DNS configuration files are stored in the
-          <filename>/etc/bind</filename> directory. The
-          primary configuration file is
-         <filename>/etc/bind/named.conf</filename>. The content
-          of the default configuration file is shown below:
-          </para>
+          <para>DNS 설정 파일들은 <filename>/etc/bind</filename> 디렉토리에 저장 됩니다. 주요 설정 파일은 <filename>/etc/bind/named.conf</filename> 이고, 기본 설정 파일의 내용은 아래와 같이 보여집니다:</para>
 
           <para>
 <programlisting>
@@ -1081,25 +909,11 @@ include "/etc/bind/named.conf.local";
 </programlisting>
           </para>
 
-          <para>
-          The <application>include</application> line specifies the
-          filename which contains the DNS options. The
-          <application>directory</application> line in the options file tells
-          DNS where to look for files. All files BIND uses will be
-          relative to this directory.
-          </para>
+          <para><application>include</application> 줄은 DNS 선택 사항을 가지는 파일 이름을 지정 합니다. 그 선택 사항 파일 내의 <application>directory</application> 줄은 파일을 어디서 볼 수 있는지 DNS에 알려 줍니다. BIND의 모든 파일은 이 디렉토리를 상대 경로로 사용 합니다.</para>
 
           <para><filename>/etc/bind/db.root</filename> 파일은 세상의 루트 네임 서버들을 기술 합니다. 그 서버들은 시간이 지남에 따라 변경되고 반드시 지금이나 나중에 관리유지 되어야 합니다.</para>
 
-          <para>
-          The <application>zone</application> section defines a master
-          server, and it is stored in a file mentioned against file tag.
-          Every zone file contains 3 resource records (RRs): an SOA RR, an
-          NS RR and a PTR RR. SOA is short of Start of Authority. The
-          "@" is a special notation meaning the origin. NS is the Name
-          Server RR. PTR is Domain Name Pointer.  To start the DNS server,
-          run the following command from a terminal prompt: 
-           </para>
+          <para><application>zone</application> 영역은 마스터 서버를 지정하고, 언급된 파일 태그로 파일에 저장 됩니다. 모든 zone 파일은 세 가지 자원 자료(RRs): SOA RR, NS RR과 PTR RR을 포함 합니다. SOA는 Start of Authority의 축약어 입니다. "@" 는 발생점을 의미하는 특별한 이름 표기 입니다. NS는 네임 서버 자원 자료 입니다. PTR은 도메인 네임 포인터 입니다. DNS 서버를 시작하기 위하여, 터미널 프롬프트에서 다음의 명령을 실행 합니다:</para>
            <para>
 <screen>
 <command>sudo /etc/init.d/bind start</command>
@@ -1116,54 +930,21 @@ include "/etc/bind/named.conf.local";
     </sect1>
 	<sect1 id="cups" status="complete">
 		<title>CUPS - 인쇄 서버</title>
-          <para>
-            The primary mechanism for Ubuntu printing and print services is the 
-			<emphasis role="bold">Common UNIX Printing System</emphasis> (CUPS). 
-			This printing system is a freely available, portable printing layer 
-			which has become the new standard for printing in most GNU/Linux 
-			distributions.
-          </para>
-          <para>
-          CUPS manages print jobs and queues and provides network printing using 
-		  the standard Internet Printing Protocol (IPP), while offering support 
-		  for a very large range of printers, from dot-matrix to laser and many 
-		  in between.  CUPS also supports PostScript Printer Description (PPD) and 
-		  auto-detection of network printers, and features a simple web-based 
-		  configuration and administration tool. 
-          </para>
+          <para>우분투의 인쇄와 프린트 서비스를 위한 주요 소프트웨어는 <emphasis role="bold">Common UNIX Printing System</emphasis> (CUPS) 입니다. 이 인쇄 시스템은 자유롭게 사용할 수 있고, 대부분의 GNU/Linux 배포판에서 인쇄를 위한 새로운 표준이 되는 이식 가능한 인쇄 계층 입니다.</para>
+          <para>CUPS는 인쇄 작업과 대기소를 관리하고, 표준 인터넷 인쇄 프로토콜(IPP)를 사용하여 네트워크 출력을 제공하고, 도트매트릭스부터 레이저까지의 굉장히 큰 범위의 프린터들과 그리고 많은 상호 간의 출력을 지원 합니다. CUPS는 또한 PostScript Printer Description (PPD) 과 네트워크 프린터의 자동 감지를 지원하고, 단순한 웹 기반의 설정과 관리 도구를 가지고 있습니다.</para>
       <sect2 id="cups-installation" status="complete">
         <title>설치</title>
-          <para>
-            To install CUPS on your Ubuntu computer, simply use <application>sudo</application> with the the <application>apt-get</application> command and give the packages to install as the first parameter. A complete CUPS install has many package dependencies, but they may all be specified on the same command line.  Enter the following at a terminal prompt to install CUPS:
-          </para>
+          <para>여러분의 우분투 컴퓨터에 CUPS를 설치하려면, 간단하게 <application>apt-get</application> 명령을<application>sudo</application> 로 사용하고 첫 번째 파라미터로 설치하고자 하는 패키지를 줍니다. 하나의 완전한 CUPS 설치는 많은 패키지 의존성을 가지지만, 같은 명령어 라인에 그것들을 모두 지정할 수 있습니다. CUPS를 설치하기 위하여 다음의 명령을 터미널 프롬프트에서 입력 하십시오:</para>
           <para>
 <screen>
-<command>sudo apt-get install cupsys cupsys-client cupsys-driver-gimpprint \ defoma fontconfig foomatic-db foomatic-filters libcupsimage2 \ libexpat1 libfontconfig1 libfreetype6 libgimpprint1 libjpeg62 \ libpaper1 libpng12-0 libpoppler0c2 libslp1 libtiff4 patch perl \ perl-modules ttf-bitstream-vera ucf</command>
+<command>sudo apt-get install cupsys cupsys-client</command>
 </screen>
           </para>
-          <para>
-          Upon authenticating with your user password, the packages should be downloaded
-		  and installed without error. Upon the conclusion of installation, the CUPS server 
-		  will be started automatically. For troubleshooting purposes, you can access CUPS 
-		  server errors via the error log file at: <filename>/var/log/cups/error_log</filename>.
-		  If the error log does not show enough information to troubleshoot any problems you
-		  encounter, the verbosity of the CUPS log can be increased by changing the <emphasis role="bold">LogLevel</emphasis> directive in the configuration file (discussed below)
-		  to "debug" or even "debug2", which logs everything, from the default of "info".  If 
-		  you make this change, remember to change it back once you've solved your problem, to 
-		  prevent the log file from becoming overly large.
-          </para>
+          <para>사용자 암호의 인증되면, 패키지는 내려받아지고 에러없이 설치되어집니다. 설치가 마무리될 때, CUPS 서버는 자동적으로 실행됩니다. 문제가 있고 그것을 확인하려면, <filename>/var/log/cups/error_log</filename>에 있는 에러 로그 파일을 통해 CUPS 서버 오류를 접근할 수 있습니다. 만약 그 에러 로그가 여러분이 직면한 문제를 파악하기 위한 충분한 정보를 보여주지 않는다면, CUPS 로그를 더 자세히 출력하도록 하는 것은 위에 언급된 설정 파일 내의 <emphasis role="bold">LogLevel</emphasis> 지시자를 "debug" 또는 심지어 "debug2"로 변경하는 것에 의하여 증가할 수 있고, 그러면 모든 것을 기록 합니다. 기본 설정된 값은 "info" 입니다. 만약 이 변경을 만들었다면, 여러분의 문제를 해결한 후에, 로그 파일이 너무 크게 되는 것을 막기 위하여 다시 원래의 설정 값으로 되돌리는 것을 기억 하십시오.</para>
       </sect2>
       <sect2 id="cups-configuration" status="complete">
         <title>설정</title>
-          <para>
-            The Common UNIX Printing System server's behavior is configured through the 
-			directives contained in the file <filename>/etc/cups/cupsd.conf</filename>.  
-			The CUPS configuration file follows the same syntax as the primary configuration 
-			file for the Apache HTTP server, so users familiar with editing Apache's 
-			configuration file should feel at ease when editing the CUPS configuration 
-			file. Some examples of settings you may wish to change initially will be 
-			presented here.
-          </para>
+          <para>Common UNIX Printing System 서버의 동작은 <filename>/etc/cups/cupsd.conf</filename> 파일 내에 포함된 지시자를 통하여 설정 됩니다. CUPS 설정 파일은 아파치 HTTP 서버를 위한 주요 설정 파일과 같은 문법을 따르므로 아파치 설정 파일을 편집하는데 익숙한 사용자들은 CUPS 설정 파일을 편집할 때 쉽다고 느낄 수 있습니다. 처음으로 변경하기를 원하는 설정 값의 몇 가지는 여기에 보여 집니다.</para>
           <tip>
                <para>설정 파일을 편집하기 전에, 원래의 파일의 복사본을 만들고 쓰기에서 그것을 보호해야만 합니다. 그래서 여러분은 원래의 설정을 참조하거나 그리고 필요한 경우 재사용 할 수 있습니다.</para>
                <para><filename>/etc/cups/cupsd.conf</filename> 파일을 복사하고 쓰기에서 그것을 보호하려면, 터미널 프롬프트에서 다음의 명령을 입력 합니다:</para>
@@ -1176,62 +957,12 @@ include "/etc/bind/named.conf.local";
                </para>
           <itemizedlist>
                 <listitem>
-                <para>
-                <emphasis role="bold">ServerAdmin</emphasis>: To configure the email 
-				address of the designated administrator of the CUPS server, simply 
-				edit the <filename>/etc/cups/cupsd.conf</filename> configuration file 
-				with your preferred text editor, and modify the <emphasis role="italics">ServerAdmin</emphasis> line accordingly.  For example, 
-				if you are the Administrator for the CUPS server, and your e-mail 
-				address is 'bjoy@somebigco.com', then you would modify the ServerAdmin 
-				line to appear as such:
-                </para>
+                <para><emphasis role="bold">ServerAdmin</emphasis>: CUPS 서버의 지정된 시스템 관리자의 이메일 주소를 설정하기 위한 것이고, 간단히 <filename>/etc/cups/cupsd.conf</filename> 설정 파일을 여러분이 선호하는 텍스트 에디터로 편집하기 위하여 열고, <emphasis role="italics">ServerAdmin</emphasis> 줄을 적절하게 수정을 합니다. 예를 들어, 여러분이 CUPS 서버의 시스템 관리자이고, 이메일 주소가 'bjoy@somebigco.com' 이면, 아래에 보이는 것과 같이 ServerAdmin 줄을 수정 합니다:</para>
                 <para>
 <screen>
 ServerAdmin bjoy@somebigco.com
 </screen>
                 </para>
-                </listitem>
-                <listitem>
-                <para>
-                <emphasis role="bold">Listen</emphasis>: By default on Ubuntu, the CUPS 
-				server installation listens only on the loopback interface at IP address 
-				<emphasis>127.0.0.1</emphasis>. In order to instruct the 
-				CUPS server to listen on an actual network adapter's IP address, you must 
-				specify either a hostname, the IP address, or optionally, an IP 
-				address/port pairing via the addition of a Listen directive.  For example, 
-				if your CUPS server resides on a local network at the IP address <emphasis role="italics">192.168.10.250</emphasis> and you'd like to make it 
-				accessible to the other systems on this subnetwork, you would edit the 
-				<filename>/etc/cups/cups.d/ports.conf</filename> and add a Listen 
-				directive, as such:
-                </para>
-                <para>
-<screen>
-Listen 127.0.0.1:631 # existing loopback Listen
-Listen /var/run/cups/cups.sock # existing socket Listen
-Listen 192.168.10.250:631 # Listen on the LAN interface, Port 631 (IPP)
-</screen>
-                </para>
-                <para>
-                In the example above, you may comment out or remove the reference to the 
-				Loopback address (127.0.0.1) if you do not wish <application>cupsd
-				</application> to listen on that interface, but would rather have it only 
-				listen on the Ethernet interfaces of the Local Area Network (LAN). To enable 
-				listening for all network interfaces for which a certain hostname is bound, 
-				including the Loopback, you could create a Listen entry for the hostname 
-				<emphasis>socrates</emphasis> as such:
-                </para>
-                <para>
-<screen>
-Listen socrates:631 # Listen on all interfaces for the hostname 'socrates'
-</screen>
-                </para> 
-				<para>or by omitting the Listen directive and using <emphasis>Port</emphasis> instead, as in:</para>
-<para>
-<screen>
-Port 631 # Listen on port 631 on all interfaces
-</screen>
-</para>
-                <para>CUPS 서버 설정 파일, <filename>/etc/cups/cupsd.conf</filename> 는, 올바르게 사용하는 몇 가지 가능한 Listen 지시자에 대한 예제를 가지고 있습니다.</para>
                 </listitem>
           </itemizedlist>
                 <para>CUPS 서버 설정 파일 내의 설정 지시자에 대한 더 많은 예제는, 터미널 프롬프트에서 다음의 명령을 입력하여 관계된 시스템 매뉴얼 페이지를 읽어 보십시오:</para>
@@ -1248,6 +979,32 @@ Port 631 # Listen on port 631 on all interfaces
 <command>sudo /etc/init.d/cupsys restart</command>
 </screen>
                 </para>
+	<para>Some other configuration for the CUPS server is done in the file <filename>/etc/cups/cups.d/ports.conf</filename>:</para>
+          <itemizedlist>
+                <listitem>
+                <para><emphasis role="bold">Listen</emphasis>: 우분투 기본 설정에 의하여, CUPS 서버의 설치는 오직 <emphasis>127.0.0.1</emphasis> IP 주소의 루프백 인터페이스만을 듣습니다. CUPS 서버가 실제 네트워크 어댑터의 IP 주소를 듣게 지시하려면, 여러분은 반드시 호스트 이름 또는 IP 주소 중의 하나, 또는 선택적으로, IP 주소/포트 쌍을 Listen 지시자에 추가해야 합니다. 예를 들어, 로컬 네트워크 상의 CUPS 서버의 IP 주소가 <emphasis role="italics">192.168.10.250</emphasis> 이고 이 서브 네트워크 상의 다른 시스템에서 그것을 사용할 수 있도록 만들기를 원한다면, <filename>/etc/cups/cups.d/ports.conf</filename> 파일을 편집하기 위하여 열고, 아래와 같이 Listen 지시자를 추가 합니다:</para>
+                <para>
+<screen>
+Listen 127.0.0.1:631 # existing loopback Listen
+Listen /var/run/cups/cups.sock # existing socket Listen
+Listen 192.168.10.250:631 # Listen on the LAN interface, Port 631 (IPP)
+</screen>
+                </para>
+                <para>위의 예에서, 만약 여러분이 <application>cupsd </application>가 루프백 인터페이스를 듣는 것을 원하지 않고 Local Area Network(LAN)의 이더넷 인터페이스만을 듣게하려고 한다면, 루프백 주소 (127.0.0.1)을 주석 처리하거나 삭제할 수 있습니다. 루프백을 포함하여, 특정 호스트 이름이 경계를 긋는 모든 네트워크 인터페이스를 듣게 만드려면, 아래와 같이 호스트 이름 <emphasis>socrates</emphasis> 를 위하여 Listen 항목을 만들 수 있습니다:</para>
+                <para>
+<screen>
+Listen socrates:631 # Listen on all interfaces for the hostname 'socrates'
+</screen>
+                </para> 
+				<para>또는 Listen 지시자는 제외하고 대신에 <emphasis>Port</emphasis> 를 사용하여 다음과 같이 할 수 있습니다:</para>
+<para>
+<screen>
+Port 631 # Listen on port 631 on all interfaces
+</screen>
+</para>
+                </listitem>
+	</itemizedlist>
+
       </sect2>
       <sect2 id="cups-references" status="complete">
         <title>참조</title>
@@ -1258,26 +1015,10 @@ Port 631 # Listen on port 631 on all interfaces
     </sect1>
 	<sect1 id="httpd" status="complete">
 		<title>HTTPD - 아파치2 웹 서버</title>
-      <para>Apache is the most commonly used Web Server on GNU/Linux systems. Web Servers are used
-          to serve Web Pages requested by client computers. Clients typically request and view
-          Web Pages using Web Browser applications such as <application>Firefox</application>,
-              <application>Opera</application>, or <application>Mozilla</application>.</para>
-      <para>Users enter a Uniform Resource Locator (URL) to point to a Web server by means of
-          its Fully Qualified Domain Name (FQDN) and a path to the required resource. For example, to view the home page of
-          the <ulink url="http://www.ubuntu.com">Ubuntu Web site</ulink> a user will enter only the FQDN. To request specific information about 
-              <ulink url="http://www.ubuntu.com/support/supportoptions/paidsupport">paid
-              support</ulink>, a user will enter the FQDN followed by a path.</para>
-      <para>The most common protocol used to transfer Web pages is the Hyper Text Transfer
-          Protocol (HTTP). Protocols such as Hyper Text Transfer Protocol over Secure Sockets Layer (HTTPS), and
-          File Transfer Protocol (FTP), a protocol for uploading and downloading files, are also
-          supported.</para>
-      <para>Apache Web Servers are often used in combination with the <application>MySQL</application>
-          database engine, the HyperText Preprocessor (<application>PHP</application>)
-          scripting language, and other popular scripting languages such as
-              <application>Python</application> and <application>Perl</application>. This
-          configuration is termed LAMP (Linux, Apache, MySQL and Perl/Python/PHP) and forms a
-          powerful and robust platform for the development and deployment of Web-based
-          applications.</para>
+      <para>아파치는 GNU/Linux 시스템 상에 가장 일반적으로 사용되는 웹 서버 입니다. 웹 서버는 클라이언트 컴퓨터에 의해 요청되는 웹 페이지를 제공하기 위하여 사용 됩니다. 클라이언트는 전형적으로 <application>Firefox</application>, <application>Opera</application>, 또는 <application>Mozilla</application> 와 같은 웹 브라우저를 사용하여 웹 페이지를 요청하고 보게 됩니다.</para>
+      <para>사용자는 웹 서버를 가리키기 위하여 완전히 지정된 도메인 이름(FQDN)과 요구되는 자원의 경로를 가지는 Uniform Resource Locator (URL) 을 입력 합니다. 예를 들어, <ulink url="http://www.ubuntu.com">우분투 웹 사이트</ulink>의 홈 페이지를 보려고 한다면, 사용자는 오직 FQDN 만을 입력할 것 입니다. <ulink url="http://www.ubuntu.com/support/supportoptions/paidsupport">비용지불 지원</ulink>에 특정 정보를 요청하려면, 사용자는 FQDN에 경로를 추가하여 입력 합니다.</para>
+      <para>웹 페이지를 전송하기 위하여 사용되는 가장 일반적인 프로토콜은 Hyper Text Transfer Protocol (HTTP) 입니다. Secure Sockets Layer 상의 Hyper Text Transfer Protocol (HTTPS) 와 파일을 업로드 또는 다운로드 하기 위한 File Transfer Protocol (FTP) 같은 프로토콜들도 또한 지원 됩니다.</para>
+      <para>아파치 웹 서버는 <application>MySQL</application> 데이타베이스 엔진, HyperText Preprocessor (<application>PHP</application>) 스크립트 언어, 그리고 <application>Python</application>과 <application>Perl</application>과 같은 다른 인기있는 스크립트 언어들과 함께 종종 사용되어 집니다. 이런 설정을 LAMP (Linux, Apache, MySQL 과 Perl/Python/PHP)라 명명하고, 이것은 웹 기반의 프로그램을 개발하고 이행하기 위한 강력하고 튼튼한 플랫폼을 구성 합니다.</para>
 <sect2 id="http-installation" status="complete">
   <title>설치</title>
                   <para>아파치2 웹 서버는 우분투 리눅스에서 사용 가능합니다. 아파치2를 설치하려면:</para>
@@ -1290,15 +1031,7 @@ Port 631 # Listen on port 631 on all interfaces
       </sect2>
       <sect2 id="http-configuration" status="complete">
         <title>설정</title>
-          <para>
-          Apache is configured by placing <emphasis>directives</emphasis> in plain text
-          configuration files. The main configuration file is called 
-		  <filename>apache2.conf</filename>. In addition, other configuration files may be added
-          using the <emphasis>Include</emphasis> directive, and wildcards can be used to
-          include many configuration files. Any directive may be placed
-          in any of these configuration files. Changes to the main
-          configuration files are only recognized by Apache2 when it is
-          started or restarted.</para>
+          <para>아파치는 일반 텍스트 설정 파일 내에 <emphasis>지시자</emphasis>를 넣는 것으로 설정이 됩니다. 주 설정 파일은 <filename>apache2.conf</filename> 입니다. 추가하여, 다른 설정 파일들은 <emphasis>Include</emphasis> 지시자를 사용하여 더해질 수 있고, 많은 설정 파일을 포함하기 위하여 와일드카드를 사용할 수 있습니다. 어떠한 지시자도 이러한 설정 파일들에 놓여질 수 있습니다. 주 설정 파일의 변경은 아파치2가 시작 또는 재시작될 때만 인식이 됩니다.</para>
 
           <para>서버는 또한 <emphasis>TypesConfig</emphasis> 지시자에 의해 정해지는 파일 이름과 그리고 기본으로 <filename>mime.types</filename>인 mime 문서 종류를 가지는 파일을 읽을 수 있습니다.</para>
 
@@ -1309,180 +1042,47 @@ Port 631 # Listen on port 631 on all interfaces
 
              <itemizedlist>
 
-             <listitem><para>
-             Apache2 ships with a virtual-host-friendly default configuration.
-			 That is, it is configured with a single default virtual host (using
-			 the <emphasis>VirtualHost</emphasis> directive) which can modified or used as-is if you
-			 have a single site, or used as a template for additional virtual hosts
-			 if you have multiple sites.  If left alone, the default virtual host
-			 will serve as your default site, or the site users will see if the
-			 URL they enter does not match the <emphasis>ServerName</emphasis> directive of any of your 
-			 custom sites.  To modify the default virtual host, edit the file
-			 <filename>/etc/apache2/sites-available/default</filename>.  If you
-			 wish to configure a new virtual host or site, copy that file into the
-			 same directory with a name you choose.  For example,
-			 <command>sudo cp /etc/apache2/sites-available/default /etc/apache2/sites-available/mynewsite</command>
-			 Edit the new file to configure the new site using some of the directives
-			 described below.
-            </para></listitem>
+             <listitem><para>아파치2는 가상 호스트에 친근한 기본 설정과 함께 제공 됩니다. 그것은, 하나의 기본 설정 가상 호스트를 (<emphasis>VirtualHost</emphasis> 지시자를 사용하여) 가지고 설정되어 있고, 변경되거나 만약 하나의 사이트를 가지고 있다면 그대로 사용할 수도 있으며, 여러 개의 사이트를 가지고 있다면 추가적인 가상 호스트를 위한 예제 양식으로 사용될 수도 있습니다. 그대로 사용을 하면, 기본 설정된 가상 호스트는 여러분의 기본 사이트로 동작하거나, 또는 사이트 사용자가 여러분이 지정한 사이트의 <emphasis>ServerName</emphasis> 지시자와 그들이 입력한 URL이 일치되는 않는 경우를 볼 수 있습니다. 기본 설정 가상 호스트를 변경하려면, <filename>/etc/apache2/sites-available/default</filename> 파일을 편집 합니다. 만약 새로운 가상 호스트나 사이트를 설정하기를 원한다면, 같은 디렉토리 내로 여러분이 선택한 이름을 가지고 그 파일을 복사 합니다. 예를 들어, <command>sudo cp /etc/apache2/sites-available/default /etc/apache2/sites-available/mynewsite</command>  아래에 기술하는 몇 가지 지시자들을 사용하여 새로운 사이트를 설정하기 위하여 그 새로운 파일을 편집 합니다.</para></listitem>
 
-             <listitem><para>
-			 The <emphasis>ServerAdmin</emphasis> directive specifies the email address to be advertised
-			 for the server's administrator.  The default value is webmaster@localhost.
-			 This should be changed to an email address that is delivered to you (if you
-			 are the server's administrator).  If your website has a problem, Apache2
-			 will display an error message containing this email address to report the
-			 problem to.  Find this directive in your site's configuration file in
-			 /etc/apache2/sites-available.
-			 </para></listitem>
+             <listitem><para><emphasis>ServerAdmin</emphasis> 지시자는 서버의 시스템 관리자를 위한 이메일 주소를 광고하기 위하여 지정 합니다. 기본 설정값은 webmaster@localhost 입니다. 이것은, 만약 여러분이 그 서버의 시스템 관리자라면, 여러분에게로 배달될 수 있는 이메일 주소로 변경되어야 합니다. 만약 여러분의 웹 사이트가 문제를 가지고 있다면, 아파치2는 그 문제를 보고하기 위하여 이 이메일 주소를 가지는 에러 메세지를 보여줍니다. /etc/apache2/sites-available 내의 사이트 설정 파일에서 이 지시자를 찾으십시오.</para></listitem>
 
-             <listitem><para>
-             The <emphasis>Listen</emphasis> directive specifies the port, and optionally the IP address,
-			 Apache2 should listen on. If the IP address is not specified, Apache2
-			 will listen on all IP addresses assigned to the machine it runs on.
-			 The default value for the Listen directive is 80.  Change this to
-			 127.0.0.1:80 to cause Apache2 to listen only on your loopback interface
-			 so that it will not be available to the Internet, to (for example) 81
-			 to change the port that it listens on, or leave it as is for normal
-			 operation.  This directive can be found and changed in its own file,
-			 <filename>/etc/apache2/ports.conf</filename>
-             </para></listitem>
+             <listitem><para><emphasis>Listen</emphasis> 지시자는 아파치2가 들어야하는, 포트, 그리고 선택 사항으로 IP 주소를 지정 합니다. 만약 IP 주소가 지정되지 않았다면, 아파치2는 서버가 실행되는 기계에 지정된 모든 IP 주소를 듣습니다. Listen 지시자를 위한 기본 설정값은 80 입니다. 오직 여러분의 루프백 인터페이스를 듣게하기 위하여 이것을 127.0.0.1:80으로 변경하고 그러면 서버는 인터넷으로는 사용할 수 없고, 듣고자 하는 포트를 변경하기 위하여 (예를 들어) 81로 지정할 수도 있고, 또는 보통의 동작을 위하여 있는 그대로 나두기도 합니다. 이 지시자를 위한 <filename>/etc/apache2/ports.conf</filename> 파일에서 지시자를  찾고 변경할 수 있습니다.</para></listitem>
 
-			 <listitem><para>
-			 The <emphasis>ServerName</emphasis> directive is optional and specifies what FQDN your
-			 site should answer to.  The default virtual host has no ServerName
-			 directive specified, so it will respond to all requests that do not
-			 match a ServerName directive in another virtual host.  If you have
-			 just acquired the domain name ubunturocks.com and wish to host it on
-			 your Ubuntu server, the value of the ServerName directive in your
-			 virtual host configuration file should be ubunturocks.com.  Add this
-			 directive to the new virtual host file you created earlier 
-			 (<filename>/etc/apache2/sites-available/mynewsite</filename>).
-			 
-			 <tip><para>You may also want your site to respond to www.ubunturocks.com, since
-				many users will assume the www prefix is appropriate.  Use the
-				<emphasis>ServerAlias</emphasis> directive for this.  You may also use wildcards in the
-				ServerAlias directive.  For example,
-				<command>ServerAlias *.ubunturocks.com</command>
-				will cause your site to respond to any domain request ending in
-				.ubunturocks.com.
-			 </para></tip>
-			 </para></listitem>
+			 <listitem><para><emphasis>ServerName</emphasis>은 선택사항입니다. 이 부분은 웹사이트에 접근할 수 있는 FQDN을 지정하는 역할을 합니다. 기본 가상 호스트에는 설정하둔 ServerName이 없기 때문에 다른 가상 호스트에서 사용하는 ServerName이 아닌 FQDN은 모두 기본 가상 호스트로 연결됩니다. ubunturocks.com이라는 도메인 이름을 구했을 때, 가상 호스트 설정 파일에 있는 ServerName의 값으로 ubunturocks.com을 입력하십시오. ServerName은 앞에서 만든 가상 호스트 파일(<filename>/etc/apache2/sites-available/mynewsite</filename>)에 넣으십시오. <tip><para>www를 앞에 붙이는 것을 당연하게 생각하는 사용자들도 많기 때문에 www.ubunturocks.com를 통해서도 웹사이트에 접근할 수 있게 설정하고 싶어할 수도 있습니다. 이 때 <emphasis>ServerAlias</emphasis>를 사용하면 됩니다. ServerAlias에 와일드카드를 사용할 수도 있습니다. 예를 들어, <command>ServerAlias *.ubunturocks.com</command>를 입력하면 .ubunturocks.com으로 끝나는 주소를 아무거나 사용하여 웹사이트에 접근할 수 있게 됩니다.</para></tip></para></listitem>
 
-			 <listitem><para>
-			 The <emphasis>DocumentRoot</emphasis> directive specifies where Apache should look for the
-			 files that make up the site.  The default value is /var/www.  No site
-			 is configured there, but if you uncomment the <emphasis>RedirectMatch</emphasis> directive
-			 in <filename>/etc/apache2/apache2.conf</filename> requests will be
-			 redirected to /var/www/apache2-default where the default Apache2 site
-			 awaits.  Change this value in your site's virtual host file, and
-			 remember to create that directory if necessary!
-			 </para></listitem>
+			 <listitem><para><emphasis>DocumentRoot</emphasis>는 웹사이트를 구성하는 파일들을 아파치가 찾을 때 사용하는 위치입니다. 기본값은 /var/www입니다. 아직은 /var/www에 아무런 웹사이트가 없지만, <filename>/etc/apache2/apache2.conf</filename>에 있는 <emphasis>RedirectMatch</emphasis>의 주석을 풀면 연결 요청이 /var/www/apache2-default로 연결되어 아파치2의 기본 웹사이트를 볼 수 있게 됩니다. 서버의 가상호스트 파일에 있는 이 값을 바꾸고, 필요한 경우에는 그 디렉토리를 변경하는 것은 잊지 마십시오.</para></listitem>
             </itemizedlist>
 
-			<tip><para>
-			The /etc/apache2/sites-available directory is <emphasis role="bold">
-			not</emphasis> parsed by Apache2.  Symbolic links in /etc/apache2/sites-enabled
-			point to "available" sites.  Use the a2ensite (Apache2
-			Enable Site) utility to create those symbolic links, like so:
-			<command>sudo a2ensite mynewsite</command>
-			where your site's configuration file is <filename>
-			/etc/apache2/sites-available/mynewsite</filename>.  Similarly, the
-			a2dissite utility should be used to disable sites.
-			</para></tip>
+			<tip><para>아파치는 /etc/apache2/sites-available 디렉토리를 직접 파싱하지 <emphasis role="bold">않습니다</emphasis>. /etc/apache2/sites-enabled에 있는 심볼릭 링크는 "접근할 수 있는" 사이트를 가리킬 뿐입니다. a2ensite (Apache2 Enable Site) 프로그램을 사용하여 <command>sudo a2ensite mynewsite</command>를 입력하여 필요한 심볼릭 링크를 만들 수 있습니다. 이 때 mynewsite는 새로 연결할 사이트의 설정 파일 <filename> /etc/apache2/sites-available/mynewsite</filename>입니다. 비슷한 방법으로 a2dissite를 사용하여 사이트의 연결을 해제할 수도 있습니다.</para></tip>
 
         </sect3>
         <sect3 id="default-settings" status="complete">
           <title>기본 설정</title>
-            <para>
-             This section explains configuration of the Apache2 server
-             default settings.  For example, if you add a virtual host, 
-             the settings you configure for the virtual host take
-             precedence for that virtual host. For a directive not
-             defined within the virtual host settings, the default
-             value is used.
-            </para>
+            <para>이 부분은 아파치2의 기본 설정을 설명합니다. 예를 들어, 가상호스트를 추가할 경우 그 가상호스트에서는 그 호스트를 위해 설정한 값이 우선순위를 가집니다. 가상호스트를 위해 설정한 값이 없을 때 기본값을 사용합니다.</para>
 
             <itemizedlist>
             <listitem>
-            <para>
-             The <emphasis>DirectoryIndex</emphasis> is the default page served by the
-             server when a user requests an index of a directory by
-             specifying a forward slash (/) at the end of the directory
-             name.</para>
+            <para><emphasis>DirectoryIndex</emphasis>는 사용자가 디렉토리명 끝에 /(슬래시)를 지정하여 디렉토리의 목록을 보고자 할 때 서버에서 기본으로 제공하는 페이지를 지정합니다.</para>
 
-             <para>For example, when a user requests the page
-             http://www.example.com/this_directory/, he or she will
-             get either the DirectoryIndex page if it exists, a
-             server-generated directory list if it does not and the
-			 Indexes option is specified, or a Permission Denied page
-			 if neither is true.  The server will try to
-             find one of the files listed in the DirectoryIndex
-             directive and will return the first one it finds. If it
-             does not find any of these files and if Options Indexes is
-             set for that directory, the server will generate and
-             return a list, in HTML format, of the subdirectories and
-             files in the directory.  The default value, found in
-			 <filename>/etc/apache2/apache2.conf</filename> is "
-			 index.html index.cgi index.pl index.php index.xhtml".
-			 Thus, if Apache2 finds a file in a requested directory
-			 matching any of these names, the first will be displayed.
-            </para>
+             <para>예를 들어, 사용자가 http://www.example.com/this_directory/라는 페이지를 요청한다면, 사용자가 볼 수 있는 페이지에 몇 가지가 있습니다. 우선, DirectoryIndex 페이지가 있을 경우에는 그 페이지를 보게 됩니다. 이 페이지가 없고, Indexes 옵션이 설정되어있다면 서버에서 생성한 디렉토리 목록을 보게 됩니다. 마지막으로 DirectoryIndex 페이지도 없고 Indexes 옵션도 설정이 안 되어있으면 Permission Denied 페이지를 보게 됩니다. 즉, 사용자의 요청이 들어오면 서버는 우선 DirectoryIndex에 설정된 파일 중에서 가장 먼저 발견하는 파일을 사용자에게 제공합니다. DirectoryIndex에 있는 파일이 하나도 없고, Indexes 옵션이 설정되어 있다면 서버는 HTML 형식으로 그 디렉토리에 있는 하위 디렉토리와 파일의 목록을 생성해서 사용자에게 제공합니다. <filename>/etc/apache2/apache2.conf</filename>에 있는 DirectoryIndex의 기본값은 "index.html index.cgi index.pl index.php index.xhtml"입니다. 사용자가 요청한 디렉토리에 앞의 파일 중 하나가 있다면 아파치2는 이 중 가장 앞의 것을 사용자에게 제공합니다.</para>
             </listitem>
 
             <listitem>
-            <para>
-             The <emphasis>ErrorDocument</emphasis> directive allows you to specify a file
-			 for Apache to use for specific error events.  For example,
-			 if a user requests a resource that does not exist, a 404
-			 error will occur, and per Apache2's default configuration,
-			 the file <filename>/usr/share/apache2/error/HTTP_NOT_FOUND.html.var
-			 </filename> will be displayed.  That file is not in the
-			 server's DocumentRoot, but there is an Alias directive in
-			 <filename>/etc/apache2/apache2.conf</filename> that redirects
-			 requests to the /error directory to /usr/share/apache2/error/.
-			 To see a list of the default ErrorDocument directives, use this
-			 command:
-			 <command>grep ErrorDocument /etc/apache2/apache2.conf</command>
-            </para>
+            <para><emphasis>ErrorDocument</emphasis> 지시자는 특정한 에러 사건을 위하여 사용할 수 있도록 아파치를 위한 파일을 지정하는 것을 허용 합니다. 예를 들어, 사용자가 요청한 자원이 존재하지 않으면, 404 에러가 일어나고, 아파치2 기본 설정에 따라, <filename>/usr/share/apache2/error/HTTP_NOT_FOUND.html.var </filename> 파일이 보여지게 됩니다. 그 파일은 서버의 DocumentRoot에 없고, /error 디렉토리를 /usr/share/apache2/error/ 로의 요청으로 재지정하는 <filename>/etc/apache2/apache2.conf</filename> 내의 Alias 지시자가 있습니다. 기본 설정된 ErrorDocument 지시자들의 목록을 보려면, 이 명령을 사용 합니다: <command>grep ErrorDocument /etc/apache2/apache2.conf</command></para>
             </listitem>
 
 
             <listitem>
-            <para>
-             By default, the server writes the transfer log to the file
-             /var/log/apache2/access.log. You can change this on a per-site
-			 basis in your virtual host configuration files with the <emphasis>CustomLog</emphasis>
-			 directive, or omit it to accept the default, specified in <filename>
-			 /etc/apache2/apache2.conf</filename>.  You may also specify the file
-			 to which errors are logged, via the <emphasis>ErrorLog</emphasis> directive, whose default
-			 is <filename>/var/log/apache2/error.log</filename>.  These are kept
-			 separate from the transfer logs to aid in troubleshooting problems
-			 with your Apache2 server.  You may also specify the <emphasis>LogLevel</emphasis> (the
-			 default value is "warn") and the <emphasis>LogFormat</emphasis> (see <filename>
-			 /etc/apache2/apache2.conf</filename> for the default value).
-			 </para>
+            <para>기본 설정에 의하여, 서버는 /var/log/apache2/access.log 파일로 전송 로그를 기록 합니다. <emphasis>CustomLog</emphasis> 지시자를 가지고 가상 호스트 설정 파일 내의 사이트당 이것을 변경하거나, 또는 <filename> /etc/apache2/apache2.conf</filename>에 지정된 기본 설정된 것을 제외시킬 수 있습니다. 또한 <emphasis>ErrorLog</emphasis> 지시자를 통하여 에러가 기록되는 파일로 지정할 수도 있습니다. 이 경우의 기본 설정은 <filename>/var/log/apache2/error.log</filename> 입니다. <emphasis>LogLevel</emphasis> (기본 설정은 "경고")과 <emphasis>LogFormat</emphasis> (기본 설정은 <filename> /etc/apache2/apache2.conf</filename>를 보십시오)도 역시 지정할 수 있습니다.</para>
             </listitem>
 
             <listitem>
-            <para>
-            Some options are specified on a per-directory basis rather than per-server.
-			Option is one of these directives.  A Directory stanza is enclosed in 
-			XML-like tags, like so:
-			<screen><command>&lt;Directory /var/www/mynewsite&gt;
+            <para>몇 가지 선택 사항은 서버당 설정이기 보다는 디렉토리당 지정이 됩니다. Option은 이러한 지시자들 중의 하나 입니다. Directory 부분은 XML 비슷하게 태크로 묶여지고, 그래서 다음과 비슷합니다: <screen><command>&lt;Directory /var/www/mynewsite&gt;
 				...
-			&lt;/Directory&gt;</command></screen>
-			The Options directive within a Directory stanza accepts one or more of the
-			following values (among others), separated by spaces:
-            </para>
+			&lt;/Directory&gt;</command></screen> Options 지시자는 Directory 부분 내에 하나 또는 그 이상의 다음의 값들을 가지고 (다른 것들과 함께), 공백으로 구분 됩니다:</para>
             <itemizedlist spacing="compact">
                 <listitem>
-                    <para><emphasis role="bold">ExecCGI</emphasis> - CGI 스크립트의 실행을 허용 합니다. 만약 이 선택사항이 선택되지 않았다면 CGI 스크립트는 수행될 수 없습니다. <tip><para>Most files should not be executed as CGI scripts.  This
-					would be very dangerous.  CGI scripts should kept in a directory 
-					separate from and outside your DocumentRoot, and only this
-					directory should have the ExecCGI option set.  This is the default,
-					and the default location for CGI scripts is /usr/lib/cgi-bin.
-					</para></tip></para>
+                    <para><emphasis role="bold">ExecCGI</emphasis> - CGI 스크립트의 실행을 허용 합니다. 만약 이 선택사항이 선택되지 않았다면 CGI 스크립트는 수행될 수 없습니다. <tip><para>대부분의 파일은 CGI 스크립트로서 실행이 되어서는 안됩니다. 이것은 매우 위험할 수 있습니다. CGI 스크립트는 여러분의 DocumentRoot 밖의 다른 디렉토리 내에 저장되어야만 하고, 오직 이 디렉토리만이 ExecCGI 옵션을 가져야 합니다. 이것은 기본 설정이고, CGI 스크립트를 위한 기본 위치는 /usr/lib/cgi-bin 입니다.</para></tip></para>
                 </listitem>
                 <listitem>
                     <para><emphasis role="bold">Includes</emphasis> - 서버 측의 includes를 허용 합니다. 서버 측 includes는 <emphasis> include</emphasis> 파일들로 HTML 파일을 허용 합니다. 이것은 일반적인 선택 사항이 아닙니다. 더 많은 정보는 <ulink url="http://httpd.apache.org/docs/2.0/howto/ssi.html">아파치2 SSI 하우투</ulink>를 보십시오.</para>
@@ -1494,17 +1094,10 @@ Port 631 # Listen on port 631 on all interfaces
                     <para><emphasis role="bold">Indexes</emphasis> - 요청된 디렉토리내에 DirectoryIndex가 (index.html과 같은) 없다면, 디렉토리 내용물의 형식화된 목록을 보여 줍니다.</para>
                 </listitem>
                 <listitem>
-                    <para>
-                    <emphasis role="bold">Multiview</emphasis> - Support content-negotiated multiviews;
-                    this option is disabled by default for security reasons.  See the <ulink url="http://httpd.apache.org/docs/2.0/mod/mod_negotiation.html#multiviews">Apache2
-					documentation on this option</ulink>.
-                    </para>
+                    <para><emphasis role="bold">Multiview</emphasis> - 컨텐츠에 따라 복수개의 보기를 지원 합니다. 이 선택 사항은 보안상의 이유로 기본 설정으로는 사용하지 못하도록 되었습니다. <ulink url="http://httpd.apache.org/docs/2.0/mod/mod_negotiation.html#multiviews">이 선택 사항에 대한 아파치2 문서</ulink>를 보십시오.</para>
                 </listitem>
                 <listitem>
-                    <para>
-                    <emphasis role="bold">SymLinksIfOwnerMatch</emphasis> - Only follow symbolic links
-                    if the target file or directory has the same owner as the link.
-                    </para>
+                    <para><emphasis role="bold">SymLinksIfOwnerMatch</emphasis> - 만약 타켓 파일 또는 디렉토리가 링크와 같은 소유자를 가졌다면 오직 심볼릭 링크를 따릅니다.</para>
                 </listitem>
             </itemizedlist>
 
@@ -1514,26 +1107,11 @@ Port 631 # Listen on port 631 on all interfaces
         <sect3 id="virtual-hosts-settings" status="complete">
 
           <title>가상 호스트 설정</title>
-            <para>
-			Virtual hosts allow you to run different servers for different IP addresses, different host 
-			names, or different ports on the same machine. For example, you can run the website for 
-			http://www.example.com and http://www.anotherexample.com on the same Web server using virtual 
-			hosts. This option corresponds to the &lt;VirtualHost&gt; directive for the default virtual 
-			host and IP-based virtual hosts. It corresponds to the &lt;NameVirtualHost&gt; directive for 
-			a name-based virtual host.
-			</para>
+            <para>가상 호스트는 같은 기계를 다른 IP 주소, 다른 호스트 이름, 또는 다른 포트로 실행할 수 있도록 합니다. 예를 들어, 같은 웹 서버에서 가상 호스트를 사용하여 http://www.example.com 과 http://www.anotherexample.com 을 실행할 수 있습니다. 이 선택 사항은 기본 설정 가상 호스트와 IP 기반 가상 호스트를 위한 &lt;VirtualHost&gt; 지시자와 대응 합니다. 이름 기반의 가상 호스트는 &lt;NameVirtualHost&gt; 지시자와 대응 합니다.</para>
 
-			<para>
-			The directives set for a virtual host only apply to that particular virtual host. If a 
-			directive is set server-wide and not defined within the virtual host settings, the default 
-			setting is used. For example, you can define a Webmaster email address and not define 
-			individual email addresses for each virtual host. 
-    		</para>
+			<para>하나의 가상 호스트를 위한 지시자의 집합은 그 특정 가상 호스트에만 적용이 됩니다. 만약 서버 전체로 지시자가 지정이 되고 가상 호스트 설정 내에 정의가 안되었다면, 기본 설정 값이 사용 됩니다. 예를 들어, 웹마스터 이메일 주소를 지정할 수 있고 각각의 가상 호스트를 위한 개별적인 이메일 주소를 설정하지 않을 수도 있습니다.</para>
  
- 			<para>
-			Set the DocumentRoot directive to the directory that contains the root document (such as 
-			index.html) for the virtual host. The default DocumentRoot is <filename>/var/www</filename>.
-			</para>
+ 			<para>가상 호스트를 위하여 루트 문서를 (index.html과 같은) 가지는 디렉토리는 DocumentRoot 지시자로 지정을 합니다. 기본 설정된 DocumentRoot는 <filename>/var/www</filename> 입니다.</para>
 
 			<para>ServerAdmin 지시자는 VirtualHost 절에 포함되는, 에러 페이지에서 이메일 주소와 함께 바닥글을 보여주는 것을 선택하였다면, 에러 페이지의 바닥글에 사용되는 이메일 주소 입니다.</para>
 
@@ -1541,20 +1119,11 @@ Port 631 # Listen on port 631 on all interfaces
         <sect3 id="server-settings" status="complete">
           <title>서버 설정</title>
             <para>이 영역은 어떻게 기본적인 서버 설정을 하는지를 설명 합니다.</para>
-                    <para><emphasis role="bold">LockFile</emphasis> - The LockFile directive sets the path 
-					to the lockfile used when the server is compiled with either USE_FCNTL_SERIALIZED_ACCEPT 
-					or USE_FLOCK_SERIALIZED_ACCEPT. It must be stored on the local disk. It should be left 
-					to the default value unless the logs directory is located on an NFS share. If this is 
-					the case, the default value should be changed to a location on the local disk and to a 
-					directory that is readable only by root. </para>
+                    <para><emphasis role="bold">LockFile</emphasis> - LockFile 지시자는 서버가 USE_FCNTL_SERIALIZED_ACCEPT 또는 USE_FLOCK_SERIALIZED_ACCEPT 중의 하나로 컴파일 되었을 때 사용되는 lockfile의 경로를 지정 합니다. 그것은 반드시 로컬 디스크에 저장되어야 합니다. NFS 공유 상에 로그 디렉토리가 위치하지 않는 한 기본 설정된 값으로 나두십시오. 이 경우라면, 오직 root에 의해서만 읽을 수 있는 디렉토리로 로컬 디스크 상의 위치를 기본 설정 값으로 변경 합니다.</para>
 
-					<para><emphasis role="bold">PidFile</emphasis> - The PidFile directive sets the file in which the server 
-					records its process ID (pid). This file should only be readable by root. In most cases, it should be left 
-					to the default value.</para>
+					<para><emphasis role="bold">PidFile</emphasis> - PidFile 지시자는 서버가 프로세스 ID (pid)를 기록하는 파일을 지정 합니다. 이 파일은 반드시 root에 의해서만 읽혀질 수 있어야 합니다. 많은 경우에, 이 지시자는 기본 설정값으로 남겨져야 합니다.</para>
 
-<para><emphasis role="bold">User</emphasis> - The User directive sets the userid used by the server to answer requests. This 
-setting determines the server's access. Any files inaccessible to this user will also be inaccessible to your website's visitors. 
-The default value for User is www-data.  </para>
+<para><emphasis role="bold">User</emphasis> - User 지시자는 요청을 대답하기 위하여 서버에 의해 사용되는 사용자 아이디를 지정 합니다. 이 설정은 서버의 접근을 결정 합니다. 이 사용자가 접근할 수 없는 파일은 또한 여러분의 웹 사이트 방문자도 접근할 수 없습니다. User를 위하여 기본 설정된 값은 www-data 입니다.</para>
             <warning>
             <para>여러분이 하는 것을 정확히 알지 않는 한, User 지시자를 root로 지정하지 마십시오. User로 root를 사용하는 여러분의 웹 서버에 거대한 보안 구멍을 만들게 됩니다.</para>
             </warning>
@@ -1563,63 +1132,21 @@ The default value for User is www-data.  </para>
         </sect3>
         <sect3 id="apache-modules" status="complete">
           <title>아파치 모듈</title>
-              <para>
-
-              Apache is a modular server. This implies that only the most
-              basic functionality is included in the core server. Extended
-              features are available through modules which can be loaded
-              into Apache. By default, a base set of modules is included in
-              the server at compile-time. If the server is compiled to use
-              dynamically loaded  modules, then modules can be compiled
-              separately, and added at any time using the LoadModule
-              directive. Otherwise, Apache must be recompiled to add or
-              remove modules. Ubuntu compiles Apache2 to allow the dynamic
-			  loading of modules.  Configuration directives may be conditionally
-	      included on the presence of a particular module by enclosing
-              them in an &lt;IfModule&gt; block.
-
-              You can install additional Apache2 modules and use them
-              with your Web server. You can install Apache2
-              modules using the <application>apt-get</application>
-              command. For example, to install the Apache2 module
-              for MYSQL authentication, you can run the
-                following command from a terminal prompt:</para>
+              <para>아파치는 모듈 방식의 서버 입니다. 이것은 핵심 서버에는 가장 기본적인 기능만을 포함하는 것을 의미 합니다. 확장되는 기능은 아파치로 올려질 수 있는 모듈을 통하여 사용 가능 합니다. 기본 설정으로, 모듈의 기본적인 집합은 컴파일 시에 서버에 포함 됩니다. 만약 서버가 동적으로 올려지는 모듈을 사용하도록 컴파일 되었다면, 모듈은 분리하여 컴파일 될 수 있고, LoadModule 지시자를 사용하여 어느 때나 추가될 수 있습니다. 그렇지 않다면, 아파치는 모듈을 추가하거나 삭제하도록 반드시 재 컴파일 되어야 합니다. 우분투는 아파치2가 동적 모듈의 올림을 허용하도록 컴파일 하였습니다. 설정 지시자들은 &lt;IfModule&gt; 블럭 내에 특정 모듈의 존재를 넣는 것으로 조건적으로 포함될 수 있습니다. 여러분은 추가적인 아파치2 모듈을 설치할 수 있고 웹 서버와 함께 사용을 할 수 있습니다. 아파치2 모듈은 <application>apt-get</application> 명령을 사용하여 추가할 수 있습니다. 예를 들어, MYSQL 인증을 위한 아파치2 모듈을 설치하려면, 다음의 명령을 터미널 프롬프트에서 실행을 합니다:</para>
                 
                 <para>
 <screen>
 <command>sudo apt-get install libapache2-mod-auth-mysql</command>
 </screen>
                 </para>
-                <para>
-                Once you install the module, the module will
-                be available in the
-                <filename>/etc/apache2/mods-available</filename> directory. You can use
-              the <application>a2enmod</application> command to
-              enable a module. You can use
-              the <application>a2dismod</application> command to
-              disable a module. Once you enable the module,
-              the module will be available in the
-              the <filename>/etc/apache2/mods-enabled</filename> directory.
-              </para>
+                <para>모둘을 설치한 후, 그 모듈은 <filename>/etc/apache2/mods-available</filename> 디렉토리 내에 있게 됩니다. 모둘을 사용 가능하게 하는 것은 <application>a2enmod</application> 명령을 사용할 수 있습니다. 모듈을 사용 가능하게 하면, 그 모듈은 <filename>/etc/apache2/mods-enabled</filename> 디렉토리 내에 있게 됩니다.</para>
         </sect3>
       </sect2>
       <sect2 id="https-configuration" status="complete">
         <title>HTTPS 설정</title>
-          <para>
-           The <application>mod_ssl</application> module adds
-           an important feature to the Apache2 server - the ability to
-           encrypt communications.  Thus, when your browser is
-           communicating using SSL encryption, the
-           https:// prefix is used at the beginning of the Uniform
-           Resource Locator (URL) in the browser navigation bar.
-          </para>
+          <para><application>mod_ssl</application> 모듈은 아파치2 서버에 중요한 - 통신을 암호화 하는 기능을 더합니다. 그러므로, SSL 암호화를 사용하여 여러분의 브라우저가 통신을 할 때, https:// 접두 주소가 브라우저 주소 막대 내의 Uniform Resource Locator (URL)의 시작에 사용 됩니다.</para>
 
-          <para>
-          The <application>mod_ssl</application> module is available in
-          <application>apache2-common</application> package. If you have
-          installed this package, you can run the following command from a terminal prompt to
-          enable the <application>mod_ssl</application> module:
-          </para>
+          <para><application>mod_ssl</application> 모듈은 <application>apache2-common</application> 패키지 내에 있습니다. 이 패키지가 설치되어 있다면, 터미널 프롬프트에서 다음의 명령을 실행하여 <application>mod_ssl</application> 모듈을 활성화 할 수 있습니다:</para>
 
           <para>
 <screen>
@@ -1628,117 +1155,52 @@ The default value for User is www-data.  </para>
           </para>
         <sect3 id="certificates-and-security" status="complete">
           <title>인증서와 보안</title>
-            <para>
-              To set up your secure server, use public key cryptography to
-              create a public and private key pair. In most cases, you
-              send your certificate request (including your public key),
-              proof of your company's identity, and payment to a
-              Certificate Authority (CA). The
-              CA verifies the certificate request and your identity, and
-              then sends back a certificate for your secure server. 
-            </para>
-             <para>
-             Alternatively, you can create your own self-signed
-             certificate. Note, however, that self-signed certificates
-             should not be used in most production environments.
-             Self-signed certificates are not automatically accepted by
-             a user's browser.  Users are prompted by the browser to
-             accept the certificate and create the secure connection.
-             </para>
+            <para>여러분의 안전한 서버를 만들기 위하여, 공개와 사적 키 쌍을 만들기 위한 공개 키 암호화를 사용 합니다. 대부분의 경우에, 여러분의 공개 키를 포함하는 인증 요청, 여러분 회사의 이름 등의 증명, 그리고 인증 기관(CA)에 지불하는 비용을 보냅니다. CA는 인증 요청과 여러분의 식별을 확인한 후 보안 서버를 위하여 인증서를 보내게 됩니다.</para>
+             <para>다른 방법으로, 여러분 스스로 자가-사인한 인증서를 만들 수 있습니다. 그러나, 자가-사인 인증서는 대부분의 현업 환경에서는 사용하지 말아야 함을 주의 하십시오. 자가-사인 인증서는 사용자의 웹브라우저에 의해 자동적으로 받아들여지지 않습니다. 사용자는 웹브라우저에 의하여 인증서를 받아들이고 보안 연결을 만들기 위한 질문을 받게 됩니다.</para>
 
-             <para>
-              Once you have a self-signed certificate or a signed
-              certificate from the CA of your choice, you need to
-              install it on your secure server.
-             </para>
+             <para>자가-사인 인증서 또는 여러분이 선택한 CA에서 사인한 인증서를 가진 후에, 그것을 보안 서버에 설치하는 것이 필요 합니다.</para>
         </sect3>
         <sect3 id="types-of-certificates" status="complete">
           <title>인증서의 종류</title>
-            <para>
-             You need a key and a certificate to operate your secure
-             server, which means that you can either generate a
-             self-signed certificate or purchase a CA-signed
-             certificate.  A CA-signed certificate provides two important
-              capabilities for your server:
-            </para>
+            <para>보안 서버를 동작하게 하려면 키와 인증서가 필요 합니다. 이것은 자가-사인한 인증서를 만들거나 또는 CA-사인 인증서를 구매하여야 하는 것을 의미 합니다. CA-사인 인증서는 여러분의 서버에 두 가지 중요한 능력을 제공 합니다:</para>
 
             <itemizedlist>
             <listitem>
-            <para>
-            Browsers (usually) automatically recognize the certificate
-            and allow a secure connection to be made without prompting
-            the user.
-            </para>
+            <para>웹브라우저들은 (대개) 사용자에게 묻는 것 없이 자동적으로 인증서와 만들어진 보안 연결을 인식 합니다.</para>
             </listitem>
             <listitem>
-            <para>
-             When a CA issues a signed certificate, it is
-             guaranteeing the identity of the organization that is
-             providing the web pages to the browser.
-            </para>
+            <para>CA가 사인된 인증을 발행하였을 때, 그것은 웹 페이지를 브라우저에 제공하는 단체의 식별을 보장 합니다.</para>
             </listitem>
             </itemizedlist>
 
-            <para>
-             Most Web browsers that support SSL have a list of CAs whose
-             certificates they automatically accept. If a browser
-             encounters a certificate whose authorizing CA is not in the
-             list, the browser asks the user to either accept or decline
-             the connection.
-            </para>
-            <para>
-             You can generate a self-signed certificate for your secure server, but
-            be aware that a self-signed certificate does not provide the same
-            functionality as a CA-signed certificate. A self-signed certificate is
-            not automatically recognized by most Web browsers, and a self-signed
-            certificate does not provide any guarantee concerning the identity of
-            the organization that is providing the website. A CA-signed certificate
-            provides both of these important capabilities for a secure server. 
-            The process of getting a certificate from a CA is fairly
-            easy. A quick overview is as follows:
-            </para>
+            <para>SSL을 지원하는 대부분의 웹 브라우저는 그들이 자동적으로 받아들이는 인증한 CA의 목록을 가집니다. 만약 브라우저가 목록 내에 인증된 CA를 가지지 않은 인증서를 만나게 되면, 브라우저는 사용자에게 접속을 허용할 것인지 또는 거절할 것인지를 물어보게 됩니다.</para>
+            <para>여러분은 보안 서버를 위하여 자가-사인된 인증서를 만들 수 있지만, 자가-사인된 인증서는 CA-사인된 인증서와 같은 기능을 제공하지 않음을 알고있어야 합니다. 자가-사인된 인증서는 대부분의 웹 브라우저에 의해 자동적으로 인식되지 않고, 자가-사인된 인증서는 웹 사이트를 제공하는 단체의 식별에 대한 염려를 위한 어떤 보증도 제공하지 않습니다. CA-사인된 인증서는 보안 서버를 위한 이 두 가지의 중요한 능력을 제공 합니다. CA에서 인증서를 받는 절차는 아주 쉽습니다. 빠른 개괄적인 것은 다음과 같습니다:</para>
 
             <orderedlist>
             <listitem>
-               <para>Create a private and public encryption key pair.</para>
+               <para>사적 그리고 공개 암호 키 쌍을 만듭니다.</para>
             </listitem>
             <listitem>
-                 <para>Create a certificate request based on the public key. The
-              certificate request contains information about your server and the
-              company hosting it.</para>
+                 <para>공개 키에 근거하여 인증서 요청을 만듭니다. 인증서 요청은 여러분의 서버와 그것을 호스팅하는 회사에 대한 정보를 가집니다.</para>
             </listitem>
             <listitem>
-                 <para>Send the certificate request, along with documents proving your
-              identity, to a CA. We cannot tell you which certificate authority to
-              choose. Your decision may be based on your past experiences, or on the
-              experiences of your friends or colleagues, or purely on monetary
-              factors.</para>
+                 <para>인증서 요청을, 여러분의 인적 사항을 제공하는 문서와 함께 CA로 보냅니다. 우리는 여러분에게 어떤 인증 기관을 선택할 지를 이야기할 수 없습니다. 여러분의 결정은 아마 여러분의 과거 경험, 친구나 동료의 경험, 또는 순전히 금전상의 요인에 근거할 겁니다.</para>
 
-                    <para>Once you have decided upon a CA, you need to follow the
-              instructions they provide on how to obtain a certificate
-              from them.</para>
+                    <para>CA를 결정하였다면, 그들에게서 어떻게 인증서를 얻을 수 있는지를 그들이 제공한 지시에 따르는 것이 필요 합니다.</para>
             </listitem>
             <listitem>
-               <para>When the CA is satisfied that you are indeed who you claim to be,
-            they send you a digital certificate.</para>
+               <para>CA가 여러분이 정말로 요청을 한 사람임을 만족하게 되면, 그들은 디지털 인증서를 여러분에게 보냅니다.</para>
             </listitem>
             <listitem>
-               <para>Install this certificate on your secure server, and begin handling
-            secure transactions. </para>
+               <para>이 인증서를 여러분의 보안 서버에 설치하고, 보안 트랜잭션을 관리하기 시작 합니다.</para>
             </listitem>
             </orderedlist>
 
-            <para>Whether you are getting a certificate from a CA or generating your own
-            self-signed certificate, the first step is to generate a key.
-            </para>
+            <para>CA에서 인증서를 받던지 또는 여러분 스스로 자가-사인 인증서를 만들던지, 첫 번째 단계는 키를 만드는 것 입니다.</para>
         </sect3>
         <sect3 id="generating-a-csr" status="complete">
-          <title>Generating a Certificate Signing Request (CSR)</title>
-            <para>
-            To generate the Certificate Signing Request (CSR), you should create your
-            own key. You can run the following command from a terminal prompt to create the
-            key:
-            </para>
+          <title>Certificate Signing Request (CSR) 만들기</title>
+            <para>인증서 서명 요청 (CSR)을 만드려면, 여러분 소유의 키를 만들어야만 합니다. 키를 만들기 위하여 터미널 프롬프트에서 다음의 명령을 수행할 수 있습니다:</para>
 
             <para>
 <screen>
@@ -1754,50 +1216,24 @@ e is 65537 (0x10001)
 Enter pass phrase for server.key:
 </programlisting>
 
-        <para>
-        You can now enter your passphrase. For best security, it should
-        at least contain eight characters. The minimum length when
-		specifying -des3 is four characters. It should include numbers
-        and/or punctuation and not be a word in a dictionary. Also
-        remember that your passphrase is case-sensitive. 
-        </para>
+        <para>이제 여러분의 암호 문구를 입력 합니다. 최선의 보안을 위하여, 그것은 최소한 8자리 문자여야 합니다. -deb3을 지정하는 경우 최소한의 길이는 4자리 문자 입니다. 그것은 숫자 그리고/또는 구두점을 포함하고 사전내의 단어여서는 안됩니다. 암호 문구는 대소문자 구별을 하는 것을 기억 하십시오.</para>
 
-        <para>
-        Re-type the passphrase to verify. Once you have re-typed it
-        correctly, the server key is generated and stored in
-        <filename>server.key</filename> file.
-        </para>
+        <para>확인을 위하여 암호 문구를 재 입력 합니다. 그것을 정확히 재 입력한 후, 서버 키는 만들어지고 <filename>server.key</filename> 파일로 저장이 됩니다.</para>
 
         <warning>
-        <para>
-        You can also run your secure web server without a passphrase.
-        This is convenient because you will not need to enter the
-        passphrase every time you start your secure web server. But it
-        is highly insecure and a compromise of the key means a
-        compromise of the server as well.
-        </para>
+        <para>또한 여러분의 보안 웹 서버를 암호 구문 없이 실행시킬 수 있습니다. 이것은 보안 웹 서버를 시작하는 매 번마다 암호 구문을 입력할 필요가 없으므로 편리합니다. 하지만, 그것은 굉장히 안전하지 못한 방법이고 보안 키의 절충은 서버의 절충과 마찬가지의 의미 입니다.</para>
         </warning>
 
-        <para>
-        In any case, you can choose to run your secure web server without
-        a passphrase by leaving out the -des3 switch in the generation
-        phase or by issuing the following command at a terminal prompt:
-        </para>
+        <para>어떤 경우에는, 구문 생성에서 -des3 스위치는 떼는 것 또는 터미널 프롬프트에서 다음의 명령을 수행하는 것으로 암호 구문 없이 보안 웹 서버를 실행하는 것을 선택할 수 있습니다:</para>
 
         <para>
 <screen>
 <command>openssl rsa -in server.key -out server.key.insecure</command>
 </screen>
         </para>
-        <para>
-        Once you run the above command, the insecure key will be stored
-        in the <filename>server.key.insecure</filename> file. You can use this
-        file to generate the CSR without passphrase.
-        </para>
+        <para>위의 명령을 실행하면, 그 insecure 키는 <filename>server.key.insecure</filename> 파일에 저장 됩니다. 여러분은 이 파일을 암호 구문 없이 CSR을 생성할 때 사용할 수 있습니다.</para>
 
-        <para>
-        To create the CSR, run the following command at a terminal prompt:
-        </para>
+        <para>CSR을 만드려면, 터미널 프롬프트에서 다음의 명령을 실행 합니다:</para>
 
         <para>
 <screen>
@@ -1805,22 +1241,12 @@ Enter pass phrase for server.key:
 </screen>
         </para>
 
-        <para>It will prompt you enter the passphrase. If you enter the
-        correct passphrase, it will prompt you to enter Company Name,
-        Site Name, Email Id, etc. Once you enter all these details, your
-        CSR will be created and it will be stored in the
-        <filename>server.csr</filename> file. You can submit this CSR file
-        to a CA for processing. The CAN will use this CSR file and issue
-        the certificate. On the other hand, you can create self-signed
-        certificate using this CSR.</para>
+        <para>암호 구문을 입력하도록 물어 봅니다. 만약 여러분이 정확한 암호 구문을 입력하면, 회사 이름, 사이트 이름, 이메일 ID 등을 입력하도록 물어 봅니다. 이러한 모든 사항을 입력한 후에, 여러분의 CSR은 만들어지고 그것은 <filename>server.csr</filename> 파일에 저장 됩니다. 이 CSR 파일을 이 후의 절차를 위하여 CA로 보낼 수 있습니다. CAN은 이 CSR 파일을 사용하고 인증서를 발행 합니다. 다른 한편으로는, 여러분은 이 CSR을 사용하여 자가-사인 인증서를 만들 수도 있습니다.</para>
 
         </sect3>
         <sect3 id="creating-a-self-signed-certificate" status="complete">
-          <title>Creating a Self-Signed Certificate</title>
-            <para>
-            To create the self-signed certificate, run the
-            following command at a terminal prompt:
-            </para>
+          <title>자가-사인 인증서 만들기</title>
+            <para>자가-사인 인증서를 만들기 위하여, 터미널 프롬프트에서 다음의 명령을 실행 합니다:</para>
 
             <para>
 <screen>
@@ -1828,39 +1254,22 @@ Enter pass phrase for server.key:
 </screen>
             </para>
 
-            <para>The above command will prompt you to enter the
-            passphrase. Once you enter the correct passphrase, your
-            certificate will be created and it will be stored in the
-            <filename>server.crt</filename> file.  </para>
+            <para>위의 명령은 여러분이 암호 구문을 입력하도록 물어 봅니다. 정확한 암호 구문이 입력된 후, 여러분의 인증서가 만들어지고 그것은 <filename>server.crt</filename> 파일에 저장 됩니다.</para>
         <warning>
-        <para>
-            If your secure server is to be used in a production environment, you
-            probably need a CA-signed certificate.  It is not
-            recommended to use self-signed certificate.
-        </para>
+        <para>만약 여러분의 보안 서버가 현업 환경에서 사용이 된다면, 아마도 CA가 사인한 인증서가 필요할 겁니다. 자가-사인한 인증서를 사용하는 것은 권장되지 않습니다.</para>
         </warning>
         </sect3>
         <sect3 id="installing-the-certificate" status="complete">
           <title>인증서 설치</title>
 
-            <para>You can install the key file
-            <filename>server.key</filename> and certificate file
-            <filename>server.crt</filename> or the certificate file issued
-            by your CA by running following commands at a terminal prompt:
-            </para>
+            <para>키 파일 <filename>server.key</filename>와 인증서 파일 <filename>server.crt</filename> 또는 여러분의 CA에서 발행한 인증서 파일을 터미널 프롬프트에서 다음의 명령들을 수행하여 설치할 수 있습니다:</para>
             <para>
 <screen>
 <command>sudo cp server.crt /etc/ssl/certs</command>
 <command>sudo cp server.key /etc/ssl/private</command>
 </screen>
             </para>
-            <para>
-            You should add the following four lines to the
-            <filename>/etc/apache2/sites-available/default</filename>
-            file or the configuration file for your secure virtual
-			host. You should place them in the <emphasis>VirtualHost</emphasis> section. They
-            should be placed under the <emphasis>DocumentRoot</emphasis> line:
-            </para>
+            <para><filename>/etc/apache2/sites-available/default</filename> 파일 또는 여러분의 보안 가상 호스트를 위한 설정 파일에 다음의 네 줄을 추가하여야 합니다. <emphasis>VirtualHost</emphasis> 부분에 그것을 넣습니다. 그것은 <emphasis>DocumentRoot</emphasis> 줄 밑에 놓여집니다:</para>
 <programlisting>
 SSLEngine on
 SSLOptions +FakeBasicAuth +ExportCertData +CompatEnvVars +StrictRequire
@@ -1869,11 +1278,7 @@ SSLCertificateFile /etc/ssl/certs/server.crt
 SSLCertificateKeyFile /etc/ssl/private/server.key
 </programlisting>
           
-            <para>
-            HTTPS should listen on port number 443. You should add the
-            following line to the <filename>/etc/apache2/ports.conf</filename>
-            file:
-            </para>
+            <para>HTTPS는 포트 번호 443을 듣습니다. <filename>/etc/apache2/ports.conf</filename> 파일에 다음의 줄을 추가하여야 합니다:</para>
 <programlisting>
 Listen 443
 </programlisting>
@@ -1881,26 +1286,15 @@ Listen 443
         </sect3>
         <sect3 id="accessing-the-server" status="complete">
           <title>서버에 접근하기</title>
-            <para>
-            Once you install your certificate, you should restart your
-            web server. You can run the following command at a terminal prompt to
-            restart your web server:
-            </para>
+            <para>여러분의 인증서를 설치한 후에, 웹 서버를 재 시작하여야 합니다. 터미널 프롬프트에서 다음의 명령을 실행하여 웹 서버를 재 시작할 수 있습니다:</para>
             <para>
 <screen>            
 <command>sudo /etc/init.d/apache2 restart</command>
 </screen>
             </para>
-        <note><para>
-        You should remember and enter the passphrase every time you
-        start your secure web server.
-        </para></note>
+        <note><para>여러분은 반드시 그 암호 구문을 기억해야 하고 보안 웹 서버가 시작되는 매 번마다 암호 구문을 입력 합니다.</para></note>
 
-            <para>You will be prompted to enter the passphrase. Once you
-            enter the correct passphrase, the secure web server will be
-            started. You can access the secure server pages by typing
-            https://your_hostname/url/ in your
-            browser address bar.</para>
+            <para>암호 구문을 입력하도록 물어 봅니다. 정확한 암호 구문을 입력한 후에, 보안 웹 서버는 시작 됩니다. 여러분의 웹 브라우저 주소   란에서 https://your_hostname/url/ 형식으로 입력하여 보안 서버 페이지를 접근 합니다.</para>
 
         </sect3>
       </sect2>
@@ -1917,26 +1311,11 @@ Listen 443
 	
 	<sect1 id="squid" status="complete">
 		<title>Squid - 프락시 서버</title>
-          <para>
-          Squid is a full-featured web proxy cache server application which provides proxy and cache services for Hyper Text
-          Transport Protocol (HTTP), File Transfer Protocol (FTP), and other popular network protocols.  Squid can implement
-          caching and proxying of Secure Sockets Layer (SSL) requests and caching of Domain Name Server (DNS) lookups, and perform
-          transparent caching. Squid also supports a wide variety of caching protocols, such as Internet Cache Protocol, (ICP)
-          the Hyper Text Caching Protocol, (HTCP) the Cache Array Routing Protocol (CARP), and the Web Cache Coordination 
-          Protocol. (WCCP) 
-          </para>
-          <para>
-          The Squid proxy cache server is an excellent solution to a variety of proxy and caching server needs, and scales from
-          the branch office to enterprise level networks while providing extensive, granular access control mechanisms and
-          monitoring of critical parameters via the Simple Network Management Protocol (SNMP).  When selecting a computer system
-          for use as a dedicated Squid proxy, or caching servers, ensure your system is configured with a large amount of physical
-          memory, as Squid maintains an in-memory cache for increased performance.
-          </para>
+          <para>Squid는 완전한 기능을 갖춘 웹 프락시 캐쉬 서버 프로그램이고 Hyper Text Transport Protocol (HTTP), File Transfer Protocol (FTP), 그리고 다른 인기있는 네트워크 프로토콜들을 위한 프락시와 캐쉬 서비스를 제공 합니다. Squid는 Secure Sockets Layer (SSL) 요청의 캐슁과 프락싱 그리고 Domain Name Server (DNS) 조회의 캐슁을 이행할 수 있고, 투명한 캐슁을 수행 합니다. 또한, Squid는 Internet Cache Protocol (ICP), Hyper Text Caching Protocol (HTCP), Cache Array Routing Protocol (CARP), 그리고 Web Cache Coordination Protocol (WCCP) 프로토콜과 같은 다양한 종류의 캐슁 프로토콜을 지원 합니다.</para>
+          <para>Squid 프락시 캐쉬 서버는 다양한 프락시와 캐슁 서버의 요구에 맞는 훌륭한 솔루션이고, 광범위하고 조직적인 접근 조종 기능과 Simple Network Management Protocol (SNMP)를 통하여 아주 중요한 것들의 감시 기능을 제공하므로 지점 사무실에서 부터 기업 수준의 네트워크 까지로 확장할 수 있습니다. 전용의 Squid 프락시, 또는 캐슁 서버로 하나의 컴퓨터를 선택하였을 때, Squid는 성능을 향상시키기 위하여 메모리 내의 캐쉬를 관리하므로 많은 양의 실제 메모리를 가지도록 시스템을 설정 합니다.</para>
       <sect2 id="squid-installation" status="complete">
         <title>설치</title>
-          <para>
-            At a terminal prompt, enter the following command to install the Squid server:
-          </para>
+          <para>터미널 프롬프트에서, Squid 서버를 설치하기 위하여 다음의 명령을 입력 합니다:</para>
           <para>
 <screen>
 <command>sudo apt-get install squid squid-common</command>
@@ -1945,17 +1324,10 @@ Listen 443
       </sect2>
       <sect2 id="squid-configuration" status="complete">
         <title>설정</title>
-          <para>
-            Squid is configured by editing the directives contained within the <filename>/etc/squid/squid.conf</filename> configuration file.
-            The following examples illustrate some of the directives which may be modified to affect the behavior of the Squid server.
-            For more in-depth configuration of Squid, see the References section. 
-          </para>
+          <para>Squid는 <filename>/etc/squid/squid.conf</filename> 설정 파일 내의 지시자를 편집하는 것으로 설정 딥니다. 다음의 예는 Squid 서버의 동작에 영향을 주기 위하여 변경될 수 있는 몇 가지의 지시자들을 보여 줍니다. 더 깊은 Squid의 설정에 대한 것은, 참조 영역을 보십시오.</para>
              <tip>
-               <para>Prior to editing the configuration file, you should make a copy of the original file and protect it 
-               from writing so you will have the original settings as a reference, and to re-use as necessary.
-               </para>
-               <para>Copy the <filename>/etc/squid/squid.conf</filename> file and protect it from writing with the following commands entered at a terminal prompt:
-               </para>
+               <para>설정 파일을 편집하기 전에, 원래의 파일의 복사본을 만들고 그것을 쓰기에서 보호해야만 합니다. 그래서 참조로서 원래의 설정값을 가질 수 있고, 필요한 경우 재 사용할 수 있습니다.</para>
+               <para>터미널 프롬프트에서 다음의 명령을 입력하여 <filename>/etc/squid/squid.conf</filename> 파일을 복사하고 그것을 쓰기에서 보호 합니다:</para>
 	     </tip>
                <para>
 <screen>
@@ -1966,58 +1338,31 @@ Listen 443
 	        <para>
            <itemizedlist>
                <listitem>
-                  <para>
-                  To set your Squid server to listen on TCP port 8888 instead of the default TCP port 3128, change
-                  the http_port directive as such:
-                  </para>
+                  <para>Squid 서버가 기본 설정된 TCP 포트 3128 대신에 TCP 포트 8888을 듣게 지정하려면, 다음과 같이 http_port 지시자를 변경 합니다:</para>
                   <para>http_port 8888</para>
                </listitem>
 	            <listitem>
-                  <para>
-                  Change the visible_hostname directive in order to give the Squid server a specific hostname.  This hostname
-                  does not necessarily need to be the computer's hostname. In this example it is set to <emphasis>weezie</emphasis>
-                  </para>
+                  <para>Squid 서버에 특정 호스트 이름을 주기 위하여 visible_hostname 지시자를 변경 합니다. 이 호스트 이름은 꼭 그 컴퓨터의 호스트 이름일 필요는 없습니다. 이 예에서는 그것은 <emphasis>weezie</emphasis>로 지정 되었습니다.</para>
                   <para>visible_hostname weezie</para>
                </listitem>
                <listitem>
-                  <para>
-                     Again, Using Squid's access control, you may configure use of Internet services proxied by Squid
-                     to be available only users with certain Internet Protocol (IP) addresses.  For example, we willll illustrate access 
-                     by users of the 192.168.42.0/24 subnetwork only:
-                  </para>
-                  <para>
-                     Add the following to the <emphasis role="bold">bottom</emphasis> of the ACL section of your <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
+                  <para>다시 한번, Squid 접근 조종을 사용하여, 특정 Internet Protocol (IP) 주소들을 가지는 사용자들만이 Squid에 의해 프락시된 인터넷 서비스가 사용 가능하도록 설정할 수 있습니다. 예를 들어, 192.168.42.0/24 서브 네트워크의 사용자들에 의해서만 접근할 수 있는 것을 보입니다:</para>
+                  <para>다음을 여러분의 <filename>/etc/squid/squid.conf</filename> 파일의 ACL 영역의 <emphasis role="bold">가장 아래</emphasis>에 추가 합니다:</para>
                   <para>acl fortytwo_network src 192.168.42.0/24</para>
-                  <para>
-                     Then, add the following to the <emphasis role="bold">top</emphasis> of the http_access section of your
-                     <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
+                  <para>그런 다음, <filename>/etc/squid/squid.conf</filename> 파일의 http_access 영역의 <emphasis role="bold">가장 위</emphasis>에 다음을 추가 합니다:</para>
                   <para>http_access allow fortytwo_network</para>
                </listitem>
                <listitem>
-                  <para>
-                     Using the excellent access control features of Squid, you may configure use of Internet services proxied by Squid
-                     to be available only during normal business hours.  For example, we'll illustrate access by employees of a business
-                     which is operating between 9:00AM and 5:00PM, Monday through Friday, and which uses the 10.1.42.0/42 subnetwork:
-                  </para>
-                  <para>
-                     Add the following to the <emphasis role="bold">bottom</emphasis> of the ACL section of your <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
+                  <para>Squid의 훌륭한 접근 조종 기능을 사용하여, 여러분의 오직 정규 업무 시간 동안에만 Squid에 의하여 프락시된 인터넷 서비스가 사용 가능하도록 설정할 수 있습니다. 예를 들어, 월요일부터 금요일까지, 오전 9시에서 오후 5시 동안 근무하는 사업장의 직원들이 10.1.42.0/42 서브 네트워크를 사용하는 경우의 접근법을 보입니다.</para>
+                  <para>다음을 여러분의 <filename>/etc/squid/squid.conf</filename> 파일의 ACL 영역의 <emphasis role="bold">가장 아래</emphasis>에 추가 합니다:</para>
                   <para>acl biz_network src 10.1.42.0/24 acl biz_hours time M T W T F 9:00-17:00</para>
-                  <para>
-                     Then, add the following to the <emphasis role="bold">top</emphasis> of the http_access section of your
-                     <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
+                  <para>그런 다음, <filename>/etc/squid/squid.conf</filename> 파일의 http_access 영역의 <emphasis role="bold">가장 위</emphasis>에 다음을 추가 합니다:</para>
                   <para>http_access allow biz_network biz_hours</para>
                </listitem>
           </itemizedlist>
           </para>
           <note>
-	  <para>
-          After making changes to the <filename>/etc/squid/squid.conf</filename> file, save the file and restart the <application>squid</application> 
-          server application to effect the changes using the following command entered at a terminal prompt:
-          </para>
+	  <para><filename>/etc/squid/squid.conf</filename> 파일에 변경을 만든 후에는, 그 파일을 저장하고 변경의 효과를 가지도록 터미널 프롬프트에서 다음의 명령을 입력하여 <application>squid</application> 서버 프로그램을 재 시작 합니다:</para>
           </note>
           <para>
 <screen>
@@ -2034,29 +1379,16 @@ Listen 443
     </sect1>
 	<sect1 id="version-control-system" status="complete">
 		<title>버전 관리 시스템</title>
-          <para>
-Version control is the art of managing changes to information. It has long been a critical tool for programmers, who typically spend their time making small changes to software and then undoing those changes the next day. But the usefulness of version control software extends far beyond the bounds of the software development world. Anywhere you can find people using computers to manage information that changes often, there is room for version control.</para>
+          <para>버전 관리는 정보의 변경을 관리하는 예술적인 작업 입니다. 그것은, 소프트웨어에 적은 변경을 만들고 다음 날에 그 변경을 취소하는 데 그들의 시간을 사용하는 전형적인 프로그래머들을 위하여 오랫 동안 아주 중요한 도구이어 왔습니다. 그러나, 버전 관리의 유용함은 소프트웨어 개발 세상의 범주를 훨씬 넘어 확장되고 있습니다. 어느 곳에서든 여러분은 사람들이 종종 정보를 변경하는 것을 컴퓨터를 사용하여 관리하는 것을 볼 수 있을 겁니다. 거기에 버전 관리를 위한 필요가 있습니다.</para>
 <para>
           </para>
       <sect2 id="subversion" status="complete">
         <title>Subversion</title>
-          <para>
-Subversion is an open source version control system. Using Subversion, you can record the history of source files and documents. It manages files and directories over time. A tree of files is placed into a central repository. The repository is much like an ordinary file server, except that it remembers every change ever made to files and directories.
-          </para>
+          <para>Subversion 은 오픈소스 버전 관리 시스템 입니다. Subversion을 사용하여, 소스 파일과 문서의 이력을 기록할 수 있습니다. 그것은 시간에 걸쳐 파일과 디렉토리를 관리 합니다. 파일의 트리는 중앙 저장소로 놓여집니다. 저장소는 보통의 파일 서버와 매우 비슷하지만, 이제껏 만들어진 파일과 디렉토리의 모든 변경을 기억하고 있습니다.</para>
         <sect3 id="subversion-installation" status="complete">
           <title>설치</title>
-            <para>
-To access Subversion repository using the HTTP protocol, you must install and 
-configure a web server. Apache2 is proven to work with Subversion. Please 
-refer to the HTTP subsection in the Apache2 section to install and configure 
-Apache2.  To access the Subversion repository using the HTTPS protocol, you 
-must install and configure a digital certificate in your Apache 2 web server. 
-Please refer to the HTTPS subsection in the Apache2 section to install and 
-configure the digital certificate.
-						</para>
-						<para>
-		To install Subversion, run the following command from a terminal prompt:
-            </para>
+            <para>HTTP 프로토콜을 사용하여 Subversion 저장소를 접근하기 위해, 여러분은 반드시 웹 서버를 설치하고 설정하여야 합니다. 아파치2는 Subversion과 잘 동작하는 것이 증명 되었습니다. 아파치2를 설치하고 설정하기 위하여 아파치2 영역 내의 HTTP 부 영역을 참조 하십시오. HTTPS 프로토콜을 사용하여 Subversion 저장소에 접근하려면, 반드시 여러분의 아파치2 웹 서버 내에 디지털 인증서를 설치하고 설정하여야 합니다. 디지털 인증서를 설치하고 설정하기 위하여 아파치2 영역 내의 HTTPS 부 영역을 참조 하십시오.</para>
+						<para>Subversion은 설치하려면, 터미널 프롬프트에서 다음의 명령을 실행 합니다:</para>
 	    <para>
 <screen>
 <command>sudo apt-get install subversion libapache2-svn</command>
@@ -2066,11 +1398,10 @@ configure the digital certificate.
         </sect3>
         <sect3 id="subversion-configuration" status="complete">
           <title>서버 설정</title>
-            <para>
-	This step assumes you have installed above mentioned packages on your system. This section explains how to create a Subversion repository and access the project.</para>
+            <para>이 절차는 위에서 언급된 패키지가 여러분의 시스템에 설치된 것으로 간주 합니다. 이 영역은 Subversion 저장소를 어떻게 만들고 프로젝트를 접근할 수 있는지를 설명 합니다.</para>
 			<sect4 id="create-svn-repos" status="complete">
-				<title>Create Subversion Repository</title>
-<para>The Subversion repository can be created using the following command from a terminal prompt:</para>
+				<title>Subversion 저장소 만들기</title>
+<para>Subversion 저장소는 터미널 프롬프트에서 다음의 명령을 사용하여 만들 수 있습니다:</para>
 
         <para>
 <screen>
@@ -2082,10 +1413,7 @@ configure the digital certificate.
         </sect3>
         <sect3 id="access-methods" status="complete">
           <title>접근 방법</title>
-<para>Subversion repositories can be accessed (checked out) through many 
-different methods --on local disk, or through various network protocols. 
-A repository location, however, is always a URL. The table describes how 
-different URL schemas map to the available access methods.</para>
+<para>Subversion 저장소는 로컬 디스크 상의 많은 다른 방법들 또는 다양한 네트워크 프로토콜을 통하여 접근(체크아웃)될 수 있습니다. 그러나, 하나의 저장소 위치는 언제나 URL 입니다. 다음 표는 어떻게 다른 URL 체계를 사용가능한 접근 방법으로 대치할 수 있는지를 기술 합니다.</para>
 				<table><title>접근 방법</title>
 
 					<tgroup cols="2">
@@ -2100,39 +1428,32 @@ different URL schemas map to the available access methods.</para>
 						<tbody>
 							<row>
 								<entry><para>file://</para></entry>
-								<entry><para>direct repository access (on local disk)</para></entry>
+								<entry><para>직접 저장소 접근 (로컬 디스크 상)</para></entry>
 							</row>
 							<row>
 								<entry><para>http://</para></entry>
-								<entry><para>Access via WebDAV protocol to Subversion-aware Apache2 web server</para></entry>
+								<entry><para>Subversion을 인식하는 아파치2 웹 서버로 WebDAV를 통하여 접근</para></entry>
 							</row>
 							<row>
 								<entry><para>https://</para></entry>
-								<entry><para>Same as http://, but with SSL encryption</para></entry>
+								<entry><para>http://와 같으나, SSL 암호화를 사용</para></entry>
 							</row>
 							<row>
 								<entry><para>svn://</para></entry>
-								<entry><para>Access via custom protocol to an svnserve server</para></entry>
+								<entry><para>svn를 사용하는 서버로 Subversion 프토토콜을 통하여 접근</para></entry>
 							</row>
 							<row>
 								<entry><para>svn+ssh://</para></entry>
-								<entry><para>Same as svn://, but through an SSH tunnel</para></entry>
+								<entry><para>svn://와 같으나, SSH 터널을 사용</para></entry>
 							</row>
 						</tbody>
 					</tgroup>
 				</table>
 
-				<para>
-In this section, we will see how to configure Subversion for all 
-these access methods. Here, we cover the basics. For more advanced 
-usage details, refer to the <ulink url="http://svnbook.red-bean.com/">svn book</ulink>.
-				</para>
+				<para>이 영역에서는, 모든 접근 방법을 위하여 Subversion을 어떻게 설정하는 지를 보일 겁니다. 여기서는, 그 기초를 다룹니다. 좀 더 고급의 사용예에 대한 자세한 것은, <ulink url="http://svnbook.red-bean.com/">svn 책</ulink>을 참고 하십시오.</para>
 			<sect4 id="direct-repos-access" status="complete">
-				<title>Direct repository access (file://)</title>
-<para> This is the simplest of all access methods. It does not 
-require any Subversion server process to be running. This access 
-method is used to access Subversion from the same machine. The 
-syntax of the command, entered at a terminal prompt, is as follows:</para>
+				<title>직접 저장소 접근 (file://)</title>
+<para>이것은 모든 접근 방법 중의 가장 단순한 것 입니다. 이것은 Subversion 서버의 프로세스가 실행 중인 것을 필요로 하지 않습니다. 이 접근 방법은 같은 기계에서 Subversion을 접근할 때 사용 됩니다. 명령의 문법은, 터미널 프롬프트에서, 다음과 같이 입력 합니다:</para>
 
         <para>
 <screen>
@@ -2146,13 +1467,13 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
 </screen>
         </para>
 	<note>
-		<para>If you do not specify the hostname, there are three forward slashes (///) -- two for the protocol (file, in this case) plus the leading slash in the path. If you specify the hostname, you must use two forward slashes (//).</para>
+		<para>만약 호스트 이름을 지정하지 않았다면, 세 개의 슬래쉬 (///)가 있습니다. 두 개는 프로토콜을 위한 것이고 (이 경우는 file), 마지막 하나는 경로를 나타내는 슬래쉬 입니다. 만약 호스트 이름을 지정한다면, 반드시 두 개의 슬래쉬(//)를 사용 합니다.</para>
 	</note>
-		<para>The repository permissions depend on filesystem permissions. If the user has read/write permission, he can checkout from and commit to the repository.</para>
+		<para>저장소의 접근 권한은 파일 시스템의 접근 권한에 의존 합니다. 만약 사용자가 읽기/쓰기 접근 권한을 가지고 있다면, 그 저장소에서 체크아웃을 하고 저장소로 커밋을 할 수 있습니다.</para>
 			</sect4>
 			<sect4 id="access-via-webdav" status="complete">
-				<title>Access via WebDAV protocol (http://)</title>
-<para> To access the Subversion repository via WebDAV protocol, you must configure your Apache 2 web server. You must add the following snippet in your <filename>/etc/apache2/apache2.conf</filename> file:</para>
+				<title>WebDAV 프로토콜을 사용하여 접근 (http://)</title>
+<para>WebDAV 프로토콜을 사용하여 Subversion 저장소를 접근하기 위하여, 여러분은 반드시 아파치2 웹 서버를 설정하여야 합니다. 반드시 다음의 예를 여러분의 <filename>/etc/apache2/apache2.conf</filename> 파일에 추가 합니다:</para>
 
 	<programlisting> &lt;Location /svn&gt;
   DAV svn
@@ -2164,73 +1485,37 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
   Require valid-user
   &lt;/LimitExcept&gt;
   &lt;/Location&gt; </programlisting>
-  <para>Next, you must create the <filename>/etc/subversion/passwd</filename> 
-  file. This file contains user authentication details. To add an entry, i.e. 
-  to add a user, you can run the following command from a terminal prompt:</para>
+  <para>다음에, <filename>/etc/subversion/passwd</filename> 파일을 반드시 만듭니다. 이 파일은 사용자 인증의 상세한 것을 가집니다. 예를 들어 사용자를 추가하는 것과 같이 항목을 추가하려면, 터미널 프롬프트에서 다음의 명령을 사용할 수 있습니다:</para>
 	<para>
 <screen>
 <command>htpasswd2 /etc/subversion/passwd user_name</command>
 </screen>
         </para>
-	<para>This command will prompt you to enter the password. Once you enter the password, the user is added. Now, to access the repository you can run the following command:</para>
+	<para>이 명령은 여러분이 암호를 입력하도록 물어 봅니다. 암호를 입력한 후, 그 사용자는 더해 집니다. 이제, 다음의 명령을 실행하여 저장소를 접근할 수 있습니다:</para>
         <screen><command>svn co http://servername/svn</command></screen>
 	<warning>
-		<para>
-			The password is transmitted as plain text. If you are worried about password snooping, you are advised to use SSL encryption. For details, please refer next section.
-		</para>
+		<para>암호는 일반 텍스트로 전송 됩니다. 만약 암호를 훔쳐보는 것을 걱정한다면, SSL 암호화를 사용할 것을 권고 합니다. 자세한 것은, 다음 부분을 참고 하십시오.</para>
 	</warning>
 			</sect4>
 			<sect4 id="access-via-webdav-with-ssl" status="complete">
-				<title>Access via WebDAV protocol with SSL encryption (https://)</title>
-					<para> 
-						Accessing Subversion repository via WebDAV protocol with SSL 
-						encryption (https://) is similar to http:// except that you 
-						must install and configure the digital certificate in your 
-						Apache2 web server.
-					</para>
+				<title>SSL 암호화와 함께 WebDAV 프로토콜을 사용하여 접근 (https://)</title>
+					<para>SSL 암호화와 함께 WebDAV 프로토콜(https://)을 사용하여 Subversion 저장소를 접근하는 것은 http://를 사용하는 것과 비슷하나 차이점은, 여러분은 반드시 아파치2 웹 서버에 디지털 인증서를 설치하고 설정하여야 합니다.</para>
 
-					<para>
-						You can install a digital certificate issued by a signing 
-						authority like Verisign. Alternatively, you can install your 
-						own self-signed certificate.
-					</para>
-					<para>
-						This step assumes you have installed and configured a digital 
-						certificate in your Apache 2 web server. Now, to access the 
-						Subversion repository, please refer to the above section! 
-						The access methods are exactly the same, except the protocol. 
-						You must use https:// to access the Subversion repository.
-					</para>
+					<para>디지털 인증서는 Verisign과 같은 인증 기관에서 발행된 것을 설치할 수 있습니다. 다른 방법으로는, 여러분이 스스로 사인한 인증서를 설치할 수도 있습니다.</para>
+					<para>이 절차는 여러분의 아파치2 웹 서버에 디지털 인증서를 설치하고 설정하였다고 간주 합니다. 이제, Subversion 저장소를 접근하기 위하여, 윗 부분을 참조 하십시오! 접근 방법은 정확히 똑같고, 단지 프로토콜이 다릅니다. 여러분은 반드시 Subversion 저장소를 접근하기 위하여 https://를 사용하여야 합니다.</para>
 
 			</sect4>
 			<sect4 id="access-via-custom-protocol" status="complete">
-				<title>Access via custom protocol (svn://)</title>
-					<para> 
-					Once the Subversion repository is created, you can configure the 
-					access control. You can edit the <filename>
-					/path/to/repos/project/conf/svnserve.conf</filename> file to 
-					configure the access control.  For example, to set up 
-					authentication, you can uncomment the following lines in the 
-					configuration file: </para>
+				<title>Subversion 프로토콜을 사용하여 접근 (svn://)</title>
+					<para>Subversion 저장소가 만들어진 후, 여러분은 접근 조종을 설정할 수 있습니다. 접근 조종을 설정하기 위하여 <filename> /path/to/repos/project/conf/svnserve.conf</filename> 파일을 편집할 수 있습니다. 예를 들어, 인증을 설정하는 것은, 그 설정 파일의 다음 줄들을 주석 해제 합니다:</para>
 					<programlisting># [general]
 # password-db = passwd</programlisting>
 
-					<para>
-					After uncommenting the above lines, you can maintain the user 
-					list in the passwd file. So, edit the file <filename>passwd
-					</filename> in the same directory and add the new user. The 
-					syntax is as follows:
-					</para>
+					<para>위의 줄들을 주석 해제한 후에, passwd 파일에 사용자 목록을 관리할 수 있습니다. 그러므로, 같은 디렉토리 내의 <filename>passwd </filename> 파일을 편집하기 위하여 열고 새로운 사용자를 추가 합니다. 문법은 다음과 같습니다:</para>
 					<programlisting>username = password</programlisting>
-					<para>
-					For more details, please refer to the file.
-					</para>
+					<para>더 자세한 것은, 그 파일을 참조 하십시오.</para>
 
-					<para>
-					Now, to access Subversion via the svn:// custom protocol, either 
-					from the same machine or a different machine, you can run 
-					svnserver using svnserve command. The syntax is as follows:
-					</para>
+					<para>이제, svn:// 프로토콜을 사용하여, 같은 기계 또는 다른 기계에 있는 Subversion 저장소를 접근하고, svnserve 명령을 사용하여 svn 서버를 실행할 수 있습니다. 문법은 다음과 같습니다:</para>
 					<programlisting>$ svnserve -d --foreground -r /path/to/repos
 # -d -- daemon mode
 # --foreground -- run in foreground (useful for debugging)
@@ -2239,112 +1524,57 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
 For more usage details, please refer to:
 $ svnserve --help</programlisting>
 
-					<para>Once you run this command, Subversion starts listening on default port (3690). To access the project repository, you must run the following command from a terminal prompt: </para>
+					<para>이 명령이 수행된 후, Subversion은 기본 설정 포트 (3690)을 듣기 시작 합니다. 프로젝트 저장소를 접근하려면, 터미널 프롬프트에서 다음의 명령을 반드시 실행하여야 합니다:</para>
 					<para>
 <screen>
 <command>svn co svn://hostname/project project --username user_name</command>
 </screen>
                                         </para>
-					<para>Based on server configuration, it prompts for password. Once 
-					you are authenticated, it checks out the code from Subversion 
-					repository.  To synchronize the project repository with the local 
-					copy, you can run the <command>update</command> sub-command. The 
-					syntax of the command, entered at a terminal prompt, is as follows:
-					</para>
+					<para>서버 설정에 따라, 암호를 물어 봅니다. 인증이 된 후, Subversion 저장소에서 코드를 체크 아웃 합니다. 로컬 복사본과 프로젝트 저장소를 동기화 하는 것은, <command>update</command> 부 명령을 실행 합니다. 그 명령의 문법은, 다음과 같이 터미널 프롬프트에서 입력 합니다:</para>
 					<para>
 <screen>
 <command>cd project_dir ; svn update</command>
 </screen>
                                         </para>
-					<para>For more details about using each Subversion sub-command, you 
-					can refer to the manual. For example, to learn more about the co 
-					(checkout) command, please run the following command from a 
-					terminal prompt:</para>
+					<para>각각의 Subversion 부 명령을 사용하는 것에 대한 더 자세한 것은, 매뉴얼을 참조 하십시오. 예를 들어, co (checkout) 명령에 대한 것을 배우려면, 터미널 프롬프트에서 다음의 명령을 실행 합니다:</para>
                     <para><screen><command>svn co help</command></screen></para>
 
 			</sect4>
 			<sect4 id="access-via-custom-protocol-with-ssl" status="complete">
-				<title>Access via custom protocol with SSL encryption (svn+ssh://)</title>
-					<para> The configuration and server process is same as in the
-					svn:// method. For details, please refer to the above section. 
-					This step assumes you have followed the above step and started 
-					the	Subversion server using <application>svnserve</application>  
-					command.</para>
+				<title>SSL 암호화와 함께 Subversion 프로토콜을 사용하여 접근 (svn+ssh://)</title>
+					<para>설정과 서버 절차는 svn:// 접근 방법 내의 것과 같습니다. 자세한 것은, 위의 영역을 참조 하십시오. 이 절차는 여러분이 위의 절차를 따라왔고 <application>svnserve</application> 명령을 사용하여 Subversion 서버을 실행하였다고 간주 합니다.</para>
 
-					<para>It is also assumed that the ssh server is running on that 
-					machine and that it is allowing incoming connections. To confirm, 
-					please try to login to that machine using ssh. If you can login, 
-					everything is perfect. If you cannot login, please address it 
-					before continuing further.</para>
+					<para>또한 그 기계에 ssh 서버가 실행 중이고 들어오는 접속을 허용하는 중이라는 것도 가정 합니다. 확인을 하려면, ssh를 사용하여 그 기계에 로그인을 시도해 보십시오. 만약 로그인을 할 수 있으면, 모든 것은 완벽 합니다. 만약 로그인을 할 수 없다면, 더 진행하기 전에 그것을 먼저 고치십시오.</para>
 
-					<para>The svn+ssh:// protocol is used to access the Subversion 
-					repository using SSL encryption. The data transfer is encrypted 
-					using this method. To access the project repository (for example 
-					with a checkout), you must use the following command syntax: 
-                                        </para>
+					<para>svn+ssh:// 프로토콜은 SSL 암호화와 함께 Subversion 저장소를 접근하기 위하여 사용 됩니다. 자료 전송은 이 방법을 사용하여 암호화 됩니다. 프로젝트 저장소를 접근하려면 (예를 들어 체크 아웃으로), 여러분은 반드시 다음의 명령 문법을 사용하여야 합니다:</para>
                                         <para>
 <screen>
 <command>svn co svn+ssh://hostname/var/svn/repos/project</command>
 </screen>
                                         </para>
 
-					<note><para> You must use the full path (/path/to/repos/project) 
-					to access the Subversion repository using this access method. 
-					</para></note>
-					<para>
-					Based on server configuration, it prompts for password. You must 
-					enter the password you use to login via ssh. Once you are 
-					authenticated, it checks out the code from the Subversion 
-					repository.
-					</para>
+					<note><para>이 접근 방법을 사용하여 Subversion 저장소를 접근하려면 반드시 완전한 경로명을 (/path/to/repos/project) 사용하여야 합니다.</para></note>
+					<para>서버 설정에 따라, 암호를 물어 봅니다. 반드시 ssh 통하여 로그인 할 때 사용하는 암호를 입력 합니다. 인증이 된 후, Subversion 저장소에서 코드를 체크 아웃 합니다.</para>
 			</sect4>
 			</sect3>
 
       </sect2>
       <sect2 id="cvs-server" status="complete">
         <title>CVS 서버</title> 
-          <para>
-          CVS is a version control system. You can use it to record the
-          history of source files.
-          </para>
+          <para>CVS는 버전 관리 시스템 입니다. 소스 파일의 이력을 기록하기 위하여 그것을 사용할 수 있습니다.</para>
         <sect3 id="cvs-installation" status="complete">
           <title>설치</title>
-            <para>
-              At a terminal prompt, enter the following command to install
-              <application>cvs</application>:
-
-<screen>
+            <para>터미널 프롬프트에서, <application>cvs</application> 를 설치하기 위하여 다음의 명령을 입력 합니다: <screen>
 <command>sudo apt-get install cvs</command>
-</screen>
-
-After you install <application>cvs</application>, you should install
-<application>xinetd</application> to start/stop the cvs server. At the
-prompt, enter the following command to install
-<application>xinetd</application>:
-
-<screen>
+</screen> <application>cvs</application> 를 설치한 후에, cvs 서버를 시작하고 중지하려면 <application>xinetd</application> 를 설치하여야 합니다. 프롬프트에서, <application>xinetd</application> 를 설치하기 위하여 다음의 명령을 입력 합니다: <screen>
 <command>sudo apt-get install xinetd</command>
-</screen>
-            </para>
+</screen></para>
         </sect3>
         <sect3 id="cvs-configuration" status="complete">
           <title>설정</title>
-            <para>
-            Once you install cvs, the repository will be automatically
-            initialized. By default, the repository resides under the
-            <application>/var/lib/cvs</application> directory. You can
-            change this path by running following command:
-
-<screen>
+            <para>cvs 를 설치한 후에, 저장소는 자동적으로 초기화 됩니다. 기본 설정으로, 저장소는 <application>/var/lib/cvs</application> 디렉토리 밑에 위치 합니다. 이 경로를 변경하는 것은 다음의 명령을 사용할 수 있습니다: <screen>
 <command>cvs -d /your/new/cvs/repo init</command>
-</screen>
-
-Once the initial repository is set up, you can configure
-<application>xinetd</application> to start the CVS server. 
-You can copy the following lines to the <filename>
-/etc/xinetd/cvspserver</filename> file.
-
-<programlisting>
+</screen> 초기 저장소가 만들어 진 후, CVS 서버를 시작하기 위하여 <application>xinetd</application> 를 설정할 수 있습니다. <filename> /etc/xinetd/cvspserver</filename> 파일에 다음 줄들을 복사 합니다. <programlisting>
 service cvspserver
 {
      port = 2401
@@ -2357,26 +1587,12 @@ service cvspserver
      server_args = -f --allow-root /var/lib/cvs pserver
      disable = no
 }
-</programlisting>
-
-<note>
-<para>
-Be sure to edit the repository if you have changed the default
-repository (<application>/var/lib/cvs</application>) directory.
-</para>
-</note>
-
-Once you have configured <application>xinetd</application> you 
-can start the cvs server by running following command:
-
-<screen>
+</programlisting><note>
+<para>만약 기본 지정된 저장소 (<application>/var/lib/cvs</application>) 디렉토리를 변경하였다면 그 저장소를 편집하는 것을 확신 하십시오.</para>
+</note> <application>xinetd</application> 를 설정한 후에 다음의 명령을 실행하여 CVS 서버를 실행할 수 있습니다: <screen>
 <command>sudo /etc/init.d/xinetd start</command>
-</screen>
-            </para>
-            <para>
-            You can confirm that the CVS server is running by issuing 
-			the following command:
-            </para>
+</screen></para>
+            <para>다음의 명령을 수행하여 CVS 서버가 실행 중인 것을 확인할 수 있습니다:</para>
 
             <para>
 <screen>
@@ -2384,63 +1600,28 @@ can start the cvs server by running following command:
 </screen>
             </para>
 
-            <para>
-            When you run this command, you should see the following line
-            or something similar:
-            </para>
+            <para>이 명령을 실행할 때, 여러분은 다음 줄 또는 그와 유사한 것을 보아야 합니다:</para>
 
 <programlisting>
 tcp 0 0 *:cvspserver *:* LISTEN 
 </programlisting>
 
-        <para>
-From here you can continue to add users, add new projects,
-and manage the CVS server. 
-        </para>
+        <para>이제 여기서 여러분은 사용자를 더하고, 새로운 프로젝트를 더하며, 그 CVS 서버를 관리하는 것을 계속할 수 있습니다.</para>
         <warning>
-<para>
-          CVS allows the user to add users independently of the
-underlying OS installation. Probably the easiest way is to use the Linux
-Users for CVS, although it has potential security issues. Please refer
-to the CVS manual for details.
-</para>
+<para>CVS는 OS 설치와는 무관하게 사용자를 추가할 수 있습니다. 아마도 가장 쉬운 것은 CVS를 위하여 리눅스 사용자를 사용하는 것이지만, 이것은 가능한 보안의 문제를 가지고 있습니다. 자세한 것은 CVS 매뉴얼을 참조 하십시오.</para>
         </warning>
 
         </sect3>
         <sect3 id="cvs-add-projects" status="complete">
           <title>프로젝트 더하기</title>
-            <para>
-            This section explains how to add new project to the CVS 
-			repository. Create the directory and add necessary document 
-			and source files to the directory. Now, run the following 
-			command to add this project to CVS repository:
-<screen>
+            <para>이 영역은 CVS 저장소로 어떻게 새로운 프로젝트를 추가하는 지에 대하여 설명 합니다. 디렉토리를 만들고 그 디렉토리로 필요한 문서와 소스 파일을 더합니다. 이제, CVS 저장소로 프로젝트를 추가하기 위하여 다음의 명령을 실행 합니다: <screen>
 <command>cd your/project</command>
 <command>cvs import -d :pserver:username@hostname.com:/var/lib/cvs -m "Importing my project to CVS repository" . new_project start</command>
-</screen>
-
-<tip>
-<para>
-You can use the CVSROOT environment variable to store the CVS root directory.
-Once you export the CVSROOT environment variable, you can avoid using -d option to
-above cvs command.
-</para>
-</tip>
-The string <emphasis>new_project</emphasis> is a vendor
-tag, and <emphasis>start</emphasis> is a release tag.
-They serve no purpose in this context, but since CVS requires them, they
-must be present.
-
-<warning>
-<para>
-When you add a new project, the CVS user you use must have write access to the
-CVS repository (<application>/var/lib/cvs</application>). By default, the
-<application>src</application> group has write access to the CVS
-repository. So, you can add the user to this group, and he can then add and
-manage projects in the CVS repository.
-</para>
-</warning>
-            </para>
+</screen><tip>
+<para>여러분은 CVS 루트 디렉토리를 저장하기 위하여 CVSROOT 환경 변수를 사용할 수 있습니다. CVSROOT 환경 변수가 export 되면, 위의 cvs 명령에 -d 옵션을 주는 것을 피할 수 있습니다.</para>
+</tip> <emphasis>new_project</emphasis> 스트링은 벤더 태그이고, <emphasis>start</emphasis> 는 릴리스 태그 입니다. 그것들은 이 문맥에서는 아무 목적도 가지지 않지만, CVS가 그것들을 요구하므로 반드시 나타내야 합니다. <warning>
+<para>새로운 프로젝트를 추가할 때, 여러분이 사용하는 CVS 사용자는 반드시 CVS 저장소 <application>/var/lib/cvs</application>) 의 쓰기 권한을 가져야 합니다. 기본 설정으로, <application>src</application> 그룹은 그 CVS 저장소로의 쓰기 권한을 가지고 있습니다. 그러므로, 여러분은 그 사용자를 이 그룹에 추가할 수 있고, 그런 후 그 사용자는 CVS 저장소 내의 프로젝트를 관리할 수 있습니다.</para>
+</warning></para>
         </sect3>
       </sect2>
       <sect2 id="version-control-ref" status="complete">
@@ -2452,34 +1633,21 @@ manage projects in the CVS repository.
     </sect1>
 	<sect1 id="databases" status="complete">
 		<title>데이타베이스</title>
-          <para>
-            Ubuntu provides two Database servers. They are:
-            <itemizedlist spacing="compact">
+          <para>우분투는 두 가지 데이타베이스 서버를 제공 합니다. 그것들은: <itemizedlist spacing="compact">
                 <listitem>
                     <para><application><trademark>MySQL</trademark></application></para>
                 </listitem>
                 <listitem>
                     <para><application>PostgreSQL</application></para>
                 </listitem>
-            </itemizedlist>
-            They are available in the main repository. This section
-            explains how to install and configure these database
-            servers.
-          </para>
+            </itemizedlist> 메인 저장소에서 사용 가능 합니다. 이 영역은 이 데이타베이스 서버들을 어떻게 설치하고 설정하는 지를 설명 합니다.</para>
       <sect2 id="mysql" status="complete">
         <title>MySQL</title>
-          <para>
-          MySQL is a fast, multi-threaded, multi-user, and robust SQL
-          database server. It is intended for mission-critical, 
-		  heavy-load production systems as well as for embedding into 
-		  mass-deployed software.
-          </para>
+          <para>MySQL은 빠르고, 멀티쓰레드, 복수 사용자, 그리고 견고한 SQL 데이타베이스 서버 입니다. 이것은 대량의 소프트웨어 이행에 포함되는 것과 마찬가지로 중요한 임무와 부하가 많은 현업 시스템을 위하여 사용 됩니다.</para>
 
         <sect3 id="mysql-installation" status="complete">
           <title>설치</title>
-            <para>
-            To install MySQL, run the following command from a terminal prompt:
-            </para>
+            <para>MySQL을 설치하기 위하여, 터미널 프롬프트에서 다음 명령을 실행 합니다:</para>
 
             <para>
 <screen>
@@ -2487,11 +1655,7 @@ manage projects in the CVS repository.
 </screen>
             </para>
 
-            <para>
-            Once the installation is complete, the MySQL server should be
-            started automatically. You can run the following command from a terminal prompt to
-            check whether the MySQL server is running:
-            </para>
+            <para>설치가 마쳐진 후, MySQL 서버는 자동적으로 시작 됩니다. MySQL 서바가 실행 중인지를 점검하려면 터미널 프롬프트에서 다음의 명령을 실행할 수 있습니다:</para>
 
             <para>
 <screen>
@@ -2499,15 +1663,12 @@ manage projects in the CVS repository.
 </screen>
             </para>
 
-            <para>
-            When you run this command, you should see the following line
-            or something similar:
-            </para>
+            <para>이 명령을 실행할 때, 여러분은 다음 줄 또는 그와 유사한 것을 보아야 합니다:</para>
 
 <programlisting>
 tcp 0 0 localhost.localdomain:mysql *:* LISTEN -
 </programlisting>
-	<para>If the server is not running correctly, you can type the following command to start it:</para>
+	<para>만약 서버가 올바르게 실행 중이 아니라면, 그것을 시작하기 위하여 다음의 명령을 입력할 수 있습니다:</para>
             <para>
 <screen>
 <command>sudo /etc/init.d/mysql restart</command>
@@ -2517,11 +1678,7 @@ tcp 0 0 localhost.localdomain:mysql *:* LISTEN -
         </sect3>
         <sect3 id="mysql-configuration" status="complete">
           <title>설정</title>
-            <para>
-            By default, the administrator password is not set. Once you
-            install MySQL, the first thing you must do is to configure
-            the MySQL administrator password. To do this, run the following commands:
-            </para>
+            <para>기본 설정으로, 관리자의 암호는 지정되지 않았습니다. MySQL을 설치한 후, 첫 번째로 여러분이 반드시 해야하는 것은 MySQL 관리자의 암호를 설정하는 것 입니다. 이것을 하기 위하여, 다음의 명령을 실행 합니다:</para>
             <para>
 <screen>
 <command>sudo mysqladmin -u root password newrootsqlpassword</command>
@@ -2533,26 +1690,15 @@ tcp 0 0 localhost.localdomain:mysql *:* LISTEN -
 </screen>
             </para>
 
-            <para>
-            You can edit the <filename>/etc/mysql/my.cnf</filename> file to configure the basic
-            settings -- log file, port number, etc. Refer to
-            <filename>/etc/mysql/my.cnf</filename> file for more details.
-            </para>
+            <para>로그 파일, 포트 번호 등의 기본적인 값을 설정하기 위하여 <filename>/etc/mysql/my.cnf</filename> 파일을 편집할 수 있습니다. 더 자세한 것은 <filename>/etc/mysql/my.cnf</filename> 파일을 참조 하십시오.</para>
         </sect3>
       </sect2>
       <sect2 id="postgresql" status="complete">
         <title>PostgreSQL</title> 
-          <para>
-          PostgreSQL is an object-relational database system that has
-          the features of traditional commercial database systems with
-          enhancements to be found in next-generation DBMS systems.
-          </para>
+          <para>PostgreSQL은 전통적인 상업용 데이타베이스 시스템의 기능에 차세대 DBMS 시스템에서 찾을 수 있는 개선을 포함하는 객체-관계형 데이타베이스 시스템 입니다.</para>
         <sect3 id="postgresql-installation" status="complete">
           <title>설치</title>
-            <para>
-            To install PostgreSQL, run the following command in the
-            command prompt:
-            </para>
+            <para>PostgreSQL를 설치하기 위하여, 명령 프롬프트에서 다음의 명령을 실행 합니다:</para>
 
             <para>
 <screen>
@@ -2560,187 +1706,88 @@ tcp 0 0 localhost.localdomain:mysql *:* LISTEN -
 </screen>
             </para>
 
-            <para>
-            Once the installation is complete, you should configure the
-            PostgreSQL server based on your needs, although the default
-            configuration is viable.</para>
+            <para>설치가 마쳐지면, 비록 기본 설정이 유용하기는 하지만, 여러분의 필요에 따라 PostgreSQL 서버를 설정할 수 있습니다.</para>
             
         </sect3>
         <sect3 id="postgresql-configuration" status="complete">
           <title>설정</title>
-            <para>By default, connection via TCP/IP is disabled.
-            PostgreSQL supports multiple client authentication methods.
-            By default, IDENT authentication method is used.  Please
-            refer <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">
-			the PostgreSQL Administrator's Guide</ulink>.</para>
+            <para>기본 설정으로, TCP/IP를 통한 접속은 사용할 수 없습니다. PostgreSQL는 복수 클라이언트 인증 방법을 지원 합니다. 기본 설정으로, IDENT 인증 방법이 사용 됩니다. <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html"> PostgreSQL 관리자 안내서</ulink>를 참조 하십시오.</para>
             
-            <para>The following discussion assumes that you wish to enable 
-			TCP/IP connections and use the MD5 method for client 
-			authentication. PostgreSQL configuration files are stored in the
-            <filename>/etc/postgresql/&lt;version&gt;/main</filename>
-            directory. For example, if you install PostgreSQL 7.4, the
-            configuration files are stored in the
-            <filename>/etc/postgresql/7.4/main</filename> directory.
-            </para>
+            <para>다음의 논의는 여러분이 TCP/IP 접속을 사용하기를 원하고 클라이언트 인증을 위하여 MD5 방법을 사용한다고 가정 합니다. PostgreSQL 설정 파일은 <filename>/etc/postgresql/&lt;version&gt;/main</filename> 디렉토리 내에 저장 됩니다. 예를 들어, PostgreSQL 7.4를 설치한다면, 설정 파일은 <filename>/etc/postgresql/7.4/main</filename> 디렉토리 내에 저장 됩니다.</para>
             
             <tip>
-            <para>
-             To configure <application>ident</application>
-             authentication, add entries to the <filename>/etc/postgresql/7.4/main/pg_ident.conf</filename>
-             file.
-            </para>
+            <para><application>ident</application> 인증을 설정하기 위하여, <filename>/etc/postgresql/7.4/main/pg_ident.conf</filename> 파일에 항목을 추가 합니다.</para>
             </tip>
 
-            <para>To enable TCP/IP connections, edit the file <filename>/etc/postgresql/7.4/main/postgresql.conf</filename></para>
+            <para>TCP/IP 접속을 사용하기 위하여, <filename>/etc/postgresql/7.4/main/postgresql.conf</filename> 파일을 편집 합니다.</para>
 
-            <para>Locate the line <emphasis>#tcpip_socket =
-            false</emphasis> and change it to
-            <emphasis>tcpip_socket =
-            true</emphasis>. You may
-            also edit all other parameters, if you know what you are doing! 
-			For details, refer to the configuration file or to the PostgreSQL documentation.
-            </para>
+            <para><emphasis>#tcpip_socket = false</emphasis> 줄에 위치하고 그것을 <emphasis>tcpip_socket = true</emphasis> 로 변경 합니다. 만약 여러분이 무엇을 하는지를 알고 있다면, 모든 다른 파라미터들도 또한 편집할 수 있습니다! 자세한 것은, 그 설정 파일 또는 PostgreSQL 문서를 참조 하십시오.</para>
 
-            <para>By default, the user credentials are not set for
-            <emphasis>MD5</emphasis> client
-            authentication. So, first it is necessary to configure the PostgreSQL server to use
-            <emphasis>trust</emphasis> client
-            authentication, connect to the database,
-            configure the password, and revert the configuration back to use
-            <emphasis>MD5</emphasis> client authentication.
-            To enable <emphasis>trust</emphasis> client
-            authentication, edit the file <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename></para>
+            <para>기본 설정으로, 사용자 보증은 <emphasis>MD5</emphasis> 클라이언트 인증을 위하여 지정될 수 없습니다. 그러므로, 우선 <emphasis>trust</emphasis> 클라이언트 인증을 사용하도록 PostgreSQL 서버를 설정하고, 데이타베이스로 연결하고, 암호를 설정하고, <emphasis>MD5</emphasis> 클라이언트 인증을 사용하도록 설정을 바꾸는 것이 필요 합니다. <emphasis>trust</emphasis> 클라이언트 인증을 활성화 하려면, <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename> 파일을 편집 합니다.</para>
 
-            <para>Comment out all the existing lines which use
-            <emphasis>ident</emphasis> and
-            <emphasis>MD5</emphasis>
-            client authentication and add the following
-            line:</para>
+            <para><emphasis>ident</emphasis> 와 <emphasis>MD5</emphasis> 클라이언트 인증을 사용하는 모든 있는 줄들을 주석 처리하고 다음 줄을 추가 합니다:</para>
 <programlisting>
 local all postgres trust sameuser
 </programlisting>
 
-            <para>Then, run the following command to
-            start the PostgreSQL server:
-            </para>
+            <para>그런 후, PostgreSQL 서버를 시작하기 위하여 다음 명령을 실행 합니다:</para>
             <para>
 <screen>
 <command>sudo /etc/init.d/postgresql start</command>
 </screen>
             </para>
-            <para>Once the PostgreSQL server is successfully started, run the following command at a terminal prompt to connect to the default
-            PostgreSQL template database</para>
+            <para>PostgreSQL 서버가 성공적으로 시작된 후, 기본 설정된 PostgreSQL 템플릿 데이타베이스에 접속하기 위하여 터미널 프롬프트에서 다음의 명령을 실행 합니다:</para>
 
             <para>
 <screen>
 <command>psql -U postgres -d template1</command>
 </screen>
             </para>
-            <para>The above command connects to PostgreSQL
-            database <emphasis>template1</emphasis> as user
-            <emphasis>postgres</emphasis>. Once you connect to the PostgreSQL
-            server, you will be at a SQL prompt. You can run the
-            following SQL command at the <application>psql</application> prompt to configure the
-            password for the user <emphasis role="italics">postgres</emphasis>.</para>
+            <para>위의 명령은 사용자 <emphasis>postgres</emphasis>로써 PostgreSQL 데이타베이스 <emphasis>template1</emphasis> 로 접속 합니다. PostgreSQL 서버로 접속하면, 여러분은 SQL 프롬프트를 보게 됩니다. <emphasis role="italics">postgres</emphasis> 사용자의 암호를 설정하기 위하여 <application>psql</application> 프롬프트에서 다음의 SQL 명령을 실행할 수 있습니다.</para>
 
             <para>
 <screen>
 <command>template1=# ALTER USER postgres with encrypted password 'your_password';</command>
 </screen>
             </para>
-            <para>After configuring the password, edit the file
-            <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename> to use
-            <emphasis>MD5</emphasis> authentication:</para>
-            <para>Comment the recently added <emphasis role="italics">trust</emphasis> line and add the following
-            line: </para>
+            <para>암호를 설정한 후에, <emphasis>MD5</emphasis> 인증을 사용하기 위하여 <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename> 파일을 편집 합니다:</para>
+            <para>최근에 추가된 <emphasis role="italics">trust</emphasis> 줄을 주석 처리하고 다음 줄을 추가 합니다:</para>
 
 <programlisting>
 local all postgres md5 sameuser
 </programlisting>
             <warning>
-            <para>
-             The above configuration is not complete by any means. Please
-             refer <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">
-			 the PostgreSQL Administrator's Guide</ulink> to configure more parameters.
-            </para>
+            <para>위의 설정은 어떠한 의미로도 완전하지 않습니다. 더 많은 파라미터를 설정하기 위해서는 <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html"> PostgreSQL 관리자 안내서</ulink> 를 참조 하십시오.</para>
             </warning>
         </sect3>
       </sect2>
     </sect1>
 	<sect1 id="email-services" status="complete">
 		<title>이메일 서비스</title>
-          <para>
-            The process of getting an email from one person to another over a network or
-			the Internet involves many systems working together.  Each of these systems
-			must be correctly configured for the process to work.  The sender uses a <emphasis>Mail
-			User Agent</emphasis> (MUA), or email client, to send the message through one or more
-			<emphasis>Mail Transfer Agents</emphasis> (MTA), the last of which will hand it off to a 				<emphasis>Mail Delivery Agent</emphasis> (MDA) for delivery to the 
-			recipient's mailbox, from which it
-			will be retrieved by the recipient's email client, usually via a POP3 or IMAP server.
-          </para>
+          <para>네트워크 또는 인터넷 상에서 한 사람에서 부터 다른 사람으로 이메일을 가지는 과정은 많은 시스템이 함께 동작하는 것과 관련 됩니다. 각각의 시스템은 과정이 동작하기 위하여 반드시 올바르게 설정되어야 합니다. 보내는 사람은 <emphasis>Mail User Agent</emphasis> (MUA) 또는 이메일 클라이언트를 사용하고, 메세지를 보내기 위하여 하나 또는 여러 개의 <emphasis>Mail Transfer Agents</emphasis> (MTA) 를 통과하며, 마지막으로, 받는 사람의 메일박스에 배달을 하기 위하여 <emphasis>Mail Delivery Agent</emphasis> (MDA) 를 거치게 됩니다. 그리고, 메일은 보통 POP3 또는 IMAP 서버를 통하여 받는 사람의 이메일 클라이언트에 의해 읽혀지게 됩니다.</para>
       <sect2 id="postfix" status="complete">
         <title>Postfix</title>
-          <para>
-            <application>Postfix</application> is the default Mail Transfer Agent (MTA) in Ubuntu. It
-            attempts to be fast and easy to administer and secure. It is
-            compatible with the MTA <application>sendmail</application>. This section explains how
-            to install and configure <application>postfix</application>. It also explains how to
-            set it up as an SMTP server using a secure connection (for sending emails securely).
-          </para>
+          <para><application>Postfix</application> 는 우분투에서 기본 설정된 Mail Transfer Agent (MTA) 입니다. 이것은 빠르고 관리와 보안을 하기가 수월 합니다. 그리고 MTA 인 <application>sendmail</application> 과 호환이 됩니다. 이 영역은 <application>postfix</application> 를 어떻게 설치하고 설정하는 지를 설명 합니다. 또한 그것을 보안 연결을 (안전하게 이메일을 보내기 위한) 사용하는 SMTP 서버로서 어떻게 만드는 지를 설명 합니다.</para>
         <sect3 id="postfix-installation" status="complete">
           <title>설치</title>
-            <para>
-            To install <application>postfix</application> with SMTP-AUTH and Transport Layer
-            Security (TLS), run the following command:
-<screen>
+            <para><application>postfix</application>를 SMTP-AUTH와 Transport Layer Security (TLS)과 함께 설치하기 위하여, 다음의 명령을 실행 합니다: <screen>
 <command>sudo apt-get install postfix</command>
-</screen>
-		Simply press return when the installation process asks questions, the configuration will be done in greater detail in the next stage.
-            </para>
+</screen> 설치 과정 중에 물어보는 질문에 간단히 엔터키를 누르고, 설정은 다음 단계에서 보다 자세히 마쳐지게 됩니다.</para>
         </sect3>
         <sect3 id="postfix-configuration" status="complete">
           <title>기본적인 설정</title>
-            <para>
-            To configure <application>postfix</application>, run the following command:
-<screen>
+            <para><application>postfix</application> 를 설정하기 위하여, 다음 명령을 실행 합니다: screen&gt;
 <command>sudo dpkg-reconfigure postfix</command>
-</screen>
-            The user interface will be displayed. On each screen, select the following
-            values:
-            <itemizedlist spacing="compact">
-            <listitem><para>Ok</para></listitem>
-            <listitem><para>Internet Site</para></listitem>
-            <listitem><para>NONE</para></listitem>
-            <listitem><para>mail.example.com</para></listitem>
-            <listitem><para>mail.example.com, localhost.localdomain, localhost</para></listitem>
-            <listitem><para>No</para></listitem>
-            <listitem><para>127.0.0.0/8</para></listitem>
-            <listitem><para>Yes</para></listitem>
-            <listitem><para>0</para></listitem>
-            <listitem><para>+</para></listitem>
-            <listitem><para>all</para></listitem>
-            </itemizedlist>
-            </para>
+</para>
             <note>
-            <para>
-            Replace mail.example.com with your mail server hostname.
-            </para>
+            <para>mail.example.com 는 여러분의 메일 서버 호스트 이름으로 대체 합니다.</para>
             </note>
 	 </sect3>
         <sect3 id="postfix-smtp-authentication" status="complete">
           <title>SMTP 인증</title>
-            <para>The next steps are to configure
-            <application>postfix</application> to use SASL for SMTP
-            AUTH. Rather than editing the configuration file directly, 
-	     you can use the <command>postconf</command> command to configure
-            all <application>postfix</application> parameters.  The
-            configuration parameters will be stored in
-            <filename>/etc/postfix/main.cf</filename> file. Later if you
-            wish to re-configure a particular parameter, you can either
-            run the command or change it manually in the file.</para>
+            <para>다음 단게는 SMTP AUTH를 위하여 SASL을 사용하도록 <application>postfix</application>를 설정하는 것 입니다. 설정 파일을 직접 편집하는 대신에, 모든 <application>postfix</application> 파라미터를 설정하기 위하여 <command>postconf</command> 명령을 사용할 수 있습니다. 설정 파라미터들은 <filename>/etc/postfix/main.cf</filename> 파일 내에 저장 됩니다. 나중에 만약 여러분이 특정 파라미터를 재 설정하기를 원한다면, 그 명령을 실행하거나 또는 그 파일을 수작업으로 변경할 수 있습니다.</para>
 	<procedure>
-		<step><para>Configure Postfix to do SMTP AUTH using SASL (saslauthd):
-<screen>
+		<step><para>SASL을 사용하여 SMTP AUTH를 (saslauthd) 하도록 Postfix를 설정하려면: <screen>
 postconf -e 'smtpd_sasl_local_domain ='
 postconf -e 'smtpd_sasl_auth_enable = yes'
 postconf -e 'smtpd_sasl_security_options = noanonymous'
@@ -2749,12 +1796,9 @@ postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permit_myn
 postconf -e 'inet_interfaces = all'
 echo 'pwcheck_method: saslauthd' &gt;&gt; /etc/postfix/sasl/smtpd.conf
 echo 'mech_list: plain login' &gt;&gt; /etc/postfix/sasl/smtpd.conf
-</screen>
-		</para>
+</screen></para>
 		</step>
-		<step><para>Next, configure the digital certificate 
-            for TLS. When asked questions, follow the instructions and answer appropriately.
-<screen>
+		<step><para>다음은, TLS를 위하여 디지털 인증서를 설정 합니다. 질문을 물어볼 때, 지시를 따르고 적절하게 대답을 합니다. <screen>
 openssl genrsa -des3 -rand /etc/hosts -out smtpd.key 1024
 chmod 600 smtpd.key
 openssl req -new -key smtpd.key -out smtpd.csr
@@ -2766,16 +1810,10 @@ mv smtpd.key /etc/ssl/private/
 mv smtpd.crt /etc/ssl/certs/
 mv cakey.pem /etc/ssl/private/
 mv cacert.pem /etc/ssl/certs/
-</screen>
-		</para>
-		<note><para>You can get the digital
-            certificate from a certificate authority. Alternatively, you
-            can create the certificate yourself. Refer to 
-			<xref linkend="creating-a-self-signed-certificate"/> for more 
-			details.</para></note>
+</screen></para>
+		<note><para>여러분은 인증 기관에서 디지털 인증서를 가질 수 있습니다. 다른 방법으로는, 스스로 인증서를 만들 수 있습니다. 더 자세한 것은 <xref linkend="creating-a-self-signed-certificate"/> 를 참조 하십시오.</para></note>
 		</step>
-		<step><para>Configure Postfix to do TLS encryption for both incoming and outgoing mail:
-<screen>
+		<step><para>들어오는 이메일과 나가는 이메일 모두에 TLS 암호화를 적용하도록 Postfix를 설정하려면:  <screen>
 postconf -e 'smtpd_tls_auth_only = no'
 postconf -e 'smtp_use_tls = yes'
 postconf -e 'smtpd_use_tls = yes'
@@ -2788,57 +1826,23 @@ postconf -e 'smtpd_tls_received_header = yes'
 postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
 postconf -e 'tls_random_source = dev:/dev/urandom'
 postconf -e 'myhostname = mail.example.com'
-</screen>
-		</para>
+</screen></para>
 		</step>
 		</procedure>
             <note>
-            <para>
-            After you run all the commands, the SMTP AUTH is configured
-            with <application>postfix</application>. The self-signed
-            cerficiate is created for TLS and it is configured with
-            <application>postfix</application>.
-            </para>
+            <para>명령을 모두 실행하고 나면 <application>postfix</application>를 위한 SMTP AUTH의 설정이 모두 끝납니다. <application>postfix</application>에서 이어서 TLS에서 사용할 인증서를 직접 서명하여 설정합니다.</para>
             </note>
-            <para>
-            Now, the file <filename>/etc/postfix/main.cf</filename>
-            should look like <ulink url="../sample/postfix_configuration">this</ulink>.
-		</para>
-		<para>
-            The postfix initial configuration is complete. Run
-            the following command to start postfix daemon:
-            <screen><command>sudo /etc/init.d/postfix start</command></screen>
-
-            Now the <application>postfix</application> daemon is installed, configured and run
-            successfully. <application>Postfix</application> supports SMTP AUTH as defined in
-            <ulink url="ftp://ftp.isi.edu/in-notes/rfc2554.txt">RFC2554</ulink>.
-            It is based on <ulink url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>. However it is still necessary to set up SASL authentication before you can use SMTP.
-            </para>
+            <para>이때 <filename>/etc/postfix/main.cf</filename>와 <ulink url="../sample/postfix_configuration">this</ulink>이 같아보여야 합니다.</para>
+		<para>Postfix의 초기 설정이 이제 끝났습니다. Postfix 데몬을 시작하려면 <screen><command>sudo /etc/init.d/postfix start</command></screen>을 실행하십시오. 이제 <application>postfix</application> 데몬이 무사히 설치되었으며, 설정이 끝나고 이제 실행중입니다. <application>Postfix</application>는 <ulink url="ftp://ftp.isi.edu/in-notes/rfc2554.txt">RFC2554</ulink>에서 정의한 SMTP AUTH를 지원하며, <ulink url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>를 따르고 있습니다. 하지만 SMTP를 사용기 위해서는 SASL 인증도 설정해야 합니다.</para>
 	</sect3>
 	<sect3 id="sasl">
 	  <title>SASL 설정하기</title>
-            <para>
-            The
-            <application>libsasl2</application>,
-            <application>sasl2-bin</application> and
-            <application>libsasl2-modules</application> are necessary to
-            enable SMTP AUTH using SASL. You can install these applications if
-            you have not installed them already.
-<screen>
-<command>apt-get install libsasl2 sasl2-bin</command>
-</screen>
-	    </para>
-	    <para>
-		A few changes are necessary to make it work properly. Because <application>Postfix</application> runs chrooted in <filename>/var/spool/postfix</filename>, <application>SASL</application> needs to be configured to run in the false root (<filename>/var/run/saslauthd</filename> becomes <filename>/var/spool/postfix/var/run/saslauthd</filename>):
-<screen>
+            <para>SASL를 통한 SMTP AUTH 기능을 사용하기 위해서는 application&gt;libsasl2</para>
+	    <para>SASL를 제대로 사용하기 위해서는 수정해야 할 것이 몇 가지 있습니다. <application>Postfix</application>는 <filename>/var/spool/postfix</filename> 내에 chroot된 상태로 동작하기 때문에, <application>SASL</application> 역시 그 chroot된 환경 내에서 동작할 수 있도록 설정해야합니다(<filename>/var/run/saslauthd</filename> 대신에 <filename>/var/spool/postfix/var/run/saslauthd</filename>가 됩니다). 다음 명령을 입력하십시오: <screen>
 <command>mkdir -p /var/spool/postfix/var/run/saslauthd</command>
 <command>rm -rf /var/run/saslauthd</command>
-</screen>
-	    </para>
-	    <para>
-            To activate <application>saslauthd</application>, edit the file <filename>/etc/default/saslauthd</filename>, and change or add the START variable. In order to configure <application>saslauthd</application> to run in the false root, add the PWDIR, PIDFILE and PARAMS variables. Finally, configure the MECHANISMS variable to your liking. The file should look like this:
-
-<programlisting>
+</screen></para>
+	    <para><application>saslauthd</application>을 작동시키려면, <filename>/etc/default/saslauthd</filename> 을 편집하기 위하여 열고, START 변수를 변경하거나 추가 합니다. <application>saslauthd</application> 이 가짜 root 환경에서 실행되도록 설정하기 위해서는, PWDIR, PIDFILE과 PARAMS 변수를 더합니다. 마지막으로, MECHANISMS 변수를 여러분이 좋아하는 곳으로 설정 합니다. 그 파일을 다음과 비슷하게 보일 겁니다: <programlisting>
 # This needs to be uncommented before saslauthd will be run
 # automatically
 START=yes
@@ -2853,223 +1857,90 @@ PIDFILE="${PWDIR}/saslauthd.pid"
 # MECHANISMS="pam shadow"
 
 MECHANISMS="pam"
-</programlisting>
-            </para>
+</programlisting></para>
 <note>
-<para>
-If you prefer, you can use <emphasis role="strong">shadow</emphasis>
-instead of <emphasis role="strong">pam</emphasis>. This will use MD5
-hashed password transfer and is perfectly secure. The username and
-password needed to authenticate will be those of the users on the system
-you are using on the server.
-</para>
+<para>만약 여러분이 좋아한다면, <emphasis role="strong">shadow</emphasis>를 <emphasis role="strong">pam</emphasis> 대신에 사용할 수 있습니다. 이것은 MD5 해쉬된 암호 전송을 사용하고 완전하게 안전 합니다. 인증을 하기 위하여 필요한 사용자 이름과 암호는 여러분이 사용하는 서버 시스템의 사용자의 그것들이 됩니다.</para>
 </note>
-        <para>
-Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd</filename>. The saslauthd init script uses this setting to create the missing directory with the appropriate permissions and ownership:
-<screen>
+        <para>다음은, <filename>/var/spool/portfix/var/run/saslauthd</filename>의 dpkg "state"를 업데이트 합니다. saslauthd init script는 적당한 접근 권한과 소유권을 가지고 없는 디렉토리를 만들기 위하여 이 설정을 사용 합니다: <screen>
 <command>dpkg-statoverride --force --update --add root sasl 755 /var/spool/postfix/var/run/saslauthd</command>
-</screen>
-        </para>
+</screen></para>
         </sect3>
         <sect3 id="postfix-testing" status="complete">
           <title>테스팅</title>
-            <para>
-          SMTP AUTH configuration is complete. Now it is time to start
-          and test the setup. You can run the following command to start
-          the SASL daemon:
-            <screen><command>sudo /etc/init.d/saslauthd start</command></screen>
-
-          To see if SMTP-AUTH and TLS work properly, run the following
-          command:
-            <screen><command>telnet mail.example.com 25</command></screen>
-          After you have established the connection to the postfix mail
-          server, type:
-            <screen>ehlo mail.example.com</screen>
-          If you see the following lines among others, then everything
-          is working perfectly. Type <command>quit</command> to exit.
-<programlisting>
+            <para>SMTP AUTH 설정을 마쳤습니다. 이제는 그것을 시작하고 설정을 테스트할 시간 입니다. SASL 데몬을 시작하기 위하여 다음의 명령을 실행할 수 있습니다: <screen><command>sudo /etc/init.d/saslauthd start</command></screen> SMTP-AUTH과 TLS가 적절하게 동작하는 지를 보려면, 다음의 명령을 실행 합니다: <screen><command>telnet mail.example.com 25</command></screen> 여러분이 postfix 메일 서버로 접속을 만들고 난 후, <screen>ehlo mail.example.com</screen> 을 입력하고 만약 다음의 줄들을 다른 것과 보게 된다면, 모든 것은 완전하게 동작하는 것 입니다. <command>quit</command>를 입력하여 종료 하십시오. <programlisting>
 250-STARTTLS
 250-AUTH LOGIN PLAIN
 250-AUTH=LOGIN PLAIN
 250 8BITMIME
-</programlisting>
-        </para>
+</programlisting></para>
         </sect3>
       </sect2>
       <sect2 id="exim4" status="complete">
         <title>Exim4</title>
-          <para>
-            <application>Exim4</application> is is another Message Transfer
-            Agent (MTA) developed at the University of Cambridge for use
-            on Unix systems connected to the internet. Exim can be
-            installed in place of <application>sendmail</application>,
-            although the configuration of
-            <application>exim</application> is quite different to
-            that of <application>sendmail</application>.
-          </para>
+          <para><application>Exim4</application>는 인터넷에 연결된 유닉스 시스템 상에서 사용하도록 캠브리지 대학에서 개발한 또다른 Message Transfer Agent (MTA) 입니다. Exim은 <application>sendmail</application> 자리에 설치될 수 있고, 설정은 <application>sendmail</application>의 설정과는 아주 다릅니다.</para>
         <sect3 id="exim4-installation" status="complete">
           <title>설치</title>
-            <para>
-            To install <application>exim4</application>, run the following command:
-<screen>
+            <para><application>exim4</application>를 설치하기 위하여, 다음 명령을 실행 합니다: <screen>
 <command>sudo apt-get install exim4 exim4-base exim4-config</command>
-</screen>
-            </para>
+</screen></para>
         </sect3>
         <sect3 id="exim4-configuration" status="complete">
           <title>설정</title>
-            <para>
-            To configure <application>exim4</application>, run the following command:
-<screen>
+            <para><application>exim4</application>를 설정하기 위하여, 다음 명령을 실행 합니다: <screen>
 <command>sudo dpkg-reconfigure exim4-config</command>
-</screen>
-            The user interface will be displayed. The user interface
-            lets you configure many parameters. For example, In
-            <application>exim4</application> the configuration files are
-            split among multiple files. If you wish to have them in one
-            file you can configure accordingly in this user interface.
-            </para>
+</screen> 사용자 인터페이스가 보여질 겁니다. 사용자 인터페이스는 여러분이 많은 파라미터를 설정할 수 있도록 합니다. 예를 들어, <application>exim4</application> 설정 파일은 여러 개의 파일들로 나누어 집니다. 만약 여러분이 그것들을 한 파일로 갖기를 원한다면 이 사용자 인터페이스에서 적절하게 설정할 수 있습니다.</para>
 
-            <para>
-            All the parameters you configure in the user interface are
-            stored in
-            <filename>/etc/exim4/update-exim4.conf.conf</filename> file.
-            If you wish to re-configure, either you re-run the
-            configuration wizard or manually edit this file
-            using your favourite editor. Once you configure, you can run
-            the following command to generate the master configuration
-            file:
-<screen>
+            <para>여러분이 사용자 인터페이스에서 설정할 수 있는 모든 파라미터들은 <filename>/etc/exim4/update-exim4.conf.conf</filename> 파일에 저장 됩니다. 만약 재 설정하기를 원한다면, 설정 마법사를 재 실행하던지 또는 여러분이 선호하는 편집기를 사용하여 수작업으로 이 파일을 편집할 수 있습니다. 설정한 후, 주 설정 파일을 만들기 위하여 다음 명령을 실행할 수 있습니다: <screen>
 <command>sudo update-exim4.conf</command>
-</screen>
-            The master configuration file, is generated and
-            it is stored in
-            <filename>/var/lib/exim4/config.autogenerated</filename>. 
-            
-            <warning>
-            <para>
-            At any time, you should not edit the master configuration
-            file,
-            <filename>/var/lib/exim4/config.autogenerated</filename>
-            manually. It is updated automatically every time you run
-            <command>update-exim4.conf</command>
-            </para>
-            </warning>
-            You can run
-            the following command to start
-            <application>exim4</application> daemon.
-<screen>
+</screen> 주 설정 파일이 만들어지고 <filename>/var/lib/exim4/config.autogenerated</filename>로 저장 됩니다. <warning>
+            <para>언제든, 여러분은 주 설정 파일, <filename>/var/lib/exim4/config.autogenerated</filename>을 수작업으로 편집하지 않습니다. 그것은 <command>update-exim4.conf</command>를 실행할 때마다 자동적으로 업데이트 됩니다.</para>
+            </warning> <application>exim4</application> 데몬을 시작하기 위하여 다음 명령을 실행할 수 있습니다: <screen>
 <command>sudo /etc/init.d/exim4 start</command>
-</screen>
-            <emphasis role="strong">TODO:</emphasis> This section should
-            cover configuring SMTP AUTH with exim4. 
-            </para>
+</screen><emphasis role="strong">TODO:</emphasis> 이 영역은 exim4와 함께 SMTP AUTH를 설정하는 것을 다룹니다.</para>
         </sect3>
       </sect2>
       <sect2 id="dovecot-server" status="complete">
         <title>Dovecot 서버</title> 
-          <para>
-          <application>Dovecot</application> is a Mail Delivery Agent, written with security
-          primarily in mind. It supports the major mailbox formats: mbox
-          or Maildir. This section explain how to set it up as an imap or
-          pop3 server.
-          </para>
+          <para><application>Dovecot</application> 은 보안 우선을 염두에 두고 쓰여진 Mail Delivery Agent 입니다. 이것은 mbox 와 Maildir 같은 주요 메일박스 형식을 지원 합니다. 이 영역은 imap 또는 pop3 서버로서 Dovecot을 어떻게 설정하는 지를 설명 합니다.</para>
         <sect3 id="dovecot-installation" status="complete">
           <title>설치</title>
-            <para>
-            To install <application>dovecot</application>, run the following command in the
-            command prompt:
-<screen>
+            <para><application>dovecot</application> 설치하기 위하여, 명령 프롬프트에서 다음 명령을 실행 합니다: <screen>
 <command>sudo apt-get install dovecot-common dovecot-imapd dovecot-pop3d</command>
-</screen>
-            </para>
+</screen></para>
         </sect3>
         <sect3 id="dovecot-configuration" status="complete">
           <title>설정</title>
-            <para>
-            To configure <application>dovecot</application>, you can edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename>. You can
-            choose the protocol you use. It could be pop3, pop3s (pop3
-            secure), imap and imaps (imap secure). A description of these protocols is beyond the scope of this guide. For further information, refer to the wikipedia articles on <ulink url="http://en.wikipedia.org/wiki/POP3">POP3</ulink> and
-            <ulink url="http://en.wikipedia.org/wiki/Internet_Message_Access_Protocol">IMAP</ulink>.
-            </para>
+            <para><application>dovecot</application>을 설정하기 위하여, <filename>/etc/dovecot/dovecot.conf</filename> 파일을 편집할 수 있습니다. 여러분이 사용하고자 하는 프로토콜을 선택할 수 있고, 그것은 pop3, pop3s (pop3 secure), imap 그리고 imaps (imap secure)이 될 수 있습니다. 이 프로토콜에 대한 설명은 이 안내서의 범위 밖 입니다. 더 많은 정보는, wikipedia의 다음 글을, <ulink url="http://en.wikipedia.org/wiki/POP3">POP3</ulink> 와 <ulink url="http://en.wikipedia.org/wiki/Internet_Message_Access_Protocol">IMAP</ulink>, 참고 하십시오.</para>
 
-            <para>
-            IMAPS and POP3S are more secure that the simple IMAP and
-            POP3 because they use SSL encryption to connect. Once you
-            have chosen the protocol, amend the following line in the file
-            <filename>/etc/dovecot/dovecot.conf</filename>:
-<programlisting>
+            <para>IMAPS와 POP3S는 접속할 때 SSL 암호화를 사용하므로 간단한 IMAP과 POP3 보다는 좀 더 안전 합니다. 이 프로토콜을 선택하였다면, <filename>/etc/dovecot/dovecot.conf</filename> 파일에 다음 줄을 수정 합니다: <programlisting>
 protocols = pop3 pop3s imap imaps
-</programlisting>
-
-            It enables the protocols when <application>dovecot</application> is started. Next, add the following line in pop3 section in the file <filename>/etc/dovecot/dovecot.conf</filename>:
-<programlisting>
+</programlisting> 그것은 <application>dovecot</application>이 시작될 때 그 프로토콜을 사용 가능하게 합니다. 다음은, <filename>/etc/dovecot/dovecot.conf</filename> 파일의 pop3 부분에 다음 줄을 추가 합니다: <programlisting>
 pop3_uidl_format = %08Xu%08Xv
-</programlisting>
-
-            Next, choose the mailbox you use. <application>Dovecot</application> supports
-            <emphasis role="strong">maildir</emphasis> and <emphasis role="strong">mbox</emphasis> formats. These are the most
-            commonly used mailbox formats. They both have their own
-            benefits and they are discussed on <ulink url="http://dovecot.org/doc/configuration.txt">the dovecot website</ulink>.
-            </para>
-            <para>
-            Once you have chosen your mailbox type, edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename> and change
-            the following line:
-<programlisting>
+</programlisting> 그 다음은, 사용할 메일박스를 선택 합니다. <application>Dovecot</application>은 <emphasis role="strong">maildir</emphasis> 과 <emphasis role="strong">mbox</emphasis> 형식을 지원 합니다. 그것은 가장 일반적으로 사용되는 메일박스 형식 입니다. 각각은 서로의 장점을 가지고 그에 대한 것은 <ulink url="http://dovecot.org/doc/configuration.txt">dovecot 웹 사이트</ulink>에 논의되어 있습니다.</para>
+            <para>여러분의 메일박스 종류를 선택한 후, <filename>/etc/dovecot/dovecot.conf</filename> 파일을 편집하기 위하여 열고 다음 줄을 변경 합니다: <programlisting>
 default_mail_env = maildir:~/Maildir # (for maildir)
 또는
 default_mail_env = mbox:~/mail:INBOX=/var/spool/mail/%u # (for mbox)
-</programlisting>
-            </para>
+</programlisting></para>
 <note>
-<para>
-You should configure your Mail Trasport Agent (MTA) to transfer the
-incoming mail to this type of mailbox if it is different from the one
-you have configured.
-</para>
+<para>만약 설정한 것과 다르다면, 이 메일박스의 종류로 수신 메일을 전송하기 위한 여러분의 Mail Trasport Agent (MTA)를 설정하여야 합니다.</para>
 </note>
-          <para>
-          Once you have configured dovecot, start the <application>dovecot</application> daemon
-          in order to test your setup:
-
-          <screen><command>sudo /etc/init.d/dovecot start</command></screen>
-
-          If you have enabled imap, or pop3, you can also try to log in
-          with the commands <command>telnet localhost pop3</command> or
-          <command>telnet localhost</command> imap2. If you see
-          something like the following, the installation has been
-          successful:
-<programlisting>
+          <para>여러분이 dovecot을 설정한 후, 그것을 테스트하기 위하여 <application>dovecot</application> 데몬을 시작 하십시오: <screen><command>sudo /etc/init.d/dovecot start</command></screen> 만약 imap 또는 pop3를 사용 가능하게 하였다면, <command>telnet localhost pop3</command> 또는 <command>telnet localhost  imap2</command> 명령을 사용하여 로그인을 시도해 볼 수 있습니다. 다음과 같은 것을 본다면, 설치는 성공적으로 된 것 입니다: <programlisting>
 bhuvan@rainbow:~$ telnet localhost pop3
 Trying 127.0.0.1...
 Connected to localhost.localdomain.
 Escape character is '^]'.
 +OK Dovecot ready.
-</programlisting>
-          </para>
+</programlisting></para>
         </sect3>
         <sect3 id="dovecot-ssl" status="complete">
           <title>Dovecot SSL 설정</title>
-            <para>
-            To configure <application>dovecot</application> to use SSL, you can edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename> and amend
-            following lines:
-<programlisting>
+            <para>SSL을 사용하도록 <application>dovecot</application>을 설정하기 위하여, <filename>/etc/dovecot/dovecot.conf</filename> 파일을 편집하기 위해 열고 다음 줄을 수정 합니다: <programlisting>
 ssl_cert_file = /etc/ssl/certs/dovecot.pem
 ssl_key_file = /etc/ssl/private/dovecot.pem
 ssl_disable = no
 disable_plaintext_auth = no
-</programlisting>
-
-          The <emphasis role="strong">cert</emphasis> and <emphasis role="strong">key</emphasis> files are created automatically
-          by <application>dovecot</application> when you install it. Please note that these keys
-          are not signed and will give "bad signature" errors when
-          connecting from a client. To avoid this, you can use
-          commercial certificates, or even better, you can use your own
-          SSL certificates.
-          </para>
+</programlisting> <emphasis role="strong">cert</emphasis> 와 <emphasis role="strong">key</emphasis> 파일은 설치될 때 <application>dovecot</application>에 의하여 자동적으로 만들어 집니다. 이 키는 사인되지 않았고 클라이언트에서 연결을 할 때 "bad signature" 에러를 주게 되는 것을 주의 하십시오. 이 것을 피하려면, 상업용 인증서를 사용할 수 있고, 또는 보다 낫게, 여러분 스스로의 SSL 인증서를 사용할 수 있습니다.</para>
 	</sect3>
 	<sect3>
 	  <title>이메일 서버를 위한 방화벽 설정</title>
@@ -3083,21 +1954,10 @@ disable_plaintext_auth = no
       </sect2>
       <sect2 id="mailman" status="complete">
         <title>Mailman</title> 
-          <para>
-          Mailman is an open source program for managing electronic mail
-          discussions and e-newsletter lists. Many open source mailing
-          lists (including all the <ulink url="http://lists.ubuntu.com">Ubuntu mailing lists</ulink>) use
-          Mailman as their mailing list software. It is powerful and easy
-          to install and maintain.
-          </para>
+          <para>Mailman은 전자 우편 회의와 전자 소식 목록을 관리하기 위한 오픈소스 프로그램 입니다. 많은 오픈소스 메일링 리스트는 (모든 <ulink url="http://lists.ubuntu.com">우분투 메일링 리스트</ulink>를 포함한) 메일링 리스트 소프트웨어로 Mailman을 사용 합니다. 이것은 강력하고 설치와 유지보수가 쉽습니다.</para>
         <sect3 id="mailman-installation" status="complete">
           <title>설치</title>
-            <para>
-            Mailman provides a web interface for the administrators
-            and users. So, it requires apache with mod_perl support.
-            Mailman uses an external mail server to send and receive 
-			emails. It works perfectly with the following mail servers:
-            </para>
+            <para>Mailman은 관리자와 사용자를 위한 웹 인터페이스를 제공 합니다. 그러므로, 그것은 mod_perl 지원을 하는 아파치를 필요로 합니다. Mailman은 이메일을 보내고 받기 위한 외부 메일 서버를 사용 합니다. 다음의 메일 서버와 완벽하게 동작 합니다:</para>
             <para>
             <itemizedlist spacing="compact">
                 <listitem>
@@ -3115,98 +1975,46 @@ disable_plaintext_auth = no
             </itemizedlist>
             </para>
 
-            <para>
-            We will see how to install mailman, the apache web server 
-			and the Exim mail server. If you wish to install mailman
-            with a different mail server, please refer to the references
-            section. 
-            </para>
+            <para>우리는 어떻게 mailman, 아파치 웹 서버와 Exim 메일 서버를 설치하는지를 봅니다. 만약 여러분이 mailman을 다른 메일 서버와 함께 설치하기를 원한다면, 참조 영역을 참고 하십시오.</para>
           <sect4 id="mailman-apache2">
             <title>아파치2</title>
               <para>아파치2를 설치하는 것은 <xref linkend="http-installation"/> 을 참조 하십시오.</para>
           </sect4>
           <sect4 id="mailman-exim4">
             <title>Exim4</title>
-              <para>
-              To install Exim4 you run the following commands at a terminal prompt:
-<screen>
+              <para>Exim4를 설치하기 위하여 터미널 프롬프트에서 다음 명령을 실행 합니다: <screen>
 <command>sudo apt-get install exim4</command>
 <command>sudo apt-get install exim4-base</command>
 <command>sudo apt-get install exim4-config</command>
-</screen>
-
-Once exim4 is installed, the configuration files are stored in
-the <filename>/etc/exim4</filename> directory. In ubuntu, by default, the exim4 configuration files are
-split across different files. You can change this behavior by changing
-the following variable in the <filename>/etc/exim4/update-exim4.conf</filename> file:
-
-              <itemizedlist spacing="compact">
+</screen> exim4가 설치되면, 설정 파일들은 <filename>/etc/exim4</filename> 디렉토리에 저장 됩니다. 우분투에서는, 기본 설정으로, exim4 설정 파일은 여러 개의 파일들로 나누어 집니다. <filename>/etc/exim4/update-exim4.conf</filename> 파일 내의 다음 변수를 변경하는 것으로 이 동작을 바꿀 수 있습니다: <itemizedlist spacing="compact">
               <listitem>
                 <para><application>dc_use_split_config='true'</application></para>
               </listitem>
-              </itemizedlist>
-              </para>
+              </itemizedlist></para>
           </sect4>
           <sect4 id="mailman-mailman">
             <title>Mailman</title>
-              <para>
-              To install <application>Mailman</application>, run following command at a terminal prompt:
-<screen>
+              <para><application>Mailman</application> 을 설치하기 위하여, 터미널 프롬프트에서 다음 명령을 실행 합니다: <screen>
 <command>sudo apt-get install mailman</command> 
-</screen>
-
-It copies the installation files in
-<application>/var/lib/mailman</application> directory. It installs the
-CGI scripts in <application>/usr/lib/cgi-bin/mailman</application>
-directory.  It creates <emphasis>list</emphasis> linux
-user. It creates the <emphasis>list</emphasis> linux
-group. The mailman process will be owned by this user. 
-              </para>
+</screen> 이것은 설치 파일을 <application>/var/lib/mailman</application> 디렉토리 내로 복사하고, <application>/usr/lib/cgi-bin/mailman</application> 디렉토리 내에 CGI 스크립트를 설치 합니다. <emphasis>list</emphasis> 리눅스 사용자를 만들고, <emphasis>list</emphasis> 리눅스 그룹도 만듭니다. mailman 프로세스는 이 사용자에 의하여 소유 됩니다.</para>
           </sect4>
         </sect3>
         <sect3 id="mailman-configuration" status="complete">
           <title>설정</title>
-            <para>
-            This section assumes you have successfully installed
-            <application>mailman</application>,
-            <application>apache2</application>, and
-            <application>exim4</application>. Now you just need
-            to configure them. 
-            </para>
+            <para>이 영역에서는 여러분이 <application>mailman</application>, <application>apache2</application>, 그리고 <application>exim4</application>를 성공적으로 설치하였다고 가정 합니다. 이제 여러분은 단지 그것들을 설정할 필요가 있습니다.</para>
           <sect4 id="mailman-conf-apache2">
             <title>아파치2</title>
-              <para>
-              Once apache2 is installed, you can add the following lines in
-              the <filename>/etc/apache2/apache2.conf</filename> file:
-<programlisting>
+              <para>아파치2가 설치되면, <filename>/etc/apache2/apache2.conf</filename> 파일에 다음의 줄들을 추가할 수 있습니다: <programlisting>
 Alias /images/mailman/ "/usr/share/images/mailman/"
 Alias /pipermail/ "/var/lib/mailman/archives/public/"
-</programlisting>
-
-Mailman uses apache2 to render its CGI scripts. The mailman CGI scripts
-are installed in the <application>/usr/lib/cgi-bin/mailman</application>
-directory. So, the mailman url will be
-http://hostname/cgi-bin/mailman/. You can make changes to the
-<filename>/etc/apache2/apache2.conf</filename> file if you wish to
-change this behavior.
-              </para>
+</programlisting> Mailman은 CGI 스크립트를 사용하기 위하여 아파치2를 이용 합니다. 메일맨 스크립트는 <application>/usr/lib/cgi-bin/mailman</application> 디렉토리에 설치 됩니다. 그러므로 그 메일맨 url은 http://hostname/cgi-bin/mailman/ 이 됩니다. 만약 변경하기를 원한다면, <filename>/etc/apache2/apache2.conf</filename> 파일에서 바꿀 수 있습니다.</para>
           </sect4>
 
           <sect4 id="mailman-conf-exim4">
             <title>Exim4</title>
-              <para>
-              Once Exim4 is installed, you can start the Exim server using the following
-              command from a terminal prompt:
-<screen>
+              <para>Exim4를 설치한 후, 터미널 프롬프트에서 다음 명령을 사용하여 Exim 서버를 시작할 수 있습니다: <screen>
 <command>sudo apt-get /etc/init.d/exim4 start</command>
-</screen>
-
-In order to make mailman work with exim4, you need to configure exim4.
-As mentioned earlier, by default, exim4 uses multiple configuration
-files of different types. For details, please refer to the <ulink url="http://www.exim.org">Exim</ulink> website.  To run mailman, we
-should add new a configuration file to the following configuration
-types: 
-              <itemizedlist spacing="compact">
+</screen> exim4와 함께 mailman이 동작하게 만들려면, exim4를 설정하는 것이 필요 합니다. 앞에 언급된 것과 같이, 기본 설정으로, exim4는 다른 종류의 복수 설정 파일들을 사용 합니다. 자세한 것은 <ulink url="http://www.exim.org">Exim</ulink> 웹 사이트를 참조 하십시오. mailman을 실행하기 위하여, 다음 설정 종류에 대한 새로운 설정 파일을 추가하여야 합니다: <itemizedlist spacing="compact">
               <listitem>
                 <para>Main</para>
               </listitem>
@@ -3216,21 +2024,11 @@ types:
               <listitem>
                 <para>Router</para>
               </listitem>
-              </itemizedlist>
-              Exim creates a master configuration file by sorting all
-              these mini configuration files. So, the order of these
-              configuration files is very important.
-              </para>
+              </itemizedlist> Exim은 모든 이 작은 설정 파일들을 정렬하여 주 설정 파일을 만듭니다. 그러므로, 이 설정 파일의 순서는 매우 중요 합니다.</para>
           </sect4>
           <sect4 id="mailman-conf-main">
             <title>Main</title>
-              <para>
-              All the configuration files belonging to the main type are
-              stored in the
-              <filename>/etc/exim4/conf.d/main/</filename> directory. You can add
-              the following content to a new file, named <filename>04_exim4-config_mailman</filename>:
-
-<programlisting>
+              <para>Main 종류에 속하는 모든 설정 파일들은 <filename>/etc/exim4/conf.d/main/</filename> 디렉토리 내에 저장 됩니다. <filename>04_exim4-config_mailman</filename> 이란 이름의 새 파일에 다음의 내용을 추가할 수 있습니다: <programlisting>
 # start
 # Home dir for your Mailman installation -- aka Mailman's prefix
 # directory.
@@ -3239,7 +2037,7 @@ types:
 MM_HOME=/var/lib/mailman
 #
 # User and group for Mailman, should match your --with-mail-gid
-# switch to Mailman's configure script.  Value is normally "mailman"
+# switch to Mailman's configure script. Value is normally "mailman"
 MM_UID=list
 MM_GID=list
 #
@@ -3259,18 +2057,11 @@ MM_WRAP=MM_HOME/mail/mailman
 # verifying list addresses)
 MM_LISTCHK=MM_HOME/lists/${lc::$local_part}/config.pck
 # end
-</programlisting>
-          </para>
+</programlisting></para>
           </sect4>
           <sect4 id="mailman-conf-transport">
             <title>Transport</title>
-              <para>
-All the configuration files belonging to transport type are stored in
-the <filename>/etc/exim4/conf.d/transport/</filename> directory. You
-can add the following content to a new file named <filename>
-40_exim4-config_mailman</filename>:
-
-<programlisting>
+              <para>Transport 종류에 속하는 모든 설정 파일들은 <filename>/etc/exim4/conf.d/transport/</filename> 디렉토리 내에 저장 됩니다. <filename> 40_exim4-config_mailman</filename> 이란 이름의 새 파일에 다음의 내용을 추가할 수 있습니다: <programlisting>
   mailman_transport:
    driver = pipe
    command = MM_WRAP \
@@ -3282,16 +2073,11 @@ can add the following content to a new file named <filename>
     home_directory = MM_HOME
     user = MM_UID
     group = MM_GID
-</programlisting>
-              </para>
+</programlisting></para>
           </sect4>
           <sect4 id="mailman-conf-router">
             <title>Router</title>
-              <para>
-All the configuration files belonging to router type are stored in the
-<filename>/etc/exim4/conf.d/router/</filename> directory. You can add the following content
-in to a new file named <filename>101_exim4-config_mailman</filename>:
-<programlisting>
+              <para>Router 종류에 속하는 모든 설정 파일들은 <filename>/etc/exim4/conf.d/router/</filename> 디렉토리 내에 저장 됩니다. <filename>101_exim4-config_mailman</filename> 이란 이름의 새 파일에 다음의 내용을 추가할 수 있습니다: <programlisting>
   mailman_router:
    driver = accept
    require_files = MM_HOME/lists/$local_part/config.pck
@@ -3300,38 +2086,18 @@ in to a new file named <filename>101_exim4-config_mailman</filename>:
                        -confirm+* : -join : -leave : \
                        -owner : -request : -admin
    transport = mailman_transport
-</programlisting>
-
-              </para>
+</programlisting></para>
 <warning>
-<para>
-The order of main and transport configuration files can be in any order.
-But, the order of router configuration files must be the same.
-This particular file must appear before the
-<application>200_exim4-config_primary</application> file.
-These two configuration files contain same type of information. The
-first file takes the precedence. For more details, please refer to the
-references section.
-</para>
+<para>Main과 Transport 설정 파일들의 순서는 어느 순서가 되도 무방 합니다. 그러나, Router 설정 파일의 순서는 반드시 똑같아야 합니다. 이 특정 파일은 <application>200_exim4-config_primary</application> 파일 이전에 반드시 나타나야 합니다. 이 두 설정 파일은 같은 종류의 정보를 가지고 있습니다. 첫 번째 파일이 우선권을 가집니다. 더 자세한 것은, 참조 영역을 참고 하십시오.</para>
 </warning>
           </sect4>
           <sect4 id="mailman-conf-mailman">
             <title>Mailman</title>
-              <para>
-Once mailman is installed, you can run it using the following command:
-<screen>
+              <para>mailman을 설치한 후, 다음 명령을 사용하여 그것을 실행할 수 있습니다: <screen>
 <command>sudo /etc/init.d/mailman start</command>
-</screen>
-
-Once mailman is installed, you should create the default mailing list.
-Run the following command to create the mailing list:
-
-
-<screen>
+</screen> mailman을 설치한 후, 기본 설정 메일링 리스트를 만들어야 합니다. 메일링 리스트를 만들기 위하여 다음 명령을 실행 합니다: <screen>
 <command>sudo /usr/sbin/newlist mailman</command>
-</screen>
-
-<programlisting>
+</screen><programlisting>
   Enter the email address of the person running the list: bhuvan at ubuntu.com
   Initial mailman password:
   To finish creating your mailing list, you must edit your <filename>/etc/aliases</filename> (or
@@ -3339,71 +2105,37 @@ Run the following command to create the mailing list:
   `newaliases' program:
 
   ## mailman mailing list
-  mailman:              "|/var/lib/mailman/mail/mailman post mailman"
-  mailman-admin:        "|/var/lib/mailman/mail/mailman admin mailman"
-  mailman-bounces:      "|/var/lib/mailman/mail/mailman bounces mailman"
-  mailman-confirm:      "|/var/lib/mailman/mail/mailman confirm mailman"
-  mailman-join:         "|/var/lib/mailman/mail/mailman join mailman"
-  mailman-leave:        "|/var/lib/mailman/mail/mailman leave mailman"
-  mailman-owner:        "|/var/lib/mailman/mail/mailman owner mailman"
-  mailman-request:      "|/var/lib/mailman/mail/mailman request mailman"
-  mailman-subscribe:    "|/var/lib/mailman/mail/mailman subscribe mailman"
-  mailman-unsubscribe:  "|/var/lib/mailman/mail/mailman unsubscribe mailman"
+  mailman: "|/var/lib/mailman/mail/mailman post mailman"
+  mailman-admin: "|/var/lib/mailman/mail/mailman admin mailman"
+  mailman-bounces: "|/var/lib/mailman/mail/mailman bounces mailman"
+  mailman-confirm: "|/var/lib/mailman/mail/mailman confirm mailman"
+  mailman-join: "|/var/lib/mailman/mail/mailman join mailman"
+  mailman-leave: "|/var/lib/mailman/mail/mailman leave mailman"
+  mailman-owner: "|/var/lib/mailman/mail/mailman owner mailman"
+  mailman-request: "|/var/lib/mailman/mail/mailman request mailman"
+  mailman-subscribe: "|/var/lib/mailman/mail/mailman subscribe mailman"
+  mailman-unsubscribe: "|/var/lib/mailman/mail/mailman unsubscribe mailman"
 
   Hit enter to notify mailman owner...
 
   # 
-</programlisting>
-
-We have configured exim to recognize all emails from mailman. So, it is
-not mandatory to make any new entries in
-<filename>/etc/aliases</filename>.  If you have made any changes
-to the configuration files, please ensure that you restart those
-services before continuing to next section.
-</para>
+</programlisting> 우리는 exim이 mailman에서 오는 모든 이메일을 인식하도록 설정 하였습니다. 그러므로, <filename>/etc/aliases</filename> 파일 내에 어떠한 새로운 항목을 만드는 것은 필수적이지 않습니다. 만약 여러분이 그 설정 파일에 어떠한 변경을 하였다면, 다음 영역을 계속하기 전에 그 서비스들을 재 시작하는 것을 확신 하십시오.</para>
           </sect4>
         </sect3>
         <sect3 id="mailman-admin" status="complete">
           <title>관리</title>
-<para>
-We assume you have a default installation. The
-mailman cgi scripts are still in
-<application>/usr/lib/cgi-bin/mailman/</application> directory.  Mailman
-provides a web based administration facility. To access this page, point
-your browser to the following url: 
-
-</para>
+<para>우리는 여러분이 기본 설정된 설치를 가졌다고 가정 합니다. mailman CGI 스크립트는 여전히 <application>/usr/lib/cgi-bin/mailman/</application> 디렉토리 내에 있습니다. Mailman은 웹 기반 관리 기능을 제공 합니다. 이 페이지를 접근하기 위하여, 다음의 url을 여러분의 브라우저에서 사용 합니다:</para>
 <para>http://hostname/cgi-bin/mailman/admin</para>
 
-<para>
-The default mailing list, <emphasis>mailman</emphasis>,
-will appear in this screen. If you click the mailing list name, it
-will ask for your authentication password.  If you enter the correct
-password, you will be able to change administrative settings of this
-mailing list.
-
-You can create a new mailing list using command line utility
-(<command>/usr/sbin/newlist</command>).
-Alternatively, you can create a new mailing list using web interface. 
-</para>
+<para>기본 설정된 메일링 리스트, <emphasis>mailman</emphasis> 가 이 화면에 나타납니다. 그 메일링 리스트 이름을 클릭하면, 여러분의 인증 암호를 물어볼 것 입니다. 올바르게 암호를 입력하였다면, 여러분은 이 메일링 리스트의 관리자 설정 값을 변경할 수 있습니다. 명령행 유틸리티(<command>/usr/sbin/newlist</command>)를 사용하여 새로운 메일링 리스트를 만들 수 있습니다. 다른 방법으로, 웹 인터페이스를 사용하여 새로운 메일링 리스트를 만들 수 있습니다.</para>
         </sect3>
         <sect3 id="mailman-users" status="complete">
           <title>사용자</title>
-<para>
-Mailman provides a web based interface for users. To access this page,
-point your browser to the following url:
-</para>
+<para>Mailman은 사용자에게 웹 기반의 인터페이스를 제공 합니다. 이 페이지를 접근하려면, 다음 url을 여러분의 브라우저에서 사용 합니다:</para>
 
 <para>http://hostname/cgi-bin/mailman/listinfo</para>
 
-<para>
-The default mailing list, <emphasis>mailman</emphasis>,
-will appear in this screen. If you
-click the mailing list name, it will display the subscription form. You
-can enter your email address, name (optional), and password to subscribe.
-An email invitation will be sent to you. You can follow the
-instructions in the email to subscribe.
-</para>
+<para>기본 설정된 메일링 리스트, <emphasis>mailman</emphasis> 가 이 화면에 나타납니다. 그 메일링 리스트 이름을 클릭하면, 가입 양식을 보입니다. 여러분의 이메일 주소, 이름(선택사항) 그리고 암호를 가입하기 위하여 입력 합니다. 여러분에게 이메일 초대가 보내집니다. 가입하기 위하여 그 이메일의 절차를 따릅니다.</para>
         </sect3>
         <sect3 id="mailman-references" status="complete">
           <title>참조</title>

@@ -124,6 +124,7 @@
 <!ENTITY kernel "http://www.kernel.org">
 <!ENTITY google "http://www.google.com">
 <!ENTITY kdelook " http://www.kde-look.org">
+<!ENTITY lulu-store "http://www.lulu.com/ubuntu-doc">
 <!-- this entity controls the url for addons--><!ENTITY java-download "http://java.sun.com/j2se/1.5.0/download.jsp">
 <!ENTITY skype-deb "skype_1.2.0.17-1_i386.deb">
 <!ENTITY skype-download "http://www.skype.com/go/getskype-linux-deb">
@@ -395,8 +396,8 @@
 <!ENTITY language "&EnglishAmerican;">
 ]>
 <chapter id="windows-networking" status="complete">
-	<title>Windows-nätverk</title>
-  <para>Datornätverk består ofta av flera olika system, och även om det vore trevligt att administrera ett nätverk som endast bestod av skrivbordsdatorer och servrar med Ubuntu måste somliga nätverk bestå av både Ubuntusystem och <trademark class="registered">Microsoft</trademark><trademark class="registered">Windows</trademark>-system som arbetar tillsammans i harmoni. Den här sektionen av <phrase>Ubuntus</phrase> serverguide introducerar principer och verktyg som används till att konfigurera din Ubuntuserver till att dela nätverksresurser med Windowsdatorer.</para>
+	<title>Windowsnätverk</title>
+  <para>Datornätverk består ofta av flera olika system, och även om det vore trevligt att administrera ett nätverk som endast bestod av skrivbordsdatorer och servrar med Ubuntu måste somliga nätverk bestå av både Ubuntusystem och <trademark class="registered">Microsoft</trademark><trademark class="registered">Windows</trademark>-system som arbetar tillsammans i harmoni. Den här sektionen av <phrase>Ubuntus</phrase> serverguide introducerar principer och verktyg som används för att konfigurera din Ubuntuserver till att dela nätverksresurser med Windowsdatorer.</para>
 	<sect1 id="windows-networking-introduction" status="complete">
 		<title>Introduktion</title>
           <para>För att använda Ubuntusystem tillsammans med Windowsklienter måste man använda tjänster som är vanliga i Windowsmiljöer. Sådana tjänster hjälper till att dela data och information om datorer och användare som är anslutna till nätverket. Dessa tjänster kan delas in tre huvudsakliga kategorier:</para>
@@ -442,7 +443,7 @@
           <para>Nu kan du redigera <filename>/etc/samba/smb.conf</filename> och göra de ändringar du vill göra.</para> 
       <sect2 id="windows-networking-server" status="complete">
         <title>Server</title>
-          <para>Som ett komplement till SAMBA-sviten av fil- och skrivardelningsprogram innehåller även Ubuntu andra kraftfulla serverprogram, som är designade för att ge dig extra nätverksserverfunktioner för Windowsklienter som liknar de som finns i faktiska windowsservrar. Till exempel erbjuder Ubuntu centraliserad hantering av nätverksresurser, som datorerer och användare, via katalogtjänster, och tillåter identifiering och auktorisering av datorer via autentieringstjänster.</para>
+          <para>Som ett komplement till SAMBA-sviten av fil- och skrivardelningsprogram innehåller även Ubuntu andra kraftfulla serverprogram, som är designade för att ge dig extra nätverksserverfunktioner för Windowsklienter som liknar de som finns i faktiska windowsservrar. Till exempel erbjuder Ubuntu centraliserad hantering av nätverksresurser, som datorerer och användare, via katalogtjänster, och tillåter identifiering av datorer via autentieringstjänster.</para>
            <para>Följande delar kommer att ta upp SAMBA och tillhörande tekniker såsom Lightweight Directory Access Protocol (LDAP) och Kerberos i mer detalj. Du kommer också lära dig om några av de konfigurationsdirektiv som går att använda i SAMBAs konfigurationsfil som låter dig integrera ditt Ubuntusystem med Windowsklienter och -servrar.</para>
         <sect3 id="active-directory" status="complete">
           <title>Active Directory</title>
@@ -493,10 +494,7 @@
                     <tip>
                        <para>Se till att du byter ut DOMÄNNAMN i ovastående exempel mot det riktiga namnet på din Windowsdomän.</para>
                     </tip>
-                 <para>
-                 You will need to restart the SAMBA daemons to effect these changes.  Restart the SAMBA
-                 daemons with the following command entered at a terminal prompt:
-                 </para>
+                 <para>Du behöver starta om SAMBA-demoner för att dessa ändringar ska verkställas. Starta om SAMBA-demonerna genom att skriva följande kommando vid en terminalprompt:</para>
                     <para>
 <screen>
 <command>sudo /etc/init.d/samba restart</command>
@@ -506,12 +504,8 @@
         </sect3>
         <sect3 id="computer-accounts" status="complete">
           <title>Datorkonton</title>
-            <para>Datorkonton används i katalogtjänster för att ge varje dator i nätverket en unik identitet, och de hanteras till och med på samma sätt som användare vad gäller säkerhet. Datorkonton kan ha lösenord precis som användarkonton, och måste autorisera sig för att komma åt nätverksresurser precis som användare. Till exempel, om en nätverksanvändare med ett giltigt konto för ett speciellt nätverk försöker autentiera sig med en nätverksresurs från en dator som inte har ett giltigt datorkonto kan han, beroende på de policies som används på nätverket, komma att nekas tillgång till resursen.</para>
-            <para>
-            A computer account may be added to the SAMBA password file, provided the name of the computer being added exists
-            as a valid user account in the local password database first. The syntax for adding a computer or machine account to
-            the SAMBA password file is to use the <application>smbpasswd</application> command from a terminal prompt as follows:
-            </para>
+            <para>Datorkonton används i katalogtjänster för att ge varje dator i nätverket en unik identitet, och de hanteras till och med på samma sätt som användare vad gäller säkerhet. Datorkonton kan ha lösenord precis som användarkonton, och måste identifiera sig för att komma åt nätverksresurser precis som användare. Till exempel, om en nätverksanvändare med ett giltigt konto för ett speciellt nätverk försöker identifiera sig mot en nätverksresurs från en dator som inte har ett giltigt datorkonto kan användaren komma att nekas tillgång till resursen, beroende på de policys som används på nätverket.</para>
+            <para>Ett datorkonto går att lägga till SAMBA:s lösenordsfil, förutsatt att namnet på datorn som läggs till redan är ett giltigt användarkonto i den lokala lösenordsdatabasen först. För att lägga till ett dator- eller maskinkonto till SAMBAs lösenordsfil används kommandot <application>smbpasswd</application> i en terminal såhär:</para>
                <para>
 <screen>
 <command>sudo smbpasswd -a -m DATORNAMN</command>
@@ -523,70 +517,41 @@
         </sect3>
         <sect3 id="file-permissions" status="complete">
           <title>Filrättigheter</title>
-            <para>
-              File Permissions define the explicit rights a computer or user has to a particular directory, file, or set of files.  Such
-              permissions may be defined by editing the <filename>/etc/samba/smb.conf</filename> file and specifying the explicit permissions of a defined
-              file share.  For example, if you have defined a SAMBA share called <emphasis role="italic">sourcedocs</emphasis> and wish
-              to give <emphasis role="italic">read-only</emphasis> permissions to the group of users known as <emphasis role="italic">planning</emphasis>,
-              but wanted to allow writing to the share by the group called <emphasis role="italic">authors</emphasis> and the user named
-              <emphasis role="italic">richard</emphasis>, then you could edit the <filename>/etc/samba/smb.conf</filename> file, and add the following entries under 
-              the <emphasis role="italic">[sourcedocs]</emphasis> entry:
-            </para>
+            <para>Filrättigheter definierar de uttryckliga rättigheter en dator eller användare har till en speciell katalog, fil eller uppsättning filer. Sådana rättigheter går att definiera genom att ändra på filen <filename>/etc/samba/smb.conf</filename> och specifierar de uttryckliga rättigheterna för respektive filutdelning. Om du till exempel har skapat en SAMBA-utdelning som heter <emphasis role="italic">sourcedocs</emphasis> och enbart vill dela ut läsrättigheter (<emphasis role="italic">read-only</emphasis>) till gruppen som heter <emphasis role="italic">planning</emphasis>, men vill ge gruppen <emphasis role="italic">authors</emphasis> och användaren <emphasis role="italic">richard</emphasis> skrivrättigheter skriver du följande rader under posten <emphasis role="italic">[sourcedocs]</emphasis>:</para>
                <para>
                   <emphasis role="bold">read list = @planning</emphasis>
                </para>
                <para>
                   <emphasis role="bold">write list = @authors, richard</emphasis>
                </para>
-             <para>
-             Save the <filename>/etc/samba/smb.conf</filename> for the changes to take effect.
-             </para>
-            <para>Another possible permission is to declare <emphasis role="italic">administrative</emphasis> permissions to a particular
-            shared resource.  Users having administrative permissions may read, write, or modify any information contained in the resource
-            the user has been given explicit administrative permissions to.  For example, if you wanted to give the user
-            <emphasis role="italic">melissa</emphasis> administrative permissions to the example <emphasis role="italic">sourcedocs</emphasis>
-            share, you would edit the <filename>/etc/samba/smb.conf</filename> file, and add the following line under the <emphasis role="italic">[sourcedocs]</emphasis> entry:
-            </para>
+             <para>Spara <filename>/etc/samba/smb.conf</filename> för att ändringarna ska verkställas.</para>
+            <para>En annan möjlig rättighet är att ge någon administrativa (<emphasis role="italic">administrative</emphasis>) rättigheter för till en delad resurs. Användare som har administrativa rättigheter kan läsa, skriva eller modifiera all information som finns i den resursen som användaren har administrativa rättigheter till. Om du till exempel vill ge användaren <emphasis role="italic">melissa</emphasis> administrativa rättigheter till vår exempel-utdelning <emphasis role="italic">sourcedocs</emphasis> behöver du redigera filen <filename>/etc/samba/smb.conf</filename> och lägga till följande rad under posten <emphasis role="italic">[sourcedocs]</emphasis>:</para>
                <para>
                   <emphasis role="bold">admin users = melissa</emphasis>
                </para>
-             <para>
-             Save the <filename>/etc/samba/smb.conf</filename> for the changes to take effect.
-             </para>
+             <para>Spara <filename>/etc/samba/smb.conf</filename> för att ändringarna ska verkställas.</para>
         </sect3>
       </sect2>
       <sect2 id="windows-networking-clients" status="complete">
         <title>Klienter</title>
-          <para>
-            Ubuntu includes client applications and capabilities for accessing network resources shared with the SMB protocol.
-            For example, a utility called <application>smbclient</application> allows for accessing remote shared file-systems, 
-            in a manner similar to a File Transfer Protocol (FTP) client. To access a shared folder resource known as 
-            <emphasis role="italic">documents</emphasis> offered by a remote Windows computer named <emphasis role="italic">bill</emphasis> using 
-            <application>smbclient</application> for example, one would enter a command similar to the following at the prompt:
-            </para>
+          <para>Ubuntu innehåller klientprogram och möjligheter att komma åt nätverksresurser som delas över SMB-protokollet. Till exempel kan du använda verktyget <application>smbclient</application> för att komma åt utdelade filsystem på ungefär samma sätt som med en klient för File Transfer Protocol (FTP). Säg att du vill komma åt en delad mapp som heter <emphasis role="italic">documents</emphasis> som delas ut av en Windowsdator vid namn <emphasis role="italic">bill</emphasis> med <application>smbclient</application>. I så fall skulle du skriva ett kommando som ser ut ungefär såhär vid prompten:</para>
                 <para>
 <screen>
 <command>smbclient //bill/documents -U &lt;användarnamn&gt;</command>
 </screen>
                 </para>
-            <para>
-            You will then be prompted for the password for the user name specified after the -U switch, and upon successful
-            authentication, will be presented with a prompt where commands may be entered for manipulating and transferring
-            files in a syntax similar to that used by non-graphical FTP clients.  For more information on the 
-            <application>smbclient</application> utility, read the utility's manual page with the command:
-<screen>
+            <para>Du kommer sedan bli frågad om lösenordet för användaren du skrev efter växeln -U. Om autentiseringen lyckas kommer du att komma till en prompt där du kan skriva kommandon för att ändra på filer och överföra dem med ungefär samma kommandon som används i icke-grafiska FTP-klienter. För mer information om verktyget <application>smbclient</application> kan du läsa dess manualsida genom att skriva kommandot: <screen>
 <command>
 man smbclient
 </command>
-</screen>
-            </para>
-            <para>Att montera en resurs från en annan dator lokalt med SMB-protokollet går också med kommandot <application>mount</application>. Till exempel, för att montera en utdelad mapp vid namn <emphasis role="italic">project-code</emphasis> från en Windowsdator som heter <emphasis role="italic">development</emphasis> som användaren <emphasis role="italic">dlightman</emphasis> till ditt Ubuntusystems monteringspunkt /mnt/pcode, skriv det här kommandot från prompten:</para>
+</screen></para>
+            <para>Det går även att montera en resurs från en annan dator lokalt med SMB-protokollet med kommandot <application>mount</application>. För att till exempel montera en utdelad mapp vid namn <emphasis role="italic">project-code</emphasis> från en Windowsdator som heter <emphasis role="italic">development</emphasis> som användaren <emphasis role="italic">dlightman</emphasis> till ditt Ubuntusystems monteringspunkt /mnt/pcode, skriv det här kommandot vid prompten:</para>
                 <para>
 <screen>
 <command>mount -t smbfs -o username=dlightman //development/project-code /mnt/pcode</command>
 </screen>
                 </para>
-                <para>Du kommer att bli frågad om användarens lösenord, och när du har lyckats autentiera dig kommer innehållet i den utdelade resursen att finnas lokalt tillgängligt via monteringspunkten du skrev som sista argumentet till mount-kommandot. För att koppla från den delade resursen, använd helt enkelt <application>umount</application>-kommandot som du skulle göra med vilket annat monterat filsystem som hellst. Till exempel:</para>
+                <para>Du kommer att bli frågad om användarens lösenord, och när du har lyckats autentisera dig kommer innehållet i den utdelade resursen att finnas lokalt tillgängligt via monteringspunkten du skrev som det sista argumentet till mount-kommandot. För att koppla från den delade resursen, använd helt enkelt kommandot <application>umount</application>, precis som du skulle göra med vilket annat monterat filsystem som hellst. Till exempel:</para>
                 <para>
 <screen>
 <command>umount /mnt/pcode</command>
@@ -594,13 +559,7 @@ man smbclient
                 </para>
         <sect3 id="user-accounts" status="complete">
           <title>Användarkonton</title>
-            <para>
-              User Accounts define persons with some level of authorization to use certain computer and network resources.  Typically, in a network
-              environment, a user account is provided to each person allowed to access a computer or network, where policies and permissions then
-              define what explicit rights that user account has access to.  To define SAMBA network users for your Ubuntu system, you may use the
-              <application>smbpasswd</application> command.  For example to add a SAMBA user to your Ubuntu system with the user name
-              <emphasis role="italic">jseinfeld</emphasis>, you would enter this command at the prompt:
-             </para>
+            <para>Användarkonton är personer som, efter någon form av identifiering, kan använda speciella datorer och nätverksresurser. Vanligtvis i en nätverksmiljö är får alla personer som får komma åt en dator eller nätverket var sitt användarkontot, där policys och rättigheter sedan definierar de exakta rättigheterna användarkontot har tillgång till. För att definiera nätverksanvändare i SAMBA i ditt Ubuntusystem, använd kommandot <application>smbpasswd</application>. För att till exempel lägga till en SAMBA-användare till ditt Ubuntusystem med användarnamnet <emphasis role="italic">jseinfeld</emphasis> skriver du följande kommando vid prompten:</para>
                  <para>
 <screen>
 <command>smbpasswd -a jseinfeld</command>
@@ -609,80 +568,36 @@ man smbclient
               <para>Programmet <application>smbpasswd</application> kommer sedan be dig skriva ett lösenord för användaren:</para>
                  <para>
                     <computeroutput>
-                    Nytt SMB-lösenord:
+                    New SMB password:
                     </computeroutput>
                  </para>
               <para>Skriv in lösenordet du vill använda för användaren, och <application>smbpasswd</application> ber dig nu att bekräfta lösenordet:</para>
                     <para>
                     <computeroutput>
-                    Bekräfta SMB-lösenord:
+                    Retype new SMB password:
                     </computeroutput>
                      </para>
                <para>Bekräfta lösenordet, och <application>smbpasswd</application> kommer att lägga användaren till SAMBAS lösenordsfil</para>
         </sect3>
         <sect3 id="windows-networking-groups" status="complete">
           <title>Grupper</title>
-            <para>
-              Groups define a collection of computers or users which have a common level of access to particular network resources and offer a level
-              of granularity in controlling access to such resources.  For example, if a group <emphasis role="italic">qa</emphasis> is defined and contains the users
-              <emphasis role="italic">freda</emphasis>, <emphasis role="italic">danika</emphasis>, and <emphasis role="italic">rob</emphasis> and a second group
-              <emphasis role="italic">support</emphasis> is defined and consists of users <emphasis role="italic">danika</emphasis>, <emphasis role="italic">jeremy</emphasis>,
-              and <emphasis role="italic">vincent</emphasis> then  certain network resources configured to allow access by the <emphasis role="italic">qa</emphasis>
-              group will subsequently enable access by freda, danika, and rob, but not jeremy or vincent.  Since the user <emphasis role="italic">danika</emphasis>
-              belongs to both the <emphasis role="italic">qa</emphasis> and <emphasis role="italic">support</emphasis> groups, she will be able to access resources
-              configured for access by both groups, whereas all other users will have only access to resources explicitly allowing the group they are
-              part of.
-            </para>
-            <para>
-            When defining groups in the SAMBA configuration file, <filename>/etc/samba/smb.conf</filename> the recognized syntax is to preface the group name with an
-            "@" symbol.  For example, if you wished to define a group named <emphasis role="italic">sysadmin</emphasis> in a certain section of the
-            <filename>/etc/samba/smb.conf</filename>, you would do so by entering the group name as <emphasis role="bold">@sysadmin</emphasis>.
-            </para>
+            <para>En grupp är en samling av datorer eller användare som har samma rättighetsnivåer till vissa nätverksresurser och ger dig lite möjligheten att kontrollera tillgång till resurser lite mindre finkornigt. Om till exempel en grupp som heter <emphasis role="italic">qa</emphasis> definieras och innehåller användarna <emphasis role="italic">freda</emphasis>, <emphasis role="italic">danika</emphasis> och <emphasis role="italic">rob</emphasis> och en annan grupp vid namn <emphasis role="italic">support</emphasis> skapas med användarna <emphasis role="italic">danika</emphasis>, <emphasis role="italic">jeremy</emphasis> och <emphasis role="italic">vincent</emphasis> kommer nätverksresurser som konfigureras för att släppa in gruppen <emphasis role="italic">qa</emphasis> följdaktligen släppa in freda, danika och rob, men inte jeremy eller vincent. Eftersom användaren <emphasis role="italic">danika</emphasis> tillhör både gruppen <emphasis role="italic">qa</emphasis> och <emphasis role="italic">support</emphasis> kommer hon att kunna komma åt nätverksresurser som släpper in användare från vilken som av grupperna, medans alla andra användare bara kommer att ha tillgång till nätverksresurser som just deras grupp har tillgång till.</para>
+            <para>När du definierar grupper i SAMBA:s konfigurationsfil, <filename>/etc/samba/smb.conf</filename>, används ett "@" innan namnet för att visa att det är en grupp. Om du till exempel vill skapa en grupp vid namn <emphasis role="italic">sysadmin</emphasis> någonstans i <filename>/etc/samba/smb.conf</filename> skulle du behöva skriva in gruppnamnet som <emphasis role="bold">@sysadmin</emphasis>.</para>
         </sect3>
         <sect3 id="group-policy" status="complete">
-          <title>Gruppolicy</title>
-            <para>
-              Group Policy defines certain SAMBA configuration settings pertaining to the Domain or Workgroup computer accounts belong to, and other
-              global settings for the SAMBA server. For example, if the SAMBA server belongs to a Workgroup of Windows computers called
-              <emphasis role="italic">LEVELONE</emphasis>, then the <filename>/etc/samba/smb.conf</filename> could be edited, and the following value changed
-              accordingly:
-            </para>
+          <title>Gruppolicys</title>
+            <para>Gruppolicys definierar vissa inställningar i SAMBA som påverkar vilken domän eller arbetsgrupp datorns konton tillhör, och andra globala inställningar för SAMBA-servern. Till exempel, om SAMBA-servern tillhör en arbetsgrupp av Windowsdatorer som heter <emphasis role="italic">LEVELONE</emphasis> kan du ändra på <filename>/etc/samba/smb.conf</filename> och ändra på följande rad:</para>
                <para>
                <emphasis role="bold">workgroup = LEVELONE</emphasis>
                </para>
-            <para>
-            Save the file and restart the SAMBA daemons to affect the change.
-            </para>
-            <para>
-            Other important global policy settings include the <emphasis role="italic">server string</emphasis> which defines the NETBIOS
-            server name reported by your Ubuntu system to other machines on the Windows-based network.  This is the name your Ubuntu system
-            will be recognized as by Windows clients and other computers capable of browsing the network with the SMB protocol.  Additionally, you
-            may specify the name and location of the SAMBA server's log file by using the <emphasis role="italic">log file</emphasis> directive
-            in the <filename>/etc/samba/smb.conf</filename> file.
-            </para>
-            <para>
-            Some of the additional directives governing global group policy include specification of the global nature of all shared resources.  For
-            example, placing certain directives under the <emphasis role="italic">[global]</emphasis> heading of the <filename>/etc/samba/smb.conf</filename> 
-            file will affect all shared resources unless an overriding directive is placed under a particular shared resource heading.  You
-            specify all shares are browseable by all clients on the network by placing a  
-            <emphasis role="italic">browseable</emphasis> directive, which takes a Boolean argument, under the
-            <emphasis role="italic">[global]</emphasis> heading in the <filename>/etc/samba/smb.conf</filename>.  That is, if you edit the file and add the line:
-            </para>
+            <para>Spara filen och starta om SAMBA-demonerna för att verkställa ändringen.</para>
+            <para>Andra viktiga inställningar för global policy inkluderar <emphasis role="italic">server string</emphasis>, som avgör vilket NETBIOS-namn ditt Ubuntusystem ska berätta för andra datorer på det Windows-baserade nätverket. Det här är namnet som ditt Ubuntusystem kommer att vara känt som av Windowsklienter och andra datorer som klarar av att bläddra i nätverket med SMB-protkollet. Du kan dessutom bestämma namnet och platsen för SAMBA-serverns loggfiler genom att ändra på instruktionen <emphasis role="italic">log file</emphasis> i filen <filename>/etc/samba/smb.conf</filename>.</para>
+            <para>Vissa av de övriga instruktionerna som påverkar den globala gruppolicyn inkluderar anvisningar för hur alla delade resurser ska uppföra sig. Till exempel kan du skriva vissa instruktioner under rubriken  <emphasis role="italic">[global]</emphasis> i filen <filename>/etc/samba/smb.conf</filename>, varpå det kommer att påverka alla utdelade resurser, om de inte har egna instruktioner som säger emot den här instruktionen. Du kan göra alla utdelade resurser bläddringsbara för alla klienter på nätverket genom att skriva instruktionen <emphasis role="italic">browseable</emphasis> under rubriken <emphasis role="italic">[global]</emphasis> i <filename>/etc/samba/smb.conf</filename>. Instruktionen tar ett booleskt argument - true eller false. Med andra ord, om du ändrar på filen och lägger till raden:</para>
             <para>
             <emphasis role="bold">browseable = true</emphasis>
             </para>
-            <para>
-            under the <emphasis role="italic">[global]</emphasis> section of <filename>/etc/samba/smb.conf</filename>, then all shares provided by
-            your Ubuntu system via SAMBA will be browseable by all authorized clients, unless a specific share contains a 
-            <emphasis role="italic">browseable = false</emphasis> directive, which will override the global directive.
-            </para>
-            <para>
-            Other examples which work in a similar manner, are the <emphasis role="italic">public</emphasis> and
-            <emphasis role="italic">writeable</emphasis> directives.  The <emphasis role="italic">public</emphasis> directive
-            accepts a Boolean value and decides whether a particular shared resource is visible by all clients, authorized or not.  The
-            <emphasis role="italic">writeable</emphasis> directive also takes a Boolean value and defines whether a particular
-            shared resource is writable by any and all network clients.
-            </para>
+            <para>i avdelningen <emphasis role="italic">[global]</emphasis> i <filename>/etc/samba/smb.conf</filename> så kommer alla utdelade resurser ditt Ubuntusystem erbjuder över SAMBA att gå att bläddra i av alla identifierade klienter, om inte en specifik resurs innehåller instruktionen <emphasis role="italic">browseable = false</emphasis>, eftersom det då kommer att åsidosätta den globala instruktionen.</para>
+            <para>Andra exempel som fungerar ungefär likadant är instruktionerna <emphasis role="italic">public</emphasis> och <emphasis role="italic">writeable</emphasis>. Instruktionen <emphasis role="italic">public</emphasis> accepterar ett booleskt värde och avgör om en specifik delad resurs är synlig för alla klienter, oavsett om de är identifierade eller inte. Instruktionen <emphasis role="italic">writeable</emphasis> accepterar också ett booleskt värde och definierar om en specifik delad resurs är skrivbar för någon och alla nätverksklienter.</para>
         </sect3>
       </sect2>
     </sect1>

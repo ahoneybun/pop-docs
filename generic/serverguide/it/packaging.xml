@@ -124,6 +124,7 @@
 <!ENTITY kernel "http://www.kernel.org">
 <!ENTITY google "http://www.google.com">
 <!ENTITY kdelook " http://www.kde-look.org">
+<!ENTITY lulu-store "http://www.lulu.com/ubuntu-doc">
 <!-- this entity controls the url for addons--><!ENTITY java-download "http://java.sun.com/j2se/1.5.0/download.jsp">
 <!ENTITY skype-deb "skype_1.2.0.17-1_i386.deb">
 <!ENTITY skype-download "http://www.skype.com/go/getskype-linux-deb">
@@ -391,89 +392,53 @@
 <!ENTITY language "&EnglishAmerican;">
 ]>
 <chapter id="package-management" status="complete">
-	<title>Gestione pacchetti</title>
-        <para>Ubuntu features a comprehensive package management system for the installation, upgrade, configuration, and removal of software.  In addition to providing access to an organized base of over 17,000 software packages for your Ubuntu computer, the package management facilities also feature dependency resolution capabilities and software update checking.
-        </para>
-        <para>
-        Several tools are available for interacting with Ubuntu's package management system, from simple command-line utilities which may be easily automated by system administrators, to a simple graphical interface which is easy to use by those new to Ubuntu.
-        </para>
+	<title>Gestione dei pacchetti</title>
+        <para>Ubuntu offre un completo sistema di gestione dei pacchetti per l'installazione, l'aggiornamento, la configurazione e la rimozione di software. Oltre a fornire accesso a una base organizzata più di 17000 pacchetti software, le funzioni di gestione dei pacchetti forniscono risoluzione delle dipendenze e verifica degli aggiornamenti.</para>
+        <para>Per l'interazione con il sistema di gestione dei pacchetti di Ubuntu sono disponibili diversi strumenti, a partire da semplici utilità a riga di comando che possono essere usate con facilità da amministratori di sistema per attività automatittate, fino a interfacce grafiche semplici da usare per chi si è avvicinato da poco a Ubuntu.</para>
   <sect1 id="package-management-introduction" status="complete">
 	<title>Introduzione</title>
-        <para>
-        Ubuntu's package management system is derived from the same system used by the Debian GNU/Linux distribution.  The package files contain all of the necessary files, meta-data, and instructions to implement a particular functionality or software application on your Ubuntu computer.
-        </para>
-        <para>
-        Debian package files typically have the extension '.deb', and typically exist in <emphasis role="italics">repositories</emphasis> which are collections of packages found on various media, such as CD-ROM discs, or online.  Packages are normally of the pre-compiled binary format; thus installation is quick and requires no compiling of software.
-        </para>
-        <para>
-        Many complex packages use the concept of <emphasis role="italics">dependencies</emphasis>.  Dependencies are additional packages required by the principal package in order to function properly.  For example, the speech synthesis package <application>Festival</application> depends upon the package <application>festvox-kalpc16k</application>, which is a package supplying one of the voices used by the application.  In order for <application>Festival</application> to function, all of the dependencies must be installed in conjunction with the principal Festival package. The software management tools in Ubuntu will do this automatically.
-        </para>
+        <para>Il sistema di gestione dei pacchetti di Ubuntu è derivato dallo stesso
+sistema usato dalla distribuzione Debian GNU/Linux. I file di pacchetto contengono tutti i file, i meta-dati e le istruzioni necessari per implementare sui sistemi Ubuntu una particolare funzionalità o una applicazione software.</para>
+        <para>Di solito, i files di pacchetto Debian presentano estensione .deb e risiedono nei <emphasis role="italics">repository</emphasis>, ossia della collezioni di pacchetti memorizzate su diversi supporti, come un disco CD-ROM o in rete. I pacchetti sono normalmente in formato binario precompilato: per questo l'installazione è veloce e non richiede la compilazione del software.</para>
+        <para>Molti pacchetti complessi si avvalgono del concetto di <emphasis role="italics">dipendenze</emphasis>. Le dipendenze sono pacchetti aggiuntivi richiesti dal pacchetti principale per poter funzionare correttamente. Ad esempio, il pacchetto di sintesi vocale <application>Festival</application> dipende dal pacchetto <application>festvox-kalpc16k</application>, il quale è un pacchetto ch fornisce una delle voci usate all'applicazione. Per poter far funzionare <application>Festival</application>, debbono essere installate tutte le dipendenze assieme al pacchetto principale di Festival. In Ubuntu tutto ciò viene fatto in modo automatico dagli strumenti di gestione del software.</para>
   </sect1>
   <sect1 id="apt-get" status="complete">
 	<title>Apt-Get</title>
-        <para>
-        The <application>apt-get</application> command is a powerful command-line tool used to work with Ubuntu's <emphasis>Advanced Packaging Tool</emphasis> (APT) performing such functions as installation of new software packages, upgrade of existing software packages, updating of the package list index, and even upgrading the entire Ubuntu system.
-        </para>
-        <para>
-        Being a simple command-line tool, <application>apt-get</application> has numerous advantages over other package management tools available in Ubuntu for server administrators.  Some of these advantages include ease of use over simple terminal connections (SSH) and the ability to be used in system administration scripts, which can in turn be automated by the <application>cron</application> scheduling utility.
-        </para>
-        <para>
-        Some examples of popular uses for the <application>apt-get</application> utility:
-        <itemizedlist>
+        <para>Il comando <application>apt-get</application> è un potente strumento a riga di comando usato per operare con l'APT (<emphasis>Advanced Packaging Tool</emphasis> ) di Ubuntu al fine di eseguire operazioni come l'installazione di nuovi pacchetti software, l'aggiornamento dei pacchetti software esistenti, l'aggiornamento dell'indice del'elenco di pacchetti e persino l'avanzamento di versione dell'intero sistema Ubuntu.</para>
+        <para>Essendo un semplice strumento da riga di comando, <application>apt-get</application> presenta agli ammministratori di sistema numerosi vantaggi rispetto ad altri strumenti di gestione dei pacchetti disponibili in Ubuntu. Alcuni di questi vantaggi sono la facilità d'utilizzo mediante connessioni via terminale (SSH) e la possibilità di essere usato in script di amministrazione del sistema, resi magari automatizzati attraverso l'utilità di pianificazione <application>cron</application>.</para>
+        <para>Alcuni esempi d'uso dell'utilità <application>apt-get</application>: <itemizedlist>
                <listitem>
-                <para>
-                <emphasis role="bold">Install a Package</emphasis>: Installation of packages using the <application>apt-get</application> tool is quite simple.  For example, to install the network scanner <emphasis role="italics">nmap</emphasis>, type the following:
-<screen>
+                <para><emphasis role="bold">Installare un pacchetto</emphasis>: l'installazione di pacchetti usando lo strumento <application>apt-get</application> è molto semplice.
+Ad esempio, per installare lo scanner di rete <emphasis role="italics">nmap</emphasis>, digitare il seguente comando: <screen>
 <command>sudo apt-get install nmap</command>
-</screen>
-                </para>
+</screen></para>
                 </listitem>
                 <listitem>
-                <para>
-                <emphasis role="bold">Remove a Package</emphasis>: Removal of a package or packages is also a straightforward and simple process. To remove the nmap package installed in the previous example, type the following:
-<screen>
+                <para><emphasis role="bold">Rimuovere un pacchetto</emphasis>: la rimozione di uno o più pacchetti è altrettanto semplice e immediata. Per rimuovere il pacchetto nmap installato nell'esempio precedente, digitare il seguente comando: <screen>
 <command>sudo apt-get remove nmap</command>
-</screen>
-                </para>
+</screen></para>
                 <tip>
-                <para><emphasis role="bold">Multiple Packages</emphasis>: You may specify multiple packages to be installed or removed, separated by spaces.
-                </para>
+                <para><emphasis role="bold">Pacchetti multipli</emphasis>: è possibile specificare più di un pacchetto da installare o rimuovere, separati da spazi.</para>
                 </tip>
                 </listitem>
                 <listitem>
-                <para>
-                <emphasis role="bold">Update the Package Index</emphasis>: The APT package index is essentially a database of available packages from the repositories defined in the <filename>/etc/apt/sources.list</filename> file.  To update the local package index with the latest changes made in repositories, type the following:
-<screen>
+                <para><emphasis role="bold">Aggiornare l'indice dei pacchetti</emphasis>: l'indice dei pacchetti di APT è essenzialmente un database dei pacchetti disponibili dai repository definite nel file <filename>/etc/apt/sources.list</filename>. Per aggiornare l'elenco locale dei pacchetti con i cambiamenti apportati di recente nei repository, digitare il comando: <screen>
 <command>sudo apt-get update</command>
-</screen>
-                </para>
+</screen>"</para>
                 </listitem>
                 <listitem>
-                <para>
-                <emphasis role="bold">Upgrade Packages</emphasis>: Over time, updated versions of packages currently installed on your computer may become available from the package repositories (for example security updated).  To upgrade your system, first update your package index as outlined above, and then type:
-<screen>
+                <para><emphasis role="bold">Aggiornare i pacchetti</emphasis>: nel corso del tempo, nei repository dei pacchetti potrebbero essere disponibili delle versioni aggiornate dei pacchetti installati sul computer (ad esempio aggiornamenti di sicurezza). Per aggiornare il sistema, per prima cosa aggiornare l'indice dei pacchetti come descritto poco sopra, poi digitare il comando: <screen>
 <command>sudo apt-get upgrade</command>
-</screen>
-                </para>
-                <para>
-                If a package needs to install or remove new dependencies when being upgraded, it will not be upgraded by the <emphasis>upgrade</emphasis> command. For such an upgrade, it is necessary to use the <emphasis role="italics">dist-upgrade</emphasis> command.
-                </para>
-                <para>
-                Also, you may upgrade your entire Ubuntu system from one revision to another with dist-upgrade.  For example, to upgrade from Ubuntu version 5.10 to version 6.06 LTS, you would first ensure the version 6.06 LTS repositories replace the existing 5.10 repositories in your computer's <filename>/etc/apt/sources.list</filename>, then simply issue the <application>apt-get update</application> command as detailed above, and finally, perform the actual upgrade by typing:
-<screen>
+</screen></para>
+                <para>Se un pacchetto necessita l'installazione o la rimozione di nuove dipendenze durante l'aggiornamento, allora tale pacchetto non sarà aggiornato dal comando <emphasis>upgrade</emphasis>. Per questo genere di aggiornamenti, è necessario utilizzare il comando <emphasis role="italics">dist-upgrade</emphasis>.</para>
+                <para>Allo stesso modo, è possibile aggiornare l'intero sistema Ubuntu da una revisione da un'altre con dist-upgrade. Ad esempio, per effettuare l'aggiornamento dalla versione 5.10 alla versione 6.06 LTS, innanzitutto bisogna assicurasi di aver sostituito nel file <filename>/etc/apt/sources.list</filename> i repository della versione 5.10 con quelli della versione 6.06 LTS, poi basta eseguire in comando <application>apt-get update</application> come descritto poco sopra, infine bisonga eseguire l'aggiornamento digitando il comando: <screen>
 <command>sudo apt-get dist-upgrade</command>
-</screen>               
-                </para>
-                <para>
-                After a fairly considerable amount of time, your computer will be upgraded to the new revision. Typically, some post-upgrade steps would be required as detailed in the upgrade notes for the revision you are upgrading to.
-                </para>
-                <para>
-                Actions of the <application>apt-get</application> command, such as installation and removal of packages, are logged in the /var/log/dpkg.log log file.
-                </para>
+</screen></para>
+                <para>L'aggiornamento del sistema alla versione successiva richiede un certo periodo di tempo. Solitamente sono richiesti alcuni passi di post-aggiornamento come descritto nelle note di aggiornamento per la revisione a cui si sta aggiornando.</para>
+                <para>Le azioni del comando <application>apt-get</application>, come l'installazione o la rimozione di pacchetti, vengono registrate nel file di registro /var/log/dpkg.log.</para>
                 </listitem>
-        </itemizedlist>
-        </para>
-		<para>For further information about the use of <application>APT</application>, read the comprehensive <ulink url="http://www.debian.org/doc/user-manuals#apt-howto">Debian APT User Manual</ulink> or type: <screen>apt-get help</screen></para>
+        </itemizedlist></para>
+		<para>Per maggiori informazioni sull'uso di <application>APT</application>, leggere il completo <ulink url="http://www.debian.org/doc/user-manuals#apt-howto">Manuale utente di Debian APT</ulink> , oppure digitare: <screen>apt-get help</screen></para>
   </sect1>
 
   <sect1 id="aptitude" status="complete">
@@ -511,8 +476,8 @@ as a normal user with the following command at a terminal prompt:
                 </para>
                </listitem>
         </itemizedlist>
-        <para>The first column of information displayed in the package list in the top pane, when actually viewing packages lists the current state of the package, and uses the following key to describe the state of the package:
-        <itemizedlist>
+        <para>La prima colonna delle informazioni visualizzate nell'elenco dei pacchetti nel pannello superiore, indica l'attuale stato del pacchetto utilizzando la seguente chiave di lettura:
+<itemizedlist>
         <listitem>
         <para><emphasis role="bold">i</emphasis>: Pacchetto installato.</para>
         </listitem>
@@ -525,69 +490,49 @@ as a normal user with the following command at a terminal prompt:
         </listitem><listitem>
         <para><emphasis role="bold">B</emphasis>: Pacchetto non integro</para>
         </listitem><listitem>
-        <para>
-        <emphasis role="bold">u</emphasis>: Unpacked files, but package not yet configured
-        </para>
+        <para><emphasis role="bold">u</emphasis>: il pacchetto è stato decompresso, ma la configurazione non ancora effettuata</para>
         </listitem><listitem>
-        <para>
-        <emphasis role="bold">C</emphasis>: Half-configured- Configuration failed and requires fix
-        </para>
+        <para><emphasis role="bold">C</emphasis>: la configurazione del pacchetto non è stata completata, è necessario intervenire</para>
         </listitem><listitem>
-        <para>
-        <emphasis role="bold">H</emphasis>: Half-installed- Removal failed and requires fix
-        </para>
+        <para><emphasis role="bold">H</emphasis>: l'installazione o la rimozione del pacchetto è fallita, è necessario intervenire</para>
         </listitem>
-        </itemizedlist>
-        </para>
-        <para>To exit Aptitude, simply press the <keycap>q</keycap> key and confirm you wish to exit. Many other functions are available from the Aptitude menu by pressing the <keycap>F10</keycap> key.
-        </para>
+        </itemizedlist></para>
+        <para>Per chiudere Aptitude, è sufficiente premere il tasto <keycap>q</keycap> confermando che si desidera uscire dall'applicazione. La maggior parte delle funzioni disponibili nel menù di Aptitude si ottiene premendo il tasto <keycap>F10</keycap>.</para>
   </sect1>
 	<sect1 id="configuration" status="complete">
 		<title>Configurazione</title>
-          <para>
-          Configuration of the <emphasis>Advanced Packaging Tool</emphasis> (APT) system repositories is stored in the /etc/apt/sources.list configuration file. An example of this file is referenced here, along with information on adding or removing repository references from the file.
-          </para>
-          <para><ulink url="../sample/sources.list">Questo</ulink> è un tipico e semplice esempio del file <filename>/etc/apt/sources.list</filename>.</para>
-          <para>
-          You may edit the file to enable repositories or disable them.  For example, to disable the requirement of inserting the Ubuntu CD-ROM whenever package operations occur, simply comment out the appropriate line for the CD-ROM, which appears at the top of the file:
-          </para>
+          <para>La configurazione dei repository del sistema APT (<emphasis>Advanced Packaging Tool</emphasis>) è memorizzata nel file di configurazione /etc/apt/sources.list. Un esempio di questo file, col le istruzioni su come aggiungere e rimuovere repository, è qui referenziato.</para>
+          <para><ulink url="../sample/sources.list">Questo</ulink> è un semplice esempio di un tipico file <filename>/etc/apt/sources.list</filename></para>
+          <para>È possibile modificare il file per abilitare o disabilitare i repository. Ad esempio, per disabilitare la necessità di inserire il CD-ROM di Ubuntu ogni volta che viene effettuata una operazione sui pacchetti, è sufficiente trasformare in commento la riga relativa al CD-ROM, che si trova all'inizio del file:</para>
           <para>
 <screen>
-# no more prompting for CD-ROM please
+# niente richiesta del CD-ROM
 # deb cdrom:[Ubuntu 6.06 _Dapper Drake_ - Release i386 (20060329.1)]/ dapper main restricted
 </screen>
           </para>
           
     </sect1>
 	<sect1 id="extra-repositories" status="complete">
-		<title>Collezioni Extra:</title>
-          <para>
-          In addition to the officially supported package repositories available for Ubuntu, there exist additional community-maintained repositories which add thousands more potential packages for installation.  Two of these additional repositories are most popular, and are the <emphasis>Universe</emphasis> and <emphasis>Multiverse</emphasis> repositories. These repositories are not officially supported by Ubuntu, which is why they are not enabled by default, but they generally provide packages which are safe for use with your Ubuntu computer. 
-          </para>
-		  <note><para>Packages in the Multiverse repository often have licensing issues that prevent them from being distributed with a free operating system, and they may be illegal in your locality.</para></note>
+		<title>Repository aggiuntivi</title>
+          <para>In aggiunta ai repository di pacchetti supportati ufficialmente disponibile per Ubuntu, esistono altri repository aggiuntivi mantenuti da comunità, che aggiungono migliaia di potenziali pacchetti da installare. Due sono i repository aggiuntivi più popolari: i repository <emphasis>Universe</emphasis> e <emphasis>Multiverse</emphasis>. Si tratta di repository non supportati ufficialmente da Ubuntu, per cui non sono abilitati in modo predefinito, ma che solitamente contengono dei pacchetti che possono essere utilizzati con sicurezza in Ubuntu.</para>
+		  <note><para>I pacchetti della repository Multiverse possono presentare dei problemi di licenza che ne impediscono la distribuzione in un sistema operativo libero e potrebbero essere illegali in alcuni paesi.</para></note>
           <warning>
-          <para>
-          Be advised that neither the <emphasis>Universe</emphasis> or <emphasis>Multiverse</emphasis> repositories contain officially supported packages. In particular, there may not be security updates for these packages.
-          </para>
+          <para>Né il repository <emphasis>Universe</emphasis>, né quello <emphasis>Multiverse</emphasis> contengono pacchetti supportati ufficialmente. In particolare, potrebbero non esserci aggiornamenti di sicurezza per tali pacchetti.</para>
           </warning>
-          <para>
-          Many other package sources are available, sometimes even offering only one package, as in the case of package sources provided by the developer of a single application.  You should always be very careful and cautious when using non-standard package sources, however.  Research the source and packages carefully before performing any installation, as some package sources and their packages could render your system unstable or non-functional in some respects.
-          </para>
-          <para>
-          To enable the <emphasis>Universe</emphasis> and <emphasis>Multiverse</emphasis> repositories, edit the <filename>/etc/apt/sources.list</filename> file and uncomment the appropriate lines:
-          </para>
+          <para>Sono disponibili molte altre sorgenti di pacchetti, alcune delle quali offrono solo un pacchetto, come nel caso di sorgenti di pacchetto fornite dallo sviluppatore di una singola applicazione. L'utilizzo di sorgenti di pacchetto non standard è rischioso, pertanto è necessario prestare la massima attenzione. È opportuno controllare la sorgente e i pacchetti in modo di accurato prima di effettuare una qualsiasi installazione, poché alcune sorgenti di pacchetto e i rispettivi paccheti potrebbero rendere il sistema instabile e non funzionante sotto certi aspetti.</para>
+          <para>Per abilitare i repository <emphasis>Universe</emphasis> e <emphasis>Multiverse</emphasis>, modificare il file <filename>/etc/apt/sources.list</filename> e rimuovere il commento dalle righe appropriate:</para>
           <para>
 <screen>
-# We want Multiverse and Universe repositories, please
+# abilitazione dei repository Multiverse e Universe
 
 deb http://archive.ubuntu.com/ubuntu dapper universe multiverse
 deb-src http://archive.ubuntu.com/ubuntu dapper universe multiverse
 </screen>
           </para>
           <sect2 id="extra-repositories-references" status="complete">
-                <title>References</title>
+                <title>Riferimenti</title>
                 <para>
-                <ulink url="https://wiki.ubuntu.com/AddingRepositoriesHowto">Adding Repositories Howto (Ubuntu Wiki)</ulink>
+                <ulink url="https://wiki.ubuntu.com/AddingRepositoriesHowto">HOWTO sull'aggiunta di repository (Wiki di Ubuntu)</ulink>
                 </para>
           </sect2>
     </sect1>

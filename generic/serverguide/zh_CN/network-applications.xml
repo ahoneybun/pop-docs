@@ -124,6 +124,7 @@
 <!ENTITY kernel "http://www.kernel.org">
 <!ENTITY google "http://www.google.com">
 <!ENTITY kdelook " http://www.kde-look.org">
+<!ENTITY lulu-store "http://www.lulu.com/ubuntu-doc">
 <!-- this entity controls the url for addons--><!ENTITY java-download "http://java.sun.com/j2se/1.5.0/download.jsp">
 <!ENTITY skype-deb "skype_1.2.0.17-1_i386.deb">
 <!ENTITY skype-download "http://www.skype.com/go/getskype-linux-deb">
@@ -934,7 +935,7 @@ include "/etc/bind/named.conf.local";
           <para>在您 Ubuntu 计算机上安装 CUPS，只需简单使用 <application>sudo</application> 和<application>apt-get</application> 命令并将要安装包作为第一个参数即可。一个完全的 CUPS 安装需要安装许多从属包，但它们也可以在同一个命令行指定。在终端提示符后输入以下命令以安装 CUPS：</para>
           <para>
 <screen>
-<command>sudo apt-get install cupsys cupsys-client cupsys-driver-gimpprint \ defoma fontconfig foomatic-db foomatic-filters libcupsimage2 \ libexpat1 libfontconfig1 libfreetype6 libgimpprint1 libjpeg62 \ libpaper1 libpng12-0 libpoppler0c2 libslp1 libtiff4 patch perl \ perl-modules ttf-bitstream-vera ucf</command>
+<command>sudo apt-get install cupsys cupsys-client</command>
 </screen>
           </para>
           <para>认证您的用户密码之后，这些包将被下载并正确安装。在安装结束之后，CUPS 服务器将自动开始。为了发现并修复问题，您可以通过错误日志文件 <filename>/var/log/cups/error_log</filename> 来查看 CUPS 服务器的错误。如果错误日志并没有显示足够的用于找到和解决您所遇问题的信息，通过将配置文件 (下面要讨论) 中将<emphasis role="bold">LogLevel</emphasis> 语句从缺省的 "info" 改为 "debug" 甚至是记录每件事的 "debug2"，以获得 CUPS 日志的详细信息。</para>
@@ -961,6 +962,23 @@ ServerAdmin bjoy@somebigco.com
 </screen>
                 </para>
                 </listitem>
+          </itemizedlist>
+                <para>关于 CUPS 服务器配置文件中配置语句的更多范例，通过在终端提示符后输入以下命令可以查阅相关的系统手册页：</para>
+               <para>
+<screen>
+<command>man cupsd.conf</command>
+</screen>
+               </para>
+                               <note>
+                <para>无论您在什么时间修改了 <filename>/etc/cups/cupsd.conf</filename> 配置文件，您都需要重启 CUPS 服务，在终端提示符后键入以下命令：</para>
+                </note>
+                <para>
+<screen>
+<command>sudo /etc/init.d/cupsys restart</command>
+</screen>
+                </para>
+	<para>CUPS 服务器的其它一些配置在文件 <filename>/etc/cups/cups.d/ports.conf</filename> 中：</para>
+          <itemizedlist>
                 <listitem>
                 <para><emphasis role="bold">Listen</emphasis>：在 Ubuntu 的缺省状态下，CUPS 服务器安装后只监听 IP 地址为 <emphasis>127.0.0.1</emphasis> 的环回接口。为了让 CUPS 服务器可以在网络适配器真正的 IP 地址上监听，您必须要么指定一个指定主机名、要么指定一个IP 地址，随您选择。可以通过 Listen 语句来添加一个 IP 地址/端口对。例如：如果您的 CUPS 服务器在一个局域网中，其 IP 地址为 <emphasis role="italics">192.168.10.250</emphasis>，您想要该子网中的其它系统能够访问它，您可以编辑 <filename>/etc/cups/cups.d/ports.conf</filename> 并如下所示添加一个 Listen 语句：</para>
                 <para>
@@ -982,23 +1000,9 @@ Listen socrates:631 # Listen on all interfaces for the hostname 'socrates'
 Port 631 # Listen on port 631 on all interfaces
 </screen>
 </para>
-                <para>CUPS 服务器配置文件 <filename>/etc/cups/cupsd.conf</filename> 包含了可能会被用到的几个 Listen 语句的范例。</para>
                 </listitem>
-          </itemizedlist>
-                <para>关于 CUPS 服务器配置文件中配置语句的更多范例，通过在终端提示符后输入以下命令可以查阅相关的系统手册页：</para>
-               <para>
-<screen>
-<command>man cupsd.conf</command>
-</screen>
-               </para>
-                               <note>
-                <para>无论您在什么时间修改了 <filename>/etc/cups/cupsd.conf</filename> 配置文件，您都需要重启 CUPS 服务，在终端提示符后键入以下命令：</para>
-                </note>
-                <para>
-<screen>
-<command>sudo /etc/init.d/cupsys restart</command>
-</screen>
-                </para>
+	</itemizedlist>
+
       </sect2>
       <sect2 id="cups-references" status="complete">
         <title>引用</title>
@@ -1076,12 +1080,7 @@ Port 631 # Listen on port 631 on all interfaces
 			&lt;/Directory&gt;</command></screen> 在 Directory 段中的 Options 语句接受一个或更多下面的用空格分隔的值 (包括其它)：</para>
             <itemizedlist spacing="compact">
                 <listitem>
-                    <para><emphasis role="bold">ExecCGI</emphasis> - 允许执行 CGI 脚本。如果该选项没有设置，则 CGI 脚本将不能执行。<tip><para>Most files should not be executed as CGI scripts.  This
-					would be very dangerous.  CGI scripts should kept in a directory 
-					separate from and outside your DocumentRoot, and only this
-					directory should have the ExecCGI option set.  This is the default,
-					and the default location for CGI scripts is /usr/lib/cgi-bin.
-					</para></tip></para>
+                    <para><emphasis role="bold">ExecCGI</emphasis> - 允许执行 CGI 脚本。如果该选项没有设置，则 CGI 脚本将不能执行。<tip><para>大多数文件不会作为 CGI 脚本运行的。这是非常危险的。CGI 脚本应该位于您 DocumentRoot 目录以外与之分开的目录中，并且只能该目录才有 ExecCGI 选项设置。缺省状态下，CGI 脚本默认位于 /usr/lib/cgi-bin。</para></tip></para>
                 </listitem>
                 <listitem>
                     <para><emphasis role="bold">Includes</emphasis> - 允许服务器端包含。服务器端包含允许一个 HTML 文件<emphasis>包含</emphasis>其他文件。这不是一个常用选项。更多信息参见 <ulink url="http://httpd.apache.org/docs/2.0/howto/ssi.html">the Apache2 SSI 指南</ulink>。</para>
@@ -1715,7 +1714,7 @@ tcp 0 0 localhost.localdomain:mysql *:* LISTEN -
           <title>配置</title>
             <para>缺省状态下，通过 TCP/IP 的连接是被禁用的。PostgreSQL 支持多客户认证方式。其中 IDENT 认证方式被默认使用。请参考  <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">PostgreSQL 管理员指南</ulink>。</para>
             
-            <para>接下来的讨论假定您希望启用 TCP/IP 连接并对客户认证使用 MD5 模式。PostgreSQL 配置文件被保存在 <filename>/etc/postgresql/&lt;version&gt;/main /etc/postgresql/7.4/main</filename></para>
+            <para>接下来的讨论假定您希望启用 TCP/IP 连接并对客户认证使用 MD5 模式。PostgreSQL 配置文件被保存在 <filename>/etc/postgresql/&lt;version&gt;/main /etc/postgresql/7.4/main </filename></para>
             
             <tip>
             <para>要配置 <application>ident</application> 认证，请在 <filename>/etc/postgresql/7.4/main/pg_ident.conf</filename> 文件中添加以下几条：</para>
@@ -2011,19 +2010,9 @@ disable_plaintext_auth = no
           </sect4>
           <sect4 id="mailman-mailman">
             <title>Mailman</title>
-              <para>
-              To install <application>Mailman</application>, run following command at a terminal prompt:
-<screen>
-<command>sudo apt-get install mailman</command> 
-</screen>
-
-It copies the installation files in
-<application>/var/lib/mailman</application> directory. It installs the
-CGI scripts in <application>/usr/lib/cgi-bin/mailman</application>
-directory.  It creates <emphasis>list</emphasis> linux
-user. It creates the <emphasis>list</emphasis> linux
-group. The mailman process will be owned by this user. 
-              </para>
+              <para>要安装 <application>Mailman</application>，在终端提示符后运行下列命令：<screen>
+<command>sudo apt-get install mailman</command>
+</screen> 它复制安装文件到 <application>/var/lib/mailman</application> 目录，将 CGI 脚本安装到 <application>/usr/lib/cgi-bin/mailman</application>目录，创建 <emphasis>list</emphasis> linux 用户，创建 <emphasis>list</emphasis> linux 用户组。mailman 进程将以该用户运行。</para>
           </sect4>
         </sect3>
         <sect3 id="mailman-configuration" status="complete">

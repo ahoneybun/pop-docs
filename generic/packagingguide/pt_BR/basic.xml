@@ -5,7 +5,7 @@
 <!ENTITY project-name "Ubuntu Documentation Project">
 <!ENTITY ubuntu "<phrase>Ubuntu</phrase>">
 <!-- VERSIONS --><!ENTITY distro-version "Dapper Drake">
-<!ENTITY distro-rev "6.06">
+<!ENTITY distro-rev "6.06 LTS">
 <!ENTITY distro-release-date "June 2006">
 <!ENTITY linux-kernel-version "2.6.15">
 <!ENTITY gcc-version "4.0.3">
@@ -124,6 +124,7 @@
 <!ENTITY kernel "http://www.kernel.org">
 <!ENTITY google "http://www.google.com">
 <!ENTITY kdelook " http://www.kde-look.org">
+<!ENTITY lulu-store "http://www.lulu.com/ubuntu-doc">
 <!-- this entity controls the url for addons--><!ENTITY java-download "http://java.sun.com/j2se/1.5.0/download.jsp">
 <!ENTITY skype-deb "skype_1.2.0.17-1_i386.deb">
 <!ENTITY skype-download "http://www.skype.com/go/getskype-linux-deb">
@@ -924,8 +925,7 @@ endif
 	$(MAKE) CC="$(CC)" CFLAGS="(CFLAGS)"
 	touch build</screen>
 			<para>Esta regra executa o <emphasis>./configure</emphasis> com o prefixo apropriado, roda o </para>
-			<para>The next rule is <filename>clean</filename>, which runs <emphasis>make -i distclean</emphasis>
-and removes the files that are made during the package building.</para>
+			<para>A proxima regra é a <filename>clean</filename>, que executa  <emphasis>make -i distclean</emphasis> e remove os arquivos que foram criados durante a criação do pacote.</para>
 
 			<screen>clean:
 	$(checkdir)
@@ -933,24 +933,22 @@ and removes the files that are made during the package building.</para>
 	-$(MAKE) -i distclean
 	rm -rf *~ debian/tmp debian/*~ debian/files* debian/substvars</screen>
 
-			<para>Next we see an empty <filename>binary-indep</filename> rule, because there are no 
-			architecture-independent files created in this package.</para>
+			<para>Depois, veremos uma regra <filename>binary-indep</filename> vazia, porque não existem arquivos independentes de arquitetura criados neste pacote.</para>
 
-			<para>There are, however, many architecture-dependent files, so <filename>binary-arch</filename> is
-used:</para>
+			<para>Existem porém, vários arquivos dependentes de arquitetura, portanto <filename>binary-arch</filename> é usado:</para>
 
-			<screen>binary-arch:    checkroot build
+			<screen>binary-arch: checkroot build
 		$(checkdir)
 		rm -rf debian/tmp
 		install -d debian/tmp/DEBIAN $(docdir)
 		install -m 755 debian/postinst debian/prerm debian/tmp/DEBIAN
 		$(MAKE) INSTALL_PROGRAM="$(INSTALL_PROGRAM)" \
 		prefix=$$(pwd)/debian/tmp/usr install
-		cd debian/tmp &amp;&amp; mv usr/info usr/man usr/share
+		cd debian/tmp  mv usr/info usr/man usr/share
 		cp -a NEWS debian/copyright $(docdir)
 		cp -a debian/changelog $(docdir)/changelog.Debian
 		cp -a ChangeLog $(docdir)/changelog
-		cd $(docdir) &amp;&amp; gzip -9 changelog changelog.Debian
+		cd $(docdir)  gzip -9 changelog changelog.Debian
 		gzip -r9 debian/tmp/usr/share/man
 		gzip -9 debian/tmp/usr/share/info/*
 		dpkg-shlibdeps debian/tmp/usr/bin/hello
@@ -959,20 +957,7 @@ used:</para>
 		chmod -R u+w,go=rX debian/tmp
 		dpkg --build debian/tmp ..</screen>
 			
-			<para>First, notice that this rule calls the
-<filename>checkroot</filename> rule to make sure the package is built as root and calls the
-<filename>build</filename> rule to compile the source. Then the <filename>debian/tmp/DEBIAN</filename> and
-<filename>debian/tmp/usr/share/doc/hello</filename> files are created, and the <filename>postinst</filename> 
-and the <filename>prerm&gt;</filename> scripts are installed to <filename>debian/tmp/DEBIAN</filename>. Then
-<emphasis>make install</emphasis> is run with a prefix that installs to the
-<filename>debian/tmp/usr</filename> directory. Afterward the documentation files (NEWS, ChangeLog, and the debian
-changelog) are gzipped and installed. <emphasis>dpkg-shlibdeps</emphasis> is invoked to find the shared
-library dependencies of the <application>hello</application> executable, and it stores the list in the
-<filename>debian/substvars</filename> file for the ${shlibs:Depends} variable in
-<filename>control</filename>. Then <emphasis>dpkg-gencontrol</emphasis> is run to create a control file for
-the binary package, and it makes the substitutions created by <emphasis>dpkg-shlibdeps</emphasis>. Finally, after
-the permissions of the <filename>debian/tmp</filename> have been set, <emphasis>dpkg --build</emphasis> is run
-to build the binary .deb package and place it in the parent directory.</para>
+			<para>Primeiramente, certifique-se de que esta regra chame a regra <filename>checkroot</filename> para ter certeza de que o pacote é construido como root e chama a regra <filename>build</filename> para compilar o fonte. Então os arquivos <filename>debian/tmp/DEBIAN</filename> e <filename>debian/tmp/usr/share/doc/hello</filename> são gerados, os scripts <filename>postinst</filename> e o <filename>prerm&gt;</filename> são instalaos em <filename>debian/tmp/DEBIAN</filename> e então <emphasis>make install</emphasis> é executado com o prefixo que instala para o diretório <filename>debian/tmp/usr</filename>. Os arquivos de documentação (NEWS, ChangeLog, e o debian changelog) são descomprimidos com o gzip e instalados. É então executado o <emphasis>dpkg-shlibdeps</emphasis> para procurar as bibliotecas compartilhadas as quais o executavel <application>hello</application> depende, e armazena a lista em <filename>debian/substvars</filename> para a variavel ${shlibs:Depends} em <filename>control</filename>. Então <emphasis>dpkg-gencontrol</emphasis> é executado para criar o arquivo de controle para o pacote binario, e faz as substituições criadas pelo <emphasis>dpkg-shlibdeps</emphasis>. Finalmente, após as permissoes do arquivo <filename>debian/tmp</filename> serem ajustadas, é executado <emphasis>dpkg --build</emphasis> para criar o .deb binário e armazena-lo no diretorio anterior.</para>
 
 		</sect2>
 
@@ -1057,9 +1042,8 @@ lintian -i *.dsc</screen>
 		<title>Packaging with Debhelper</title>
 		
 		<important><para><emphasis role="bold">Requirements:</emphasis> The
-				requirements from the <xref linkend="basic-scratch"/> section
-				plus debhelper and dh-make</para>
-		</important>
+				requirements from <xref linkend="basic-scratch"/> plus
+				debhelper and dh-make</para> </important>
 
 		<para> As a packager, you will rarely create packages from scratch as
 			we have done in the previous section. As you can imagine, many of
@@ -1127,7 +1111,7 @@ Package Name    : hello
 Version         : 2.1.1
 License         : blank
 Type of Package : Single
-Hit &lt;enter&gt; to confirm: <emphasis role="bold">Enter</emphasis></screen>
+Hit &lt;enter&gt; to confirm: <emphasis role="bold">Entrar</emphasis></screen>
 
 		<caution><para>Only run <application>dh_make -e</application> once. If
 		you run it again after you do it the first time, it will not work
@@ -1460,7 +1444,7 @@ include /usr/share/cdbs/1/class/autotools.mk</screen>
 	</sect1>
 		
 	<sect1 id="basic-updating" status="complete">
-		<title>Updating Packages</title>
+		<title>Atualizando Pacotes</title>
 
 			<para>If you have been around Linux distributions for any amount
 				of time, you have realized that there are sometimes bugs in
@@ -1524,14 +1508,11 @@ dpatch patch-template -p "01_patchname" "patch-file description" \
 	&lt; patch-file &gt; 01_patchname.dpatch
 echo 01_patchname.dpatch &gt;00list</screen>
 
-			<para>You can now place <filename>01_patchname.dpatch</filename>
-				and <filename>00list</filename> in the
-				<filename>debian/patches</filename> directory of your source
-				package:</para>
+			<para>Você pode agora colocar <filename>01_patchname.dpatch</filename> e <filename>00list</filename> no <filename>debian/patches</filename> diretório de seu pacote fonte.</para>
 
 			<screen>
-mkdir ../&lt;package&gt;-&lt;version&gt;/debian/patches
-cp 01_patchname.dpatch 00list ../&lt;package&gt;-&lt;version&gt;/debian/patches
+mkdir ../&lt;package&gt;-&lt;version&gt;/debian/patches↵
+cp 01_patchname.dpatch 00list ../&lt;package&gt;-&lt;version&gt;/debian/patches↵
 cd ..
 rm -rf tmp
 			</screen>
@@ -1578,7 +1559,7 @@ debdiff &lt;oldpackage&gt;.deb &lt;newpackage&gt;.deb &gt; package.debdiff
 		<title>Common Mistakes</title>
 			
 		<sect2 id="basic-ex_files">
-			<title>dh_make Example Files</title>
+			<title>Arquivos de Exemplo do dh_make</title>
 			
 			<para>When you use dh_make to create the initial "debianization", example files
 				for various tasks are created in the <filename>debian/</filename>
@@ -1621,7 +1602,7 @@ debdiff &lt;oldpackage&gt;.deb &lt;newpackage&gt;.deb &gt; package.debdiff
 						separation between the upstream source and the changes made to
 						produce the <phrase>Ubuntu</phrase> source package.</para> </listitem>
 
-				<listitem><para>Debian to <phrase>Ubuntu</phrase> Synchronization</para>
+				<listitem><para>Sincronização do Debian para o <phrase>Ubuntu</phrase></para>
 
 					<para>Changing original tarballs makes it hard to automatically sync
 						from Debian to <phrase>Ubuntu</phrase>. Normally, only the .diff.gz and .dsc files

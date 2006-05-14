@@ -124,6 +124,7 @@
 <!ENTITY kernel "http://www.kernel.org">
 <!ENTITY google "http://www.google.com">
 <!ENTITY kdelook " http://www.kde-look.org">
+<!ENTITY lulu-store "http://www.lulu.com/ubuntu-doc">
 <!-- this entity controls the url for addons--><!ENTITY java-download "http://java.sun.com/j2se/1.5.0/download.jsp">
 <!ENTITY skype-deb "skype_1.2.0.17-1_i386.deb">
 <!ENTITY skype-download "http://www.skype.com/go/getskype-linux-deb">
@@ -861,29 +862,29 @@ option netbios-name-servers 192.168.1.1; </screen>
 
           <para>
 <programlisting>
-// This is the primary configuration file for the BIND DNS server named.
+// Este é o arquivo de configuração primária para o servidor de DNS BIND named.
 //
-// Please read /usr/share/doc/bind/README.Debian for information on the 
-// structure of BIND configuration files in Debian for BIND versions 8.2.1 
-// and later, *BEFORE* you customize this configuration file.
+// Por favor, leia /usr/share/doc/bind/README.Debian para informações sobre a
+// estrutura dos arquivos de configuração do BIND no Debian para versão 8.2.1 do BIND
+// ou superior, *ANTES* de você customizar este arquivo de configuração.
 //
 
 include "/etc/bind/named.conf.options";
 
-// reduce log verbosity on issues outside our control
+// reduz a saída de log em erros fora do nosso controle
 logging {
-	category lame-servers { null; };
-	category cname { null; };
+ category lame-servers { null; };
+ category cname { null; };
 };
 
-// prime the server with knowledge of the root servers
+// servidor primário, que conhece os servidores raiz
 zone "." {
         type hint;
         file "/etc/bind/db.root";
 };
 
-// be authoritative for the localhost forward and reverse zones, and for
-// broadcast zones as per RFC 1912
+// seja a autoridade para repasses locais, zonas reversas e para a
+// zona de broadcast, como definido no RFC 1912
 
 zone "localhost" {
         type master;
@@ -905,7 +906,7 @@ zone "255.in-addr.arpa" {
         file "/etc/bind/db.255";
 };
 
-// add local zone definitions here
+// adicione definições locais aqui
 include "/etc/bind/named.conf.local";
 </programlisting>
           </para>
@@ -938,32 +939,14 @@ include "/etc/bind/named.conf.local";
           <para>Para instalar o CUPS no seu computador Ubuntu, basta apenas usar <application>sudo</application> com o comando <application>apt-get</application> e especificar os pacotes a serem instalados como o primeiro parâmetro. Uma instalação de servidor CUPS completa possui várias dependências para outros pacotes, mas eles todos podem ser especificados na mesma linha de comando. Digite o seguinte no prompt de um terminal para instalar o CUPS:</para>
           <para>
 <screen>
-<command>sudo apt-get install cupsys cupsys-client cupsys-driver-gimpprint \ defoma fontconfig foomatic-db foomatic-filters libcupsimage2 \ libexpat1 libfontconfig1 libfreetype6 libgimpprint1 libjpeg62 \ libpaper1 libpng12-0 libpoppler0c2 libslp1 libtiff4 patch perl \ perl-modules ttf-bitstream-vera ucf</command>
+<command>sudo apt-get install cupsys cupsys-client</command>
 </screen>
           </para>
-          <para>
-          Upon authenticating with your user password, the packages should be downloaded
-		  and installed without error. Upon the conclusion of installation, the CUPS server 
-		  will be started automatically. For troubleshooting purposes, you can access CUPS 
-		  server errors via the error log file at: <filename>/var/log/cups/error_log</filename>.
-		  If the error log does not show enough information to troubleshoot any problems you
-		  encounter, the verbosity of the CUPS log can be increased by changing the <emphasis role="bold">LogLevel</emphasis> directive in the configuration file (discussed below)
-		  to "debug" or even "debug2", which logs everything, from the default of "info".  If 
-		  you make this change, remember to change it back once you've solved your problem, to 
-		  prevent the log file from becoming overly large.
-          </para>
+          <para>Uma vez autenticado com a senha do seu usuário, deverá ocorrer o download e instalação dos pacotes sem erros. Após a instalação, o servidor CUPS será inicializado automaticamente. Para resolução de problemas, você pode acessar os erros do servidor CUPS através do arquivo de log de erros em: <filename>/var/log/cups/error_log</filename>. Se os logs de erros não mostrar informações necessárias para resolução dos seus problemas que você encontrar, a qualidade de saída de log do CUPS pode ser incrementada, alterando a diretiva <emphasis role="bold">LogLevel</emphasis> no arquivo de configuração (discutido logo abaixo) para "debug" ou ainda "debug2", o que causará o registro em log de tudo, do padrão ao "info". Se você fizer esta mudança, lembre-se de desfazê-la assim que você resolver seu problema, para prevenir que o arquivo fique muito grande.</para>
       </sect2>
       <sect2 id="cups-configuration" status="complete">
         <title>Configuração</title>
-          <para>
-            The Common UNIX Printing System server's behavior is configured through the 
-			directives contained in the file <filename>/etc/cups/cupsd.conf</filename>.  
-			The CUPS configuration file follows the same syntax as the primary configuration 
-			file for the Apache HTTP server, so users familiar with editing Apache's 
-			configuration file should feel at ease when editing the CUPS configuration 
-			file. Some examples of settings you may wish to change initially will be 
-			presented here.
-          </para>
+          <para>O comportamento do servidor CUPS (The Common UNIX Printing System) é configurado através das diretivas contidas no arquivo <filename>/etc/cups/cupsd.conf</filename>. O arquivo de configuração do CUPS segue a mesma sintaxe que o arquivo de configuração primário para o servidor de HTTP Apache, portanto os usuários familiares com a edição do arquivo de configuração do Apache deverão ter uma maior facilidade ao editar a configuração do CUPS. Alguns exemplos de configuração que você queira inicialmente alterar serão apresentados aqui.</para>
           <tip>
                <para>Antes de editar o arquivo de configuração, você deve fazer uma cópia do arquivo original e protegê-lo contra sobrescrição, porque assim você terá os ajustes originais como uma referência, e para reusar como necessário.</para>
                <para>Copiar o arquivo <filename>/etc/cups/cupsd.conf</filename> e protegê-lo contra sobrescrição com o seguinte comando, executado na linha de comando:</para>
@@ -976,62 +959,12 @@ include "/etc/bind/named.conf.local";
                </para>
           <itemizedlist>
                 <listitem>
-                <para>
-                <emphasis role="bold">ServerAdmin</emphasis>: To configure the email 
-				address of the designated administrator of the CUPS server, simply 
-				edit the <filename>/etc/cups/cupsd.conf</filename> configuration file 
-				with your preferred text editor, and modify the <emphasis role="italics">ServerAdmin</emphasis> line accordingly.  For example, 
-				if you are the Administrator for the CUPS server, and your e-mail 
-				address is 'bjoy@somebigco.com', then you would modify the ServerAdmin 
-				line to appear as such:
-                </para>
+                <para><emphasis role="bold">ServerAdmin</emphasis>: Para configurar o endereço de email designado para o administrador do servidor CUPS, simplesmente edite o arquivo de configuração <filename>/etc/cups/cupsd.conf</filename> com seu editor de textos predileto, e altere a diretiva <emphasis role="italics">ServerAdmin</emphasis> de acordo. Por exemplo, se você é o administrador do servidor CUPS, e seu email é bjoy@somebigco.com, Então você deverá alterar a diretiva ServerAdmin para ficar como:</para>
                 <para>
 <screen>
 ServerAdmin bjoy@somebigco.com
 </screen>
                 </para>
-                </listitem>
-                <listitem>
-                <para>
-                <emphasis role="bold">Listen</emphasis>: By default on Ubuntu, the CUPS 
-				server installation listens only on the loopback interface at IP address 
-				<emphasis>127.0.0.1</emphasis>. In order to instruct the 
-				CUPS server to listen on an actual network adapter's IP address, you must 
-				specify either a hostname, the IP address, or optionally, an IP 
-				address/port pairing via the addition of a Listen directive.  For example, 
-				if your CUPS server resides on a local network at the IP address <emphasis role="italics">192.168.10.250</emphasis> and you'd like to make it 
-				accessible to the other systems on this subnetwork, you would edit the 
-				<filename>/etc/cups/cups.d/ports.conf</filename> and add a Listen 
-				directive, as such:
-                </para>
-                <para>
-<screen>
-Listen 127.0.0.1:631           # existing loopback Listen
-Listen /var/run/cups/cups.sock # existing socket Listen
-Listen 192.168.10.250:631      # Listen on the LAN interface, Port 631 (IPP)
-</screen>
-                </para>
-                <para>
-                In the example above, you may comment out or remove the reference to the 
-				Loopback address (127.0.0.1) if you do not wish <application>cupsd
-				</application> to listen on that interface, but would rather have it only 
-				listen on the Ethernet interfaces of the Local Area Network (LAN). To enable 
-				listening for all network interfaces for which a certain hostname is bound, 
-				including the Loopback, you could create a Listen entry for the hostname 
-				<emphasis>socrates</emphasis> as such:
-                </para>
-                <para>
-<screen>
-Listen socrates:631  # Listen on all interfaces for the hostname 'socrates'
-</screen>
-                </para> 
-				<para>ou omitindo a diretriz Listen e usando <emphasis>Port</emphasis> invés, como:</para>
-<para>
-<screen>
-Port 631 # Escute na porta 631 em todas as interfaces
-</screen>
-</para>
-                <para>O arquivo de configuração do servidor CUPS, <filename>/etc/cups/cupsd.conf</filename>, contém diversos exemplos de possíveis diretivas Listen, os quais são válidos para uso.</para>
                 </listitem>
           </itemizedlist>
                 <para>Para mais exemplos de diretivas de configuração no arquivo de configuração do servidor CUPS, veja a página de manual do sistema relacionada através da utilização do seguinte comando no prompt de um terminal:</para>
@@ -1048,6 +981,32 @@ Port 631 # Escute na porta 631 em todas as interfaces
 <command>sudo /etc/init.d/cupsys restart</command>
 </screen>
                 </para>
+	<para>Some other configuration for the CUPS server is done in the file <filename>/etc/cups/cups.d/ports.conf</filename>:</para>
+          <itemizedlist>
+                <listitem>
+                <para><emphasis role="bold">Listen</emphasis>: Por padrão no Ubuntu, o servidor CUPS escuta somente na interface de loopback no endereço de IP <emphasis>127.0.0.1</emphasis>. Para instruir o CUPS a escutar num endereço IP de uma rede, você deve especificar um hostname, um endereço de IP, ou opcionalmente, um endereço/porta de acordo com as diretivas Listen. Por exemplo, se seu servidor CUPS fica numa rede local com o endereço de IP <emphasis role="italics">192.168.10.250</emphasis> e você gostaria de torná-lo acessível para outros sistemas em sua sub-rede, você deverá editar o arquivo <filename>/etc/cups/cups.d/ports.conf</filename> e adicionar uma diretiva Listen, como:</para>
+                <para>
+<screen>
+Listen 127.0.0.1:631 # Loopback existente
+Listen /var/run/cups/cups.sock # Escuta de socket existente
+Listen 192.168.10.250:631 # Escutando na interface LAN, porta 631 (IPP)
+</screen>
+                </para>
+                <para>No exemplo acima, você deve comentar ou remover a referência ao endereço Loopback (127.0.0.1) se você não desejar que o <application>cupsd </application> escute naquela interface, mas sim preferir que ele escute somente na interface Ethernet da sua Rede Local (LAN). Para habilitar a escuta para todas as interfaces de rede em que um hostname esteja ligado, incluíndo a loopback, você pode criar uma entrada de Listen para o hostname <emphasis>socrates</emphasis> como:</para>
+                <para>
+<screen>
+Listen socrates:631 # Escute em todas as interfaces pelo hostname 'socrates'
+</screen>
+                </para> 
+				<para>ou omitindo a diretriz Listen e usando <emphasis>Port</emphasis> invés, como:</para>
+<para>
+<screen>
+Port 631 # Escute na porta 631 em todas as interfaces
+</screen>
+</para>
+                </listitem>
+	</itemizedlist>
+
       </sect2>
       <sect2 id="cups-references" status="complete">
         <title>Referências</title>
@@ -1058,26 +1017,10 @@ Port 631 # Escute na porta 631 em todas as interfaces
     </sect1>
 	<sect1 id="httpd" status="complete">
 		<title>HTTPD - Servidor Web Apache2</title>
-      <para>Apache is the most commonly used Web Server on GNU/Linux systems. Web Servers are used
-          to serve Web Pages requested by client computers. Clients typically request and view
-          Web Pages using Web Browser applications such as <application>Firefox</application>,
-              <application>Opera</application>, or <application>Mozilla</application>.</para>
-      <para>Users enter a Uniform Resource Locator (URL) to point to a Web server by means of
-          its Fully Qualified Domain Name (FQDN) and a path to the required resource. For example, to view the home page of
-          the <ulink url="http://www.ubuntu.com">Ubuntu Web site</ulink> a user will enter only the FQDN. To request specific information about 
-              <ulink url="http://www.ubuntu.com/support/supportoptions/paidsupport">paid
-              support</ulink>, a user will enter the FQDN followed by a path.</para>
-      <para>The most common protocol used to transfer Web pages is the Hyper Text Transfer
-          Protocol (HTTP). Protocols such as Hyper Text Transfer Protocol over Secure Sockets Layer (HTTPS), and
-          File Transfer Protocol (FTP), a protocol for uploading and downloading files, are also
-          supported.</para>
-      <para>Apache Web Servers are often used in combination with the <application>MySQL</application>
-          database engine, the HyperText Preprocessor (<application>PHP</application>)
-          scripting language, and other popular scripting languages such as
-              <application>Python</application> and <application>Perl</application>. This
-          configuration is termed LAMP (Linux, Apache, MySQL and Perl/Python/PHP) and forms a
-          powerful and robust platform for the development and deployment of Web-based
-          applications.</para>
+      <para>O Apache é o Servidor Web mais utilizado em sistemas GNU/Linux. Servidores Web são utilizados para servir pedidos de Páginas WEB por computadores clientes. Os clientes em geral fazem requisições e visualizam Páginas da WEB usando navegadores como <application>Firefox</application>, <application>Opera</application> ou <application>Mozilla</application>.</para>
+      <para>Usuários entram um Localizador Uniforme de Recursos (Uniform Resource Locator, URL) para apontar para um servidor Web através do seu Nome de Domínio Completo (Fully Qualified Domain Name - FQDN) e um caminho para o recurso requerido. Por exemplo, para ver a home page do <ulink url="http://www.ubuntu.com">Site do Ubuntu</ulink>, um usuário irá informar apenas o FQDN. Para requisitar informações específicas sobre o <ulink url="http://www.ubuntu.com/support/supportoptions/paidsupport">suporte pago</ulink>, um usuário irá informar o FQDN seguido de um caminho.</para>
+      <para>O protoloco mais comum usado para transferir páginas de internet é o Hyper Text Transfer Protocol (HTTP - Protocolo de transferência de hipertexto). Protocolos como Hyper Text Transfer Protocol over Secure Sockets Layer (HTTPS - Protocolo seguro de transferência de hipertexto) e File Transfer Protocol (FTP - Protocolo de transferência de arquivo), um protocolo para enviar e receber arquivos, são também suportados.</para>
+      <para>Servidores Web Apache são geralmente utilizados em conjunto com o motor de banco de dados <application>MySQL</application>, a linguagem de de construção de scripts pré-processadora de hiper-texto (<application>PHP</application>), e outras linguagens de construção de scripts populares como o <application>Python</application> e o <application>Perl</application>. Essa configuração é denominada LAMP (Linux, Apache, MySQL e Perl/Python/PHP) e dá forma a uma poderosa e robusta plataforma de desenvolvimento e hospedagem de aplicações basedas na web.</para>
 <sect2 id="http-installation" status="complete">
   <title>Instalação</title>
                   <para>O servidor web Apache2 está disponível no Ubuntu Linux. Para instalar o Apache2:</para>
@@ -1090,15 +1033,7 @@ Port 631 # Escute na porta 631 em todas as interfaces
       </sect2>
       <sect2 id="http-configuration" status="complete">
         <title>Configuração</title>
-          <para>
-          Apache is configured by placing <emphasis>directives</emphasis> in plain text
-          configuration files. The main configuration file is called 
-		  <filename>apache2.conf</filename>. In addition, other configuration files may be added
-          using the <emphasis>Include</emphasis> directive, and wildcards can be used to
-          include many configuration files. Any directive may be placed
-          in any of these configuration files. Changes to the main
-          configuration files are only recognized by Apache2 when it is
-          started or restarted.</para>
+          <para>O Apache é configurado colocando-se <emphasis>diretivas</emphasis> em arquivos de configuração de texto puro. O arquivo de configuração principal é chamado <filename>apache2.conf</filename>. Além disso, outros arquivos de configuração podem ser adicionados utilizando-se a diretiva <emphasis>Include</emphasis>, e caracteres coringa (wildcards) podem ser utilizados para incluir vários arquivos de configuração. Qualquer diretiva pode ser colocada em qualquer desses arquivos de configuração. Mudanças no arquivo de configuração apenas são reconhecidas pelo Apache2 quando este for iniciado ou reiniciado.</para>
 
           <para>O servidor também irá ler um arquivo contendo os tipos mime de documentos; o nome do arquivo é definido pela diretiva <emphasis>TypesConfig</emphasis>, e é <filename>mime.types</filename> por padrão.</para>
 
@@ -1110,220 +1045,62 @@ Port 631 # Escute na porta 631 em todas as interfaces
 
              <itemizedlist>
 
-             <listitem><para>
-             Apache2 ships with a virtual-host-friendly default configuration.
-			 That is, it is configured with a single default virtual host (using
-			 the <emphasis>VirtualHost</emphasis> directive) which can modified or used as-is if you
-			 have a single site, or used as a template for additional virtual hosts
-			 if you have multiple sites.  If left alone, the default virtual host
-			 will serve as your default site, or the site users will see if the
-			 URL they enter does not match the <emphasis>ServerName</emphasis> directive of any of your 
-			 custom sites.  To modify the default virtual host, edit the file
-			 <filename>/etc/apache2/sites-available/default</filename>.  If you
-			 wish to configure a new virtual host or site, copy that file into the
-			 same directory with a name you choose.  For example,
-			 <command>sudo cp /etc/apache2/sites-available/default /etc/apache2/sites-available/mynewsite</command>
-			 Edit the new file to configure the new site using some of the directives
-			 described below.
-            </para></listitem>
+             <listitem><para>O Apache2 vem com uma configuração padrão amigável para hosts virtuais. Isto é, ele é configurado com um host virtual único padrão (utilizando a diretiva <emphasis>VirtualHost</emphasis>) o qual pode ser modificado ou utilizado como está se você tiver apenas um site, ou ainda usado como modelo para hosts virtuais adicionais caso você tenha múltiplos sites. Se não for alterado, o host virtual padrão servirá como seu site padrão, ou o site que os usuários utilizarão caso a URL que eles especifiquem não bata com a diretiva <emphasis>ServerName</emphasis> de nenhum de seus sites customizados. Para modificar o virtual host padrão, edite o arquivo <filename>/etc/apache2/sites-available/default</filename>. Caso você deseje configurar um novo host virtual ou site, copie esse arquivo para o mesmo diretório com um nome de sua escolha. Por exemplo, <command>sudo cp /etc/apache2/sites-available/default /etc/apache2/sites-available/meunovosite</command>. Edite o novo arquivo para configurar o novo site utilizando algumas das diretivas descritas abaixo.</para></listitem>
 
-             <listitem><para>
-			 The <emphasis>ServerAdmin</emphasis> directive specifies the email address to be advertised
-			 for the server's administrator.  The default value is webmaster@localhost.
-			 This should be changed to an email address that is delivered to you (if you
-			 are the server's administrator).  If your website has a problem, Apache2
-			 will display an error message containing this email address to report the
-			 problem to.  Find this directive in your site's configuration file in
-			 /etc/apache2/sites-available.
-			 </para></listitem>
+             <listitem><para>A diretiva <emphasis>ServerAdmin</emphasis> especifica o endereço de email a ser anunciado como do administrador do servidor. O valor padrão é webmaster@localhost. Ele deve ser alterado para um endereço de email que seja entregue para você (caso você seja o administrador do servidor). Se seu website possuir um problema, o Apache2 mostrará uma mensagem de erro contendo este endereço de email para qual o problema poderá ser relatado. Encontre esta diretiva no arquivo de configuração do site site em /etc/apache2/sites-available.</para></listitem>
 
-             <listitem><para>
-             The <emphasis>Listen</emphasis> directive specifies the port, and optionally the IP address,
-			 Apache2 should listen on. If the IP address is not specified, Apache2
-			 will listen on all IP addresses assigned to the machine it runs on.
-			 The default value for the Listen directive is 80.  Change this to
-			 127.0.0.1:80 to cause Apache2 to listen only on your loopback interface
-			 so that it will not be available to the Internet, to (for example) 81
-			 to change the port that it listens on, or leave it as is for normal
-			 operation.  This directive can be found and changed in its own file,
-			 <filename>/etc/apache2/ports.conf</filename>
-             </para></listitem>
+             <listitem><para>A diretiva <emphasis>Listen</emphasis> especifica a porta, e opcionalmente o endereço IP, na qual o Apache2 irá escutar. Se o endereço IP não for especificado, o Apache2 irá escutar em todos os endereços IP designados para a máquina no qual ele esteja rodando. O valor padrão para a diretiva Listen é 80. Altere isso para 127.0.0.1:80 para fazer com que o Apache apenas escute apenas na sua interface de loopback, de forma que ele esteja disponível para a Internet, para (por exemplo) 81 para mudar a porta no qual ele escuta, ou deixe o valor como está para operação normal. Esta diretiva pode ser encontrada e alterada em seu próprio arquivo, <filename>/etc/apache2/ports.conf</filename></para></listitem>
 
-			 <listitem><para>
-			 The <emphasis>ServerName</emphasis> directive is optional and specifies what FQDN your
-			 site should answer to.  The default virtual host has no ServerName
-			 directive specified, so it will respond to all requests that do not
-			 match a ServerName directive in another virtual host.  If you have
-			 just acquired the domain name ubunturocks.com and wish to host it on
-			 your Ubuntu server, the value of the ServerName directive in your
-			 virtual host configuration file should be ubunturocks.com.  Add this
-			 directive to the new virtual host file you created earlier 
-			 (<filename>/etc/apache2/sites-available/mynewsite</filename>).
-			 
-			 <tip><para>You may also want your site to respond to www.ubunturocks.com, since
-				many users will assume the www prefix is appropriate.  Use the
-				<emphasis>ServerAlias</emphasis> directive for this.  You may also use wildcards in the
-				ServerAlias directive.  For example,
-				<command>ServerAlias *.ubunturocks.com</command>
-				will cause your site to respond to any domain request ending in
-				.ubunturocks.com.
-			 </para></tip>
-			 </para></listitem>
+			 <listitem><para>A diretiva <emphasis>ServerName</emphasis> é opcional e especifica qual a FQDN seu site deverá responder. O host virtual padrão não possui diretiva ServerName especificada, portanto ele irá responder a todas as requisições que não combinem com uma diretiva ServerName em outro host virtual. Se você acabou de adquirir o nome de domínio ubunturocks.com e gostaria de hospedá-lo no seu servidor Ubuntu, o valor da diretiva ServerName no arquivo de configuração do seu host virtual deverá ser ubunturocks.com. Adicione esta diretiva ao novo arquivo de site virtual que você criou antes (<filename>/etc/apache2/sites-available/meunovosite). VocServerAlias para isso. VocServerAlias *.ubunturocks.com ir</filename></para></listitem>
 
-			 <listitem><para>
-			 The <emphasis>DocumentRoot</emphasis> directive specifies where Apache should look for the
-			 files that make up the site.  The default value is /var/www.  No site
-			 is configured there, but if you uncomment the <emphasis>RedirectMatch</emphasis> directive
-			 in <filename>/etc/apache2/apache2.conf</filename> requests will be
-			 redirected to /var/www/apache2-default where the default Apache2 site
-			 awaits.  Change this value in your site's virtual host file, and
-			 remember to create that directory if necessary!
-			 </para></listitem>
+			 <listitem><para>A diretiva <emphasis>DocumentRoot</emphasis> especifica onde o Apache deve procurar pelos arquivos que formam o site. O valor padrão é /var/www. Nenhum site está configurado lá, mas você pode descomentar a diretiva <emphasis>RedirectMatch</emphasis> em <filename>/etc/apache2/apache2.conf</filename> as requisições serão redirecionadas para /var/www/apache2-default onde o site padrão do Apache2 aguarda. Altere este valor no arquivo de host virtual do seu site e lembre-se de criar aquele diretório se necessário!</para></listitem>
             </itemizedlist>
 
-			<tip><para>
-			The /etc/apache2/sites-available directory is <emphasis role="bold">
-			not</emphasis> parsed by Apache2.  Symbolic links in /etc/apache2/sites-enabled
-			point to "available" sites.  Use the a2ensite (Apache2
-			Enable Site) utility to create those symbolic links, like so:
-			<command>sudo a2ensite mynewsite</command>
-			where your site's configuration file is <filename>
-			/etc/apache2/sites-available/mynewsite</filename>.  Similarly, the
-			a2dissite utility should be used to disable sites.
-			</para></tip>
+			<tip><para>O diretório /etc/apache2/sites-available <emphasis>não</emphasis> é decodificado pelo Apache2. Links simbólicos em /etc/apache2/sites-enabled apontam para sites "disponíveis" (available). Utilize o utilitário a2ensite (Apache2 Enable Site) para criar esses links simbólicos, como neste exemplo: <command>sudo a2ensite meunovosite</command> onde o arquivo de configuração do seu site é <filename> /etc/apache2/sites-available/meunovosite</filename>. Semelhantemente, o utilitário a2dissite deve ser usado para desabilitar sites.</para></tip>
 
         </sect3>
         <sect3 id="default-settings" status="complete">
           <title>Configuração Padrão</title>
-            <para>
-             This section explains configuration of the Apache2 server
-             default settings.  For example, if you add a virtual host, 
-             the settings you configure for the virtual host take
-             precedence for that virtual host. For a directive not
-             defined within the virtual host settings, the default
-             value is used.
-            </para>
+            <para>Esta seção explica a configuração das definições padrão do servidor Apache2. Por exemplo, se você adicionar um host virtual, as definições que você configurar para o host virtual têm precedência para aquele host virtual. Para uma diretiva não definida dentro da definição de host virtual, o valor padrão é utilizado.</para>
 
             <itemizedlist>
             <listitem>
-            <para>
-             The <emphasis>DirectoryIndex</emphasis> is the default page served by the
-             server when a user requests an index of a directory by
-             specifying a forward slash (/) at the end of the directory
-             name.</para>
+            <para>O <emphasis>DirectoryIndex</emphasis> é a página padrão servida pelo servidor quando o usuário requisita um índice de um diretório especificando uma barra (/) no final do nome do diretório.</para>
 
-             <para>For example, when a user requests the page
-             http://www.example.com/this_directory/, he or she will
-             get either the DirectoryIndex page if it exists, a
-             server-generated directory list if it does not and the
-			 Indexes option is specified, or a Permission Denied page
-			 if neither is true.  The server will try to
-             find one of the files listed in the DirectoryIndex
-             directive and will return the first one it finds. If it
-             does not find any of these files and if Options Indexes is
-             set for that directory, the server will generate and
-             return a list, in HTML format, of the subdirectories and
-             files in the directory.  The default value, found in
-			 <filename>/etc/apache2/apache2.conf</filename> is "
-			 index.html index.cgi index.pl index.php index.xhtml".
-			 Thus, if Apache2 finds a file in a requested directory
-			 matching any of these names, the first will be displayed.
-            </para>
+             <para>Por exemplo, quando um usuário solicita a página http://www.examplo.com/este_diretório/, ele ou ela vai ver: o DirectoryIndex (DiretórioÍndice) se ele existir; uma lista do diretório gerado pelo servidor caso não exista e as opções de índices estiverem especificadas; ou uma página de Permissão Negada se nenhuma das duas opções forem verdadeiras. O servidor irá tentar encontrar um dos arquivos listados no DirectoryIndex e irá retornar o primeiro que for encontrado. Se ele não encontrar nenhum destes arquivos e se as Opções de Índices estiver ajustadas para aquele diretório, o servidor irá gerar e retornar uma lista, no formato HTML, dos subdiretórios e arquivos no diretório. O valor padão, encontrado em <filename>/etc/apache2/apache2.conf</filename> é "index.html index.cgi index.pl index.php index.xhtml". Portanto, se o Apache2 encontras um arquivo no diretório solicitado que bate com um destes nomes, o primeiro será mostrado.</para>
             </listitem>
 
             <listitem>
-            <para>
-             The <emphasis>ErrorDocument</emphasis> directive allows you to specify a file
-			 for Apache to use for specific error events.  For example,
-			 if a user requests a resource that does not exist, a 404
-			 error will occur, and per Apache2's default configuration,
-			 the file <filename>/usr/share/apache2/error/HTTP_NOT_FOUND.html.var
-			 </filename> will be displayed.  That file is not in the
-			 server's DocumentRoot, but there is an Alias directive in
-			 <filename>/etc/apache2/apache2.conf</filename> that redirects
-			 requests to the /error directory to /usr/share/apache2/error/.
-			 To see a list of the default ErrorDocument directives, use this
-			 command:
-			 <command>grep ErrorDocument /etc/apache2/apache2.conf</command>
-            </para>
+            <para>A diretiva <emphasis>ErrorDocument</emphasis> permite que você especifique um arquivo para o Apache usar para um evento específico de erro. Por exemplo, se um usuário solicitar um recurso que não existe, um erro 404 ocorrerá, e por padrão de configuração do Apache2, o arquivo <filename>/usr/share/apache2/error/HTTP_NOT_FOUND.html.var </filename> será mostrado. Este arquivo não está na Raiz de Documentos do servidor, mais existe uma diretiva de apelido no <filename>/etc/apache2/apache2.conf</filename> que redireciona as requisições do diretório /error para /usr/share/apache2/error/. Para ver a listagem de directivas padrão de Documentos de Erro, use o comando: <command>grep ErrorDocument /etc/apache2/apache2.conf</command></para>
             </listitem>
 
 
             <listitem>
-            <para>
-             By default, the server writes the transfer log to the file
-             /var/log/apache2/access.log. You can change this on a per-site
-			 basis in your virtual host configuration files with the <emphasis>CustomLog</emphasis>
-			 directive, or omit it to accept the default, specified in <filename>
-			 /etc/apache2/apache2.conf</filename>.  You may also specify the file
-			 to which errors are logged, via the <emphasis>ErrorLog</emphasis> directive, whose default
-			 is <filename>/var/log/apache2/error.log</filename>.  These are kept
-			 separate from the transfer logs to aid in troubleshooting problems
-			 with your Apache2 server.  You may also specify the <emphasis>LogLevel</emphasis> (the
-			 default value is "warn") and the <emphasis>LogFormat</emphasis> (see <filename>
-			 /etc/apache2/apache2.conf</filename> for the default value).
-			 </para>
+            <para>Por padrão, o servidor registra o arquivo de transferências no arquivo /var/log/apache2/access.log. Você pode mudar isto site por site em seu arquivo de configuração de host virtual atravéz da diretriz <emphasis>CustomLog</emphasis>, ou omiti-la para aceitar o padrão, especificado no arquivo <filename> /etc/apache2/apache2.conf</filename>. Você pode também especificar o arquivo onde os erros serão registrados, através da diretriz <emphasis>ErrorLog</emphasis>, que por padrão é <filename>/var/log/apache2/error.log</filename>. Estes são mantidos separados do log de transferência para permitir eliminação de problemas com seu servidor Apache2. Você pode também especificar o <emphasis>LogLevel</emphasis> (o valor padrão é "alertar") e o <emphasis>LogFormat</emphasis> (veja o <filename>/etc/apache2/apache2.conf</filename> para o valor padrão).</para>
             </listitem>
 
             <listitem>
-            <para>
-            Some options are specified on a per-directory basis rather than per-server.
-			Option is one of these directives.  A Directory stanza is enclosed in 
-			XML-like tags, like so:
-			<screen><command>&lt;Directory /var/www/mynewsite&gt;
-				...
-			&lt;/Directory&gt;</command></screen>
-			The Options directive within a Directory stanza accepts one or more of the
-			following values (among others), separated by spaces:
-            </para>
+            <para>Algumas opções são especificadas num esquema por diretórios ao invéz de um esquema por servidor. A diretiva Option é uma dessas diretivas. Uma instância de Directory é encapsulada entre tags semelhantes ao XML, como em:<screen><command>&lt;Directory /var/www/mynewsite&gt;
+    ...
+   &lt;/Directory&gt;</command></screen> A diretiva Options com um instância de Directory aceita um ou mais dos seguintes valores (entre outros), separados por espaços:</para>
             <itemizedlist spacing="compact">
                 <listitem>
-                    <para><emphasis role="bold">ExecCGI</emphasis> - Allow
-                    execution of CGI scripts. CGI scripts are not
-                    executed if this option is not chosen.
-					<tip><para>Most files should not be executed as CGI scripts.  This
-					would be very dangerous.  CGI scripts should kept in a directory 
-					separate from and outside your DocumentRoot, and only this
-					directory should have the ExecCGI option set.  This is the default,
-					and the default location for CGI scripts is /usr/lib/cgi-bin.
-					</para></tip>
-					</para>
+                    <para><emphasis role="bold">ExecCGI</emphasis> - Permite execução de scripts CGI. Scripts CGI não são executados se esta opção não estiver abilitada. <tip><para>A maioria dos arquivos não devem ser executados como scripts CGI. Isto pode ser muito perigoso. Scripts CGI devem ser mantidos em diretórios separados fora do DocumentRoot, e somente este diretório deve ter a opção ExecCGI habilitada. Isto é o padrão, e o local padrão para os scripts CGI é /usr/lib/cgi-bin.</para></tip></para>
                 </listitem>
                 <listitem>
-                    <para><emphasis role="bold">Includes</emphasis> - Allow server-side includes.
-					Server-side includes allow an HTML file to <emphasis>
-					include</emphasis> other files.  This is not a common option.  See
-					<ulink url="http://httpd.apache.org/docs/2.0/howto/ssi.html">the Apache2
-					SSI Howto</ulink> for mor information.</para>
+                    <para><emphasis role="bold">Includes</emphasis> - Permite inclusões no lado do servidor. Inclusões no lado do servidor permitem que um arquivo HTML <emphasis>inclua</emphasis> outros arquivos. Essa não é uma opção comum. Veja <ulink url="http://httpd.apache.org/docs/2.0/howto/ssi.html">o Apache2 SSI Howto</ulink> para maiores informações.</para>
                 </listitem>
                 <listitem>
-                    <para><emphasis role="bold">IncludesNOEXEC</emphasis> - Allow server-side includes,
-                    but disable the #exec and #include commands in CGI
-                    scripts.</para>
+                    <para><emphasis role="bold">IncludesNOEXEC</emphasis> - Permite server-side includes, mais desabilita uso dos comandos #exec e #include nos scripts CGI</para>
                 </listitem>
                 <listitem>
-                    <para>
-                    <emphasis role="bold">Indexes</emphasis> - Display a formatted list of the
-                    directory's contents, if no DirectoryIndex (such as index.html) exists in the 
-					requested directory.
-					<caution><para>For security reasons, this should usually not be set, and certainly
-					should not be set on your DocumentRoot directory.  Enable this option carefully on
-					a per-directory basis only if you are certain you want users to see the entire
-					contents of the directory.</para></caution>
-                    </para>
+                    <para><emphasis role="bold">Indexes</emphasis> - Mostra uma lista formatada dos conteúdos dos diretórios, caso não exista um DirectoryIndex (tal como index.html) no diretório requisitado . <caution><para>Por motivos de segurança, isto geralmente não deveria estar hablilitado, e certamente não deveria estar habilitado no seu diretório DocumentRoot. Habilite esta opção com cuidado, diretório por diretório somente se você tem certeza de que quer que os usuários vejam o conteúdo inteiro do diretório.</para></caution></para>
                 </listitem>
                 <listitem>
-                    <para>
-                    <emphasis role="bold">Multiview</emphasis> - Support content-negotiated multiviews;
-                    this option is disabled by default for security reasons.  See the <ulink url="http://httpd.apache.org/docs/2.0/mod/mod_negotiation.html#multiviews">Apache2
-					documentation on this option</ulink>.
-                    </para>
+                    <para><emphasis role="bold">Multiview</emphasis> - Suporta multi-visões negociadas pelo conteúdo; esta opção está desabilitada por padrão por motivos de segurança. Veja a <ulink url="http://httpd.apache.org/docs/2.0/mod/mod_negotiation.html#multiviews">Documentação do Apache2 para esta opção</ulink>.</para>
                 </listitem>
                 <listitem>
-                    <para>
-                    <emphasis role="bold">SymLinksIfOwnerMatch</emphasis> - Only follow symbolic links
-                    if the target file or directory has the same owner as the link.
-                    </para>
+                    <para><emphasis role="bold">SymLinksIfOwnerMatch</emphasis> - Somente segue os links simbólicos caso o arquivo alvo ou diretório seja do mesmo dono que o link.</para>
                 </listitem>
             </itemizedlist>
 
@@ -1332,48 +1109,22 @@ Port 631 # Escute na porta 631 em todas as interfaces
         </sect3>
         <sect3 id="virtual-hosts-settings" status="complete">
 
-          <title>Virtual Hosts Settings</title>
-            <para>
-			Virtual hosts allow you to run different servers for different IP addresses, different host 
-			names, or different ports on the same machine. For example, you can run the website for 
-			http://www.example.com and http://www.anotherexample.com on the same Web server using virtual 
-			hosts. This option corresponds to the &lt;VirtualHost&gt; directive for the default virtual 
-			host and IP-based virtual hosts. It corresponds to the &lt;NameVirtualHost&gt; directive for 
-			a name-based virtual host.
-			</para>
+          <title>Configurações de Hosts Virtuais</title>
+            <para>Hosts virtuais permitem que você rode diferentes servidores para diferentes endereços IP, diferentes nomes, ou diferentes portas da mesma máquina. Por exemplo, você pode rodar o website por http://www.exemplo.com.br e http://www.outroexemplo.com.br no mesmo servidor Web usando hosts virtuais. Esta opção corresponde à diretiva &lt;VirtualHost&gt; para o virtual host padrão e virtual hosts baseados em IP. E corresponde à diretiva &lt;NameVirtualHost&gt; para um virtual host baseado em nomes.</para>
 
-			<para>
-			The directives set for a virtual host only apply to that particular virtual host. If a 
-			directive is set server-wide and not defined within the virtual host settings, the default 
-			setting is used. For example, you can define a Webmaster email address and not define 
-			individual email addresses for each virtual host. 
-    		</para>
+			<para>As diretivas para um host virtual somente são aplicadas para um host virtual em particular. Se a diretiva é setada para escopo de servidor e não definida dentro das configurações de um virtual host, as configurações padrão serão usadas. Por exempĺo, você pode definir o email do Webmaster e não definir um email individual para cada virtual host.</para>
  
- 			<para>
-			Set the DocumentRoot directive to the directory that contains the root document (such as 
-			index.html) for the virtual host. The default DocumentRoot is <filename>/var/www</filename>.
-			</para>
+ 			<para>Ajuste a diretiva DocumentRoot para o diretório que contém o documento raíz (como o index.html) para o host virtual. O DocumentRoot padrão é <filename>/var/www</filename>.</para>
 
-			<para>
-			The ServerAdmin directive within the VirtualHost stanza is email the address used in the 
-			footer of error pages if you choose to show a footer with an email address on the error pages.
-			</para>
+			<para>A diretiva ServerAdmin dentro da instância do VirtualHost armazena o email usado no rodapé da página de erros caso você escolha mostrar um rodapé com o endereço de email na página de erro.</para>
 
         </sect3>
         <sect3 id="server-settings" status="complete">
           <title>Configurações do Servidor</title>
-            <para>
-This section explains how to configure basic server settings.</para>
-                    <para><emphasis role="bold">LockFile</emphasis> - The LockFile directive sets the path 
-					to the lockfile used when the server is compiled with either USE_FCNTL_SERIALIZED_ACCEPT 
-					or USE_FLOCK_SERIALIZED_ACCEPT. It must be stored on the local disk. It should be left 
-					to the default value unless the logs directory is located on an NFS share. If this is 
-					the case, the default value should be changed to a location on the local disk and to a 
-					directory that is readable only by root. </para>
+            <para>Esta seção explica como configurar as opções básicas de um servidor.</para>
+                    <para><emphasis role="bold">LockFile</emphasis> - A diretiva LockFile define o caminho do arquivo de trava usado quando o servidor é compilado tanto com USE_FCNTL_SERIALIZED_ACCEPT quanto com USE_FLOCK_SERIALIZED_ACCEPT. É obrigatório armazená-lo no disco local. Deixe o valor padrão a menos que o diretório de logs esteja localizando em um compartilhamento NFS. Se este for o caso, o valor padrão deverá ser alterado para um caminho no disco local e para um diretório no qual apenas o root tem permissões de leitura.</para>
 
-					<para><emphasis role="bold">PidFile</emphasis> - The PidFile directive sets the file in which the server 
-					records its process ID (pid). This file should only be readable by root. In most cases, it should be left 
-					to the default value.</para>
+					<para><emphasis role="bold">PidFile</emphasis> - A diretiva PidFile define o arquivo em que o servidor gravará o seu ID de processo (pid). Este arquivo deve ser permissões de leitura somente para o root. Na maioria dos casos, o valor padrão deve ser deixado.</para>
 
 <para><emphasis role="bold">User</emphasis> - The User directive sets the userid used by the server to answer requests. This 
 setting determines the server's access. Any files inaccessible to this user will also be inaccessible to your website's visitors. 
@@ -1478,86 +1229,44 @@ The default value for User is www-data.  </para>
         </sect3>
         <sect3 id="types-of-certificates" status="complete">
           <title>Tipos de Certificados</title>
-            <para>
-             You need a key and a certificate to operate your secure
-             server, which means that you can either generate a
-             self-signed certificate or purchase a CA-signed
-             certificate.  A CA-signed certificate provides two important
-              capabilities for your server:
-            </para>
+            <para>Você precisa de uma chave e um certificado para operar o seu servidor seguro, o que significa que você tanto pode gerar uma certificado auto-assinado como comprar um certificado assinado por um CA. Um certificado assinado por um CA provê duas capacidades importantes para o seu servidor:</para>
 
             <itemizedlist>
             <listitem>
-            <para>
-            Browsers (usually) automatically recognize the certificate
-            and allow a secure connection to be made without prompting
-            the user.
-            </para>
+            <para>Navegadores (em geral) automaticamente reconhecem o certificado e permitem uma conexão segura sem questionamentos ao usuário.</para>
             </listitem>
             <listitem>
-            <para>
-             When a CA issues a signed certificate, it is
-             guaranteeing the identity of the organization that is
-             providing the web pages to the browser.
-            </para>
+            <para>Quando um CA emite um certificado assinado, está garantindo a identidade da organização que está provendo as páginas da web para o navegador.</para>
             </listitem>
             </itemizedlist>
 
-            <para>
-             Most Web browsers that support SSL have a list of CAs whose
-             certificates they automatically accept. If a browser
-             encounters a certificate whose authorizing CA is not in the
-             list, the browser asks the user to either accept or decline
-             the connection.
-            </para>
-            <para>
-             You can generate a self-signed certificate for your secure server, but
-            be aware that a self-signed certificate does not provide the same
-            functionality as a CA-signed certificate. A self-signed certificate is
-            not automatically recognized by most Web browsers, and a self-signed
-            certificate does not provide any guarantee concerning the identity of
-            the organization that is providing the website. A CA-signed certificate
-            provides both of these important capabilities for a secure server. 
-            The process of getting a certificate from a CA is fairly
-            easy. A quick overview is as follows:
-            </para>
+            <para>A maioria dos navegadores que suportam SSL possuem uma lista dos CAs cujo certificados são automaticamente aceitos. Se o navegador encontrar um certificado cujo CA autorizador não esteja na lista, o navegador irá perguntar para o usuário se ele deve aceitar ou rejeitar a conexão.</para>
+            <para>Você pode gerar um certificado auto-assinado para o seu servidor seguro, mas fique atento para o fato de que certificados auto-assinados não fornecem a mesma funcionalidade que certificados assinados por um CA. Um certificado auto-assinado não é automaticamente reconhecido pela maioria dos navegadores, e um certificado auto-assinado também não fornece nenhuma garantia quanto à identidade da organização que está disponibilizando o website. Um certificado assinado por um CA fornece essas duas importantes capacidades para um servidor seguro. O processo de receber um certificado assinado por um CA é bastante fácil. Segue um resumo rápido:</para>
 
             <orderedlist>
             <listitem>
-               <para>Create a private and public encryption key pair.</para>
+               <para>Cria um par de chaves criptográficas privada e pública.</para>
             </listitem>
             <listitem>
-                 <para>Create a certificate request based on the public key. The
-              certificate request contains information about your server and the
-              company hosting it.</para>
+                 <para>Cria uma requisição de certificado baseada na chave pública. A requisição de certificado contém informação a respeito do seu servidor e da empresa que o hospeda.</para>
             </listitem>
             <listitem>
-                 <para>Send the certificate request, along with documents proving your
-              identity, to a CA. We cannot tell you which certificate authority to
-              choose. Your decision may be based on your past experiences, or on the
-              experiences of your friends or colleagues, or purely on monetary
-              factors.</para>
+                 <para>Envie o pedido de certificado, juntamente com documentos provando sua identidade, para o CA. Não podemos lhe dizer qual Autoridade em Certificados (CA) escolher. Sua decisão deve ser baseada nas suas experiências anteriores, na experiência de amigos ou colegas, ou puramente por fatores financeiros.</para>
 
-                    <para>Once you have decided upon a CA, you need to follow the
-              instructions they provide on how to obtain a certificate
-              from them.</para>
+                    <para>Uma vez decido qual CA usar, você precisa seguir as instruções que eles disponibilizam em como obter um certificado deles.</para>
             </listitem>
             <listitem>
-               <para>When the CA is satisfied that you are indeed who you claim to be,
-            they send you a digital certificate.</para>
+               <para>Quando o CA está satisfeito de que você é de fato quem diz ser, eles lhe enviam um certificado digital.</para>
             </listitem>
             <listitem>
-               <para>Install this certificate on your secure server, and begin handling
-            secure transactions. </para>
+               <para>Instale este certificado em seu servidor seguro, e comece a realizar transações seguras.</para>
             </listitem>
             </orderedlist>
 
-            <para>Whether you are getting a certificate from a CA or generating your own
-            self-signed certificate, the first step is to generate a key.
-            </para>
+            <para>Não importa se está recebendo um certificado de um CA ou gerando o seu certificado auto-assinado, o primeiro passo é criar uma chave.</para>
         </sect3>
         <sect3 id="generating-a-csr" status="complete">
-          <title>Generating a Certificate Signing Request (CSR)</title>
+          <title>Gerando uma Assinatura de Requisição de Certificado (CSR)</title>
             <para>
             To generate the Certificate Signing Request (CSR), you should create your
             own key. You can run the following command from a terminal prompt to create the
@@ -1586,11 +1295,7 @@ Enter pass phrase for server.key:
         remember that your passphrase is case-sensitive. 
         </para>
 
-        <para>
-        Re-type the passphrase to verify. Once you have re-typed it
-        correctly, the server key is generated and stored in
-        <filename>server.key</filename> file.
-        </para>
+        <para>Redigite a sua senha para verificação. Uma vez redigitado corretamente, a chave do servidor é gerada e armazenada no arquivo <filename>server.key</filename>.</para>
 
         <warning>
         <para>
@@ -1619,9 +1324,7 @@ Enter pass phrase for server.key:
         file to generate the CSR without passphrase.
         </para>
 
-        <para>
-        To create the CSR, run the following command at a terminal prompt:
-        </para>
+        <para>Para criar um CSR, execute o seguinte comando no prompt do terminal:</para>
 
         <para>
 <screen>
@@ -1657,34 +1360,20 @@ Enter pass phrase for server.key:
             certificate will be created and it will be stored in the
             <filename>server.crt</filename> file.  </para>
         <warning>
-        <para>
-            If your secure server is to be used in a production environment, you
-            probably need a CA-signed certificate.  It is not
-            recommended to use self-signed certificate.
-        </para>
+        <para>Se o seu servidor seguro deve ser utilizado em um ambiente de produção, você provavelmente precisa de um certificado assinado por uma CA. Não é recomentado usar certificados auto-assinados.</para>
         </warning>
         </sect3>
         <sect3 id="installing-the-certificate" status="complete">
-          <title>Installing the Certificate</title>
+          <title>Instalando o Certificado</title>
 
-            <para>You can install the key file
-            <filename>server.key</filename> and certificate file
-            <filename>server.crt</filename> or the certificate file issued
-            by your CA by running following commands at a terminal prompt:
-            </para>
+            <para>Você pode instalar o arquivo chave <filename>server.key</filename>, o arquivo de certificado <filename>server.crt</filename> ou o arquivo de certificado fornecido pela sua CA rodando os seguintes comandos num prompt de terminal:</para>
             <para>
 <screen>
 <command>sudo cp server.crt /etc/ssl/certs</command>
 <command>sudo cp server.key /etc/ssl/private</command>
 </screen>
             </para>
-            <para>
-            You should add the following four lines to the
-            <filename>/etc/apache2/sites-available/default</filename>
-            file or the configuration file for your secure virtual
-			host. You should place them in the <emphasis>VirtualHost</emphasis> section. They
-            should be placed under the <emphasis>DocumentRoot</emphasis> line:
-            </para>
+            <para>Você deve adicionar as quatro linhas abaixo no arquivo <filename>/etc/apache2/sites-available/default</filename> ou no arquivo de configuração do seu host virtual seguro. Você deve colocá-las na seção <emphasis>VirtualHost</emphasis>. Elas devem ser colocadas abaixo da linha <emphasis>DocumentRoot</emphasis>:</para>
 <programlisting>
 SSLEngine on
 
@@ -1694,11 +1383,7 @@ SSLCertificateFile /etc/ssl/certs/server.crt
 SSLCertificateKeyFile /etc/ssl/private/server.key
 </programlisting>
           
-            <para>
-            HTTPS should listen on port number 443. You should add the
-            following line to the <filename>/etc/apache2/ports.conf</filename>
-            file:
-            </para>
+            <para>O HTTPS deve escutar na porta número 443. Você deve adicionar a seguinte linha ao arquivo <filename>/etc/apache2/ports.conf</filename>.</para>
 <programlisting>
 Listen 443
 </programlisting>
@@ -1706,64 +1391,36 @@ Listen 443
         </sect3>
         <sect3 id="accessing-the-server" status="complete">
           <title>Acessando o Servidor</title>
-            <para>
-            Once you install your certificate, you should restart your
-            web server. You can run the following command at a terminal prompt to
-            restart your web server:
-            </para>
+            <para>Assim que seu certificado estiver instalado, você deve re-iniciar seu servidor web. Você pode executar o seguinte comando em um prompt de terminal para re-iniciar seu servidor web:</para>
             <para>
 <screen>            
 <command>sudo /etc/init.d/apache2 restart</command>
 </screen>
             </para>
-        <note><para>
-        You should remember and enter the passphrase every time you
-        start your secure web server.
-        </para></note>
+        <note><para>Você deve lembrar e informar a senha toda vez que iniciar o seu servidor web seguro.</para></note>
 
-            <para>You will be prompted to enter the passphrase. Once you
-            enter the correct passphrase, the secure web server will be
-            started. You can access the secure server pages by typing
-            https://your_hostname/url/ in your
-            browser address bar.</para>
+            <para>Você será perguntado sobre sua senha. Assim que você informar a senha correta, o servidor web seguro irá ser iniciado. Você pode acessar páginas seguras no servidor digitando https://seu_hostname/url/ na barra de endereços do seu navegador.</para>
 
         </sect3>
       </sect2>
       <sect2 id="http-references" status="complete">
         <title>Referências</title>
           <para>
-          <ulink url="http://httpd.apache.org/docs/2.0/">Apache2
-          Documentation</ulink>
+          <ulink url="http://httpd.apache.org/docs/2.0/">Documentação do Apache2</ulink>
           </para>
           <para>
-          <ulink url="http://www.modssl.org/docs/">Mod SSL
-          Documentation</ulink>
+          <ulink url="http://www.modssl.org/docs/">Documentação do Mod SSL</ulink>
           </para>
       </sect2>
     </sect1>
 	
 	<sect1 id="squid" status="complete">
-		<title>Squid - Proxy Server</title>
-          <para>
-          Squid is a full-featured web proxy cache server application which provides proxy and cache services for Hyper Text
-          Transport Protocol (HTTP), File Transfer Protocol (FTP), and other popular network protocols.  Squid can implement
-          caching and proxying of Secure Sockets Layer (SSL) requests and caching of Domain Name Server (DNS) lookups, and perform
-          transparent caching. Squid also supports a wide variety of caching protocols, such as Internet Cache Protocol, (ICP)
-          the Hyper Text Caching Protocol, (HTCP) the Cache Array Routing Protocol (CARP), and the Web Cache Coordination 
-          Protocol. (WCCP) 
-          </para>
-          <para>
-          The Squid proxy cache server is an excellent solution to a variety of proxy and caching server needs, and scales from
-          the branch office to enterprise level networks while providing extensive, granular access control mechanisms and
-          monitoring of critical parameters via the Simple Network Management Protocol (SNMP).  When selecting a computer system
-          for use as a dedicated Squid proxy, or caching servers, ensure your system is configured with a large amount of physical
-          memory, as Squid maintains an in-memory cache for increased performance.
-          </para>
+		<title>Squid - Sevidor Proxy</title>
+          <para>Squid é um servidor proxy  cache completo que fornece servi</para>
+          <para>O servidor proxy cache Squid é uma excelente solução para uma vasta gama de necessidades de servidores de cache e proxy, ele atende desde pequenos escritórios até redes de grandes empresas fornecendo mecanismos de controle de acesso granulares e monitoramento de parâmetros críticos via Protocolo Simples de Gerenciamento de Redes (SNMP). Quando escolher um computador para uso dedicado à função de servidor proxy Squid, ou servidores de cache, certifique-se de que seu sistema estará configurado com uma grande quantidade de memória física, já que o Squid mantém um cache em memória para melhor performance.</para>
       <sect2 id="squid-installation" status="complete">
         <title>Instalação</title>
-          <para>
-            At a terminal prompt, enter the following command to install the Squid server:
-          </para>
+          <para>No prompt de terminal, digite os seguintes comandos para instalar o servidor Squid:</para>
           <para>
 <screen>
 <command>sudo apt-get install squid squid-common</command>
@@ -1772,17 +1429,12 @@ Listen 443
       </sect2>
       <sect2 id="squid-configuration" status="complete">
         <title>Configuração</title>
-          <para>
-            Squid is configured by editing the directives contained within the <filename>/etc/squid/squid.conf</filename> configuration file.
-            The following examples illustrate some of the directives which may be modified to affect the behavior of the Squid server.
-            For more in-depth configuration of Squid, see the References section. 
-          </para>
+          <para>O Squid é configurado através da edição de diretivas presentes no arquivo de configuração <filename>/etc/squid/squid.conf</filename>. Os exemplos a seguir ilustram algumas das diretivas que podem ser modificadas para afetar o coportamente do servidor Squid. Para uma configuração mais especializada do Squid, veja a seção de referências.</para>
              <tip>
                <para>Prior to editing the configuration file, you should make a copy of the original file and protect it 
                from writing so you will have the original settings as a reference, and to re-use as necessary.
                </para>
-               <para>Copy the <filename>/etc/squid/squid.conf</filename> file and protect it from writing with the following commands entered at a terminal prompt:
-               </para>
+               <para>Copie o arquivo <filename>/etc/squid/squid.conf</filename> e proteja-o contra gravação informando os seguintes comandos no prompt de comando de um terminal:</para>
 	     </tip>
                <para>
 <screen>
@@ -1894,11 +1546,11 @@ configure the digital certificate.
 
         </sect3>
         <sect3 id="subversion-configuration" status="complete">
-          <title>Server Configuration</title>
+          <title>Configuração do Servidor</title>
             <para>
 	This step assumes you have installed above mentioned packages on your system. This section explains how to create a Subversion repository and access the project.</para>
 			<sect4 id="create-svn-repos" status="complete">
-				<title>Create Subversion Repository</title>
+				<title>Cria um Repositório Subversion</title>
 <para>The Subversion repository can be created using the following command from a terminal prompt:</para>
 
         <para>
@@ -1910,12 +1562,12 @@ configure the digital certificate.
 
         </sect3>
         <sect3 id="access-methods" status="complete">
-          <title>Access Methods</title>
+          <title>Métodos de Acesso</title>
 <para>Subversion repositories can be accessed (checked out) through many 
 different methods --on local disk, or through various network protocols. 
 A repository location, however, is always a URL. The table describes how 
 different URL schemas map to the available access methods.</para>
-				<table><title>Access Methods</title>
+				<table><title>Métodos de Acesso</title>
 
 					<tgroup cols="2">
 						<colspec colname="1"/>
@@ -1937,7 +1589,7 @@ different URL schemas map to the available access methods.</para>
 							</row>
 							<row>
 								<entry><para>https://</para></entry>
-								<entry><para>Same as http://, but with SSL encryption</para></entry>
+								<entry><para>O mesmo que http://, mais com criptografia SSL</para></entry>
 							</row>
 							<row>
 								<entry><para>svn://</para></entry>
@@ -1945,7 +1597,7 @@ different URL schemas map to the available access methods.</para>
 							</row>
 							<row>
 								<entry><para>svn+ssh://</para></entry>
-								<entry><para>Same as svn://, but through an SSH tunnel</para></entry>
+								<entry><para>Mesmo que svn://, mais através de um túnel SSH</para></entry>
 							</row>
 						</tbody>
 					</tgroup>
@@ -1957,7 +1609,7 @@ these access methods. Here, we cover the basics. For more advanced
 usage details, refer to the <ulink url="http://svnbook.red-bean.com/">svn book</ulink>.
 				</para>
 			<sect4 id="direct-repos-access" status="complete">
-				<title>Direct repository access (file://)</title>
+				<title>Acesso direto ao repositório (file://)</title>
 <para> This is the simplest of all access methods. It does not 
 require any Subversion server process to be running. This access 
 method is used to access Subversion from the same machine. The 
@@ -1968,7 +1620,7 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
 <command>svn co file:///path/to/repos/project</command>
 </screen>
         </para>
-  <para>or</para>
+  <para>ou</para>
 	<para>
 <screen>
 <command>svn co file://localhost/path/to/repos/project</command>
@@ -2010,7 +1662,7 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
 	</warning>
 			</sect4>
 			<sect4 id="access-via-webdav-with-ssl" status="complete">
-				<title>Access via WebDAV protocol with SSL encryption (https://)</title>
+				<title>Acesso via protocolo WebDAV com criptografia SSL (https://)</title>
 					<para> 
 						Accessing Subversion repository via WebDAV protocol with SSL 
 						encryption (https://) is similar to http:// except that you 
@@ -2033,7 +1685,7 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
 
 			</sect4>
 			<sect4 id="access-via-custom-protocol" status="complete">
-				<title>Access via custom protocol (svn://)</title>
+				<title>Acessar via protocolo específico (svn://)</title>
 					<para> 
 					Once the Subversion repository is created, you can configure the 
 					access control. You can edit the <filename>
@@ -2967,30 +2619,13 @@ group. The mailman process will be owned by this user.
         </sect3>
         <sect3 id="mailman-configuration" status="complete">
           <title>Configuração</title>
-            <para>
-            This section assumes you have successfully installed
-            <application>mailman</application>,
-            <application>apache2</application>, and
-            <application>exim4</application>. Now you just need
-            to configure them. 
-            </para>
+            <para>Esta seção assume que você já tenha instalado com sucesso o <application>mailman</application>, o <application>apache2</application>, e o <application>exim4</application>. Agora você só precisa configurá-los.</para>
           <sect4 id="mailman-conf-apache2">
             <title>Apache2</title>
-              <para>
-              Once apache2 is installed, you can add the following lines in
-              the <filename>/etc/apache2/apache2.conf</filename> file:
-<programlisting>
+              <para>Uma vez que o apache2 esteja instalado, você pode adicionar as seguintes linhas no arquivo <filename>/etc/apache2/apache2.conf</filename>: <programlisting>
 Alias /images/mailman/ "/usr/share/images/mailman/"
 Alias /pipermail/ "/var/lib/mailman/archives/public/"
-</programlisting>
-
-Mailman uses apache2 to render its CGI scripts. The mailman CGI scripts
-are installed in the <application>/usr/lib/cgi-bin/mailman</application>
-directory. So, the mailman url will be
-http://hostname/cgi-bin/mailman/. You can make changes to the
-<filename>/etc/apache2/apache2.conf</filename> file if you wish to
-change this behavior.
-              </para>
+</programlisting> O Mailman utiliza o apache2 para renderizar seus scripts CGI. Os scripts CGI do mailman são instalados no diretório <application>/usr/lib/cgi-bin/mailman</application>. Logo, a URL do mailman será http://hostname/cgi-bin/mailman/. Você pode fazer alterações no arquivo <filename>/etc/apache2/apache2.conf</filename> caso queira alterar este comportamento.</para>
           </sect4>
 
           <sect4 id="mailman-conf-exim4">
@@ -2999,7 +2634,7 @@ change this behavior.
 <command>sudo apt-get /etc/init.d/exim4 start</command>
 </screen> Com o sentido de fazer o mailman trabalhar com o exim4, você deve configurar o exim4. Como mencionado anteriormente, por padrão, exim4 utiliza múltiplos arquivos de configuração de diferentes tipos. Para maiores detalhes, acesse, por favor, o seguinte website <ulink url="http://www.exim.org">Exim</ulink>. Para executar o mailman, você deveria adicionar um novo arquivo de configuração aos seguintes tipos de configuração: <itemizedlist spacing="compact">
               <listitem>
-                <para>Main</para>
+                <para>Principal</para>
               </listitem>
               <listitem>
                 <para>Transporte</para>
@@ -3010,7 +2645,7 @@ change this behavior.
               </itemizedlist> O Exim cria um arquivo mestre de configuração classificando todos estes pequenos arquivos de configuração. Logo, a ordem de tais arquivos de configuração é muito importante.</para>
           </sect4>
           <sect4 id="mailman-conf-main">
-            <title>Main</title>
+            <title>Principal</title>
               <para>Todos os arquivos que pertençam ao tipo principal são armazenados no diretório <filename>/etc/exim4/conf.d/main/</filename>. Você pode adicionar o seguinte conteúdo a um novo arquivo, chamado <filename>04_exim4-config_mailman</filename>: <programlisting>
 # start
 # Home dir for your Mailman installation -- aka Mailman's prefix

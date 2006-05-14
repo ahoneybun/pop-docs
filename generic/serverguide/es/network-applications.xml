@@ -124,6 +124,7 @@
 <!ENTITY kernel "http://www.kernel.org">
 <!ENTITY google "http://www.google.com">
 <!ENTITY kdelook " http://www.kde-look.org">
+<!ENTITY lulu-store "http://www.lulu.com/ubuntu-doc">
 <!-- this entity controls the url for addons--><!ENTITY java-download "http://java.sun.com/j2se/1.5.0/download.jsp">
 <!ENTITY skype-deb "skype_1.2.0.17-1_i386.deb">
 <!ENTITY skype-download "http://www.skype.com/go/getskype-linux-deb">
@@ -444,18 +445,7 @@ nameserver 208.185.179.218↵
         </sect2>
         <sect2 id="managing-hosts" status="complete">
           <title>Manejando Hosts</title>
-            <para>
-            To manage hosts, you can add, edit, or remove hosts from
-            <filename>/etc/hosts</filename> file. The file contains IP
-            addresses and their corresponding hostnames.  When your
-            system tries to resolve a hostname to an IP address or
-            determine the hostname for an IP address, it refers to the
-            <filename>/etc/hosts</filename> file before using the name
-            servers.  If the IP address is listed in the
-            <filename>/etc/hosts</filename> file, the name servers are
-            not used.  This behavior can be modified by editing <filename>
-			/etc/nsswitch.conf</filename> at your peril.
-            </para>
+            <para>Para gestionar los hosts, puede añadir, editar, o borrar hosts del archivo <filename>/etc/hosts</filename>. Este archivo contiene direcciones IP y sus correspondientes nombres de host. Cuando su sistema intenta resolver un nombre de host en una dirección IP, o determinar el nombre del host a partir de su dirección IP, busca en el archivo <filename>/etc/hosts</filename> antes de usar los servidores de nombres. Si la dirección IP se encuentra en el archivo <filename>/etc/hosts</filename>, no se usarán los servidores de nombres. Este comportamiento se puede modificar cambiando el archivo <filename> /etc/nsswitch.conf</filename> para adaptarlo a sus necesidades.</para>
 
             <para>Si su red contiene ordenadores cuya dirección IP no este listada en el DNS, es recomendable que los añada en el archivo <filename>/etc/hosts</filename>.</para>
         </sect2>
@@ -781,7 +771,7 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
       </sect2>
       <sect2 id="nfs-references" status="complete">
         <title>Referencias</title>
-				<para><ulink url="http://nfs.sourceforge.net/">Linux NFS faq</ulink></para>
+				<para><ulink url="http://nfs.sourceforge.net/">FAQ de NFS en Linux</ulink></para>
       </sect2>
     </sect1>
 	<sect1 id="dhcp" status="complete">
@@ -998,20 +988,10 @@ include "/etc/bind/named.conf.local";↵
           <para>Para instalar CUPS en su equipo Ubuntu, simplemente use <application>sudo</application> con la orden <application>apt-get</application> y proporcione como primer parámtro el nombre de los paquetes a instalar. Una instalación completa de CUPS tiene muchas dependencias de paquetes, pero pueden especificarse todas ellas en la misma línea de órdenes. Introduzca lo siguiente en la línea de órdenes de una terminal para instalar CUPS:</para>
           <para>
 <screen>
-<command>sudo apt-get install cupsys cupsys-client cupsys-driver-gimpprint \ defoma fontconfig foomatic-db foomatic-filters libcupsimage2 \ libexpat1 libfontconfig1 libfreetype6 libgimpprint1 libjpeg62 \ libpaper1 libpng12-0 libpoppler0c2 libslp1 libtiff4 patch perl \ perl-modules ttf-bitstream-vera ucf</command>
+<command>sudo apt-get install cupsys cupsys-client</command>
 </screen>
           </para>
-          <para>
-          Upon authenticating with your user password, the packages should be downloaded
-		  and installed without error. Upon the conclusion of installation, the CUPS server 
-		  will be started automatically. For troubleshooting purposes, you can access CUPS 
-		  server errors via the error log file at: <filename>/var/log/cups/error_log</filename>.
-		  If the error log does not show enough information to troubleshoot any problems you
-		  encounter, the verbosity of the CUPS log can be increased by changing the <emphasis role="bold">LogLevel</emphasis> directive in the configuration file (discussed below)
-		  to "debug" or even "debug2", which logs everything, from the default of "info".  If 
-		  you make this change, remember to change it back once you've solved your problem, to 
-		  prevent the log file from becoming overly large.
-          </para>
+          <para>Tras autenticarse con su contraseña de usuario, los paquetes se descargarán y se instalarán sin errores. Tras finalizar la instalación, el servidor CUPS se iniciará automáticamente. Con el propósito de ayudar a la resolución de posibles problemas, puede acceder a los errores del servidor CUPS consultando el archivo de registro de errores en: <filename>/var/log/cups/error_log</filename>. Si el registro de errores no mostrara información suficiente para resolver los problemas encontrados, se podría incrementar el detalle del registro de CUPS cambiando la directiva <emphasis role="bold">LogLevel</emphasis> en el archivo de configuración (como se indicó antes) del valor predeterminado «info» al valor «debug», o incluso «debug2», lo que registrará todo. Si hace este cambio, recuerde volverlo a su valor original una vez haya resuelto su problem, para evitar que el archivo de registro crezca demasiado.</para>
       </sect2>
       <sect2 id="cups-configuration" status="complete">
         <title>Configuración</title>
@@ -1044,19 +1024,25 @@ ServerAdmin bjoy@somebigco.com↵
 </screen>
                 </para>
                 </listitem>
-                <listitem>
+          </itemizedlist>
+                <para>Para más ejemplos de directivas de configuración en el archivo de configuración del servidor CUPS, vea la página de manual asociada introduciendo el siguiente comando en un terminal:</para>
+               <para>
+<screen>
+<command>man cupsd.conf</command>
+</screen>
+               </para>
+                               <note>
+                <para>Una vez haya realizado cambios en el archivo de configuración <filename>/etc/cups/cupsd.conf</filename>, necesitará reiniciar el servidor CUPS tecleando la siguiente orden en la línea de órdenes de una terminal:</para>
+                </note>
                 <para>
-                <emphasis role="bold">Listen</emphasis>: By default on Ubuntu, the CUPS 
-				server installation listens only on the loopback interface at IP address 
-				<emphasis>127.0.0.1</emphasis>. In order to instruct the 
-				CUPS server to listen on an actual network adapter's IP address, you must 
-				specify either a hostname, the IP address, or optionally, an IP 
-				address/port pairing via the addition of a Listen directive.  For example, 
-				if your CUPS server resides on a local network at the IP address <emphasis role="italics">192.168.10.250</emphasis> and you'd like to make it 
-				accessible to the other systems on this subnetwork, you would edit the 
-				<filename>/etc/cups/cups.d/ports.conf</filename> and add a Listen 
-				directive, as such:
+<screen>
+<command>sudo /etc/init.d/cupsys restart</command>
+</screen>
                 </para>
+	<para>Otras opciones de configuración para el servidor CUPS se encuentran en el archivo <filename>/etc/cups/cups.d/ports.conf</filename>:</para>
+          <itemizedlist>
+                <listitem>
+                <para><emphasis role="bold">Listen</emphasis>: De forma predeterminada, en Ubuntu la instalación del servidor CUPS escucha sólo por la interfaz loopback en la dirección IP <emphasis>127.0.0.1</emphasis>. Para hacer que el servidor CUPS escuche en la dirección IP del verdadero adaptador de red, debe especificar un nombre de host, una dirección IP, o bien, un par dirección IP/puerto, y para ello debe añadir una directiva Listen. Por ejemplo, si su servidor CUPS reside en una red local con la dirección IP <emphasis role="italics">192.168.10.250</emphasis> y desea que sea accesible para los demás sistemas de esta subred, debe editar el archivo  <filename>/etc/cups/cups.d/ports.conf</filename> y añadir una directiva Listen, de esta forma:</para>
                 <para>
 <screen>
 ↵
@@ -1078,23 +1064,9 @@ Listen·socrates:631··#·Escuchando en todos los interfaces para la máquina·
 Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
 </screen>
 </para>
-                <para>El archivo de configuración del servidor CUPS, <filename>/etc/cups/cupsd.conf</filename>, contiene algunos ejemplos de directivas Listen que son validos para su uso.</para>
                 </listitem>
-          </itemizedlist>
-                <para>Para más ejemplos de directivas de configuración en el archivo de configuración del servidor CUPS, vea la página de manual asociada introduciendo el siguiente comando en un terminal:</para>
-               <para>
-<screen>
-<command>man cupsd.conf</command>
-</screen>
-               </para>
-                               <note>
-                <para>Una vez haya realizado cambios en el archivo de configuración <filename>/etc/cups/cupsd.conf</filename>, necesitará reiniciar el servidor CUPS tecleando la siguiente orden en la línea de órdenes de una terminal:</para>
-                </note>
-                <para>
-<screen>
-<command>sudo /etc/init.d/cupsys restart</command>
-</screen>
-                </para>
+	</itemizedlist>
+
       </sect2>
       <sect2 id="cups-references" status="complete">
         <title>Referencias</title>
@@ -1106,19 +1078,9 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
 	<sect1 id="httpd" status="complete">
 		<title>HTTPD - Servidor Web Apache2</title>
       <para>Apache es el Servidor Web mas comunmente utilizado en sistemas GNU/Linux. Los Servidores Web son usados para servir Páginas Web solicitadas por ordenadores clientes. Los clientes típicamente solicitan ver Páginas Web usando un Navegador como <application>Firefox</application>, <application>Opera</application>, o <application>Mozilla</application>.</para>
-      <para>Users enter a Uniform Resource Locator (URL) to point to a Web server by means of
-          its Fully Qualified Domain Name (FQDN) and a path to the required resource. For example, to view the home page of
-          the <ulink url="http://www.ubuntu.com">Ubuntu Web site</ulink> a user will enter only the FQDN. To request specific information about 
-              <ulink url="http://www.ubuntu.com/support/supportoptions/paidsupport">paid
-              support</ulink>, a user will enter the FQDN followed by a path.</para>
+      <para>Los usuarios introducen un Localizador de Recursos Uniforme (Uniform Resource Locator, URL) para señalar a un servidor web por medio de su Nombre de Dominio Totalmente Cualificado (Fully Qualified Domain Name, FQDN) y de una ruta al recurso solicitado. Por ejemplo, para ver la página web del <ulink url="http://www.ubuntu.com">sitio web de Ubuntu</ulink>, un usuario debería introducir únicamente el FQDN. Para solicitar información específica acerca del <ulink url="http://www.ubuntu.com/support/supportoptions/paidsupport">soporte de pago</ulink>, un usuario deberá introducir el FQDN seguido de una ruta.</para>
       <para>El protocolo más comunmente utilizado para ver páginas Web es el Hyper Text Transfer Protocol (HTTP). Protocolos como el Hyper Text Transfer Protocol sobre Secure Sockets Layer (HTTPS), y  File Transfer Protocol (FTP), un protocolo para subir y descargar archivos, también son soportados.</para>
-      <para>Apache Web Servers are often used in combination with the <application>MySQL</application>
-          database engine, the HyperText Preprocessor (<application>PHP</application>)
-          scripting language, and other popular scripting languages such as
-              <application>Python</application> and <application>Perl</application>. This
-          configuration is termed LAMP (Linux, Apache, MySQL and Perl/Python/PHP) and forms a
-          powerful and robust platform for the development and deployment of Web-based
-          applications.</para>
+      <para>Los servidores web Apache a menudo se usan en combinación con el motor de bases de datos <application>MySQL</application>, el lenguaje de scripting <application>PHP</application>, y otros lenguajes de scripting populares como <application>Python</application> y <application>Perl</application>. Esta configuración se denomina LAMP (Linux, Apache, MySQL y Perl/Python/PHP) y conforma una potente y robusta plataforma para el desarrollo y distribución de aplicaciones basadas en la web.</para>
 <sect2 id="http-installation" status="complete">
   <title>Instalación</title>
                   <para>El servidor web Apache2 esta disponible en Ubuntu Linux. Para instalar Apache2:</para>
@@ -1194,49 +1156,18 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
 			 directive to the new virtual host file you created earlier 
 			 (<filename>/etc/apache2/sites-available/mynewsite</filename>).
 			 
-			 <tip><para>You may also want your site to respond to www.ubunturocks.com, since
-				many users will assume the www prefix is appropriate.  Use the
-				<emphasis>ServerAlias</emphasis> directive for this.  You may also use wildcards in the
-				ServerAlias directive.  For example,
-				<command>ServerAlias *.ubunturocks.com</command>
-				will cause your site to respond to any domain request ending in
-				.ubunturocks.com.
-			 </para></tip>
+			 <tip><para>También puede desear que su sitio responda a www.ubunturocks.com, ya que muchos usuarios asumen que el prefijo www es apropiado. Para ello, use la directiva <emphasis>ServerAlias</emphasis>. Puede usar comodines en la directiva ServerAlias. Por ejemplo, <command>ServerAlias *.ubunturocks.com</command> hará que su sitio responda a cualquier solicitud de dominio que termine en .ubunturocks.com.</para></tip>
 			 </para></listitem>
 
-			 <listitem><para>
-			 The <emphasis>DocumentRoot</emphasis> directive specifies where Apache should look for the
-			 files that make up the site.  The default value is /var/www.  No site
-			 is configured there, but if you uncomment the <emphasis>RedirectMatch</emphasis> directive
-			 in <filename>/etc/apache2/apache2.conf</filename> requests will be
-			 redirected to /var/www/apache2-default where the default Apache2 site
-			 awaits.  Change this value in your site's virtual host file, and
-			 remember to create that directory if necessary!
-			 </para></listitem>
+			 <listitem><para>La directiva <emphasis>DocumentRoot</emphasis> especifica dónde debe buscar Apache los archivos que forman el sitio. El valor predeterminado es /var/www. No hay ningún sitio configurado allí, pero si descomenta la directiva <emphasis>RedirectMatch</emphasis> en <filename>/etc/apache2/apache2.conf</filename>, las peticiones se redirigirán a /var/www/apache2-default, que es donde reside el sitio predeterminado de Apache2. Cambie este valor en el archivo de host virtual de su sitio, y recuerde crear ese directorio si fuese necesario.</para></listitem>
             </itemizedlist>
 
-			<tip><para>
-			The /etc/apache2/sites-available directory is <emphasis role="bold">
-			not</emphasis> parsed by Apache2.  Symbolic links in /etc/apache2/sites-enabled
-			point to "available" sites.  Use the a2ensite (Apache2
-			Enable Site) utility to create those symbolic links, like so:
-			<command>sudo a2ensite mynewsite</command>
-			where your site's configuration file is <filename>
-			/etc/apache2/sites-available/mynewsite</filename>.  Similarly, the
-			a2dissite utility should be used to disable sites.
-			</para></tip>
+			<tip><para>Apache2 <emphasis role="bold">no</emphasis> procesa el directorio /etc/apache2/sites-available. Los enlaces simbólicos en /etc/apache2/sites-enabled apuntan a los sitios «disponibles». Use la utilidad a2ensite (Apache2 Enable Site) para crear esos enlaces simbólicos, así: <command>sudo a2ensite minuevositio</command> donde el archivo de cofiguración de su sitio es <filename> /etc/apache2/sites-available/minuevositio</filename>. Igualmente, se debe usar la utilidad a2dissite para deshabilitar sitios.</para></tip>
 
         </sect3>
         <sect3 id="default-settings" status="complete">
           <title>Configuración por Defecto</title>
-            <para>
-             This section explains configuration of the Apache2 server
-             default settings.  For example, if you add a virtual host, 
-             the settings you configure for the virtual host take
-             precedence for that virtual host. For a directive not
-             defined within the virtual host settings, the default
-             value is used.
-            </para>
+            <para>Esta sección explica la configuración de las opciones predeterminadas del servidor Apache2. Por ejemplo, si desea añadir un host virtual, las opciones que usted configura para el host virtual tienen prioridad para ese host virtual. Para las directivas no definidas dentro de las opciones del host virtual, se usan los valores predeterminados.</para>
 
             <itemizedlist>
             <listitem>
@@ -1302,12 +1233,7 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
 			&lt;/Directory&gt;</command></screen> La directiva Options dentro del parrafo Directory acepta un o más de los siguientes valores (entre otros), separados por espacios:</para>
             <itemizedlist spacing="compact">
                 <listitem>
-                    <para><emphasis role="bold">ExecCGI</emphasis> - Permite la ejecución de scripts CGI. Los scripts CGI no serán ejecutados si esta opción no fue escojida. <tip><para>Most files should not be executed as CGI scripts.  This
-					would be very dangerous.  CGI scripts should kept in a directory 
-					separate from and outside your DocumentRoot, and only this
-					directory should have the ExecCGI option set.  This is the default,
-					and the default location for CGI scripts is /usr/lib/cgi-bin.
-					</para></tip></para>
+                    <para><emphasis role="bold">ExecCGI</emphasis> - Permite la ejecución de scripts CGI. Los scripts CGI no serán ejecutados si esta opción no fue escojida. <tip><para>Muchos archivos no deberían ser ejecutados como scripts CGI. Esto podría resultar muy peligroso. Los scripts CGI deberían mantenerse en un directorio separado fuera de su DocumentRoot, y dicho directorio debería ser el único que tuviese activada la opción ExecCGI. Así está establecido desde el principio, y la ubicación predeterminada para los scripts CGI es /usr/lib/cgi-bin.</para></tip></para>
                 </listitem>
                 <listitem>
                     <para><emphasis role="bold">Includes</emphasis> - Allow server-side includes.
@@ -1394,27 +1320,7 @@ The default value for User is www-data.  </para>
         </sect3>
         <sect3 id="apache-modules" status="complete">
           <title>Módulos de Apache</title>
-              <para>
-
-              Apache is a modular server. This implies that only the most
-              basic functionality is included in the core server. Extended
-              features are available through modules which can be loaded
-              into Apache. By default, a base set of modules is included in
-              the server at compile-time. If the server is compiled to use
-              dynamically loaded  modules, then modules can be compiled
-              separately, and added at any time using the LoadModule
-              directive. Otherwise, Apache must be recompiled to add or
-              remove modules. Ubuntu compiles Apache2 to allow the dynamic
-			  loading of modules.  Configuration directives may be conditionally
-	      included on the presence of a particular module by enclosing
-              them in an &lt;IfModule&gt; block.
-
-              You can install additional Apache2 modules and use them
-              with your Web server. You can install Apache2
-              modules using the <application>apt-get</application>
-              command. For example, to install the Apache2 module
-              for MYSQL authentication, you can run the
-                following command from a terminal prompt:</para>
+              <para>Apache es un servidor modular. Esto supone que en el núcleo del servidor sólo está incluida la funcionalidad más básica. Las características extendidas están disponibles a través de módulos que se pueden cargar en Apache. De forma predeterminada, durante la compilación se incluye un juego básico de módulos en el servidor. Si el servidor se compila para que use módulos cargables dinámicamente, los módulos se podrán compilar por separado y se podrán añadir posteriormente usando la directiva LoadModule. En caso contrario, habrá que recompilar Apache para añadir o quitar módulos. Ubuntu compila Apache2 para que permita la carga dinámica de módulos. Las directivas de configuración ser pueden incluir condicionalmente en base a la presencia de un módulo en particular, encerrándolas en un bloque &lt;IfModule&gt;. Puede instalar módulos adicionales de Apache2 y usarlos con su servidor web. Puede instalar los módulos de Apache2 usando la orden <application>apt-get</application>. Por ejemplo, para instalar el módulo de Apache2 que proporciona autenticación por MySQL, puede ejecutar lo siguiente en la línea de órdenes de una terminal:</para>
                 
                 <para>
 <screen>
@@ -1437,112 +1343,52 @@ The default value for User is www-data.  </para>
           </para>
         <sect3 id="certificates-and-security" status="complete">
           <title>Certificados y Seguridad</title>
-            <para>
-              To set up your secure server, use public key cryptography to
-              create a public and private key pair. In most cases, you
-              send your certificate request (including your public key),
-              proof of your company's identity, and payment to a
-              Certificate Authority (CA). The
-              CA verifies the certificate request and your identity, and
-              then sends back a certificate for your secure server. 
-            </para>
-             <para>
-             Alternatively, you can create your own self-signed
-             certificate. Note, however, that self-signed certificates
-             should not be used in most production environments.
-             Self-signed certificates are not automatically accepted by
-             a user's browser.  Users are prompted by the browser to
-             accept the certificate and create the secure connection.
-             </para>
+            <para>Para configurar un servidor seguro, utilice criptografía de clave pública para crear un par de claves pública y privada. En la mayoría de los casos, usted envía su solicitud de certificado (incluyendo su clave pública), una prueba de la identidad de su compañía, y el pago correspondiente, a una Autoridad de Certificación (Certificate Authority, CA). La CA verifica la solicitud de certificado y su identidad, y posteriormente le envía un certificado para su servidor seguro.</para>
+             <para>También puede crear su propio certificado auto-firmado. Tenga en cuenta, no obstante, que los certificados auto-firmados no deben usarse en la mayoría de los entornos de producción. Los certificados auto-firmados no son aceptados automáticamente por los navegadores de los usuarios. Los navegadores solicitarán al usuario que acepte el certificado para crear la conexión segura.</para>
 
-             <para>
-              Once you have a self-signed certificate or a signed
-              certificate from the CA of your choice, you need to
-              install it on your secure server.
-             </para>
+             <para>Cuando tenga un certificado auto-firmado, o un certificado firmado por una CA de su elección, necesitará instalarlo en su servidor seguro.</para>
         </sect3>
         <sect3 id="types-of-certificates" status="complete">
           <title>Tipos de Certificados</title>
-            <para>
-             You need a key and a certificate to operate your secure
-             server, which means that you can either generate a
-             self-signed certificate or purchase a CA-signed
-             certificate.  A CA-signed certificate provides two important
-              capabilities for your server:
-            </para>
+            <para>Necesita una clave y un certificado para trabajar con su servidor seguro, lo que significa que deberá generar su propio certificado firmado por usted mismo, o comprar un certificado firmado por una CA. Un certificado firmado por una CA proporciona dos capacidades importantes para su servidor:</para>
 
             <itemizedlist>
             <listitem>
             <para>Los navegadores (habitualmente) reconocen automáticamente el certificado y permiten establecer una conexión segura sin preguntar al usuario.</para>
             </listitem>
             <listitem>
-            <para>
-             When a CA issues a signed certificate, it is
-             guaranteeing the identity of the organization that is
-             providing the web pages to the browser.
-            </para>
+            <para>Cuando una CA envía un certificado firmado, está garantizando la identidad de la organización que está suministrando las páginas web al navegador.</para>
             </listitem>
             </itemizedlist>
 
-            <para>
-             Most Web browsers that support SSL have a list of CAs whose
-             certificates they automatically accept. If a browser
-             encounters a certificate whose authorizing CA is not in the
-             list, the browser asks the user to either accept or decline
-             the connection.
-            </para>
-            <para>
-             You can generate a self-signed certificate for your secure server, but
-            be aware that a self-signed certificate does not provide the same
-            functionality as a CA-signed certificate. A self-signed certificate is
-            not automatically recognized by most Web browsers, and a self-signed
-            certificate does not provide any guarantee concerning the identity of
-            the organization that is providing the website. A CA-signed certificate
-            provides both of these important capabilities for a secure server. 
-            The process of getting a certificate from a CA is fairly
-            easy. A quick overview is as follows:
-            </para>
+            <para>Muchos navegadores web que soportan SSL tienen una lista de CAs cuyos certificados aceptan automáticamente. Si un navegador encuentra un certificado autorizado por una CA que no está en su lista, el navegador le preguntará al usuario si desea aceptar o denegar la conexión.</para>
+            <para>Puede generar un certificado firmado por usted mismo para su servidor seguro, pero tenga en cuenta que un certificado auto-firmado no proporciona la misma funcionalidad que un certificado firmado por una CA. La mayoría de los navegadores web no reconocen automáticamente los certificados auto-firmados, y éstos además no proporcionan ninguna garantía acerca de la identidad de la organización que está proporcionando el sitio web. Un certificado firmado por una CA proporciona estas dos importantes características a un servidor seguro. El proceso para obtener un certificado de una CA es realmente fácil. A grandes rasgos, consta de:</para>
 
             <orderedlist>
             <listitem>
                <para>Crear dos llaves encriptadas pública y privada.</para>
             </listitem>
             <listitem>
-                 <para>Create a certificate request based on the public key. The
-              certificate request contains information about your server and the
-              company hosting it.</para>
+                 <para>Crear una solicitud de certificado basado en la clave pública. La solicitud de certificado contiene información sobre su servidor y la compañía que lo aloja.</para>
             </listitem>
             <listitem>
-                 <para>Send the certificate request, along with documents proving your
-              identity, to a CA. We cannot tell you which certificate authority to
-              choose. Your decision may be based on your past experiences, or on the
-              experiences of your friends or colleagues, or purely on monetary
-              factors.</para>
+                 <para>Enviar la solicitud de certificado, junto con los documentos que prueban su identidad, a una CA. No podemos decirle qué autoridad de certificación elegir. Su decisión debe basarse en sus experiencias pasadas, o en las experiencias de sus amigos o colegas, o simplemente en factores económicos.</para>
 
-                    <para>Once you have decided upon a CA, you need to follow the
-              instructions they provide on how to obtain a certificate
-              from them.</para>
+                    <para>Una vez se haya decidido por una CA, necesita seguir las instrucciones que ésta le proporcione para obtener un certificado proveniente de ella.</para>
             </listitem>
             <listitem>
-               <para>When the CA is satisfied that you are indeed who you claim to be,
-            they send you a digital certificate.</para>
+               <para>Cuando la CA esté segura de que tiene todo lo que necesita de usted, le enviará un certificado digital.</para>
             </listitem>
             <listitem>
                <para>Instalar este certificado en su servidor seguro, y soportar transacciones seguras.</para>
             </listitem>
             </orderedlist>
 
-            <para>Whether you are getting a certificate from a CA or generating your own
-            self-signed certificate, the first step is to generate a key.
-            </para>
+            <para>Cuando obtenga un certificado de una CA, o genere su propio certificado auto-firmado, el primer paso es generar una clave.</para>
         </sect3>
         <sect3 id="generating-a-csr" status="complete">
-          <title>Generating a Certificate Signing Request (CSR)</title>
-            <para>
-            To generate the Certificate Signing Request (CSR), you should create your
-            own key. You can run the following command from a terminal prompt to create the
-            key:
-            </para>
+          <title>Generar una Petición de Firma de Certificado (Certificate Signing Request, CSR)</title>
+            <para>Para generar la Solicitud de Firma de Certificado (Certificate Signing Request, CSR), deberá crear su propia clave. Para ello, puede ejecutar la siguiente orden en la línea de órdenes de una terminal:</para>
 
             <para>
 <screen>
@@ -1559,46 +1405,22 @@ e is 65537 (0x10001)↵
 Enter pass phrase for server.key:↵
 </programlisting>
 
-        <para>
-        You can now enter your passphrase. For best security, it should
-        at least contain eight characters. The minimum length when
-		specifying -des3 is four characters. It should include numbers
-        and/or punctuation and not be a word in a dictionary. Also
-        remember that your passphrase is case-sensitive. 
-        </para>
+        <para>Ahora puede introducir su frase de paso. Para mayor seguridad, ésta debería contener, al menos, ocho caracteres. La longitud mínima al especificar -des3 es de cuatro caracteres. Debe incluir números y/o signos de puntuación, y no debería ser una palabra que se pudiera encontrar en un diccionario. Además, recuerde que su frase de paso distingue mayúsculas de minúsculas.</para>
 
-        <para>
-        Re-type the passphrase to verify. Once you have re-typed it
-        correctly, the server key is generated and stored in
-        <filename>server.key</filename> file.
-        </para>
+        <para>Vuelva a escribir la frase de paso para verificarla. Cuando la haya vuelto a escribir correctamente, se generará la clave del servidor y se almacenará en el archivo <filename>server.key</filename>.</para>
 
         <warning>
-        <para>
-        You can also run your secure web server without a passphrase.
-        This is convenient because you will not need to enter the
-        passphrase every time you start your secure web server. But it
-        is highly insecure and a compromise of the key means a
-        compromise of the server as well.
-        </para>
+        <para>También puede ejecutar su servidor web seguro sin una frase de paso. Esto puede ser conveniente porque así no tendrá que introducir la frase de paso cada vez que vaya a arrancar su servidor web seguro. Pero también resulta altamente inseguro y comprometer la clave significa también comprometer al servidor.</para>
         </warning>
 
-        <para>
-        In any case, you can choose to run your secure web server without
-        a passphrase by leaving out the -des3 switch in the generation
-        phase or by issuing the following command at a terminal prompt:
-        </para>
+        <para>En todo caso, puede escoger ejecutar su servidor web seguro sin frase de paso quitando la opción -des3 en la fase de generación, o ejecutando la siguiente orden en una terminal:</para>
 
         <para>
 <screen>
 <command>openssl rsa -in server.key -out server.key.insecure</command>
 </screen>
         </para>
-        <para>
-        Once you run the above command, the insecure key will be stored
-        in the <filename>server.key.insecure</filename> file. You can use this
-        file to generate the CSR without passphrase.
-        </para>
+        <para>Una vez haya ejecutado la orden anterior, la clave insegura se almacenará en el archivo <filename>server.key.insecure</filename>. Puede usar este archivo para generar el CSR sin frase de paso.</para>
 
         <para>Para crear el CSR, ejecute el siguiente comando en un terminal:</para>
 
@@ -1608,22 +1430,12 @@ Enter pass phrase for server.key:↵
 </screen>
         </para>
 
-        <para>It will prompt you enter the passphrase. If you enter the
-        correct passphrase, it will prompt you to enter Company Name,
-        Site Name, Email Id, etc. Once you enter all these details, your
-        CSR will be created and it will be stored in the
-        <filename>server.csr</filename> file. You can submit this CSR file
-        to a CA for processing. The CAN will use this CSR file and issue
-        the certificate. On the other hand, you can create self-signed
-        certificate using this CSR.</para>
+        <para>Se le pedirá que introduzca la frase de paso. Si la introduce correctamente, se le solicitará que introduzca el nombre de la empresa, el nombre del sitio, la dirección de correo electrónico, etc. Cuando haya introducido todos esos detalles, se creará su CSR y se almacenará en el archivo <filename>server.csr</filename>. Puede enviar ese archivo CSR a una AC para que lo procese. La AC usará ese archivo CSR y emitirá el certificado. Por otra parte, también puede crear un certificado auto-firmado usando este CSR.</para>
 
         </sect3>
         <sect3 id="creating-a-self-signed-certificate" status="complete">
-          <title>Creating a Self-Signed Certificate</title>
-            <para>
-            To create the self-signed certificate, run the
-            following command at a terminal prompt:
-            </para>
+          <title>Creación de un certificado auto-firmado</title>
+            <para>Para crear un certificado auto-firmado, ejecute la siguiente orden en una terminal:</para>
 
             <para>
 <screen>
@@ -1631,26 +1443,15 @@ Enter pass phrase for server.key:↵
 </screen>
             </para>
 
-            <para>The above command will prompt you to enter the
-            passphrase. Once you enter the correct passphrase, your
-            certificate will be created and it will be stored in the
-            <filename>server.crt</filename> file.  </para>
+            <para>La orden anterior le solicitará que introduzca la frase de paso. Cuando la haya introducido, se creará su certificado y se almacenará en el archivo <filename>server.crt</filename>.</para>
         <warning>
-        <para>
-            If your secure server is to be used in a production environment, you
-            probably need a CA-signed certificate.  It is not
-            recommended to use self-signed certificate.
-        </para>
+        <para>Si su servidor seguro se va a usar en un entorno de producción, probablemente necesitará un certificado firmado por una CA. No se recomienda el uso de certificados auto-firmados.</para>
         </warning>
         </sect3>
         <sect3 id="installing-the-certificate" status="complete">
           <title>Instalar el Certificado</title>
 
-            <para>You can install the key file
-            <filename>server.key</filename> and certificate file
-            <filename>server.crt</filename> or the certificate file issued
-            by your CA by running following commands at a terminal prompt:
-            </para>
+            <para>Puede instalar el archivo de la clave <filename>server.key</filename> y el archivo del certificado <filename>server.crt</filename> o el archivo de certificado enviado por su CA ejecutando las siguientes órdenes en la línea de órdenes de una terminal:</para>
             <para>
 <screen>
 <command>sudo cp server.crt /etc/ssl/certs</command>
@@ -1683,11 +1484,7 @@ Listen 443↵
         </sect3>
         <sect3 id="accessing-the-server" status="complete">
           <title>Accediendo al Servidor</title>
-            <para>
-            Once you install your certificate, you should restart your
-            web server. You can run the following command at a terminal prompt to
-            restart your web server:
-            </para>
+            <para>Una vez haya instalado su certificado, debería reiniciar su servidor web. Puede ejecutar la siguiente orden en la línea de órdenes de una terminal para reiniciar su servidor web.</para>
             <para>
 <screen>            
 <command>sudo /etc/init.d/apache2 restart</command>
@@ -1695,11 +1492,7 @@ Listen 443↵
             </para>
         <note><para>Debería memorizar e introducir su contraseña cada vez que inicie una sesión segura en su navegador.</para></note>
 
-            <para>You will be prompted to enter the passphrase. Once you
-            enter the correct passphrase, the secure web server will be
-            started. You can access the secure server pages by typing
-            https://your_hostname/url/ in your
-            browser address bar.</para>
+            <para>Se le pedirá que introduzca la frase de paso. Cuando haya introducido la frase de paso correcta, se arrancará el servidor web seguro. Puede acceder a las páginas del servidor seguro tecleando https://su_equipo/url en la barra de direcciones de su navegador.</para>
 
         </sect3>
       </sect2>
@@ -1747,10 +1540,7 @@ Listen 443↵
                   <para>http_port·8888</para>
                </listitem>
 	            <listitem>
-                  <para>
-                  Change the visible_hostname directive in order to give the Squid server a specific hostname.  This hostname
-                  does not necessarily need to be the computer's hostname. In this example it is set to <emphasis>weezie</emphasis>
-                  </para>
+                  <para>Cambie la directiva visible_hostname para hacer que el servidor Squid tenga un nombre de host específico. Este nombre de host no tiene por qué ser necesariamente el nombre de host del equipo. En este ejemplo se ha establecido a <emphasis>weezie</emphasis></para>
                   <para>visible_hostname·weezie</para>
                </listitem>
                <listitem>
@@ -1897,9 +1687,9 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
 </screen>
         </para>
 	<note>
-		<para>If you do not specify the hostname, there are three forward slashes (///) -- two for the protocol (file, in this case) plus the leading slash in the path. If you specify the hostname, you must use two forward slashes (//).</para>
+		<para>Si no especifica el nombre del host, ha de usar tres barras (///) -- dos para el protocolo (file, en este caso) más la barra que indica la raíz de la ruta. Si especifica el nombre del host, debe usar dos barras (//).</para>
 	</note>
-		<para>The repository permissions depend on filesystem permissions. If the user has read/write permission, he can checkout from and commit to the repository.</para>
+		<para>Los permisos del repositorio dependen de los permisos del sistema de archivos. Si el usuario tiene permisos de lectura/escritura, puede hacer «checkout» y «commit» sobre el repositorio.</para>
 			</sect4>
 			<sect4 id="access-via-webdav" status="complete">
 				<title>Acceso·via·protocolo WebDAV·(http://)</title>
@@ -1938,11 +1728,7 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
 						Apache2 web server.
 					</para>
 
-					<para>
-						You can install a digital certificate issued by a signing 
-						authority like Verisign. Alternatively, you can install your 
-						own self-signed certificate.
-					</para>
+					<para>Puede instalar un certificado digital emitido por una autoridad de certificación como Verisign. También puede instalar su propio certificado auto-firmado.</para>
 					<para>
 						This step assumes you have installed and configured a digital 
 						certificate in your Apache 2 web server. Now, to access the 
@@ -2415,28 +2201,13 @@ MECHANISMS="pam"↵
         </sect3>
         <sect3 id="postfix-testing" status="complete">
           <title>Comprobando</title>
-            <para>
-          SMTP AUTH configuration is complete. Now it is time to start
-          and test the setup. You can run the following command to start
-          the SASL daemon:
-            <screen><command>sudo /etc/init.d/saslauthd start</command></screen>
-
-          To see if SMTP-AUTH and TLS work properly, run the following
-          command:
-            <screen><command>telnet mail.example.com 25</command></screen>
-          After you have established the connection to the postfix mail
-          server, type:
-            <screen>ehlo mail.example.com</screen>
-          If you see the following lines among others, then everything
-          is working perfectly. Type <command>quit</command> to exit.
-<programlisting>
+            <para>La configuración del SMTP AUTH está ya completa. Ahora es el momento de iniciar y probar la configuración. Puede ejecutar la siguiente orden para arrancar el demonio SASL: <screen><command>sudo /etc/init.d/saslauthd start</command></screen> Para ver si el SMTP-AUTH y el TLS funcionan correctamente, ejecute la siguiente orden: <screen><command>telnet mail.example.com 25</command></screen> Una vez que haya establecido la conexión con el servidor de correo postfix, teclee: <screen>ehlo mail.ejemplo.com</screen> Si ve aparecer las siguientes líneas (entre otras), es que todo funciona correctamente. Teclee <command>quit</command> para salir. <programlisting>
 ↵
 250-STARTTLS↵
 250-AUTH LOGIN PLAIN↵
 250-AUTH=LOGIN PLAIN↵
 250 8BITMIME↵
-</programlisting>
-        </para>
+</programlisting></para>
         </sect3>
       </sect2>
       <sect2 id="exim4" status="complete">
@@ -2674,19 +2445,9 @@ disable_plaintext_auth = no↵
           </sect4>
           <sect4 id="mailman-mailman">
             <title>Mailman</title>
-              <para>
-              To install <application>Mailman</application>, run following command at a terminal prompt:
-<screen>
+              <para>Para instalar <application>Mailman</application>, ejecute esta orden en una terminal: <screen>
 <command>sudo apt-get install mailman</command> 
-</screen>
-
-It copies the installation files in
-<application>/var/lib/mailman</application> directory. It installs the
-CGI scripts in <application>/usr/lib/cgi-bin/mailman</application>
-directory.  It creates <emphasis>list</emphasis> linux
-user. It creates the <emphasis>list</emphasis> linux
-group. The mailman process will be owned by this user. 
-              </para>
+</screen> Eso copia los archivos de instalación en el directorio <application>/var/lib/mailman</application>, instala los scripts CGI en el directorio <application>/usr/lib/cgi-bin/mailman</application>, crea una <emphasis>lista</emphasis> de usuarios de linux y la <emphasis>lista</emphasis> de grupos de linux. El proceso mailman será propiedad de este usuario.</para>
           </sect4>
         </sect3>
         <sect3 id="mailman-configuration" status="complete">

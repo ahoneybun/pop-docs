@@ -33,5 +33,5 @@ for x in rosetta-about-ubuntu/*; do
 	../../validate.sh ${y}/about-ubuntu.xml
 done
 
-rm -rf rosetta-about-ubuntu*
+#rm -rf rosetta-about-ubuntu*
 rm .xml2po.mo
