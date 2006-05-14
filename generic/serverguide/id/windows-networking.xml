@@ -124,6 +124,7 @@
 <!ENTITY kernel "http://www.kernel.org">
 <!ENTITY google "http://www.google.com">
 <!ENTITY kdelook " http://www.kde-look.org">
+<!ENTITY lulu-store "http://www.lulu.com/ubuntu-doc">
 <!-- this entity controls the url for addons--><!ENTITY java-download "http://java.sun.com/j2se/1.5.0/download.jsp">
 <!ENTITY skype-deb "skype_1.2.0.17-1_i386.deb">
 <!ENTITY skype-download "http://www.skype.com/go/getskype-linux-deb">
@@ -395,43 +396,24 @@
 <!ENTITY language "&EnglishAmerican;">
 ]>
 <chapter id="windows-networking" status="complete">
-	<title>Windows Networking</title>
+	<title>Jaringan Windows</title>
   <para>Jaringan komputer seringkali terdiri dari sistem yang beragam, mengelola jaringan komputer yang terdiri dari komputer-komputer Ubuntu Desktop ataupun Ubuntu Server merupakan hal yang mudah, bahkan komputer-komputer Ubuntu dapat bekerja bersama dalam satu jaringan dengan komputer-komputer bersistem <trademark class="registered">Microsoft</trademark><trademark class="registered">Windows</trademark> secara harmonis. Panduan <phrase>Ubuntu</phrase> Server, khususnya bagian ini akan memperkenalkan prinsip-prinsip dan tools (umumnya adalah aplikasi) yang digunakan untuk mengkonfigurasi Ubuntu Server agar dapat melakukan sharing network resources dengan komputer-komputer yang menggunakan sistem operasi Windows.</para>
 	<sect1 id="windows-networking-introduction" status="complete">
 		<title>Pengenalan</title>
-          <para>
-          Successfully networking your Ubuntu system with Windows clients involves providing and integrating with services 
-          common to Windows environments. Such services assist the sharing of data and information about the computers 
-          and users involved in the network, and may be classified under three major categories of functionality:
-          </para>
+          <para>Kesuksesan jaringan sistem Ubuntu anda dengan client Windows melibatkan ketersediaan intregritas dengan service - service umum ke lingkungan Windows. Seperti service - service yang melayani sharing data dan informasi tentang komputer dan user - user yang terhubung kedalam jaringan, dan dapat diklasifikasikan dibawah tiga katagori utama berdasarkan fungsionalitasnya:</para>
           <itemizedlist>
              <listitem>
-             <para>
-             <emphasis role="bold">File and Printer Sharing Services</emphasis>. Using the Server Message Block (SMB) protocol to facilitate
-             the sharing of files, folders, volumes, and the sharing of printers throughout the network.
-             </para>
+             <para><emphasis role="bold">Service File dan Printer Sharing</emphasis>. Menggunakan protocol Server Message Block (SMB) sebagai fasilitas untuk sharing file, folder, volumes, dan sharing printer keseluruh jaringan.</para>
              </listitem>
              <listitem>
-             <para>
-             <emphasis role="bold">Directory Services</emphasis>. Sharing vital information about the computers and users of the network
-             with such technologies as the Lightweight Directory Access Protocol (LDAP) and Microsoft
-             <trademark class="registered">Active Directory</trademark>.
-             </para>
+             <para><emphasis role="bold">Service Directory</emphasis>. Berbagi informasi penting tentang komputer dan user jaringan dengan menggunakan teknologi seperti Lighweight Directory Access Protocol (LDAP) dan Microsoft <trademark class="registered">Active Direktory&gt;/trademark&gt;.</trademark></para>
              </listitem>
              <listitem>
-             <para>
-             <emphasis role="bold">Authentication and Access</emphasis>. Establishing the identity of a computer or user of the network and 
-             determining the information the computer or user is authorized to access using such principles and technologies as
-             file permissions, group policies, and the Kerberos authentication service.
-             </para>
+             <para><emphasis role="bold">Authentication dan Access</emphasis>.  
+Menetapkan identitas komputer dan user jaringan dan menentukan informasi komputer atau user diberihak untuk mengakses menggunakan prinsip dan teknologi permisi file, group policies, dan service authentifikasi Kerberos.</para>
              </listitem>
           </itemizedlist>
-          <para>Fortunately, your Ubuntu system may provide all such facilities to Windows clients and share network resources among them.  
-          One of the principle pieces of software your Ubuntu system includes for Windows networking is the SAMBA suite of SMB server applications
-           and tools.  This section of the <phrase>Ubuntu</phrase> Server Guide will briefly introduce the installation and limited configuration of the SAMBA
-           suite of server applications and utilities.  Additional, detailed documentation and information on SAMBA is beyond the scope of this
-           documentation, but exists on the <ulink url="http://www.samba.org">SAMBA website</ulink>.
-          </para>
+          <para>Untungnya, sistem Ubuntu anda dapat menyediakan semua fasilitas kepada client Windows dan memungkinkan diantara mereka untuk saling berbagi sumberdaya jaringan. Salah satu dari sekian banyak software yang terdapat pada sistem Ubuntu anda termasuk untuk jaringan Windows adalah tools dan server aplikasi SMB SAMBA suite. Ini adalah bagian dari <phrase>Ubuntu</phrase>Panduan Server yang akan memperkenalkan secara singkat tentang installasi dan konfigurasi terbatas dari utiliti dan aplikasi server SAMBA suite. Informasi dan dokumentasi tambahan yang lebih rinci tentang SAMBA tidak terdapat pada dokumentasi ini, tapi berada pada <ulink url="http://www.samba.org">website SAMBA</ulink>.</para>
     </sect1>
 	<sect1 id="installing-samba" status="complete">
 		<title>Menginstall SAMBA</title>
@@ -451,9 +433,7 @@
 </screen>
            </para>
             <tip>
-               <para>Prior to editing the configuration file, you should make a copy of the original file and protect it 
-               from writing so you will have the original settings as a reference and to re-use as necessary.
-             </para>
+               <para>Sebelum mulai mengedit file configurasi, kamu sebaiknya membuat copy dari file original dan melindunginya dari penulisan jadi kamu akan tetap mempunyai settingan original sebagai referensi dan untuk digunakan kembali bila diperlukan.</para>
             </tip>
            <para>
           Backup the <filename>/etc/samba/smb.conf</filename> file:
@@ -468,75 +448,29 @@
           </para> 
       <sect2 id="windows-networking-server" status="complete">
         <title>Server</title>
-          <para>
-            In addition to the SAMBA suite of file and printer sharing server applications, Ubuntu also includes 
-            other powerful server applications designed to provide additional network server functionality to Windows clients
-            similar to the functionality provided by actual Windows servers.  For example, Ubuntu offers centralized
-            management of network resources such as computers and users via Directory Services, and facilitates the identification,
-            and authorization of computers and users via Authentication Services.
-           </para>
-           <para>
-            The following sections will discuss SAMBA and the supporting technologies, such as Lightweight Directory Access Protocol
-            (LDAP) server, and Kerberos authentication server in more detail. You will also learn about some of the available configuration
-            directives available the SAMBA configuration file which facilitate network integration with Windows clients and servers.
-           </para>
+          <para>Dalam penambahan aplikasi server untuk saling berbagi (sharing) file dan printer SAMBA suite, Ubuntu juga memasukkan aplikasi server lain yang kuat (powerful) didesain untuk menyediakan tambahan extra fungsionalitas server jaringan kepada client Windows yang mirip dengan fungsionalitas yang diberikan oleh server Windows. Sebagai contoh, Ubuntu menawarkan manajemen sumberdaya (resources) jaringan seperti komputer dan user yang terpusat melalui (via) Directory Services, dan memfasilitasi pengidentifikasian, dan pemberian hak (authorization) komputer dan user melalui (via) Authentication Services.</para>
+           <para>Bagian berikutnya akan berbicara tentang SAMBA dan teknologi pendukungnya, seperti Lightweight Directory Access Protocol (LDAP) server, dan Kerberos authentication server dengan lebih rinci. Kamu juga akan belajar tentang beberapa perintah konfigurasi yang ada yang tersedia pada file konfigurasi SAMBA yang memberikan fasilitas jaringan terintegrasi  pada Windows client dan server.</para>
         <sect3 id="active-directory" status="complete">
-          <title>Active Directory</title>
-            <para>
-              Active Directory is a proprietary implementation of Directory Services by Microsoft, and is used to provide
-              a means to share information about network resources and users.  In addition to providing a centralized source
-              of such information, Active Directory also acts as a centralized authentication security authority for the network.
-              Active directory combines capabilities traditionally found in separate, specialized directory systems to simplify
-              integration, management, and security of network resources.  The SAMBA package may be configured to use
-              Active Directory services from a Windows Domain Controller.
-            </para>
+          <title>Directory Active</title>
+            <para>Active Directory adalah implementasi dari Directory Services yang dimiliki oleh Microsoft, dan digunakan untuk memberikan (sharing) informasi yang berarti tentang suberdaya user dan jaringan. Dalam penambahan untuk menyediakan sumber informasi terpusat, Active Directory juga bertindak sebagai authentication security authority yang terpusat untuk jaringan. Active directory mengkombinasikan kemampuan tradisionil (traditionally) yang ditemukan terpisah, dikhususkan pada directory systems untuk menyederhanakan integritas, manajemen, dan keamanan sumberdaya jaringan. Paket SAMBA boleh dikonfigurasikan untuk menggunakan Active Directory service dari Domain Controller Window.</para>
             <sect4 id="ldap" status="complete">
               <title>LDAP</title>
-              <para>
-                 The LDAP server application provides Directory Services functionality to Windows computers in a manner very similar 
-                 to Microsoft Active Directory services.  Such services include managing the identities and relationships of computers,
-                 users, and groups of computers or users that participate in the network, and providing a consistent means to describe,
-                  locate, and manage these resources. The freely available implementation of LDAP available for your Ubuntu system is
-                  called <emphasis role="italic">OpenLDAP</emphasis>.  The server daemons responsible for handling OpenLDAP directory 
-                  requests and the propagation of directory data from one LDAP server to another on Ubuntu, are 
-                  <application>slapd</application> and <application>slurpd</application>.  
-                  OpenLDAP may be used in conjunction with SAMBA to provide File, Print, and Directory services in much the same way
-                  a Windows Domain Controller does so long as SAMBA is compiled with LDAP support.
-              </para>
+              <para>Aplikasi server LDAP menyediakan Pelayanan Direktori (Directory Services) untuk fungsionalitas komputer Windows dengan cara yang sangat mirip dengan Microsoft Active Directory services. Servicesnya seperti termasuk pengaturan identitas dan hubungan komputer, user, dan groups komputer atau user yang ada dalam jaringan, dan memberikan suatu yang konsisten dan berarti untuk digambarkan, menempatkan, dan mengatur sumberdaya ini. Implementasi LDAP yang ada dengan bebas tersedia untuk system Ubuntu anda yang dinamakan <emphasis role="italic">OpenLDAP</emphasis>. Server daemon bertanggung jawab untuk menangani direktori OpenLDAP yang diminta dan perkembangan data direktori dari satu server LDAP kepada yang lainnya dalam Ubuntu, adalah <application>slapd</application> dan <application>slurpd</application>. OpenLDAP dapat digunakan dalam sambungannya dengan SAMBA untuk menyediakan file, Print, dan service Direktori dengan cara yang sama dengan yang dilakukan oleh Windows Domain Controller selama SAMBA dilengkapi dengan dukungan LDAP.</para>
             </sect4>
             <sect4 id="kerberos" status="complete">
               <title>Kerberos</title>
-              <para>
-                 The Kerberos authentication security system is a standardized service for providing authentication to 
-                 computers and users by means of a centralized server which grants encrypted authorization tickets accepted
-                 for authorization by any other computer using Kerberos.  Benefits of Kerberos authentication include mutual
-                 authentication, delegated authentication, interoperability, and simplified trust management. The primary
-                 server daemons for handling the Kerberos authentication and Kerberos database administration on Ubuntu 
-                 are <application>krb5kdc</application> and <application>kadmin</application>.  SAMBA may use 
-                 Kerberos as a mechanism for authenticating computers and users against a Windows Domain Controller.  To
-                 do so, the Ubuntu system must have Kerberos installed, and the <filename>/etc/samba/smb.conf</filename> must be modified to
-                 select the the proper <emphasis role="italic">realm</emphasis> and <emphasis role="italic">security</emphasis> mode.
-                 For example, edit the <filename>/etc/samba/smb.conf</filename> file and add
-                 the values:
-                 </para>
+              <para>Kerberos adalah service standar keamanan system authentikasi untuk memberikan pelayanan authentikasi kepada komputer dan user dalam bentuk server terpusat yang memberi tiket otorisasi terenkripsi yang dapat diterima untuk otorisasi  oleh setiap computer yang ada menggunakan Kerberos. Manfaat dari authentikasi Kerberos termasuk authentikasi bersama (mutual authentication), authentikasi utusan (delegated authentication), interoperabilitas (interoperability),  dan manajemen kepercayaan sederhana (simplified trust management). Server daemons utama untuk mengangani authentikasi Kerberos dan administrasi database Kerberos dalam Ubuntu adalah <application>kadmin</application>. SAMBA juga dapat menggunakan Kerberos sebagai mekanisme untuk mengauthentikasi computer dan user pada Windows Domain Controller. Untuk melakukan itu semua, system Ubuntu harus sudah terinstall Kerberos, dan <filename>/etc/samba/smb.conf</filename> harus juga dimodifikasi untuk memilih mode kepatutan<emphasis role="italic">realm</emphasis> dan <emphasis role="italic">security</emphasis>. Sebagai contoh, edit file <filename>/etc/samba/smb.conf</filename> dan tambahkan nilai:</para>
                  <para>
                  <emphasis role="bold">realm = DOMAIN_NAME</emphasis>
                  </para>
                  <para>
                  <emphasis role="bold">security = ADS</emphasis>
                  </para>
-                 <para>
-                 to the file, and save the file.  
-                 </para>
+                 <para>pada file, dan simpan file.</para>
                     <tip>
-                       <para>Be sure to replace the token DOMAIN_NAME in the example above with the actual name of your specific
-                       Windows Domain.
-                       </para>
+                       <para>Yakinkan untuk menggantikan DOMAIN_NAME seperti dalam contoh dengan nama sebenarnya dari Domain Windows spesifik anda.</para>
                     </tip>
-                 <para>
-                 You will need to restart the SAMBA daemons to effect these changes.  Restart the SAMBA
-                 daemons with the following command entered at a terminal prompt:
-                 </para>
+                 <para>Untuk mendapatkan efek perubahan ini kamu akan memerlukan untuk merestart SAMBA daemons. Untuk meRestart SAMBA daemons dapat diikuti dengan memasukkan perintah pada prompt terminal:</para>
                     <para>
 <screen>
 <command>sudo /etc/init.d/samba restart</command>
@@ -546,15 +480,7 @@
         </sect3>
         <sect3 id="computer-accounts" status="complete">
           <title>Computer Accounts</title>
-            <para>
-              Computer Accounts are used in Directory Services to uniquely identify computer systems participating in a network,
-              and are even treated in the same manner as users in terms of security.  Computer accounts may have passwords just
-              as user accounts do, and are subject to authorization to network resources in the same manner as user accounts.
-              For example, if a network user, with a valid account for a particular network attempts to authenticate with a
-              network resource from a computer which does not have a valid computer account, depending upon policies enforced
-              on the network, the user may be denied access to the resource if the computer the user is attempting authentication
-              from is considered to be an unauthorized computer.
-            </para>
+            <para>Computer Accounts digunakan dalam Service Direktori untuk mengidentifikasi unik system komputer yang berada dalam jaringan, dan dapat</para>
             <para>
             A computer account may be added to the SAMBA password file, provided the name of the computer being added exists
             as a valid user account in the local password database first. The syntax for adding a computer or machine account to
@@ -562,7 +488,7 @@
             </para>
                <para>
 <screen>
-<command>sudo smbpasswd -a -m COMPUTER_NAME</command>
+<command>sudo smbpasswd -a -m NAMA_KOMPUTER</command>
 </screen>
                </para>
                   <tip>
@@ -572,7 +498,7 @@
                    </tip>
         </sect3>
         <sect3 id="file-permissions" status="complete">
-          <title>File Permissions</title>
+          <title>Permisi File</title>
             <para>
               File Permissions define the explicit rights a computer or user has to a particular directory, file, or set of files.  Such
               permissions may be defined by editing the <filename>/etc/samba/smb.conf</filename> file and specifying the explicit permissions of a defined
@@ -588,9 +514,7 @@
                <para>
                   <emphasis role="bold">write list = @authors, richard</emphasis>
                </para>
-             <para>
-             Save the <filename>/etc/samba/smb.conf</filename> for the changes to take effect.
-             </para>
+             <para>Simpat file<filename>/etc/samba/smb.conf</filename>untuk melihat perubahannya.</para>
             <para>Another possible permission is to declare <emphasis role="italic">administrative</emphasis> permissions to a particular
             shared resource.  Users having administrative permissions may read, write, or modify any information contained in the resource
             the user has been given explicit administrative permissions to.  For example, if you wanted to give the user
@@ -600,13 +524,11 @@
                <para>
                   <emphasis role="bold">admin users = melissa</emphasis>
                </para>
-             <para>
-             Save the <filename>/etc/samba/smb.conf</filename> for the changes to take effect.
-             </para>
+             <para>Simpat file<filename>/etc/samba/smb.conf</filename>untuk melihat perubahannya.</para>
         </sect3>
       </sect2>
       <sect2 id="windows-networking-clients" status="complete">
-        <title>Clients</title>
+        <title>Klien</title>
           <para>
             Ubuntu includes client applications and capabilities for accessing network resources shared with the SMB protocol.
             For example, a utility called <application>smbclient</application> allows for accessing remote shared file-systems, 
@@ -638,7 +560,7 @@ man smbclient
             </para>
                 <para>
 <screen>
-<command>mount -t smbfs -o username=dlightman //development/project-code /mnt/pcode</command>
+<command>mount -t smbfs -o username=dllighman //developnent/project-code /mnt/pcode</command>
 </screen>
                 </para>
                 <para>You will then be prompted for the user password, and after successfully authenticating, the contents of the shared resource
@@ -652,7 +574,7 @@ man smbclient
 </screen>
                 </para>
         <sect3 id="user-accounts" status="complete">
-          <title>User Accounts</title>
+          <title>Akunt user</title>
             <para>
               User Accounts define persons with some level of authorization to use certain computer and network resources.  Typically, in a network
               environment, a user account is provided to each person allowed to access a computer or network, where policies and permissions then
@@ -665,26 +587,19 @@ man smbclient
 <command>smbpasswd -a jseinfeld</command>
 </screen>
                  </para>
-              <para>
-              The <application>smbpasswd</application> application will then prompt you to enter a password for the user:
-              </para>
+              <para>Aplikasi <application>smbpasswd</application> akan menyuruh kamu untuk memasukkan password untuk user:</para>
                  <para>
                     <computeroutput>
-                    New SMB password:
+                    Password SMB baru:
                     </computeroutput>
                  </para>
-              <para>
-              Enter the password you wish to set for the user, and the <application>smbpasswd</application> application will
-              ask you to confirm the password:
-              </para>
+              <para>Masukkan password untuk user yang kamu, dan aplikasi <application>smbpasswd</application> akan meminta kamu untuk mengkonfirmasi password:</para>
                     <para>
                     <computeroutput>
-                    Retype new SMB password:
+                    Ketik ulang password SMB baru:
                     </computeroutput>
                      </para>
-               <para>
-               Confirm the password, and <application>smbpasswd</application> will add the entry for the user to the SAMBA password file.
-               </para>
+               <para>Konfirmasikan password, dan <application>smbpasswd</application> akan menambahkan entry untuk user kedalam file password SAMBA.</para>
         </sect3>
         <sect3 id="windows-networking-groups" status="complete">
           <title>Groups</title>
@@ -716,9 +631,7 @@ man smbclient
                <para>
                <emphasis role="bold">workgroup = LEVELONE</emphasis>
                </para>
-            <para>
-            Save the file and restart the SAMBA daemons to affect the change.
-            </para>
+            <para>Simpan file dan restart SAMBA daemons untuk efek perubahannya.</para>
             <para>
             Other important global policy settings include the <emphasis role="italic">server string</emphasis> which defines the NETBIOS
             server name reported by your Ubuntu system to other machines on the Windows-based network.  This is the name your Ubuntu system
@@ -735,9 +648,7 @@ man smbclient
             <emphasis role="italic">[global]</emphasis> heading in the <filename>/etc/samba/smb.conf</filename>.  That is, if you edit the file and add the line:
             </para>
             <para>
-            <emphasis role="bold">
-            browseable = true
-            </emphasis>
+            <emphasis role="bold">browseable = true</emphasis>
             </para>
             <para>
             under the <emphasis role="italic">[global]</emphasis> section of <filename>/etc/samba/smb.conf</filename>, then all shares provided by

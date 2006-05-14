@@ -124,6 +124,7 @@
 <!ENTITY kernel "http://www.kernel.org">
 <!ENTITY google "http://www.google.com">
 <!ENTITY kdelook " http://www.kde-look.org">
+<!ENTITY lulu-store "http://www.lulu.com/ubuntu-doc">
 <!-- this entity controls the url for addons--><!ENTITY java-download "http://java.sun.com/j2se/1.5.0/download.jsp">
 <!ENTITY skype-deb "skype_1.2.0.17-1_i386.deb">
 <!ENTITY skype-download "http://www.skype.com/go/getskype-linux-deb">
@@ -395,7 +396,7 @@
 <!ENTITY language "&EnglishAmerican;">
 ]>
 <chapter id="networking" status="complete">
-	<title>Networking</title>
+	<title>Réseau</title>
   <para>Networks consist of two or more devices, such as computer systems, printers, and related
         equipment which are connected by either physical cabling wireless links for the
         purpose of sharing and distributing information among the connected devices. 
@@ -406,11 +407,7 @@
   </para>
 	<sect1 id="network-configuration" status="complete">
 		<title>Network Configuration</title>
-          <para>
-            Ubuntu ships with a number of graphical utilities to configure your network devices.
-			This document is geared toward server administrators and will focus on managing your
-			network on the command line.
-          </para>
+          <para>Ubuntu est fourni avec de nombreux utilitaires graphiques pour la configuration des périphériques réseau. Ce document s'adresse aux administrateurs de serveurs et se focalisera sur la gestion de votre réseau par la ligne de commande.</para>
       <sect2 id="ethernet" status="complete">
         <title>Ethernet</title> 
           <para>
@@ -474,16 +471,9 @@ nameserver 4.2.2.2</screen>
 		</para>
       </sect2>
       <sect2 id="managing-dns-entries" status="complete">
-          <title>Managing DNS Entries</title>
-            <para>This section explains how to configure the nameserver
-            to use when resolving IP address to hostnames and vice
-            versa. It does not explain how to configure the system as a name
-            server.
-            </para>
-            <para>
-            To manage DNS entries, you can add, edit, or remove DNS names
-            from the <filename>/etc/resolv.conf</filename> file. A <ulink url="../sample/resolv.conf">sample file</ulink> is given below:
-            </para>
+          <title>Gérer les entrées DNS</title>
+            <para>Cette section explique la configuration du serveur de noms dans le cas d'une résolution d'adresses IP en noms d'hôtes et vice-versa. Elle ne concerne pas la configuration du système en tant que serveur de noms.</para>
+            <para>Pour gérer les entrées DNS, vous pouvez ajouter, modifier, ou enlever les noms des DNS du fichier <filename>/etc/resolv.conf</filename>. Un <ulink url="../sample/resolv.conf">fichier d'exemple</ulink> est donné ci-dessous :</para>
 <programlisting>
 search com
 nameserver 204.11.126.131
@@ -549,7 +539,7 @@ nameserver 208.185.179.218
 			and thus it is the most popular set of network protocols on Earth. 
           </para>
       <sect2 id="tcpip-introduction" status="complete">
-        <title>TCP/IP Introduction</title> 
+        <title>Introduction à TCP/IP</title> 
           <para>
             The two protocol components of TCP/IP deal with different aspects of computer networking.
             <emphasis>Internet Protocol</emphasis>, the "IP" of TCP/IP is a 
@@ -673,7 +663,7 @@ nameserver 208.185.179.218
             </para>
         </sect2>
         <sect2 id="ip-routing" status="complete">
-          <title>IP Routing</title>
+          <title>Routage IP</title>
             <para>
               IP routing is a means of specifying and discovering paths in a TCP/IP network along which
               network data may be sent.  Routing uses a set of <emphasis>routing tables</emphasis>
@@ -707,7 +697,7 @@ nameserver 208.185.179.218
             </para>
         </sect2>
         <sect2 id="tcp-and-udp" status="complete">
-          <title>TCP and UDP</title>
+          <title>TCP et UDP</title>
             <para>
               TCP is a connection-based protocol, offering error correction and guaranteed delivery of
               data via what is known as <emphasis>flow control</emphasis>. Flow control
@@ -868,7 +858,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
         </sect2>
     </sect1>
 	<sect1 id="openssh-server" status="complete">
-		<title>OpenSSH Server</title>
+		<title>Serveur OpenSSH</title>
       <sect2 id="openssh-introduction">
         <title>Introduction</title> 
            <para>
@@ -901,9 +891,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
           </sect2>
         <sect2 id="openssh-installation">
         <title>Installation</title>
-        <para>
-        Installation of the OpenSSH client and server applications is simple. To install the OpenSSH client applications on your Ubuntu system, use this command at a terminal prompt:
-        </para>
+        <para>L'installation des applications client et serveur d'OpenSSH est simple. Pour installer les applications clientes d'OpenSSH sur votre système Ubuntu, tapez cette commande dans un terminal :</para>
            <para>
 <screen>
 <command>sudo apt-get install openssh-client</command>
@@ -946,9 +934,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
 <command>sudo chmod a-w /etc/ssh/sshd_config.original</command>
 </screen>
                </para> 
-            <para>
-            The following are examples of configuration directives you may change:
-            </para>
+            <para>Voici des exemples de directives de configuration que vous pourriez changer :</para>
            <itemizedlist>
                <listitem>
                <para>
@@ -963,9 +949,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
             <para>
             To have <application>sshd</application> allow public key-based login credentials, simply add or modify the line:
             </para>
-               <para>
-               PubkeyAuthentication yes
-               </para>
+               <para>PubkeyAuthentication yes</para>
             <para>
             in the <filename>/etc/ssh/sshd_config</filename> file, or if already present, ensure the line is not commented out.
             </para>
@@ -975,12 +959,8 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
              To make your OpenSSH server display the contents of the <filename>/etc/issue.net</filename> file as a pre-login
              banner, simply add or modify the line:
              </para>
-               <para>
-               Banner  /etc/issue.net
-               </para>
-               <para>
-               in the <filename>/etc/ssh/sshd_config</filename> file.
-               </para>
+               <para>Banner /etc/issue.net</para>
+               <para>dans le fichier <filename>/etc/ssh/sshd_config</filename>.</para>
              </listitem>
              </itemizedlist>
 	    <para>
@@ -1005,7 +985,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
    <sect2 id="openssh-references" status="complete">
       <title>References</title>
       <para>
-      <ulink url="http://www.openssh.org/">OpenSSH Website</ulink>
+      <ulink url="http://www.openssh.org/">Site Internet de OpenSSH</ulink>
       </para>
       <para>
       <ulink url="https://wiki.ubuntu.com/AdvancedOpenSSH">Advanced OpenSSH Wiki Page</ulink>
@@ -1023,7 +1003,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
             <para>Access to an FTP server can be managed in two ways:</para>
             <itemizedlist spacing="compact">
                 <listitem>
-                    <para>Anonymous</para>
+                    <para>Anonyme</para>
                 </listitem>
                 <listitem>
                     <para>Authentifié</para>
@@ -1038,7 +1018,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
                 the FTP Home directory. This hides the rest of the file system from remote
             sessions.</para>
             <sect2 id="vsftpd-ftp-server-installation" status="complete">
-                <title>vsftpd - FTP Server Installation</title>
+                <title>vsftpd - Installation du serveur FTP</title>
                     <para>vsftpd is an FTP daemon available in
                     Ubuntu. It is easy to install, set up, and
                     maintain.  To install <application>vsftpd</application> you
@@ -1048,7 +1028,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
 
                 </sect2>
             <sect2 id="vsftpd-ftp-server-configuration" status="complete">
-                <title>vsftpd - FTP Server Configuration</title>
+                <title>vsftpd - Configuration du serveur FTP</title>
                 <para>
                 You can edit the vsftpd configuration file,
                 <filename>/etc/vsftpd.conf</filename>, to
@@ -1091,31 +1071,15 @@ anonymous_enable=NO
                 page, <command>man 5 vsftpd.conf</command> for
                 details of each parameter. 
                 </para>
-                <para> 
-                Once you configure <application>vsftpd</application> you
-                can start the daemon. You can run following command to
-                run the <application>vsftpd</application> daemon:
-                  <screen> <command>sudo /etc/init.d/vsftpd start</command> </screen>
-                </para>
-				<note><para>
-				Please note that the defaults in the configuration file are
-				set as they are for security reasons.  Each of the above
-				changes makes the system a little less secure, so make them
-				only if you need them.
-				</para></note>
+                <para>Une fois <application>vsftpd</application> configuré, vous pouvez démarrer le démon. La commande suivante permet de démarrer le démon <application>vsftpd</application> : <screen> <command>sudo /etc/init.d/vsftpd start</command> </screen></para>
+				<note><para>Veuillez noter que les réglages par défaut du fichier de configuration sont tels qu'ils sont pour des raisons de sécurité. Chacun des changements cités ci-dessus diminue la sécurité du système, par conséquent ne les appliquez qu'en cas de nécessité.</para></note>
                 </sect2>
     </sect1>
 	<sect1 id="network-file-system" status="complete">
 		<title>Network File System (NFS)</title>
-          <para>
-          NFS allows a system to share directories and files with others
-          over a network. By using NFS, users and programs can access
-          files on remote systems almost as if they were local files.
-          </para>
+          <para>NFS permet à un système de partager des répertoires et des fichiers à travers un réseau. En utilisant NFS, utilisateurs et programmes peuvent accéder aux fichiers de systèmes distants comme s'ils étaient des fichiers locaux.</para>
 
-          <para>
-          Some of the most notable benefits that NFS can provide are:
-          </para>
+          <para>Quelques uns des plus remarquables avantages que NFS peut apporter sont :</para>
 
           <itemizedlist>
           <listitem>
@@ -1169,9 +1133,7 @@ network.</para>
           systems cannot access the NFS mount.
           </para>
 
-          <para>
-          To start the NFS server, you can run the following command at a terminal prompt:
-          </para>
+          <para>Pour démarrer le serveur NFS, vous pouvez taper la commande suivante dans un terminal :</para>
           <para>
 <screen>
 <command>sudo /etc/init.d/nfs-kernel-server start</command>
@@ -1179,22 +1141,15 @@ network.</para>
           </para>
       </sect2>
       <sect2 id="nfs-client-configuration" status="complete">
-        <title>NFS Client Configuration</title>
-          <para>
-          Use the <application>mount</application> command to mount a shared NFS directory from
-          another machine, by typing a command line similar to the following at a terminal prompt:
-          </para>
+        <title>Configuration du client NFS</title>
+          <para>Utilisez la commande <application>mount</application> pour monter un répertoire NFS partagé à partir d'une autre machine, en tapant dans un terminal une commande telle que :</para>
           <para>
 <screen>
-<command>sudo mount example.hostname.com:/ubuntu /local/ubuntu</command>
+<command>sudo mount exemple.nomhote.com:/ubuntu /local/ubuntu</command>
 </screen>
 </para>
       <warning>
-      <para>
-      The mount point directory <filename>/local/ubuntu</filename> must
-      exist. There should be no files or subdirectories in the
-      <filename>/local/ubuntu</filename> directory.
-      </para>
+      <para>Le répertoire <filename>/local/ubuntu</filename> du point de montage doit exister. Il ne devrait y avoir ni fichiers ni sous-répertoires dans le répertoire <filename>/local/ubuntu</filename></para>
       </warning>
 
       <para>
@@ -1212,13 +1167,13 @@ network.</para>
       
       <para>
 <programlisting>
-example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,intr
+exemple.nomhote.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,intr↵
 </programlisting>
       </para>
       </sect2>
       <sect2 id="nfs-references" status="complete">
         <title>References</title>
-				<para><ulink url="http://nfs.sourceforge.net/">Linux NFS faq</ulink></para>
+				<para><ulink url="http://nfs.sourceforge.net/">FAQ Linux NFS</ulink></para>
       </sect2>
     </sect1>
 	<sect1 id="dhcp" status="complete">
@@ -1231,7 +1186,7 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
             <para>The most common settings provided by a DHCP server to DHCP clients include:</para>
             <itemizedlist spacing="compact">
                 <listitem>
-                    <para>IP-Address and Netmask</para>
+                    <para>Adresse IP et masque réseau</para>
                 </listitem>
                 <listitem>
                     <para>DNS</para>
@@ -1267,7 +1222,7 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
             <para>A DHCP server can provide configuration settings using two methods:</para>
             <variablelist>
                 <varlistentry>
-                    <term>MAC Address</term>
+                    <term>Adresse MAC</term>
                     <listitem>
                         <para>This method entails using DHCP to identify the unique hardware address
                             of each network card connected to the network and then continually
@@ -1356,7 +1311,7 @@ option netbios-name-servers 192.168.1.1; </screen>
       <sect2 id="dhcp-references" status="complete">
         <title>References</title>
           <para>
-            <ulink url="http://www.dhcp-handbook.com/dhcp_faq.html">DHCP FAQ</ulink>
+            <ulink url="http://www.dhcp-handbook.com/dhcp_faq.html">FAQ DHCP</ulink>
           </para>
       </sect2>
     </sect1>
@@ -1504,11 +1459,7 @@ include "/etc/bind/named.conf.local";
           </para>
           <para>
 <screen>
-<command>sudo apt-get install cupsys cupsys-client cupsys-driver-gimpprint \
-defoma fontconfig foomatic-db foomatic-filters libcupsimage2 \
-libexpat1 libfontconfig1 libfreetype6 libgimpprint1 libjpeg62 \
-libpaper1 libpng12-0 libpoppler0c2 libslp1 libtiff4 patch perl \
-perl-modules ttf-bitstream-vera ucf</command>
+<command>sudo apt-get install cupsys cupsys-client</command>
 </screen>
           </para>
           <para>
@@ -1566,6 +1517,29 @@ ServerAdmin bjoy@somebigco.com
 </screen>
                 </para>
                 </listitem>
+          </itemizedlist>
+                <para>
+                For more examples of configuration directives in the CUPS server 
+				configuration file, view the associated system manual page by entering the 
+				following command at a terminal prompt:
+               </para>
+               <para>
+<screen>
+<command>man cupsd.conf</command>
+</screen>
+               </para>
+                               <note>
+                <para>
+                Whenever you make changes to the <filename>/etc/cups/cupsd.conf</filename> configuration file, you'll need to restart the CUPS server by typing the following command at a terminal prompt:
+                </para>
+                </note>
+                <para>
+<screen>
+<command>sudo /etc/init.d/cupsys restart</command>
+</screen>
+                </para>
+	<para>Some other configuration for the CUPS server is done in the file <filename>/etc/cups/cups.d/ports.conf</filename>:</para>
+          <itemizedlist>
                 <listitem>
                 <para>
                 <emphasis role="bold">Listen</emphasis>: By default on Ubuntu, the CUPS 
@@ -1606,32 +1580,9 @@ Listen socrates:631  # Listen on all interfaces for the hostname 'socrates'
 Port 631  # Listen on port 631 on all interfaces
 </screen>
 </para>
-                <para>
-                The CUPS server configuration file, <filename>/etc/cups/cupsd.conf</filename>,
-				contains several examples of possible Listen directives which are valid for use.
-                </para>
                 </listitem>
-          </itemizedlist>
-                <para>
-                For more examples of configuration directives in the CUPS server 
-				configuration file, view the associated system manual page by entering the 
-				following command at a terminal prompt:
-               </para>
-               <para>
-<screen>
-<command>man cupsd.conf</command>
-</screen>
-               </para>
-                               <note>
-                <para>
-                Whenever you make changes to the <filename>/etc/cups/cupsd.conf</filename> configuration file, you'll need to restart the CUPS server by typing the following command at a terminal prompt:
-                </para>
-                </note>
-                <para>
-<screen>
-<command>sudo /etc/init.d/cupsys restart</command>
-</screen>
-                </para>
+	</itemizedlist>
+
       </sect2>
       <sect2 id="cups-references" status="complete">
         <title>References</title>
@@ -1789,7 +1740,7 @@ Port 631  # Listen on port 631 on all interfaces
 
         </sect3>
         <sect3 id="default-settings" status="complete">
-          <title>Default Settings</title>
+          <title>Réglages par défaut</title>
             <para>
              This section explains configuration of the Apache2 server
              default settings.  For example, if you add a virtual host, 

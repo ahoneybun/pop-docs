@@ -124,6 +124,7 @@
 <!ENTITY kernel "http://www.kernel.org">
 <!ENTITY google "http://www.google.com">
 <!ENTITY kdelook " http://www.kde-look.org">
+<!ENTITY lulu-store "http://www.lulu.com/ubuntu-doc">
 <!-- this entity controls the url for addons--><!ENTITY java-download "http://java.sun.com/j2se/1.5.0/download.jsp">
 <!ENTITY skype-deb "skype_1.2.0.17-1_i386.deb">
 <!ENTITY skype-download "http://www.skype.com/go/getskype-linux-deb">
@@ -395,50 +396,23 @@
 <!ENTITY language "&EnglishAmerican;">
 ]>
 <chapter id="networking" status="complete">
-	<title>Networking</title>
-  <para>Networks consist of two or more devices, such as computer systems, printers, and related
-        equipment which are connected by either physical cabling wireless links for the
-        purpose of sharing and distributing information among the connected devices. 
-  </para>
-  <para>This section of the Ubuntu Server Guide provides general and specific information pertaining
-        to networking, including an overview of network concepts and detailed discussion of popular
-        network protocols and server applications.
-  </para>
+	<title>Rete</title>
+  <para>Le reti sono costituite da due o più dispositivi, come computer, stampanti e relativi accessori, collegati tra loro sia fisicamente, tramite dei cavi, oppure mediante dispositivi senza filo, allo scopo di condividere e distribuire informazioni tra i dispositivi connessi.</para>
+  <para>Questa sezione della Guida ad Ubuntu sul server fornisce informazioni generali e specifiche sulle reti, inclusa una panoramica dei concetti di rete e una discussione dettagliata dei protocolli di rete più usate e delle applicazioni server.</para>
 	<sect1 id="network-configuration" status="complete">
-		<title>Network Configuration</title>
-          <para>
-            Ubuntu ships with a number of graphical utilities to configure your network devices.
-			This document is geared toward server administrators and will focus on managing your
-			network on the command line.
-          </para>
+		<title>Configurazione della rete</title>
+          <para>Ubuntu è corredato da una serie d'utilità grafiche per la configurazione
+dei dispositivi di rete. Questo documento è diretto agli amministratori del server ed si focalizza sulla gestione della rete da riga di comando.</para>
       <sect2 id="ethernet" status="complete">
         <title>Ethernet</title> 
-          <para>
-		  Most ethernet configuration is centralized in a single file,
-		  <filename>/etc/network/interfaces</filename>.  If you have no ethernet devices, only
-		  the loopback interface will appear in this file, and it will look something like
-		  this:
-		  <screen># This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
+          <para>Gran parte della configurazione di ethernet è concentrata il un singolo file, <filename>/etc/network/interfaces</filename>. Se non è presente alcun dispositivo ethernet, in questo file è elencata solo l'interfaccia di loopback ed il contenuto è simile a quanto segue: <screen># Questo file descrive le interfacce di rete disponibili sul sistema e #come attivarle. Per maggiori informazioni, consultare interfaces(5).
 
-# The loopback network interface
+# L'interfaccia di rete di loopback
 auto lo
 iface lo inet loopback
 address 127.0.0.1
-netmask 255.0.0.0</screen>
-		If you have only one ethernet device, eth0, and it gets its configuration from a DHCP server,
-		and it should come up automatically at boot, only two additional lines are required:
-		<screen>auto eth0
-iface eth0 inet dhcp</screen>
-		The first line specifies that the eth0 device should come up automatically when you boot.
-		The second line means that interface (<quote>iface</quote>) eth0 should have an IPv4 address
-		space (replace <quote>inet</quote> with <quote>inet6</quote> for an IPv6 device) and that
-		it should get its configuration automatically from DHCP.  Assuming your network and DHCP
-		server are properly configured, this machine's network should need no further configuration to
-		operate properly.  The DHCP server will provide the default gateway (implemented via the
-		<application>route</application> command), the device's IP address (implemented via the 
-		<application>ifconfig</application> command), and and DNS servers used on the network
-		(implemented in the <filename>/etc/resolv.conf</filename> file.)</para>
+netmask 255.0.0.0</screen>. Se nel sistema è presente solo un dispositivo ethernet, eth0, e la sua configurazione viene ottenuta da un server DHCP, allora il dispositivo dovrebbe essere attivato automaticamente al boot e nel file sono richieste solo le due righe aggiuntive: <screen>auto eth0
+iface eth0 inet dhcp</screen> La prima riga specifica che il dispositivo eth0 dovrebbe essere attivato automaticamente al boot. La seconda riga indica che l'interfaccia (<quote>iface</quote>) eth0 dovrebbe avere un indirizzo nello spazio di IPv4 (sostituire <quote>inet</quote> con <quote>inet6</quote> per un dispositivo IPv6) e che dovrebbe ottenere la sua configurazione da DHCP in modo automatico. Assumendo che la rete e il server DHCP sono propriamente configurati, la macchina in questione non dovrebbe necessitare di ulteriore configurazione per operare propriamente. Il server DHCP fornisce il gateway predefinito (implementato attraverso il comando <application>route</application>), l'indirizzo IP del dispositivo (implementato attraverso il comando <application>ifconfig</application>) e viene usato un server DNS sulla rete (implementato nel file <filename>/etc/resolv.conf</filename>).</para>
 		<para>To configure your ethernet device with a static IP address and custom configuration,
 		some more information will be required.  Suppose you want to assign the IP address
 		192.168.0.2 to the device eth1, with the typical netmask of 255.255.255.0.  Your default
@@ -462,28 +436,13 @@ nameserver 4.2.2.2</screen>
 		your own nameserver, enter it here.  Otherwise, ask your Internet Service Provider
 		for the primary and secondary DNS servers to use, and enter them into
 		<filename>/etc/resolv.conf</filename> as shown above.</para>
-		<para>Many more configurations are possible, including dialup PPP interfaces, IPv6
-		networking, VPN devices, etc.  Refer to <application>man 5 interfaces</application>
-		for more information and supported options.  Remember that
-		<filename>/etc/network/interfaces</filename> is used by the 
-		<application>ifup</application>/<application>ifdown</application> scripts as a
-		higher level configuration scheme than may be used in some other Linux distributions,
-		and that the traditional, lower level utilities such as <application>ifconfig</application>,
-		<application>route</application>, and <application>dhclient</application> are still
-		available to you for ad hoc configurations.
-		</para>
+		<para>È possibile realizzare molte altre configurazioni, incluse quelle per le interfacce PPP dialup, le reti IPv6, i dispositivi VPN, ecc. Fare riferimento a <application>man 5 interfaces</application> per maggiori informazioni e per le opzioni supportate. Notare che <filename>/etc/network/interfaces</filename> è usato dagli script <application>ifup</application>/<application>ifdown</application> come schema di configurazione ad un livello più alto rispetto magari ad altre distribuzioni di Linux e che le tradizionali utilità di livello inferiore, come <application>ifconfig</application>, <application>route</application> e <application>dhclient</application> sono sempre disponibili per una configurazione ottimale.</para>
       </sect2>
       <sect2 id="managing-dns-entries" status="complete">
-          <title>Managing DNS Entries</title>
-            <para>This section explains how to configure the nameserver
-            to use when resolving IP address to hostnames and vice
-            versa. It does not explain how to configure the system as a name
-            server.
-            </para>
-            <para>
-            To manage DNS entries, you can add, edit, or remove DNS names
-            from the <filename>/etc/resolv.conf</filename> file. A <ulink url="../sample/resolv.conf">sample file</ulink> is given below:
-            </para>
+          <title>Gestione dei record DNS</title>
+            <para>Questa sezione spiega come configurare il server di nomi da usare durante la risoluzione degli indirizzi IP in nomi di host e viceversa. Non viene spiegato come configurare il sistema per operare come server di nomi.</para>
+            <para>Nel gestire i record DNS, è possibile aggiungere, modificare o rimuovere
+i nomi DNS  dal file <filename>/etc/resolv.conf</filename>. Un </para>
 <programlisting>
 search com
 nameserver 204.11.126.131
@@ -492,60 +451,27 @@ nameserver 64.125.134.132
 nameserver 208.185.179.218
 </programlisting>
             
-            <para>
-             The <application>search</application> key specifies the string
-             which will be appended to an incomplete hostname. Here, we
-             have mentioned it as <application>com</application>. So, when we
-             run: <command>ping ubuntu</command> it would be interpreted
-             as <command>ping ubuntu.com</command>.
-            </para> 
+            <para>La chiave <application>search</application> specifica la stringa che viene accodata ad un nome di host incompleto. In questo caso è stato specificato <application>com</application>. Pertanto quando viene eseguito il comando <command>ping ubuntu</command>, questo viene interpretato come <command>ping ubuntu.com</command>.</para> 
 
-            <para>
-            The <application>nameserver</application> key specifies the
-            nameserver IP address. It will be used to resolve the given
-            IP address or hostname. This file can have multiple nameserver
-            entries. The nameservers will be used by the network query
-            in the same order.
-            </para>
+            <para>La chiave <application>nameserver</application> specifica l'indirizzo IP del server di nomi. Tale server viene usato per risolvere un indirizzo IP o un nome host forniti. Questo file può contenere diversi record di server di nomi. I server di nomi sono usati nelle interrogazioni di rete nell'ordine in cui compaiono.</para>
 
             <warning>
-            <para>Se i nomi dei server sono rilevati dinamicamente di servizi DHCP o PPoE (rilevati dal proprio provider ISP) non vanno aggiunti in questo file, che sarà aggiornato automaticamente.</para>
+            <para>Se i nomi dei server DNS sono recuperati dinamicamente da DHCP o PPPoE (recuperati dal proprio ISP), i record dei server di nomi non vanno aggiunti a questo file. Il file viene infatti aggiornato automaticamente.</para>
             </warning>
 
         </sect2>
         <sect2 id="managing-hosts" status="complete">
-          <title>Managing Hosts</title>
-            <para>
-            To manage hosts, you can add, edit, or remove hosts from
-            <filename>/etc/hosts</filename> file. The file contains IP
-            addresses and their corresponding hostnames.  When your
-            system tries to resolve a hostname to an IP address or
-            determine the hostname for an IP address, it refers to the
-            <filename>/etc/hosts</filename> file before using the name
-            servers.  If the IP address is listed in the
-            <filename>/etc/hosts</filename> file, the name servers are
-            not used.  This behavior can be modified by editing <filename>
-			/etc/nsswitch.conf</filename> at your peril.
-            </para>
+          <title>Gestione degli host</title>
+            <para>Nel gestire gli host, è possibile aggiungere, modificare o rimuovere gli host dal file <filename>/etc/hosts</filename>. Il file contiene indirizzi IP e i loro corrispettivi nomi di host. Quando il sistema tenta di risolvere un nome di host in un indirizzo IP oppure di determinare il nome di host per un indirizzo IP, viene fatto riferimento al file <filename>/etc/hosts</filename> prima di usare i server di nomi. Se l'indirizzo IP è elencato nel file <filename>/etc/hosts</filename>, i server di nomi non vengono utilizzati. Questo comportamento può essere modificato editando il file <filename>/etc/nsswitch.conf</filename> a proprio rischio e pericolo.</para>
 
-            <para>
-            If your network contains computers whose IP
-            addresses are not listed in DNS, it is recommended that you
-            add them to the <filename>/etc/hosts</filename> file.
-            </para>
+            <para>Se la rete comprende dei computer i cui indirizzi IP non sono elencati nel DNS, è consigliabile aggiungerli al file <filename>/etc/hosts</filename>.</para>
         </sect2>
     </sect1>
 	<sect1 id="tcpip" status="complete">
 		<title>TCP/IP</title>
-          <para>
-            The Transmission Control Protocol and Internet Protocol (TCP/IP) is a standard 
-			set of protocols developed in the late 1970s by the Defense Advanced Research 
-			Projects Agency (DARPA) as a means of communication between different types of 
-			computers and computer networks. TCP/IP is the driving force of the Internet, 
-			and thus it is the most popular set of network protocols on Earth. 
-          </para>
+          <para>Il protocollo TCP/IP (Transmission Control Protocol and Internet Protocol) è un insieme standard di protocolli sviluppato nella seconda metà degli anni '70 dalla DARPA (Defence Advanced Research Project Agency), allo scopo di permettere la comunicazione tra diversi tipi di computer e di reti di computer. TCP/IP è il motore di Internet, ecco perchè è l'insieme di protocolli di rete del mondo più diffuso al mondo.</para>
       <sect2 id="tcpip-introduction" status="complete">
-        <title>TCP/IP Introduction</title> 
+        <title>Introduzione a TCP/IP</title> 
           <para>
             The two protocol components of TCP/IP deal with different aspects of computer networking.
             <emphasis>Internet Protocol</emphasis>, the "IP" of TCP/IP is a 
@@ -558,7 +484,7 @@ nameserver 208.185.179.218
           </para>
           </sect2>
         <sect2 id="tcpip-configuration" status="complete">
-          <title>TCP/IP Configuration</title>
+          <title>Configurazione di TCP/IP</title>
             <para>
             The TCP/IP protocol configuration consists of several elements which must be set by 
 			editing the appropriate configuration files, or deploying solutions such as the Dynamic 
@@ -567,9 +493,7 @@ nameserver 208.185.179.218
 			configuration values must be set correctly in order to facilitate the proper network 
 			operation of your Ubuntu system.
             </para>
-            <para>
-            The common configuration elements of TCP/IP and their purposes are as follows:
-            <itemizedlist>
+            <para>I tipici elementi di configurazione del TCP/IP e i loro scopi sono i seguenti: <itemizedlist>
                <listitem>
                   <para>
                   <emphasis role="bold">IP address</emphasis> The IP address is a unique
@@ -643,33 +567,23 @@ nameserver 208.185.179.218
                   the Level3 (Verizon) servers with IP addresses from
                   4.2.2.1 to 4.2.2.6. </para>
                      <tip>
-                        <para>
-                        The IP address, Netmask, Network Address, Broadcast Address, and Gateway Address
-                        are typically specified via the appropriate directives in the file  <filename>/etc/network/interfaces</filename>. The Nameserver Addresses are typically specified via  <emphasis>nameserver</emphasis> 
-                        directives in the file <filename>/etc/resolv.conf</filename>. For more information, 
-                        view the system manual page for <filename>interfaces</filename> or <filename>resolv.conf</filename> respectively, with the following commands typed at a terminal prompt:
-                        </para>
+                        <para>Gli indirizzi IP, le maschere di rete, gli indirizzi di rete, gli indirizzi di broadcast e gli indirizzi di gateway sono tipicamente determinati attraverso appropriate direttive nel file <filename>/etc/network/interfaces</filename>. Gli indirizzi di server di nomi sono tipicamente specificati attraverso le direttive <emphasis>nameserver</emphasis> nel file <filename>/etc/resolv.conf</filename>. Per maggiori informazioni, consultare rispettivamente le pagine di manuale di sistema per <filename>interfaces</filename> e  <filename>resolv.conf</filename>, usando i seguenti comandi da digitare al prompt di un terminale:</para>
                      </tip>
-                    <para>
-                    Access the system manual page for <filename>interfaces</filename> with the following command:
-                    </para>
+                    <para>Accedere alla pagina di manuale di sistema per <filename>interfaces</filename> con il seguente comando:</para>
                     <para>
 <screen>
 <command>man interfaces</command>
 </screen>
                     </para>
-                    <para>
-                    Access the system manual page for <filename>resolv.conf</filename> with the following command:
-                    </para>
+                    <para>Accedere alla pagina di manuale di sistema per <filename>resolv.conf</filename> con il seguente comando:</para>
                     <para>
 <screen><command>man resolv.conf</command></screen>
                     </para>
                </listitem>
-            </itemizedlist>
-            </para>
+            </itemizedlist></para>
         </sect2>
         <sect2 id="ip-routing" status="complete">
-          <title>IP Routing</title>
+          <title>Instradamento IP</title>
             <para>
               IP routing is a means of specifying and discovering paths in a TCP/IP network along which
               network data may be sent.  Routing uses a set of <emphasis>routing tables</emphasis>
@@ -703,7 +617,7 @@ nameserver 208.185.179.218
             </para>
         </sect2>
         <sect2 id="tcp-and-udp" status="complete">
-          <title>TCP and UDP</title>
+          <title>TCP e UDP</title>
             <para>
               TCP is a connection-based protocol, offering error correction and guaranteed delivery of
               data via what is known as <emphasis>flow control</emphasis>. Flow control
@@ -722,38 +636,19 @@ nameserver 208.185.179.218
             </para>
         </sect2>
         <sect2 id="icmp" status="complete">
-          <title>ICMP</title>
-            <para>
-              The Internet Control Messaging Protocol (ICMP) is an extension to the Internet Protocol (IP) as defined
-              in the Request For Comments (RFC) #792 and supports network packets containing control, error, and
-              informational messages.  ICMP is used by such network applications as the <application>ping</application>
-              utility, which can determine the availability of a network host or device.  Examples of some error messages
-              returned by ICMP which are useful to both network hosts and devices such as routers, include 
-              <emphasis>Destination Unreachable</emphasis> and <emphasis>Time Exceeded</emphasis>.
-            </para>
+          <title>ICPM</title>
+            <para>ICMP (Internet Control Messaging Protocol) è un'estensione di IP (Internet Protocol), come definito nell'RFC (Request For Comments) numero 792; ICPM supporta pacchetti di rete contenenti  messaggi di controllo, di errore e di informazione. ICMP è usato da applicazioni di rete come l'utilità <application>ping</application>, che consente di determinare la disponibilità di un host o una interfaccia di rete. Esempi di alcuni dei messaggi di errore restituiti da ICMP utili sia agli host e interfacce di rete che ai router sono <emphasis>Destination Unreachable</emphasis> e <emphasis>Time Exceeded</emphasis>.</para>
         </sect2>
         <sect2 id="daemons" status="complete">
-          <title>Daemons</title>
-            <para>
-              Daemons are special system applications which typically execute continuously in the background and
-              await requests for the functions they provide from other applications.  Many daemons are network-centric; that is,
-              a large number of daemons executing in the background on an Ubuntu system may provide network-related functionality.
-              Some examples of such network daemons include the <emphasis>Hyper Text Transport Protocol Daemon</emphasis> 
-              (httpd), which provides web server functionality; the <emphasis>Secure SHell Daemon</emphasis> (sshd), which
-              provides secure remote login shell and file transfer capabilities; and the <emphasis>Internet Message Access 
-              Protocol Daemon</emphasis> (imapd), which provides E-Mail services.
-            </para>
+          <title>Demoni</title>
+            <para>I demoni sono speciali applicazioni di sistema che tipicamente sono continuamente in esecuzione in background, attendendo dagli altri programmi richieste relative funzioni da essi fornite. Molti demoni hanno a che fare con la rete. Infatti molti demoni in esecuzione in background sui sistemi Ubuntu forniscono delle funzionalità legate alla rete. Alcuni esempi di questi demoni di rete includono <emphasis>httpd</emphasis> (Hyper Text Transport Protocol Daemon), che fornisce funzionalità di server web; <emphasis>sshd</emphasis> (Secure SHell Daemon), che fornisce funzionalità di login e trasferimento file sicuro da remoto; <emphasis>imapd</emphasis> (Internet Message Access Protocol Daemon), che fornisce servizi di email.</para>
         </sect2>
     </sect1>
 	<sect1 id="firewall-configuration" status="help">
 		<title>Firewall Configuration</title>
-          <para>
-             The Linux kernel includes the <emphasis>Netfilter</emphasis> subsystem,
-			 which is used to manipulate or decide the fate of network traffic headed into or through
-			 your server.  All modern Linux firewall solutions use this system for packet filtering.
-          </para>
+          <para>Il kernel Linux include il sottosistema <emphasis>Netfilter</emphasis>, usato per manipolare o decidere la sorte del traffico di rete all'interno o attraverso il server dell'utente. Tutte le soluzioni moderne del firewall per Linux si basano su questo sistema di filtraggio dei pacchetti di rete.</para>
         <sect2 id="firewall-introduction" status="help">
-          <title>Firewall Introduction</title>
+          <title>Introduzione al firewall</title>
             <para>
               The kernel's packet filtering system would be of little use to administrators without
 			  a userspace interface to manage it.  This is the purpose of iptables.  When a packet
@@ -787,13 +682,10 @@ nameserver 208.185.179.218
 			  The above command assumes that your private address space is 192.168.0.0/16 and
 			  that your Internet-facing device is ppp0.  The syntax is broken down as follows:
 			  <itemizedlist>
-				  <listitem><para> -t nat -- the rule is to go into the nat table</para></listitem>
-				  <listitem><para> -A POSTROUTING -- the rule is to be appended (-A) to the POSTROUTING 
-				  chain</para></listitem>
-				  <listitem><para> -s 192.168.0.0/16 -- the rule applies to traffic originating from the
-				  specified address space</para></listitem>
-				  <listitem><para> -o ppp0 -- the rule applies to traffic scheduled to be routed through
-				  the specified network device</para></listitem>
+				  <listitem><para>-t nat -- la regola è per entrare nella tabella nat.</para></listitem>
+				  <listitem><para>-A POSTROUTING -- la regola serve ad accodare (-A) alla catena del POSTROUTING</para></listitem>
+				  <listitem><para>-s 192.168.0.0/16 -- la regola si applica al traffico che origina dallo spazio dell'indirizzo specificato</para></listitem>
+				  <listitem><para>-o ppp0 -- la regola si applica al traffico previsto e schedulato tramite il dispositivo di rete specificato.</para></listitem>
 				  <listitem><para>-j MASQUERADE -- il traffico che soddisfa questa regola viene indirizzato (-j) al bersaglio di mascheratura per essere mascherato come descritto.</para></listitem>
 			  </itemizedlist>
 			</para>
@@ -863,16 +755,10 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
         </sect2>
     </sect1>
 	<sect1 id="openssh-server" status="complete">
-		<title>OpenSSH Server</title>
+		<title>Server OpenSSH</title>
       <sect2 id="openssh-introduction">
         <title>Introduzione</title> 
-           <para>
-            This section of the <phrase>Ubuntu</phrase> Server Guide introduces a powerful collection of tools
-            for the remote control of networked computers and transfer of data between networked 
-            computers, called <emphasis>OpenSSH</emphasis>. You will also learn
-            about some of the configuration settings possible with the OpenSSH server application and
-            how to change them on your Ubuntu system. 
-          </para>
+           <para>Questa sezione della guida presenta una potente collezione di strumenti per il controllo remoto di computer in rete, per il trasferimento dei dati tra i medesimi, chiamata <emphasis>OpenSSH</emphasis>. L'utente imparerà come configurare l'applicazione Open Server SSH, e le sue modifiche.</para>
           <para>
             OpenSSH is a freely available version of the Secure Shell (SSH) protocol family of 
             tools for remotely controlling a computer or transferring files between computers.
@@ -895,7 +781,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
             </para>
           </sect2>
         <sect2 id="openssh-installation">
-        <title>Installation</title>
+        <title>Installazione</title>
         <para>
         Installation of the OpenSSH client and server applications is simple. To install the OpenSSH client applications on your Ubuntu system, use this command at a terminal prompt:
         </para>
@@ -941,38 +827,20 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
 <command>sudo chmod a-w /etc/ssh/sshd_config.original</command>
 </screen>
                </para> 
-            <para>
-            The following are examples of configuration directives you may change:
-            </para>
+            <para>Quelli che seguono sono esempi delle istruzioni di configurazione che possono essere modificate:</para>
            <itemizedlist>
                <listitem>
-               <para>
-               To set your OpenSSH to listen on TCP port 2222 instead of the default TCP port 22, change
-               the Port directive as such:
-               </para>
-               <para>
-               Port 2222
-               </para>
+               <para>Per far ascoltare OpenSSh alla porta TCP 2222 invece della porta TCP 22, modificare le istruzioni relative alla porta come segue:</para>
+               <para>Porta 2222</para>
                </listitem>
 	<listitem>
-            <para>
-            To have <application>sshd</application> allow public key-based login credentials, simply add or modify the line:
-            </para>
-               <para>
-               PubkeyAuthentication yes
-               </para>
-            <para>
-            in the <filename>/etc/ssh/sshd_config</filename> file, or if already present, ensure the line is not commented out.
-            </para>
+            <para>Affinchè l'applicazione <application>sshd</application> permetta il login basato su cifratutra a chiave pubblica, basta modificare o aggiungere la linea:</para>
+               <para>PubkeyAuthentication yes</para>
+            <para>nel file <filename>/etc/ssh/sshd_config</filename>. Se la stringa è già presente nel file, verificare che non sia disattivata.</para>
             </listitem>
             <listitem>
-             <para>
-             To make your OpenSSH server display the contents of the <filename>/etc/issue.net</filename> file as a pre-login
-             banner, simply add or modify the line:
-             </para>
-               <para>
-               Banner  /etc/issue.net
-               </para>
+             <para>Affinchè il server OpenSSH mostri il contenuto del file <filename>/etc/issue.net</filename> come un banner di pre-login, basta aggiungere o modificare la linea:</para>
+               <para>Banner /etc/issue.net</para>
                <para>
                in the <filename>/etc/ssh/sshd_config</filename> file.
                </para>
@@ -998,7 +866,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
                         </warning>
         </sect2>
    <sect2 id="openssh-references" status="complete">
-      <title>References</title>
+      <title>Riferimenti</title>
       <para>
       <ulink url="http://www.openssh.org/">OpenSSH Website</ulink>
       </para>
@@ -1018,10 +886,10 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
             <para>Access to an FTP server can be managed in two ways:</para>
             <itemizedlist spacing="compact">
                 <listitem>
-                    <para>Anonymous</para>
+                    <para>Anonimo</para>
                 </listitem>
                 <listitem>
-                    <para>Authenticated</para>
+                    <para>Autenticato</para>
                 </listitem>
             </itemizedlist>
             <para>In the Anonymous mode, remote clients can access the FTP server by using the
@@ -1033,17 +901,12 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
                 the FTP Home directory. This hides the rest of the file system from remote
             sessions.</para>
             <sect2 id="vsftpd-ftp-server-installation" status="complete">
-                <title>vsftpd - FTP Server Installation</title>
-                    <para>vsftpd is an FTP daemon available in
-                    Ubuntu. It is easy to install, set up, and
-                    maintain.  To install <application>vsftpd</application> you
-                can run the following command:
-                <screen> <command>sudo apt-get install vsftpd</command> </screen>
-                </para>
+                <title>vsftpd - Installazione del server FTP.</title>
+                    <para>vsftpd è un daemon FTP disponibile in Ubuntu. E' di facile installazione, configurazione, e manutenzione. Per installare l'applicazione <application>vsftpd</application> si deve lanciare l'istruzione seguente: <screen> <command>sudo apt-get install vsftpd</command> </screen></para>
 
                 </sect2>
             <sect2 id="vsftpd-ftp-server-configuration" status="complete">
-                <title>vsftpd - FTP Server Configuration</title>
+                <title>vsftpd - Configurazione del server FTP</title>
                 <para>
                 You can edit the vsftpd configuration file,
                 <filename>/etc/vsftpd.conf</filename>, to
@@ -1053,31 +916,36 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
                 allowed. If you wish to disable this option, you
                 should change the following line:
 <programlisting>
-anonymous_enable=YES
+↵
+anonymous_enable=YES↵
 </programlisting>
                 to
 <programlisting>
-anonymous_enable=NO
+↵
+anonymous_enable=NO↵
 </programlisting>
                 By default, local system users are not allowed to
                 login to FTP server. To change this setting, you
                 should uncomment the following line:
 <programlisting>
-#local_enable=YES
+↵
+#local_enable=YES↵
 </programlisting>
                 By default, users are allowed to download files
                 from FTP server. They are not allowed to upload
                 files to FTP server. To change this setting, you
                 should uncomment the following line:
 <programlisting>
-#write_enable=YES
+↵
+#write_enable=YES↵
 </programlisting>
                 Similarly, by default, the anonymous users are not
                 allowed to upload files to FTP server. To change
                 this setting, you should uncomment the following
                 line:
 <programlisting>
-#anon_upload_enable=YES
+↵
+#anon_upload_enable=YES↵
 </programlisting>
                 The configuration file consists of many
                 configuration parameters. The information about
@@ -1133,7 +1001,7 @@ network.</para>
           </itemizedlist>
 
       <sect2 id="nfs-installation" status="complete">
-        <title>Installation</title>
+        <title>Installazione</title>
       
           <para>
           At a terminal prompt enter the following command to install the NFS
@@ -1212,7 +1080,7 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
       </para>
       </sect2>
       <sect2 id="nfs-references" status="complete">
-        <title>References</title>
+        <title>Riferimenti</title>
 				<para><ulink url="http://nfs.sourceforge.net/">Linux NFS faq</ulink></para>
       </sect2>
     </sect1>
@@ -1244,13 +1112,13 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
                     <para>Domain Name</para>
                 </listitem>
                 <listitem>
-                    <para>Default Gateway</para>
+                    <para>Gateway predefinito</para>
                 </listitem>
                 <listitem>
                     <para>Time Server</para>
                 </listitem>
                 <listitem>
-                    <para>Print Server</para>
+                    <para>Server di stampa</para>
                 </listitem>
             </itemizedlist>
             <para>The advantage of using DHCP is that changes to the network, for example a change
@@ -1289,7 +1157,7 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
                 installed on all computers required to be automatically configured. Both programs
                 are easy to install and configure and will be automatically started at system boot.</para>
       <sect2 id="dhcp-installation" status="complete">
-        <title>Installation</title>
+        <title>Installazione</title>
           <para>At a terminal prompt, enter the following command to install
                   <application>dhcpd</application>:</para>
           <para>
@@ -1320,19 +1188,20 @@ Starting DHCP server: dhcpd failed to start - check syslog for diagnostics.  </s
             <para>Most commonly, what you want to do is assign an IP address randomly. This can be
                 done with settings as follows:</para>
             <screen>
-# Sample /etc/dhcpd.conf
-# (add your comments here) 
-default-lease-time 600;
-max-lease-time 7200;
-option subnet-mask 255.255.255.0;
-option broadcast-address 192.168.1.255;
-option routers 192.168.1.254;
-option domain-name-servers 192.168.1.1, 192.168.1.2;
-option domain-name "mydomain.org";
-
-subnet 192.168.1.0 netmask 255.255.255.0 {
-range 192.168.1.10 192.168.1.100;
-range 192.168.1.150 192.168.1.200;
+↵
+# Sample /etc/dhcpd.conf↵
+# (add your comments here) ↵
+default-lease-time 600;↵
+max-lease-time 7200;↵
+option subnet-mask 255.255.255.0;↵
+option broadcast-address 192.168.1.255;↵
+option routers 192.168.1.254;↵
+option domain-name-servers 192.168.1.1, 192.168.1.2;↵
+option domain-name "mydomain.org";↵
+↵
+subnet 192.168.1.0 netmask 255.255.255.0 {↵
+range 192.168.1.10 192.168.1.100;↵
+range 192.168.1.150 192.168.1.200;↵
 } </screen>
             <para>This will result in the DHCP server giving a client an IP address from the range
                 192.168.1.10-192.168.1.100 or 192.168.1.150-192.168.1.200. It will lease an IP
@@ -1344,12 +1213,13 @@ range 192.168.1.150 192.168.1.200;
             <para>If you need to specify a WINS server for your Windows clients, you will need to
                 include the netbios-name-servers option, e.g.</para>
             <screen>
+↵
 option netbios-name-servers 192.168.1.1; </screen>
             <para>Dhcpd configuration settings are taken from the DHCP mini-HOWTO, which can be found
                     <ulink url="http://www.tldp.org/HOWTO/DHCP/index.html">here</ulink>. </para>
       </sect2>
       <sect2 id="dhcp-references" status="complete">
-        <title>References</title>
+        <title>Riferimenti</title>
           <para>
             <ulink url="http://www.dhcp-handbook.com/dhcp_faq.html">DHCP FAQ</ulink>
           </para>
@@ -1366,7 +1236,7 @@ option netbios-name-servers 192.168.1.1; </screen>
                 server on GNU/Linux.</para>
             <!-- things to do: IPv6-->
       <sect2 id="dns-installation" status="complete">
-        <title>Installation</title>
+        <title>Installazione</title>
           <para>At a terminal prompt, enter the following command to install
                   <application>dns</application>:</para>
           <para>
@@ -1469,7 +1339,7 @@ include "/etc/bind/named.conf.local";
           </para>
       </sect2>
       <sect2 id="dns-references" status="complete">
-        <title>References</title>
+        <title>Riferimenti</title>
           <para>
             <ulink url="http://www.tldp.org/HOWTO/DNS-HOWTO.html">DNS HOWTO</ulink>
           </para>
@@ -1493,17 +1363,13 @@ include "/etc/bind/named.conf.local";
 		  configuration and administration tool. 
           </para>
       <sect2 id="cups-installation" status="complete">
-        <title>Installation</title>
+        <title>Installazione</title>
           <para>
             To install CUPS on your Ubuntu computer, simply use <application>sudo</application> with the the <application>apt-get</application> command and give the packages to install as the first parameter. A complete CUPS install has many package dependencies, but they may all be specified on the same command line.  Enter the following at a terminal prompt to install CUPS:
           </para>
           <para>
 <screen>
-<command>sudo apt-get install cupsys cupsys-client cupsys-driver-gimpprint \
-defoma fontconfig foomatic-db foomatic-filters libcupsimage2 \
-libexpat1 libfontconfig1 libfreetype6 libgimpprint1 libjpeg62 \
-libpaper1 libpng12-0 libpoppler0c2 libslp1 libtiff4 patch perl \
-perl-modules ttf-bitstream-vera ucf</command>
+<command>sudo apt-get install cupsys cupsys-client</command>
 </screen>
           </para>
           <para>
@@ -1561,6 +1427,29 @@ ServerAdmin bjoy@somebigco.com
 </screen>
                 </para>
                 </listitem>
+          </itemizedlist>
+                <para>
+                For more examples of configuration directives in the CUPS server 
+				configuration file, view the associated system manual page by entering the 
+				following command at a terminal prompt:
+               </para>
+               <para>
+<screen>
+<command>man cupsd.conf</command>
+</screen>
+               </para>
+                               <note>
+                <para>
+                Whenever you make changes to the <filename>/etc/cups/cupsd.conf</filename> configuration file, you'll need to restart the CUPS server by typing the following command at a terminal prompt:
+                </para>
+                </note>
+                <para>
+<screen>
+<command>sudo /etc/init.d/cupsys restart</command>
+</screen>
+                </para>
+	<para>Some other configuration for the CUPS server is done in the file <filename>/etc/cups/cups.d/ports.conf</filename>:</para>
+          <itemizedlist>
                 <listitem>
                 <para>
                 <emphasis role="bold">Listen</emphasis>: By default on Ubuntu, the CUPS 
@@ -1601,35 +1490,12 @@ Listen socrates:631  # Listen on all interfaces for the hostname 'socrates'
 Port 631  # Listen on port 631 on all interfaces
 </screen>
 </para>
-                <para>
-                The CUPS server configuration file, <filename>/etc/cups/cupsd.conf</filename>,
-				contains several examples of possible Listen directives which are valid for use.
-                </para>
                 </listitem>
-          </itemizedlist>
-                <para>
-                For more examples of configuration directives in the CUPS server 
-				configuration file, view the associated system manual page by entering the 
-				following command at a terminal prompt:
-               </para>
-               <para>
-<screen>
-<command>man cupsd.conf</command>
-</screen>
-               </para>
-                               <note>
-                <para>
-                Whenever you make changes to the <filename>/etc/cups/cupsd.conf</filename> configuration file, you'll need to restart the CUPS server by typing the following command at a terminal prompt:
-                </para>
-                </note>
-                <para>
-<screen>
-<command>sudo /etc/init.d/cupsys restart</command>
-</screen>
-                </para>
+	</itemizedlist>
+
       </sect2>
       <sect2 id="cups-references" status="complete">
-        <title>References</title>
+        <title>Riferimenti</title>
         <para>
         <ulink url="http://www.cups.org/">CUPS Website</ulink>
         </para>
@@ -1658,7 +1524,7 @@ Port 631  # Listen on port 631 on all interfaces
           powerful and robust platform for the development and deployment of Web-based
           applications.</para>
 <sect2 id="http-installation" status="complete">
-  <title>Installation</title>
+  <title>Installazione</title>
                   <para>The Apache2 web server is available in Ubuntu
                   Linux. To install Apache2:</para>
           <procedure><step>
@@ -2320,7 +2186,7 @@ Listen 443
         </sect3>
       </sect2>
       <sect2 id="http-references" status="complete">
-        <title>References</title>
+        <title>Riferimenti</title>
           <para>
           <ulink url="http://httpd.apache.org/docs/2.0/">Apache2
           Documentation</ulink>
@@ -2350,7 +2216,7 @@ Listen 443
           memory, as Squid maintains an in-memory cache for increased performance.
           </para>
       <sect2 id="squid-installation" status="complete">
-        <title>Installation</title>
+        <title>Installazione</title>
           <para>
             At a terminal prompt, enter the following command to install the Squid server:
           </para>
@@ -2456,7 +2322,7 @@ Listen 443
           </para>
       </sect2>
       <sect2 id="squid-references" status="complete">
-      <title>References</title>
+      <title>Riferimenti</title>
       <para>
       <ulink url="http://www.squid-cache.org/">Squid Website</ulink>
       </para>
@@ -2474,7 +2340,7 @@ Version control is the art of managing changes to information. It has long been 
 Subversion is an open source version control system. Using Subversion, you can record the history of source files and documents. It manages files and directories over time. A tree of files is placed into a central repository. The repository is much like an ordinary file server, except that it remembers every change ever made to files and directories.
           </para>
         <sect3 id="subversion-installation" status="complete">
-          <title>Installation</title>
+          <title>Installazione</title>
             <para>
 To access Subversion repository using the HTTP protocol, you must install and 
 configure a web server. Apache2 is proven to work with Subversion. Please 
@@ -2738,7 +2604,7 @@ $ svnserve --help</programlisting>
           history of source files.
           </para>
         <sect3 id="cvs-installation" status="complete">
-          <title>Installation</title>
+          <title>Installazione</title>
             <para>
               At a terminal prompt, enter the following command to install
               <application>cvs</application>:
@@ -2874,7 +2740,7 @@ manage projects in the CVS repository.
         </sect3>
       </sect2>
       <sect2 id="version-control-ref" status="complete">
-        <title>References</title> 
+        <title>Riferimenti</title> 
 				<para><ulink url="http://subversion.tigris.org/">Subversion Home Page</ulink></para>
 				<para><ulink url="http://svnbook.red-bean.com/">Subversion Book</ulink></para>
 				<para><ulink url="http://ximbiot.com/cvs/manual/cvs-1.11.21/cvs_toc.html">CVS Manual</ulink></para>
@@ -2906,7 +2772,7 @@ manage projects in the CVS repository.
           </para>
 
         <sect3 id="mysql-installation" status="complete">
-          <title>Installation</title>
+          <title>Installazione</title>
             <para>
             To install MySQL, run the following command from a terminal prompt:
             </para>
@@ -2978,7 +2844,7 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
           enhancements to be found in next-generation DBMS systems.
           </para>
         <sect3 id="postgresql-installation" status="complete">
-          <title>Installation</title>
+          <title>Installazione</title>
             <para>
             To install PostgreSQL, run the following command in the
             command prompt:
@@ -3118,7 +2984,7 @@ local   all         postgres                          md5 sameuser
             set it up as an SMTP server using a secure connection (for sending emails securely).
           </para>
         <sect3 id="postfix-installation" status="complete">
-          <title>Installation</title>
+          <title>Installazione</title>
             <para>
             To install <application>postfix</application> with SMTP-AUTH and Transport Layer
             Security (TLS), run the following command:
@@ -3338,7 +3204,7 @@ Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd<
             that of <application>sendmail</application>.
           </para>
         <sect3 id="exim4-installation" status="complete">
-          <title>Installation</title>
+          <title>Installazione</title>
             <para>
             To install <application>exim4</application>, run the following command:
 <screen>
@@ -3405,7 +3271,7 @@ Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd<
           pop3 server.
           </para>
         <sect3 id="dovecot-installation" status="complete">
-          <title>Installation</title>
+          <title>Installazione</title>
             <para>
             To install <application>dovecot</application>, run the following command in the
             command prompt:
@@ -3526,7 +3392,7 @@ disable_plaintext_auth = no
           to install and maintain.
           </para>
         <sect3 id="mailman-installation" status="complete">
-          <title>Installation</title>
+          <title>Installazione</title>
             <para>
             Mailman provides a web interface for the administrators
             and users. So, it requires apache with mod_perl support.
@@ -3847,7 +3713,7 @@ instructions in the email to subscribe.
 </para>
         </sect3>
         <sect3 id="mailman-references" status="complete">
-          <title>References</title>
+          <title>Riferimenti</title>
 <para>
 <ulink url="http://www.list.org/mailman-install/index.html"> GNU Mailman
 - Installation Manual</ulink>

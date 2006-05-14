@@ -124,6 +124,7 @@
 <!ENTITY kernel "http://www.kernel.org">
 <!ENTITY google "http://www.google.com">
 <!ENTITY kdelook " http://www.kde-look.org">
+<!ENTITY lulu-store "http://www.lulu.com/ubuntu-doc">
 <!-- this entity controls the url for addons--><!ENTITY java-download "http://java.sun.com/j2se/1.5.0/download.jsp">
 <!ENTITY skype-deb "skype_1.2.0.17-1_i386.deb">
 <!ENTITY skype-download "http://www.skype.com/go/getskype-linux-deb">
@@ -391,7 +392,7 @@
 <!ENTITY language "en">
 ]>
 <chapter id="basic-chap" status="complete">
-	<title>Basic Packaging</title>
+	<title>Contruction basique de paquets</title>
 
 	<para>Two of the problems that many novice packagers face are that there
 		are multiple ways of packaging, and there is more than one tool
@@ -424,11 +425,7 @@
 				automake, gnupg, lintian, fakeroot and <xref linkend="gs-pbuilder"/>.</para>
 		</important>
 					
-		<para>In this example we will be using the GNU <application><ulink url="http://www.gnu.org/software/hello/hello.html">hello</ulink></application>
-			program as our example. You can download the source tarball from
-			<ulink url="http://ftp.gnu.org/gnu/hello/hello-2.1.1.tar.gz">ftp.gnu.org</ulink>.
-			For the purposes of this example, we will be using the
-			<filename>~/hello/</filename> directory.</para>
+		<para>Dans cet exemple, nous utiliserons l'application GNU <application><ulink url="http://www.gnu.org/software/hello/hello.html">hello</ulink></application>. Vous pouvez télécharger l'archive des sources depuis <ulink url="http://ftp.gnu.org/gnu/hello/hello-2.1.1.tar.gz">ftp.gnu.org</ulink>. Pour les besoins de l'exemple, nous utiliserons le dossier <filename>~/hello/</filename>.</para>
 		<screen>
 mkdir ~/hello
 cd ~/hello
@@ -480,42 +477,26 @@ tar -xzvf hello_2.1.1.orig.tar.gz</screen>
 				source package will incorrectly be built as a Debian native
 				package.</para></warning>
 
-		<para>We now have a <filename>hello-2.1.1</filename> directory
-			containing the source files. Now we need to create the customary
-			<application>debian</application> directory where all the
-			packaging information is stored, allowing us to separate the
-			packaging files from the application source files.</para>
+		<para>Nous avons maintenant un répertoire <filename>hello-2.1.1</filename> qui contient les fichiers sources. Nous devons maintenant créer le répertoire <application>debian</application> personnalisé où toute l'information de construction de paquet est stockée, nous permettant de séparer les fichiers de construction de paquet des fichiers source de l'application.</para>
 
 		<screen>
 mkdir hello-2.1.1/debian
 cd hello-2.1.1/debian/</screen>
 
-		<para>We now need to create the essential files for any <phrase>Ubuntu</phrase>
-			source package: <filename>changelog</filename>,
-			<filename>control</filename>, <filename>copyright</filename>, and
-			<filename>rules</filename>. These are the files needed to create
-			the binary packages (.deb files) from the original (upstream)
-			source code. Let us look at each one in turn.</para>
+		<para>Nous devons maintenant créer les fichiers essentiels pour n'importe quel paquet source <phrase>Ubuntu</phrase> : <filename>changelog</filename>, <filename>control</filename>, <filename>copyright</filename>, et <filename>rules</filename>. Ce sont les fichiers nécessaires à la création des paquets binaires (fichiers .deb) depuis le code source original (upstream). Examinons en détail chacun de ces fichiers.</para>
 		
 		<sect2>
 			<title>changelog</title>
 			
-			<para>The <filename>changelog</filename> file is, as its name
-				implies, a listing of the changes made in each version. It
-				has a specific format that gives the package name, version,
-				distribution, changes, and who made the changes
-				at a given time. If you have a GPG key, make sure to use the same name
-				and email address in <filename>changelog</filename> as you
-				have in your key. The following is a template
-				<filename>changelog</filename>:</para>
+			<para>Le fichier <filename>changelog</filename> (journal des changements) est, comme son nom l'indique (pour les anglophones), une liste des changements réalisés pour chaque version. Il a un format spécifique qui donne le nom du paquet, sa version, la distribution, les changements et la personne qui a fait les changements à un moment donné. Si vous avez une clé GPG, soyez certain d'utiliser les même noms et courriels dans le fichier <filename>changelog</filename> que ceux que vous avez dans votre clé. Veuillez noter Ce qui suit est un modèle pour <filename>changelog</filename>, veuillez noter que son contenu doit être en anglais, même si ce modèle est traduit pour plus de compréhension.</para>
 			<screen>
-package (version) distribution; urgency=urgency
+paquet (version) distribution; urgency=urgency
 
-  * change details
-    more change details
-  * even more change details
+  * détails du changement
+    plus de détails
+  * d'autres détails
 
--- maintainer name &lt;email address&gt;[two spaces]  date</screen>
+-- Nom du mainteneur &lt;courriel&gt;[deux espaces] date</screen>
 
 			<para>Le format (de la date en particulier) est important. La dte doit être au format défini par la RFC822. Elle peut être obtenue à l'aide du programme <application>822-date</application>.</para>
 
@@ -935,8 +916,9 @@ lintian -i *.dsc</screen>
 	<sect1 id="basic-debhelper" status="complete">
 		<title>Packaging with Debhelper</title>
 		
-		<important><para><emphasis role="bold">Requirements :</emphasis> (Requis). Les requis par la section <xref linkend="basic-scratch"/> ainsi que debhelper et dh-make.</para>
-		</important>
+		<important><para><emphasis role="bold">Requirements:</emphasis> The
+				requirements from <xref linkend="basic-scratch"/> plus
+				debhelper and dh-make</para> </important>
 
 		<para>En tant qu'empaqueteur, vous créerez rarement des paquets de zéro comme nous venons de le faire dans la section précédente. Comme vous pouvez l'imaginer, plusieurs des tâches et uen grande partie de l'information dans le fichier <filename>rules</filename> sont communs aux paquets. Afin de faciliter et de rendre plus efficace la mise en paquets, vous pouvez utiliser <application>debhelper</application> pour vous aider dans ces tâches. Dephelper est un ensemble de scripts Perl (préfixés par <emphasis>dh_</emphasis>) qui automatisent le processus de construction de paquets. Avec ces scripts, la construction d'un paquet Debian devient passablement simple.</para>
 

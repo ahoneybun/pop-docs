@@ -124,6 +124,7 @@
 <!ENTITY kernel "http://www.kernel.org">
 <!ENTITY google "http://www.google.com">
 <!ENTITY kdelook " http://www.kde-look.org">
+<!ENTITY lulu-store "http://www.lulu.com/ubuntu-doc">
 <!-- this entity controls the url for addons--><!ENTITY java-download "http://java.sun.com/j2se/1.5.0/download.jsp">
 <!ENTITY skype-deb "skype_1.2.0.17-1_i386.deb">
 <!ENTITY skype-download "http://www.skype.com/go/getskype-linux-deb">
@@ -428,10 +429,7 @@
 			</varlistentry>
 			
 			<varlistentry><term><application>pbuilder</application></term>
-				<listitem><para>constructs a chroot system and builds a package inside
-						the chroot. It is an ideal system to use to check that a package
-						has correct build dependencies and to build clean packages to be
-						tested and distributed.</para></listitem> </varlistentry>
+				<listitem><para>crée un système chroot et construit un paquet dans le chroot. C'est un système idéal à utiliser pour vérifier si un paquet contient les dépendances de constructions correctes et pour construire des paquets à tester et distribuer.</para></listitem> </varlistentry>
 		</variablelist>
 
 	</sect1>
@@ -462,17 +460,7 @@ sudo pbuilder create --distribution &lt;distro&gt; \
 	--othermirror "deb http://archive.ubuntu.com/ubuntu &lt;distro&gt; universe multiverse"
 		</screen>
 
-		<para>where &lt;distro&gt; is the release you want
-			(<emphasis>edgy</emphasis> for instance) to create the pbuilder
-			for. If you would like to create more than one
-			<application>pbuilder</application> environment you can append the
-			<emphasis>--basetgz</emphasis> flag with the desired location for
-			the compressed <application>pbuilder</application> environment.
-			The default is <filename>/var/cache/pbuilder/base.tgz</filename>.
-			If you do choose to use <emphasis>--basetgz</emphasis> you will
-			need to use it with the other <application>pbuilder</application>
-			commands so <application>pbuilder</application> knows which
-			compressed build environment to use.</para>
+		<para>où &lt;distro&gt; est la version (<emphasis>edgy</emphasis> dans ce cas) pour laquelle vous voulez créer le pbuilder. Si vous voulez créer plus d'un environnement <application>pbuilder</application>, vous pouvez ajouter le drapeau <emphasis>--basetgz</emphasis> avec l'emplacement désiré pour l'environnement compressé de <application>pbuilder</application>. Par défaut, ce sera <filename>/var/cache/pbuilder/base.tgz</filename>. Si vous choisisset d'utiliser <emphasis>--basetgz</emphasis>, vous devrez l'utiliser dans les autres commandes <application>pbuilder</application> afin que <application>pbuilder</application> sache quel environnement de construction compressé il doit utiliser.</para>
 		
 		<note><para>La création d'un environnement pbuilder va prendre un certain temps car <application>debootstrap</application> télécharge une installation minimale d'<phrase>Ubuntu</phrase>.</para></note>
 
@@ -484,15 +472,12 @@ sudo pbuilder create --distribution &lt;distro&gt; \
 
 		<screen>sudo pbuilder build *.dsc</screen>
 
-		<para>This will build all the source packages in the current directory. The
-			resulting .debs and source packages can be found in
-			<filename>/var/cache/pbuilder/result/</filename> (which can be
-			changed with the <emphasis>--buildresult</emphasis> flag).</para>
+		<para>Cela va construire tous les paquets sources dans le répertoire courant. Les .debs résultants et les paquets sources se situent dans <filename>/var/cache/pbuilder/result/</filename> (peut être changé avec le paramètre <emphasis>--buildresult</emphasis>).</para>
 
 	</sect2>
 
 	<sect2>
-		<title>Updating the pbuilder</title>
+		<title>Mettre à jour pbuilder</title>
 		
 		<para>Vous devez toujour avoir pbuilder lancé même lorsque vous testez vos paquets source, et surtout si vous travaillez sur une distribution de développement qui change rapidement, pour être sûr que les dépendances soient correctement trouvées. Pour mettre à jour pbuilder, utilisez :</para>
 

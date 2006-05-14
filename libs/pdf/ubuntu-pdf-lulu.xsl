@@ -5,70 +5,10 @@
 
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-xmlns:fo="http://www.w3.org/1999/XSL/Format"><!-- Import the standard xsl -->
-<xsl:import href="/usr/share/xml/docbook/stylesheet/nwalsh/fo/docbook.xsl"/>
+xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
-<!-- TEMPLATE OVERRIDES SECTION -->
-
-<!-- modify footer.content template from fo/pagesetup.xsl to change page number
-     location from center to right -->
-<xsl:template name="footer.content">
-  <xsl:param name="pageclass" select="''"/>
-  <xsl:param name="sequence" select="''"/>
-  <xsl:param name="position" select="''"/>
-  <xsl:param name="gentext-key" select="''"/>
-
-  <fo:block>
-    <!-- pageclass can be front, body, back -->
-    <!-- sequence can be odd, even, first, blank -->
-    <!-- position can be left, center, right -->
-    <xsl:choose>
-      <xsl:when test="$pageclass = 'titlepage'">
-        <!-- nop; no footer on title pages -->
-      </xsl:when>
-
-      <xsl:when test="$double.sided != 0 and $sequence = 'even'
-                      and $position='left'">
-        <fo:page-number/>
-      </xsl:when>
-
-      <xsl:when test="$double.sided != 0 and ($sequence = 'odd' or $sequence = 'first')
-                      and $position='right'">
-        <fo:page-number/>
-      </xsl:when>
-
-<!-- This is the original
-      <xsl:when test="$double.sided = 0 and $position='center'">
-        <fo:page-number/>
-      </xsl:when>
--->
-     <!-- change from center to right -->
-      <xsl:when test="$double.sided = 0 and $position='right'">
-        <fo:page-number/>
-      </xsl:when>
-
-
-      <xsl:when test="$sequence='blank'">
-        <xsl:choose>
-          <xsl:when test="$double.sided != 0 and $position = 'left'">
-            <fo:page-number/>
-          </xsl:when>
-          <xsl:when test="$double.sided = 0 and $position = 'center'">
-            <fo:page-number/>
-          </xsl:when>
-          <xsl:otherwise>
-            <!-- nop -->
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-
-
-      <xsl:otherwise>
-        <!-- nop -->
-      </xsl:otherwise>
-    </xsl:choose>
-  </fo:block>
-</xsl:template>
+<!-- Import the new xsl -->
+<xsl:import href="/home/matt/tmp/docbook-xsl-1.69.1/fo/docbook.xsl"/>
 
 <!-- ***************  Fonts  *********************  -->
 <!-- ***************************************************  -->
@@ -96,7 +36,7 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"><!-- Import the standard xsl -->
 <xsl:param name="page.width">18.9cm</xsl:param>
 <xsl:param name="page.height">24.6cm</xsl:param>
 
-<!-- It's a book, so this takes account for the binding -->
+<!-- It's a book, so this takes account for the binding  -->
 <xsl:param name="double.sided" select="1"></xsl:param>
 
 <!-- This causes some blank pages on the left hand side, so don't draw headers on those pages -->
@@ -108,7 +48,7 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"><!-- Import the standard xsl -->
 <!-- Turn on left justify. The default is full justify -->
 <xsl:param name="alignment">left</xsl:param> 
 
-<!-- Margins -->
+<!-- Margins  -->
 <xsl:param name="page.margin.outer">
   <xsl:choose>
     <xsl:when test="$double.sided != 0">0.75in</xsl:when>
@@ -201,15 +141,6 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"><!-- Import the standard xsl -->
   <xsl:attribute name="font-style">italic</xsl:attribute>
 </xsl:attribute-set>
 
-<!-- ***************  Footnotes  *********************  -->
-<!-- ***************************************************  -->
-
-<!-- smaller footnote marks -->
-
-<xsl:attribute-set name="footnote.mark.properties">
-  <xsl:attribute name="font-size">65%</xsl:attribute>
-</xsl:attribute-set>
-
 <!-- ***************  Admonitions  *********************  -->
 <!-- ***************************************************  -->
 
@@ -218,6 +149,9 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"><!-- Import the standard xsl -->
 
 <!-- If true (non-zero), admonitions are presented with a generated text label such as Note or Warning in the appropriate language. If zero, such labels are turned off, but any title children of the admonition element are still output. The default value is 1. -->
 <xsl:param name="admon.textlabel" select="0"></xsl:param>
+
+<xsl:param name="admon.graphics.path" select="'../../../../common/admon-lulu/'"/>
+<xsl:param name="admon.graphics.extension" select="'.png'"/>
 
 <!-- ***************  ToC/LoT/Index Generation  *********************  -->
 <!-- ***************************************************  -->
@@ -248,10 +182,6 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"><!-- Import the standard xsl -->
   <xsl:attribute name="space-before.minimum">0.2em</xsl:attribute>
   <xsl:attribute name="space-before.maximum">0.5em</xsl:attribute>
 </xsl:attribute-set>
-
-<!-- Create bookmarks in the PDF file 
-     NOTE: this is only applicable if Apache fop is used -->
-<xsl:param name="fop.extensions" select="1"/>
 
 <!-- Get rid of annoying white page after titlepage -->
 <xsl:template name="book.titlepage.separator"/>

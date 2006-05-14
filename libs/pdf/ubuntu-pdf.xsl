@@ -1,53 +1,73 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- Customization layer for PDF output 
-     CREATION INFO:
-        Author: Jeff Schering
-        Date: April 23, 2005
-        Version: 0.1
-     REVISION INFO:
-        Author: Jeff Schering 
-        Date: January 3, 2006 
-        Version: 0.2
-        Description: added draft mode parameters
-     REVISION INFO:
-        Author: 
-        Date: 
-        Version: 0.3
-        
      License: CC-BY-SA. see http://creativecommons.org/licenses/by-sa/2.0/
 -->
+
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
-<!-- Import the standard xsl -->
-<xsl:import href="/usr/share/xml/docbook/stylesheet/nwalsh/fo/docbook.xsl"/>
+<!-- Import the new xsl -->
+<xsl:import href="/home/matt/tmp/docbook-xsl-1.69.1/fo/docbook.xsl"/>
 
-<!-- PARAMETERS SECTION -->
+<!-- ***************  Fonts  *********************  -->
+<!-- ***************************************************  -->
 
-<!-- select draft mode, either yes or no -->
-<xsl:param name="draft.mode" select="'no'"/>
-
-<!-- Give each section a number -->
-<xsl:param name="section.autolabel" select="0"></xsl:param>
-
-<!-- Turn on left justify. The default is full justify  -->
-<xsl:param name="alignment">left</xsl:param>
-
-<!-- Create bookmarks in the PDF file 
-     NOTE: this is only applicable if Apache fop is used -->
-<xsl:param name="fop.extensions" select="1"/>
-
-<!-- Put a rule above each footer and a rule below each header  -->
-<xsl:param name="footer.rule" select="1"/>
-<xsl:param name="header.rule" select="1"/>
-
-<!-- Use a sans-serif font -->
-<xsl:param name="body.font.family" select="'sans-serif'"/>
+<!-- Use a serif font -->
+<xsl:param name="body.font.family" select="'serif'"/>
+<xsl:param name="dingbat.font.family">
+   <xsl:value-of select="$body.font.family"/>
+</xsl:param>
+<xsl:param name="title.font.family">
+   <xsl:value-of select="$body.font.family"/>
+</xsl:param>
 <xsl:param name="body.font.master">11</xsl:param>
 <xsl:param name="body.font.size">
  <xsl:value-of select="$body.font.master"/><xsl:text>pt</xsl:text>
 </xsl:param>
+
+<xsl:param name="monospace.font.family" select="'monospace'"></xsl:param>
+
+<!-- Smaller monospace -->
+<xsl:attribute-set name="monospace.properties">
+  <xsl:attribute name="font-size">80%</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:param name="line-height" select="'1.5'"></xsl:param>
+
+<!-- ***************  Page Format  *********************  -->
+<!-- ***************************************************  -->
+
+<!-- Define the page width/height -->
+<xsl:param name="page.width">21cm</xsl:param>
+<xsl:param name="page.height">29.7cm</xsl:param>
+
+<!-- Give each section a number -->
+<xsl:param name="section.autolabel" select="1"></xsl:param>
+
+<!-- Turn on left justify. The default is full justify -->
+<xsl:param name="alignment">left</xsl:param> 
+
+<!-- Margins -->
+<xsl:param name="page.margin.outer">
+  <xsl:choose>
+    <xsl:when test="$double.sided != 0">0.75in</xsl:when>
+    <xsl:otherwise>1in</xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="page.margin.inner">
+  <xsl:choose>
+    <xsl:when test="$double.sided != 0">1in</xsl:when>
+    <xsl:otherwise>1in</xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+
+<!-- Keep paragraphs flush with the left hand side -->
+<xsl:param name="body.start.indent" select="'0pc'"/>
+
+<!-- Put a rule above each footer and a rule below each header  -->
+<xsl:param name="footer.rule" select="0"/>
+<xsl:param name="header.rule" select="1"/>
 
 <!-- Don't split words across lines (no end-of-line word breaks) -->
 <xsl:param name="hyphenate">false</xsl:param>
@@ -56,84 +76,82 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format">
      right headers. This is needed because the doc title is in the center header -->
 <xsl:param name="header.column.widths" select="'1 3 1'"/>
 
-<!-- TEMPLATE OVERRIDES SECTION -->
+<!-- ***************  Headers  *********************  -->
+<!-- ***************************************************  -->
 
-<!-- modify footer.content template from fo/pagesetup.xsl to change page number
-     location from center to right -->
-<xsl:template name="footer.content">
-  <xsl:param name="pageclass" select="''"/>
-  <xsl:param name="sequence" select="''"/>
-  <xsl:param name="position" select="''"/>
-  <xsl:param name="gentext-key" select="''"/>
+<xsl:attribute-set name="section.title.properties">
+  <xsl:attribute name="font-family">
+    <xsl:value-of select="$title.font.family"></xsl:value-of>
+  </xsl:attribute>
+  <xsl:attribute name="font-weight">normal</xsl:attribute>
+  <!-- font size is calculated dynamically by section.heading template -->
+  <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
+  <xsl:attribute name="space-before.minimum">0.8em</xsl:attribute>
+  <xsl:attribute name="space-before.optimum">1.0em</xsl:attribute>
+  <xsl:attribute name="space-before.maximum">1.2em</xsl:attribute>
+  <xsl:attribute name="text-align">left</xsl:attribute>
+  <xsl:attribute name="start-indent"><xsl:value-of select="$title.margin.left"></xsl:value-of></xsl:attribute>
+</xsl:attribute-set>
 
-  <fo:block>
-    <!-- pageclass can be front, body, back -->
-    <!-- sequence can be odd, even, first, blank -->
-    <!-- position can be left, center, right -->
-    <xsl:choose>
-      <xsl:when test="$pageclass = 'titlepage'">
-        <!-- nop; no footer on title pages -->
-      </xsl:when>
+<xsl:attribute-set name="section.title.level1.properties">
+  <xsl:attribute name="font-weight">bold</xsl:attribute>
+  <xsl:attribute name="text-decoration">underline</xsl:attribute>
+  <xsl:attribute name="font-size">
+    <xsl:value-of select="$body.font.master * 1.5"></xsl:value-of>
+    <xsl:text>pt</xsl:text>
+  </xsl:attribute>
+  <xsl:attribute name="break-before">page</xsl:attribute>
+</xsl:attribute-set>
 
-      <xsl:when test="$double.sided != 0 and $sequence = 'even'
-                      and $position='left'">
-        <fo:page-number/>
-      </xsl:when>
+<xsl:attribute-set name="section.title.level2.properties">
+  <xsl:attribute name="text-decoration">underline</xsl:attribute>
+  <xsl:attribute name="font-size">
+    <xsl:value-of select="$body.font.master * 1.3"></xsl:value-of>
+    <xsl:text>pt</xsl:text>
+  </xsl:attribute>
+</xsl:attribute-set>
 
-      <xsl:when test="$double.sided != 0 and ($sequence = 'odd' or $sequence = 'first')
-                      and $position='right'">
-        <fo:page-number/>
-      </xsl:when>
+<xsl:attribute-set name="section.title.level3.properties">
+  <xsl:attribute name="text-decoration">underline</xsl:attribute>
+  <xsl:attribute name="font-size">
+    <xsl:value-of select="$body.font.master * 1"></xsl:value-of>
+    <xsl:text>pt</xsl:text>
+  </xsl:attribute>
+</xsl:attribute-set>
 
-<!-- This is the original
-      <xsl:when test="$double.sided = 0 and $position='center'">
-        <fo:page-number/>
-      </xsl:when>
--->
-     <!-- change from center to right -->
-      <xsl:when test="$double.sided = 0 and $position='right'">
-        <fo:page-number/>
-      </xsl:when>
-
-
-      <xsl:when test="$sequence='blank'">
-        <xsl:choose>
-          <xsl:when test="$double.sided != 0 and $position = 'left'">
-            <fo:page-number/>
-          </xsl:when>
-          <xsl:when test="$double.sided = 0 and $position = 'center'">
-            <fo:page-number/>
-          </xsl:when>
-          <xsl:otherwise>
-            <!-- nop -->
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-
-
-      <xsl:otherwise>
-        <!-- nop -->
-      </xsl:otherwise>
-    </xsl:choose>
-  </fo:block>
-</xsl:template>
+<xsl:attribute-set name="section.title.level4.properties">
+  <xsl:attribute name="font-style">italic</xsl:attribute>
+  <xsl:attribute name="font-size">
+    <xsl:value-of select="$body.font.master * 1"></xsl:value-of>
+    <xsl:text>pt</xsl:text>
+  </xsl:attribute>
+</xsl:attribute-set>
 
 <!-- ***************  Links  *********************  -->
 <!-- ***************************************************  -->
 
-<!-- urls in square brackets after links -->
-
+<!-- urls in brackets for ulinks -->
 <xsl:param name="ulink.show" select="1"></xsl:param>
 
-<!-- Blue links -->
+<!-- page numbers included in xref cross references -->
+<xsl:param name="insert.xref.page.number">no</xsl:param>
 
+<!-- ulink formatting -->
 <xsl:attribute-set name="xref.properties">
-  <xsl:attribute name="color">blue</xsl:attribute>
+  <xsl:attribute name="font-style">italic</xsl:attribute>
 </xsl:attribute-set>
+
+<!-- footnotes -->
+<xsl:param name="ulink.footnotes" select="'yes'"></xsl:param>
+<xsl:attribute-set name="footnote.mark.properties">
+  <xsl:attribute name="font-size">65%</xsl:attribute>
+  <xsl:attribute name="font-weight">normal</xsl:attribute>
+  <xsl:attribute name="font-style">normal</xsl:attribute>
+</xsl:attribute-set>
+
 
 <!-- ***************  Admonitions  *********************  -->
 <!-- ***************************************************  -->
-
 
 <!-- If true (non-zero), admonitions are presented in an alternate style that uses a graphic. Default graphics are provided in the distribution. -->
 <xsl:param name="admon.graphics" select="1"></xsl:param>
@@ -141,10 +159,11 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format">
 <!-- If true (non-zero), admonitions are presented with a generated text label such as Note or Warning in the appropriate language. If zero, such labels are turned off, but any title children of the admonition element are still output. The default value is 1. -->
 <xsl:param name="admon.textlabel" select="0"></xsl:param>
 
+<xsl:param name="admon.graphics.path" select="'../../../../common/admon-lulu/'"/>
+<xsl:param name="admon.graphics.extension" select="'.png'"/>
+
 <!-- ***************  ToC/LoT/Index Generation  *********************  -->
 <!-- ***************************************************  -->
-
-<!-- This is an excellent reference:  http://www.sagehill.net/docbookxsl/TOCcontrol.html -->
 
 <!-- Specifies the depth to which recursive sections should appear in the TOC -->
 <xsl:param name="toc.section.depth" select="1" />
@@ -153,20 +172,36 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format">
 <xsl:param name="toc.max.depth" select="2" />
 
 <!-- **************** Miscellaneous Fixes ****************** -->
+<!-- ***************************************************  -->
 
-<!-- Some custom spacing for lists -->
+<!-- Some custom spacing for lists
 
 <xsl:attribute-set name="list.block.spacing">
   <xsl:attribute name="space-before.optimum">0.3em</xsl:attribute>
   <xsl:attribute name="space-before.minimum">0.2em</xsl:attribute>
-  <xsl:attribute name="space-before.maximum">1em</xsl:attribute>
-  <xsl:attribute name="space-after.optimum">0.8em</xsl:attribute>
-  <xsl:attribute name="space-after.minimum">0.5em</xsl:attribute>
-  <xsl:attribute name="space-after.maximum">1em</xsl:attribute>
+  <xsl:attribute name="space-before.maximum">0.5em</xsl:attribute>
+  <xsl:attribute name="space-after.optimum">0.3em</xsl:attribute>
+  <xsl:attribute name="space-after.minimum">0.2em</xsl:attribute>
+  <xsl:attribute name="space-after.maximum">0.5em</xsl:attribute>
 </xsl:attribute-set>
+
+<xsl:attribute-set name="list.item.spacing">
+  <xsl:attribute name="space-before.optimum">0.3em</xsl:attribute>
+  <xsl:attribute name="space-before.minimum">0.2em</xsl:attribute>
+  <xsl:attribute name="space-before.maximum">0.5em</xsl:attribute>
+</xsl:attribute-set>
+
+-->
 
 <!-- Get rid of annoying white page after titlepage -->
 <xsl:template name="book.titlepage.separator"/>
+
+<!--
+<xsl:param name="fop.extensions" select="1"/>
+-->
+
+<!-- select draft mode, either yes or no -->
+<xsl:param name="draft.mode" select="'no'"/>
 
 </xsl:stylesheet>
 

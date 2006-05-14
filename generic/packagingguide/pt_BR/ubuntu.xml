@@ -5,7 +5,7 @@
 <!ENTITY project-name "Ubuntu Documentation Project">
 <!ENTITY ubuntu "<phrase>Ubuntu</phrase>">
 <!-- VERSIONS --><!ENTITY distro-version "Dapper Drake">
-<!ENTITY distro-rev "6.06">
+<!ENTITY distro-rev "6.06 LTS">
 <!ENTITY distro-release-date "June 2006">
 <!ENTITY linux-kernel-version "2.6.15">
 <!ENTITY gcc-version "4.0.3">
@@ -124,6 +124,7 @@
 <!ENTITY kernel "http://www.kernel.org">
 <!ENTITY google "http://www.google.com">
 <!ENTITY kdelook " http://www.kde-look.org">
+<!ENTITY lulu-store "http://www.lulu.com/ubuntu-doc">
 <!-- this entity controls the url for addons--><!ENTITY java-download "http://java.sun.com/j2se/1.5.0/download.jsp">
 <!ENTITY skype-deb "skype_1.2.0.17-1_i386.deb">
 <!ENTITY skype-download "http://www.skype.com/go/getskype-linux-deb">
@@ -396,14 +397,7 @@
 	<sect1 id="ubuntu-upload" status="complete">
 		<title>Enviando e Revisão</title>
 
-		<para>Once you have created a source package (either a completely new package or
-			just an update/bugfix), you will want to distribute your
-			package so that other people can enjoy your hard work. The most effective way
-			to do that for <phrase>Ubuntu</phrase> is to contribute your package to the Universe repository.
-			The community developers who are responsible for the Universe repository are
-			known as Masters of the Universe (<ulink url="https://wiki.ubuntu.com/MOTU">MOTU</ulink>). <ulink url="http://revu.tauware.de">REVU</ulink> is a web-based tool that gives
-			people a place to upload their source packages for other people to look at and
-			for MOTUs to review in a structured manner.</para>
+		<para>Uma vez que você criou o pacote fonte (qualquer novo pacote ou apenas uma atualização/bugfix), você desejará distribuir seu pacote assim outras pessoas possam apreciar seu trabalho duro. O caminho mais eficaz para fazer isso no <phrase>Ubuntu</phrase> é contribuir com seu pacote para o respositório Universe. A comunidade de desenvolvedores que são responsáveis pelo repositório Universe são conhecidos como os Mestres do Universo (<ulink url="https://wiki.ubuntu.com/MOTU">MOTU</ulink>). <ulink url="http://revu.tauware.de">REVU</ulink>é uma ferramenta web que dá as pessoas um lugar para guardar seus pacotes fontes para que outras pessoas vejam e para que o MOTU revise de forma estruturada.</para>
 
 		<sect2 id="contribute-as-uploader">
 			<title>Contribuindo como um Enviador</title>
@@ -417,8 +411,7 @@
 				need a password to upload packages, only to log in to the website and
 				to reply to comments.</para>
 
-			<note><para>It is not necessary to have your key signed by others to upload to REVU, but
-					it is a good idea to have it done at some point.</para></note>
+			<note><para>Não é necessário ter uma chave assinada por outros para enviar para REVU, mas é uma boa idéia fazer isso em algum momento.</para></note>
 			
 			
 			<sect3 id="upload-your-packages">
@@ -441,25 +434,21 @@
 
 				<screen>dput revu *_source.changes</screen>
 
-				<note><para>If you are reuploading a changed package (after receiving
-						reviews), you may get an error like this:</para>
+				<note><para>Se você está re-enviando um pacote alterado (depois de receber revisões) você pode receber um erro como este:</para>
 					
 				<screen>
-Upload package to host revu
-Already uploaded to tauware.de
-Doing nothing for myapp_source.changes</screen>
+Enviar pacote para o servidor revu
+Já foi enviado para tauware.de
+Fazendo nada para myapp_source.changes</screen>
 			
-				<para>To fix, add the -f option to dput to force the upload or remove the
-					<filename>.upload</filename> file that was created by
-					<application>dput</application>.</para></note>
+				<para>Para fixar, adicionar a opção -f ao dput para forçar o envio ou remover o arquivo <filename>.upload</filename> que foi criado pelo <application>dput</application>.</para></note>
 			
-				<para>Processing of uploads is done every five minutes, so if your upload does not show up,
-				please contact the REVU administrators by email, or join the Freenode IRC channel #ubuntu-motu.</para>
+				<para>O processamento dos envios (uploads) é feito a cada cinco minutos, então, se o seu envio não apareceu, por favor entre em contato com os administradores do REVU por email, ou acesse o canal #ubuntu-motu no Freenode IRC.</para>
 		
 			</sect3>
 		
 			<sect3 id="howto-login">
-				<title>How to login to REVU</title>
+				<title>Como logar no REVU</title>
 			
 				<para>After your first upload, you are registered automatically in the
 					database and assigned a random password. On the <ulink url="http://revu.tauware.de">REVU</ulink> website, use the email
@@ -504,8 +493,7 @@ Doing nothing for myapp_source.changes</screen>
 
 			<sect3 id="getting-help">
 				<title>Obtendo Ajuda</title>
-				<para>If you need assistance on these steps, or if you have questions about REVU, you can
-					ask in #ubuntu-motu on the Freenode IRC network.</para>
+				<para>Se você prescisa de assistência nestes passos, ou se você tem perguntas sobre o REVU, você pode perguntar no #ubuntu-motu na rede IRC Freenode.</para>
 			</sect3>
 
 		</sect2>
@@ -513,13 +501,11 @@ Doing nothing for myapp_source.changes</screen>
 	</sect1>
 
 	<sect1 id="ubuntu-sync" status="complete">
-		<title>Merges and Syncs</title>
+		<title>Mescle e Sincronize</title>
 
 
 
-		<important><para><emphasis role="bold">Requirements:</emphasis>
-				build-essential, automake, gnupg, lintian, fakeroot,
-				patchutils, debhelper and <xref linkend="gs-pbuilder"/>.</para></important>
+		<important><para><emphasis role="bold">Exigências:</emphasis> build-essential, automake, gnupg, lintian, fakeroot, patchutils, debhelper e <xref linkend="gs-pbuilder"/>.</para></important>
 		
 		<para><phrase>Ubuntu</phrase> is based on the Debian Linux distribution and uses the same package
 			management system (APT). At the beginning of each <phrase>Ubuntu</phrase> development cycle, the
@@ -544,21 +530,15 @@ Doing nothing for myapp_source.changes</screen>
 			to be applied to the new Debian version, too. This decision is called <emphasis>merging</emphasis>.
 		</para>
 		<sect2 id="merge-tutorial">
-			<title>Merging Tutorial</title>
-			<para>The merging process involves looking at the changes to both the Debian and
-				Ubuntu source packages and determining what has changed and which changes are
-				Ubuntu-specific. Let us now look at an example,
-				a popular CD creation program called <application>xcdroast</application>.
-			</para>
-			<para>To start, make a folder to hold our project, then navigate there:</para>
+			<title>Tutorial Mesclando</title>
+			<para>O processo de mesclagem envolve observar as mudanças entre os pacotes fontes no Debian e no Ubuntu e deteminando  o que mudaram e quais mudanças são especificas do Ubuntu. Deixe-nos agora observar um exemplo, um popular programa de gravação de CD chamado <application>xcdroast</application>.</para>
+			<para>Para iniciar, crie uma pasta para manter nosso projeto, então navegue lá:</para>
 			<screen>
 mkdir ~/xcdroast
 cd ~/xcdroast</screen>
-			<para>Now download all of the source packages involved into
-				this directory:</para>
+			<para>Agora baixe todos os pacotes fontes envolvidos dentro deste diretório:</para>
 			<itemizedlist>
-				<listitem><para>The <application>xcdroast</application> source tarball that is used
-						by all versions:</para>
+				<listitem><para>Um <application>xcdroast</application> fonte tarball que é usado para todas as versões:</para>
 					<itemizedlist>
 						<listitem>
 <para><ulink url="http://snapshot.debian.net/archive/2006/01/16/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15.orig.tar.gz">xcdroast_0.98+0alpha15.orig.tar.gz</ulink></para>
@@ -566,23 +546,21 @@ cd ~/xcdroast</screen>
 					</itemizedlist>
 				</listitem>
 				<listitem>
-					<para>The <phrase>Ubuntu</phrase> Breezy source package files:</para>
+					<para>Os arquivos do pacote fonte do <phrase>Ubuntu</phrase> Breezy:</para>
 					<itemizedlist>
 						<listitem><para>
 <ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.dsc">xcdroast_0.98+0alpha15-1.1ubuntu1.dsc</ulink></para>
 						</listitem>
 						<listitem><para>
-<ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz">
-	xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz</ulink></para>
+<ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz">xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz</ulink></para>
 						</listitem>
 					</itemizedlist>
 				</listitem>
 				<listitem>
-					<para>The Debian source package files that the Breezy packages are derived from:</para>
+					<para>Os arquivos do pacote fonte do Debian dos quais os pacotes do Breezy são derivados:</para>
 						<itemizedlist>
 							<listitem>
-<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.diff.gz">
-		xcdroast_0.98+0alpha15-1.1.diff.gz</ulink></para>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.diff.gz">xcdroast_0.98+0alpha15-1.1.diff.gz</ulink></para>
 							</listitem>
 							<listitem>
 <para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.dsc">xcdroast_0.98+0alpha15-1.1.dsc</ulink></para>
@@ -590,8 +568,7 @@ cd ~/xcdroast</screen>
 						</itemizedlist>
 				</listitem>
 				<listitem>
-					<para>The new Debian source package files that the Dapper packages will be
-						derived from:</para>
+					<para>Os novos pacotes fontes do Debian dos quais os pacotes do Dapper packages serão derivados:</para>
 					<itemizedlist>
 						<listitem>
 <para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-3.dsc">xcdroast_0.98+0alpha15-3.dsc</ulink></para>
@@ -602,9 +579,7 @@ cd ~/xcdroast</screen>
 					</itemizedlist>
 				</listitem>
 			</itemizedlist>
-			<note><para>These steps can also be done by searching for the Debian packages
-				at <ulink url="packages.debian.org">packages.debian.org</ulink> and the Ubuntu
-				packages at <ulink url="packages.ubuntu.com">packages.ubuntu.com</ulink>.</para></note>
+			<note><para>Estes passos também podem ser feitos procurando por pacotes Debian no <ulink url="packages.debian.org">packages.debian.org</ulink> e os pacotes do Ubuntu no <ulink url="packages.ubuntu.com">packages.ubuntu.com</ulink>.</para></note>
 		<tip><para>A very useful package to have installed when doing merges (or any Ubuntu packaging) is
 				<application>devscripts</application>. If you do not have that already
 				installed, install it before proceeding.</para></tip>
@@ -618,33 +593,31 @@ cd ~/xcdroast</screen>
 				<ulink url="https://launchpad.net/malone/bugs/2698">Malone</ulink>.
 			</para>
 			
-			<para>Now inspect the actual changes in the source packages:</para>
+			<para>Agora inspecione as atuais mudanças nos pacotes fontes:</para>
 			<screen>
-debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-1.1ubuntu1.dsc | \
+debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-1.1ubuntu1.dsc | 
 	ubuntu.debdiff | less ubuntu.debdiff</screen>
 			
-			<para>The lines that start with - have been removed from the Debian package, and those that start
-				with + have been added to the <phrase>Ubuntu</phrase> package.</para>
-			<para>The following is what we see:</para>
+			<para>As linhas que inciam com - foram removidas do pacote Debian, e aqueles que iniciam com + foram adcionados ao pacote <phrase>Ubuntu</phrase>.</para>
+			<para>A seguir é o que nós vemos:</para>
 			<itemizedlist>
 				<listitem>
 					<para>In debian/rules install is being used instead of cp to install the xcdroast icon.
 						Also, there is a new line installing the .desktop file.</para>
 				</listitem>
 				<listitem>
-					<para>In debian/changelog the changes made are added to the changelog entry.</para>
+					<para>No debian/changelog as mudanças feitas são adcionadas numa entrada no changelog.</para>
 				</listitem>
 				<listitem>
 					<para>In debian/dirs usr/share/applications has been added for the install lines above to
 						work properly.</para>
 				</listitem>
 				<listitem>
-					<para>xcdroast.desktop is added</para>
+					<para>xcdroast.desktop é adicionado</para>
 				</listitem>
 			</itemizedlist>
 			
-			<para>Now we know how the Ubuntu source was changed. Now we need to see what has changed in
-				the Debian sources.</para>
+			<para>Agora nós sabemos como a fonte do Ubuntu foi alterada. Agora nós precisamos ver o que foi alterando nas fontes do Debian.</para>
 			<screen>
 debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-3.dsc &gt; debian.debdiff
 less debian.debdiff</screen>
@@ -664,7 +637,7 @@ less debian.debdiff</screen>
 			
 			<para>This will decompress the xcdroast_0.98+0alpha15.orig.tar.gz file, create a xcdroast-0.98+0alpha15
 				directory, and apply the changes found in xcdroast_0.98+0alpha15-3.diff.gz.</para>
-			<para>Now navigate to the debian directory:</para>
+			<para>Agora iremos ao diretório do debian:</para>
 			
 			<screen>cd xcdroast-0.98+0alpha15/debian</screen>
 			
@@ -673,7 +646,7 @@ less debian.debdiff</screen>
 			
 			<screen>cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps</screen>
 			
-			<para>...should be changed to:</para>
+			<para>...pode ser alterado para:</para>
 			
 			<screen>
 #cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps
@@ -693,7 +666,7 @@ install -D -m 644 $(CURDIR)/debian/xcdroast.xpm \
 [Desktop Entry]
 Encoding=UTF-8
 Name=X-CD-Roast
-Comment=Create a CD
+Comment=Criar um CD
 Exec=xcdroast
 Icon=xcdroast.xpm
 Type=Application
@@ -786,7 +759,7 @@ Categories=Qt;KDE;Utility;</screen>
 		</sect2>
 		
 		<sect2 id="generating-pot-files">
-			<title>Gerando arquivos .pot</title>
+			<title>Gerando Arquivos .pot</title>
 
 			<para>The Ubuntu translation website, <ulink url="https://launchpad.net/rosetta/">Rosetta</ulink>, now supports KDE,
 				which means KDE packages need to support Rosetta by generating .pot

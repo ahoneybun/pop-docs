@@ -124,6 +124,7 @@
 <!ENTITY kernel "http://www.kernel.org">
 <!ENTITY google "http://www.google.com">
 <!ENTITY kdelook " http://www.kde-look.org">
+<!ENTITY lulu-store "http://www.lulu.com/ubuntu-doc">
 <!-- this entity controls the url for addons--><!ENTITY java-download "http://java.sun.com/j2se/1.5.0/download.jsp">
 <!ENTITY skype-deb "skype_1.2.0.17-1_i386.deb">
 <!ENTITY skype-download "http://www.skype.com/go/getskype-linux-deb">
@@ -395,7 +396,7 @@
 <!ENTITY language "&EnglishAmerican;">
 ]>
 <chapter id="windows-networking" status="complete">
-	<title>Réseaux Windows</title>
+	<title>Réseautage Windows</title>
   <para>Les réseaux d'ordinateurs sont souvent composés de systèmes divers et,  même si opérer un réseau constitué entièrement de serveurs et de postes d'utilisateur Ubuntu serait plaisant, certains environnements réseau doivent comprendre à la fois des systèmes Ubuntu et <trademark class="registered">Microsoft</trademark><trademark class="registered">Windows</trademark> travaillant ensemble en harmonie. Cette section du Guide du Serveur <phrase>Ubuntu</phrase> présente les principes et les outils utilisés afin de configurer votre serveur Ubuntu pour le partage des ressources réseau avec des ordinateurs Windows.</para>
 	<sect1 id="windows-networking-introduction" status="complete">
 		<title>Introduction</title>
@@ -534,7 +535,7 @@
             <para>Un compte d'ordinateur peut être ajouté au fichier de mots de passe SAMBA, pourvu que le nom de l'ordinateur à ajouter existe déjà comme un nom de compte d'utilisateur valide dans la base de données locale. Pour ajouter un compte d'ordinateur ou de machine au fichier de mots de passe SAMBA, il faut utiliser la commande <application>smbpasswd</application> dans une console comme ceci :</para>
                <para>
 <screen>
-<command>sudo smbpasswd -a -m COMPUTER_NAME</command>
+<command>sudo smbpasswd -a -m NOM_ORDINATEUR</command>
 </screen>
                </para>
                   <tip>
@@ -543,15 +544,7 @@
         </sect3>
         <sect3 id="file-permissions" status="complete">
           <title>Permissions de fichier</title>
-            <para>
-              File Permissions define the explicit rights a computer or user has to a particular directory, file, or set of files.  Such
-              permissions may be defined by editing the <filename>/etc/samba/smb.conf</filename> file and specifying the explicit permissions of a defined
-              file share.  For example, if you have defined a SAMBA share called <emphasis role="italic">sourcedocs</emphasis> and wish
-              to give <emphasis role="italic">read-only</emphasis> permissions to the group of users known as <emphasis role="italic">planning</emphasis>,
-              but wanted to allow writing to the share by the group called <emphasis role="italic">authors</emphasis> and the user named
-              <emphasis role="italic">richard</emphasis>, then you could edit the <filename>/etc/samba/smb.conf</filename> file, and add the following entries under 
-              the <emphasis role="italic">[sourcedocs]</emphasis> entry:
-            </para>
+            <para>Les Permissions de fichiers définissent les droits explicites qu'un ordinateur ou un utilisateur a sur un dossier, fichier ou groupe de fichiers particulier. De telles permissions peuvent être définies en éditant le fichier <filename>/etc/samba/smb.conf</filename> et en définissant explicitement les permissions d'un partage de fichiers défini. Par exemple, si vous avez défini un partage SAMBA intitulé <emphasis role="italic">sourcedocs</emphasis> et souhaitez donner les droits de <emphasis role="italic">lecture seule</emphasis> au groupe d'utilisateurs appelé <emphasis role="italic">planning</emphasis>, mais souhaitez autoriser l'accès au partage en écriture par le groupe appelé <emphasis role="italic">authors</emphasis> et à l'utilisateur nommé <emphasis role="italic">richard</emphasis>, alors vous pouvez éditer le fichier <filename>/etc/samba/smb.conf</filename>, et ajouter les lignes suivantes sous l'entrée <emphasis role="italic">[sourcedocs]</emphasis> :</para>
                <para>
                   <emphasis role="bold">read list = @planning</emphasis>
                </para>
@@ -574,17 +567,11 @@
 <command>smbclient //bill/documents -U &lt;username&gt;</command>
 </screen>
                 </para>
-            <para>
-            You will then be prompted for the password for the user name specified after the -U switch, and upon successful
-            authentication, will be presented with a prompt where commands may be entered for manipulating and transferring
-            files in a syntax similar to that used by non-graphical FTP clients.  For more information on the 
-            <application>smbclient</application> utility, read the utility's manual page with the command:
-<screen>
+            <para>Il vous sera alors demandé le mot de passe de l'utilisateur spécifié après le paramètre -U, et après la réussite de l'authentification, vous obiendrez un prompt vous permettant de manipuler ou transférer les fichiers avec une syntaxe semblable au client FTP en mode texte. Pour plus d'informations sur l'utilitaire <application>smbclient</application>, consultez la page du manuel avec la commande : <screen>
 <command>
 man smbclient
 </command>
-</screen>
-            </para>
+</screen></para>
             <para>
             Local mounting of remote network resources using the SMB protocol is also possible using the <application>mount</application> command.
             For example, to mount a shared  folder named <emphasis role="italic">project-code</emphasis> on a Windows server named 
@@ -596,11 +583,7 @@ man smbclient
 <command>mount -t smbfs -o username=dlightman //development/project-code /mnt/pcode</command>
 </screen>
                 </para>
-                <para>You will then be prompted for the user password, and after successfully authenticating, the contents of the shared resource
-                will be available locally via the mount-point specified as the last argument to the mount command.   To disconnect the shared
-                resource, simply use the <application>umount</application> command as you would with any other mounted file system.
-                For example:
-                </para>
+                <para>Il vous sera alors demandé d'entrer le mot de passe utilisateur, et après vous être authentifié, le contenu de la ressource partagée sera accessible localement via le point de montage spécifié par le dernier argument de la commande mount. Pour déconnecter la ressource partagée, utilisez simplement la commande <application>umount</application> comme vous le feriez avec n'importe quel autre système de fichiers monté. Par exemple :</para>
                 <para>
 <screen>
 <command>umount /mnt/pcode</command>
@@ -608,13 +591,7 @@ man smbclient
                 </para>
         <sect3 id="user-accounts" status="complete">
           <title>Comptes utilisateur</title>
-            <para>
-              User Accounts define persons with some level of authorization to use certain computer and network resources.  Typically, in a network
-              environment, a user account is provided to each person allowed to access a computer or network, where policies and permissions then
-              define what explicit rights that user account has access to.  To define SAMBA network users for your Ubuntu system, you may use the
-              <application>smbpasswd</application> command.  For example to add a SAMBA user to your Ubuntu system with the user name
-              <emphasis role="italic">jseinfeld</emphasis>, you would enter this command at the prompt:
-             </para>
+            <para>Les Comptes Utilisateurs définissent des personnes avec un certain niveau d'autorisation à utiliser un certain ordinateur et des ressources réseau. Typiquement, dans un environnement réseau, un compte utilisateur est fourni à chaque personne autorisée à accéder à un ordinateur ou à un réseau, où des politiques de sécurité et des permissions définissent alors de quels droits explicites ce compte utilisateur dispose. Pour définir des utilisateurs réseau SAMBA sur votre système Ubuntu, vous pouvez utiliser la commande <application>smbpasswd</application>. Par exemple, pour ajouter un utilisateur SAMBA à votre système Ubuntu avec le nom d'utilisateur <emphasis role="italic">jseinfeld</emphasis>, vous pourriez entrer ceci à l'invite de commandes :</para>
                  <para>
 <screen>
 <command>smbpasswd -a jseinfeld</command>
@@ -638,22 +615,8 @@ man smbclient
         </sect3>
         <sect3 id="windows-networking-groups" status="complete">
           <title>Groupes</title>
-            <para>
-              Groups define a collection of computers or users which have a common level of access to particular network resources and offer a level
-              of granularity in controlling access to such resources.  For example, if a group <emphasis role="italic">qa</emphasis> is defined and contains the users
-              <emphasis role="italic">freda</emphasis>, <emphasis role="italic">danika</emphasis>, and <emphasis role="italic">rob</emphasis> and a second group
-              <emphasis role="italic">support</emphasis> is defined and consists of users <emphasis role="italic">danika</emphasis>, <emphasis role="italic">jeremy</emphasis>,
-              and <emphasis role="italic">vincent</emphasis> then  certain network resources configured to allow access by the <emphasis role="italic">qa</emphasis>
-              group will subsequently enable access by freda, danika, and rob, but not jeremy or vincent.  Since the user <emphasis role="italic">danika</emphasis>
-              belongs to both the <emphasis role="italic">qa</emphasis> and <emphasis role="italic">support</emphasis> groups, she will be able to access resources
-              configured for access by both groups, whereas all other users will have only access to resources explicitly allowing the group they are
-              part of.
-            </para>
-            <para>
-            When defining groups in the SAMBA configuration file, <filename>/etc/samba/smb.conf</filename> the recognized syntax is to preface the group name with an
-            "@" symbol.  For example, if you wished to define a group named <emphasis role="italic">sysadmin</emphasis> in a certain section of the
-            <filename>/etc/samba/smb.conf</filename>, you would do so by entering the group name as <emphasis role="bold">@sysadmin</emphasis>.
-            </para>
+            <para>Les Groupes définissent un ensemble d'ordinateurs ou d'utilisateurs qui ont un niveau d'accès commun à des ressources réseau particulières, et offrent une certaine granularité dans le contrôle d'accès à de telles ressources. Par exemple, si un groupe <emphasis role="italic">qa</emphasis> est défini et contient les utilisateurs <emphasis role="italic">freda</emphasis>, <emphasis role="italic">danika</emphasis>, et <emphasis role="italic">rob</emphasis>, et un second groupe <emphasis role="italic">support</emphasis> est défini et contient les utilisateurs <emphasis role="italic">danika</emphasis>, <emphasis role="italic">jeremy</emphasis> et <emphasis role="italic">vincent</emphasis>, alors certaines ressources réseau configurées pour autoriser l'accès au groupe <emphasis role="italic">qa</emphasis> autoriseraient par conséquent l'accès à freda, danika et rob, mais pas à jeremy ou à vincent. Comme l'utilisateur <emphasis role="italic">danika</emphasis> appartient aux deux groupes <emphasis role="italic">qa</emphasis> et <emphasis role="italic">support</emphasis>, elle sera capable d'accéder aux ressources configurées comme accessibles par les deux groupes, tandis que tous les autres utilisateurs n'auront accès qu'aux ressources autorisant explicitement le groupe dont ils font partie.</para>
+            <para>Lors de la définition de groupes dans le fichier de configuration de SAMBA, <filename>/etc/samba/smb.conf</filename>, la syntaxe reconnue est le préfixage du nom de groupe par le symbole "@". Par exemple, si vous souhaitez définir un groupe nommé <emphasis role="italic">sysadmin</emphasis> dans une certaine section du fichier <filename>/etc/samba/smb.conf, vous devez entrer le nom de groupe @sysadmin.</filename></para>
         </sect3>
         <sect3 id="group-policy" status="complete">
           <title>Stratégie de groupe</title>
@@ -685,9 +648,7 @@ man smbclient
             <emphasis role="italic">[global]</emphasis> heading in the <filename>/etc/samba/smb.conf</filename>.  That is, if you edit the file and add the line:
             </para>
             <para>
-            <emphasis role="bold">
-            browseable = true
-            </emphasis>
+            <emphasis role="bold">browseable = true</emphasis>
             </para>
             <para>
             under the <emphasis role="italic">[global]</emphasis> section of <filename>/etc/samba/smb.conf</filename>, then all shares provided by

@@ -40,5 +40,5 @@ for x in rosetta-desktopguide/*; do
 
 done
 
-rm -rf rosetta-desktopguide*
+#rm -rf rosetta-desktopguide*
 rm .xml2po.mo
