@@ -394,20 +394,18 @@
 <chapter id="package-management" status="complete">
 	<title>Gestão de Pacotes</title>
         <para>O Ubuntu apresenta um sistema acessível de gestão de pacotes para instalação, actualização, configuração e remoção de software. Para além de disponibilizar o acesso a uma base organizada de mais de 17000 pacotes de software para o seu computador Ubuntu, a gestão de pacotes também facilita a resolução de dependências e a verificação de existência de actualizações.</para>
-        <para>Várias ferramentas estão disponíveis para interagir com o sistema de gestão de pacotes do Ubuntu, desde simples utilitário de linhas de comandos que podem ser facilmente automatizados por administradores de sistemas, até um sistema com interface gráfico que pode ser facilmente utilizado por utilizadores novatos no Ubuntu.</para>
+        <para>Várias ferramentas estão disponíveis para interagir com o sistema de gestão de pacotes do Ubuntu, desde simples utilitários de linhas de comandos que podem ser facilmente automatizados por administradores de sistemas, até um sistema com interface gráfico que pode ser facilmente utilizado por utilizadores novatos no Ubuntu.</para>
   <sect1 id="package-management-introduction" status="complete">
 	<title>Introdução</title>
-        <para>O sistema de gestão de pacotes do Ubuntu é derivado de um sistema semelhante utilizado pelo Debian GNU/Linux. Os ficheiros dos pacotes contêm todos os ficheiros necessários, meta-dados, e instruções para implementar uma funcionalidade ou aplicação de software em particular no seu computador Ubuntu.</para>
+        <para>O sistema de gestão de pacotes do Ubuntu é derivado do mesmo sistema utilizado pelo Debian GNU/Linux. Os ficheiros dos pacotes contêm todos os ficheiros necessários, meta-dados, e instruções para implementar uma funcionalidade ou aplicação de software em particular no seu computador Ubuntu.</para>
         <para>Os ficheiros de pacotes do Debian têm habitualmente a extensão '.deb', e tipicamente existem em <emphasis role="italics">repositórios</emphasis> que são colecções de pacotes disponíveis em vários suportes, tais como CD-ROM ou online. Os pacotes estão normalmente num formato binário pré-compilado, pelo que a instalação é rápida e não necessita de software de compilação.</para>
-        <para>Muitos pacotes complexos utilizam o conceito de <emphasis role="italics">dependências</emphasis>. Dependências são pacotes adicionais necessários pelo pacote principal para que possa funcionar correctamente. Por exemplo, o pacote de sintetização de voz <application>Festival</application> depende do pacote <application>festvox-kalpc16k</application>, que é o pacote que fornece uma das vozes utilizada pela aplicação. Para que a aplicação <application>Festival</application> funcione todas as dependências têm que ser instaladas em conjunto com o pacote principal. As ferramentas de gestão de software no Ubuntu fazem isto automaticamente.</para>
+        <para>Muitos pacotes complexos utilizam o conceito de <emphasis role="italics">dependências</emphasis>. Dependências são pacotes adicionais necessários ao pacote principal para que este possa funcionar correctamente. Por exemplo, o pacote de sintetização de voz <application>Festival</application> depende do pacote <application>festvox-kalpc16k</application>, que é o pacote que fornece uma das vozes utilizada pela aplicação. Para que a aplicação <application>Festival</application> funcione todas as dependências têm que ser instaladas em conjunto com o pacote principal. As ferramentas de gestão de software no Ubuntu fazem isto automaticamente.</para>
   </sect1>
   <sect1 id="apt-get" status="complete">
 	<title>Apt-Get</title>
         <para>O comando <application>apt-get</application> é uma ferramenta poderosa em linha de comandos utilizada para trabalhar com o APT <emphasis>Advanced Packaging Tool</emphasis> do Ubuntu efectuando funções tais como a instalação de novos pacotes de software, actualização dos pacotes instalados, actualização da lista de pacotes, e até a actualização completa do sistema Ubuntu.</para>
-        <para>Sendo uma simples ferramenta de linha de comandos, o <application>apt-get</application> tem inúmeras vantagens sobre outras ferramentas de gestão de pacotes disponíveis para os administradores de sistemas.  Algumas dessa vantagens incluem uma fácil utilização através de ligações utilizando via terminais (SSH) e a possibilidade de ser utilizado em programas <emphasis role="italics">scripts</emphasis> de administração, que podem podem ser activados pelo utilitário de agendamento de tarefas <application>cron</application>.</para>
-        <para>
-        Some examples of popular uses for the <application>apt-get</application> utility:
-        <itemizedlist>
+        <para>Sendo uma simples ferramenta de linha de comandos, o <application>apt-get</application> tem inúmeras vantagens sobre outras ferramentas de gestão de pacotes disponíveis para os administradores de sistemas.  Algumas dessa vantagens incluem uma fácil utilização através de simples ligações via terminal (SSH) e a possibilidade de ser utilizado em programas <emphasis role="italics">scripts</emphasis> de administração, que podem podem ser activados pelo utilitário de agendamento de tarefas <application>cron</application>.</para>
+        <para>Alguns exemplos de utilizações populares para o utilitário <application>apt-get</application>: <itemizedlist>
                <listitem>
                 <para><emphasis role="bold">Instalar um Pacote</emphasis>: A instalação de pacotes utilizando a ferramenta <application>apt-get</application> é muito simples. Por exemplo, para instalar a aplicação de análise de redes <emphasis role="italics">nmap</emphasis>, digite o seguinte seguinte comando: <screen>
 <command>sudo apt-get install nmap</command>
@@ -427,123 +425,73 @@
 </screen></para>
                 </listitem>
                 <listitem>
-                <para>
-                <emphasis role="bold">Upgrade Packages</emphasis>: Over time, updated versions of packages currently installed on your computer may become available from the package repositories (for example security updated).  To upgrade your system, first update your package index as outlined above, and then type:
-<screen>
+                <para><emphasis role="bold">Upgrade de Pacotes</emphasis>: <emphasis role="italics">Upgrade</emphasis> das versões  dos pacotes instalados no seu sistema podem estar disponíveis nos repositórios (por exemplo actualizações de segurança). Para efectuar o upgrade do seu sistema actualize em primeiro lugar a lista de pacotes como indicado acima, depois escreva: <screen>
 <command>sudo apt-get upgrade</command>
-</screen>
-                </para>
-                <para>
-                If a package needs to install or remove new dependencies when being upgraded, it will not be upgraded by the <emphasis>upgrade</emphasis> command. For such an upgrade, it is necessary to use the <emphasis role="italics">dist-upgrade</emphasis> command.
-                </para>
-                <para>
-                Also, you may upgrade your entire Ubuntu system from one revision to another with dist-upgrade.  For example, to upgrade from Ubuntu version 5.10 to version 6.06 LTS, you would first ensure the version 6.06 LTS repositories replace the existing 5.10 repositories in your computer's <filename>/etc/apt/sources.list</filename>, then simply issue the <application>apt-get update</application> command as detailed above, and finally, perform the actual upgrade by typing:
-<screen>
+</screen></para>
+                <para>Se um pacote necessita instalar ou remover novos pacotes dos quais depende quando pretendemos fazer o upgrade, o comando <emphasis>upgrade</emphasis> não o fará. Para esta actualização é necessário utilizar o comando <emphasis role="italics">dist-upgrade</emphasis>.</para>
+                <para>Também pode efectuar o <emphasis role="italics">upgrade</emphasis>  do seu sistema Ubuntu por completo de uma revisão para outra com o comando dist-upgrade. Por exemplo, para actualizar o sistema da versão 5.10 para a versão 6.06 LTS, primeiro assegure-se que substitui os repositórios da versão 5.10 pelos da 6.06 LTS no ficheiro <filename>/etc/apt/sources.list</filename> do seu computador, depois utilize o comando <application>apt-get update</application> como indicado acima, finalmente execute a actualização propriamente dita com o comando: <screen>
 <command>sudo apt-get dist-upgrade</command>
-</screen>               
-                </para>
-                <para>
-                After a fairly considerable amount of time, your computer will be upgraded to the new revision. Typically, some post-upgrade steps would be required as detailed in the upgrade notes for the revision you are upgrading to.
-                </para>
-                <para>
-                Actions of the <application>apt-get</application> command, such as installation and removal of packages, are logged in the /var/log/dpkg.log log file.
-                </para>
+</screen></para>
+                <para>Após um tempo relativamente grande o seu computador estará actualizado para a nova revisão. Tipicamente, alguns passos pós actualização serão requeridos tal como indicado nas notas de actualização da revisão para a qual está a efectuar a actualização.</para>
+                <para>As acções do comando <application>apt-get</application>, tais como instalação e remoção de pacotes, estão registadas num ficheiro /var/log/dpkg.log .</para>
                 </listitem>
-        </itemizedlist>
-        </para>
-		<para>For further information about the use of <application>APT</application>, read the comprehensive <ulink url="http://www.debian.org/doc/user-manuals#apt-howto">Debian APT User Manual</ulink> or type: <screen>apt-get help</screen></para>
+        </itemizedlist></para>
+		<para>Para mais informação acerca da utilização de <application>APT</application>, consulte <ulink url="http://www.debian.org/doc/user-manuals#apt-howto">Debian APT User Manual</ulink> ou utilize o comando: <screen>apt-get help</screen></para>
   </sect1>
 
   <sect1 id="aptitude" status="complete">
 	<title>Aptitude</title>
-        <para>
-        <application>Aptitude</application> is a menu-driven, text-based front-end to the <emphasis>Advanced Packaging Tool</emphasis> (APT) system. Many of the common package management functions, such as installation, removal, and upgrade, are performed in <application>Aptitude</application> with single-key commands, which are typically lowercase letters.
-        </para>
-        <para>
-        <application>Aptitude</application> is best suited to use in a non-graphical terminal environment to ensure proper functioning of the command keys.  You may start <application>Aptitude</application> 
-as a normal user with the following command at a terminal prompt:
-<screen>
+        <para><application>Aptitude</application> é uma interface em modo de texto baseada em menus, para o sistema APT <emphasis>Advanced Packaging Tool</emphasis>. Muitas das funções comuns de gestão de pacotes, tais como a instalação, remoção e actualização, são efectuadas no <application>Aptitude</application> com comandos de uma única tecla, habitualmente letras minúsculas.</para>
+        <para><application>Aptitude</application> é indicada para um ambiente não gráfico de terminal para assegurar um melhor funcionamento do teclado. Pode iniciar a aplicação <application>Aptitude</application> como um utilizador normal, escrevendo na linha de comandos o seguinte comando: <screen>
 <command>sudo aptitude</command>
-</screen>
-        </para>
-        <para>
-        When <application>Aptitude</application> starts, you will see a menu bar at the top of the screen and two panes below the menu bar.  The top pane contains package categories, such as <emphasis role="italics">New Packages</emphasis> and <emphasis role="italics">Not Installed Packages</emphasis>. The bottom pane contains information related to the packages and package categories.
-        </para>
-        <para>Using <application>Aptitude</application> for package management is relatively straightforward, and the user interface makes common tasks simple to perform.  The following are examples of popular package management functions as performed in <application>Aptitude</application>:
-        </para>
+</screen></para>
+        <para>Quando o <application>Aptitude</application> inicia, irá ver uma barra de menu no topo do ecrã e duas secções abaixo da barra de menu. A secção de cima contém as categorias de pacotes, tal como <emphasis role="italics">Novos Pacotes</emphasis> e <emphasis role="italics">Pacotes Não Instalados</emphasis>. A secção de baixo contém informação relativa aos pacotes e suas categorias.</para>
+        <para>Usar o <application>Aptitude</application> para gestão de pacotes é relativamente simples, e a interface do utilizador torna simples tarefas comuns. Seguem-se exemplos de funções populares de gestão de pacotes através do <application>Aptitude</application>:</para>
         <itemizedlist>
                <listitem>
-                <para><emphasis role="bold">Install Packages</emphasis>: To install a package, locate the package via the Not Installed Packages package category, for example, by using the keyboard arrow keys and the <keycap>ENTER</keycap> key, and highlight the package you wish to install.  After highlighting the package you wish to install, press the <keycap>+</keycap> key, and the package entry should turn <emphasis role="italics">green</emphasis>, indicating it has been marked for installation. Now press <keycap>g</keycap> to be presented with a summary of package actions.  Press <keycap>g</keycap> again, and you will be prompted to become root to complete the installation. Press <keycap>ENTER</keycap> which will result in a Password: prompt.  Enter your user password to become root. Finally, press <keycap>g</keycap> once more and you'll be prompted to download the package.  Press <keycap>ENTER</keycap> on the <emphasis role="italics">Continue</emphasis> prompt, and downloading and installation of the package will commence.
-                </para>
+                <para><emphasis role="bold">Instalar Pacotes</emphasis>: Para instalar um pacote, localize-o via a categoria Pacotes Não Instalados, por exemplo, usando as setas do teclado e a tecla <keycap>ENTER</keycap>, e escolha o pacote que deseja instalar. Após escolher o pacote a instalar, pressione a tecla <keycap>+</keycap>, e a entrada do pacote irá tornar-se <emphasis role="italics">verde</emphasis>, indicando que foi marcado para instalação. De seguide pressione <keycap>g</keycap> para lhe ser apresentado o sumário das acções do pacote. Pressione <keycap>g</keycap> novamente, e ser-lhe-á pedido que se torne superutilizador para completar a instalação. Pressione <keycap>ENTER</keycap> o que irá resultar num pedido de palavra-chave. Insira a palavra-chave do utilizador para se tornar superutilizador. Finalmente, pressione <keycap>g</keycap> mais uma vez e ser-lhe-á dito para fazer o download do pacote. Pressione <keycap>ENTER</keycap> na prompt <emphasis role="italics">Continuar</emphasis>, e irá começar o download e instalação do pacote.</para>
                </listitem>
                <listitem>
-                <para><emphasis role="bold">Remove Packages</emphasis>: To remove a package, locate the package via the Installed Packages package category, for example, by using the keyboard arrow keys and the <keycap>ENTER</keycap> key, and highlight the package you wish to remove.  After highlighting the package you wish to install, press the <keycap>-</keycap> key, and the package entry should turn <emphasis role="italics">pink</emphasis>, indicating it has been marked for removal. Now press <keycap>g</keycap> to be presented with a summary of package actions.  Press <keycap>g</keycap> again, and you will be prompted to become root to complete the installation. Press <keycap>ENTER</keycap> which will result in a Password: prompt.  Enter your user password to become root. Finally, press <keycap>g</keycap> once more, and you'll be prompted to download the package.  Press <keycap>ENTER</keycap> on the <emphasis role="italics">Continue</emphasis> prompt, and removal of the package will commence.
-                </para>
+                <para><emphasis role="bold">Remover Pacotes</emphasis>: Para remover um pacote, localize o mesmo via a categoria Pacotes Instalados, por exemplo usando as setas de direcção no teclado e o <keycap>ENTER</keycap>, até o pacote desejado estar evidenciado. Depois deste passo, prima a tecla <keycap>-</keycap> e a entrada referente a este pacote assumirá uma cor <emphasis role="italics">rosa</emphasis>, indicando que foi marcada para remoção. De seguida prima a tecla <keycap>g</keycap> para que lhe seja apresentado um sumário das opções disponíveis para o pacote. Volte a premir a tecla <keycap>g</keycap> e ser-lhe-á solicitado que se assuma como o utilizador root para completar a tarefa. Prima <keycap>ENTER</keycap> mais uma vez obtendo assim uma caixa de diálogo solicitando a inserção da password. Insira a password do administrador/root. Finalmente prima <keycap>g</keycap> mais uma vez e ser-lhe-á indicada a acção a decorrer. Pressione <keycap>ENTER</keycap> na prompt <emphasis role="italics">Continuar</emphasis> e a remoção do pacote terá início.</para>
                </listitem>
                <listitem>
-                <para><emphasis role="bold">Update Package Index</emphasis>: To update the package index, simply press the <keycap>u</keycap> key and you will be prompted to become root to complete the installation. Press <keycap>ENTER</keycap> which will result in a Password: prompt.  Enter your user password to become root. Updating of the package index will commence.  Press <keycap>ENTER</keycap> on the OK prompt when the download dialog is presented to complete the process.
-                </para>
+                <para><emphasis role="bold">Actualizar o índice de pacotes</emphasis>: para actualizar o índice dos pacotes, simplesmente prima a tecla <keycap>u</keycap> e ser-lhe-á solicitado que assuma o papel de root para concluir a tarefa. Prima <keycap>ENTER</keycap> e insira a password do utilizador root. A actualização terá início após carregar uma vez mais em <keycap>ENTER</keycap> na caixa de diálogo seguinte.</para>
                </listitem>
                <listitem>
                 <para><emphasis role="bold">Upgrade Packages</emphasis>: To upgrade packages,  perform the update of the package index as detailed above, and then press the <keycap>U</keycap> key to mark all upgradeable packages. Now press <keycap>g</keycap> whereby you'll be presented with a summary of package actions.  Press <keycap>g</keycap> again, and you will be prompted to become root to complete the installation. Press <keycap>ENTER</keycap> which will result in a Password: prompt.  Enter your user password to become root. Finally, press <keycap>g</keycap> once more, and you'll be prompted to download the package.  Press <keycap>ENTER</keycap> on the <emphasis role="italics">Continue</emphasis> prompt, and upgrade of the packages will commence.
                 </para>
                </listitem>
         </itemizedlist>
-        <para>The first column of information displayed in the package list in the top pane, when actually viewing packages lists the current state of the package, and uses the following key to describe the state of the package:
-        <itemizedlist>
+        <para>A primeira coluna de informação apresentada na lista de pacotes no painel superior, quando se visualiza efectivamente a listagem do estado actual dos pacotes, e utiliza a seguinte chave para descrever o estado do pacote: <itemizedlist>
         <listitem>
-        <para>
-        <emphasis role="bold">i</emphasis>: Installed package.
-        </para>
+        <para><emphasis role="bold">i</emphasis>: Pacote instalado.</para>
         </listitem>
         <listitem>
-        <para>
-        <emphasis role="bold">c</emphasis>: Package not installed, but package configuration remains on system
-        </para>
+        <para><emphasis role="bold">c</emphasis>: Pacote não instalado, mas a respectiva configuração mantém-se no sistema.</para>
         </listitem><listitem>
-        <para>
-        <emphasis role="bold">p</emphasis>: Purged from system
-        </para>
+        <para><emphasis role="bold">p</emphasis>: Eliminado do sistema</para>
         </listitem><listitem>
-        <para>
-        <emphasis role="bold">v</emphasis>: Virtual package
-        </para>
+        <para><emphasis role="bold">v</emphasis>: Pacote virtual</para>
         </listitem><listitem>
-        <para>
-        <emphasis role="bold">B</emphasis>: Broken package
-        </para>
+        <para><emphasis role="bold">B</emphasis>: Pacote danificado (broken)</para>
         </listitem><listitem>
-        <para>
-        <emphasis role="bold">u</emphasis>: Unpacked files, but package not yet configured
-        </para>
+        <para><emphasis role="bold">u</emphasis>: Ficheiros descomprimidos (unpacked), mas o pacote não está ainda configurado</para>
         </listitem><listitem>
-        <para>
-        <emphasis role="bold">C</emphasis>: Half-configured- Configuration failed and requires fix
-        </para>
+        <para><emphasis role="bold">C</emphasis>: Parcialmente configurado - Configuração falhada e requer reparação</para>
         </listitem><listitem>
-        <para>
-        <emphasis role="bold">H</emphasis>: Half-installed- Removal failed and requires fix
-        </para>
+        <para><emphasis role="bold">H</emphasis>: Parcialmente instalado - Remoção falhada e requer reparação</para>
         </listitem>
-        </itemizedlist>
-        </para>
-        <para>To exit Aptitude, simply press the <keycap>q</keycap> key and confirm you wish to exit. Many other functions are available from the Aptitude menu by pressing the <keycap>F10</keycap> key.
-        </para>
+        </itemizedlist></para>
+        <para>Para sair do Aptitude, pressione simplesmente a tecla <keycap>q</keycap> e confirme que pretende sair. Muitas outras funções estão disponíveis no menu do Aptitude pressionando a tecla <keycap>F10</keycap>.</para>
   </sect1>
 	<sect1 id="configuration" status="complete">
 		<title>Configuração</title>
-          <para>
-          Configuration of the <emphasis>Advanced Packaging Tool</emphasis> (APT) system repositories is stored in the /etc/apt/sources.list configuration file. An example of this file is referenced here, along with information on adding or removing repository references from the file.
-          </para>
-          <para>
-          <ulink url="../sample/sources.list">Here</ulink> is a simple example of a typical <filename>/etc/apt/sources.list</filename> file.
-          </para>
-          <para>
-          You may edit the file to enable repositories or disable them.  For example, to disable the requirement of inserting the Ubuntu CD-ROM whenever package operations occur, simply comment out the appropriate line for the CD-ROM, which appears at the top of the file:
-          </para>
+          <para>A configuração dos repositórios do <emphasis>Utilitário Avançado de Pacotes</emphasis> (APT) está armazenada no ficheiro de configuração /etc/apt/sources.list. Um exemplo deste ficheiro está referenciado aqui, em conjunto com informação para adicionar ou remover repositórios do ficheiro.</para>
+          <para><ulink url="../sample/sources.list">Aqui</ulink> é um exemplo simples do conteúdo típico do ficheiro <filename>/etc/apt/sources.list</filename>.</para>
+          <para>Pode editar o ficheiro para activar ou desactivar repositórios. Por exemplo, para desactivar o pedido de inserção do CD-ROM do Ubuntu sempre que ocorrem operações referentes a pacotes, coloque um comentário na linha apropriada que aparece no início do ficheiro:</para>
           <para>
 <screen>
-# no more prompting for CD-ROM please
+# Não voltar a pedir o CD
 # deb cdrom:[Ubuntu 6.06 _Dapper Drake_ - Release i386 (20060329.1)]/ dapper main restricted
 </screen>
           </para>
@@ -551,24 +499,16 @@ as a normal user with the following command at a terminal prompt:
     </sect1>
 	<sect1 id="extra-repositories" status="complete">
 		<title>Repositórios Extra</title>
-          <para>
-          In addition to the officially supported package repositories available for Ubuntu, there exist additional community-maintained repositories which add thousands more potential packages for installation.  Two of these additional repositories are most popular, and are the <emphasis>Universe</emphasis> and <emphasis>Multiverse</emphasis> repositories. These repositories are not officially supported by Ubuntu, which is why they are not enabled by default, but they generally provide packages which are safe for use with your Ubuntu computer. 
-          </para>
-		  <note><para>Packages in the Multiverse repository often have licensing issues that prevent them from being distributed with a free operating system, and they may be illegal in your locality.</para></note>
+          <para>Em adição aos repositórios dos pacotes oficialmente suportados e disponíveis para o Ubuntu, existem repositórios adicionais mantidos pela comunidade que acrescentam milhares de pacotes potenciais para instalação. Destes, dois são muito populares, os repositórios <emphasis>Universe</emphasis> e <emphasis>Multiverse</emphasis>. Estes repositórios não são oficialmente suportados pelo Ubuntu, razão pela qual não estão activados por omissão, mas geralmente fornecem pacotes que podem ser utilizados de forma segura no seu computador Ubuntu.</para>
+		  <note><para>Os pacotes do repositório Multiverse têm frequentemente licenças que impedem a sua distribuição com um sistema operativo gratuito, e podem ser ilegais no seu país ou região.</para></note>
           <warning>
-          <para>
-          Be advised that neither the <emphasis>Universe</emphasis> or <emphasis>Multiverse</emphasis> repositories contain officially supported packages. In particular, there may not be security updates for these packages.
-          </para>
+          <para>Tenha em atenção que os repositórios <emphasis>Universe</emphasis> ou <emphasis>Multiverse</emphasis> não contêm pacotes suportados oficialmente. Em particular, podem não existir actualizações de segurança para esses pacotes.</para>
           </warning>
-          <para>
-          Many other package sources are available, sometimes even offering only one package, as in the case of package sources provided by the developer of a single application.  You should always be very careful and cautious when using non-standard package sources, however.  Research the source and packages carefully before performing any installation, as some package sources and their packages could render your system unstable or non-functional in some respects.
-          </para>
-          <para>
-          To enable the <emphasis>Universe</emphasis> and <emphasis>Multiverse</emphasis> repositories, edit the <filename>/etc/apt/sources.list</filename> file and uncomment the appropriate lines:
-          </para>
+          <para>Muitas outras fontes de pacotes estão disponíveis, por vezes contendo apenas um pacote, como no caso de uma fonte fornecida pelo programador de apenas uma aplicação. No entanto deve ter sempre um extremo cuidado e precaução quando utiliza pacotes não padrão. Pesquise a origem e os pacotes antes de os instalar, dado que algumas fontes e os respectivos pacotes podem tornar o seu sistema instável ou impedi-lo de funcionar.</para>
+          <para>Para activar os repositórios <emphasis>Universe</emphasis> e <emphasis>Multiverse</emphasis>, edite o ficheiro <filename>/etc/apt/sources.list</filename> e retire o carácter de comentário "#" das linhas apropriadas.</para>
           <para>
 <screen>
-# We want Multiverse and Universe repositories, please
+# Queremos os repositórios Universe e Multiverse, por favor
 
 deb http://archive.ubuntu.com/ubuntu dapper universe multiverse
 deb-src http://archive.ubuntu.com/ubuntu dapper universe multiverse
@@ -577,7 +517,7 @@ deb-src http://archive.ubuntu.com/ubuntu dapper universe multiverse
           <sect2 id="extra-repositories-references" status="complete">
                 <title>Referências</title>
                 <para>
-                <ulink url="https://wiki.ubuntu.com/AddingRepositoriesHowto">Adding Repositories Howto (Ubuntu Wiki)</ulink>
+                <ulink url="https://wiki.ubuntu.com/AddingRepositoriesHowto">Como Adicionar Repositórios (Ubuntu Wiki)</ulink>
                 </para>
           </sect2>
     </sect1>

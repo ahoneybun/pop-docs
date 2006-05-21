@@ -398,7 +398,7 @@
 <chapter id="networking" status="complete">
 	<title>联网</title>
   <para>网络是由两个或两个以上的设备通过物理线缆或无线连接而成并在连接设备之间共享和分发信息。这些设备包括计算机系统、打印机或用有线或无线连接起来的其它相关设备。</para>
-  <para>Ubuntu 服务器版指南的这部分提供与联网相关的一般和特定信息，包括网络概念的简介以及对常用网络协议及服务器应用程序的详细讨论。</para>
+  <para>Ubuntu 服务器指南的这部分提供与联网相关的一般和特定信息，包括网络概念的简介以及对常用网络协议及服务器应用程序的详细讨论。</para>
 	<sect1 id="network-configuration" status="complete">
 		<title>网络配置</title>
           <para>Ubuntu 提供了许多图形化工具来配制您的网络设备。本文适用于服务器管理员并聚焦在命令行中管理您的网络。</para>
@@ -550,7 +550,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
 		<title>OpenSSH 服务器</title>
       <sect2 id="openssh-introduction">
         <title>介绍</title> 
-           <para><phrase>Ubuntu</phrase> 服务器版指南的这部分内容介绍一个强大的远程控制网络计算机和在它们之间传输数据的工具集 <emphasis>OpenSSH</emphasis>。您也可以学到一些 OpenSSH 服务器应用程序的配置以及如何在您 Ubuntu 系统修改它们。</para>
+           <para><phrase>Ubuntu</phrase> 服务器指南的这部分内容介绍一个强大的远程控制网络计算机和在它们之间传输数据的工具集 <emphasis>OpenSSH</emphasis>。您也可以学到一些 OpenSSH 服务器应用程序的配置以及如何在您 Ubuntu 系统修改它们。</para>
           <para>OpenSSH 是Secure Shell (SSH) 协议工具集中的一个自由可用的版本，用以远程控制一台计算机或在计算机之间传输文件。完成这些功能的传统工具，如 <application>telnet</application> 或 <application>rcp</application> 等，是不安全的，它们在使用时用明文来传输用户的密码。OpenSSH 提供一个服务器守护程序和客户端工具来保障安全、加密的远程控制和文件传输操作，以有效地取代传统的工具。</para>
           <para>OpenSSH 服务器组组件 <application>sshd</application> 持续监听来自任何客户端工具的连接请求。当一个连接请求发生时，<application>sshd</application> 根据客户端连接的类型来设置当前连接。例如，如果远程计算机是通过 <application>ssh</application> 客户端应用程序来连接的话，OpenSSH 服务器将在认证之后设置一个远程控制会话。如果一个远程用户通过 <application>scp</application> 来连接 OpenSSH 服务器，OpenSSH 服务器将在认证之后开始服务器和客户机之间的安全文件拷贝。OpenSSH 可以支持多种认证模式，包括纯密码、公钥以及<application>Kerberos</application> 票据。</para>
           </sect2>
@@ -1714,7 +1714,7 @@ tcp 0 0 localhost.localdomain:mysql *:* LISTEN -
           <title>配置</title>
             <para>缺省状态下，通过 TCP/IP 的连接是被禁用的。PostgreSQL 支持多客户认证方式。其中 IDENT 认证方式被默认使用。请参考  <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">PostgreSQL 管理员指南</ulink>。</para>
             
-            <para>接下来的讨论假定您希望启用 TCP/IP 连接并对客户认证使用 MD5 模式。PostgreSQL 配置文件被保存在 <filename>/etc/postgresql/&lt;version&gt;/main /etc/postgresql/7.4/main </filename></para>
+            <para>接下来的讨论假定您希望启用 TCP/IP 连接并对客户认证使用 MD5 模式。PostgreSQL 配置文件被保存在 <filename>/etc/postgresql/&lt;version&gt;/main /etc/postgresql/7.4/main</filename></para>
             
             <tip>
             <para>要配置 <application>ident</application> 认证，请在 <filename>/etc/postgresql/7.4/main/pg_ident.conf</filename> 文件中添加以下几条：</para>
@@ -1724,8 +1724,7 @@ tcp 0 0 localhost.localdomain:mysql *:* LISTEN -
 
             <para>找到 <emphasis>#tcpip_socket = false</emphasis> 行并将其改为 <emphasis>tcpip_socket = true</emphasis>。如果您知道您正在做什么，那么您也可以编辑其他所有参数。详情请参考配置文件或 PostgreSQL 文档。</para>
 
-            <para>缺省状态下，没有为 <emphasis>MD5</emphasis> 客户端认证设置用户证书。因此，首先必须将 PostgreSQL
- 服务器配置成使用 <emphasis>trust</emphasis> 客户端认证，用以连接数据库。配置密码并将配置恢复成使用 <emphasis>MD5</emphasis> 客户端认证。要启用 <emphasis>trust</emphasis> 客户端认证，可编辑文件 <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename></para>
+            <para>缺省状态下，没有为 <emphasis>MD5</emphasis> 客户端认证设置用户证书。因此，首先必须将 PostgreSQL 服务器配置成使用 <emphasis>trust</emphasis> 客户端认证，用以连接数据库。配置密码并将配置恢复成使用 <emphasis>MD5</emphasis> 客户端认证。要启用 <emphasis>trust</emphasis> 客户端认证，可编辑文件 <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename></para>
 
             <para>注释所有使用 <emphasis>ident</emphasis> 和 <emphasis>MD5</emphasis> 客户端认证的行并添加下列行：</para>
 <programlisting>

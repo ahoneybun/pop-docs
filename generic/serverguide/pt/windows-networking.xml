@@ -400,7 +400,7 @@
   <para>Redes de computadores são frequentemente compostas por diversos sistemas, e apesar de que seria engraçado operar uma rede composta apenas por computadores e servidores Ubuntu, alguns ambientes de rede têm de consistir em sistemas Ubuntu e <trademark class="registered">Microsoft</trademark><trademark class="registered">Windows</trademark> trabalhando juntos em harmonia. Esta secção do Guia do Servidor <phrase>Ubuntu</phrase> introduz princípios e ferramentas usados na configuração do seu Servidor Ubuntu para partilhar recursos de rede com computadores Windows.</para>
 	<sect1 id="windows-networking-introduction" status="complete">
 		<title>Introdução</title>
-          <para>Ligando em rede o seu sistema Ubuntu com clientes Windows com sucesso envolve providenciar e integrar com serviços comuns aos ambientes Windows. Tais serviços assistem na partilha de dados e informação acerca dos computadores e utilizadores envolvidos na rede, e podem ser classificados em três principais categorias de funcionalidade:</para>
+          <para>Ligar em rede o seu sistema Ubuntu a clientes Windows com sucesso envolve providenciar e integrar com serviços comuns aos ambientes Windows. Tais serviços assistem na partilha de dados e informação acerca dos computadores e utilizadores envolvidos na rede, e podem ser classificados em três principais categorias de funcionalidade:</para>
           <itemizedlist>
              <listitem>
              <para><emphasis role="bold">Serviços de Partilha de Ficheiros e Impressoras </emphasis>. Usando o protocolo Server Message Block (SMB) para facilitar a partilha de ficheiros, pastas, volumes e a partilha de impressoras pela rede.</para>
@@ -412,10 +412,10 @@
              <para><emphasis role="bold">Acesso e Autenticação</emphasis>. Estabelecendo a identidade de um computador ou utilizador da rede e determinando a informação do computador ou utilizador autorizado a aceder usando princípios e tecnologias tais como permissões de ficheiros, políticas de grupo, e o serviço de autenticação Kerberos.</para>
              </listitem>
           </itemizedlist>
-          <para>Felizmente, o seu sistema Ubuntu pode fornecer tais facilidades a clientes Windows e partilhar recursos de rede entre eles. Uma das peças chave de software que o seu sistema Ubuntu inclui para trabalhar em redes Windows é a suite SAMBA de ferramentas e aplicações de servidor SMB. Esta secção do Guia do Servidor <phrase>Ubuntu</phrase> irá introduzir sucintamente a instalação e configuração limitada da suite SAMBA de utilitários e aplicações de servidor. Documentação detalhada e informação sobre SAMBA está fora dos objectivos desta documentação, mas existe no <ulink url="http://www.samba.org">website SAMBA</ulink>.</para>
+          <para>Felizmente, o seu sistema Ubuntu pode fornecer tais facilidades a clientes Windows e partilhar recursos de rede entre eles. Uma das peças chave de software que o seu sistema Ubuntu inclui para trabalhar em redes Windows é a suite SAMBA de ferramentas e aplicações de servidor SMB. Esta secção do Guia do Servidor <phrase>Ubuntu</phrase> irá introduzir sucintamente a instalação e configuração limitada da suite SAMBA de utilitários e aplicações de servidor. Documentação detalhada e informação sobre SAMBA está fora dos objectivos desta documentação, mas existe no <ulink url="http://www.samba.org">sítio web SAMBA</ulink>.</para>
     </sect1>
 	<sect1 id="installing-samba" status="complete">
-		<title>A instalar o SAMBA</title>
+		<title>Instalar o SAMBA</title>
           <para>Na linha de comandos <emphasis role="italic">prompt</emphasis> introduza o comando seguinte para instalar as aplicações do servidor SAMBA:</para>
           <para>
 <screen>
@@ -424,15 +424,15 @@
            </para> 
     </sect1>
 	<sect1 id="configuring-samba" status="complete">
-		<title>A configurar o SAMBA</title>
-          <para>Você pode configurar o servidor SAMBA editando o ficheiro <filename>/etc/samba/smb.conf</filename> para alterar as definições padrão ou adicionar novas definições. Informação extra sobre cada definição está disponível nos comentários do ficheiro <filename>/etc/samba/smb.conf</filename> ou vendo o manual do <filename>/etc/samba/smb.conf</filename> a partir da linha de comandos <emphasis role="italic">prompt</emphasis> com o seguinte comando escrito no terminal:</para>
+		<title>Configurar o SAMBA</title>
+          <para>Pode configurar o servidor SAMBA editando o ficheiro <filename>/etc/samba/smb.conf</filename> para alterar as definições padrão ou adicionar novas definições. Informação extra sobre cada definição está disponível nos comentários do ficheiro <filename>/etc/samba/smb.conf</filename> ou vendo o manual do <filename>/etc/samba/smb.conf</filename> a partir da linha de comandos <emphasis role="italic">prompt</emphasis> com o seguinte comando escrito no terminal:</para>
            <para>
 <screen>
 <command>man smb.conf</command>
 </screen>
            </para>
             <tip>
-               <para>Antes de editar o ficheiro de configuração, você deve criar uma cópia do ficheiro original e protegê-lo de escrita de modo a ter as definições originais como referência e reusá-las se necessário.</para>
+               <para>Antes de editar o ficheiro de configuração, deve criar uma cópia do ficheiro original e protegê-lo de escrita de modo a ter as definições originais como referência e reusá-las se necessário.</para>
             </tip>
            <para>Cria cópia de segurança do ficheiro <filename>/etc/samba/smb.conf</filename>:</para>
              <para>
@@ -447,26 +447,26 @@
            <para>As secções seguintes discutem com mais detalhe o SAMBA e as tecnologias de suporte, tais como o servidor Lightweight Directory Access Protocol (LDAP), e o servidor de autenticação Kerberos. Também conhecerá algumas directivas disponíveis no ficheiros de configuração do SAMBA que facilitam a integração com clientes e servidores Windows.</para>
         <sect3 id="active-directory" status="complete">
           <title>Directório Activo</title>
-            <para>Active Directory é uma implementação proprietária da Microsoft dos Serviços de Directório, e é utilizada para fornecer meios de partilhar informação acerca dos recursos e utilizadores de rede. Para além de fornecer uma fonte centralizada destas informações, Active Directory também funciona como central de autenticação e segurança para a rede.
+            <para>Active Directory (Directório Activo) é uma implementação proprietária da Microsoft dos Serviços de Directório, e é utilizada para fornecer meios de partilhar informação acerca dos recursos e utilizadores de rede. Para além de fornecer uma fonte centralizada destas informações, Active Directory também funciona como central de autenticação e segurança para a rede.
 Active Directory combina funcionalidades tradicionalmente separadas em sistemas de directório especializados, para simplificar a integração, gestão e segurança dos recursos da rede. O pacote SAMBA pode ser configurado para utilizar os serviços de Active Directory de um Controlador de Domínio Windows.</para>
             <sect4 id="ldap" status="complete">
               <title>LDAP</title>
-              <para>A aplicação de servidor LDAP oferece funcionalidades de Serviços de Directório a computadores em Windows de forma muito semelhante aos serviços <emphasis role="italic">Active Directory</emphasis> da Microsoft. Tais serviços incluem a gestão de identidades e relação de computadores, utilizadores e grupos de computadores ou utilizadores que fazem parte da rede, e fornece uma forma consistente para descrever, localizar e gerir esses recursos. A implementação gratuita do LDAP disponível para o seu sistema Ubuntu chama-se <emphasis role="italic">OpenLDAP</emphasis>. Os processos do servidor responsáveis por manipular os pedidos OpenLDAP de directórios e de propagação dos dados de directórios de um servidor LDAP para outro em Ubuntu sáo, <application>slapd</application> e <application>slurpd</application>. OpenLDAP pode ser utilizado em conjunto com o SAMBA para fornecer serviços de Ficheiros, Impressão e de Directórios da mesma forma que um Controlador de Domínios Windows, desde que o SAMBA seja compilador com suporte LDAP.</para>
+              <para>A aplicação de servidor LDAP oferece funcionalidades de Serviços de Directório a computadores Windows de forma muito semelhante aos serviços <emphasis role="italic">Active Directory</emphasis> da Microsoft. Tais serviços incluem a gestão de identidades e relação de computadores, utilizadores e grupos de computadores ou utilizadores que fazem parte da rede, e fornece uma forma consistente para descrever, localizar e gerir esses recursos. A implementação gratuita do LDAP disponível para o seu sistema Ubuntu chama-se <emphasis role="italic">OpenLDAP</emphasis>. Os processos do servidor responsáveis por manipular os pedidos OpenLDAP de directórios e de propagação dos dados de directórios de um servidor LDAP para outro em Ubuntu são, <application>slapd</application> e <application>slurpd</application>. OpenLDAP pode ser utilizado em conjunto com o SAMBA para fornecer serviços de Ficheiros, Impressão e de Directórios da mesma forma que um Controlador de Domínios Windows, desde que o SAMBA seja compilado com suporte LDAP.</para>
             </sect4>
             <sect4 id="kerberos" status="complete">
               <title>Kerberos</title>
-              <para>O sistema de autenticação segura Kerberos é um serviço padrão para fornecer autenticação a computadores e utilizadores através de um servidor central que garante, senhas de autorização codificadas aceites por qualquer outros computador que utilize o Kerberos. As vantagens do Kerberos incluem autenticação mútua, autenticação por delegação, interoperatibilidade e gestão simplificada de domínios de confiança. Os processos do servidor principal para manipulação autenticação do Kerberos, e da base de dados de administração do Kerberos no Ubuntu são  <application>krb5kdc</application> e <application>kadmin</application>. O SAMBA pode utilizar o Kerberos como mecanismo de autenticação de computadores e utilizadores num Controlador de Domínio Windows. Para isso o Ubuntu deve ter o Kerberos instalado e o ficheiro <filename>/etc/samba/smb.conf</filename> deve ser modificado para seleccionar o modo adequado de <emphasis role="italic">realm</emphasis> e <emphasis role="italic">security</emphasis>. Por exemplo: edite o ficheiro <filename>/etc/samba/smb.conf</filename> e acrescente os valores:</para>
+              <para>O sistema de autenticação segura Kerberos é um serviço padrão para fornecer autenticação a computadores e utilizadores através de um servidor central que garante, senhas de autorização codificadas aceites por qualquer outros computador que utilize o Kerberos. As vantagens do Kerberos incluem autenticação mútua, autenticação por delegação, interoperabilidade e gestão simplificada de domínios de confiança. Os processos do servidor principal para gestão da autenticação Kerberos, e da administração da base de dados do Kerberos no Ubuntu são  <application>krb5kdc</application> e <application>kadmin</application>. O SAMBA pode utilizar o Kerberos como mecanismo de autenticação de computadores e utilizadores num Controlador de Domínio Windows. Para isso o Ubuntu deve ter o Kerberos instalado e o ficheiro <filename>/etc/samba/smb.conf</filename> deve ser modificado para seleccionar o modo adequado de <emphasis role="italic">realm</emphasis> e <emphasis role="italic">security</emphasis>. Por exemplo: edite o ficheiro <filename>/etc/samba/smb.conf</filename> e acrescente os valores:</para>
                  <para>
-                 <emphasis role="bold">realm = NOME_DOMINIO</emphasis>
+                 <emphasis role="bold">realm = NOME_DOMÍNIO</emphasis>
                  </para>
                  <para>
                  <emphasis role="bold">security = ADS</emphasis>
                  </para>
                  <para>para o ficheiro, e grave o ficheiro.</para>
                     <tip>
-                       <para>Assegure-se de que substitui NOME_DOMINIO no exemplo acima pelo nome real do seu Domínio Windows específico.</para>
+                       <para>Assegure-se de que substitui NOME_DOMÍNIO no exemplo acima pelo nome real do seu Domínio Windows específico.</para>
                     </tip>
-                 <para>Você deve reiniciar os serviços SAMBA para as alterações terem efeito. Reinicie os serviços SAMBA com o seguinte comando escrito no terminal:</para>
+                 <para>Deve reiniciar os serviços SAMBA para as alterações terem efeito. Reinicie os serviços SAMBA com o seguinte comando escrito no terminal:</para>
                     <para>
 <screen>
 <command>sudo /etc/init.d/samba restart</command>
@@ -476,7 +476,7 @@ Active Directory combina funcionalidades tradicionalmente separadas em sistemas 
         </sect3>
         <sect3 id="computer-accounts" status="complete">
           <title>Contas de Computador</title>
-            <para>Contas de Computador são usadas nos Serviços de Directório para a identificação única de sistemas de computador participando em rede, e são mesmo tratadas na mesma maneira que utilizadores em termos de segurança. Contas de Computador podem ter palavras passe tal como têm as contas de utilizador, e são sujeitas a autorização a recursos de rede na mesma maneira que as contas de utilizador. Por exemplo, se um utilizador de rede, com uma conta válida para uma rede específica tenta-se autenticar com um recurso de rede de um computador que não possui conta de computador válida, dependendo de políticas impostas na rede, pode ser negado ao utilizador acesso ao recurso se o computador apartir do qual o utilizador se tenta autenticar é considerado um computador não autorizado.</para>
+            <para>Contas de Computador são usadas nos Serviços de Directório para a identificação única de sistemas de computador participando em rede, e são mesmo tratadas da mesma maneira que utilizadores em termos de segurança. Contas de Computador podem ter palavras passe tal como têm as contas de utilizador, e são sujeitas a autorização a recursos de rede na mesma maneira que as contas de utilizador. Por exemplo, se um utilizador de rede, com uma conta válida para uma rede específica se tentar autenticar com um recurso de rede de um computador que não possui conta de computador válida, dependendo de políticas impostas na rede, pode ser negado ao utilizador acesso ao recurso se o computador a partir do qual o utilizador se tenta autenticar é considerado um computador não autorizado.</para>
             <para>Uma conta para um computador pode ser adicionado ao ficheiro de palavras passe do SAMBA desde que o computador já exista como um utilizador válido na base de dados local de palavras passe. Para adicionar um computador ou máquina ao ficheiro de palavras passe do SAMBA utilize o comando <application>smbpasswd</application> na linha de comandos, com a sintaxe seguinte:</para>
                <para>
 <screen>
@@ -489,7 +489,7 @@ Active Directory combina funcionalidades tradicionalmente separadas em sistemas 
         </sect3>
         <sect3 id="file-permissions" status="complete">
           <title>Permissões de Ficheiros</title>
-            <para>Permissões do Ficheiro define explicitamente os privilégios que um computador ou utilizador têm para um directório, ficheiro ou conjunto de ficheiros. Tais privilégios podem ser definidos editando o ficheiro <filename>/etc/samba/smb.conf</filename> e indicando explicitamente as permissões de uma partilha. Por exemplo, se tiver definida uma partilha chamada <emphasis role="italic">sourcedocs</emphasis> e pretende dar permissões "só de leitura" <emphasis role="italic">read-only</emphasis> ao grupo de utilizadores definido como <emphasis role="italic">planning</emphasis>, mas pretende atribuir privilégios de escrita ao grupo de utilizadores <emphasis role="italic">authors</emphasis> e ao utilizador <emphasis role="italic">richard</emphasis>, então pode editar o ficheiro <filename>/etc/samba/smb.conf</filename> e acrescentar as seguintes linhas dentro da secção <emphasis role="italic">[sourcedocs]</emphasis> :</para>
+            <para>Permissões de Ficheiros definem explicitamente os privilégios que um computador ou utilizador têm para um directório, ficheiro ou conjunto de ficheiros. Tais privilégios podem ser definidos editando o ficheiro <filename>/etc/samba/smb.conf</filename> e indicando explicitamente as permissões de uma partilha. Por exemplo, se tiver definida uma partilha chamada <emphasis role="italic">sourcedocs</emphasis> e pretende dar permissões "só de leitura" <emphasis role="italic">read-only</emphasis> ao grupo de utilizadores definido como <emphasis role="italic">planning</emphasis>, mas pretende atribuir privilégios de escrita ao grupo de utilizadores <emphasis role="italic">authors</emphasis> e ao utilizador <emphasis role="italic">richard</emphasis>, então pode editar o ficheiro <filename>/etc/samba/smb.conf</filename> e acrescentar as seguintes linhas dentro da secção <emphasis role="italic">[sourcedocs]</emphasis> :</para>
                <para>
                   <emphasis role="bold">read list = @planning</emphasis>
                </para>
@@ -497,7 +497,7 @@ Active Directory combina funcionalidades tradicionalmente separadas em sistemas 
                   <emphasis role="bold">write list = @authors, richard</emphasis>
                </para>
              <para>Grave o <filename>/etc/samba/smb.conf</filename> para as alterações terem efeito.</para>
-            <para>Outra privilégio possível é declarar permissões administrativas <emphasis role="italic">administrative</emphasis>  para uma partilha em particular. Os utilizadores com permissões administrativas podem ler, escrever ou modificar qualquer informação dentro do recurso para o qual o utilizador deu explicitamente permissões administrativas. Por exemplo, se quiser dar ao utilizador <emphasis role="italic">melissa</emphasis> permissões administrativas para a partilha <emphasis role="italic">sourcedocs</emphasis>, edite o ficheiro <filename>/etc/samba/smb.conf</filename> e adicione a seguinte linha dentro da secção <emphasis role="italic">[sourcedocs]</emphasis> :</para>
+            <para>Outro privilégio possível é declarar permissões administrativas <emphasis role="italic">administrative</emphasis> para uma partilha em particular. Os utilizadores com permissões administrativas podem ler, escrever ou modificar qualquer informação dentro do recurso para o qual o utilizador deu explicitamente permissões administrativas. Por exemplo, se quiser dar ao utilizador <emphasis role="italic">melissa</emphasis> permissões administrativas para a partilha <emphasis role="italic">sourcedocs</emphasis>, edite o ficheiro <filename>/etc/samba/smb.conf</filename> e adicione a seguinte linha dentro da secção <emphasis role="italic">[sourcedocs]</emphasis> :</para>
                <para>
                   <emphasis role="bold">admin users = melissa</emphasis>
                </para>
@@ -506,16 +506,16 @@ Active Directory combina funcionalidades tradicionalmente separadas em sistemas 
       </sect2>
       <sect2 id="windows-networking-clients" status="complete">
         <title>Clientes</title>
-          <para>o Ubuntu inclui aplicações cliente e capacidades para aceder a recursos de rede partilhados com o protocolo SMB. Por exemplo, o utilitário <application>smbclient</application> permite o acesso remoto a sistemas de ficheiros partilhados, de forma semelhante a uma aplicação cliente de FTP <emphasis role="italic">File Transfer Protocol</emphasis>. Para aceder a uma pasta partilhada designada <emphasis role="italic">documents</emphasis> por uma máquina remota Windows com o nome <emphasis role="italic">bill</emphasis> utilizando, por exemplo, o <application>smbclient</application>, deve executar na linha de comandos o seguinte comando:</para>
+          <para>O Ubuntu inclui aplicações cliente e capacidades para aceder a recursos de rede partilhados com o protocolo SMB. Por exemplo, o utilitário <application>smbclient</application> permite o acesso remoto a sistemas de ficheiros partilhados, de forma semelhante a uma aplicação cliente de FTP <emphasis role="italic">File Transfer Protocol</emphasis>. Para aceder a uma pasta partilhada designada <emphasis role="italic">documents</emphasis> oferecida por uma máquina remota Windows com o nome <emphasis role="italic">bill</emphasis>, utilizando o <application>smbclient</application>, poderia-se introduzir por exemplo, um comando similar ao seguinte na linha de comandos:</para>
                 <para>
 <screen>
 <command>smbclient //bill/documents -U &lt;utilizador&gt;</command>
 </screen>
                 </para>
-            <para>Ser-lhe-á pedida a palavra passe do utilizador cujo nome foi indicado após o parâmetro -U , e após autenticação válida, aparecerá uma linha de comandos onde pode digitar comandos para manipulação e transferência de ficheiros utilizando uma sintaxe semelhante à utilizada por clientes de FTP em modo de texto. Para mais informação acerca do utilitário <application>smbclient</application> leia a página do respectivo manual com o comando: <screen>↵
-<command>↵
-man smbclient↵
-</command>↵
+            <para>Ser-lhe-á pedida a palavra passe do utilizador cujo nome foi indicado após o parâmetro -U , e após autenticação válida, aparecerá uma linha de comandos onde pode digitar comandos para manipulação e transferência de ficheiros utilizando uma sintaxe semelhante à utilizada por clientes de FTP em modo de texto. Para mais informação acerca do utilitário <application>smbclient</application> leia a página do respectivo manual com o comando: <screen>
+<command>
+man smbclient
+</command>
 </screen></para>
             <para>A montagem local de um recurso remoto utilizando o protocolo SMB também é possível utilizando o comando <application>mount</application>. Por exemplo, para montar uma pasta partilhada com o nome <emphasis role="italic">project-code</emphasis> num servidor Windows chamado <emphasis role="italic">development</emphasis> como o utilizador <emphasis role="italic">dlightman</emphasis> no ponto de montagem local da máquina Ubuntu /mnt/pcode, deve utilizar o seguinte comando na linha de comandos:</para>
                 <para>
@@ -523,7 +523,7 @@ man smbclient↵
 <command>mount -t smbfs -o username=dlightman //cevelopment/project-code /mnt/pcode</command>
 </screen>
                 </para>
-                <para>Ser-lhe-á pedida a palavra passe, e após autenticação validada os conteúdos do recurso partilhado estarão disponíveis através do ponto de montagem especificado como último argumento do comando mount. Para desligar o recurso partilhado, utilize o comando <application>umount</application> como com qualquer outro sistema de ficheiros montados. Por exemplo:</para>
+                <para>Ser-lhe-á pedida a palavra passe, e após autenticação validada os conteúdos do recurso partilhado estarão disponíveis através do ponto de montagem especificado como último argumento do comando mount. Para desligar o recurso partilhado, utilize o comando <application>umount</application> como com qualquer outro sistema de ficheiros montado. Por exemplo:</para>
                 <para>
 <screen>
 <command>umount /mnt/pcode</command>
@@ -531,7 +531,7 @@ man smbclient↵
                 </para>
         <sect3 id="user-accounts" status="complete">
           <title>Contas de Utilizadores</title>
-            <para>Contas de Utilizador definem pessoas com algum tipo de permissões para utilizarem determinadps computadores e recursos de rede. Tipicamente, num ambiente de rede, é fornecida a cada pessoa que pode aceder a um computador ou rede, onde políticas e permissões então definem quais os privilégios específicos desse utilizador. Para definir utilizadores de rede SAMBA para o seu sistema Ubuntu pode utilizar o comando <application>smbpasswd</application>. Por exemplo, para adicionar um utilizador SAMBA ao seu sistema Ubuntu com o nome de utilizador <emphasis role="italic">jseinfeld</emphasis>, digite este comando na linha de comandos:</para>
+            <para>Contas de Utilizador definem pessoas com algum tipo de permissões para utilizarem determinadps computadores e recursos de rede. Tipicamente, num ambiente de rede, é fornecida a cada pessoa uma conta com a qual pode aceder a um computador ou rede, onde políticas e permissões definem quais os privilégios específicos desse utilizador. Para definir utilizadores de rede SAMBA para o seu sistema Ubuntu pode utilizar o comando <application>smbpasswd</application>. Por exemplo, para adicionar um utilizador SAMBA ao seu sistema Ubuntu com o nome de utilizador <emphasis role="italic">jseinfeld</emphasis>, digite este comando na linha de comandos:</para>
                  <para>
 <screen>
 <command>smbpasswd -a jseinfeld</command>
@@ -553,22 +553,22 @@ man smbclient↵
         </sect3>
         <sect3 id="windows-networking-groups" status="complete">
           <title>Grupos</title>
-            <para>Os Grupos definem um conjunto de computadores ou de utilizadores com um nível de acesso comum a um recurso particular da rede e eferece um nível de granularidade no controlo de acesso a esses recursos. Por exemplo, se um grupo <emphasis role="italic">qa</emphasis> estiver definido e contiver os utilizadores <emphasis role="italic">freda</emphasis>, <emphasis role="italic">danika</emphasis>, e <emphasis role="italic">rob</emphasis>, e um segundo grupo &gt;emphasis role="italic"&gt;support</para>
+            <para>Os Grupos definem um conjunto de computadores ou de utilizadores com um nível de acesso comum a um recurso particular da rede e oferece um nível de granularidade no controlo de acesso a esses recursos. Por exemplo, se um grupo <emphasis role="italic">qa</emphasis> estiver definido e contiver os utilizadores <emphasis role="italic">freda</emphasis>, <emphasis role="italic">danika</emphasis>, e <emphasis role="italic">rob</emphasis>, e um segundo grupo <emphasis role="italic">support</emphasis> estiver definido e contiver os utilizadores <emphasis role="italic">danika</emphasis>, <emphasis role="italic">jeremy</emphasis> e <emphasis role="italic">vincent</emphasis>, então alguns recursos de rede configurados para permitirem o acesso pelo grupo <emphasis role="italic">qa</emphasis> permitirão o acesso de freda, danika, e rob, mas não de jeremy ou vincent. Dado que a utilizadora <emphasis role="italic">danika</emphasis> pertence a ambos os grupos, <emphasis role="italic">qa</emphasis> e <emphasis role="italic">support</emphasis>role="italic"&gt;support</para>
             <para>Ao definir grupos no ficheiro de configuração do SAMBA <filename>/etc/samba/smb.conf</filename> a sintaxe reconhecida é acrescentar o símbolo <emphasis role="bold">@</emphasis> como prefixo ao nome do grupo. Por exemplo, se pretende definir um grupo chamado <emphasis role="italic">sysadmin</emphasis> numa determinada secção do ficheiro <filename>/etc/samba/smb.conf</filename>, fá-lo-á indicando nessa secção o grupo como <emphasis role="bold">@sysadmin</emphasis> .</para>
         </sect3>
         <sect3 id="group-policy" status="complete">
           <title>Política de Grupo</title>
-            <para>Política de Grupo define determinadas configurações do SAMBA para respeitantes ao Domínio ou Grupo de Trabalho ao qual o computador pertence, e outras configurações globais do servidor SAMBA. Por exemplo, se o servidor SAMBA pertence a um Grupo de Trabalho de computadores em Windows chamado <emphasis role="italic">LEVELONE</emphasis>, o ficheiro <filename>/etc/samba/smb.conf</filename> pode ser editado e o valor seguinte alterado em conformidade:</para>
+            <para>Política de Grupo define determinadas configurações do SAMBA respeitantes ao Domínio ou Grupo de Trabalho ao qual o computador pertence, e outras configurações globais do servidor SAMBA. Por exemplo, se o servidor SAMBA pertence a um Grupo de Trabalho de computadores em Windows chamado <emphasis role="italic">LEVELONE</emphasis>, o ficheiro <filename>/etc/samba/smb.conf</filename> pode ser editado e o valor seguinte alterado em conformidade:</para>
                <para>
                <emphasis role="bold">workgroup = LEVELONE</emphasis>
                </para>
-            <para>Grave o ficheiros e reinicie os serviços <emphasis role="italic">daemons</emphasis> do SAMBA para aplicar as alterações.</para>
-            <para>Outra configuração importante de política global inclui a <emphasis role="italic">server string</emphasis> qiue define o nome NETBIOS do servidor comunicado pelo seu sistema Ubuntu a outras máquinas da rede baseada em Windows. É por este nome que o seu sistema Ubuntu pelos clientes Windows e outros computadores capazes de pesquisar na rede utilizando o protocolo SMB. Adicionalmente, pode especificar o nome e a localização do ficheiro de registos <emphasis role="italic">log</emphasis> do servidor SAMBA utilizando a directiva <emphasis role="italic">log file</emphasis> no ficheiro <filename>/etc/samba/smb.conf</filename>.</para>
-            <para>Algumas das directivas adicionais que comandam a política de grupo global incluem a especificação da natureza global de todos os recursos partilhados. Por exemplo, colocar determinadas directivas dentro da secção <emphasis role="italic">[global]</emphasis> no início de ficheiro <filename>/etc/samba/smb.conf</filename> afectarão todos os recursos partilhados a não ser que uma directiva que se soreponha seja colocada na secção de um recurso em particular. Você especifica que todas as partilhas são pesquisáveis por todos os clientes da rede colocando a directiva <emphasis role="italic">browseable</emphasis>, que aceita um valor Lógico, dentro da secção <emphasis role="italic">[global]</emphasis> no início de <filename>/etc/samba/smb.conf</filename>. Isto é, se editar o ficheiro e adicionar a linha:</para>
+            <para>Grave o ficheiros e reinicie os serviços (<emphasis role="italic">daemons</emphasis>) do SAMBA para aplicar as alterações.</para>
+            <para>Outra configuração importante de política global inclui a <emphasis role="italic">server string</emphasis> que define o nome NETBIOS do servidor comunicado pelo seu sistema Ubuntu a outras máquinas da rede baseada em Windows. É por este nome que o seu sistema Ubuntu será reconhecido pelos clientes Windows e outros computadores capazes de pesquisar na rede utilizando o protocolo SMB. Adicionalmente, pode especificar o nome e a localização do ficheiro de registos <emphasis role="italic">log</emphasis> do servidor SAMBA utilizando a directiva <emphasis role="italic">log file</emphasis> no ficheiro <filename>/etc/samba/smb.conf</filename>.</para>
+            <para>Algumas das directivas adicionais que comandam a política de grupo global incluem a especificação da natureza global de todos os recursos partilhados. Por exemplo, ao colocar determinadas directivas dentro da secção <emphasis role="italic">[global]</emphasis> no início de ficheiro <filename>/etc/samba/smb.conf</filename> afectarão todos os recursos partilhados a não ser que uma directiva que se sobreponha seja colocada na secção de um recurso em particular. Pode especificar que todas as partilhas são pesquisáveis por todos os clientes da rede colocando a directiva <emphasis role="italic">browseable</emphasis>, que aceita um valor Lógico, dentro da secção <emphasis role="italic">[global]</emphasis> no início de <filename>/etc/samba/smb.conf</filename>. Isto é, se editar o ficheiro e adicionar a linha:</para>
             <para>
             <emphasis role="bold">browseable = true</emphasis>
             </para>
-            <para>dentro da secção <emphasis role="italic">[global]</emphasis> do ficheiro  <filename>/etc/samba/smb.conf</filename>, então todas as partilhas disponibilizadas pelo seu sistema Ubuntu através do SAMBA ficarão pesquisavéis por todos os clientes autorizados, a não ser que uma partilha específica cotenha a directiva  <emphasis role="italic">browseable = false</emphasis> que se sobrepõe a directiva global.</para>
+            <para>dentro da secção <emphasis role="italic">[global]</emphasis> do ficheiro  <filename>/etc/samba/smb.conf</filename>, todas as partilhas disponibilizadas pelo seu sistema Ubuntu através do SAMBA ficarão pesquisavéis por todos os clientes autorizados, a não ser que uma partilha específica contenha a directiva  <emphasis role="italic">browseable = false</emphasis> que se sobrepõe à directiva global.</para>
             <para>Outros exemplos que funcionam de forma similar são as directivas <emphasis role="italic">public</emphasis> e <emphasis role="italic">writeable</emphasis> . A directiva <emphasis role="italic">public</emphasis> aceita um valor lógico e determina que um recurso partilhado em particular é visível para todos os clientes, autorizados ou não. A directiva <emphasis role="italic">writeable</emphasis> também aceita um valor lógico e define se um recurso partilhado em particular tem acesso de escrita para todo e qualquer cliente de rede.</para>
         </sect3>
       </sect2>

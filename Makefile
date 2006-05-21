@@ -53,7 +53,7 @@ website: index-all
 
 	make -C kubuntu -f Makefile website pdf
 
-index-all: index-C index-bn index-bo index-cs index-da index-de index-es index-et index-fi index-fr index-hr index-hu index-id index-is index-it index-ja index-ka index-ko index-ku index-lt index-nb index-pl index-pt index-pt_BR index-ru index-ro index-sk index-sv index-th index-tl index-tr index-zh_CN index-zh_TW
+index-all: index-C index-be index-bn index-bo index-cs index-da index-de index-el index-es index-et index-fi index-fr index-hr index-hu index-id index-is index-it index-ja index-ka index-ko index-ku index-lt index-nb index-pl index-pt index-pt_BR index-ru index-ro index-sk index-sv index-th index-tl index-tr index-zh_CN index-zh_TW
 
 	cp libs/index.css $(BASE)
 	mkdir -p $(BASE)ubuntu/common/img/
@@ -62,6 +62,10 @@ index-all: index-C index-bn index-bo index-cs index-da index-de index-es index-e
 index-C:
 
 	xsltproc --stringparam root.filename "index" -o $(BASE) $(INDEXCHUNKXSL) website-index/C/website-index.xml
+
+index-be:
+
+	xsltproc --stringparam root.filename "index.be" -o $(BASE) $(INDEXCHUNKXSL) website-index/be/website-index.xml
 
 index-bn:
 
@@ -82,6 +86,10 @@ index-da:
 index-de:
 
 	xsltproc --stringparam root.filename "index.de" -o $(BASE) $(INDEXCHUNKXSL) website-index/de/website-index.xml
+
+index-el:
+
+	xsltproc --stringparam root.filename "index.el" -o $(BASE) $(INDEXCHUNKXSL) website-index/el/website-index.xml
 
 index-es:
 
