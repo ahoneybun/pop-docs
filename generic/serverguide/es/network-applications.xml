@@ -398,9 +398,9 @@
 <chapter id="networking" status="complete">
 	<title>Red</title>
   <para>La red consiste en dos o más dispositivos, como ordenadores, impresoras y equipamiento relacionado que están conectados por cables o enlaces wireless con el proposito de compartir y distribuir información a través de los dispositios conectados.</para>
-  <para>Esta seccion de Guía de Servidor de Ubuntu provee información general y específica perteneciente a las redes, incluyendo un vistazo a conceptos de red y detalladas discusiones sobre protocolos de red y aplicaciones de servidor.</para>
+  <para>Esta seccion de la Guía del servidor Ubuntu proporciona información general y específica sobre las redes, incluyendo un vistazo a conceptos de red y detalladas discusiones sobre protocolos de red y aplicaciones de servidor.</para>
 	<sect1 id="network-configuration" status="complete">
-		<title>Configuración de Red</title>
+		<title>Configuración de red</title>
           <para>Ubuntu viene con varias utilidades gráficas para configurar sus dispositivos de red. Este documento es una herramienta para los administradores de servidores y esta enfocada para manejar su red en línea de comandos.</para>
       <sect2 id="ethernet" status="complete">
         <title>Ethernet</title> 
@@ -422,16 +422,15 @@ nameserver 4.2.2.2</screen>  La directiva <emphasis role="italics">search</empha
 		<para>Es posible realizar muchas más configuraciones, incluyendo interfaces de marcación analógica PPP, redes IPv6, dispositivos VPN, etc. Acuda a <application>man 5 interfaces</application> para obtener más información y las opciones soportadas. Recuerde que los scripts <application>ifup</application>/<application>ifdown</application> usan <filename>/etc/network/interfaces</filename> como un esquema de configuración de más alto nivel que el utilizado en otras distribuciones de Linux, y que las tradicionales utilidades de más bajo nivel como <application>ifconfig</application>, <application>route</application> y <application>dhclient</application> todavía se encuentran disponibles para realizar configuraciones más puntuales.</para>
       </sect2>
       <sect2 id="managing-dns-entries" status="complete">
-          <title>Manejando Entradas DNS</title>
+          <title>Gestionar entradas DNS</title>
             <para>Esta sección explica cómo configurar el servidor de nombres que se usará para resolver direcciones IP en nombres de host, y viceversa. No explica cómo configurar el sistema como un servidor de nombres.</para>
             <para>Para administrar los DNS, puedes agregar, editar o eliminar los servidores DNS desde el archivo <filename>/etc/resolv.conf</filename>. Un <ulink url="../sample/resolv.conf">archivo de ejemplo</ulink> se muestra a continuación:</para>
 <programlisting>
-↵
-search com↵
-nameserver 204.11.126.131↵
-nameserver 64.125.134.133↵
-nameserver 64.125.134.132↵
-nameserver 208.185.179.218↵
+search com
+nameserver 204.11.126.131
+nameserver 64.125.134.133
+nameserver 64.125.134.132
+nameserver 208.185.179.218
 </programlisting>
             
             <para>La clave <application>search</application> especifica la cadena que se añadirá a un nombre incompleto de host. Aquí se ha especificado como  <application>com</application>. Por tanto, cuando se ejecute la orden: <command>ping ubuntu</command> ésta se interpretará como <command>ping ubuntu.com</command>.</para> 
@@ -444,7 +443,7 @@ nameserver 208.185.179.218↵
 
         </sect2>
         <sect2 id="managing-hosts" status="complete">
-          <title>Manejando Hosts</title>
+          <title>Gestionar los hosts</title>
             <para>Para gestionar los hosts, puede añadir, editar, o borrar hosts del archivo <filename>/etc/hosts</filename>. Este archivo contiene direcciones IP y sus correspondientes nombres de host. Cuando su sistema intenta resolver un nombre de host en una dirección IP, o determinar el nombre del host a partir de su dirección IP, busca en el archivo <filename>/etc/hosts</filename> antes de usar los servidores de nombres. Si la dirección IP se encuentra en el archivo <filename>/etc/hosts</filename>, no se usarán los servidores de nombres. Este comportamiento se puede modificar cambiando el archivo <filename> /etc/nsswitch.conf</filename> para adaptarlo a sus necesidades.</para>
 
             <para>Si su red contiene ordenadores cuya dirección IP no este listada en el DNS, es recomendable que los añada en el archivo <filename>/etc/hosts</filename>.</para>
@@ -452,13 +451,13 @@ nameserver 208.185.179.218↵
     </sect1>
 	<sect1 id="tcpip" status="complete">
 		<title>TCP/IP</title>
-          <para>El Transmission Control Protocol and Internet Protocol (TCP/IP) es un juego de protocolos estandard desarrollados a finales de los 70 por el Defense Advanced Research Projects Agency (DARPA) como una forma de comunicarse entre diferentes tipo de ordenadores y redes. TCP/IP es el impulsor de Internet, y es el más popular juego de protocolos de red de la Tierra.</para>
+          <para>El Protocolo de Control de Transmisión y Protocolo Internet (Transmission Control Protocol and Internet Protocol, TCP/IP) es un juego de protocolos estandard desarrollados a finales de los 70 por el Defense Advanced Research Projects Agency (DARPA) como una forma de comunicarse entre diferentes tipo de ordenadores y redes. TCP/IP es el impulsor de Internet, y es el más popular juego de protocolos de red de la Tierra.</para>
       <sect2 id="tcpip-introduction" status="complete">
         <title>Introducción a TCP/IP</title> 
           <para>Los dos protocolos componentes del TCP/IP se encargan de aspectos diferentes en las redes de ordenadores. El <emphasis>Protocolo Internet</emphasis> (Internet Protocol), el «IP» del TCP/IP, es un protocolo sin conexión que se ocupa únicamente del encaminamiento de los paquetes a través de la red usando el <emphasis role="italics">datagrama IP</emphasis> como unidad básica de información en la red. Los datagramas IP constan de una cabecera seguida de un mensaje. El <emphasis>Protocolo de Control de Transmisión</emphasis> (Transmission Control Protocol) es el «TCP» del TCP/IP y permite que los hosts de la red puedan establecer conexiones que se utilizarán para intercambiar flujos de datos. El TCP también garantiza la entrega de los datos a través de las conexiones y que éstos llegarán al host de destino en el mismo orden en que fueron enviados desde el host de origen.</para>
           </sect2>
         <sect2 id="tcpip-configuration" status="complete">
-          <title>Configuración TCP/IP</title>
+          <title>Configuración de TCP/IP</title>
             <para>La configuración del protocolo TCP/IP consta de varios elementos que deben establecerse editando los archivos de configuración apropiados, o utilizando soluciones como el servidor de Protocolo de Configuración Dinámica de Hosts (Dynamic Host Configuration Protocol, DHCP) que, de hecho, puede configurarse para proporcionar automáticamente las opciones de configuración TCP/IP adecuadas para los clientes de la red. Esos valores de configuración deben establecerse adecuadamente para poder facilitar el correcto funcionamiento de la red en su sistema Ubuntu.</para>
             <para>Los elementos de configuración comunes del TCP/IP y sus propositos son los siguientes: <itemizedlist>
                <listitem>
@@ -495,7 +494,7 @@ nameserver 208.185.179.218↵
             </itemizedlist></para>
         </sect2>
         <sect2 id="ip-routing" status="complete">
-          <title>Enrutamiento IP</title>
+          <title>Encaminamiento IP</title>
             <para>El encaminamiento IP es una manera de especificar y descubrir caminos en una red TCP/IP por los cuales se pueden enviar datos dentro de la red. El encaminamiento usa un conjunto de <emphasis>tablas de enrutamiento</emphasis> (routing tables) para dirigir el envío de los paquetes de datos desde su origen hasta su destino, a menudo usando muchos nodos intermedios conocidos como <emphasis>encaminadores</emphasis> o «routers». El encaminamiento IP es la forma principal de descubrir caminos dentro de Internet. Hay dos formas básicas de encaminamiento IP: <emphasis>encaminamiento estático</emphasis> y <emphasis>encaminamiento dinámico</emphasis>.</para>
             <para>El encaminamiento estático supone añadir manualmente las rutas IP en la tabla de encaminamiento del sistema, y esto se hace normalmente manipulando la tabla de encaminamiento con la orden <application>route</application>. El encaminamiento estático tiene muchas ventajas sobre el encaminamiento dinámico, como la simplicidad de implementación sobre redes pequeñas, la predecibilidad (la tabla de encaminamiento siempre se calcula por adelantado, y por tanto la ruta siempre es la misma cada vez que se usa), y la baja sobrecarga en otros routers y enlaces de red por la inexistencia de un protocolo de encaminamiento dinámico. Sin embargo, el encaminamiento estático también presenta algunos inconvenientes. Por ejemplo, está limitado a redes pequeñas y no escala adecuadamente. El encaminamiento estático también fracasa completamente al intentar adaptarse a pérdidas de la red y a fallos a lo largo de la ruta debido a la naturaleza inmutable de la misma.</para>
             <para>El encaminamiento dinámico depende de redes grandes con muchas rutas IP posibles desde un origen hacia un destino, y hace uso de protocolos especiales de encaminamiento, como el Protocolo de Información del Router (Router Information Protocol, RIP), que gestina los ajustes automáticos en las tablas de encaminamiento que hacen posible el encaminamiento dinámico. El encaminamiento dinámico tiene varias ventajas sobre el encaminamiento estático, como su superior escalabilidad y la capacidad de adaptarse a los fallos y las pérdidas producidos a lo largo de las rutas de la red. Además, tiene una configuración menos manual de las tablas de encaminamiento, puesto que los routers aprenden unos de otros sobre la existencia y la disponibilidad de las rutas. Esta característica también elimina la posibilidad de introducir fallos en las tablas de encaminamiento provocadas por un error humano. El encaminamiento dinámico no es perfecto, sin embargo, y presenta inconvenientes como su mayor complejidad y la sobrecarga adicional de la red debida a las comunicaciones entre los routers, que no benefician inmediatamente a los usuarios finales, y que además consume ancho de banda de la red.</para>
@@ -572,7 +571,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
         </sect2>
         <sect2 id="openssh-configuration">
           <title>Configuración</title>
-            <para>Usted puede configurar el comportamiento por defecto del servidor OpenSSH , <application>sshd</application>, editando el archivo <filename>/etc/ssh/sshd_config</filename>. Para información sobre las directivas de configuración usadas en este fichero, puede var la página del manual apropiada con el siguiente comando, introduzcalo en el prompt:</para>
+            <para>Puede configurar el comportamiento predeterminado del servidor OpenSSH, <application>sshd</application>, editando el archivo <filename>/etc/ssh/sshd_config</filename>. Para más información sobre las directivas de configuración usadas en este archivo, puede ver la página del manual apropiada con la siguiente orden, introducida en una terminal:</para>
                <para>
 <screen>
 <command>man sshd_config</command>
@@ -598,15 +597,15 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
 	<listitem>
             <para>Para hacer que <application>sshd</application> permita credenciales de inicio de sesión basados en clave pública, simplemente añada o modifique la línea:</para>
                <para>PubkeyAuthentication yes</para>
-            <para>en el archivo <filename>/etc/ssh/sshd_config</filename> , si está presente, asegurese que la línea no esta comentada.</para>
+            <para>en el archivo <filename>/etc/ssh/sshd_config</filename>, si está presente, asegúrese que la línea no está comentada.</para>
             </listitem>
             <listitem>
              <para>Para hacer que su servidor OpenSSH muestre el contenido del archivo <filename>/etc/issue.net</filename> como banner antes del login, simplemente añada o modifique la línea:</para>
                <para>Banner /etc/issue.net</para>
-               <para>en el archivo <filename>/etc/ssh/sshd_config</filename> .</para>
+               <para>en el archivo <filename>/etc/ssh/sshd_config</filename>.</para>
              </listitem>
              </itemizedlist>
-	    <para>Después de hacer los cambios en el archivo <filename>/etc/ssh/sshd_config</filename> , guarde este, y reinicie el servidor <application>sshd</application> para que los cambios tengan efecto usando el siguiente comando en un terminal:</para>
+	    <para>Después de hacer los cambios en el archivo <filename>/etc/ssh/sshd_config</filename>, guarde este, y reinicie el servidor <application>sshd</application> para que los cambios tengan efecto usando la siguiente orden en una terminal:</para>
                <para>
 <screen>
 <command>sudo /etc/init.d/ssh restart</command>
@@ -619,7 +618,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
    <sect2 id="openssh-references" status="complete">
       <title>Referencias</title>
       <para>
-      <ulink url="http://www.openssh.org/">Web OpenSSH</ulink>
+      <ulink url="http://www.openssh.org/">Sitio web de OpenSSH</ulink>
       </para>
       <para>
       <ulink url="https://wiki.ubuntu.com/AdvancedOpenSSH">Página Wiki Avanzada de OpenSSH</ulink>
@@ -628,17 +627,17 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
      </sect1>
 	<sect1 id="ftp-server" status="complete">
         <title>Servidor FTP</title> 
-            <para>Protocolo de Transferencia de Ficheros (FTP) es un protocolo TCP para subir y descargar archivos entre ordenadores. El FTP funciona con el modelo cliente/servidor. El componente servidor es llamado <emphasis>demonio FTP</emphasis>. Esta continuamente escuchando peticiones FTP de clientes remotos. Cuando se recibe una petición, comprueba el login y establece la conexión. Durante la duración de la sesión ejecuta los comandos enviados por el cliente FTP.</para>
+            <para>El Protocolo de Transferencia de Archivos (FTP) es un protocolo TCP para subir y descargar archivos entre ordenadores. El FTP funciona con el modelo cliente/servidor. El componente servidor es llamado <emphasis>demonio FTP</emphasis>. Está continuamente escuchando peticiones FTP de clientes remotos. Cuando se recibe una petición, gestiona la creación de la sesión y establece la conexión. Durante la duración de la sesión ejecuta las órdenes enviadas por el cliente FTP.</para>
             <para>El acceso a un servidor FTP puede hacerse de dos maneras:</para>
             <itemizedlist spacing="compact">
                 <listitem>
                     <para>Anónimo</para>
                 </listitem>
                 <listitem>
-                    <para>Autentificado</para>
+                    <para>Autenticado</para>
                 </listitem>
             </itemizedlist>
-            <para>En el modo Anónimo, los clientes remotos pueden acceder al servidor FTP usando la cuenta de usuario por defecto llamada "anonymous" o "ftp" y enviando una dirección de correo como password. En el modo de Autentificación los usuario deben poseer una cuenta y su password. El acceso del usuario a los directorios u ficheros del servidor FTP dependerá de los permisos definidos para la cuenta utilizada. Como regla general, el demonio FTP oculta el directorio raíz del servidor FTP y le cambia por el directorio de inicio del FTP. Esto oculta el resto del sistema de fichero en las sesiones remotas.</para>
+            <para>En el modo Anónimo, los clientes remotos pueden acceder al servidor FTP usando la cuenta de usuario por defecto llamada «anonymous» o "ftp" y enviando una dirección de correo como contraseña. En el modo  Autenticado los usuario deben poseer una cuenta y su contraseña. El acceso del usuario a los directorios u ficheros del servidor FTP dependerá de los permisos definidos para la cuenta utilizada. Como regla general, el demonio FTP oculta el directorio raíz del servidor FTP y lo cambia por el directorio de inicio del FTP. Esto oculta el resto del sistema de archivos en las sesiones remotas.</para>
             <sect2 id="vsftpd-ftp-server-installation" status="complete">
                 <title>vsftpd - Instalación del Servidor FTP</title>
                     <para>vsftpd es un demonio FTP disponible en Ubuntu. Es fácil de intalar, configurar y mantener. Para instalar <application>vsftpd</application> puede ejecutar el siguiente comando: <screen> <command>sudo apt-get install vsftpd</command> </screen></para>
@@ -655,36 +654,31 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
                 allowed. If you wish to disable this option, you
                 should change the following line:
 <programlisting>
-↵
-anonymous_enable=YES↵
+anonymous_enable=YES
 </programlisting>
                 to
 <programlisting>
-↵
-anonymous_enable=NO↵
+anonymous_enable=NO
 </programlisting>
                 By default, local system users are not allowed to
                 login to FTP server. To change this setting, you
                 should uncomment the following line:
 <programlisting>
-↵
-#local_enable=YES↵
+#local_enable=YES
 </programlisting>
                 By default, users are allowed to download files
                 from FTP server. They are not allowed to upload
                 files to FTP server. To change this setting, you
                 should uncomment the following line:
 <programlisting>
-↵
-#write_enable=YES↵
+#write_enable=YES
 </programlisting>
                 Similarly, by default, the anonymous users are not
                 allowed to upload files to FTP server. To change
                 this setting, you should uncomment the following
                 line:
 <programlisting>
-↵
-#anon_upload_enable=YES↵
+#anon_upload_enable=YES
 </programlisting>
                 The configuration file consists of many
                 configuration parameters. The information about
@@ -699,9 +693,9 @@ anonymous_enable=NO↵
     </sect1>
 	<sect1 id="network-file-system" status="complete">
 		<title>Network File System (NFS)</title>
-          <para>NFS permite a un sistema compartir directorios y archivos con otros a través de la red. Usando NFS, usuarios y programas pueden acceder a fichero en sistemas remotos casi como si fueran archivos locales.</para>
+          <para>NFS permite a un sistema compartir directorios y archivos con otros sistemas a través de la red. Usando NFS, los usuarios y los programas pueden acceder a archivos en sistemas remotos casi como si fueran archivos locales.</para>
 
-          <para>Algunos de los beneficios mas notables que el NFS suministra son:</para>
+          <para>Algunos de los beneficios más notables que el NFS suministra son:</para>
 
           <itemizedlist>
           <listitem>
@@ -719,7 +713,7 @@ anonymous_enable=NO↵
       <sect2 id="nfs-installation" status="complete">
         <title>Instalación</title>
       
-          <para>En un terminal introduzca el siguiente comando para instalar el Servidor NFS:</para>
+          <para>Ejecute la siguiente orden en una terminal para instalar el Servidor NFS:</para>
           <para>
 <screen>
 <command>sudo apt-get install nfs-kernel-server</command>
@@ -731,15 +725,14 @@ anonymous_enable=NO↵
           <para>Puede configurar los directorios a exportar añadiendolos al archivo <filename>/etc/exports</filename> . Por ejemplo:</para>
           <para>
 <screen>
-↵
-/ubuntu *(ro,sync,no_root_squash)↵
-/home *(rw,sync,no_root_squash)↵
+/ubuntu *(ro,sync,no_root_squash)
+/home *(rw,sync,no_root_squash)
 </screen>
           </para>
 
           <para>Puede reemplazar * con uno de los formatos de nombres de máquina. Haciendo la declaración del nombre de máquina tan específica como sea posible para evitar que sistemas no deseados accedan al punto de montaje NFS.</para>
 
-          <para>Para iniciar el servidor NFS, ejecute el siguiente comando en un terminal:</para>
+          <para>Para iniciar el servidor NFS, ejecute la siguiente orden en una terminal:</para>
           <para>
 <screen>
 <command>sudo /etc/init.d/nfs-kernel-server start</command>
@@ -747,15 +740,15 @@ anonymous_enable=NO↵
           </para>
       </sect2>
       <sect2 id="nfs-client-configuration" status="complete">
-        <title>Configuración del Cliente NFS</title>
-          <para>Use el comando <application>mount</application> para montar directorios NFS compartidos por otra máquina, tecleando un línea de comandos similar a esta en el terminal:</para>
+        <title>Configuración del cliente NFS</title>
+          <para>Use la orden <application>mount</application> para montar directorios NFS compartidos por otra máquina, tecleando una orden similar a ésta en la terminal:</para>
           <para>
 <screen>
-<command>sudo mount example.hostname.com:/ubuntu /local/ubuntu</command>
+<command>sudo mount ejemplo.hostname.com:/ubuntu /local/ubuntu</command>
 </screen>
 </para>
       <warning>
-      <para>El directorio del punto de montaje <filename>/local/ubuntu</filename> debe existir. No debe de haber fichero ni directorios dentro de <filename>/local/ubuntu</filename> .</para>
+      <para>El directorio del punto de montaje <filename>/local/ubuntu</filename> debe existir. No deben haber archivos ni directorios dentro de <filename>/local/ubuntu</filename>.</para>
       </warning>
 
       <para>Una forma alternativa de montar un recurso compartido desde otra máquina es añadiendo una línea en el archivo <filename>/etc/fstab</filename> . La línea debe contener el nombre de máquina del servidor NFS, el directorio que esta siendo exportado en el servidor, y el directorio en la máquina local donde el recurso NFS será montado.</para>
@@ -764,8 +757,7 @@ anonymous_enable=NO↵
       
       <para>
 <programlisting>
-↵
-example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,intr↵
+example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,intr
 </programlisting>
       </para>
       </sect2>
@@ -777,10 +769,10 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
 	<sect1 id="dhcp" status="complete">
 		<title>Dynamic Host Configuration Protocol (DHCP)</title>
             <para>El Protocolo de Configuración Dinámica de Hosts (DHCP, en inglés), es un servicio de red que permite que los ordenadores hosts sean configurados automáticamente desde un servidor en lugar de tener que configurar manualmente cada host de la red. Los ordenadores configurados para ser clientes DHCP no tienen control sobre la configuración que reciben del servidor DHCP, y la configuración es transparente para el usuario del ordenador.</para>
-            <para>La configuración más común suministrada por un servidor DHCP a clientes DHCP incluye:</para>
+            <para>Las opciones de configuración más comunes suministradas por un servidor DHCP a los clientes DHCP incluyen:</para>
             <itemizedlist spacing="compact">
                 <listitem>
-                    <para>Dirección IP y Mascara de Red</para>
+                    <para>Dirección IP y máscara de red</para>
                 </listitem>
                 <listitem>
                     <para>DNS</para>
@@ -792,19 +784,19 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
             <para>Además, un servidor DHCP puede suministrar propiedades de configuración como:</para>
             <itemizedlist spacing="compact">
                 <listitem>
-                    <para>Nombre de Máquina</para>
+                    <para>Nombre del host</para>
                 </listitem>
                 <listitem>
-                    <para>Nombre de Dominio</para>
+                    <para>Nombre de dominio</para>
                 </listitem>
                 <listitem>
-                    <para>Puerta de Enlace</para>
+                    <para>Puerta de enlace predeterminada</para>
                 </listitem>
                 <listitem>
-                    <para>Servidor de Tiempo</para>
+                    <para>Servidor horario</para>
                 </listitem>
                 <listitem>
-                    <para>Servidor de Impresión</para>
+                    <para>Servidor de impresión</para>
                 </listitem>
             </itemizedlist>
             <para>La ventaja de usar DHCP es que un cambio en la red (por ejemplo, un cambio en la dirección del servidor DNS), sólo supone un cambio en el servidor DHCP, ya que todos los hosts de la red se reconfigurarán automáticamente la próxima vez que sus clientes DHCP soliciten la configuración al servidor DHCP. Como una ventaja añadida, también es más fácil integrar nuevos ordenadores en la red, ya que no es necesario comprobar la disponibilidad de la dirección IP. Los conflictos de direcciones IP también se reducen.</para>
@@ -813,7 +805,7 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
                 <varlistentry>
                     <term>Dirección MAC</term>
                     <listitem>
-                        <para>Este método supone el uso de DHCP para identificar el hardware único de cada tarjeta de red conectada a la red y continuar proveyendo una configuración constante cada vez que el cliente DHCP hace una petición usando ese dispositivo de red.</para>
+                        <para>Este método supone el uso de DHCP para identificar el hardware único de cada tarjeta de red conectada a la red y continuar suministrando una configuración constante cada vez que el cliente DHCP hace una petición usando ese dispositivo de red.</para>
                     </listitem>
                 </varlistentry>
                 <varlistentry>
@@ -854,32 +846,30 @@ Starting DHCP server: dhcpd failed to start - check syslog for diagnostics.  </s
             <para>El mensaje final de error de la instalación puede resultar un poco confuso, pero los siguientes pasos pueden ayudarle a configurar el servicio:</para>
             <para>Lo más común, que usted quisiera hacer es asignar una dirección IP de forma aleatoria. Esto puede ser hecho con las siguientes configuraciones:</para>
             <screen>
-↵
-# Sample /etc/dhcpd.conf↵
-# (add your comments here) ↵
-default-lease-time 600;↵
-max-lease-time 7200;↵
-option subnet-mask 255.255.255.0;↵
-option broadcast-address 192.168.1.255;↵
-option routers 192.168.1.254;↵
-option domain-name-servers 192.168.1.1, 192.168.1.2;↵
-option domain-name "mydomain.org";↵
-↵
-subnet 192.168.1.0 netmask 255.255.255.0 {↵
-range 192.168.1.10 192.168.1.100;↵
-range 192.168.1.150 192.168.1.200;↵
+# Sample /etc/dhcpd.conf
+# (add your comments here) 
+default-lease-time 600;
+max-lease-time 7200;
+option subnet-mask 255.255.255.0;
+option broadcast-address 192.168.1.255;
+option routers 192.168.1.254;
+option domain-name-servers 192.168.1.1, 192.168.1.2;
+option domain-name "mydomain.org";
+
+subnet 192.168.1.0 netmask 255.255.255.0 {
+range 192.168.1.10 192.168.1.100;
+range 192.168.1.150 192.168.1.200;
 } </screen>
             <para>Esto hará que el servidor DHCP proporcione a un cliente una dirección IP dentro del rango 192.168.1.10 - 192.168.1.100 ó 192.168.1.150 - 192.168.1.200. La concesión de la dirección IP durará 600 segundos, si el cliente no ha solicitado un intervalo de tiempo específico. En caso contrario, la concesión máxima permitida será de 7200 segundos. El servidor también «aconsejará» al cliente que use 255.255.255.0 como su máscara de subred, 192.168.1.255 como su dirección de difusión, 192.168.1.254 como la dirección del router/pasarela, y 192.168.1.1 y 192.168.1.2 como sus servidores DNS.</para>
             <para>Si necesita especificar un servidor WINS para sus clientes Windows, necesitará incluir la opción netbios-name-servers option, p.e.</para>
             <screen>
-↵
 option netbios-name-servers 192.168.1.1; </screen>
-            <para>Los parámetros de configuración del Dhcpd son tomados del DHCP mini-HOWTO, que se puede encontrar en <ulink url="http://www.tldp.org/HOWTO/DHCP/index.html">here</ulink>.</para>
+            <para>Los parámetros de configuración de dhcpd son tomados del DHCP mini-HOWTO, que se puede encontrar <ulink url="http://www.tldp.org/HOWTO/DHCP/index.html">aquí</ulink>.</para>
       </sect2>
       <sect2 id="dhcp-references" status="complete">
         <title>Referencias</title>
           <para>
-            <ulink url="http://www.dhcp-handbook.com/dhcp_faq.html">DHCP FAQ</ulink>
+            <ulink url="http://www.dhcp-handbook.com/dhcp_faq.html">FAQ de DHCP</ulink>
           </para>
       </sect2>
     </sect1>
@@ -902,53 +892,52 @@ option netbios-name-servers 192.168.1.1; </screen>
 
           <para>
 <programlisting>
-↵
-// This is the primary configuration file for the BIND DNS server named.↵
-//↵
-// Please read /usr/share/doc/bind/README.Debian for information on the ↵
-// structure of BIND configuration files in Debian for BIND versions 8.2.1 ↵
-// and later, *BEFORE* you customize this configuration file.↵
-//↵
-↵
-include "/etc/bind/named.conf.options";↵
-↵
+// This is the primary configuration file for the BIND DNS server named.
+//
+// Please read /usr/share/doc/bind/README.Debian for information on the 
+// structure of BIND configuration files in Debian for BIND versions 8.2.1 
+// and later, *BEFORE* you customize this configuration file.
+//
+
+include "/etc/bind/named.conf.options";
+
 // reduce log verbosity on issues outside our control↵
-logging {↵
-	category lame-servers { null; };↵
-	category cname { null; };↵
-};↵
-↵
-// prime the server with knowledge of the root servers↵
-zone "." {↵
-        type hint;↵
-        file "/etc/bind/db.root";↵
-};↵
-↵
-// be authoritative for the localhost forward and reverse zones, and for↵
-// broadcast zones as per RFC 1912↵
-↵
-zone "localhost" {↵
-        type master;↵
-        file "/etc/bind/db.local";↵
-};↵
-↵
-zone "127.in-addr.arpa" {↵
-        type master;↵
-        file "/etc/bind/db.127";↵
-};↵
-↵
-zone "0.in-addr.arpa" {↵
-        type master;↵
-        file "/etc/bind/db.0";↵
-};↵
-↵
-zone "255.in-addr.arpa" {↵
-        type master;↵
-        file "/etc/bind/db.255";↵
-};↵
-↵
-// add local zone definitions here↵
-include "/etc/bind/named.conf.local";↵
+logging {
+	category lame-servers { null; };
+	category cname { null; };
+};
+
+// prime the server with knowledge of the root servers
+zone "." {
+        type hint;
+        file "/etc/bind/db.root";
+};
+
+// be authoritative for the localhost forward and reverse zones, and for
+// broadcast zones as per RFC 1912
+
+zone "localhost" {
+        type master;
+        file "/etc/bind/db.local";
+};
+
+zone "127.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.127";
+};
+
+zone "0.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.0";
+};
+
+zone "255.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.255";
+};
+
+// add local zone definitions here
+include "/etc/bind/named.conf.local";
 </programlisting>
           </para>
 
@@ -1019,8 +1008,7 @@ include "/etc/bind/named.conf.local";↵
                 </para>
                 <para>
 <screen>
-↵
-ServerAdmin bjoy@somebigco.com↵
+ServerAdmin bjoy@somebigco.com
 </screen>
                 </para>
                 </listitem>
@@ -1045,10 +1033,9 @@ ServerAdmin bjoy@somebigco.com↵
                 <para><emphasis role="bold">Listen</emphasis>: De forma predeterminada, en Ubuntu la instalación del servidor CUPS escucha sólo por la interfaz loopback en la dirección IP <emphasis>127.0.0.1</emphasis>. Para hacer que el servidor CUPS escuche en la dirección IP del verdadero adaptador de red, debe especificar un nombre de host, una dirección IP, o bien, un par dirección IP/puerto, y para ello debe añadir una directiva Listen. Por ejemplo, si su servidor CUPS reside en una red local con la dirección IP <emphasis role="italics">192.168.10.250</emphasis> y desea que sea accesible para los demás sistemas de esta subred, debe editar el archivo  <filename>/etc/cups/cups.d/ports.conf</filename> y añadir una directiva Listen, de esta forma:</para>
                 <para>
 <screen>
-↵
-Listen 127.0.0.1:631 # existing loopback Listen↵
-Listen /var/run/cups/cups.sock # existing socket Listen↵
-Listen 192.168.10.250:631 # Listen on the LAN interface, Port 631 (IPP)↵
+Listen 127.0.0.1:631 # existing loopback Listen
+Listen /var/run/cups/cups.sock # existing socket Listen
+Listen 192.168.10.250:631 # Listen on the LAN interface, Port 631 (IPP)
 </screen>
                 </para>
                 <para>En el ejemplo anterior, debe comentar o borrar la referencia a la dirección de loopback (127.0.0.1) si no desea que <application>cupsd</application> escuche por esa interfaz, sino sólo por la interfaz Ethernet de la red local (LAN). Para activar la escucha por todas las interfases de red en las que se haya establecido un nombre de host, incluyendo el loopback, debería crear una entrada listen para el nombre de host <emphasis>socrates</emphasis> así:</para>
@@ -1060,8 +1047,7 @@ Listen·socrates:631··#·Escuchando en todos los interfaces para la máquina·
 				<para>o omitiendo la directiva Listen y usando <emphasis>Port</emphasis> en su lugar, como en:</para>
 <para>
 <screen>
-↵
-Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
+Port 631 # Escuchando en el puerto 631 en todos los interfaces
 </screen>
 </para>
                 </listitem>
@@ -1095,13 +1081,11 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
         <title>Configuración</title>
           <para>Apache se configura colocando <emphasis>directivas</emphasis> en archivos de configuración de texto plano. El archivo principal de configuración se llama <filename>apache2.conf</filename>. Además, se pueden añadir otros archivos de configuración mediante la directiva <emphasis>Include</emphasis>, y se pueden usar comodines para incluir muchos archivos de configuración. Todas las directivas deben colocarse en alguno de esos archivos de configuración. Apache2 sólo reconocerá los cambios realizados en los archivos principales de configuración cuando se inicie o se reinicie.</para>
 
-          <para>The server also reads a file containing mime document types;
-          the filename is set by the <emphasis>TypesConfig</emphasis> directive, and is
-          <filename>mime.types</filename> by default.</para>
+          <para>El servidor también lee un fichero que contiene los tipos mime de los documentos; el nombre de ese fichero lo establece la directiva <emphasis>TypesConfig</emphasis>, y es <filename>mime.types</filename> por omisión.</para>
 
           <para>El archivo de configuración predeterminado de Apache2 es <filename>/etc/apache2/apache2.conf</filename>. Puede editar este archivo para configurar el servidor Apache2. Podrá configurar el número de puerto, la raíz de documentos, los módulos, los archivos de registros, los hosts virtuales, etc.</para>
         <sect3 id="http-basic-settings" status="complete">
-          <title>Configuración Básica</title>
+          <title>Opciones básicas</title>
             <para>Esta sección explica los parámetros de configuración esenciales para el servidor Apache2. Remitase a la <ulink url="http://httpd.apache.org/docs/2.0/">Documentación de Apache2 Documentation</ulink> para más detalles.</para>
 
              <itemizedlist>
@@ -1123,15 +1107,7 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
 			 described below.
             </para></listitem>
 
-             <listitem><para>
-			 The <emphasis>ServerAdmin</emphasis> directive specifies the email address to be advertised
-			 for the server's administrator.  The default value is webmaster@localhost.
-			 This should be changed to an email address that is delivered to you (if you
-			 are the server's administrator).  If your website has a problem, Apache2
-			 will display an error message containing this email address to report the
-			 problem to.  Find this directive in your site's configuration file in
-			 /etc/apache2/sites-available.
-			 </para></listitem>
+             <listitem><para>La directiva <emphasis>ServerAdmin</emphasis> especifica la dirección de correo del administrador del servidor. El valor por omisión es webmaster@localhost. Cambie esta dirección por alguna a la que le puedan llegar los mensajes que se le envíen (si ud. es el administrador del servicio). Si su sitio web tiene algún problema, Apache2 mostrará un mensaje de error con en la que aparecerá esta dirección de correo para que la gente pueda enviar un informe del error. La directiva se encuentra en el fichero de configuración de su sitio en /etc/apache2/sites-available.</para></listitem>
 
              <listitem><para>
              The <emphasis>Listen</emphasis> directive specifies the port, and optionally the IP address,
@@ -1166,7 +1142,7 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
 
         </sect3>
         <sect3 id="default-settings" status="complete">
-          <title>Configuración por Defecto</title>
+          <title>Opciones predeterminadas</title>
             <para>Esta sección explica la configuración de las opciones predeterminadas del servidor Apache2. Por ejemplo, si desea añadir un host virtual, las opciones que usted configura para el host virtual tienen prioridad para ese host virtual. Para las directivas no definidas dentro de las opciones del host virtual, se usan los valores predeterminados.</para>
 
             <itemizedlist>
@@ -1236,16 +1212,10 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
                     <para><emphasis role="bold">ExecCGI</emphasis> - Permite la ejecución de scripts CGI. Los scripts CGI no serán ejecutados si esta opción no fue escojida. <tip><para>Muchos archivos no deberían ser ejecutados como scripts CGI. Esto podría resultar muy peligroso. Los scripts CGI deberían mantenerse en un directorio separado fuera de su DocumentRoot, y dicho directorio debería ser el único que tuviese activada la opción ExecCGI. Así está establecido desde el principio, y la ubicación predeterminada para los scripts CGI es /usr/lib/cgi-bin.</para></tip></para>
                 </listitem>
                 <listitem>
-                    <para><emphasis role="bold">Includes</emphasis> - Allow server-side includes.
-					Server-side includes allow an HTML file to <emphasis>
-					include</emphasis> other files.  This is not a common option.  See
-					<ulink url="http://httpd.apache.org/docs/2.0/howto/ssi.html">the Apache2
-					SSI Howto</ulink> for mor information.</para>
+                    <para><emphasis role="bold">Includes</emphasis> - Permite «server-side includes». Éstos, permiten a un fichero HTML <emphasis>incluir</emphasis> otros ficheros. No es una opción muy común, consulte el <ulink url="http://httpd.apache.org/docs/2.0/howto/ssi.html">Cómo - Apache2 SSI</ulink> para más información.</para>
                 </listitem>
                 <listitem>
-                    <para><emphasis role="bold">IncludesNOEXEC</emphasis> - Allow server-side includes,
-                    but disable the #exec and #include commands in CGI
-                    scripts.</para>
+                    <para><emphasis role="bold">IncludesNOEXEC</emphasis> - Permite «server-side includes», pero deshabilita los #exec y #include en los scripts CGI.</para>
                 </listitem>
                 <listitem>
                     <para><emphasis role="bold">Indexes</emphasis> - Muestra una lista formateada del contenido de los directorios, si no existe el DirectoryIndex (como el index.html) en el directorio solicitado. <caution><para>For security reasons, this should usually not be set, and certainly
@@ -1289,10 +1259,7 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces↵
  
  			<para>Establezca la directiva DocumentRoot apuntando al directorio que contenga el documento raíz (como el index.html) para el host virtual. El DocumentRoot por defecto es <filename>/var/www</filename>.</para>
 
-			<para>
-			The ServerAdmin directive within the VirtualHost stanza is email the address used in the 
-			footer of error pages if you choose to show a footer with an email address on the error pages.
-			</para>
+			<para>La directiva ServerAdmin, dentro de una estrofa VirtualHost, es la dirección de correo usada en el pie de página de las páginas de error (si es que eligió mostrar un pie de página con la dirección de correo en las páginas de error).</para>
 
         </sect3>
         <sect3 id="server-settings" status="complete">
@@ -1588,15 +1555,7 @@ Subversion is an open source version control system. Using Subversion, you can r
           </para>
         <sect3 id="subversion-installation" status="complete">
           <title>Instalación</title>
-            <para>
-To access Subversion repository using the HTTP protocol, you must install and 
-configure a web server. Apache2 is proven to work with Subversion. Please 
-refer to the HTTP subsection in the Apache2 section to install and configure 
-Apache2.  To access the Subversion repository using the HTTPS protocol, you 
-must install and configure a digital certificate in your Apache 2 web server. 
-Please refer to the HTTPS subsection in the Apache2 section to install and 
-configure the digital certificate.
-						</para>
+            <para>Para acceder a un repositorio de Subversion mediante el protocolo HTTP, debe instalar y configurar un servidor web. Apache2 ha demostrado funcionar bien con Subversion (para instalar y configurar Apache2, consulte la sub-sección HTTP de la sección de Apache2). Para acceder al repositorio de Subversion repository mediante el protocolo HTTPS, debe instalar y configurar un certificado digital en su servidor web Apache 2 (para ello, consulte la sub-sección HTTPS de la sección de Apache2).</para>
 						<para>Para instalar Subversion, ejecute la siguiente orden en la línea de órdenes de una terminal:</para>
 	    <para>
 <screen>
@@ -1607,11 +1566,10 @@ configure the digital certificate.
         </sect3>
         <sect3 id="subversion-configuration" status="complete">
           <title>Configuración del servidor</title>
-            <para>
-	This step assumes you have installed above mentioned packages on your system. This section explains how to create a Subversion repository and access the project.</para>
+            <para>Este paso asume que ya tiene instalados los paquetes mencionados en su sistema. Esta sección le explica cómo crear un repositorio de Subversion y acceder al proyecto.</para>
 			<sect4 id="create-svn-repos" status="complete">
 				<title>Crear un repositorio de Subversion</title>
-<para>The Subversion repository can be created using the following command from a terminal prompt:</para>
+<para>El repositorio de Subversion puede ser creado usando la siguiente orden en la línea de órdenes de una terminal</para>
 
         <para>
 <screen>
@@ -1699,21 +1657,19 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
   DAV svn
   SVNPath /path/to/repos
   AuthType Basic
-  AuthName "Your repository name"
+  AuthName "El nombre de su repositorio"
   AuthUserFile /etc/subversion/passwd
   &lt;LimitExcept GET PROPFIND OPTIONS REPORT&gt;
   Require valid-user
   &lt;/LimitExcept&gt;
   &lt;/Location&gt; </programlisting>
-  <para>Next, you must create the <filename>/etc/subversion/passwd</filename> 
-  file. This file contains user authentication details. To add an entry, i.e. 
-  to add a user, you can run the following command from a terminal prompt:</para>
+  <para>Ahora, debe crear el fichero <filename>/etc/subversion/passwd</filename>, el cual contiene los detalles de autenticación del usuario. Para añadir una entrada, p.e. para añadir un usuario, puede ejecutar esta orden en una terminal:</para>
 	<para>
 <screen>
 <command>htpasswd2·/etc/subversion/passwd·user_name</command>
 </screen>
         </para>
-	<para>This command will prompt you to enter the password. Once you enter the password, the user is added. Now, to access the repository you can run the following command:</para>
+	<para>Ésta orden le pedirá que introduzca su contraseña. Cuando lo haga, se añadirá el usuario. Entonces, para acceder al repositorio puede ejecutar esto:</para>
         <screen><command>svn co http://servername/svn</command></screen>
 	<warning>
 		<para>La contraseña se transmite como texto plano. Si le preocupa que puedan interceptar su contraseña, se le recomienda que use cifrado SSL. Para más detalles, consulte la siguiente sección.</para>
@@ -2108,7 +2064,7 @@ local all postgres md5 sameuser
             <listitem><para>Sí</para></listitem>
             <listitem><para>0</para></listitem>
             <listitem><para>+</para></listitem>
-            <listitem><para>all</para></listitem>
+            <listitem><para>todo</para></listitem>
             </itemizedlist></para>
             <note>
             <para>Reemplace mail.example.com con el nombre de máquina de su servidor de correo.</para>

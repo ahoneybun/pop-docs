@@ -398,7 +398,7 @@
 <chapter id="networking" status="complete">
 	<title>Rede</title>
   <para>As redes consistem em dois ou mais dispositivos, tal como sistemas de computador, impressoras e equipamentos relacionados que são ligados por qualquer meio físico, como equipamentos de rede via sinal de rádio (wireless), com o propósito de compartilhar informações e ou distribuir informações entre os dispositivos conectados.</para>
-  <para>Esta seção do Guia Ubuntu para Servidores fornece informação gerais e específicas sobre redes, incluindo uma vista geral de conceitos de rede e detalhes sobre protocolos populares de rede e aplicações de servidor.</para>
+  <para>Esta seção do Guia para Servidores Ubuntu fornece informação gerais e específicas sobre redes, incluindo uma vista geral de conceitos de rede e detalhes sobre protocolos populares de rede e aplicações de servidor.</para>
 	<sect1 id="network-configuration" status="complete">
 		<title>Configuração de Rede</title>
           <para>O Ubuntu distribui um número de utilidades gráficas para configurar seus equipamentos de rede. Este documento tem como foco administradores de servidores e focalizará em como administrar sua rede usando a linha de comando.</para>
@@ -551,7 +551,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
 		<title>Servidor OpenSSH</title>
       <sect2 id="openssh-introduction">
         <title>Introdução</title> 
-           <para>Esta seção do Guia <phrase>Ubuntu</phrase> para Servidores introduz uma coleção de poderosas ferramentas para o controle remoto de computadores ligados em rede e transferência de dados entre computadores na rede, chamado <emphasis>OpenSSH</emphasis>. Você também aprenderá sobre algumas tarefas de configuração possíveis com a aplicação de servidor OpenSSH e como mudá-las em seu sistema Ubuntu.</para>
+           <para>Esta seção do Guia para Servidores <phrase>Ubuntu</phrase> introduz uma coleção de poderosas ferramentas para o controle remoto de computadores ligados em rede e transferência de dados entre computadores na rede, chamado <emphasis>OpenSSH</emphasis>. Você também aprenderá sobre algumas tarefas de configuração possíveis com a aplicação de servidor OpenSSH e como mudá-las em seu sistema Ubuntu.</para>
           <para>OpenSSH é uma versão disponível livremente da família de ferramentas do protocolo Secure Shell (SSH) para controlar um computador remotamente ou transferir arquivos entre computadores. Ferramentas tradicionais utilizadas para cumprir essas funções, como <application>telnet</application> ou <application>rcp</application> são inseguras e transmitem a senha de um usuário em texto puro quando utilizadas. O OpenSSH provê um servidor daemon e ferramentas de cliente para facilitar controle remoto e operações de transmissão de arquivo com segurança e criptografia, efetivamente substituindo ferramentas de legado.</para>
           <para>O componete de servidor OpenSSH, <application>sshd</application>, observa constantemente conexões de clientes para qualquer das ferramentas do cliente. Quando uma requisição de conexão ocorre, <application>sshd</application> inicia a conexão correta dependendo do tipo de ferramenta de conexão do cliente. Por exemplo, se um computador remoto conecta-se por um cliente <application>ssh</application>, o servidor OpenSSH iniciará o controle remoto da sessão após autenticar. OpenSSH utiliza vários métodos de autentificação, incluindo senha simples, chave pública e tiquetes <application>Kerberos</application>.</para>
           </sect2>
@@ -981,7 +981,7 @@ ServerAdmin bjoy@somebigco.com
 <command>sudo /etc/init.d/cupsys restart</command>
 </screen>
                 </para>
-	<para>Some other configuration for the CUPS server is done in the file <filename>/etc/cups/cups.d/ports.conf</filename>:</para>
+	<para>Algumas das outras configurações do servidor CUPS são feitas no arquivo <filename>/etc/cups/cups.d/ports.conf</filename>:</para>
           <itemizedlist>
                 <listitem>
                 <para><emphasis role="bold">Listen</emphasis>: Por padrão no Ubuntu, o servidor CUPS escuta somente na interface de loopback no endereço de IP <emphasis>127.0.0.1</emphasis>. Para instruir o CUPS a escutar num endereço IP de uma rede, você deve especificar um hostname, um endereço de IP, ou opcionalmente, um endereço/porta de acordo com as diretivas Listen. Por exemplo, se seu servidor CUPS fica numa rede local com o endereço de IP <emphasis role="italics">192.168.10.250</emphasis> e você gostaria de torná-lo acessível para outros sistemas em sua sub-rede, você deverá editar o arquivo <filename>/etc/cups/cups.d/ports.conf</filename> e adicionar uma diretiva Listen, como:</para>
@@ -1126,75 +1126,30 @@ Port 631 # Escute na porta 631 em todas as interfaces
 
 					<para><emphasis role="bold">PidFile</emphasis> - A diretiva PidFile define o arquivo em que o servidor gravará o seu ID de processo (pid). Este arquivo deve ser permissões de leitura somente para o root. Na maioria dos casos, o valor padrão deve ser deixado.</para>
 
-<para><emphasis role="bold">User</emphasis> - The User directive sets the userid used by the server to answer requests. This 
-setting determines the server's access. Any files inaccessible to this user will also be inaccessible to your website's visitors. 
-The default value for User is www-data.  </para>
+<para><emphasis role="bold">User</emphasis> - A diretiva User seta o UserID usado pelo servidor para responder as solicitações. Esta opção determina o acesso ao servidor. Qualquer arquivo inacessível a este usuário será também inacessível aos visitantes do seu website. O valor padrão para o User é www-data</para>
             <warning>
-            <para>
- Unless you know exactly what you are doing, do not set the User directive to root. Using root as the User will create large security holes for your Web server.  </para>
+            <para>A não ser que você saiba exatamente o que está fazendo, não defina a diretiva User para root. Usando o root como User (usuário) você irá criar largas brechas de sergurança para seu ser servidor Web.</para>
             </warning>
- <para>The Group directive is similar to the User directive. Group sets the group under which the server will answer requests. The default group is also www-data.</para>
+ <para>A diretiva Group é similar a diretiva User. Group define o grupo que o servidor irá responder as solicitações. O grupo padrão é www-data.</para>
 
         </sect3>
         <sect3 id="apache-modules" status="complete">
           <title>Módulos do Apache</title>
-              <para>
-
-              Apache is a modular server. This implies that only the most
-              basic functionality is included in the core server. Extended
-              features are available through modules which can be loaded
-              into Apache. By default, a base set of modules is included in
-              the server at compile-time. If the server is compiled to use
-              dynamically loaded  modules, then modules can be compiled
-              separately, and added at any time using the LoadModule
-              directive. Otherwise, Apache must be recompiled to add or
-              remove modules. Ubuntu compiles Apache2 to allow the dynamic
-			  loading of modules.  Configuration directives may be conditionally
-	      included on the presence of a particular module by enclosing
-              them in an &lt;IfModule&gt; block.
-
-              You can install additional Apache2 modules and use them
-              with your Web server. You can install Apache2
-              modules using the <application>apt-get</application>
-              command. For example, to install the Apache2 module
-              for MYSQL authentication, you can run the
-                following command from a terminal prompt:</para>
+              <para>O Apache é um servidor modular. Isso significa que somente as funcionalidades básicas são inclusas no núcleo do servidor. A extensão das funcionalidades são disponibilizadas através de módulos, que podem ser carregados no Apache. Por padrão, alguns módulos básicos já estão inclusos na hora da compilação. Se o servidor for compilado para usar o carregamento dinâmico de módulos, então os módulos podem ser compilados separadamente, e adicionados à qualquer hora usando a diretiva LoadModule. Caso contrário, o Apache2 precisa ser recompilado para adicionar ou remover módulos. O Ubuntu compila o Apache2 de maneira que permita o carregamento dinâmico de módulos. As diretivas de configuração podem ser incluídas condicionalmente, com a presença de um módulo em particular incluído num bloco &lt;IfModule&gt;. Você pode instalar módulos adicionais do Apache2 e usá-los com o seu servidor WEB. Você pode instalar módulos do Apache2 usando o comando <application>apt-get</application>. Por exemplo, para instalar o módulo do Apache2 para autenticação por MYSQL, você pode executar o seguinte comando de um prompt de terminal (linha de comando)</para>
                 
                 <para>
 <screen>
 <command>sudo apt-get install libapache2-mod-auth-mysql</command>
 </screen>
                 </para>
-                <para>
-                Once you install the module, the module will
-                be available in the
-                <filename>/etc/apache2/mods-available</filename> directory. You can use
-              the <application>a2enmod</application> command to
-              enable a module. You can use
-              the <application>a2dismod</application> command to
-              disable a module. Once you enable the module,
-              the module will be available in the
-              the <filename>/etc/apache2/mods-enabled</filename> directory.
-              </para>
+                <para>Quando você instala um módulo, ele estará disponível no diretório <filename>/etc/apache2/mods-available</filename>. Você pode usar o comando <application>a2enmod</application> para habilitar um módulo. Você pode usar o comando <application>a2dismod</application> para desabilitar um módulo. Quando você desabilita um módulo, ele estará disponível no diretório <filename>/etc/apache2/mods-enabled</filename>.</para>
         </sect3>
       </sect2>
       <sect2 id="https-configuration" status="complete">
         <title>Configurações HTTPS</title>
-          <para>
-           The <application>mod_ssl</application> module adds
-           an important feature to the Apache2 server - the ability to
-           encrypt communications.  Thus, when your browser is
-           communicating using SSL encryption, the
-           https:// prefix is used at the beginning of the Uniform
-           Resource Locator (URL) in the browser navigation bar.
-          </para>
+          <para>O módulo <application>mod_ssl</application> adiciona uma funcionalidade importante no servidor Apache2 - a habilidade de encriptar comunicações. Portanto, quando o seu navegador se comunica utilizando encriptação SSL, o prefixo https:// é usado no começo do Localizador de Recurso Uniforme (URL) na barra de navegação do navegador.</para>
 
-          <para>
-          The <application>mod_ssl</application> module is available in
-          <application>apache2-common</application> package. If you have
-          installed this package, you can run the following command from a terminal prompt to
-          enable the <application>mod_ssl</application> module:
-          </para>
+          <para>O módulo <application>mod_ssl</application> está disponível no pacote <application>apache2-common</application>. Se você possuir este pacote instalado, você pode executar o comando a seguir de um prompt de terminal para ativar o módulo <application>mod_ssl</application>:</para>
 
           <para>
 <screen>
@@ -1203,29 +1158,10 @@ The default value for User is www-data.  </para>
           </para>
         <sect3 id="certificates-and-security" status="complete">
           <title>Certificados e Segurança</title>
-            <para>
-              To set up your secure server, use public key cryptography to
-              create a public and private key pair. In most cases, you
-              send your certificate request (including your public key),
-              proof of your company's identity, and payment to a
-              Certificate Authority (CA). The
-              CA verifies the certificate request and your identity, and
-              then sends back a certificate for your secure server. 
-            </para>
-             <para>
-             Alternatively, you can create your own self-signed
-             certificate. Note, however, that self-signed certificates
-             should not be used in most production environments.
-             Self-signed certificates are not automatically accepted by
-             a user's browser.  Users are prompted by the browser to
-             accept the certificate and create the secure connection.
-             </para>
+            <para>Para configurar um servidor seguro, use a criptografia de chave pública para criar um par de chaves pública e privada. Na maioria dos casos, você manda o seu pedido de certificação (incluindo a sua chave pública), uma prova da identidade da sua companhia e o pagamento para uma Autoridade de Certificados (CA). A CA verifica o pedido de certificação e sua identidade, e depois manda de volta um certificado para o seu servidor seguro.</para>
+             <para>Alternativamente, você pode criar o seu certificado auto-assinado. Note que, entretando, o certificado auto-assinado não deve ser usando na maioria dos ambientes de produção. Certificados auto-assinados não são automaticamente aceitos pelo navegador dos usuários. Os usuários são questionados pelo navegador para aceitar o certificado e criar uma conexão segura.</para>
 
-             <para>
-              Once you have a self-signed certificate or a signed
-              certificate from the CA of your choice, you need to
-              install it on your secure server.
-             </para>
+             <para>Assim que você tiver um certificado auto-assinado ou um certificado assinado por um CA de sua escolha, você precisa instalá-lo no seu servidor seguro.</para>
         </sect3>
         <sect3 id="types-of-certificates" status="complete">
           <title>Tipos de Certificados</title>
@@ -1267,11 +1203,7 @@ The default value for User is www-data.  </para>
         </sect3>
         <sect3 id="generating-a-csr" status="complete">
           <title>Gerando uma Assinatura de Requisição de Certificado (CSR)</title>
-            <para>
-            To generate the Certificate Signing Request (CSR), you should create your
-            own key. You can run the following command from a terminal prompt to create the
-            key:
-            </para>
+            <para>Para gerar o Pedido de Assinatura de Certificado (CSR - Certificate Signing Request) você deve criar sua própria chave. Você pode rodar o seguinte comando no prompt do terminal (linha de comando) para criar a chave:</para>
 
             <para>
 <screen>
@@ -1279,50 +1211,30 @@ The default value for User is www-data.  </para>
 </screen>
             </para>
 <programlisting>
-Generating RSA private key, 1024 bit long modulus
+Gerando chave privada RSA, 1024 bit módulos longos
 .....................++++++
 .................++++++
-unable to write 'random state'
-e is 65537 (0x10001)
-Enter pass phrase for server.key:
+impossível escrever 'estado aletaório'
+e é 65537 (0x10001)
+Informe a chave senha para o server.key:
 </programlisting>
 
-        <para>
-        You can now enter your passphrase. For best security, it should
-        at least contain eight characters. The minimum length when
-		specifying -des3 is four characters. It should include numbers
-        and/or punctuation and not be a word in a dictionary. Also
-        remember that your passphrase is case-sensitive. 
-        </para>
+        <para>Agora, você pode inserir a sua senha. Para uma segurança melhor, ela deve conter no mínimo oito caracteres. O tamanho mínimo quando -des3 é especificado é de quatro caracteres. É bom incluir números e/ou pontuação e não ser uma palavra de dicionário. Também, lembre-se que a sua senha é sensível à caixa alta e/ ou baixa.</para>
 
         <para>Redigite a sua senha para verificação. Uma vez redigitado corretamente, a chave do servidor é gerada e armazenada no arquivo <filename>server.key</filename>.</para>
 
         <warning>
-        <para>
-        You can also run your secure web server without a passphrase.
-        This is convenient because you will not need to enter the
-        passphrase every time you start your secure web server. But it
-        is highly insecure and a compromise of the key means a
-        compromise of the server as well.
-        </para>
+        <para>Você pode rodar um servidor seguro sem uma senha. Isso é conveniente porque você não precisa entrar com a senha todas as vezes que incializa o seu servidor seguro, mas é muito inseguro e uma compromissão da chave significará a compromissão do servidor também.</para>
         </warning>
 
-        <para>
-        In any case, you can choose to run your secure web server without
-        a passphrase by leaving out the -des3 switch in the generation
-        phase or by issuing the following command at a terminal prompt:
-        </para>
+        <para>Em qualquer caso, você pode escoher em rodar o seu servidor sem a frase, deixar de lado a alteração -des3 na geração da frase ou lançando um novo comando no prompt do terminal (linha de comando):</para>
 
         <para>
 <screen>
 <command>openssl rsa -in server.key -out server.key.insecure</command>
 </screen>
         </para>
-        <para>
-        Once you run the above command, the insecure key will be stored
-        in the <filename>server.key.insecure</filename> file. You can use this
-        file to generate the CSR without passphrase.
-        </para>
+        <para>Uma vez executado o comando abaixo, a chave insegura será armazenada no arquivo <filename>server.key.insecure</filename>. Você pode usar esse arquivo para gerar o CSR sem senha.</para>
 
         <para>Para criar um CSR, execute o seguinte comando no prompt do terminal:</para>
 
@@ -1332,22 +1244,12 @@ Enter pass phrase for server.key:
 </screen>
         </para>
 
-        <para>It will prompt you enter the passphrase. If you enter the
-        correct passphrase, it will prompt you to enter Company Name,
-        Site Name, Email Id, etc. Once you enter all these details, your
-        CSR will be created and it will be stored in the
-        <filename>server.csr</filename> file. You can submit this CSR file
-        to a CA for processing. The CAN will use this CSR file and issue
-        the certificate. On the other hand, you can create self-signed
-        certificate using this CSR.</para>
+        <para>Ele irá solicitar que você informe a senha. Se você informar a senha correta ele irá pedir para que você informe o Nome da Empresa, Nome do Site, Email, etc. Assim que você informar todos esses detalhes, seu CSR será criado e armazenado no arquivo <filename>server.csr</filename>. Você pode enviar esse arquivo CSR para uma CA para processamento. A CAN irá usar esse arquivo CSR para emitir o certificado. Por outro lado, você pode criar certificados auto-assinados usando esse CSR.</para>
 
         </sect3>
         <sect3 id="creating-a-self-signed-certificate" status="complete">
-          <title>Creating a Self-Signed Certificate</title>
-            <para>
-            To create the self-signed certificate, run the
-            following command at a terminal prompt:
-            </para>
+          <title>Criando um certificado Auto-Assinado</title>
+            <para>Para criar um certificado auto-assinado, execute o seguinte comando no prompt de terminal:</para>
 
             <para>
 <screen>
@@ -1355,10 +1257,7 @@ Enter pass phrase for server.key:
 </screen>
             </para>
 
-            <para>The above command will prompt you to enter the
-            passphrase. Once you enter the correct passphrase, your
-            certificate will be created and it will be stored in the
-            <filename>server.crt</filename> file.  </para>
+            <para>O comando abaixo irá lhe pedir uma senha. Assim que você informar a senha correta, seu certificado será criado e ele será armazenado no arquivo <filename>server.crt</filename>.</para>
         <warning>
         <para>Se o seu servidor seguro deve ser utilizado em um ambiente de produção, você provavelmente precisa de um certificado assinado por uma CA. Não é recomentado usar certificados auto-assinados.</para>
         </warning>
@@ -1431,9 +1330,7 @@ Listen 443
         <title>Configuração</title>
           <para>O Squid é configurado através da edição de diretivas presentes no arquivo de configuração <filename>/etc/squid/squid.conf</filename>. Os exemplos a seguir ilustram algumas das diretivas que podem ser modificadas para afetar o coportamente do servidor Squid. Para uma configuração mais especializada do Squid, veja a seção de referências.</para>
              <tip>
-               <para>Prior to editing the configuration file, you should make a copy of the original file and protect it 
-               from writing so you will have the original settings as a reference, and to re-use as necessary.
-               </para>
+               <para>Antes de editar o arquivo de configuração você deve fazer uma cópia do arquivo original e protegê-lo contra gravação, assim você terá as configurações originais para referência e re-utilização quando necessário.</para>
                <para>Copie o arquivo <filename>/etc/squid/squid.conf</filename> e proteja-o contra gravação informando os seguintes comandos no prompt de comando de um terminal:</para>
 	     </tip>
                <para>
@@ -1445,60 +1342,31 @@ Listen 443
 	        <para>
            <itemizedlist>
                <listitem>
-                  <para>
-                  To set your Squid server to listen on TCP port 8888 instead of the default TCP port 3128, change
-                  the http_port directive as such:
-                  </para>
+                  <para>Para configurar o servidor Squid para ouvir na porta TCP 8888 ao invés da porta padrão TCP 3128, modifique a diretiva http_port da seguinte maneira:</para>
                   <para>http_port 8888</para>
                </listitem>
 	            <listitem>
-                  <para>
-                  Change the visible_hostname directive in order to give the Squid server a specific hostname.  This hostname
-                  does not necessarily need to be the computer's hostname. In this example it is set to <emphasis>weezie</emphasis>
-                  </para>
-                  <para>
-                  visible_hostname weezie
-                  </para>
+                  <para>Modifique a diretiva visible_hostname de forma a dar ao servidor Squid um nome de host específico. Esse nome de host não precisa ser necessáriamente o nome de host do computador. Nesse exemplo ele é configurado como sendo <emphasis>weezie</emphasis></para>
+                  <para>visible_hostname weezie</para>
                </listitem>
                <listitem>
-                  <para>
-                     Again, Using Squid's access control, you may configure use of Internet services proxied by Squid
-                     to be available only users with certain Internet Protocol (IP) addresses.  For example, we willll illustrate access 
-                     by users of the 192.168.42.0/24 subnetwork only:
-                  </para>
-                  <para>
-                     Add the following to the <emphasis role="bold">bottom</emphasis> of the ACL section of your <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
+                  <para>Novamente, Usando o controle de acesso do Squid, você pode configurar o uso de serviços de Internet filtrados pelo squid para estar disponível somente para usuários de certos endereços de IP. Por exemplo, iremos ilustrar o acesso somente de usuários da sub-rede  192.168.42.0/24:</para>
+                  <para>Adicione as seguintes informações no <emphasis role="bold">final</emphasis> da seção ACL do seu arquivo <filename>/etc/squid/squid.conf</filename>:</para>
                   <para>acl fortytwo_network src 192.168.42.0/24</para>
-                  <para>
-                     Then, add the following to the <emphasis role="bold">top</emphasis> of the http_access section of your
-                     <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
+                  <para>Então, adicione as seguintes informações no <emphasis role="bold">topo</emphasis> da seção http_access do seu arquivo <filename>/etc/squid/squid.conf</filename>:</para>
                   <para>http_access allow fortytwo_network</para>
                </listitem>
                <listitem>
-                  <para>
-                     Using the excellent access control features of Squid, you may configure use of Internet services proxied by Squid
-                     to be available only during normal business hours.  For example, we'll illustrate access by employees of a business
-                     which is operating between 9:00AM and 5:00PM, Monday through Friday, and which uses the 10.1.42.0/42 subnetwork:
-                  </para>
-                  <para>
-                     Add the following to the <emphasis role="bold">bottom</emphasis> of the ACL section of your <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
+                  <para>Usando os excelentes recursos de controle de acesso do Squid, você pode configurar o uso de serviços da Internet através de proxy para estarem disponíveis apenas durante o horário normal de trabalho. Por exemplo, nós iremos ilustrar o acesso de empregados de uma empresa que opera entre as 9:00AM e 5:00PM, de Segunda à Sexta e que usa a sub-rede 10.1.42.0/24:</para>
+                  <para>Adicione as seguintes informações no <emphasis role="bold">final</emphasis> da seção ACL do seu arquivo <filename>/etc/squid/squid.conf</filename>:</para>
                   <para>acl biz_network src 10.1.42.0/24 acl biz_hours time M T W T F 9:00-17:00</para>
-                  <para>
-                     Then, add the following to the <emphasis role="bold">top</emphasis> of the http_access section of your
-                     <filename>/etc/squid/squid.conf</filename> file:
-                  </para>
+                  <para>Então, adicione as seguintes informações no <emphasis role="bold">topo</emphasis> da seção http_access do seu arquivo <filename>/etc/squid/squid.conf</filename>:</para>
                   <para>http_access allow biz_network biz_hours</para>
                </listitem>
           </itemizedlist>
           </para>
           <note>
-	  <para>
-          After making changes to the <filename>/etc/squid/squid.conf</filename> file, save the file and restart the <application>squid</application> 
-          server application to effect the changes using the following command entered at a terminal prompt:
-          </para>
+	  <para>Depois de fazer alterações no arquivo <filename>/etc/squid/squid.conf</filename>, salve-o e reinicie o servidor <application>squid</application> para que as alterações tenham efeito usando o seguinte comando em um prompt de terminal:</para>
           </note>
           <para>
 <screen>
@@ -1515,29 +1383,16 @@ Listen 443
     </sect1>
 	<sect1 id="version-control-system" status="complete">
 		<title>Version Control System</title>
-          <para>
-Version control is the art of managing changes to information. It has long been a critical tool for programmers, who typically spend their time making small changes to software and then undoing those changes the next day. But the usefulness of version control software extends far beyond the bounds of the software development world. Anywhere you can find people using computers to manage information that changes often, there is room for version control.</para>
+          <para>O controle de versões é a arte de gerenciar mudanças na informação. Ele tem sido há muito tempo uma ferramenta crucial para programadores, que tipicamente passam seu tempo fazendo pequenas mudanças em um software e então desfazendo essas mudanças no outro dia. Mas a utilidade de softwares de controle de versões vão muito além do mundo dos desenvolvedores de software. Em qualquer lugar que você possa encontrar pessoas usando computadores para gerenciar informações que mudam constantemente, existe espaço para o controle de versões.</para>
 <para>
           </para>
       <sect2 id="subversion" status="complete">
         <title>Subversion</title>
-          <para>
-Subversion is an open source version control system. Using Subversion, you can record the history of source files and documents. It manages files and directories over time. A tree of files is placed into a central repository. The repository is much like an ordinary file server, except that it remembers every change ever made to files and directories.
-          </para>
+          <para>O Subversion é um sistema de controle de versões de código aberto. Ele gerencia arquivos e diretórios através do tempo. Uma árvore de arquivos é colocada em um repositório central. Esse repositório é muito parecido com um servidor de arquivos comum, exceto pelo fato de que ele se lembra de todas as alterações feitas nos arquivos e diretórios.</para>
         <sect3 id="subversion-installation" status="complete">
           <title>Instalação</title>
-            <para>
-To access Subversion repository using the HTTP protocol, you must install and 
-configure a web server. Apache2 is proven to work with Subversion. Please 
-refer to the HTTP subsection in the Apache2 section to install and configure 
-Apache2.  To access the Subversion repository using the HTTPS protocol, you 
-must install and configure a digital certificate in your Apache 2 web server. 
-Please refer to the HTTPS subsection in the Apache2 section to install and 
-configure the digital certificate.
-						</para>
-						<para>
-		To install Subversion, run the following command from a terminal prompt:
-            </para>
+            <para>Para acessar o repositório Subversion usando o protocolo HTTP você precisa instalar e configurar um servidor web. O Apache2 é recomendado para trabalhar com o Subversion. Por favor consulte a sub-seção HTTP na seção do Apache2 para instalar e configurar o Apache2. Para acessar o repositório Subversion usando o protocolo HTTPS você precisa instalar e configurar um certificado digital no seu servidor web Apache2. Por favor consulte a sub-seção HTTPS na seção do Apache2 para instalar e configurar um certificado digital.</para>
+						<para>Para instalar o Subversion, execute o seguinte comando no prompt de terminal:</para>
 	    <para>
 <screen>
 <command>sudo apt-get install subversion libapache2-svn</command>
@@ -1547,11 +1402,10 @@ configure the digital certificate.
         </sect3>
         <sect3 id="subversion-configuration" status="complete">
           <title>Configuração do Servidor</title>
-            <para>
-	This step assumes you have installed above mentioned packages on your system. This section explains how to create a Subversion repository and access the project.</para>
+            <para>Este passo assume que você possui instalado os pacotes acima mencionados em seu sistema. Esta sessão explica como criar um repositório Subversion e acessar o projeto.</para>
 			<sect4 id="create-svn-repos" status="complete">
 				<title>Cria um Repositório Subversion</title>
-<para>The Subversion repository can be created using the following command from a terminal prompt:</para>
+<para>O repositório Subversion pode ser criado usando o seguinte comando de um prompt de terminal:</para>
 
         <para>
 <screen>
@@ -1563,10 +1417,7 @@ configure the digital certificate.
         </sect3>
         <sect3 id="access-methods" status="complete">
           <title>Métodos de Acesso</title>
-<para>Subversion repositories can be accessed (checked out) through many 
-different methods --on local disk, or through various network protocols. 
-A repository location, however, is always a URL. The table describes how 
-different URL schemas map to the available access methods.</para>
+<para>Os repositórios do Subversion podem ser acessados (retirados) através de diversos métodos -- no disco local, através de vários protocolos de rede. Uma localização de repositório, entretanto, é sempre uma URL. A tabela descreve como diferentes esquemas de URL apontam para os métodos de acesso disponíveis.</para>
 				<table><title>Métodos de Acesso</title>
 
 					<tgroup cols="2">
@@ -1574,18 +1425,18 @@ different URL schemas map to the available access methods.</para>
 						<colspec colname="2"/>
 						<thead>
 							<row>
-								<entry><para>Schema</para></entry>
-								<entry><para>Access Method</para></entry>
+								<entry><para>Esquema</para></entry>
+								<entry><para>Método de Acesso</para></entry>
 							</row>
 						</thead>
 						<tbody>
 							<row>
 								<entry><para>file://</para></entry>
-								<entry><para>direct repository access (on local disk)</para></entry>
+								<entry><para>acesso direto ao repositório (no disco local)</para></entry>
 							</row>
 							<row>
 								<entry><para>http://</para></entry>
-								<entry><para>Access via WebDAV protocol to Subversion-aware Apache2 web server</para></entry>
+								<entry><para>Acesso via protocolo WebDAV aos servidores web Apache2 dotados de Subversion</para></entry>
 							</row>
 							<row>
 								<entry><para>https://</para></entry>
@@ -1593,7 +1444,7 @@ different URL schemas map to the available access methods.</para>
 							</row>
 							<row>
 								<entry><para>svn://</para></entry>
-								<entry><para>Access via custom protocol to an svnserve server</para></entry>
+								<entry><para>Acesso via protocolo customizado para um servidor svnserve</para></entry>
 							</row>
 							<row>
 								<entry><para>svn+ssh://</para></entry>
@@ -1603,17 +1454,10 @@ different URL schemas map to the available access methods.</para>
 					</tgroup>
 				</table>
 
-				<para>
-In this section, we will see how to configure Subversion for all 
-these access methods. Here, we cover the basics. For more advanced 
-usage details, refer to the <ulink url="http://svnbook.red-bean.com/">svn book</ulink>.
-				</para>
+				<para>Nessa seção, nós iremos ver como configurar o Subversion para todos esses métodos de acesso. Aqui, nós iremos cobrir o básico. Para detalhes avançados de utilização consulte o <ulink url="http://svnbook.red-bean.com/">livro do svn</ulink>.</para>
 			<sect4 id="direct-repos-access" status="complete">
 				<title>Acesso direto ao repositório (file://)</title>
-<para> This is the simplest of all access methods. It does not 
-require any Subversion server process to be running. This access 
-method is used to access Subversion from the same machine. The 
-syntax of the command, entered at a terminal prompt, is as follows:</para>
+<para>Esse é o mais simples de todos os métodos de acesso. Ele não requer que nenhum processo do servidor Subversion esteja rodando. Esse método de acesso é usado para acessar o Subversion a partir da mesma máquina. A sintaxe do comando, informado no prompt de um terminal, é a seguinte:</para>
 
         <para>
 <screen>
@@ -1623,207 +1467,118 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
   <para>ou</para>
 	<para>
 <screen>
-<command>svn co file://localhost/path/to/repos/project</command>
+<command>svn co file://localhost/caminho/para/o/repositorio/do/projeto</command>
 </screen>
         </para>
 	<note>
-		<para>If you do not specify the hostname, there are three forward slashes (///) -- two for the protocol (file, in this case) plus the leading slash in the path. If you specify the hostname, you must use two forward slashes (//).</para>
+		<para>Se você não especificar o nome do host, haverão três barras (///) -- duas para o protocolo (arquivo, nesse caso) mais a barra inicial do caminho. Se você especificar o nome do host, você deverá usar duas barras (//).</para>
 	</note>
-		<para>The repository permissions depend on filesystem permissions. If the user has read/write permission, he can checkout from and commit to the repository.</para>
+		<para>As permissões do repositório dependem das permissões do sistema de arquivos. Se o usuário tem permissão de leitura/gravação, ele pode fazer checkout e fazer commit para o repositório.</para>
 			</sect4>
 			<sect4 id="access-via-webdav" status="complete">
-				<title>Access via WebDAV protocol (http://)</title>
-<para> To access the Subversion repository via WebDAV protocol, you must configure your Apache 2 web server. You must add the following snippet in your <filename>/etc/apache2/apache2.conf</filename> file:</para>
+				<title>Acesso via protocolo WebDAV (http://)</title>
+<para>Para acessar o repositório através do protocolo WebDAV, você precisa configurar seu servidor web Apache 2. Você precisa adicionar o seguinte trecho ao seu arquivo <filename>/etc/apache2/apache2.conf</filename>:</para>
 
 	<programlisting> &lt;Location /svn&gt;
   DAV svn
-  SVNPath /path/to/repos
+  SVNPath /caminho/para/o/repositorio
   AuthType Basic
-  AuthName "Your repository name"
+  AuthName "Nome do seu repositorio"
   AuthUserFile /etc/subversion/passwd
   &lt;LimitExcept GET PROPFIND OPTIONS REPORT&gt;
   Require valid-user
   &lt;/LimitExcept&gt;
-  &lt;/Location&gt; </programlisting>
-  <para>Next, you must create the <filename>/etc/subversion/passwd</filename> 
-  file. This file contains user authentication details. To add an entry, i.e. 
-  to add a user, you can run the following command from a terminal prompt:</para>
+  &lt;/Location </programlisting>
+  <para>Em seguida, você precisa criar o arquivo <filename>/etc/subversion/passwd</filename>. Esse arquivo contém detalhes de autenticação de usuários. Para adicionar uma entrada, ex.: para adicionar um usuário, você pode rodar o seguinte comando a partir do prompt de um terminal:</para>
 	<para>
 <screen>
 <command>htpasswd2 /etc/subversion/passwd user_name</command>
 </screen>
         </para>
-	<para>This command will prompt you to enter the password. Once you enter the password, the user is added. Now, to access the repository you can run the following command:</para>
+	<para>Esse comando irá lhe solicitar a entrada de uma senha. Assim que você informar a senha, o usuário será adicionado. Agora, para acessar o repositório você precisa rodar o seguinte comando:</para>
         <screen><command>svn co http://servername/svn</command></screen>
 	<warning>
-		<para>
-			The password is transmitted as plain text. If you are worried about password snooping, you are advised to use SSL encryption. For details, please refer next section.
-		</para>
+		<para>As senhas são transmitidas em texto simples. Se você estiver preocupado com roubo de senhas, você está convidado a usar criptografia SSL. Para detalhes, por favor consulte a próxima seção.</para>
 	</warning>
 			</sect4>
 			<sect4 id="access-via-webdav-with-ssl" status="complete">
 				<title>Acesso via protocolo WebDAV com criptografia SSL (https://)</title>
-					<para> 
-						Accessing Subversion repository via WebDAV protocol with SSL 
-						encryption (https://) is similar to http:// except that you 
-						must install and configure the digital certificate in your 
-						Apache2 web server.
-					</para>
+					<para>Acessar o repositório Subversion via protocolo WebDAV com criptografia SSL (https://) é semelhante a acessar via http:// exceto pelo fato de que você precisa instalar e configurar um certificado digital no seu servidor web Apache2.</para>
 
-					<para>
-						You can install a digital certificate issued by a signing 
-						authority like Verisign. Alternatively, you can install your 
-						own self-signed certificate.
-					</para>
-					<para>
-						This step assumes you have installed and configured a digital 
-						certificate in your Apache 2 web server. Now, to access the 
-						Subversion repository, please refer to the above section! 
-						The access methods are exactly the same, except the protocol. 
-						You must use https:// to access the Subversion repository.
-					</para>
+					<para>Você pode instalar um certificado digital fornecido por uma autoridade de certificação como a Verisign. Alternativamente, você pode instalar seus próprios certificados auto-assinados.</para>
+					<para>Esse passo assume que você tenha instalado e configurado um certificado digital no seu servidor web Apache 2. Agora, para acessar o repositório do Subversion, por favor consulte a seção acima! Os métodos de acesso são exatamente os mesmos, exceto pelo protocolo. Você precisa usar https:// para acessar o repositório do Subversion.</para>
 
 			</sect4>
 			<sect4 id="access-via-custom-protocol" status="complete">
 				<title>Acessar via protocolo específico (svn://)</title>
-					<para> 
-					Once the Subversion repository is created, you can configure the 
-					access control. You can edit the <filename>
-					/path/to/repos/project/conf/svnserve.conf</filename> file to 
-					configure the access control.  For example, to set up 
-					authentication, you can uncomment the following lines in the 
-					configuration file: </para>
+					<para>Assim que o repositório do Subversion é criado, você pode configurar o protocolo de acesso. Você pode editar o arquivo <filename> /path/to/repos/project/conf/svnserve.conf</filename> para configurar o controle de acesso. Por exemplo, para configurar a autenticação você pode descomentar as seguintes linhas no arquivo de configuração:</para>
 					<programlisting># [comum]
 # password-db = passwd</programlisting>
 
-					<para>
-					After uncommenting the above lines, you can maintain the user 
-					list in the passwd file. So, edit the file <filename>passwd
-					</filename> in the same directory and add the new user. The 
-					syntax is as follows:
-					</para>
+					<para>Depois de descomentar as linhas acima você pode manter a lista de usuários no arquivo passwd. Então, edite o arquivo <filename>passwd </filename> no mesmo diretório e adicione o novo usuário. A sintaxe é a seguinte:</para>
 					<programlisting>nomedousuário = senha</programlisting>
 					<para>Para mais detalhes, por favor referir ao arquivo.</para>
 
-					<para>
-					Now, to access Subversion via the svn:// custom protocol, either 
-					from the same machine or a different machine, you can run 
-					svnserver using svnserve command. The syntax is as follows:
-					</para>
-					<programlisting>$ svnserve -d --foreground -r /path/to/repos
-# -d -- daemon mode
-# --foreground -- run in foreground (useful for debugging)
-# -r -- root of directory to serve
+					<para>Agora, para acessar o Subversion via protocolo específico svn://, estando na mesma maquina ou não, você pode rodar o svnserver usando o comando svnserve. A sintaxe é a seguinte:</para>
+					<programlisting>$ svnserve -d --foreground -r /caminho/para/o/repositorio
+# -d -- modo daemon
+# --foreground -- roda em primeiro plano (útil para detecção de erros)
+# -r -- raiz do diretório a ser servido
 
-For more usage details, please refer to:
+Para maiores detalhes de utilização, por favor consulte:
 $ svnserve --help</programlisting>
 
-					<para>Once you run this command, Subversion starts listening on default port (3690). To access the project repository, you must run the following command from a terminal prompt: </para>
+					<para>Assim que você rodar esse comando, o Subversion iniciará ouvindo na porta padrão (3690). Para acessar o repositório do projeto, você precisa rodar o seguinte comando a partir de um prompt de terminal:</para>
 					<para>
 <screen>
 <command>svn co svn://hostname/project project --username nome_do_usuário</command>
 </screen>
                                         </para>
-					<para>Based on server configuration, it prompts for password. Once 
-					you are authenticated, it checks out the code from Subversion 
-					repository.  To synchronize the project repository with the local 
-					copy, you can run the <command>update</command> sub-command. The 
-					syntax of the command, entered at a terminal prompt, is as follows:
-					</para>
+					<para>Baseado na configuração do servidor, ele perguntará por uma senha. Assim que você estiver autenticado, ele irá fazer a retirada do código do repositório do Subversion. Para sincronizar o repositório do projeto com a cópia local, você pode rodar o sub-comando <command>update</command>. A sintaxe do comando, informado em um prompt de terminal, é a seguinte:</para>
 					<para>
 <screen>
-<command>cd project_dir ; svn update</command>
+<command>cd diretorio_do_projeto ; svn update</command>
 </screen>
                                         </para>
-					<para>For more details about using each Subversion sub-command, you 
-					can refer to the manual. For example, to learn more about the co 
-					(checkout) command, please run the following command from a 
-					terminal prompt:</para>
+					<para>Para maiores detalhes sobre a utilização de cada sub-comando do Subversion, você pode consultar o manual. Por exemplo, para aprender mais sobre o comando co (checkout), por favor rode o seguinte comando em um prompt de terminal:</para>
                     <para><screen><command>svn co help</command></screen></para>
 
 			</sect4>
 			<sect4 id="access-via-custom-protocol-with-ssl" status="complete">
-				<title>Access via custom protocol with SSL encryption (svn+ssh://)</title>
-					<para> The configuration and server process is same as in the
-					svn:// method. For details, please refer to the above section. 
-					This step assumes you have followed the above step and started 
-					the	Subversion server using <application>svnserve</application>  
-					command.</para>
+				<title>Acessar via protocolo específico com criptografia SSL (svn+ssh://)</title>
+					<para>A configuração e o processo do servidor é o mesmo do método svn://. Para detalhes, por favor consulte a seção acima. Esse passo assume que você tenha seguido o passo acima e iniciado o servidor Subversion usando o comando <application>svnserve</application>.</para>
 
-					<para>It is also assumed that the ssh server is running on that 
-					machine and that it is allowing incoming connections. To confirm, 
-					please try to login to that machine using ssh. If you can login, 
-					everything is perfect. If you cannot login, please address it 
-					before continuing further.</para>
+					<para>Também assume-se que o servidor ssh esteja rodando na maquina e que ele permita conexões entrantes. Para confirmar, por favor tente fazer login na maquina usando ssh. Se você puder fazer login, tudo está perfeito. Se você não puder fazer login, por favor resolva isso antes de continuar.</para>
 
-					<para>The svn+ssh:// protocol is used to access the Subversion 
-					repository using SSL encryption. The data transfer is encrypted 
-					using this method. To access the project repository (for example 
-					with a checkout), you must use the following command syntax: 
-                                        </para>
+					<para>O protoclo svn+ssh:// é usado para acessar o repositório do Subversion usando criptografia SSL. Os dados transferidos são criptografados usando esse método. Para acessar o repositório do projeto (por exemplo com um checkout), você precisa usar a seguinte sintaxe de comando:</para>
                                         <para>
 <screen>
 <command>svn co svn+ssh://hostname/var/svn/repos/project</command>
 </screen>
                                         </para>
 
-					<note><para> You must use the full path (/path/to/repos/project) 
-					to access the Subversion repository using this access method. 
-					</para></note>
-					<para>
-					Based on server configuration, it prompts for password. You must 
-					enter the password you use to login via ssh. Once you are 
-					authenticated, it checks out the code from the Subversion 
-					repository.
-					</para>
+					<note><para>Você precisa usar o caminho completo (/caminho/para/o/repositorio/do/projeto) para acessar o repositório do Subversion usando esse método de acesso.</para></note>
+					<para>Baseado na configuração do servidor ele perguntará por uma senha. Você precisa informar a senha que você usa para fazer login via ssh. Uma vez que esteja autenticado, ele retirará o código do repositório do Subversion.</para>
 			</sect4>
 			</sect3>
 
       </sect2>
       <sect2 id="cvs-server" status="complete">
-        <title>CVS Server</title> 
-          <para>
-          CVS is a version control system. You can use it to record the
-          history of source files.
-          </para>
+        <title>Servidor CVS</title> 
+          <para>O CVS é um sistema de controle de versões. Você pode usá-lo para gravar o histórico de arquivos fonte.</para>
         <sect3 id="cvs-installation" status="complete">
           <title>Instalação</title>
-            <para>
-              At a terminal prompt, enter the following command to install
-              <application>cvs</application>:
-
-<screen>
+            <para>Em um prompt de terminal, informe o seguinte comando para instalar o <application>cvs</application>: <screen>
 <command>sudo apt-get install cvs</command>
-</screen>
-
-After you install <application>cvs</application>, you should install
-<application>xinetd</application> to start/stop the cvs server. At the
-prompt, enter the following command to install
-<application>xinetd</application>:
-
-<screen>
+</screen>Depois que você instalar o <application>cvs</application>, você deverá instalar o <application>xinetd</application> para iniciar/parar o servidor cvs. No prompt, informe o seguinte comando para instalar o <application>xinetd</application>:<screen>
 <command>sudo apt-get install xinetd</command>
-</screen>
-            </para>
+</screen></para>
         </sect3>
         <sect3 id="cvs-configuration" status="complete">
           <title>Configuração</title>
-            <para>
-            Once you install cvs, the repository will be automatically
-            initialized. By default, the repository resides under the
-            <application>/var/lib/cvs</application> directory. You can
-            change this path by running following command:
-
-<screen>
-<command>cvs -d /your/new/cvs/repo init</command>
-</screen>
-
-Once the initial repository is set up, you can configure
-<application>xinetd</application> to start the CVS server. 
-You can copy the following lines to the <filename>
-/etc/xinetd/cvspserver</filename> file.
-
-<programlisting>
+            <para>Assim que tiver instalado o cvs, o repositório será automaticamente inicializado. Por padrão, o repositório reside dentro do diretório <application>/var/lib/cvs</application>. Você pode trocar esse caminho rodando o seguinte comando:<screen>
+<command>cvs -d /seu/novo/repo/cvs init</command>
+</screen> Assim que o repositório inicial tiver sido configurado, você pode configurar o <application>xinetd</application> para iniciar o servidor CVS. Você pode copiar as seguintes linhas para o arquivo <filename> /etc/xinetd/cvspserver</filename>. <programlisting>
 service cvspserver
 {
      port = 2401
@@ -1836,26 +1591,12 @@ service cvspserver
      server_args = -f --allow-root /var/lib/cvs pserver
      disable = no
 }
-</programlisting>
-
-<note>
-<para>
-Be sure to edit the repository if you have changed the default
-repository (<application>/var/lib/cvs</application>) directory.
-</para>
-</note>
-
-Once you have configured <application>xinetd</application> you 
-can start the cvs server by running following command:
-
-<screen>
+</programlisting><note>
+<para>Certifique-se de ter editado o repositório se você modificar o repositório padrão localizado em (<application>/var/lib/cvs</application>).</para>
+</note> Assim que tiver configurado o <application>xinetd</application> você pode iniciar o servidor cvs rodando o seguinte comando: <screen>
 <command>sudo /etc/init.d/xinetd start</command>
-</screen>
-            </para>
-            <para>
-            You can confirm that the CVS server is running by issuing 
-			the following command:
-            </para>
+</screen></para>
+            <para>Você pode confirmar que o servidor CVS está executando digitando o seguinte comando:</para>
 
             <para>
 <screen>
@@ -1863,102 +1604,57 @@ can start the cvs server by running following command:
 </screen>
             </para>
 
-            <para>
-            When you run this command, you should see the following line
-            or something similar:
-            </para>
+            <para>Quando você executa esse comando, você deve visualizar a seguinte linha ou algo similar:</para>
 
 <programlisting>
 tcp 0 0 *:cvspserver *:* LISTEN 
 </programlisting>
 
-        <para>
-From here you can continue to add users, add new projects,
-and manage the CVS server. 
-        </para>
+        <para>Daqui em diante, você pode continuar a adicionar usuários, criar novos projetos e administrar o servidor CVS.</para>
         <warning>
-<para>
-          CVS allows the user to add users independently of the
-underlying OS installation. Probably the easiest way is to use the Linux
-Users for CVS, although it has potential security issues. Please refer
-to the CVS manual for details.
-</para>
+<para>O CVS permite que o usuário adicione usuários independentemente da instalação do SO hospedeiro. Provavelmente a maneira mais fácil é usar os Usuários do Linux para o CVS, entretanto isso oferece problemas potenciais de segurança. Por favor consulte o manual para mais detalhes.</para>
         </warning>
 
         </sect3>
         <sect3 id="cvs-add-projects" status="complete">
-          <title>Add Projects</title>
-            <para>
-            This section explains how to add new project to the CVS 
-			repository. Create the directory and add necessary document 
-			and source files to the directory. Now, run the following 
-			command to add this project to CVS repository:
-<screen>
-<command>cd your/project</command>
-<command>cvs import -d :pserver:username@hostname.com:/var/lib/cvs -m "Importing my project to CVS repository" . new_project start</command>
-</screen>
+          <title>Adicionar Projetos</title>
+            <para>Esta seção explica como adicionar um novo projeto no repositório CVS. Crie o diretório e adicione os documentos necessários e os arquivos fontes no diretório. Agora, execute o seguinte comando para adicionar este projeto ao repositório CVS: <screen>
 
-<tip>
-<para>
-You can use the CVSROOT environment variable to store the CVS root directory.
-Once you export the CVSROOT environment variable, you can avoid using -d option to
-above cvs command.
-</para>
-</tip>
-The string <emphasis>new_project</emphasis> is a vendor
-tag, and <emphasis>start</emphasis> is a release tag.
-They serve no purpose in this context, but since CVS requires them, they
-must be present.
+<command>cd seu/projeto</command>
 
-<warning>
-<para>
-When you add a new project, the CVS user you use must have write access to the
-CVS repository (<application>/var/lib/cvs</application>). By default, the
-<application>src</application> group has write access to the CVS
-repository. So, you can add the user to this group, and he can then add and
-manage projects in the CVS repository.
-</para>
-</warning>
-            </para>
+<command>cvs import -d :pserver:username@hostname.com:/var/lib/cvs -m "Importando meu projeto para o respositório CVS" . novo_proto start</command>
+
+</screen><tip>
+<para>Você pode usar a variável ambiental CVSROOT para armazenar o diretório raiz do CVS. Uma vez que tenha exportado a variável ambiental CVSROOT, você pode evitá-la usando a opção -d em conjunto com o comando cvs acima.</para>
+</tip> A string <emphasis>novo_projeto</emphasis> é uma tag do fabricante, e<emphasis>start</emphasis> é uma release tag. Elas não possuem finalidade no contexto, mas como o CVS os requer, eles devem estar presentes. <warning>
+<para>Quando você adicionar um novo projeto, o usuário CVS tem permisssão de escrita no repositório CVS (<application>/var/lib/cvs</application>). Por padrão, o grupo <application>src</application> tem permissão de escrita no repositório CVS. Então, você pode adicionar um usuário neste grupo, e ele poderá então adicionar e gerenciar projetos no respositório CVS.</para>
+</warning></para>
         </sect3>
       </sect2>
       <sect2 id="version-control-ref" status="complete">
         <title>Referências</title> 
-				<para><ulink url="http://subversion.tigris.org/">Subversion Home Page</ulink></para>
-				<para><ulink url="http://svnbook.red-bean.com/">Subversion Book</ulink></para>
-				<para><ulink url="http://ximbiot.com/cvs/manual/cvs-1.11.21/cvs_toc.html">CVS Manual</ulink></para>
+				<para><ulink url="http://subversion.tigris.org/">Página do Subversion</ulink></para>
+				<para><ulink url="http://svnbook.red-bean.com/">Livro do Subversion</ulink></para>
+				<para><ulink url="http://ximbiot.com/cvs/manual/cvs-1.11.21/cvs_toc.html">Manual do CVS</ulink></para>
       </sect2>
     </sect1>
 	<sect1 id="databases" status="complete">
-		<title>Databases</title>
-          <para>
-            Ubuntu provides two Database servers. They are:
-            <itemizedlist spacing="compact">
+		<title>Bancos de Dados</title>
+          <para>O Ubuntu provê dois servidores de banco de dados. São eles: <itemizedlist spacing="compact">
                 <listitem>
                     <para><application><trademark>MySQL</trademark></application></para>
                 </listitem>
                 <listitem>
                     <para><application>PostgreSQL</application></para>
                 </listitem>
-            </itemizedlist>
-            They are available in the main repository. This section
-            explains how to install and configure these database
-            servers.
-          </para>
+            </itemizedlist> . Eles estão disponíveis no repositório principal. Esta seção explica como instalar e configurar esses servidores de bancos de dados.</para>
       <sect2 id="mysql" status="complete">
         <title>MySQL</title>
-          <para>
-          MySQL is a fast, multi-threaded, multi-user, and robust SQL
-          database server. It is intended for mission-critical, 
-		  heavy-load production systems as well as for embedding into 
-		  mass-deployed software.
-          </para>
+          <para>MySQL é um servidor de dados SQL rápido, multi-thread, multi-usuário e robusto. Ele é adequado para missões críticas, sistema de alto carregamento assim como para embutir em software instalado em massa.</para>
 
         <sect3 id="mysql-installation" status="complete">
           <title>Instalação</title>
-            <para>
-            To install MySQL, run the following command from a terminal prompt:
-            </para>
+            <para>Para instalar MySQL, execute o seguinte comando a partir do prompt de terminal:</para>
 
             <para>
 <screen>
@@ -1966,11 +1662,7 @@ manage projects in the CVS repository.
 </screen>
             </para>
 
-            <para>
-            Once the installation is complete, the MySQL server should be
-            started automatically. You can run the following command from a terminal prompt to
-            check whether the MySQL server is running:
-            </para>
+            <para>Quando a instalação estiver completa, o servidor MySQL deverá ser iniciado automaticamente. Você poderá executar o seguinte comando em um terminal para checar se o servidor MySQL está rodando.</para>
 
             <para>
 <screen>
@@ -1978,15 +1670,12 @@ manage projects in the CVS repository.
 </screen>
             </para>
 
-            <para>
-            When you run this command, you should see the following line
-            or something similar:
-            </para>
+            <para>Quando você executa esse comando, você deve visualizar a seguinte linha ou algo similar:</para>
 
 <programlisting>
-tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
+tcp 0 0 localhost.localdomain:mysql *:* LISTEN -
 </programlisting>
-	<para>If the server is not running correctly, you can type the following command to start it:</para>
+	<para>Se o servidor não está executando corretamente, você pode digitar o seguinte comando para inicializá-lo.</para>
             <para>
 <screen>
 <command>sudo /etc/init.d/mysql restart</command>
@@ -1996,11 +1685,7 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
         </sect3>
         <sect3 id="mysql-configuration" status="complete">
           <title>Configuração</title>
-            <para>
-            By default, the administrator password is not set. Once you
-            install MySQL, the first thing you must do is to configure
-            the MySQL administrator password. To do this, run the following commands:
-            </para>
+            <para>Por padrão, a senha de administrador não vem definida. Assim que instalar o MySQL, a primeira coisa que precisa fazer é configurar a senha de administrador do MySQL. Para fazer isso, execute os seguintes comandos:</para>
             <para>
 <screen>
 <command>sudo mysqladmin -u root senha novasenhadoroot</command>
@@ -2012,26 +1697,15 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
 </screen>
             </para>
 
-            <para>
-            You can edit the <filename>/etc/mysql/my.cnf</filename> file to configure the basic
-            settings -- log file, port number, etc. Refer to
-            <filename>/etc/mysql/my.cnf</filename> file for more details.
-            </para>
+            <para>Você pode editar o arquivo <filename>/etc/mysql/my.cnf</filename> para configurar as opções básicas -- arquivo de log, número da porta, etc. Veja o arquivo <filename>/etc/mysql/my.cnf</filename> para maiores detalhes.</para>
         </sect3>
       </sect2>
       <sect2 id="postgresql" status="complete">
         <title>PostgreSQL</title> 
-          <para>
-          PostgreSQL is an object-relational database system that has
-          the features of traditional commercial database systems with
-          enhancements to be found in next-generation DBMS systems.
-          </para>
+          <para>O PostgreSQL é um sistema de banco de dados objeto-relacional que possui os recursos de sistemas de banco de dados comerciais tradicionais com melhorias que serão encontradas na próxima geração de sistemas DBMS.</para>
         <sect3 id="postgresql-installation" status="complete">
           <title>Instalação</title>
-            <para>
-            To install PostgreSQL, run the following command in the
-            command prompt:
-            </para>
+            <para>Para instalar PostgreSQL, execute o comando seguinte a partir do prompt de comando:</para>
 
             <para>
 <screen>
@@ -2039,154 +1713,79 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
 </screen>
             </para>
 
-            <para>
-            Once the installation is complete, you should configure the
-            PostgreSQL server based on your needs, although the default
-            configuration is viable.</para>
+            <para>Assim que a instalação estiver completa, você deve configurar o servidor PostgreSQL de acordo com suas necessidades, ainda que  a configuração padrão seja viável.</para>
             
         </sect3>
         <sect3 id="postgresql-configuration" status="complete">
           <title>Configuração</title>
-            <para>By default, connection via TCP/IP is disabled.
-            PostgreSQL supports multiple client authentication methods.
-            By default, IDENT authentication method is used.  Please
-            refer <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">
-			the PostgreSQL Administrator's Guide</ulink>.</para>
+            <para>Por padrão, a conexão via TCP/IP está desabilitada. O PostgreSQL suporta múltiplos métodos de autenticação. Por padrão, o método de autenticação IDENT é usado. Por favor consulte <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html"> O Guia de Administrador do PostgreSQL</ulink>.</para>
             
-            <para>The following discussion assumes that you wish to enable 
-			TCP/IP connections and use the MD5 method for client 
-			authentication. PostgreSQL configuration files are stored in the
-            <filename>/etc/postgresql/&lt;version&gt;/main</filename>
-            directory. For example, if you install PostgreSQL 7.4, the
-            configuration files are stored in the
-            <filename>/etc/postgresql/7.4/main</filename> directory.
-            </para>
+            <para>A seguinte discussão assume que você deseja habilitar conexões TCP/IP e usar o metódo MD5 para autenticações de clientes. Os arquivos de configuração do PostgreSQL estão armazenados no diretório <filename>/etc/postgresql/&lt;version&gt;/main</filename>. Por exemplo, se você instalar o PostgreSQL 7.4, os arquivos de configuração estão armazenados no diretório <filename>/etc/postgresql/7.4/main</filename>.</para>
             
             <tip>
-            <para>
-             To configure <application>ident</application>
-             authentication, add entries to the <filename>/etc/postgresql/7.4/main/pg_ident.conf</filename>
-             file.
-            </para>
+            <para>Para configurar a autenticação <application>ident</application>, adicione as entradas no arquivo <filename>/etc/postgresql/7.4/main/pg_ident.conf</filename>.</para>
             </tip>
 
-            <para>To enable TCP/IP connections, edit the file <filename>/etc/postgresql/7.4/main/postgresql.conf</filename></para>
+            <para>Para habilitar conexões TCP/IP, edite o arquivo <filename>/etc/postgresql/7.4/main/postgresql.conf</filename></para>
 
-            <para>Locate the line <emphasis>#tcpip_socket =
-            false</emphasis> and change it to
-            <emphasis>tcpip_socket =
-            true</emphasis>. You may
-            also edit all other parameters, if you know what you are doing! 
-			For details, refer to the configuration file or to the PostgreSQL documentation.
-            </para>
+            <para>Localize a linha <emphasis>#tcpip_socket = false</emphasis> e altere-a para <emphasis>tcpip_socket = true</emphasis>. Você poderá editar outros parâmetros, se você souber o que está fazendo! Para detalhes, consulte o arquivo de configuração ou a documentação do PostgreSQL.</para>
 
-            <para>By default, the user credentials are not set for
-            <emphasis>MD5</emphasis> client
-            authentication. So, first it is necessary to configure the PostgreSQL server to use
-            <emphasis>trust</emphasis> client
-            authentication, connect to the database,
-            configure the password, and revert the configuration back to use
-            <emphasis>MD5</emphasis> client authentication.
-            To enable <emphasis>trust</emphasis> client
-            authentication, edit the file <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename></para>
+            <para>Por padrão, as credenciais de usuário não são definidas para autenticação de cliente por <emphasis>MD5</emphasis>. Então, primeiro é necessário configurar o servidor PostgreSQL para usar a autenticação de clientes por <emphasis>confiança</emphasis>, conecte a base de dados, configure a senha e reverta a configuração para a autenticação de clientes por <emphasis>MD5</emphasis> usar. Para habilitar a autenticação de clientes por <emphasis>confiança</emphasis>, edite o arquivo <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename></para>
 
-            <para>Comment out all the existing lines which use
-            <emphasis>ident</emphasis> and
-            <emphasis>MD5</emphasis>
-            client authentication and add the following
-            line:</para>
+            <para>Comente todas as linhas existentes que usem a autenticação de clientes por <emphasis>ident</emphasis> e <emphasis>MD5</emphasis> e adicione a seguinte linha:</para>
 <programlisting>
 local all postgres trust sameuser
 </programlisting>
 
-            <para>Then, run the following command to
-            start the PostgreSQL server:
-            </para>
+            <para>Então, executa o seguinte comando para inicializar o servidor PostgreSQL:</para>
             <para>
 <screen>
 <command>sudo /etc/init.d/postgresql start</command>
 </screen>
             </para>
-            <para>Once the PostgreSQL server is successfully started, run the following command at a terminal prompt to connect to the default
-            PostgreSQL template database</para>
+            <para>Assim que o servidor PostgreSQL for iniciado com sucesso, rode o seguinte comando em um prompt de terminal para se conectar ao banco de dados padrão de exemplo do PostgreSQL</para>
 
             <para>
 <screen>
 <command>psql -U postgres -d template1</command>
 </screen>
             </para>
-            <para>The above command connects to PostgreSQL
-            database <emphasis>template1</emphasis> as user
-            <emphasis>postgres</emphasis>. Once you connect to the PostgreSQL
-            server, you will be at a SQL prompt. You can run the
-            following SQL command at the <application>psql</application> prompt to configure the
-            password for the user <emphasis role="italics">postgres</emphasis>.</para>
+            <para>O comando acima conecta ao banco de dados <emphasis>template1</emphasis> do PostgreSQL como usuário <emphasis>postgres</emphasis>. Assim que você se conectar ao servidor PostgreSQL, você estará no prompt SQL. Você pode rodar os seguintes comandos SQL no prompt do <application>psql</application> para configurar a senha para o usuário <emphasis role="italics">postgres</emphasis>.</para>
 
             <para>
 <screen>
-<command>template1=# ALTER USER postgres with encrypted password 'your_password';</command>
+<command>template1=# ALTERA USUÁRIO postgres com senha criptografada 'sua_senha';</command>
 </screen>
             </para>
-            <para>After configuring the password, edit the file
-            <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename> to use
-            <emphasis>MD5</emphasis> authentication:</para>
-            <para>Comment the recently added <emphasis role="italics">trust</emphasis> line and add the following
-            line: </para>
+            <para>Depois de configurar a senha, edite o arquivo <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename> para usar a autenticação <emphasis>MD5</emphasis>:</para>
+            <para>Comente a linha <emphasis role="italics">confiança</emphasis> adicionada recentemente  e adicione a seguinte linha:</para>
 
 <programlisting>
-local   all         postgres                          md5 sameuser
+local all postgres md5 sameuser
 </programlisting>
             <warning>
-            <para>
-             The above configuration is not complete by any means. Please
-             refer <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">
-			 the PostgreSQL Administrator's Guide</ulink> to configure more parameters.
-            </para>
+            <para>A configuração abaixo não está de nenhuma forma completa. Por favor consulte <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html"> o Guia do Administrador do PostgreSQL</ulink> para configurar mais parâmetros.</para>
             </warning>
         </sect3>
       </sect2>
     </sect1>
 	<sect1 id="email-services" status="complete">
-		<title>Email Services</title>
-          <para>
-            The process of getting an email from one person to another over a network or
-			the Internet involves many systems working together.  Each of these systems
-			must be correctly configured for the process to work.  The sender uses a <emphasis>Mail
-			User Agent</emphasis> (MUA), or email client, to send the message through one or more
-			<emphasis>Mail Transfer Agents</emphasis> (MTA), the last of which will hand it off to a 				<emphasis>Mail Delivery Agent</emphasis> (MDA) for delivery to the 
-			recipient's mailbox, from which it
-			will be retrieved by the recipient's email client, usually via a POP3 or IMAP server.
-          </para>
+		<title>Serviços de Email</title>
+          <para>O processo de entrega de um e-mail de um pessoa para outra através da rede ou da Internet demanda o trabalho conjunto de muitos sistemas. Cada um desses sistemas precisa estar corretamente configurado para que o processo funcione. O remetente usa um <emphasis>Agente Usuário de Correio</emphasis> (MUA) ou cliente de e-mail, para enviar a mensagem através de um ou mais <emphasis>Agentes de Transferência de Correio</emphasis> (MTA), o qual irá entregá-la para um <emphasis>Agente de Entrega de Correio</emphasis> (MDA) para entregá-la na caixa postal do destinatário, apartir da qual será retirada pelo cliente de e-mail do destinatário, normalmente através de um servidor POP3 ou IMAP.</para>
       <sect2 id="postfix" status="complete">
         <title>Postfix</title>
-          <para>
-            <application>Postfix</application> is the default Mail Transfer Agent (MTA) in Ubuntu. It
-            attempts to be fast and easy to administer and secure. It is
-            compatible with the MTA <application>sendmail</application>. This section explains how
-            to install and configure <application>postfix</application>. It also explains how to
-            set it up as an SMTP server using a secure connection (for sending emails securely).
-          </para>
+          <para><application>Postfix</application> é o Mail Transfer Agent (MTA) padrão do Ubuntu. Ele tenta ser rápido, fácil de administrar e seguro. É compatível com o MTA <application>sendmail</application>. Esta seção explica como instalar e configurar o <application>postfix</application>. Também explica como configurá-lo como um servidor SMTP usando uma conexão segura (para enviar emails de forma segura).</para>
         <sect3 id="postfix-installation" status="complete">
           <title>Instalação</title>
-            <para>
-            To install <application>postfix</application> with SMTP-AUTH and Transport Layer
-            Security (TLS), run the following command:
-<screen>
+            <para>Para instalar o <application>postfix</application> com SMTP-AUTH e Transport Layer Security (TLS), execute o seguinte comando: <screen>
 <command>sudo apt-get install postfix</command>
-</screen>
-		Simply press return when the installation process asks questions, the configuration will be done in greater detail in the next stage.
-            </para>
+</screen> Simplesmente pressione enter para a perguntas durante o processo de instalação, a configuração será feita em detalhes no próximo passo.</para>
         </sect3>
         <sect3 id="postfix-configuration" status="complete">
           <title>Configuração Básica</title>
-            <para>
-            To configure <application>postfix</application>, run the following command:
-<screen>
+            <para>Para configurar o <application>postfix</application>, execute o seguinte comando: <screen>
 <command>sudo dpkg-reconfigure postfix</command>
-</screen>
-            The user interface will be displayed. On each screen, select the following
-            values:
-            <itemizedlist spacing="compact">
+</screen> A interface do usuário será mostrada. Em cada tela, selecione os seguintes valores: <itemizedlist spacing="compact">
             <listitem><para>Ok</para></listitem>
             <listitem><para>Site de Internet</para></listitem>
             <listitem><para>NENHUM</para></listitem>
@@ -2198,28 +1797,16 @@ local   all         postgres                          md5 sameuser
             <listitem><para>0</para></listitem>
             <listitem><para>+</para></listitem>
             <listitem><para>all</para></listitem>
-            </itemizedlist>
-            </para>
+            </itemizedlist></para>
             <note>
-            <para>
-            Replace mail.example.com with your mail server hostname.
-            </para>
+            <para>Substitua mail.example.com pelo nome do seu servidor de email.</para>
             </note>
 	 </sect3>
         <sect3 id="postfix-smtp-authentication" status="complete">
-          <title>SMTP Authentication</title>
-            <para>The next steps are to configure
-            <application>postfix</application> to use SASL for SMTP
-            AUTH. Rather than editing the configuration file directly, 
-	     you can use the <command>postconf</command> command to configure
-            all <application>postfix</application> parameters.  The
-            configuration parameters will be stored in
-            <filename>/etc/postfix/main.cf</filename> file. Later if you
-            wish to re-configure a particular parameter, you can either
-            run the command or change it manually in the file.</para>
+          <title>Autenticação SMTP</title>
+            <para>Os próximos passos são configurar o <application>postfix</application> para usar SASL para SMTP AUTH. Ao invés de editar o arquivo de configuração diretamente, você pode usar o comando <command>postconf</command> para configurar todos os parâmetros do <application>postfix</application>. Os parâmetros de configuração serão armanzenados no arquivo <filename>/etc/postfix/main.cf</filename>. Depois se você desejar reconfigurar um parâmetro em particular, você pode executar o comando ou mudá-lo manualmente no arquivo.</para>
 	<procedure>
-		<step><para>Configure Postfix to do SMTP AUTH using SASL (saslauthd):
-<screen>
+		<step><para>Configure o Postfix para fazer SMTP AUTH usando SASL (saslauthd): <screen>
 postconf -e 'smtpd_sasl_local_domain ='
 postconf -e 'smtpd_sasl_auth_enable = yes'
 postconf -e 'smtpd_sasl_security_options = noanonymous'
@@ -2228,12 +1815,9 @@ postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permit_myn
 postconf -e 'inet_interfaces = all'
 echo 'pwcheck_method: saslauthd' &gt;&gt; /etc/postfix/sasl/smtpd.conf
 echo 'mech_list: plain login' &gt;&gt; /etc/postfix/sasl/smtpd.conf
-</screen>
-		</para>
+</screen></para>
 		</step>
-		<step><para>Next, configure the digital certificate 
-            for TLS. When asked questions, follow the instructions and answer appropriately.
-<screen>
+		<step><para>Depois, configure o certificado digital para o TLS. Quando houver perguntas, siga as instruções e responda corretamente. <screen>
 openssl genrsa -des3 -rand /etc/hosts -out smtpd.key 1024
 chmod 600 smtpd.key
 openssl req -new -key smtpd.key -out smtpd.csr
@@ -2245,16 +1829,10 @@ mv smtpd.key /etc/ssl/private/
 mv smtpd.crt /etc/ssl/certs/
 mv cakey.pem /etc/ssl/private/
 mv cacert.pem /etc/ssl/certs/
-</screen>
-		</para>
-		<note><para>You can get the digital
-            certificate from a certificate authority. Alternatively, you
-            can create the certificate yourself. Refer to 
-			<xref linkend="creating-a-self-signed-certificate"/> for more 
-			details.</para></note>
+</screen></para>
+		<note><para>Você pode adquirir o certificado digital de uma autoridade certificadora. Alternativamente , você pode criar o certificado você mesmo. Consulte o <xref linkend="creating-a-self-signed-certificate"/> para mais detalhes.</para></note>
 		</step>
-		<step><para>Configure Postfix to do TLS encryption for both incoming and outgoing mail:
-<screen>
+		<step><para>Configure o Postfix para fazer encriptação TLS para entrada e saida de email: <screen>
 postconf -e 'smtpd_tls_auth_only = no'
 postconf -e 'smtp_use_tls = yes'
 postconf -e 'smtpd_use_tls = yes'
@@ -2267,58 +1845,27 @@ postconf -e 'smtpd_tls_received_header = yes'
 postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
 postconf -e 'tls_random_source = dev:/dev/urandom'
 postconf -e 'myhostname = mail.example.com'
-</screen>
-		</para>
+</screen></para>
 		</step>
 		</procedure>
             <note>
-            <para>
-            After you run all the commands, the SMTP AUTH is configured
-            with <application>postfix</application>. The self-signed
-            cerficiate is created for TLS and it is configured with
-            <application>postfix</application>.
-            </para>
+            <para>Depois que você executar todos os comandos, o SMTP AUTH é configurado com o <application>postfix</application>. O cerficado auto-assinado é criado para o TLS  e é configurado com o <application>postfix</application>.</para>
             </note>
-            <para>
-            Now, the file <filename>/etc/postfix/main.cf</filename>
-            should look like <ulink url="../sample/postfix_configuration">this</ulink>.
-		</para>
-		<para>
-            The postfix initial configuration is complete. Run
-            the following command to start postfix daemon:
-            <screen><command>sudo /etc/init.d/postfix start</command></screen>
-
-            Now the <application>postfix</application> daemon is installed, configured and run
-            successfully. <application>Postfix</application> supports SMTP AUTH as defined in
-            <ulink url="ftp://ftp.isi.edu/in-notes/rfc2554.txt">RFC2554</ulink>.
-            It is based on <ulink url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>. However it is still necessary to set up SASL authentication before you can use SMTP.
-            </para>
+            <para>Agora, o arquivo <filename>/etc/postfix/main.cf</filename> parecerá com <ulink url="../sample/postfix_configuration">este</ulink>.</para>
+		<para>A configuração inicial do postfix está completa. Execute o seguinte comando para iniciar o daemon do postfix: <screen><command>sudo /etc/init.d/postfix start</command></screen> Agora o <application>postfix</application> daemon está instalado, configurado e executando com sucesso. O <application>Postfix</application> suporta o SMTP AUTH como definido na <ulink url="ftp://ftp.isi.edu/in-notes/rfc2554.txt">RFC2554</ulink>. É baseado no <ulink url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>. Entretanto é necessário configurar a autenticação SASL antes de usar o SMTP.</para>
 	</sect3>
 	<sect3 id="sasl">
 	  <title>Configurando SASL</title>
-            <para>
-            The
-            <application>libsasl2</application>,
-            <application>sasl2-bin</application> and
-            <application>libsasl2-modules</application> are necessary to
-            enable SMTP AUTH using SASL. You can install these applications if
-            you have not installed them already.
-<screen>
+            <para>As <application>libsasl2</application>, <application>sasl2-bin</application> e <application>libsasl2-modules</application> são necessárias para habilitar a Autenticação SMTP usando SASL. Você pode instalar essas aplicações se você não as tiver instalado anteriormente. <screen>
 <command>apt-get install libsasl2 sasl2-bin</command>
-</screen>
-	    </para>
-	    <para>
-		A few changes are necessary to make it work properly. Because <application>Postfix</application> runs chrooted in <filename>/var/spool/postfix</filename>, <application>SASL</application> needs to be configured to run in the false root (<filename>/var/run/saslauthd</filename> becomes <filename>/var/spool/postfix/var/run/saslauthd</filename>):
-<screen>
+</screen></para>
+	    <para>Algumas modificações são necessárias para fazê-lo funcionar corretamente. Devido ao <application>Postfix</application> rodar sob chroot em <filename>/var/spool/postfix</filename>, a <application>SASL</application> precisa ser configurada para rodar na falsa raíz (<filename>/var/run/saslauthd</filename> se torna <filename>/var/spool/postfix/var/run/saslauthd</filename>): <screen>
 <command>mkdir -p /var/spool/postfix/var/run/saslauthd</command>
 <command>rm -rf /var/run/saslauthd</command>
-</screen>
-	    </para>
-	    <para>
-            To activate <application>saslauthd</application>, edit the file <filename>/etc/default/saslauthd</filename>, and change or add the START variable. In order to configure <application>saslauthd</application> to run in the false root, add the PWDIR, PIDFILE and PARAMS variables. Finally, configure the MECHANISMS variable to your liking. The file should look like this:
-
-<programlisting>
-# This needs to be uncommented before saslauthd will be run
+</screen></para>
+	    <para>Para ativar o <application>saslauthd</application>, edite o arquivo <filename>/etc/default/saslauthd</filename> e modifique ou adicione a variável START. Para configurar o <application>saslauthd</application> para rodar na raíz falsa, adicione as variáveis PWDIR, PIDFILE e PARAMS. Finalmente, configure a variável MECHANISMS à sua maneira. O arquivo deve se parecer com isso: <programlisting>
+# Isso deve ser descomentado antes que o saslauthd rode
+# automaticamente
 # automatically
 START=yes
 
@@ -2326,238 +1873,106 @@ PWDIR="/var/spool/postfix/var/run/saslauthd"
 PARAMS="-m ${PWDIR}"
 PIDFILE="${PWDIR}/saslauthd.pid"
 
-# You must specify the authentication mechanisms you wish to use.
-# This defaults to "pam" for PAM support, but may also include
-# "shadow" or "sasldb", like this:
+# Você deve especificar os mecanismos de autenticação que você
+# deseja usar. O valor padrão é "pam" para suporte PAM, mas você
+# pode também incluir "shadow" ou "sasldb", assim:
 # MECHANISMS="pam shadow"
 
 MECHANISMS="pam"
-</programlisting>
-            </para>
+</programlisting></para>
 <note>
-<para>
-If you prefer, you can use <emphasis role="strong">shadow</emphasis>
-instead of <emphasis role="strong">pam</emphasis>. This will use MD5
-hashed password transfer and is perfectly secure. The username and
-password needed to authenticate will be those of the users on the system
-you are using on the server.
-</para>
+<para>Se preferir, você pode utilizar <emphasis role="strong">shadow</emphasis> ao invés de <emphasis role="strong">pam</emphasis>. Ele irá usar transferência encriptada de senha MD5 e isso é perfeitamente seguro. O nome do usuário e a senha necessários para a autenticação serão aqueles  mesmos dos usuários do sistema que você está usando no servidor.</para>
 </note>
-        <para>
-Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd</filename>. The saslauthd init script uses this setting to create the missing directory with the appropriate permissions and ownership:
-<screen>
+        <para>Em seguida, atualize o "estado" do dpkg do <filename>/var/spool/portfix/var/run/saslauthd</filename>. Os scripts de inicialização do saslauthd usam essa configuração para criar o diretório que falta com as permissões e posses necessárias: <screen>
 <command>dpkg-statoverride --force --update --add root sasl 755 /var/spool/postfix/var/run/saslauthd</command>
-</screen>
-        </para>
+</screen></para>
         </sect3>
         <sect3 id="postfix-testing" status="complete">
           <title>Testando</title>
-            <para>
-          SMTP AUTH configuration is complete. Now it is time to start
-          and test the setup. You can run the following command to start
-          the SASL daemon:
-            <screen><command>sudo /etc/init.d/saslauthd start</command></screen>
-
-          To see if SMTP-AUTH and TLS work properly, run the following
-          command:
-            <screen><command>telnet mail.example.com 25</command></screen>
-          After you have established the connection to the postfix mail
-          server, type:
-            <screen>ehlo mail.example.com</screen>
-          If you see the following lines among others, then everything
-          is working perfectly. Type <command>quit</command> to exit.
-<programlisting>
+            <para>A configuração da Autenticação do SMTP está completa. Agora é hora de iniciar e testar a configuração. Você pode rodar o seguinte comando para iniciar o daemon SASL: <screen><command>sudo /etc/init.d/saslauthd start</command></screen> Para ver se o SMTP-AUTH e o TLS estão funcionando normalmente, rode o seguinte comando: <screen><command>telnet mail.example.com 25</command></screen> Depois que tiver estabelecido uma conexão com o servidor de e-mail postfix, digite: <screen>ehlo mail.example.com</screen> Se você vir as seguintes linhas entre outras, então tudo estará funcionando perfeitamente. Digite <command>quit</command> para sair. <programlisting>
 250-STARTTLS
 250-AUTH LOGIN PLAIN
 250-AUTH=LOGIN PLAIN
 250 8BITMIME
-</programlisting>
-        </para>
+</programlisting></para>
         </sect3>
       </sect2>
       <sect2 id="exim4" status="complete">
         <title>Exim4</title>
-          <para>
-            <application>Exim4</application> is is another Message Transfer
-            Agent (MTA) developed at the University of Cambridge for use
-            on Unix systems connected to the internet. Exim can be
-            installed in place of <application>sendmail</application>,
-            although the configuration of
-            <application>exim</application> is quite different to
-            that of <application>sendmail</application>.
-          </para>
+          <para>O <application>Exim4</application> é outro Agente de Transferência de Mensagens (MTA) desenvolvido na Universidade de Cambridge para uso em sistemas Unix conectados à Internet. O Exim pode ser instalado no lugar do <application>sendmail</application>, entretanto a configuração do <application>exim</application> é bem diferente daquela feita para o <application>sendmail</application></para>
         <sect3 id="exim4-installation" status="complete">
           <title>Instalação</title>
-            <para>
-            To install <application>exim4</application>, run the following command:
-<screen>
+            <para>Para instalar o <application>exim4</application>, rode o seguinte comando: <screen>
 <command>sudo apt-get install exim4 exim4-base exim4-config</command>
-</screen>
-            </para>
+</screen></para>
         </sect3>
         <sect3 id="exim4-configuration" status="complete">
           <title>Configuração</title>
-            <para>
-            To configure <application>exim4</application>, run the following command:
+            <para>Para configurar o <application>exim4</application>, rode o seguinte comando:
 <screen>
 <command>sudo dpkg-reconfigure exim4-config</command>
-</screen>
-            The user interface will be displayed. The user interface
-            lets you configure many parameters. For example, In
-            <application>exim4</application> the configuration files are
-            split among multiple files. If you wish to have them in one
-            file you can configure accordingly in this user interface.
-            </para>
+</screen> A interface de usuário será mostrada. A interface de usuário permite a você configurar vários parâmetros. Por exemplo, no <application>exim4</application> os arquivos de configuração estão divididos em múltiplos arquivos. Se você quiser tê-los em um único arquivo você pode configurar isso através da interface de usuário.</para>
 
-            <para>
-            All the parameters you configure in the user interface are
-            stored in
-            <filename>/etc/exim4/update-exim4.conf.conf</filename> file.
-            If you wish to re-configure, either you re-run the
-            configuration wizard or manually edit this file
-            using your favourite editor. Once you configure, you can run
-            the following command to generate the master configuration
-            file:
-<screen>
+            <para>Todos os parâmetros que você configura através da interface de usuário são armazenados no arquivo <filename>/etc/exim4/update-exim4.conf.conf</filename>. Se você deseja reconfigurá-lo, então você deve rodar novamente o assistente de configuração ou editar esse arquivo manualmente usando o seu editor favorito. Uma vez que você o tenha configurado, você pode rodar o seguinte comando para gerar o arquivo de configuração principal: <screen>
 <command>sudo update-exim4.conf</command>
-</screen>
-            The master configuration file, is generated and
-            it is stored in
-            <filename>/var/lib/exim4/config.autogenerated</filename>. 
-            
-            <warning>
-            <para>
-            At any time, you should not edit the master configuration
-            file,
-            <filename>/var/lib/exim4/config.autogenerated</filename>
-            manually. It is updated automatically every time you run
-            <command>update-exim4.conf</command>
-            </para>
-            </warning>
-            You can run
-            the following command to start
-            <application>exim4</application> daemon.
-<screen>
+</screen> O arquivo de configuração principal é gerado e é armazenado em <filename>/var/lib/exim4/config.autogenerated</filename>. <warning>
+            <para>Em nenhum momento você deve editar o arquivo de configuração principal <filename>/var/lib/exim4/config.autogenerated</filename> manualmente. Ele é atualizado automaticamente toda vez que você roda o <command>update-exim4.conf</command></para>
+            </warning> Você pode rodar o seguinte comando para iniciar o daemon do <application>exim4</application>. <screen>
 <command>sudo /etc/init.d/exim4 start</command>
-</screen>
-            <emphasis role="strong">TODO:</emphasis> This section should
-            cover configuring SMTP AUTH with exim4. 
-            </para>
+</screen><emphasis role="strong">TODO:</emphasis> Essa seção deverá cobrir a configuração da Autenticação SMTP com o exim4.</para>
         </sect3>
       </sect2>
       <sect2 id="dovecot-server" status="complete">
-        <title>Dovecot Server</title> 
-          <para>
-          <application>Dovecot</application> is a Mail Delivery Agent, written with security
-          primarily in mind. It supports the major mailbox formats: mbox
-          or Maildir. This section explain how to set it up as an imap or
-          pop3 server.
-          </para>
+        <title>Servidor Dovecot</title> 
+          <para>O <application>Dovecot</application> é um Agente de Entrega de Correio, escrito tendo em mente a segurança em primeiro lugar. Ele suporta os principais formatos de caixas postais: mbox ou Maildir. Essa seção explica como configurá-lo como um servidor imap ou pop3.</para>
         <sect3 id="dovecot-installation" status="complete">
           <title>Instalação</title>
-            <para>
-            To install <application>dovecot</application>, run the following command in the
-            command prompt:
-<screen>
+            <para>Para instalar o <application>dovecot</application>, rode o seguinte comando em um prompt de comando: <screen>
 <command>sudo apt-get install dovecot-common dovecot-imapd dovecot-pop3d</command>
-</screen>
-            </para>
+</screen></para>
         </sect3>
         <sect3 id="dovecot-configuration" status="complete">
           <title>Configuração</title>
-            <para>
-            To configure <application>dovecot</application>, you can edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename>. You can
-            choose the protocol you use. It could be pop3, pop3s (pop3
-            secure), imap and imaps (imap secure). A description of these protocols is beyond the scope of this guide. For further information, refer to the wikipedia articles on <ulink url="http://en.wikipedia.org/wiki/POP3">POP3</ulink> and
-            <ulink url="http://en.wikipedia.org/wiki/Internet_Message_Access_Protocol">IMAP</ulink>.
-            </para>
+            <para>Para configurar o <application>dovecot</application>, você pode editar o arquivo <filename>/etc/dovecot/dovecot.conf</filename>. Você pode escolher o protocolo que você usa. Ele pode ser pop3, pop3s (pop3 seguro), imap e imaps (imap seguro). Uma descrição desses protocolos está além do escopo desse guia. Para maiores informações, consulte os artigos da wikipedia em <ulink url="http://pt.wikipedia.org/wiki/POP3">POP3</ulink> e <ulink url="http://pt.wikipedia.org/wiki/Internet_Message_Access_Protocol">IMAP</ulink>.</para>
 
-            <para>
-            IMAPS and POP3S are more secure that the simple IMAP and
-            POP3 because they use SSL encryption to connect. Once you
-            have chosen the protocol, amend the following line in the file
-            <filename>/etc/dovecot/dovecot.conf</filename>:
-<programlisting>
+            <para>O IMAPS e o POP3S são mais seguros que o IMAP e o POP3 simples porque eles usam criptografia SSL para conexão. Assim que você tiver escolhido o protocolo, descomente a seguinte linha no arquivo <filename>/etc/dovecot/dovecot.conf</filename>: <programlisting>
 protocols = pop3 pop3s imap imaps
-</programlisting>
-
-            It enables the protocols when <application>dovecot</application> is started. Next, add the following line in pop3 section in the file <filename>/etc/dovecot/dovecot.conf</filename>:
-<programlisting>
+</programlisting> Isso irá habilitar os protocolos quando o <application>dovecot</application> for iniciado. Em seguida, adicione a seguinte linha na seção pop3 no arquivo <filename>/etc/dovecot/dovecot.conf</filename>: <programlisting>
 pop3_uidl_format = %08Xu%08Xv
-</programlisting>
-
-            Next, choose the mailbox you use. <application>Dovecot</application> supports
-            <emphasis role="strong">maildir</emphasis> and <emphasis role="strong">mbox</emphasis> formats. These are the most
-            commonly used mailbox formats. They both have their own
-            benefits and they are discussed on <ulink url="http://dovecot.org/doc/configuration.txt">the dovecot website</ulink>.
-            </para>
+</programlisting> Em seguida, escolha a caixa postal que você usa. O <application>Dovecot</application> suporta os formatos <emphasis role="strong">maildir</emphasis> e <emphasis role="strong">mbox</emphasis>. Esses são os formatos de caixa postal comumente mais utilizados. Ambos tem seus benefícios e eles são discutidos no <ulink url="http://dovecot.org/doc/configuration.txt">website do dovecot</ulink>.</para>
             <para>Após escolhido o seu tipo de caixa de e-mail, edite o arquivo <filename>/etc/dovecot/dovecot.conf</filename> e modifique a seguinte linha: <programlisting>
-default_mail_env = maildir:~/Maildir # (for maildir)
-or
-default_mail_env = mbox:~/mail:INBOX=/var/spool/mail/%u # (for mbox)
+default_mail_env = maildir:~/Maildir # (para maildir)
+ou
+default_mail_env = mbox:~/mail:INBOX=/var/spool/mail/%u # (para mbox)
 </programlisting></para>
 <note>
-<para>
-You should configure your Mail Trasport Agent (MTA) to transfer the
-incoming mail to this type of mailbox if it is different from the one
-you have configured.
-</para>
+<para>Você deve configurar seu Agente de Transporte de E-mail (MTA) para transferir o e-mail entrante a esse tipo de caixa de e-mail caso ele seja diferente do outro que você configurou.</para>
 </note>
-          <para>
-          Once you have configured dovecot, start the <application>dovecot</application> daemon
-          in order to test your setup:
-
-          <screen><command>sudo /etc/init.d/dovecot start</command></screen>
-
-          If you have enabled imap, or pop3, you can also try to log in
-          with the commands <command>telnet localhost pop3</command> or
-          <command>telnet localhost</command> imap2. If you see
-          something like the following, the installation has been
-          successful:
-<programlisting>
+          <para>Assim que você tiver configurado o dovecot, inicie o daemon do <application>dovecot</application> para testar sua configuração: <screen><command>sudo /etc/init.d/dovecot start</command></screen> Se você tiver habilitado imap ou pop3, você também pode tentar se logar com os comandos <command>telnet localhost pop3</command> ou <command>telnet localhost</command> imap2. Se você vir algo como isso, a instalação foi bem sucedida: <programlisting>
 bhuvan@rainbow:~$ telnet localhost pop3
 Trying 127.0.0.1...
 Connected to localhost.localdomain.
 Escape character is '^]'.
 +OK Dovecot ready.
-</programlisting>
-          </para>
+</programlisting></para>
         </sect3>
         <sect3 id="dovecot-ssl" status="complete">
-          <title>Dovecot SSL Configuration</title>
-            <para>
-            To configure <application>dovecot</application> to use SSL, you can edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename> and amend
-            following lines:
-<programlisting>
+          <title>Configuração de SSL do Dovecot</title>
+            <para>Para configurar o <application>dovecot</application> para que utilize SSL, você pode editar o arquivo <filename>/etc/dovecot/dovecot.conf</filename> e adicionar as seguintes linhas: <programlisting>
 ssl_cert_file = /etc/ssl/certs/dovecot.pem
 ssl_key_file = /etc/ssl/private/dovecot.pem
 ssl_disable = no
 disable_plaintext_auth = no
-</programlisting>
-
-          The <emphasis role="strong">cert</emphasis> and <emphasis role="strong">key</emphasis> files are created automatically
-          by <application>dovecot</application> when you install it. Please note that these keys
-          are not signed and will give "bad signature" errors when
-          connecting from a client. To avoid this, you can use
-          commercial certificates, or even better, you can use your own
-          SSL certificates.
-          </para>
+</programlisting> Os arquivos <emphasis role="strong">cert</emphasis> e <emphasis role="strong">key</emphasis> são criados automaticamente pelo <application>dovecot</application> quando você o instala. Por favor note que essas chaves não são assinadas e darão erros de "assinatura ruim" (bad signature) quando se conectar de um cliente. Para evitar isso, você pode utilizar certificados comerciais, ou ainda melhor, você pode utilizar seus próprios certificados SSL.</para>
 	</sect3>
 	<sect3>
 	  <title>Configuração de Firewall para um Servidor de Email</title>
-          <para>
-          To access your mail server from another computer, you must
-          configure your firewall to allow connections to the server on
-          the necessary ports.
-            <itemizedlist>
+          <para>Para acessar seu servidor de e-mail através de outro computador, você deve configurar seu firewall para permitir conexões ao servidor nas portas necessárias. <itemizedlist>
             <listitem><para>IMAP - 143</para></listitem>
             <listitem><para>IMAPS - 993</para></listitem>
             <listitem><para>POP3 - 110</para></listitem>
             <listitem><para>POP3S - 995</para></listitem>
-            </itemizedlist>
-          </para>
+            </itemizedlist></para>
         </sect3>
       </sect2>
       <sect2 id="mailman" status="complete">
@@ -2602,19 +2017,9 @@ disable_plaintext_auth = no
           </sect4>
           <sect4 id="mailman-mailman">
             <title>Mailman</title>
-              <para>
-              To install <application>Mailman</application>, run following command at a terminal prompt:
-<screen>
+              <para>Para instalar o <application>Mailman</application>, execute o seguinte comando em um prompt de terminal: <screen>
 <command>sudo apt-get install mailman</command> 
-</screen>
-
-It copies the installation files in
-<application>/var/lib/mailman</application> directory. It installs the
-CGI scripts in <application>/usr/lib/cgi-bin/mailman</application>
-directory.  It creates <emphasis>list</emphasis> linux
-user. It creates the <emphasis>list</emphasis> linux
-group. The mailman process will be owned by this user. 
-              </para>
+</screen> Ele copia os arquivos de instalação para o diretório <application>/var/lib/mailman</application>, instala os scripts CGI no diretório <application>/usr/lib/cgi-bin/mailman</application>. cria o usuário de linux <emphasis>list</emphasis>, cria o grupo de linux <emphasis>list</emphasis>. O processo mailman será controlado por este usuário.</para>
           </sect4>
         </sect3>
         <sect3 id="mailman-configuration" status="complete">
@@ -2647,34 +2052,36 @@ Alias /pipermail/ "/var/lib/mailman/archives/public/"
           <sect4 id="mailman-conf-main">
             <title>Principal</title>
               <para>Todos os arquivos que pertençam ao tipo principal são armazenados no diretório <filename>/etc/exim4/conf.d/main/</filename>. Você pode adicionar o seguinte conteúdo a um novo arquivo, chamado <filename>04_exim4-config_mailman</filename>: <programlisting>
-# start
-# Home dir for your Mailman installation -- aka Mailman's prefix
-# directory.
-# On Ubuntu this should be "/var/lib/mailman"
-# This is normally the same as ~mailman
+# início
+# Diretório inicial para sua instalação do mailman -- tambem conhecido
+# como diretório prefixo do Mailman directory.
+# No Ubuntu isso deve ser "/var/lib/mailman"
+# É geralmente o mesmo que ~mailman
 MM_HOME=/var/lib/mailman
 #
-# User and group for Mailman, should match your --with-mail-gid
-# switch to Mailman's configure script.  Value is normally "mailman"
+# Usuário e grupo para o Mailman, deve equivaler ao seu parâmetro 
+# --with-mail-gid ao script "configura" do Mailman. O valor é normalmente
+# "mailman"
 MM_UID=list
 MM_GID=list
 #
-# Domains that your lists are in - colon separated list
-# you may wish to add these into local_domains as well
+# Domínios onde estão suas listas - lista separada por vírgulas
+# você pode querer adicioná-los também ao local_domains
 domainlist mm_domains=hostname.com
 #
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=↵
 #
-# These values are derived from the ones above and should not need
-# editing unless you have munged your mailman installation
+# Estes valores são derivados daqueles acima and você não deverá 
+# precisar editá-los a não ser que você tenha bagunçado a sua instalação
+# do mailman
 #
-# The path of the Mailman mail wrapper script
+# O caminho do script wrapper de email do Mailman
 MM_WRAP=MM_HOME/mail/mailman
 #
-# The path of the list config file (used as a required file when
-# verifying list addresses)
+# O arquivo do arquivo de configuração da lista (usado como um arquivo
+# requerido quando se verifica endereços de listas)
 MM_LISTCHK=MM_HOME/lists/${lc::$local_part}/config.pck
-# end
+# fim
 </programlisting></para>
           </sect4>
           <sect4 id="mailman-conf-transport">

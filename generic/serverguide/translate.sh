@@ -38,5 +38,5 @@ for x in rosetta-serverguide/*; do
 	../../validate.sh $y/serverguide.xml
 done
 
-rm -rf rosetta-serverguide*
+#rm -rf rosetta-serverguide*
 rm .xml2po.mo

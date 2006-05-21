@@ -19,8 +19,8 @@
 #    at /usr/share/common-licenses/GPL
 ####################################################################################
 
-tar -xzvf rosetta-packagingguide.tar.gz
-rm -rf rosetta-packagingguide/packagingguide.pot
+#tar -xzvf rosetta-packagingguide.tar.gz
+#rm -rf rosetta-packagingguide/packagingguide.pot
 for x in rosetta-packagingguide/*; do
 	y=$(basename ${x} .po)
 	echo ${y}
@@ -39,5 +39,5 @@ for x in rosetta-packagingguide/*; do
 	../../validate.sh $y/packagingguide.xml
 done
 
-rm -rf rosetta-packagingguide*
+#rm -rf rosetta-packagingguide*
 rm .xml2po.mo

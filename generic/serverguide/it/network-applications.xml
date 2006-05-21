@@ -405,37 +405,21 @@
 dei dispositivi di rete. Questo documento è diretto agli amministratori del server ed si focalizza sulla gestione della rete da riga di comando.</para>
       <sect2 id="ethernet" status="complete">
         <title>Ethernet</title> 
-          <para>Gran parte della configurazione di ethernet è concentrata il un singolo file, <filename>/etc/network/interfaces</filename>. Se non è presente alcun dispositivo ethernet, in questo file è elencata solo l'interfaccia di loopback ed il contenuto è simile a quanto segue: <screen># Questo file descrive le interfacce di rete disponibili sul sistema e #come attivarle. Per maggiori informazioni, consultare interfaces(5).
+          <para>Gran parte della configurazione di ethernet è concentrata il un singolo file, <filename>/etc/network/interfaces</filename>. Se non è presente alcun dispositivo ethernet, in questo file è elencata solo l'interfaccia di loopback e il contenuto è simile a quanto segue: <screen># Questo file descrive le interfacce di rete disponibili sul sistema e
+#come attivarle. Per maggiori informazioni, consultare interfaces(5).
 
 # L'interfaccia di rete di loopback
 auto lo
 iface lo inet loopback
 address 127.0.0.1
-netmask 255.0.0.0</screen>. Se nel sistema è presente solo un dispositivo ethernet, eth0, e la sua configurazione viene ottenuta da un server DHCP, allora il dispositivo dovrebbe essere attivato automaticamente al boot e nel file sono richieste solo le due righe aggiuntive: <screen>auto eth0
+netmask 255.0.0.0</screen> Se nel sistema è presente solo un dispositivo ethernet, eth0, e la sua configurazione viene ottenuta da un server DHCP, allora il dispositivo dovrebbe essere attivato automaticamente al boot e nel file sono richieste solo le due righe aggiuntive: <screen>auto eth0
 iface eth0 inet dhcp</screen> La prima riga specifica che il dispositivo eth0 dovrebbe essere attivato automaticamente al boot. La seconda riga indica che l'interfaccia (<quote>iface</quote>) eth0 dovrebbe avere un indirizzo nello spazio di IPv4 (sostituire <quote>inet</quote> con <quote>inet6</quote> per un dispositivo IPv6) e che dovrebbe ottenere la sua configurazione da DHCP in modo automatico. Assumendo che la rete e il server DHCP sono propriamente configurati, la macchina in questione non dovrebbe necessitare di ulteriore configurazione per operare propriamente. Il server DHCP fornisce il gateway predefinito (implementato attraverso il comando <application>route</application>), l'indirizzo IP del dispositivo (implementato attraverso il comando <application>ifconfig</application>) e viene usato un server DNS sulla rete (implementato nel file <filename>/etc/resolv.conf</filename>).</para>
-		<para>To configure your ethernet device with a static IP address and custom configuration,
-		some more information will be required.  Suppose you want to assign the IP address
-		192.168.0.2 to the device eth1, with the typical netmask of 255.255.255.0.  Your default
-		gateway's IP address is 192.168.0.1.  You would enter something like this into
-		<filename>/etc/network/interfaces</filename>:
-		<screen>iface eth1 inet static
-	address 192.168.0.2
-	netmask 255.255.255.0
-	gateway 192.168.0.1</screen>
-		In this case, you will need to specify your DNS servers manually in
-		<filename>/etc/resolv.conf</filename>, which should look something like this:
-		<screen>search mydomain.com
+		<para>Per configurare il dispositivo ethernet con un indirizzo IP statico e una configurazione personalizzata, sono richieste alcune informazioni aggiuntive. Si fa l'ipotesi di voler assegnare l'indirizzo IP 192.168.0.2 al dispositivo eth1, con la tipica maschera di rete 255.255.255.0. L'indirizzo IP del gateway predefinito è 192.168.0.1. In tal caso si dovrebbe inserire in <filename>/etc/network/interfaces</filename> qualcosa tipo: <screen>iface eth1 inet static
+      address 192.168.0.2
+      netmask 255.255.255.0
+      gateway 192.168.0.1</screen> In tal caso è necessario specificare manualmente i server DNS in <filename>/etc/resolv.conf</filename>, che dovrebbe contenere qualcosa tipo: <screen>search miodominio.it
 nameserver 192.168.0.1
-nameserver 4.2.2.2</screen>
-		The <emphasis role="italics">search</emphasis> directive will append mydomain.com
-		to hostname queries in an attempt to resolve names to your network.  For example,
-		if your network's domain is mydomain.com and you try to ping the host
-		<quote>mybox</quote>, the DNS query will be modified to <quote>mybox.mydomain.com</quote>
-		for resolution.  The <emphasis role="italics">nameserver</emphasis> directives
-		specifiy DNS servers to be used to resolve hostnames to IP addresses.  If you use
-		your own nameserver, enter it here.  Otherwise, ask your Internet Service Provider
-		for the primary and secondary DNS servers to use, and enter them into
-		<filename>/etc/resolv.conf</filename> as shown above.</para>
+nameserver 4.2.2.2</screen> La direttiva <emphasis role="italics">search</emphasis> fa sì che miodominio.it sia accodata alle interrogazioni dei nomi di host nel tentativo di risolvere i nome sulla rete locale. Ad esempio, se il proprio nome di dominio è miodominio.it e si prova a fare un ping all'host <quote>mybox</quote>, l'interrogazione DNS viene modificata in <quote>mybox.miodominio.it</quote> per la risoluzione. La direttiva <emphasis role="italics">nameserver</emphasis> specifica i server DNS da usare per risolvere i nomi di host in indirizzi IP. Se si fa uso di un proprio server di nomi, inserirlo qui. Altrimenti, domandare al proprio ISP (Internet Service Provider) i server DNS primario e secondario da usare e inserirli in <filename>/etc/resolv.conf</filename> come mostrato poco sopra.</para>
 		<para>È possibile realizzare molte altre configurazioni, incluse quelle per le interfacce PPP dialup, le reti IPv6, i dispositivi VPN, ecc. Fare riferimento a <application>man 5 interfaces</application> per maggiori informazioni e per le opzioni supportate. Notare che <filename>/etc/network/interfaces</filename> è usato dagli script <application>ifup</application>/<application>ifdown</application> come schema di configurazione ad un livello più alto rispetto magari ad altre distribuzioni di Linux e che le tradizionali utilità di livello inferiore, come <application>ifconfig</application>, <application>route</application> e <application>dhclient</application> sono sempre disponibili per una configurazione ottimale.</para>
       </sect2>
       <sect2 id="managing-dns-entries" status="complete">
@@ -469,103 +453,32 @@ nameserver 208.185.179.218
     </sect1>
 	<sect1 id="tcpip" status="complete">
 		<title>TCP/IP</title>
-          <para>Il protocollo TCP/IP (Transmission Control Protocol and Internet Protocol) è un insieme standard di protocolli sviluppato nella seconda metà degli anni '70 dalla DARPA (Defence Advanced Research Project Agency), allo scopo di permettere la comunicazione tra diversi tipi di computer e di reti di computer. TCP/IP è il motore di Internet, ecco perchè è l'insieme di protocolli di rete del mondo più diffuso al mondo.</para>
+          <para>Il protocollo TCP/IP (Transmission Control Protocol e Internet Protocol) è un insieme standard di protocolli sviluppato nella seconda metà degli anni '70 dalla DARPA (Defence Advanced Research Project Agency), allo scopo di permettere la comunicazione tra diversi tipi di computer e di reti di computer. TCP/IP è il motore di Internet, ecco perchè è l'insieme di protocolli di rete più diffuso al mondo.</para>
       <sect2 id="tcpip-introduction" status="complete">
         <title>Introduzione a TCP/IP</title> 
-          <para>
-            The two protocol components of TCP/IP deal with different aspects of computer networking.
-            <emphasis>Internet Protocol</emphasis>, the "IP" of TCP/IP is a 
-			connectionless protocol which deals only with network packet routing using the <emphasis role="italics">IP datagram</emphasis> as the basic unit of networking information.  The 
-			IP datagram consists of a header followed by a message.  The <emphasis>
-			Transmission Control Protocol</emphasis> is the "TCP" of TCP/IP and enables network hosts 
-			to establish connections which may be used to exchange data streams.  TCP also guarantees 
-			that the data between connections is delivered and that it arrives at one network host in 
-			the same order as sent from another network host.
-          </para>
+          <para>I due protocolli che compongono il TCP/IP si occupano di aspetti diversi delle reti di computer. L'<emphasis>Internet Protocol</emphasis>, la parte IP di TCP/IP, è un protocollo senza connessione che tratta solo l'instradamento dei pacchetti di rete usando il <emphasis role="italics">datagramma IP</emphasis> come l'unità fondamentale dell'informazione di rete. Il datagramma IP è formato da un'intestazione seguita da un messaggio. Il <emphasis>Transmission Control Protocol</emphasis>, la parte TCP di TCP/IP, consente agli host della rete di stabilire delle connessioni usate per scambiare flussi di dati. Inoltre il TCP garantisce che i dati tra le connessioni siano consegnati e che arrivino ad host della rete nello stesso ordine in cui sono stati trasmessi da un altro host della rete.</para>
           </sect2>
         <sect2 id="tcpip-configuration" status="complete">
           <title>Configurazione di TCP/IP</title>
-            <para>
-            The TCP/IP protocol configuration consists of several elements which must be set by 
-			editing the appropriate configuration files, or deploying solutions such as the Dynamic 
-			Host Configuration Protocol (DHCP) server which in turn, can be configured to provide the 
-			proper TCP/IP configuration settings to network clients automatically. These 
-			configuration values must be set correctly in order to facilitate the proper network 
-			operation of your Ubuntu system.
-            </para>
+            <para>La configurazione del protocollo TCP/IP è composta da vari elementi che debbono essere impostati modificando gli appropriati file di configurazione oppure adottando soluzioni quali un server DHCP (Dynamic Host Configuration Protocol); tale server provvede ad assegnare automaticamente le corrette impostazioni di configurazione TCP/IP ai client della rete. Questi valori di configurazione debbono essere impostati correttamente per consentire al sistema Ubuntu di operare adeguatamente in rete.</para>
             <para>I tipici elementi di configurazione del TCP/IP e i loro scopi sono i seguenti: <itemizedlist>
                <listitem>
-                  <para>
-                  <emphasis role="bold">IP address</emphasis> The IP address is a unique
-                  identifying string expressed as four decimal numbers ranging from zero (0)
-                  to two-hundred and fifty-five (255), separated by periods,
-                  with each of the four numbers representing eight (8) bits of the address for a
-                  total length of thirty-two (32) bits for the whole address. This format is called
-                  <emphasis>dotted quad
-                  notation</emphasis>.</para>
+                  <para><emphasis role="bold">Indirizzo IP</emphasis> L'indirizzo IP è una stringa d'identificazione unica, espressa da quattro numeri decimali compresi tra zero (0) e duecentocinquantacinque (255), separati da punti; ciascuno dei quattro numeri rappresenta otto (8) bit dell'indirizzo per una lunghezza totale di trentadue (32) bit per l'indirizzo completo. Questo formato è detto <emphasis>notazione decimale a punti</emphasis>.</para>
                </listitem>
                <listitem>
-                  <para>
-                  <emphasis role="bold">Netmask</emphasis> The Subnet Mask (or simply,
-                  <emphasis>netmask</emphasis>) is a local bit mask, or set of flags
-                  which separate the portions of an IP address significant to the network from the
-                  bits significant to the <emphasis>subnetwork</emphasis>.  For example,
-                  in a Class C network, the standard netmask is 255.255.255.0 which masks the first
-                  three bytes of the IP address and allows the last byte of the IP address to
-                  remain available for specifying hosts on the subnetwork.
-                  </para>
+                  <para><emphasis role="bold">Maschera di rete</emphasis> La maschera di rete (o semplicemente <emphasis>netmask</emphasis>) è una maschera locale di bit, ovvero un insieme di indicatori che separano la porzione di un indirizzo IP che indica la rete dai bit che indicano la <emphasis>sotto-rete</emphasis>. Ad esempio, in una rete di classe C, la maschera di rete standard è 255.255.255.0 che serve a mascherare i primi tre byte dell'indirizzo IP, consentendo all'ultimo byte dell'indirizzo IP di essere disponibile per specificare gli host della sotto-rete.</para>
                </listitem>
                <listitem>
-                  <para>
-                  <emphasis role="bold">Network Address</emphasis> The Network Address represents the
-                  bytes comprising the network portion of an IP address.  For example, the host 12.128.1.2
-                  in a Class A network would use 12.0.0.0 as the network address, which uses twelve (12)
-                  to represent the first byte of the IP address, (the network part) and zeroes (0) 
-                  in all of the remaining three bytes to represent the potential host values.  Network
-                  hosts using the very common private and non-routable IP addresses such as 192.168.1.100
-                  would in turn use a Network Address of 192.168.1.0, which specifies the first three
-                  bytes of the Class C 192.168.1 network and a zero (0) for all the possible hosts on the
-                  network.
-                  </para>
+                  <para><emphasis role="bold">Indirizzo di rete</emphasis> L'indirizzo di rete rappresenta i byte che contengono la porzione di rete di un indirizzo IP. Ad esempio, l'host 12.128.1.2 in una rete di classe A usa 12.0.0.0 come indirizzo di rete; tale indirizzo di rete usa il 12 per rappresentare il primo byte dell'indirizzo IP (la parte della rete) e gli zero (0) in tutti i restanti tre byte per rappresentare i valori dei potenziali host. Gli host di rete che usano indirizzi IP privati e non indirizzabili molto comuni come 192.168.1.100 usano come indirizzo di rete 192.168.1.0, che specifica che i primi tre gruppi di byte 192.168.1 appartengono ad una rete di classe C, mentre uno zero rappresenta tutti gli host presenti nella rete.</para>
                </listitem>
                <listitem>
-                  <para>
-                  <emphasis role="bold">Broadcast Address</emphasis> The Broadcast Address is an IP address
-                  which allows network data to be sent simultaneously to all hosts on a given subnetwork rather
-                  than specifying a particular network host.  The standard general broadcast address for IP networks is
-                  255.255.255.255, but this broadcast address cannot be used to send a broadcast message to
-                  every host on the Internet because routers block it.  A more appropriate broadcast address
-                  is set to match a specific subnetwork.  For example, on the popular private Class C IP network,
-                  192.168.1.0, the broadcast address should be configured as 192.168.1.255. Broadcast messages are
-                  typically produced by network protocols such as the Address Resolution Protocol (ARP) and the 
-                  Routing Information Protocol (RIP).             
-                  </para>
+                  <para><emphasis role="bold">Indirizzo di broadcast</emphasis> L'indirizzo di broadcast è un indirizzo IP che consente di inviare dati simultaneamente a tutti gli host di una data sotto-rete invece che a uno specifico host di rete. L'indirizzo di broadcast generale standard per le reti IP è 255.255.255.255, ma questo indirizzo di broadcast non può essere usato per inviare un messaggio in broadcast a tutti gli host su Internet poiché viene bloccato dai router. Un indirizzo di broadcast più idoneo è impostato per corrispondere a una specifica sotto-rete. Ad esempio in una comune rete IP privata di classe C, 192.168.1.0, l'indirizzo di broadcast dovrebbe essere configurato come 192.168.1.255. I messaggi di broadcast sono preparati normalmente dai protocolli di rete quali ARP (Address Resolution Protocol) e RIP (Routing Information Protocol).</para>
                </listitem>
                <listitem>
-                  <para>
-                  <emphasis role="bold">Gateway Address</emphasis> A Gateway Address is the IP address through which
-                  a particular network, or host on a network, may be reached.  If one network host wishes to communicate
-                  with another network host, and that host is not located on the same network, then a 
-                  <emphasis>gateway</emphasis> must be used. In many cases, the Gateway Address will be that
-                  of a router on the same network, which will in turn pass traffic on to other networks or hosts, such as
-                  Internet hosts.  The value of the Gateway Address setting must be correct, or your system will not be able
-                  to reach any hosts beyond those on the same network.                  
-                  </para>
+                  <para><emphasis role="bold">Indirizzo del gateway</emphasis> Un indirizzo del gateway è l'indirizzo IP attraverso il quale una particolare rete, o un host su una rete, può essere raggiunta. Se un host di rete desidera comunicare con un altro host di rete, senza essere localizzati nelle stessa rete, allora deve essere usato un <emphasis>gateway</emphasis>. In molti casi l'indirizzo del gateway coincide con quello di un router della medesima rete, il quale ha il compito di far transitare il traffico ad altre reti o host, come gli host su Internet. L'impostazione del valore dell'indirizzo del gateway deve essere corretta, altrimenti il sistema non è in grado di raggiungere gli host che non si trovano sulla rete cui appartiene.</para>
                </listitem>
                <listitem>
-                  <para>
-                  <emphasis role="bold">Nameserver Address</emphasis> Nameserver Addresses represent the IP addresses of
-                  Domain Name Service (DNS) systems, which resolve network hostnames into IP addresses.  There are three levels of
-                  Nameserver Addresses, which may be specified in order of precedence: The 
-                  <emphasis>Primary</emphasis>
-                  Nameserver, the <emphasis>Secondary</emphasis> Nameserver, and the 
-                  <emphasis>Tertiary</emphasis>
-                  Nameserver. In order for your system to be able to resolve network hostnames into their
-                  corresponding IP addresses, you must specify valid Nameserver Addresses which you are authorized to use
-                  in your system's TCP/IP configuration.  In many cases these addresses can and will be provided by your
-                  network service provider, but many free and publicly accessible Nameservers are available for use, such as
-                  the Level3 (Verizon) servers with IP addresses from
-                  4.2.2.1 to 4.2.2.6. </para>
+                  <para><emphasis role="bold">Indirizzo di server dei nomi</emphasis> Gli indirizzi di server dei nomi rappresentano gli indirizzi IP del sistema DNS (Domain Name Service), che risolve i nomi degli host della rete in indirizzi IP. Sono disponibili tre livelli di indirizzi di server dei nomi che possono essere specificati in ordine di precedenza: il server dei nomi <emphasis>primario</emphasis>, il server dei nomi <emphasis>secondario</emphasis>, e il server dei nomi <emphasis>terziario</emphasis>. Per consentire al sisema di risolvere i nomi degli host di rete nei loro corrispondenti indirizzi IP, è necessario specificare nella configurazione del sistema TCP/IP degli indirizzi di server dei nomi validi e che si è autorizzati a usare. In molti casi tali indirizi possono e sono forniti dal provider dell'utente: comunque risultano liberi e pubblicamente accessibili molti server dei nomi, come i server Level3 (Verizon) con indirizzi IP da 4.2.2.1 a 4.2.2.6.</para>
                      <tip>
                         <para>Gli indirizzi IP, le maschere di rete, gli indirizzi di rete, gli indirizzi di broadcast e gli indirizzi di gateway sono tipicamente determinati attraverso appropriate direttive nel file <filename>/etc/network/interfaces</filename>. Gli indirizzi di server di nomi sono tipicamente specificati attraverso le direttive <emphasis>nameserver</emphasis> nel file <filename>/etc/resolv.conf</filename>. Per maggiori informazioni, consultare rispettivamente le pagine di manuale di sistema per <filename>interfaces</filename> e  <filename>resolv.conf</filename>, usando i seguenti comandi da digitare al prompt di un terminale:</para>
                      </tip>
@@ -584,56 +497,14 @@ nameserver 208.185.179.218
         </sect2>
         <sect2 id="ip-routing" status="complete">
           <title>Instradamento IP</title>
-            <para>
-              IP routing is a means of specifying and discovering paths in a TCP/IP network along which
-              network data may be sent.  Routing uses a set of <emphasis>routing tables</emphasis>
-              to direct the forwarding of network data packets from their source to the destination, often
-              via many intermediary network nodes known as <emphasis>routers</emphasis>.
-              IP Routing is the principal mode of path discovery on the Internet.  There are two primary forms of
-              IP Routing: <emphasis>Static Routing</emphasis> and 
-              <emphasis>Dynamic Routing.</emphasis>
-            </para>
-            <para>
-            Static routing involves manually adding IP routes to the system's routing table, and this is usually
-            done by manipulating the routing table with the <application>route</application> command. Static routing enjoys
-            many advantages over dynamic routing, such as simplicity of implementation on smaller networks, 
-            predictability (the routing table is always computed in advance, and thus the route is precisely the 
-            same each time it used), and low overhead on other routers and network links due to the lack of a
-            dynamic routing protocol.  However, static routing does present some disadvantages as well.  For example,
-            static routing is limited to small networks and does not scale well.  Static routing also fails completely
-            to adapt to network outages and failures along the route due to the fixed nature of the route. 
-            </para>
-            <para>
-            Dynamic Routing depends on large networks with multiple possible IP routes from a source to a destination
-            and makes use of special routing protocols, such as the Router Information Protocol (RIP), which handle
-            the automatic adjustments in routing tables that make dynamic routing possible.  Dynamic routing
-            has several advantages over static routing, such as superior scalability and the ability to adapt
-            to failures and outages along network routes. Additionally, there is less manual configuration of the
-            routing tables, since routers learn from one another about their existence and available routes. This trait
-            also eliminates the possibility of introducing mistakes in the routing tables via human error.
-            Dynamic routing is not perfect, however, and presents disadvantages such as heightened complexity and
-            additional network overhead from router communications, which does not immediately benefit the end users,
-            but still consumes network bandwidth.
-            </para>
+            <para>L'instradamento IP (routing) è un mezzo per specificare e scoprire i percorsi in una rete TCP/IP lungo i quali possono essere inviati dati di rete. L'instradamento fa uso di un insieme di <emphasis>tabelle di instradamento</emphasis> per gestire l'avanzamento dei pacchetti di dati di rete dalla sorgente fino alla destinazione, spesso attraverso molti nodi di rete intermedi di rete noti come <emphasis>router</emphasis>. L'instradamento IP è il mezzo principale per trovare i percorsi su Internet. Due sono le forme principali di instradamento IP: <emphasis>instradamento statico</emphasis> e <emphasis>instradamento dinamico</emphasis>.</para>
+            <para>L'instradamento statico comporta l'aggiunta manuale delle rotte IP alla tabella di instradamento del sistema; ciò viene di solito eseguito mediante la manipolazione della tabella di instradamento con il comando <application>route</application>. L'instradamento statico gode di molti vantaggi sull'instradamento dinamico, come la semplicità d'implementazione sulle reti poco estese, la predicibilità (la tabella di instradamento è sempre calcolata in anticipo, quindi l'instradamento è sempre lo stesso a ogni utilizzo) e una  bassa sovrapponibilità (overhaed) sugli altri router e sugli altri collegamenti di rete dovuta alla mancanza di un protocollo di instradamento dinamico. Comunque, l'instradamento statico, presenta anche alcuni svantaggi. Ad esempio, l'instradamento statico è limitato solo alle reti di piccole dimensioni e non è in grado di "scalare" bene. Inoltre l'instradamento statico fallisce completamente nell'adattarsi alle disfunzioni e fallimenti della rete sulla rotta a causa della natura statica della stessa rotta.</para>
+            <para>L'instradamento dinamico su reti di grandi dimensioni è subordinato alla presenza di diverse possibili rotte IP da una sorgente a una destinazione e fa uso di speciali protocolli di instradamento, come il RIP (Router Information Protocol) che gestisce la regolazione automatica delle tabelle di riavviamento così da rendere possibile l'instradamento dinamico. L'instradamento dinamico gode di vantaggi rispetto all'instradamento statico, come maggiore scalabilità e capacità di adattamento a disfunzioni e fallimenti di rete. In aggiunta è richiesta una minore configurazione manuale delle tabelle di instradamento, poichè i router apprendono l'uno dall'altro informazioni sulla loro esistenza e disponibilità. Questa peculiarità elimina di fatto la possibilità di introdurre errori "umani" nelle tabelle di instradamento. Tuttavia l'instradamento dinamico non è perfetto e presenta alcuni svantaggi quali una complessità accentuata ed un carico di lavoro aggiuntivo per le reti, derivato dalle comunicazioni tra router, che non è di beneficio immediato per gli utenti, ma che consuma comunque la larghezza di banda della rete.</para>
         </sect2>
         <sect2 id="tcp-and-udp" status="complete">
           <title>TCP e UDP</title>
-            <para>
-              TCP is a connection-based protocol, offering error correction and guaranteed delivery of
-              data via what is known as <emphasis>flow control</emphasis>. Flow control
-              determines when the flow of a data stream needs to be stopped, and previously sent data
-              packets should to be re-sent due to problems such as <emphasis>collisions</emphasis>,
-              for example, thus ensuring complete and accurate delivery of the data.  TCP is typically
-              used in the exchange of important information such as database transactions. 
-            </para>
-            <para>
-              The User Datagram Protocol (UDP), on the other hand, is a <emphasis>connectionless</emphasis>
-              protocol which seldom deals with the transmission of important data because it lacks flow
-              control or any other method to ensure reliable delivery of the data.  UDP is commonly used
-              in such applications as audio and video streaming, where it is considerably faster than
-              TCP due to the lack of error correction and flow control, and where the loss of a few packets
-			  is not generally catastrophic.
-            </para>
+            <para>TCP è un protocollo basato sulla connessione, che offre correzione d'errore e che garantisce la consegna dei dati attraverso ciò che è conosciuto come <emphasis>controllo di flusso</emphasis>. Il controllo di flusso determina quando il flusso di uno stream di dati debba essere fermato e i pacchetti di dati inviati in precedenza debbano essere reinviati a causa di problemi come <emphasis>collisioni</emphasis>, assicurando quindi la completa e accurata consegna dei dati. TCP è tipicamente usato nello scambio di informazioni importanti come transazioni di database.</para>
+            <para>UDP (User Datagram Protocol), al contrario, è un protocollo <emphasis>senza connessione</emphasis> che raramente tratta della trasmissione dei dati importanti a causa della mancanza del controllo di flusso o di altro metodo che garantisca la consegna affidabile dei dati. UDP è normalmente usato in applicazioni come lo streaming audio e video, in cui risulta considerevolemnte più veloce del protocollo TCP, a causa della mancanza di correzione d'errore e del controllo di flusso, e in cui la perdita di alcuni pacchetti non è generalmente un evento catastrofico.</para>
         </sect2>
         <sect2 id="icmp" status="complete">
           <title>ICPM</title>
@@ -645,120 +516,43 @@ nameserver 208.185.179.218
         </sect2>
     </sect1>
 	<sect1 id="firewall-configuration" status="help">
-		<title>Firewall Configuration</title>
-          <para>Il kernel Linux include il sottosistema <emphasis>Netfilter</emphasis>, usato per manipolare o decidere la sorte del traffico di rete all'interno o attraverso il server dell'utente. Tutte le soluzioni moderne del firewall per Linux si basano su questo sistema di filtraggio dei pacchetti di rete.</para>
+		<title>Configurazione del firewall</title>
+          <para>Il kernel Linux include il sottosistema <emphasis>Netfilter</emphasis>, usato per manipolare o decidere la sorte del traffico di rete diretto all'interno o attraverso un server. Tutte le moderne soluzioni firewall per Linux si basano su questo sistema di filtraggio dei pacchetti.</para>
         <sect2 id="firewall-introduction" status="help">
           <title>Introduzione al firewall</title>
-            <para>
-              The kernel's packet filtering system would be of little use to administrators without
-			  a userspace interface to manage it.  This is the purpose of iptables.  When a packet
-			  reaches your server, it will be handed off to the Netfilter subsystem for acceptance,
-			  manipulation, or rejection based on the rules supplied to it from userspace via
-			  iptables.  Thus, iptables is all you need to manage your firewall if you're familiar
-			  with it, but many frontends are available to simplify the task.
-            </para>
+            <para>Il sistema di filtraggio dei pacchetti del kernel non è di grande utilità per gli amministratori senza un'interfaccia nello spazio utente per gestirlo. Questo è il compito di iptables. Quando un pacchetto raggiunge il proprio server,  esso è gestito affidato al sottosistema Netfilter per l'accettazione, la manipolazione oppure il rifiuto secondo quanto stabilito da regole fornite al sottosistema dallo spazio utente attraverso iptables. Quindi, iptables è tutto ciò che è necessario per gestire il proprio firewall, a patto che si abbia la dimestichezza necessaria; sono comunque disponibili molte altre applicazioni per semplificare tale attività.</para>
         </sect2>
         <sect2 id="ip-masquerading" status="help">
-          <title>IP Masquerading</title>
-            <para>
-              The purpose of IP Masquerading is to allow machines with private, non-routable IP
-			  addresses on your network to access the Internet through the machine doing the
-			  masquerading.  Traffic from your private network destined for the Internet must be
-			  manipulated for replies to be routable back to the machine that made the request.
-			  To do this, the kernel must modify the <emphasis>source</emphasis>
-			  IP address of each packet so that replies will be routed back to it, rather than
-			  to the private IP address that made the request, which is impossible over the 
-			  Internet.  Linux uses <emphasis>Connection Tracking</emphasis>
-			  (conntrack) to keep track of which connections belong to which machines and reroute
-			  each return packet accordingly.  Traffic leaving your private network is thus
-			  "masqueraded" as having originated from your Ubuntu gateway machine.
-			  This process is referred to in Microsoft documentation as Internet
-			  Connection Sharing.
-            </para>
-			<para>
-              This can be accomplished with a single iptables rule, which may differ slightly
-			  based on your network configuration:
-			  <screen>sudo iptables -t nat -A POSTROUTING -s 192.168.0.0/16 -o ppp0 -j MASQUERADE</screen>
-			  The above command assumes that your private address space is 192.168.0.0/16 and
-			  that your Internet-facing device is ppp0.  The syntax is broken down as follows:
-			  <itemizedlist>
-				  <listitem><para>-t nat -- la regola è per entrare nella tabella nat.</para></listitem>
-				  <listitem><para>-A POSTROUTING -- la regola serve ad accodare (-A) alla catena del POSTROUTING</para></listitem>
-				  <listitem><para>-s 192.168.0.0/16 -- la regola si applica al traffico che origina dallo spazio dell'indirizzo specificato</para></listitem>
-				  <listitem><para>-o ppp0 -- la regola si applica al traffico previsto e schedulato tramite il dispositivo di rete specificato.</para></listitem>
-				  <listitem><para>-j MASQUERADE -- il traffico che soddisfa questa regola viene indirizzato (-j) al bersaglio di mascheratura per essere mascherato come descritto.</para></listitem>
-			  </itemizedlist>
-			</para>
-			<para>
-              Each chain in the filter table (the default table, and where most or all packet
-			  filtering occurs) has a default <emphasis>policy</emphasis> of
-			  ACCEPT, but if you are creating a firewall in addition to a gateway device, you
-			  may have set the policies to DROP or REJECT, in which case your masqueraded
-			  traffic needs to be allowed through the FORWARD chain for the above rule to work:
-			  <screen>sudo iptables -A FORWARD -s 192.168.0.0/16 -o ppp0 -j ACCEPT
-sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED -i ppp0 -j ACCEPT</screen>
-			  The above commands will allow all connections from your local network to the
-			  Internet and all traffic related to those connections to return to the machine
-			  that initiated them.
-			</para>
+          <title>IP masquerading</title>
+            <para>Il compito dell'IP masquerading è di consentire a quelle macchine della rete fornite di indirizzi IP privati e non instradabili di accedere a Internet tramite la macchina che opera il masquerading. Il traffico che va dalla rete privata verso Internet deve essere manipolato per ottenere risposte che siano re-instradabili alla macchina che ne ha fatto richiesta. Per ottenere questo risultato, il kernel deve modificare l'indirizzo IP <emphasis>sorgente</emphasis> di ciascun pacchetto affinchè tali risposte vengano re-instradate a esso invece che all'indirizzo IP privato che ha fatto la richiesta, procedura impossibile da eseguire su Internet. Linux fa uso del <emphasis>tracciamento della connessione</emphasis> (conntrack) per tenere traccia di quale connessione appartenga a quale macchina e di conseguenza per reinstradare ciascun pacchetto di risposta. Il traffico in uscita dalla rete privata viene quindi "mascherato" per simulare l'uscita dalla macchina gateway Ubuntu. Nella documentazione Microsoft questo processo è indicato come condivisione delle connessioni internet (Internet Connection Sharing).</para>
+			<para>Tutto ciò può essere ottenuto con una singola regola di iptables, che può differire leggermente in funzione della propria configurazione di rete: <screen>sudo iptables -t nat -A POSTROUTING -s 192.168.0.0/16 -o ppp0 -j MASQUERADE</screen> Nel comando precedente si è supposto che il proprio spazio di indirizzi privati sia 192.168.0.0/16 e che l'interfaccia affacciata su Internet sia ppp0. La sintassi è: <itemizedlist>
+				  <listitem><para>-t nat -- la regola viene inserita nella tabella nat</para></listitem>
+				  <listitem><para>-A POSTROUTING -- la regola viene accodata (-A) alla catena POSTROUTING</para></listitem>
+				  <listitem><para>-s 192.168.0.0/16 -- la regola si applica al traffico originato dallo spazio di indirizzi specificato</para></listitem>
+				  <listitem><para>-o ppp0 -- la regola si applica al traffico instradato attraverso l'interfaccia di rete specificata</para></listitem>
+				  <listitem><para>-j MASQUERADE -- il traffico che soddisfa questa regola viene "saltato" (-j sta per jump) alla destinazione MASQUERADE per essere manipolato come descritto in precedenza</para></listitem>
+			  </itemizedlist></para>
+			<para>La <emphasis>politica</emphasis> predefinita di ogni catena nella tabella "filter" (la tabella predefinita, dove si verifica la maggior parte o l'intero filtraggio dei pacchetti) è ACCEPT (accetta), ma se si sta creando un firewall  in aggiunta a un dispositivo di gateway, è necessario definire delle politiche di DROP (scarta) o REJECT (rifiuta). In questo caso è necessario autorizzare il traffico mascherato attraverso la catena di FORWARD (inoltra) per far funzionare il masquerading: <screen>sudo iptables -A FORWARD -s 192.168.0.0/16 -o ppp0 -j ACCEPT
+sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED -i ppp0 -j ACCEPT</screen> I comandi  precedenti servono per autorizzare tutte le connessioni dalla rete locale verso Internet e tutto il traffico relativo a tali connessioni che torna alle macchine che lo hanno inizilizzato.</para>
         </sect2>
         <sect2 id="firewall-tools" status="help">
-          <title>Tools</title>
-            <para>
-              There are many tools available to help you construct a complete firewall without
-			  intimate knowledge of iptables.  For the GUI-inclined, 
-			  <application>Firestarter</application> is quite popular and easy to use, and
-			  <application>fwbuilder</application> is very powerful and will look familiar 
-			  to an administrator who has used a commercial firewall utility such as Checkpoint 
-			  FireWall-1.  If you prefer a command-line tool with plain-text configuration files, 
-			  <application>Shorewall</application> is a very powerful solution to help you 
-			  configure an advanced firewall for any network.  If your network is relatively 
-			  simple, or if you don't have a network, <application>ipkungfu</application> should 
-			  give you a working firewall "out of the box" with zero configuration, 
-			  and will allow you to easily set up a more advanced firewall by editing simple, 
-			  well-documented configuration files.  Another interesting tool is 
-			  <application>fireflier</application>, which is designed to be a desktop firewall 
-			  application.  It is made up of a server (fireflier-server) and your choice of GUI 
-			  clients (GTK or QT), and behaves like many popular interactive firewall 
-			  applications for Windows.
-            </para>
+          <title>Strumenti</title>
+            <para>Molti sono gli strumenti disponibili per aiutare nella costruzione di un firewall completo senza ricorrere all'apprendimento di iptables. Per coloro che sono abituati a un'interfaccia grafica, l'applicazione <application>Firestarter</application> è molto comune e semplice da usare e <application>fwbuilder</application> è molto potente e molto familiare agli amministratori di sistema che hanno usato una firewall commerciale quale Checkpoint FireWall-1. Se si preferisce un'applicazione basata sulla riga di comando con file di configurazione in testo semplice, <application>Shorewall</application> è una soluzione molto potente per configurare un firewall avanzato su ogni rete. Se la rete non è complessa, o si ha una singola macchina, <application>ipkungfu</application> è in grado di fornire un firewall funzionante che non necessita di configurazione, offrendo al tempo stesso la possibilità di predisporne uno più avanzato tramite la modifica di semplici e ben documentati file di configurazione. Un altro strumento interessante è <application>fireflier</application>, progettato per essere una applicazione firewall per sistemi desktop. È composto da un server (fireflier-server) e da un'interfaccia grafica (GTK o QT) e si comporta come molte applicazioni firewall interattive per Windows.</para>
         </sect2>
         <sect2 id="firewall-logs" status="help">
-          <title>Logs</title>
-            <para>
-              Firewall logs are essential for recognizing attacks, troubleshooting your
-			  firewall rules, and noticing unusual activity on your network.  You must include
-			  logging rules in your firewall for them to be generated, though, and logging
-			  rules must come before any applicable terminating rule (a rule with a target
-			  that decides the fate of the packet, such as ACCEPT, DROP, or REJECT).  For
-			  example:
-			  <screen>sudo iptables -A INPUT -m state --state NEW -p tcp --dport 80 -j LOG --log-prefix "NEW_HTTP_CONN: "</screen>
-			  A request on port 80 from the local machine, then, would generate a log in dmesg
-			  that looks like this:
-			</para>
+          <title>Registri</title>
+            <para>I registri firewall sono essenziali per riconoscere attacci, risolvere problemi relativi alle regole del firewall e notificare attività di rete insolita. Per poter generare tali registri è necessario che vengano incluse delle regole di registrazione nel firewall e che tali regole siano inserite prima di ogni regola di terminazione applicabile (cioè una regola con una destinazione che decide la sorte di un pacchetto, come ACCEPT, DROP o REJECT). Ad esempio: <screen>sudo iptables -A INPUT -m state --state NEW -p tcp --dport 80 -j LOG --log-prefix "NUOV_CONN_HTTP: "</screen> In questo modo, una richiesta alla porta 80 dalla macchina locale genera un registro in dmesg come il seguente:</para>
 			<para>
-			  <programlisting>[4304885.870000] NEW_HTTP_CONN: IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=58288 DF PROTO=TCP SPT=53981 DPT=80 WINDOW=32767 RES=0x00 SYN URGP=0</programlisting>
+			  <programlisting>[4304885.870000] NUOV_CONN_HTTP: IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=58288 DF PROTO=TCP SPT=53981 DPT=80 WINDOW=32767 RES=0x00 SYN URGP=0</programlisting>
 			</para>
-			<para>
-              The above log will also appear in <filename>/var/log/messages</filename>,
-			  <filename>/var/log/syslog</filename>, and <filename>/var/log/kern.log</filename>.
-			  This behavior can be modified by editing <filename>/etc/syslog.conf</filename>
-			  appropriately or by installing and configuring <application>ulogd</application>
-			  and using the ULOG target instead of LOG.  The <application>ulogd</application>
-			  daemon is a userspace server that listens for logging instructions from the kernel
-			  specifically for firewalls, and can log to any file you like, or even to a
-			  <application>PostgreSQL</application> or <application>MySQL</application>
-			  database.  Making sense of your firewall logs can be simplified by using a log
-			  analyzing tool such as <application>fwanalog</application>, <application>
-			  fwlogwatch</application>, or <application>lire</application>.
-            </para>
+			<para>Il registro precedente appare anche nei file <filename>/var/log/messages</filename>, <filename>/var/log/syslog</filename> e <filename>/var/log/kern.log</filename>. Questo comportamento può essere cambiato, modificando in modo appropriato il file <filename>/etc/syslog.conf</filename> o installando e configurando <application>ulogd</application> facendo uso della destinazione ULOG al posto di LOG. Il demone <application>ulogd</application> è un server nello spazio utente in ascolto per le istruzioni di registro del kernel specifiche dei firewall; è possibile salvare i registri su qualsiasi file o perfino in un database come <application>PostgreSQL</application> o <application>MySQL</application>. Per dare un significato ai registri del firewall è possibile utilizzare delle applicazioni di analisi dei reigistri come <application>fwanalog</application>, <application> fwlogwatch</application> o <application>lire</application>.</para>
         </sect2>
     </sect1>
 	<sect1 id="openssh-server" status="complete">
 		<title>Server OpenSSH</title>
       <sect2 id="openssh-introduction">
         <title>Introduzione</title> 
-           <para>Questa sezione della guida presenta una potente collezione di strumenti per il controllo remoto di computer in rete, per il trasferimento dei dati tra i medesimi, chiamata <emphasis>OpenSSH</emphasis>. L'utente imparerà come configurare l'applicazione Open Server SSH, e le sue modifiche.</para>
+           <para>Questa sezione della guida presenta una potente collezione di strumenti per il controllo remoto di computer in rete e per il trasferimento di dati tra i medesimi, chiamata <emphasis>OpenSSH</emphasis>. Vengono anche indicate alcune delle possibili impostazioni di configurazione e come cambiarle su sistemi Ubuntu.</para>
           <para>
             OpenSSH is a freely available version of the Secure Shell (SSH) protocol family of 
             tools for remotely controlling a computer or transferring files between computers.
@@ -856,13 +650,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
 </screen>
                </para>
 		<warning>
-                           <para>
-                           Many other configuration directives for <application>sshd</application> are available for changing the server application's
-                           behavior to fit your needs. Be advised, however, if your only method of access to a server is <application>ssh</application>,
-                           and you make a mistake in configuring <application>sshd</application> via the <filename>/etc/ssh/sshd_config</filename> file, you may find you
-                           are locked out of the server upon restarting it, or that the <application>sshd</application> server refuses to start due
-                           to an incorrect configuration directive, so be extra careful when editing this file on a remote server.
-                           </para>
+                           <para>Per soddisfare le esigenze dell'utente, sono disponibili molte altre istruzioni di configurazione per modificare il comportamento dell'applicazione <application>sshd</application>. Se l'unico metodo per accedere al server è mediante l'applicazione <application>ssh</application> è necessario prestare molta attenzione alla configurazione di <application>sshd</application>. Delle impostazioni non corrette nel file <filename>/etc/ssh/sshd_config</filename> possono precludere l'accesso al server dopo il suo riavvio, oppure impedire il suo funzionamento. In sintesi, è necessaria molta attenzione nella modifica del file <filename>/etc/ssh/sshd_config</filename>.</para>
                         </warning>
         </sect2>
    <sect2 id="openssh-references" status="complete">
@@ -1021,8 +809,8 @@ network.</para>
           </para>
           <para>
 <screen>
-/ubuntu  *(ro,sync,no_root_squash)
-/home    *(rw,sync,no_root_squash)
+/ubuntu *(ro,sync,no_root_squash)
+/home *(rw,sync,no_root_squash)
 </screen>
           </para>
 
@@ -1109,7 +897,7 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
                     <para>Host Name</para>
                 </listitem>
                 <listitem>
-                    <para>Domain Name</para>
+                    <para>Nome dominio</para>
                 </listitem>
                 <listitem>
                     <para>Gateway predefinito</para>
@@ -1268,8 +1056,8 @@ include "/etc/bind/named.conf.options";
 
 // reduce log verbosity on issues outside our control
 logging {
-	category lame-servers { null; };
-	category cname { null; };
+    category lame-servers { null; };
+    category cname { null; };
 };
 
 // prime the server with knowledge of the root servers
@@ -1277,7 +1065,6 @@ zone "." {
         type hint;
         file "/etc/bind/db.root";
 };
-
 // be authoritative for the localhost forward and reverse zones, and for
 // broadcast zones as per RFC 1912
 
@@ -1346,7 +1133,7 @@ include "/etc/bind/named.conf.local";
       </sect2>
     </sect1>
 	<sect1 id="cups" status="complete">
-		<title>CUPS - Print Server</title>
+		<title>CUPS - Server di Stampa</title>
           <para>
             The primary mechanism for Ubuntu printing and print services is the 
 			<emphasis role="bold">Common UNIX Printing System</emphasis> (CUPS). 
@@ -1484,7 +1271,7 @@ Listen 192.168.10.250:631      # Listen on the LAN interface, Port 631 (IPP)
 Listen socrates:631  # Listen on all interfaces for the hostname 'socrates'
 </screen>
                 </para> 
-				<para>or by omitting the Listen directive and using <emphasis>Port</emphasis> instead, as in:</para>
+				<para>oppure omettendo la direttiva Listen e utilizzando quella <emphasis>Port</emphasis>, come in:</para>
 <para>
 <screen>
 Port 631  # Listen on port 631 on all interfaces
@@ -1497,7 +1284,7 @@ Port 631  # Listen on port 631 on all interfaces
       <sect2 id="cups-references" status="complete">
         <title>Riferimenti</title>
         <para>
-        <ulink url="http://www.cups.org/">CUPS Website</ulink>
+        <ulink url="http://www.cups.org/">Sito Web di CUPS</ulink>
         </para>
         </sect2>
     </sect1>
@@ -1650,7 +1437,7 @@ Port 631  # Listen on port 631 on all interfaces
 
         </sect3>
         <sect3 id="default-settings" status="complete">
-          <title>Default Settings</title>
+          <title>Impostazioni predefinite</title>
             <para>
              This section explains configuration of the Apache2 server
              default settings.  For example, if you add a virtual host, 
@@ -2121,7 +1908,7 @@ Enter pass phrase for server.key:
         </warning>
         </sect3>
         <sect3 id="installing-the-certificate" status="complete">
-          <title>Installing the Certificate</title>
+          <title>Installare il certificato</title>
 
             <para>You can install the key file
             <filename>server.key</filename> and certificate file
@@ -2253,9 +2040,7 @@ Listen 443
                   To set your Squid server to listen on TCP port 8888 instead of the default TCP port 3128, change
                   the http_port directive as such:
                   </para>
-                  <para>
-                  http_port 8888
-                  </para>
+                  <para>http_port 8888</para>
                </listitem>
 	            <listitem>
                   <para>
@@ -2282,9 +2067,7 @@ Listen 443
                      Then, add the following to the <emphasis role="bold">top</emphasis> of the http_access section of your
                      <filename>/etc/squid/squid.conf</filename> file:
                   </para>
-                  <para>
-                     http_access allow fortytwo_network
-                  </para>
+                  <para>http_access allow fortytwo_network</para>
                </listitem>
                <listitem>
                   <para>
@@ -2295,17 +2078,12 @@ Listen 443
                   <para>
                      Add the following to the <emphasis role="bold">bottom</emphasis> of the ACL section of your <filename>/etc/squid/squid.conf</filename> file:
                   </para>
-                  <para>
-                     acl biz_network src 10.1.42.0/24
-                     acl biz_hours time M T W T F 9:00-17:00
-                  </para>
+                  <para>acl biz_network src 10.1.42.0/24 acl biz_hours time M T W T F 9:00-17:00</para>
                   <para>
                      Then, add the following to the <emphasis role="bold">top</emphasis> of the http_access section of your
                      <filename>/etc/squid/squid.conf</filename> file:
                   </para>
-                  <para>
-                     http_access allow biz_network biz_hours
-                  </para>
+                  <para>http_access allow biz_network biz_hours</para>
                </listitem>
           </itemizedlist>
           </para>
@@ -2538,7 +2316,7 @@ $ svnserve --help</programlisting>
 					<para>Once you run this command, Subversion starts listening on default port (3690). To access the project repository, you must run the following command from a terminal prompt: </para>
 					<para>
 <screen>
-<command>svn co svn://hostname/project project --username user_name</command>
+<command>svn co svn://hostname/project project --username nome_utente</command>
 </screen>
                                         </para>
 					<para>Based on server configuration, it prompts for password. Once 
@@ -2686,7 +2464,7 @@ can start the cvs server by running following command:
             </para>
 
 <programlisting>
-tcp        0      0 *:cvspserver            *:* LISTEN 
+tcp 0 0 *:cvspserver *:* LISTEN 
 </programlisting>
 
         <para>
@@ -2743,11 +2521,11 @@ manage projects in the CVS repository.
         <title>Riferimenti</title> 
 				<para><ulink url="http://subversion.tigris.org/">Subversion Home Page</ulink></para>
 				<para><ulink url="http://svnbook.red-bean.com/">Subversion Book</ulink></para>
-				<para><ulink url="http://ximbiot.com/cvs/manual/cvs-1.11.21/cvs_toc.html">CVS Manual</ulink></para>
+				<para><ulink url="http://ximbiot.com/cvs/manual/cvs-1.11.21/cvs_toc.html">Manuale CVS</ulink></para>
       </sect2>
     </sect1>
 	<sect1 id="databases" status="complete">
-		<title>Databases</title>
+		<title>Database</title>
           <para>
             Ubuntu provides two Database servers. They are:
             <itemizedlist spacing="compact">
@@ -2773,9 +2551,7 @@ manage projects in the CVS repository.
 
         <sect3 id="mysql-installation" status="complete">
           <title>Installazione</title>
-            <para>
-            To install MySQL, run the following command from a terminal prompt:
-            </para>
+            <para>Per installare MySQL, eseguire i seguenti comando dal terminale:</para>
 
             <para>
 <screen>
@@ -2801,7 +2577,7 @@ manage projects in the CVS repository.
             </para>
 
 <programlisting>
-tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
+tcp 0 0 localhost.localdomain:mysql *:* LISTEN -
 </programlisting>
 	<para>If the server is not running correctly, you can type the following command to start it:</para>
             <para>
@@ -2820,20 +2596,16 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
             </para>
             <para>
 <screen>
-<command>sudo mysqladmin -u root password newrootsqlpassword</command>
+<command>sudo mysqladmin -u root password nuovapasswordrootsql</command>
 </screen>
             </para>
             <para>
 <screen>
-<command>sudo mysqladmin -u root -h localhost password newrootsqlpassword</command>
+<command>sudo mysqladmin -u root -h localhost password nuovapasswordrootsql</command>
 </screen>
             </para>
 
-            <para>
-            You can edit the <filename>/etc/mysql/my.cnf</filename> file to configure the basic
-            settings -- log file, port number, etc. Refer to
-            <filename>/etc/mysql/my.cnf</filename> file for more details.
-            </para>
+            <para>E' possibile editare il file <filename>/etc/mysql/my.cnf</filename> per configurare le impostazioni di base -- file di log, numeri di porta, ecc. Fare riferimento al file <filename>/etc/mysql/my.cnf</filename> per ulteriori dettagli.</para>
         </sect3>
       </sect2>
       <sect2 id="postgresql" status="complete">
@@ -2887,7 +2659,7 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
             </para>
             </tip>
 
-            <para>To enable TCP/IP connections, edit the file <filename>/etc/postgresql/7.4/main/postgresql.conf</filename></para>
+            <para>Per abilitare le connessioni TCP/IP, modificare il file <filename>/etc/postgresql/7.4/main/postgresql.conf</filename></para>
 
             <para>Locate the line <emphasis>#tcpip_socket =
             false</emphasis> and change it to
@@ -2913,7 +2685,7 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
             client authentication and add the following
             line:</para>
 <programlisting>
-local   all         postgres                          trust sameuser
+local all postgres trust sameuser
 </programlisting>
 
             <para>Then, run the following command to
@@ -2951,7 +2723,7 @@ local   all         postgres                          trust sameuser
             line: </para>
 
 <programlisting>
-local   all         postgres                          md5 sameuser
+local all postgres md5 sameuser
 </programlisting>
             <warning>
             <para>
@@ -2995,7 +2767,7 @@ local   all         postgres                          md5 sameuser
             </para>
         </sect3>
         <sect3 id="postfix-configuration" status="complete">
-          <title>Basic Configuration</title>
+          <title>Configurazione di base</title>
             <para>
             To configure <application>postfix</application>, run the following command:
 <screen>
@@ -3024,7 +2796,7 @@ local   all         postgres                          md5 sameuser
             </note>
 	 </sect3>
         <sect3 id="postfix-smtp-authentication" status="complete">
-          <title>SMTP Authentication</title>
+          <title>Autenticazione SMTP</title>
             <para>The next steps are to configure
             <application>postfix</application> to use SASL for SMTP
             AUTH. Rather than editing the configuration file directly, 
@@ -3035,8 +2807,7 @@ local   all         postgres                          md5 sameuser
             wish to re-configure a particular parameter, you can either
             run the command or change it manually in the file.</para>
 	<procedure>
-		<step><para>Configure Postfix to do SMTP AUTH using SASL (saslauthd):
-<screen>
+		<step><para>Configurare Postfix per l'esecuzione di SMTP AUTH utilizzando SASL (saslauthd): <screen>
 postconf -e 'smtpd_sasl_local_domain ='
 postconf -e 'smtpd_sasl_auth_enable = yes'
 postconf -e 'smtpd_sasl_security_options = noanonymous'
@@ -3045,12 +2816,9 @@ postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permit_myn
 postconf -e 'inet_interfaces = all'
 echo 'pwcheck_method: saslauthd' &gt;&gt; /etc/postfix/sasl/smtpd.conf
 echo 'mech_list: plain login' &gt;&gt; /etc/postfix/sasl/smtpd.conf
-</screen>
-		</para>
+</screen></para>
 		</step>
-		<step><para>Next, configure the digital certificate 
-            for TLS. When asked questions, follow the instructions and answer appropriately.
-<screen>
+		<step><para>Quindi, configurare i certificati digitali per TLS. Quando vengono poste delle domande, seguire le istruzioni e rispondere correttamente. <screen>
 openssl genrsa -des3 -rand /etc/hosts -out smtpd.key 1024
 chmod 600 smtpd.key
 openssl req -new -key smtpd.key -out smtpd.csr
@@ -3062,16 +2830,14 @@ mv smtpd.key /etc/ssl/private/
 mv smtpd.crt /etc/ssl/certs/
 mv cakey.pem /etc/ssl/private/
 mv cacert.pem /etc/ssl/certs/
-</screen>
-		</para>
+</screen></para>
 		<note><para>You can get the digital
             certificate from a certificate authority. Alternatively, you
             can create the certificate yourself. Refer to 
 			<xref linkend="creating-a-self-signed-certificate"/> for more 
 			details.</para></note>
 		</step>
-		<step><para>Configure Postfix to do TLS encryption for both incoming and outgoing mail:
-<screen>
+		<step><para>Configurare Postfix affinché esegua cifratura TLS sia per le email in arrivo sia per quelle in uscita: <screen>
 postconf -e 'smtpd_tls_auth_only = no'
 postconf -e 'smtp_use_tls = yes'
 postconf -e 'smtpd_use_tls = yes'
@@ -3084,8 +2850,7 @@ postconf -e 'smtpd_tls_received_header = yes'
 postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
 postconf -e 'tls_random_source = dev:/dev/urandom'
 postconf -e 'myhostname = mail.example.com'
-</screen>
-		</para>
+</screen></para>
 		</step>
 		</procedure>
             <note>
@@ -3112,7 +2877,7 @@ postconf -e 'myhostname = mail.example.com'
             </para>
 	</sect3>
 	<sect3 id="sasl">
-	  <title>Configuring SASL</title>
+	  <title>Configurare SASL</title>
             <para>
             The
             <application>libsasl2</application>,
@@ -3263,7 +3028,7 @@ Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd<
         </sect3>
       </sect2>
       <sect2 id="dovecot-server" status="complete">
-        <title>Dovecot Server</title> 
+        <title>Server Dovecot</title> 
           <para>
           <application>Dovecot</application> is a Mail Delivery Agent, written with security
           primarily in mind. It supports the major mailbox formats: mbox
@@ -3314,9 +3079,9 @@ pop3_uidl_format = %08Xu%08Xv
             <filename>/etc/dovecot/dovecot.conf</filename> and change
             the following line:
 <programlisting>
-default_mail_env = maildir:~/Maildir # (for maildir)
-or
-default_mail_env = mbox:~/mail:INBOX=/var/spool/mail/%u # (for mbox)
+default_mail_env = maildir:~/Maildir # (per maildir)
+o
+default_mail_env = mbox:~/mail:INBOX=/var/spool/mail/%u # (per mbox)
 </programlisting>
             </para>
 <note>
@@ -3338,7 +3103,7 @@ you have configured.
           something like the following, the installation has been
           successful:
 <programlisting>
-bhuvan@rainbow:~$ telnet localhost pop3
+telnet localhost pop3
 Trying 127.0.0.1...
 Connected to localhost.localdomain.
 Escape character is '^]'.
@@ -3416,17 +3181,10 @@ disable_plaintext_auth = no
             </itemizedlist>
             </para>
 
-            <para>
-            We will see how to install mailman, the apache web server 
-			and the Exim mail server. If you wish to install mailman
-            with a different mail server, please refer to the references
-            section. 
-            </para>
+            <para>Verrà descritto come installare mailman, il server web apache e il server mail Exim. Se si desidera installare mailman con un server mail diverso, fare riferimento alla sezione Riferimenti.</para>
           <sect4 id="mailman-apache2">
             <title>Apache2</title>
-              <para>
-                To install apache2 you refer to <xref linkend="http-installation"/>.
-              </para>
+              <para>Per installare apache2 fare riferimento a <xref linkend="http-installation"/>.</para>
           </sect4>
           <sect4 id="mailman-exim4">
             <title>Exim4</title>
@@ -3542,7 +3300,7 @@ types:
 MM_HOME=/var/lib/mailman
 #
 # User and group for Mailman, should match your --with-mail-gid
-# switch to Mailman's configure script.  Value is normally "mailman"
+# switch to Mailman's configure script. Value is normally "mailman"
 MM_UID=list
 MM_GID=list
 #
@@ -3578,8 +3336,8 @@ can add the following content to a new file named <filename>
    driver = pipe
    command = MM_WRAP \
                '${if def:local_part_suffix \
-                     {${sg{$local_part_suffix}{-(\\w+)(\\+.*)?}{\$1}}} \
-                     {post}}' \
+                    {${sg{$local_part_suffix}{-(\\w+)(\\+.*)?}{\$1}}} \
+                    {post}}' \
                $local_part
     current_directory = MM_HOME
     home_directory = MM_HOME
@@ -3600,8 +3358,8 @@ in to a new file named <filename>101_exim4-config_mailman</filename>:
    require_files = MM_HOME/lists/$local_part/config.pck
    local_part_suffix_optional
    local_part_suffix = -bounces : -bounces+* : \
-                       -confirm+* : -join : -leave : \
-                       -owner : -request : -admin
+                      -confirm+* : -join : -leave : \
+                      -owner : -request : -admin
    transport = mailman_transport
 </programlisting>
 
@@ -3642,18 +3400,18 @@ Run the following command to create the mailing list:
   `newaliases' program:
 
   ## mailman mailing list
-  mailman:              "|/var/lib/mailman/mail/mailman post mailman"
-  mailman-admin:        "|/var/lib/mailman/mail/mailman admin mailman"
-  mailman-bounces:      "|/var/lib/mailman/mail/mailman bounces mailman"
-  mailman-confirm:      "|/var/lib/mailman/mail/mailman confirm mailman"
-  mailman-join:         "|/var/lib/mailman/mail/mailman join mailman"
-  mailman-leave:        "|/var/lib/mailman/mail/mailman leave mailman"
-  mailman-owner:        "|/var/lib/mailman/mail/mailman owner mailman"
-  mailman-request:      "|/var/lib/mailman/mail/mailman request mailman"
-  mailman-subscribe:    "|/var/lib/mailman/mail/mailman subscribe mailman"
-  mailman-unsubscribe:  "|/var/lib/mailman/mail/mailman unsubscribe mailman"
+  mailman: "|/var/lib/mailman/mail/mailman post mailman"
+  mailman-admin: "|/var/lib/mailman/mail/mailman admin mailman"
+  mailman-bounces: "|/var/lib/mailman/mail/mailman bounces mailman"
+  mailman-confirm: "|/var/lib/mailman/mail/mailman confirm mailman"
+  mailman-join: "|/var/lib/mailman/mail/mailman join mailman"
+  mailman-leave: "|/var/lib/mailman/mail/mailman leave mailman"
+  mailman-owner: "|/var/lib/mailman/mail/mailman owner mailman"
+  mailman-request: "|/var/lib/mailman/mail/mailman request mailman"
+  mailman-subscribe: "|/var/lib/mailman/mail/mailman subscribe mailman"
+  mailman-unsubscribe: "|/var/lib/mailman/mail/mailman unsubscribe mailman"
 
-  Hit enter to notify mailman owner...
+  Hit enter to notify mailman owner..
 
   # 
 </programlisting>
@@ -3676,9 +3434,7 @@ provides a web based administration facility. To access this page, point
 your browser to the following url: 
 
 </para>
-<para>
-http://hostname/cgi-bin/mailman/admin
-</para>
+<para>http://hostname/cgi-bin/mailman/admin</para>
 
 <para>
 The default mailing list, <emphasis>mailman</emphasis>,
@@ -3693,15 +3449,13 @@ Alternatively, you can create a new mailing list using web interface.
 </para>
         </sect3>
         <sect3 id="mailman-users" status="complete">
-          <title>Users</title>
+          <title>Utenti</title>
 <para>
 Mailman provides a web based interface for users. To access this page,
 point your browser to the following url:
 </para>
 
-<para>
-http://hostname/cgi-bin/mailman/listinfo
-</para>
+<para>http://hostname/cgi-bin/mailman/listinfo</para>
 
 <para>
 The default mailing list, <emphasis>mailman</emphasis>,
