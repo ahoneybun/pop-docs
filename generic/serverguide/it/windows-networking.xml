@@ -412,7 +412,7 @@
              <para><emphasis role="bold">Autenticazione e acesso</emphasis>. Stabilire l'identità del computer o dell'utente della rete e determinare quali risorse siano accessibili al computer o all'utente tramite i permessi e i privilegi, utilizzando permessi dei file, politiche di gruppo e il servizio di autenticazione Kerberos.</para>
              </listitem>
           </itemizedlist>
-          <para>Fortunatamente, i sistemi Ubuntu sono in grado di fornire queste funzionalità ai client Windows, permettendo la condivisione di risorse di rete. Uno dei componenti software principali incluso nei sistemi Ubuntu per il networking con Windows è la suite SAMBA, che comprende utilità e applicazioni per server SMB. Questa sezione della Guida ad <phrase>Ubuntu</phrase> sul server introduce all'installazione e alla configurazione base delle utilità e delle applicazioni server della suite SAMBA. Fornire maggiori dettagli su SAMBA va oltre lo scopo di questa guida, tali informazioni possono essere reperite sul <ulink url="http://www.samba.org">sito web di SAMBA</ulink>.</para>
+          <para>Fortunatamente, i sistemi Ubuntu sono in grado di fornire queste funzionalità ai client Windows, permettendo la condivisione di risorse di rete. Uno dei componenti software principali, incluso nei sistemi Ubuntu per il networking con Windows, è la suite SAMBA, che comprende utilità e applicazioni per server SMB. Questa sezione della Guida ad <phrase>Ubuntu</phrase> sul server introduce all'installazione e alla configurazione base delle utilità e delle applicazioni server della suite SAMBA. Fornire maggiori dettagli su SAMBA va oltre lo scopo di questa guida, tali informazioni possono essere reperite nel <ulink url="http://www.samba.org">sito web di SAMBA</ulink>.</para>
     </sect1>
 	<sect1 id="installing-samba" status="complete">
 		<title>Installare SAMBA</title>
@@ -425,7 +425,7 @@
     </sect1>
 	<sect1 id="configuring-samba" status="complete">
 		<title>Configurare SAMBA</title>
-          <para>Il server SAMBA si configura attraverso la modifica del file <filename>/etc/samba/smb.conf</filename> per aggiungere o cambiare le impostazioni di default. Nei commenti del file <filename>/etc/samba/smb.conf</filename> l'utente può trovare altri dettagli sulla configurazione oppure consultando il manuale di <filename>/etc/samba/smb.conf</filename> digitando il seguente comando:</para>
+          <para>Il server SAMBA si configura attraverso la modifica del file <filename>/etc/samba/smb.conf</filename> per aggiungere o cambiare le impostazioni predefinite. Nei commenti del file <filename>/etc/samba/smb.conf</filename> l'utente può trovare altri dettagli sulla configurazione oppure consultando il manuale di <filename>/etc/samba/smb.conf</filename> digitando il seguente comando:</para>
            <para>
 <screen>
 <command>man smb.conf</command>
@@ -440,33 +440,22 @@
 <command>sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.original</command>
 </screen>
              </para> 
-          <para>Ora, editare il file <filename>/etc/samba/smb.conf</filename> e apportare i cambiamenti desiderati.</para> 
+          <para>Ora, aprire il file <filename>/etc/samba/smb.conf</filename> e apportare i cambiamenti desiderati.</para> 
       <sect2 id="windows-networking-server" status="complete">
         <title>Server</title>
-          <para>In aggiunta alla suite SAMBA per la gestione di un server con tutte le sue applicazioni, Ubuntu offre altre potenti applicazioni per aumentare le funzionalità dei servizi offerti ai client Windows, molto simili a quelli offerti dai server Windows. Ubuntu offre la gestione centralizzata delle risorse della rete con Directory Services e facilita l'identificazione e l'autorizzazione di computer o utenti mediante Authentication Serivces.</para>
+          <para>In aggiunta alla suite SAMBA per la gestione di un server, con tutte le sue applicazioni, Ubuntu offre altre potenti applicazioni per aumentare le funzionalità dei servizi offerti ai client Windows, molto simili a quelli offerti dai server Windows. Ubuntu offre la gestione centralizzata delle risorse della rete con Directory Services e facilita l'identificazione e l'autorizzazione di computer o utenti mediante Authentication Serivces.</para>
            <para>Le seguenti sezioni trattano in dettaglio di SAMBA e delle tecnologie di supporto, quali server LDAP (Lightweight Directory Access Protocol) e server d'autenticazione Kerberos. Sono esposte anche alcune delle direttive di configurazione disponibili nel file di configurazione di SAMBA che possono facilitare l'integrazione in rete con client e server Windows.</para>
         <sect3 id="active-directory" status="complete">
           <title>Active Directory</title>
             <para>Active Directory è un'implementazione proprietaria di Microsoft di Directory Services in grado di fornire i mezzi necessari a condividere le informazioni sugli utenti e sulle risorse della rete. Oltre a offrire una sorgente centralizzata per queste informazioni, Active Directory agisce come autorità centrale per l'autenticazione nella rete. Active Directory combina le funzionalità di servizi di directory specializzati, in modo tale da semplificare l'integrazione, la gestione e la sicurezze delle risorse di rete. La suite SAMBA può essere configurata per utilizzare i servizi di Active Directory forniti da un Windows Domain Controller.</para>
             <sect4 id="ldap" status="complete">
               <title>LDAP</title>
-              <para>Il server LDAP fornisce, in maniera molto simile ai servizi Microsoft Active Directory, le funzionalità dei Directory Services ai computer Windows: questi servizi forniscono i mezzi per descrivere, localizzare e gestire le risorse della rete. L'implementazione libera di LDAP disponibile in Ubuntu si chiama <emphasis role="italic">OpenLDAP</emphasis>. I demoni del server responsabili della gestione delle richieste della directory OpenLDAP e della distribuzione dei dati custoditi in un server LDAP in un altro sistema Ubuntu si chiamano <application>slapd</application> e <application>slurpd</application>. OpenLDAP può essere utilizzato in combinazione con SAMBA per fornire Directory Services e la condivisione di file e stampanti, più o meno nello stesso modo con il quale un Windows Domain Controller interagisce con un server SAMBA compilato con il supporto LDAP.</para>
+              <para>Il server LDAP fornisce, in maniera molto simile ai servizi Microsoft Active Directory, le funzionalità dei Directory Services ai computer Windows: questi servizi forniscono i mezzi per descrivere, localizzare e gestire le risorse della rete. L'implementazione libera di LDAP disponibile in Ubuntu, si chiama <emphasis role="italic">OpenLDAP</emphasis>. I demoni del server, responsabili della gestione delle richieste di directory OpenLDAP e della distribuzione dei dati custoditi in un server LDAP in un altro sistema Ubuntu, si chiamano <application>slapd</application> e <application>slurpd</application>. OpenLDAP può essere utilizzato in combinazione con SAMBA per fornire Directory Services e la condivisione di file e stampanti, più o meno nello stesso modo con il quale un Windows Domain Controller interagisce con un server SAMBA compilato con il supporto LDAP.</para>
             </sect4>
             <sect4 id="kerberos" status="complete">
               <title>Kerberos</title>
-              <para>
-                 The Kerberos authentication security system is a standardized service for providing authentication to 
-                 computers and users by means of a centralized server which grants encrypted authorization tickets accepted
-                 for authorization by any other computer using Kerberos.  Benefits of Kerberos authentication include mutual
-                 authentication, delegated authentication, interoperability, and simplified trust management. The primary
-                 server daemons for handling the Kerberos authentication and Kerberos database administration on Ubuntu 
-                 are <application>krb5kdc</application> and <application>kadmin</application>.  SAMBA may use 
-                 Kerberos as a mechanism for authenticating computers and users against a Windows Domain Controller.  To
-                 do so, the Ubuntu system must have Kerberos installed, and the <filename>/etc/samba/smb.conf</filename> must be modified to
-                 select the the proper <emphasis role="italic">realm</emphasis> and <emphasis role="italic">security</emphasis> mode.
-                 For example, edit the <filename>/etc/samba/smb.conf</filename> file and add
-                 the values:
-                 </para>
+              <para>Il sistema standard di autenticazione Kerberos è un servizio che fornisce autenticazione ai computer e agli utenti. Il servizio viene fornito attraverso un server centralizzato di autenticazione che garantisce biglietti d'accesso cifrati e accettati dai sistemi che operano con Kerberos. I benefici offerti da Kerberos sono la reciproca autenticazione, un'autenticazione per delega, interoperabilità e una gestione semplificata delle credenziali. I demoni principali in Ubuntu per la gestione dell'autenticazione Kerberos e l'amministrazione del database sono <application>krb5kdc</application> e <application>kadmin</application>. SAMBA può utilizzare Kerberos quale meccanismo di autenticazione dei computer e degli utenti in un ambiente controllato da un Windows Domain Controller. Per poter fare questo, il sistema Ubuntu deve avere installato Kerberos e il file <filename>/etc/samba/smb.conf</filename> deve essere predisposto per selezionare i corretti <emphasis role="italic">realm</emphasis> e <emphasis role="italic">security</emphasis>. Modificare, per esempio,
+<filename>/etc/samba/smb.conf</filename> aggiungendo i valori:</para>
                  <para>
                  <emphasis role="bold">realm = NOME_DOMINIO</emphasis>
                  </para>
@@ -487,8 +476,8 @@
         </sect3>
         <sect3 id="computer-accounts" status="complete">
           <title>Account computer</title>
-            <para>Nei Directory Services gli account del computer sono utilizzati per identificare univocamente i computer presenti nella rete. Dal punto di vista della sicurezza sono trattati come degli account utente, pertanto possono avere delle password e sono soggetti ad autorizzazioni per l'accesso alle risorse di rete. Ad esempio, se un utente con un account valido tenta di accedere a una risorsa da un computer che non possiede un account valido, a seconda delle politiche di sicurezza applicate, l'accesso alla risorsa potrebbe essere negato se il computer dal quale l'utente sta effettuando l'autenticazione non possiede le necessarie autorizzazioni.</para>
-            <para>Un account del computer può essere aggiunto al database degli account di SAMBA fornendo il nome del computer, purché questo non sia già presente come account utente. Per aggiungere un account del computer al database degli account di SAMBA, bisogna utilizzare, in un terminale, il comando <application>smbpasswd</application>:</para>
+            <para>Nei Directory Services gli account del computer sono utilizzati per identificare univocamente i computer presenti nella rete. Dal punto di vista della sicurezza sono trattati come degli account utente, pertanto possono avere delle password e sono soggetti ad autorizzazioni per l'accesso alle risorse di rete. Per esempio, se un utente con un account valido tenta di accedere a una risorsa da un computer che non possiede un account valido, a seconda delle politiche di sicurezza applicate, l'accesso alla risorsa potrebbe essere negato se il computer, dal quale l'utente sta effettuando l'autenticazione, non possiede le necessarie autorizzazioni.</para>
+            <para>Un account del computer può essere aggiunto al database degli account di SAMBA fornendo il nome del computer, purché questo non sia già presente come account utente. Per aggiungere un account del computer al database degli account di SAMBA, utilizzare, in un terminale, il comando <application>smbpasswd</application>:</para>
                <para>
 <screen>
 <command>sudo smbpasswd -a -m NOME_COMPUTER</command>
@@ -500,7 +489,7 @@
         </sect3>
         <sect3 id="file-permissions" status="complete">
           <title>Permessi dei file</title>
-            <para>I permessi di accesso ai file indicano esplicitamente le operazioni consentite a un computer o a un utente su una particolare directory, un determinato file oppure un insieme di file. Questi permessi possono essere definiti modificando il file <filename>/etc/samba/smb.conf</filename> e specificando i permessi per una condivisione. Ad esempio, se l'utente ha definito una condivisione SAMBA chiamata <emphasis role="italic">sourcedocs</emphasis> e desidera concedere i permessi di <emphasis role="italic">sola lettura</emphasis> al gruppo <emphasis role="italic">planning</emphasis>, concedendo però i permessi di <emphasis role="italic">scrittura</emphasis> al gruppo <emphasis role="italic">authors</emphasis> e all'utente <emphasis role="italic">mario</emphasis>, è necessario modificare il file <filename>/etc/samba/smb.conf</filename>, aggiungendo le seguenti righe al di sotto di <emphasis role="italic">[sourcedocs]</emphasis>:</para>
+            <para>I permessi di accesso ai file indicano esplicitamente le operazioni consentite a un computer o a un utente su una particolare directory, un determinato file oppure un insieme di file. Questi permessi possono essere definiti modificando il file <filename>/etc/samba/smb.conf</filename> e specificando i permessi per una condivisione. Ad esempio, se l'utente ha definito una condivisione SAMBA chiamata <emphasis role="italic">sourcedocs</emphasis> e desidera concedere i permessi di <emphasis role="italic">sola lettura</emphasis> al gruppo <emphasis role="italic">pianificazione</emphasis>, concedendo però i permessi di <emphasis role="italic">scrittura</emphasis> al gruppo <emphasis role="italic">autori</emphasis> e all'utente <emphasis role="italic">mario</emphasis>, è necessario modificare il file <filename>/etc/samba/smb.conf</filename>, aggiungendo le seguenti righe al di sotto di <emphasis role="italic">[sourcedocs]</emphasis>:</para>
                <para>
                   <emphasis role="bold">read list = @pianificazione</emphasis>
                </para>
@@ -508,12 +497,7 @@
                   <emphasis role="bold">write list = @autori, mario</emphasis>
                </para>
              <para>Salvare il file <filename>/etc/samba/smb.conf</filename> affinché i cambiamenti abbiano effetto.</para>
-            <para>Another possible permission is to declare <emphasis role="italic">administrative</emphasis> permissions to a particular
-            shared resource.  Users having administrative permissions may read, write, or modify any information contained in the resource
-            the user has been given explicit administrative permissions to.  For example, if you wanted to give the user
-            <emphasis role="italic">melissa</emphasis> administrative permissions to the example <emphasis role="italic">sourcedocs</emphasis>
-            share, you would edit the <filename>/etc/samba/smb.conf</filename> file, and add the following line under the <emphasis role="italic">[sourcedocs]</emphasis> entry:
-            </para>
+            <para>È inoltre possibile concedere permessi <emphasis role="italic">amministrativi</emphasis> per una particolare risorsa condivisa. Gli utenti che possiedono permessi amministrativi possono leggere, scrivere o modificare tutte le informazioni della risorsa per la quale hanno ottenuto i permessi. Per esempio, se si desidera concedere all'utente <emphasis role="italic">melissa</emphasis> i permessi amministrativi sulla condivisione <emphasis role="italic">sourcedocs</emphasis>, è necessario modificare il file <filename>/etc/samba/smb.conf</filename> aggiungendo le seguenti righe al di sotto di <emphasis role="italic">[sourcedocs]</emphasis>:</para>
                <para>
                   <emphasis role="bold">admin users = melissa</emphasis>
                </para>
@@ -522,16 +506,10 @@
       </sect2>
       <sect2 id="windows-networking-clients" status="complete">
         <title>Client</title>
-          <para>
-            Ubuntu includes client applications and capabilities for accessing network resources shared with the SMB protocol.
-            For example, a utility called <application>smbclient</application> allows for accessing remote shared file-systems, 
-            in a manner similar to a File Transfer Protocol (FTP) client. To access a shared folder resource known as 
-            <emphasis role="italic">documents</emphasis> offered by a remote Windows computer named <emphasis role="italic">bill</emphasis> using 
-            <application>smbclient</application> for example, one would enter a command similar to the following at the prompt:
-            </para>
+          <para>Ubuntu include funzionalità e applicazioni client per accedere alle risorse di rete condivise attraverso il protocollo SMB. Per esempio, mediante l'applicazione <application>smbclient</application>, è possibile accedere a file system remoti condivisi , come con un client FTP (File Transfer Protocol). Per accedere alla cartella condivisa <emphasis role="italic">documenti</emphasis>, nel computer remoto Windows denominato <emphasis role="italic">bill</emphasis> utilizzando <application>smbclient</application>, è sufficiente digitare al prompt dei comandi:</para>
                 <para>
 <screen>
-<command>smbclient //silvio/documenti -U &lt;nomeutente&gt;</command>
+<command>smbclient //bill/documenti -U &lt;nomeutente&gt;</command>
 </screen>
                 </para>
             <para>Viene richiesta la password per il nome utente specificato dopo l'argomento -U e, se l'autenticazione ha avuto successo, viene presentato un prompt in cui è possibile inserire i comandi per manipolare e trasferire i file, usando una sintassi simile a quella usata dai client FTP in modalità non grafica. Per maggiori informazioni sull'applicazione <application>smbclient</application>, leggere la corrispondente pagina di manuale utilizzando il comando: <screen>
@@ -539,22 +517,13 @@
 man smbclient
 </command>
 </screen></para>
-            <para>
-            Local mounting of remote network resources using the SMB protocol is also possible using the <application>mount</application> command.
-            For example, to mount a shared  folder named <emphasis role="italic">project-code</emphasis> on a Windows server named 
-            <emphasis role="italic">development</emphasis> as the user <emphasis role="italic">dlightman</emphasis> to your Ubuntu system's /mnt/pcode 
-            mount-point, you would issue this command at the prompt:
-            </para>
+            <para>Utilizzando il protocollo SMB, è anche possibile montare localmente risorse remote attraverso il comando <application>mount</application>. Per esempio, per montare sul punto di mount /mnt/pcode del proprio sistema Ubuntu, con i permessi dell'utente <emphasis role="italic">giuseppe</emphasis>, la cartella condivisa chiamata <emphasis role="italic">codice-progetto</emphasis> che si trova sul server Windows <emphasis role="italic">sviluppo</emphasis>, è necessario digitare al prompt il seguente comando:</para>
                 <para>
 <screen>
-<command>mount -t smbfs -o username=siffredir //sviluppo/codice-progetto /mnt/pcode</command>
+<command>mount -t smbfs -o username=giuseppe //sviluppo/codice-progetto /mnt/pcode</command>
 </screen>
                 </para>
-                <para>You will then be prompted for the user password, and after successfully authenticating, the contents of the shared resource
-                will be available locally via the mount-point specified as the last argument to the mount command.   To disconnect the shared
-                resource, simply use the <application>umount</application> command as you would with any other mounted file system.
-                For example:
-                </para>
+                <para>Viene richiesta la password dell'utente e, se l'autenticazione ha avuto successo, il contenuto della risorsa condivisa è disponibile, localmente, nel punto di mount specificato come ultimo argomento del comando di mount. Per scollegare la risorsa condivisa è sufficiente utilizzare il comando <application>umount</application>, come per ogni altro file system montato. Per esempio:</para>
                 <para>
 <screen>
 <command>umount /mnt/pcode</command>
@@ -562,19 +531,13 @@ man smbclient
                 </para>
         <sect3 id="user-accounts" status="complete">
           <title>Account utente</title>
-            <para>
-              User Accounts define persons with some level of authorization to use certain computer and network resources.  Typically, in a network
-              environment, a user account is provided to each person allowed to access a computer or network, where policies and permissions then
-              define what explicit rights that user account has access to.  To define SAMBA network users for your Ubuntu system, you may use the
-              <application>smbpasswd</application> command.  For example to add a SAMBA user to your Ubuntu system with the user name
-              <emphasis role="italic">jseinfeld</emphasis>, you would enter this command at the prompt:
-             </para>
+            <para>Gli account utenti definiscono gli utenti e il livello di autorizzazione all'utilizzo di un computer o delle risorse di rete concessi a quell'utente. È normale che in una rete ogni utente abbia un proprio account con cui vengono definiti i diritti e i permessi di accesso alle risorse. La definizione degli utenti SAMBA nel server Ubuntu avviene tramite l'uso di <application>smbpasswd</application>. Per esempio, per aggiungere un utente SAMBA al server Ubuntu, assegnandogli il nome <emphasis role="italic">jseinfeld</emphasis>, da terminale digitare:</para>
                  <para>
 <screen>
-<command>smbpasswd -a rbenigni</command>
+<command>smbpasswd -a jsenfield</command>
 </screen>
                  </para>
-              <para>L'applicazione <application>smbpasswd</application> chiederà tramite il prompt di creare una password per l'utente:</para>
+              <para>L'applicazione <application>smbpasswd</application> chiederà di inserire una password per l'utente:</para>
                  <para>
                     <computeroutput>
                     Nuova password SMB:
@@ -589,50 +552,23 @@ man smbclient
                <para>Confermata la nuova password, <application>smbpasswd</application> aggiungerà una nuova voce per l'utente nel file delle password di SAMBA.</para>
         </sect3>
         <sect3 id="windows-networking-groups" status="complete">
-          <title>Groups</title>
-            <para>
-              Groups define a collection of computers or users which have a common level of access to particular network resources and offer a level
-              of granularity in controlling access to such resources.  For example, if a group <emphasis role="italic">qa</emphasis> is defined and contains the users
-              <emphasis role="italic">freda</emphasis>, <emphasis role="italic">danika</emphasis>, and <emphasis role="italic">rob</emphasis> and a second group
-              <emphasis role="italic">support</emphasis> is defined and consists of users <emphasis role="italic">danika</emphasis>, <emphasis role="italic">jeremy</emphasis>,
-              and <emphasis role="italic">vincent</emphasis> then  certain network resources configured to allow access by the <emphasis role="italic">qa</emphasis>
-              group will subsequently enable access by freda, danika, and rob, but not jeremy or vincent.  Since the user <emphasis role="italic">danika</emphasis>
-              belongs to both the <emphasis role="italic">qa</emphasis> and <emphasis role="italic">support</emphasis> groups, she will be able to access resources
-              configured for access by both groups, whereas all other users will have only access to resources explicitly allowing the group they are
-              part of.
-            </para>
-            <para>Nella definizione dei gruppi nel file di configurazione di SAMBA, <filename>/etc/samba/smb.conf</filename>, è necessario far precedere il nome del gruppo dal simbolo «@». Se, ad esempio, l'utente desiderasse definire un gruppo chiamato <emphasis role="italic">sysadmin</emphasis> in una certa sezione del file <filename>/etc/samba/smb.conf</filename>, dovrebbe nominare il grippo: 
-<emphasis role="bold">@sysadmin</emphasis>.</para>
+          <title>Gruppi</title>
+            <para>I gruppi definiscono un insieme di computer e utenti che godono dei medesimi privilegi di accesso alle risorse condivise. I gruppi offrono un alto livello di controllo degli accessi alle risorse. Per esempio, se il gruppo <emphasis role="italic">qa</emphasis> contiene gli utenti <emphasis role="italic">freda</emphasis>, <emphasis role="italic">danika</emphasis> e <emphasis role="italic">rob</emphasis> e viene definito il secondo gruppo <emphasis role="italic">support</emphasis> che contiene gli utenti <emphasis role="italic">danika</emphasis>, <emphasis role="italic">jeremy</emphasis> e <emphasis role="italic">vincent</emphasis>, allora alcune risorse di rete impostate per concedere l'accesso al gruppo <emphasis role="italic">qa</emphasis> concedono automaticamente l'accesso anche agli utenti freda, danika e rob, mentre lo negano a jeremy o vincent. Dal momento che l'utente <emphasis role="italic">danika</emphasis> è membro di entrambi i gruppi <emphasis role="italic">qa</emphasis> e <emphasis role="italic">support</emphasis> potrà accedere a tutte le risorse condivise il cui accesso è stato concesso a entrambi i gruppi, gli altri utenti avranno accesso alle risorse esplicitamente assegnate al gruppo di appartenenza.</para>
+            <para>Nella definizione dei gruppi nel file di configurazione di SAMBA <filename>/etc/samba/smb.conf</filename>, è necessario far precedere il nome del gruppo dal simbolo «@». Per definire un gruppo chiamato <emphasis role="italic">sysadmin</emphasis> in una certa sezione del file <filename>/etc/samba/smb.conf</filename> bisogna inserire il nome del gruppo come <emphasis role="bold">@sysadmin</emphasis>.</para>
         </sect3>
         <sect3 id="group-policy" status="complete">
-          <title>Group Policy</title>
-            <para>
-              Group Policy defines certain SAMBA configuration settings pertaining to the Domain or Workgroup computer accounts belong to, and other
-              global settings for the SAMBA server. For example, if the SAMBA server belongs to a Workgroup of Windows computers called
-              <emphasis role="italic">LEVELONE</emphasis>, then the <filename>/etc/samba/smb.conf</filename> could be edited, and the following value changed
-              accordingly:
-            </para>
+          <title>Politiche di gruppo</title>
+            <para>Le politiche di gruppo definiscono alcuni parametri della configurazione di SAMBA relativi al Dominio o al Gruppo di lavoro a cui appartengono degli account e ad altri parametri globali di configurazione del server di SAMBA. Se, per esempio, un server SAMBA appartiene a un Gruppo di lavoro Windows denominato <emphasis role="italic">LEVELONE</emphasis>, il file <filename>/etc/samba/smb.conf</filename> può essere modificato con il valore seguente:</para>
                <para>
                <emphasis role="bold">workgroup = LEVELONE</emphasis>
                </para>
-            <para>Affiché le modifiche abbiano effetto bisogna riavviare il demone SAMBA.</para>
-            <para>Altri importanti parametri di configurazione includono <emphasis role="italic">server string</emphasis> che definisce il nome del server NETBIOS dichiarato dal sistema Ubuntu alle altre macchine della rete basate sul sistema Windows. Questo è il nome del vostro sistema Ubuntu riconosciuto dai client Windows e dagli altri computer in grado di navigare con il protocollo SMB. È possibile specificare il nome e la posizione del file di log del server SAMBA utilizzando la direttiva <emphasis role="italic">log file</emphasis> all'interno del file <filename>/etc/samba/smb.conf</filename>.</para>
-            <para>
-            Some of the additional directives governing global group policy include specification of the global nature of all shared resources.  For
-            example, placing certain directives under the <emphasis role="italic">[global]</emphasis> heading of the <filename>/etc/samba/smb.conf</filename> 
-            file will affect all shared resources unless an overriding directive is placed under a particular shared resource heading.  You
-            specify all shares are browseable by all clients on the network by placing a  
-            <emphasis role="italic">browseable</emphasis> directive, which takes a Boolean argument, under the
-            <emphasis role="italic">[global]</emphasis> heading in the <filename>/etc/samba/smb.conf</filename>.  That is, if you edit the file and add the line:
-            </para>
+            <para>Riavviare il demone SAMBA affiché le modifiche abbiano effetto.</para>
+            <para>Altri importanti parametri di configurazione includono <emphasis role="italic">server string</emphasis> che definisce il nome del server NETBIOS dichiarato dal sistema Ubuntu alle altre macchine della rete Windows. Questo è il nome del sistema Ubuntu riconosciuto dai client Windows e dagli altri computer in grado di navigare con il protocollo SMB. È possibile specificare il nome e la posizione del file di log del server SAMBA utilizzando la direttiva <emphasis role="italic">log file</emphasis> all'interno del file <filename>/etc/samba/smb.conf</filename>.</para>
+            <para>Alcune delle direttive che governano le politiche globali del gruppo includono dettagli della natura globale delle risorse condivise. Per esempio, inserendo alcune direttive al di sotto della sezione <emphasis role="italic">[global]</emphasis> nel file <filename>/etc/samba/smb.conf</filename>, queste influenzeranno tutte le relative risorse condivise fino a quando un'altra direttiva primaria non ne annulli l'effetto. È quindi possibile stabilire che tutte le risorse siano esplorabili dai client della rete collocando una direttiva <emphasis role="italic">browseable</emphasis>, che prevede un argomento booleano, sotto l'intestazione <emphasis role="italic">[global]</emphasis> del file <filename>/etc/samba/smb.conf</filename>. Quindi aggiungendo la riga:</para>
             <para>
             <emphasis role="bold">browseable = true</emphasis>
             </para>
-            <para>
-            under the <emphasis role="italic">[global]</emphasis> section of <filename>/etc/samba/smb.conf</filename>, then all shares provided by
-            your Ubuntu system via SAMBA will be browseable by all authorized clients, unless a specific share contains a 
-            <emphasis role="italic">browseable = false</emphasis> directive, which will override the global directive.
-            </para>
+            <para>sotto la sezione <emphasis role="italic">[global]</emphasis> del file <filename>/etc/samba/smb.conf</filename>, tutte la risorse condivisibili, fornite dal sistema Ubuntu attraverso SAMBA, saranno esplorabili dai client autorizzati, a meno che una specifica risorsa non contenga una direttiva <emphasis role="italic">browseable = false</emphasis> che scavalca le disposizioni impartite dalla direttiva globale.</para>
             <para>Altri esempi di direttive che operano in maniera simile alla precedente sono <emphasis role="italic">public</emphasis> e <emphasis role="italic">writeable</emphasis>. La direttiva <emphasis role="italic">public</emphasis> accetta un valore booleano per decidere se una particolare risorsa condivisa sia visibile a tutti i client autorizzati. Anche la direttiva <emphasis role="italic">writeable</emphasis> accetta un valore booleano per decidere se una particolare risorsa condivisa possa essere modificata o meno dai client della rete.</para>
         </sect3>
       </sect2>

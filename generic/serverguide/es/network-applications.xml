@@ -645,48 +645,17 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
                 </sect2>
             <sect2 id="vsftpd-ftp-server-configuration" status="complete">
                 <title>vsftpd - Configuración del Servidor FTP</title>
-                <para>
-                You can edit the vsftpd configuration file,
-                <filename>/etc/vsftpd.conf</filename>, to
-                change the default settings.
-
-                By default only anonymous FTP is
-                allowed. If you wish to disable this option, you
-                should change the following line:
-<programlisting>
+                <para>Puede editar el archivo de configuración de vsftpd, <filename>/etc/vsftpd.conf</filename>, para cambiar las opciones por omisión. De forma predeterminada, sólo se permiten los accesos FTP anónimos. Si desea desactivar esta opción, debe cambiar la siguiente línea: <programlisting>
 anonymous_enable=YES
-</programlisting>
-                to
-<programlisting>
+</programlisting> a <programlisting>
 anonymous_enable=NO
-</programlisting>
-                By default, local system users are not allowed to
-                login to FTP server. To change this setting, you
-                should uncomment the following line:
-<programlisting>
+</programlisting>. De forma predeterminada, los usuarios locales del sistema no pueden iniciar una sesión al servidor FTP. Para cambiar esto, debe descomentar la siguiente línea: <programlisting>
 #local_enable=YES
-</programlisting>
-                By default, users are allowed to download files
-                from FTP server. They are not allowed to upload
-                files to FTP server. To change this setting, you
-                should uncomment the following line:
-<programlisting>
+</programlisting> De forma predeterminada, los usuarios pueden descargar archivos desde el servidor FTP. Sin embargo, no pueden subir archivos al servidor FTP. Para cambiar esto, debe descomentar la siguiente línea: <programlisting>
 #write_enable=YES
-</programlisting>
-                Similarly, by default, the anonymous users are not
-                allowed to upload files to FTP server. To change
-                this setting, you should uncomment the following
-                line:
-<programlisting>
+</programlisting> Del mismo modo, de forma predeterminada, los usuarios anónimos no pueden subir archivos al servidor FTP. Para cambiar esta opción, debe descomentar la siguiente línea: <programlisting>
 #anon_upload_enable=YES
-</programlisting>
-                The configuration file consists of many
-                configuration parameters. The information about
-                each parameter is available in the configuration
-                file. Alternatively, you can refer to the man
-                page, <command>man 5 vsftpd.conf</command> for
-                details of each parameter. 
-                </para>
+</programlisting> El archivo de configuración consta de muchos parámetros de configuración. La información sobre cada parámetro se encuentra disponible en el archivo de configuración. Además, puede consultar la página del manual, <command>man 5 vsftpd.conf</command>, para conocer más detalles sobre cada parámetro.</para>
                 <para>Una vez que haya configurado <application>vsftpd</application> puede ejecutar el demonio. Puede ejecutar el siguiente comando para lanzar el demonio <application>vsftpd</application> : <screen> <command>sudo /etc/init.d/vsftpd start</command> </screen></para>
 				<note><para>Por favor note que las configuración por defecto del archivo de configuración estan así por razones de seguridad. Cada uno de los cambios de arriba hacen el sistema un poco menos seguro, por lo tanto haga estos cambios solo si son necesarios.</para></note>
                 </sect2>
@@ -945,15 +914,7 @@ include "/etc/bind/named.conf.local";
 
           <para>El fichero llamado <filename>/etc/bind/db.root</filename> describe los servidores de nombres raiz en el mundo. Los servidores cambian con el tiempo y deben de ser mantenidos.</para>
 
-          <para>
-          The <application>zone</application> section defines a master
-          server, and it is stored in a file mentioned against file tag.
-          Every zone file contains 3 resource records (RRs): an SOA RR, an
-          NS RR and a PTR RR. SOA is short of Start of Authority. The
-          "@" is a special notation meaning the origin. NS is the Name
-          Server RR. PTR is Domain Name Pointer.  To start the DNS server,
-          run the following command from a terminal prompt: 
-           </para>
+          <para>La sección <application>zone</application> define un servidor maestro, y se almacena en un archivo mencionado en la etiqueta file. Cada archivo de zona contiene tres registros de recurso (RRs): un RR SOA, un RR NS y un RR PTR. SOA viene de Start of Authority («Inicio de autoridad»). La «@» es una notación especial que significa el origen. NS es el RR para el Servidor de Nombres. PTR es el Domain Name Pointer («Puntero al nombre de dominio»). Para arrancar el servidor DNS, ejecute la siguiente orden desde la línea de órdenes de una terminal:</para>
            <para>
 <screen>
 <command>sudo /etc/init.d/bind start</command>
@@ -997,15 +958,7 @@ include "/etc/bind/named.conf.local";
                </para>
           <itemizedlist>
                 <listitem>
-                <para>
-                <emphasis role="bold">ServerAdmin</emphasis>: To configure the email 
-				address of the designated administrator of the CUPS server, simply 
-				edit the <filename>/etc/cups/cupsd.conf</filename> configuration file 
-				with your preferred text editor, and modify the <emphasis role="italics">ServerAdmin</emphasis> line accordingly.  For example, 
-				if you are the Administrator for the CUPS server, and your e-mail 
-				address is 'bjoy@somebigco.com', then you would modify the ServerAdmin 
-				line to appear as such:
-                </para>
+                <para><emphasis role="bold">ServerAdmin</emphasis>: Para configurar la dirección de correo del administrador del servidor CUPS, simplemente edite el archivo de configuración <filename>/etc/cups/cupsd.conf</filename> con su editor de textos favorito, y modifique adecuadamente la línea <emphasis role="italics">ServerAdmin</emphasis>. Por ejemplo, si usted es el administrador del servidor CUPS, y su dirección de correo electrónico es  «bjoy@somebigco.com», entonces podría modificar la línea ServerAdmin para que tenga el siguiente aspecto:</para>
                 <para>
 <screen>
 ServerAdmin bjoy@somebigco.com
@@ -1090,50 +1043,13 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces
 
              <itemizedlist>
 
-             <listitem><para>
-             Apache2 ships with a virtual-host-friendly default configuration.
-			 That is, it is configured with a single default virtual host (using
-			 the <emphasis>VirtualHost</emphasis> directive) which can modified or used as-is if you
-			 have a single site, or used as a template for additional virtual hosts
-			 if you have multiple sites.  If left alone, the default virtual host
-			 will serve as your default site, or the site users will see if the
-			 URL they enter does not match the <emphasis>ServerName</emphasis> directive of any of your 
-			 custom sites.  To modify the default virtual host, edit the file
-			 <filename>/etc/apache2/sites-available/default</filename>.  If you
-			 wish to configure a new virtual host or site, copy that file into the
-			 same directory with a name you choose.  For example,
-			 <command>sudo cp /etc/apache2/sites-available/default /etc/apache2/sites-available/mynewsite</command>
-			 Edit the new file to configure the new site using some of the directives
-			 described below.
-            </para></listitem>
+             <listitem><para>Apache2 trae una configuración predeterminada preparada para  servidores virtuales. Viene configurado con un único servidor virtual predeterminado (usando la directiva <emphasis>VirtualHost</emphasis>) que se puede modificar, o dejarlo tal cual si sólo tiene un único sitio web, o usarlo como plantilla para servidores virtuales adicionales si tiene varios sitios web. Si se deja solo, el servidor virtual predeterminado funcionará como su servidor predeterminado, o los usuarios del sitio web verán si la URL que introducen no concuerda con la directiva <emphasis>ServerName</emphasis> de cualquiera de sus sitios personalizados. Para modificar el servidor virtual predeterminado, edite el archivo <filename>/etc/apache2/sites-available/default</filename>. Si desea configurar un nuevo servidor o sitio virtual, copie ese archivo dentro del mismo directorio con el nombre que haya elegido. Por ejemplo, <command>sudo cp /etc/apache2/sites-available/default /etc/apache2/sites-available/minuevositio</command> Edite el nuevo archivo para configurar el nuevo sitio usando algunas de las directivas que se describen a continuación.</para></listitem>
 
              <listitem><para>La directiva <emphasis>ServerAdmin</emphasis> especifica la dirección de correo del administrador del servidor. El valor por omisión es webmaster@localhost. Cambie esta dirección por alguna a la que le puedan llegar los mensajes que se le envíen (si ud. es el administrador del servicio). Si su sitio web tiene algún problema, Apache2 mostrará un mensaje de error con en la que aparecerá esta dirección de correo para que la gente pueda enviar un informe del error. La directiva se encuentra en el fichero de configuración de su sitio en /etc/apache2/sites-available.</para></listitem>
 
-             <listitem><para>
-             The <emphasis>Listen</emphasis> directive specifies the port, and optionally the IP address,
-			 Apache2 should listen on. If the IP address is not specified, Apache2
-			 will listen on all IP addresses assigned to the machine it runs on.
-			 The default value for the Listen directive is 80.  Change this to
-			 127.0.0.1:80 to cause Apache2 to listen only on your loopback interface
-			 so that it will not be available to the Internet, to (for example) 81
-			 to change the port that it listens on, or leave it as is for normal
-			 operation.  This directive can be found and changed in its own file,
-			 <filename>/etc/apache2/ports.conf</filename>
-             </para></listitem>
+             <listitem><para>La directiva <emphasis>Listen</emphasis> especifica el puerto (y, opcionalmente, la dirección IP) por el que escuchará Apache2. Si no se especifica la dirección IP, Apache2 escuchará por todas las direcciones IP asignadas a la máquina en la que se ejecute. El valor predeterminado de la directiva Listen es 80. Cambiarlo a 127.0.0.1:80 provoca que Apache2 sólo escuche por su dispositivo loopback, de forma que no estará disponible para Internet. Cámbielo a 81 (por ejemplo) para cambiar el puerto por el que escucha, o déjelo tal cual para que funcione normalmente. La directiva se puede encontrar y cambiar en su propio archivo de configuración, <filename>/etc/apache2/ports.conf</filename>.</para></listitem>
 
-			 <listitem><para>
-			 The <emphasis>ServerName</emphasis> directive is optional and specifies what FQDN your
-			 site should answer to.  The default virtual host has no ServerName
-			 directive specified, so it will respond to all requests that do not
-			 match a ServerName directive in another virtual host.  If you have
-			 just acquired the domain name ubunturocks.com and wish to host it on
-			 your Ubuntu server, the value of the ServerName directive in your
-			 virtual host configuration file should be ubunturocks.com.  Add this
-			 directive to the new virtual host file you created earlier 
-			 (<filename>/etc/apache2/sites-available/mynewsite</filename>).
-			 
-			 <tip><para>También puede desear que su sitio responda a www.ubunturocks.com, ya que muchos usuarios asumen que el prefijo www es apropiado. Para ello, use la directiva <emphasis>ServerAlias</emphasis>. Puede usar comodines en la directiva ServerAlias. Por ejemplo, <command>ServerAlias *.ubunturocks.com</command> hará que su sitio responda a cualquier solicitud de dominio que termine en .ubunturocks.com.</para></tip>
-			 </para></listitem>
+			 <listitem><para>La directiva <emphasis>ServerName</emphasis> es opcional, y especifica con cuál FQDN (Full Qualified Domain Name, Nombre de Dominio Totalmente Cualificado) responderá su sitio web. El servidor virtual predeterminado no especifica ninguna directiva ServerName, por lo que responderá a todas las peticiones que no se ajusten a ninguna directiva ServerName en otro servidor virtual. Si acaba de adquirir el dominio ubuntumola.com, y desea asociar a él su servidor Ubuntu, el valor de la directiva ServerName en el archivo de configuración de su servidor virtual debería ser ubuntumola.com. Añada esta directiva al nuevo archivo de configuración virtual que creó previamente <filename>/etc/apache2/sites-available/minuevositio</filename>). <tip><para>También puede desear que su sitio responda a www.ubunturocks.com, ya que muchos usuarios asumen que el prefijo www es apropiado. Para ello, use la directiva <emphasis>ServerAlias</emphasis>. Puede usar comodines en la directiva ServerAlias. Por ejemplo, <command>ServerAlias *.ubunturocks.com</command> hará que su sitio responda a cualquier solicitud de dominio que termine en .ubunturocks.com.</para></tip></para></listitem>
 
 			 <listitem><para>La directiva <emphasis>DocumentRoot</emphasis> especifica dónde debe buscar Apache los archivos que forman el sitio. El valor predeterminado es /var/www. No hay ningún sitio configurado allí, pero si descomenta la directiva <emphasis>RedirectMatch</emphasis> en <filename>/etc/apache2/apache2.conf</filename>, las peticiones se redirigirán a /var/www/apache2-default, que es donde reside el sitio predeterminado de Apache2. Cambie este valor en el archivo de host virtual de su sitio, y recuerde crear ese directorio si fuese necesario.</para></listitem>
             </itemizedlist>
@@ -1149,57 +1065,18 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces
             <listitem>
             <para>El <emphasis>DirectoryIndex</emphasis> es la página servida por defecto por el servidor cuando un usuario solicita el índice de un directorio añadiendo la barra de división (/) al final del nombre del directorio.</para>
 
-             <para>For example, when a user requests the page
-             http://www.example.com/this_directory/, he or she will
-             get either the DirectoryIndex page if it exists, a
-             server-generated directory list if it does not and the
-			 Indexes option is specified, or a Permission Denied page
-			 if neither is true.  The server will try to
-             find one of the files listed in the DirectoryIndex
-             directive and will return the first one it finds. If it
-             does not find any of these files and if Options Indexes is
-             set for that directory, the server will generate and
-             return a list, in HTML format, of the subdirectories and
-             files in the directory.  The default value, found in
-			 <filename>/etc/apache2/apache2.conf</filename> is "
-			 index.html index.cgi index.pl index.php index.xhtml".
-			 Thus, if Apache2 finds a file in a requested directory
-			 matching any of these names, the first will be displayed.
-            </para>
+             <para>Por ejemplo, cuando un usuario solicite la página http://www.ejemplo.com/este_directorio/, él o ella obtendrá la página DirectoryIndex si existe, un listado de directorio generado por el servidor si no existe pero tiene especificada la opción Indexes, o una página Permiso Denegado si no se cumplen ninguna de las condiciones anteriores. El servidor intentará buscar uno de los archivos listados en la directiva DirectoryIndex y devolverá el primero que encuentre. Si no encuentra ninguno de esos archivos, y está establecida la opción Options Indexes para ese directorio, el servidor generará y devolverá una lista, en formato HTML, de los subdirectorios y archivos del directorio. El valor predeterminado, almacenado en <filename>/etc/apache2/apache2.conf</filename>, es «index.html index.cgi index.pl index.php index.xhtml». Por tanto, si Apache2 encuentra un archivo en un directorio solicitado que se ajusta a alguno de esos nombres, se mostrará el primero de todos.
+
+page if it exists, a server-generated directory list if it does not and the Indexes option is specified, or a Permission Denied page if neither is true. The server will try to find one of the files listed in the DirectoryIndex directive and will return the first one it finds. If it does not find any of these files and if Options Indexes is set for that directory, the server will generate and return a list, in HTML format, of the subdirectories and files in the directory. The default value, found in <filename>/etc/apache2/apache2.conf</filename> is " index.html index.cgi index.pl index.php index.xhtml". Thus, if Apache2 finds a file in a requested directory matching any of these names, the first will be displayed.</para>
             </listitem>
 
             <listitem>
-            <para>
-             The <emphasis>ErrorDocument</emphasis> directive allows you to specify a file
-			 for Apache to use for specific error events.  For example,
-			 if a user requests a resource that does not exist, a 404
-			 error will occur, and per Apache2's default configuration,
-			 the file <filename>/usr/share/apache2/error/HTTP_NOT_FOUND.html.var
-			 </filename> will be displayed.  That file is not in the
-			 server's DocumentRoot, but there is an Alias directive in
-			 <filename>/etc/apache2/apache2.conf</filename> that redirects
-			 requests to the /error directory to /usr/share/apache2/error/.
-			 To see a list of the default ErrorDocument directives, use this
-			 command:
-			 <command>grep ErrorDocument /etc/apache2/apache2.conf</command>
-            </para>
+            <para>La directiva <emphasis>ErrorDocument</emphasis> le permite especificar un archivo que usará Apache2 para los eventos de error específicos. Por ejemplo, si un usuario solicita un recurso que no existe, se producirá un error 404, y (en base a la configuración predeterminada de Apache2), se mostrará el archivo <filename>/usr/share/apache2/error/HTTP_NOT_FOUND.html.var </filename>. Ese archivo no está en el DocumentRoot del servidor, sino que existe una directiva Alias en <filename>/etc/apache2/apache2.conf</filename> que redirige hacia /usr/share/apache2/error/ las solicitudes dirigidas al directorio /error. Para ver una lista de las directivas ErrorDocument predeterminadas, use la orden: <command>grep ErrorDocument /etc/apache2/apache2.conf</command></para>
             </listitem>
 
 
             <listitem>
-            <para>
-             By default, the server writes the transfer log to the file
-             /var/log/apache2/access.log. You can change this on a per-site
-			 basis in your virtual host configuration files with the <emphasis>CustomLog</emphasis>
-			 directive, or omit it to accept the default, specified in <filename>
-			 /etc/apache2/apache2.conf</filename>.  You may also specify the file
-			 to which errors are logged, via the <emphasis>ErrorLog</emphasis> directive, whose default
-			 is <filename>/var/log/apache2/error.log</filename>.  These are kept
-			 separate from the transfer logs to aid in troubleshooting problems
-			 with your Apache2 server.  You may also specify the <emphasis>LogLevel</emphasis> (the
-			 default value is "warn") and the <emphasis>LogFormat</emphasis> (see <filename>
-			 /etc/apache2/apache2.conf</filename> for the default value).
-			 </para>
+            <para>De forma predeterminada, el servidor escribe los registros de las transferencias en el archivo /var/log/apache2/access.log. Puede cambiar esto sitio a sitio en los archivos de configuración de su servidor virtual con la directiva <emphasis>CustomLog</emphasis>, o también puede omitirla para aceptar la opción predeterminada, especificada en <filename> /etc/apache2/apache2.conf</filename>. También puede especificar el archivo en el que se registrarán los errores, por medio de la directiva <emphasis>ErrorLog</emphasis>, cuyo valor predeterminado es <filename>/var/log/apache2/error.log</filename>. Estos se mantienen separados de los registros de transferencias para ayudar en la resolución de problemas con su servidor Apache2. También puede especificar la directiva <emphasis>LogFormat</emphasis> (consulte en <filename>/etc/apache2/apache2.conf</filename> su valor predeterminado).</para>
             </listitem>
 
             <listitem>
@@ -1218,17 +1095,10 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces
                     <para><emphasis role="bold">IncludesNOEXEC</emphasis> - Permite «server-side includes», pero deshabilita los #exec y #include en los scripts CGI.</para>
                 </listitem>
                 <listitem>
-                    <para><emphasis role="bold">Indexes</emphasis> - Muestra una lista formateada del contenido de los directorios, si no existe el DirectoryIndex (como el index.html) en el directorio solicitado. <caution><para>For security reasons, this should usually not be set, and certainly
-					should not be set on your DocumentRoot directory.  Enable this option carefully on
-					a per-directory basis only if you are certain you want users to see the entire
-					contents of the directory.</para></caution></para>
+                    <para><emphasis role="bold">Indexes</emphasis> - Muestra una lista formateada del contenido de los directorios, si no existe el DirectoryIndex (como el index.html) en el directorio solicitado. <caution><para>Por razones de seguridad, esto no debería establecerse, y desde luego no en el directorio indicado por DocumentRoot. Habilite esta opción con cuidado (y sólo para ciertos directorios) sólo si esta seguro de querer que los usuarios vean todo el contenido del directorio.</para></caution></para>
                 </listitem>
                 <listitem>
-                    <para>
-                    <emphasis role="bold">Multiview</emphasis> - Support content-negotiated multiviews;
-                    this option is disabled by default for security reasons.  See the <ulink url="http://httpd.apache.org/docs/2.0/mod/mod_negotiation.html#multiviews">Apache2
-					documentation on this option</ulink>.
-                    </para>
+                    <para><emphasis role="bold">Vistas múltiples</emphasis> - Soporte para vistas múltiples negociadas por contenido; esta opción está desactivada de forma predeterminada por motivos de seguridad. Consulte la <ulink url="http://httpd.apache.org/docs/2.0/mod/mod_negotiation.html#multiviews">documentación de Apache2 sobre esta opción</ulink>.</para>
                 </listitem>
                 <listitem>
                     <para><emphasis role="bold">SymLinksIfOwnerMatch</emphasis> - Solo seguirá enlaces simbólicos si el directorio de destino es del mismo usuario que el enlace.</para>
@@ -1241,21 +1111,9 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces
         <sect3 id="virtual-hosts-settings" status="complete">
 
           <title>Configuración de Servidores Virtuales</title>
-            <para>
-			Virtual hosts allow you to run different servers for different IP addresses, different host 
-			names, or different ports on the same machine. For example, you can run the website for 
-			http://www.example.com and http://www.anotherexample.com on the same Web server using virtual 
-			hosts. This option corresponds to the &lt;VirtualHost&gt; directive for the default virtual 
-			host and IP-based virtual hosts. It corresponds to the &lt;NameVirtualHost&gt; directive for 
-			a name-based virtual host.
-			</para>
+            <para>Los servidores virtuales le permiten ejecutar, en la misma máquina, diferentes servidores para diferentes direcciones IP, diferentes nombres de máquina o diferentes puertos. Por ejemplo, puede tener los sitios web http://www.ejemplo.com y http://www.otroejemplo.com en el mismo servidor web usando servidores virtuales.  Esta opción corresponde a la directiva &lt;VirtualHost&gt; para el servidor virtual predeterminado y para los servidores virtuales basados en IP. Corresponde a la directiva &lt;NameVirtualHost&gt; para un servidor virtual basado en el nombre.</para>
 
-			<para>
-			The directives set for a virtual host only apply to that particular virtual host. If a 
-			directive is set server-wide and not defined within the virtual host settings, the default 
-			setting is used. For example, you can define a Webmaster email address and not define 
-			individual email addresses for each virtual host. 
-    		</para>
+			<para>El conjunto de directivas para un servidor virtual sólo se aplican a un servidor virtual particular. Si una directiva se establece a nivel del servidor completo y no se define dentro de las opciones del servidor virtual, entonces se usarán las opciones predeterminadas. Por ejemplo, puede definir una dirección de correo electrónico para el webmaster y no definir direcciones de correo individuales para cada servidor virtual.</para>
  
  			<para>Establezca la directiva DocumentRoot apuntando al directorio que contenga el documento raíz (como el index.html) para el host virtual. El DocumentRoot por defecto es <filename>/var/www</filename>.</para>
 
@@ -1265,20 +1123,11 @@ Port 631 # Escuchando en el puerto 631 en todos los interfaces
         <sect3 id="server-settings" status="complete">
           <title>Configuración del Servidor</title>
             <para>Esta sección explica como configurar básicamente un servidor.</para>
-                    <para><emphasis role="bold">LockFile</emphasis> - The LockFile directive sets the path 
-					to the lockfile used when the server is compiled with either USE_FCNTL_SERIALIZED_ACCEPT 
-					or USE_FLOCK_SERIALIZED_ACCEPT. It must be stored on the local disk. It should be left 
-					to the default value unless the logs directory is located on an NFS share. If this is 
-					the case, the default value should be changed to a location on the local disk and to a 
-					directory that is readable only by root. </para>
+                    <para><emphasis role="bold">LockFile</emphasis> - La directiva LockFile establece la ruta al archivo de bloqueo usado cuando el servidor se compila con la opción USE_FCNTL_SERIALIZED_ACCEPT o USE_FLOCK_SERIALIZED_ACCEPT. Debe almacenarse en el disco local. Debe dejarse a su valor predeterminado, a menos que el directorio de registros esté ubicado en un directorio NFS compartido. Si es éste el caso, debería cambiarse el valor predeterminado a una ubicación en el disco local y a un directorio en el que sólo tenga permisos de lectura el usuario «root» .</para>
 
-					<para><emphasis role="bold">PidFile</emphasis> - The PidFile directive sets the file in which the server 
-					records its process ID (pid). This file should only be readable by root. In most cases, it should be left 
-					to the default value.</para>
+					<para><emphasis role="bold">PidFile</emphasis> - La directiva PidFile establece el archivo en el que el servidor registrará su identificador de proceso (pid). Sobre este archivo sólo debe tener permisos de lectura el usuario «root». En la mayoría de los casos, debería dejarse a su valor predeterminado.</para>
 
-<para><emphasis role="bold">User</emphasis> - The User directive sets the userid used by the server to answer requests. This 
-setting determines the server's access. Any files inaccessible to this user will also be inaccessible to your website's visitors. 
-The default value for User is www-data.  </para>
+<para><emphasis role="bold">User</emphasis> - La directiva User establece el identificador de usuario utilizado por el srevidor para responder a las peticiones. Esta opción determina el acceso de servidor. Todos los archivos inaccesibles para este usuario serán también inaccesibles para los visitantes de su sitio web. El valor predeterminado para User es «www-data».</para>
             <warning>
             <para>Hasta que no sepa exactamente lo que esta haciendo, no ponga en la directiva User al root. Usar el root como usuario puede crear grandes agujeros de seguridad en su servidor Web.</para>
             </warning>
@@ -1425,13 +1274,7 @@ Enter pass phrase for server.key:↵
 <command>sudo cp server.key /etc/ssl/private</command>
 </screen>
             </para>
-            <para>
-            You should add the following four lines to the
-            <filename>/etc/apache2/sites-available/default</filename>
-            file or the configuration file for your secure virtual
-			host. You should place them in the <emphasis>VirtualHost</emphasis> section. They
-            should be placed under the <emphasis>DocumentRoot</emphasis> line:
-            </para>
+            <para>Debería añadir las siguientes cuatro líneas al archivo <filename>/etc/apache2/sites-available/default</filename> o bien al archivo de configuración de su servidor virtual seguro. Debe colocarlas en la sección <emphasis>VirtualHost</emphasis>, bajo la línea <emphasis>DocumentRoot</emphasis>:</para>
 <programlisting>
 ↵
 SSLEngine on↵
@@ -1544,15 +1387,12 @@ Listen 443↵
     </sect1>
 	<sect1 id="version-control-system" status="complete">
 		<title>Sistema de Control de Versiones</title>
-          <para>
-Version control is the art of managing changes to information. It has long been a critical tool for programmers, who typically spend their time making small changes to software and then undoing those changes the next day. But the usefulness of version control software extends far beyond the bounds of the software development world. Anywhere you can find people using computers to manage information that changes often, there is room for version control.</para>
+          <para>El control de versiones es el arte de administrar los cambios de la información. Ha sido siempre una herramienta crítica para los programadores, quienes habitualmente gastan su tiempo en hacer pequeños cambios al software y posteriormente deshacer esos cambios al día siguiente. Pero la utilidad del software de control de versiones sobrepasa los límites del mundo del desarrollo de software. En cualquier lugar donde pueda encontrarse gente usando computadores para gestionar información que cambie a menudo, habrá sitio para el control de versiones.</para>
 <para>
           </para>
       <sect2 id="subversion" status="complete">
         <title>Subversion</title>
-          <para>
-Subversion is an open source version control system. Using Subversion, you can record the history of source files and documents. It manages files and directories over time. A tree of files is placed into a central repository. The repository is much like an ordinary file server, except that it remembers every change ever made to files and directories.
-          </para>
+          <para>Subversion es un sistema de control de versiones open source. Mediante Subversion, puede registrar la historia de archivos de código fuente y documentos. Gestiona archivos y directorios a través del tiempo. Se coloca un árbol de archivos en un repositorio central. El repositorio es como un servidor de archivos ordinario, excepto en que recuerda todos los cambios que se realizan sobre los archivos y los directorios que contiene.</para>
         <sect3 id="subversion-installation" status="complete">
           <title>Instalación</title>
             <para>Para acceder a un repositorio de Subversion mediante el protocolo HTTP, debe instalar y configurar un servidor web. Apache2 ha demostrado funcionar bien con Subversion (para instalar y configurar Apache2, consulte la sub-sección HTTP de la sección de Apache2). Para acceder al repositorio de Subversion repository mediante el protocolo HTTPS, debe instalar y configurar un certificado digital en su servidor web Apache 2 (para ello, consulte la sub-sección HTTPS de la sección de Apache2).</para>
@@ -1581,10 +1421,7 @@ Subversion is an open source version control system. Using Subversion, you can r
         </sect3>
         <sect3 id="access-methods" status="complete">
           <title>Métodos de Acceso</title>
-<para>Subversion repositories can be accessed (checked out) through many 
-different methods --on local disk, or through various network protocols. 
-A repository location, however, is always a URL. The table describes how 
-different URL schemas map to the available access methods.</para>
+<para>Se puede acceder («check out») a los repositorios de Subversion a través de muchos métodos diferentes --en un disco local, o a través de varios protocolos de red. Una ubicación dentro del repositorio, sin embargo, es siempre una URL. La tabla describe cómo se corresponden diferentes esquemas de URL con los métodos de acceso disponibles.</para>
 				<table><title>Métodos de Acceso</title>
 
 					<tgroup cols="2">
@@ -1603,7 +1440,7 @@ different URL schemas map to the available access methods.</para>
 							</row>
 							<row>
 								<entry><para>http://</para></entry>
-								<entry><para>Access via WebDAV protocol to Subversion-aware Apache2 web server</para></entry>
+								<entry><para>Acceso a través del protocolo WebDAV a un servidor web Apache2 con Subversion incluido</para></entry>
 							</row>
 							<row>
 								<entry><para>https://</para></entry>
@@ -1621,17 +1458,10 @@ different URL schemas map to the available access methods.</para>
 					</tgroup>
 				</table>
 
-				<para>
-In this section, we will see how to configure Subversion for all 
-these access methods. Here, we cover the basics. For more advanced 
-usage details, refer to the <ulink url="http://svnbook.red-bean.com/">svn book</ulink>.
-				</para>
+				<para>En esta sección, veremos cómo configurar Subversion para todos esos métodos de acceso. Aquí cubrimos lo básico. Para más detalles avanzados sobre su utilización, consulte el <ulink url="http://svnbook.red-bean.com/">libro de svn</ulink>.</para>
 			<sect4 id="direct-repos-access" status="complete">
 				<title>Acceso directo al repositorio (file://)</title>
-<para> This is the simplest of all access methods. It does not 
-require any Subversion server process to be running. This access 
-method is used to access Subversion from the same machine. The 
-syntax of the command, entered at a terminal prompt, is as follows:</para>
+<para>Este es el método de acceso más sencillo. No necesita que se esté ejecutando ningún proceso de servidor Subversion. Este método de acceso se usa para acceder a Subversion desde la misma máquina. La sintaxis de la orden, introducida en la línea de órdenes de una terminal, es la siguiente:</para>
 
         <para>
 <screen>
@@ -1651,7 +1481,7 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
 			</sect4>
 			<sect4 id="access-via-webdav" status="complete">
 				<title>Acceso·via·protocolo WebDAV·(http://)</title>
-<para> To access the Subversion repository via WebDAV protocol, you must configure your Apache 2 web server. You must add the following snippet in your <filename>/etc/apache2/apache2.conf</filename> file:</para>
+<para>Para acceder al repositorio de Subversion a través del protocolo WebDAV, debe configurar su servidor web Apache2. Debe añadir lo siguiente en su archivo <filename>/etc/apache2/apache2.conf</filename>:</para>
 
 	<programlisting> &lt;Location /svn&gt;
   DAV svn
@@ -1677,115 +1507,62 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
 			</sect4>
 			<sect4 id="access-via-webdav-with-ssl" status="complete">
 				<title>Acceso vía protocolo WebDAV con encriptación SSL (https://)</title>
-					<para> 
-						Accessing Subversion repository via WebDAV protocol with SSL 
-						encryption (https://) is similar to http:// except that you 
-						must install and configure the digital certificate in your 
-						Apache2 web server.
-					</para>
+					<para>El acceso a un repositorio de Subversion por medio del protocolo WebDAV con cifrado SSL (https://) es similar al http:// excepto en que debe instalar y configurar el certificado digital en su servidor web Apache2.</para>
 
 					<para>Puede instalar un certificado digital emitido por una autoridad de certificación como Verisign. También puede instalar su propio certificado auto-firmado.</para>
-					<para>
-						This step assumes you have installed and configured a digital 
-						certificate in your Apache 2 web server. Now, to access the 
-						Subversion repository, please refer to the above section! 
-						The access methods are exactly the same, except the protocol. 
-						You must use https:// to access the Subversion repository.
-					</para>
+					<para>Este paso asume que tiene instalado y configurado un certificado digital en su servidor web Apache2. Ahora, para acceder al repositorio de Subversion, por favor, consulte la sección anterior. Los métodos de acceso son exactamente los mismos, excepto el protocolo. Debe usar https:// para acceder al repositorio de Subversion.</para>
 
 			</sect4>
 			<sect4 id="access-via-custom-protocol" status="complete">
 				<title>Acceso vía protocolo personalizado (svn://)</title>
-					<para> 
-					Once the Subversion repository is created, you can configure the 
-					access control. You can edit the <filename>
-					/path/to/repos/project/conf/svnserve.conf</filename> file to 
-					configure the access control.  For example, to set up 
-					authentication, you can uncomment the following lines in the 
-					configuration file: </para>
+					<para>Cuando se haya creado el repositorio de Subversion, podrá configurar el control de acceso. Puede editar el archivo <filename> /ruta/al/repositorio/proyecto/conf/svnserve.conf</filename> para configurar el control de acceso. Por ejemplo, para configurar la autenticación, puede descomentar las siguientes líneas en el archivo de configuración:</para>
 					<programlisting># [general]↵
 # password-db = passwd</programlisting>
 
-					<para>
-					After uncommenting the above lines, you can maintain the user 
-					list in the passwd file. So, edit the file <filename>passwd
-					</filename> in the same directory and add the new user. The 
-					syntax is as follows:
-					</para>
+					<para>Tras descomentar las líneas anteriores, podrá mantener la lista de usuarios en el archivo passwd. Para ello, edite el archivo <filename>passwd</filename> en el mismo directorio y añada el nuevo usuario. La sintaxis es la siguiente:</para>
 					<programlisting>username·=·password</programlisting>
 					<para>Para más detalles, por favor consulte el archivo.</para>
 
-					<para>
-					Now, to access Subversion via the svn:// custom protocol, either 
-					from the same machine or a different machine, you can run 
-					svnserver using svnserve command. The syntax is as follows:
-					</para>
-					<programlisting>$ svnserve -d --foreground -r /path/to/repos
-# -d -- daemon mode
-# --foreground -- run in foreground (useful for debugging)
-# -r -- root of directory to serve
-
-For more usage details, please refer to:
+					<para>Ahora, para acceder a Subversion a través del protocolo personalizado svn://, bien sea desde la misma máquina o desde otra diferente, debe ejecutar svnserver usando la orden svnserve. La sintaxis es la siguiente:</para>
+					<programlisting>$ svnserve -d --foreground -r /ruta/al/repositorio
+# -d -- modo demonio
+# --foreground -- ejecutar en primer plano (útil para depuración)
+# -r -- raíz del directorio a servir
+↵
+Para más detalles de uso, por favor, consulte:
 $ svnserve --help</programlisting>
 
-					<para>Once you run this command, Subversion starts listening on default port (3690). To access the project repository, you must run the following command from a terminal prompt: </para>
+					<para>Una vez haya ejecutado la orden, Subversion comenzará a escuchar por el puerto predeterminado (3690). Para acceder al repositorio del proyecto, deberá ejecutar la siguiente orden en la línea de órdenes de una terminal:</para>
 					<para>
 <screen>
 <command>svn co svn://hostname/project project --username user_name</command>
 </screen>
                                         </para>
-					<para>Based on server configuration, it prompts for password. Once 
-					you are authenticated, it checks out the code from Subversion 
-					repository.  To synchronize the project repository with the local 
-					copy, you can run the <command>update</command> sub-command. The 
-					syntax of the command, entered at a terminal prompt, is as follows:
-					</para>
+					<para>En función de la configuración del servidor, se le solicitará una contraseña. Cuando se haya autenticado, se recuperará («check out») el código desde el repositorio de Subversion. Para sincronizar el repositorio del proyecto con la copia local, puede ejecutar la sub-orden <command>update</command>. La sintaxis de la orden, introducida en la línea de órdenes, es la siguiente:</para>
 					<para>
 <screen>
 <command>cd project_dir ; svn update</command>
 </screen>
                                         </para>
-					<para>For more details about using each Subversion sub-command, you 
-					can refer to the manual. For example, to learn more about the co 
-					(checkout) command, please run the following command from a 
-					terminal prompt:</para>
+					<para>Para más detalles sobre cómo usar cada sub-orden de Subversion, puede consultar el manual. Por ejemplo, para aprender más sobre la orden co (checkout), ejecute la siguiente orden en la línea de órdenes de una terminal:</para>
                     <para><screen><command>svn co help</command></screen></para>
 
 			</sect4>
 			<sect4 id="access-via-custom-protocol-with-ssl" status="complete">
 				<title>Acceso vía protocolo personalizado con encriptación SSL (svn+ssh://)</title>
-					<para> The configuration and server process is same as in the
-					svn:// method. For details, please refer to the above section. 
-					This step assumes you have followed the above step and started 
-					the	Subversion server using <application>svnserve</application>  
-					command.</para>
+					<para>El proceso de configurar un servidor es el mismo que con el método svn://. Para más detalles, por favor, consulte la sección anterior. Este paso asume que ha seguido los pasos anteriores y que ha iniciado el servidor de Subversion usando la orden <application>svnserve</application>.</para>
 
-					<para>It is also assumed that the ssh server is running on that 
-					machine and that it is allowing incoming connections. To confirm, 
-					please try to login to that machine using ssh. If you can login, 
-					everything is perfect. If you cannot login, please address it 
-					before continuing further.</para>
+					<para>También asume que se está ejecutando el servidor ssh en esa máquina y que se permiten las conexiones entrantes. Para confirmarlo, por favor, intente iniciar una sesión en esa máquina usando ssh. Si puede entrar, todo está correcto. Si no puede entrar, por favor, corríjalo antes de continuar.</para>
 
-					<para>The svn+ssh:// protocol is used to access the Subversion 
-					repository using SSL encryption. The data transfer is encrypted 
-					using this method. To access the project repository (for example 
-					with a checkout), you must use the following command syntax: 
-                                        </para>
+					<para>El procotolo svn+ssh:// se utiliza para acceder al repositorio de Subversion usando el cifrado SSL. Los datos transferidos se cifran usando este método. Para acceder al repositorio del proyecto (por ejemplo, con un «checkout») debe usar la siguiente sintaxis:</para>
                                         <para>
 <screen>
 <command>svn·co·svn+ssh://hostname/var/svn/repos/project</command>
 </screen>
                                         </para>
 
-					<note><para> You must use the full path (/path/to/repos/project) 
-					to access the Subversion repository using this access method. 
-					</para></note>
-					<para>
-					Based on server configuration, it prompts for password. You must 
-					enter the password you use to login via ssh. Once you are 
-					authenticated, it checks out the code from the Subversion 
-					repository.
-					</para>
+					<note><para>Debe usar la ruta completa (/ruta/al/repositorio/del/proyecto) para acceder al repositorio de Subversion usando este método de acceso.</para></note>
+					<para>En función de la configuración del servidor, se le solicitará una contraseña. Debe introducir la misma contraseña que usa para iniciar sesión con ssh. Cuando se haya autenticado, se recuperará («check out») el código del repositorio de Subversion.</para>
 			</sect4>
 			</sect3>
 
@@ -1795,42 +1572,17 @@ $ svnserve --help</programlisting>
           <para>CVS es un sistema de control de versiones. Puede usarlo para grabar el historial de un fichero fuente.</para>
         <sect3 id="cvs-installation" status="complete">
           <title>Instalación</title>
-            <para>
-              At a terminal prompt, enter the following command to install
-              <application>cvs</application>:
-
-<screen>
+            <para>En la línea de órdenes de una terminal, introduzca las siguientes órdenes para instalar <application>cvs</application>: <screen>
 <command>sudo apt-get install cvs</command>
-</screen>
-
-After you install <application>cvs</application>, you should install
-<application>xinetd</application> to start/stop the cvs server. At the
-prompt, enter the following command to install
-<application>xinetd</application>:
-
-<screen>
+</screen> Cuando haya instalado <application>cvs</application>, deberá instalar <application>xinetd</application> para arrancar y parar el servidor cvs. En la línea de órdenes, introduzca la siguiente orden para instalar <application>xinetd</application>: <screen>
 <command>sudo apt-get install xinetd</command>
-</screen>
-            </para>
+</screen></para>
         </sect3>
         <sect3 id="cvs-configuration" status="complete">
           <title>Configuración</title>
-            <para>
-            Once you install cvs, the repository will be automatically
-            initialized. By default, the repository resides under the
-            <application>/var/lib/cvs</application> directory. You can
-            change this path by running following command:
-
-<screen>
-<command>cvs -d /your/new/cvs/repo init</command>
-</screen>
-
-Once the initial repository is set up, you can configure
-<application>xinetd</application> to start the CVS server. 
-You can copy the following lines to the <filename>
-/etc/xinetd/cvspserver</filename> file.
-
-<programlisting>
+            <para>Una vez que haya instalado el cvs, el repositorio se inicializará automáticamente. De forma predeterminada, el repositorio residirá en el directorio <application>/var/lib/cvs</application>. Puede cambiar esta ruta ejecutando la siguiente orden: <screen>
+<command>cvs -d /su/nuevo/repo init</command>
+</screen> Cuando se configure el repositorio inicial, podrá configurar <application>xinetd</application> para iniciar el servidor CVS. Puede copiar las siguientes líneas en el archivo <filename> /etc/xinetd/cvspserver</filename>. <programlisting>
 ↵
 service cvspserver↵
 {↵
@@ -1844,22 +1596,11 @@ service cvspserver↵
      server_args = -f --allow-root /var/lib/cvs pserver↵
      disable = no↵
 }↵
-</programlisting>
-
-<note>
-<para>
-Be sure to edit the repository if you have changed the default
-repository (<application>/var/lib/cvs</application>) directory.
-</para>
-</note>
-
-Once you have configured <application>xinetd</application> you 
-can start the cvs server by running following command:
-
-<screen>
+</programlisting><note>
+<para>Asegúrese de editar el repositorio si ha cambiado el directorio predeterminado del repositorio (<application>/var/lib/cvs</application>).</para>
+</note> Cuando haya configurado el <application>xinetd</application>, podrá iniciar el servidor cvs ejecutando la siguiente orden: <screen>
 <command>sudo /etc/init.d/xinetd start</command>
-</screen>
-            </para>
+</screen></para>
             <para>Puede confirmar que el servidor CVS se está ejecutando introduciendo la siguiente orden:</para>
 
             <para>
@@ -1877,12 +1618,7 @@ tcp 0 0 *:cvspserver *:* LISTEN ↵
 
         <para>Desde aquí puede continuar añadiendo usuarios, nuevos proyectos, y manejando el servidor CVS.</para>
         <warning>
-<para>
-          CVS allows the user to add users independently of the
-underlying OS installation. Probably the easiest way is to use the Linux
-Users for CVS, although it has potential security issues. Please refer
-to the CVS manual for details.
-</para>
+<para>CVS le permite añadir usuarios independientemente del sistema operativo subyacente. Probablemente, la forma más sencilla es usar los usuarios de Linux en el CVS, aunque esto trae potenciales problemas de seguridad. Por favor, consulte el manual del CVS para más detalles.</para>
         </warning>
 
         </sect3>
@@ -2056,7 +1792,7 @@ local all postgres md5 sameuser
 </screen> Se mostrará la interfaz de usuario. En cada pantalla, seleccione los siguientes valores: <itemizedlist spacing="compact">
             <listitem><para>Ok</para></listitem>
             <listitem><para>Sitio de Internet</para></listitem>
-            <listitem><para>NONE</para></listitem>
+            <listitem><para>NINGUNO</para></listitem>
             <listitem><para>mail.example.com</para></listitem>
             <listitem><para>mail.example.com, localhost.localdomain, localhost</para></listitem>
             <listitem><para>No</para></listitem>
@@ -2168,15 +1904,7 @@ MECHANISMS="pam"↵
       </sect2>
       <sect2 id="exim4" status="complete">
         <title>Exim4</title>
-          <para>
-            <application>Exim4</application> is is another Message Transfer
-            Agent (MTA) developed at the University of Cambridge for use
-            on Unix systems connected to the internet. Exim can be
-            installed in place of <application>sendmail</application>,
-            although the configuration of
-            <application>exim</application> is quite different to
-            that of <application>sendmail</application>.
-          </para>
+          <para><application>Exim4</application> es otro Agente de Transporte de Correo (MTA), desarrolado en la Universidad de Cambridge para su uso en sistemas Unix contactados por Internet. Se puede instalar Exim en lugar de <application>sendmail</application>, aunque la configuración de  <application>exim</application> es bastante diferente a la de <application>sendmail</application>.</para>
         <sect3 id="exim4-installation" status="complete">
           <title>Instalación</title>
             <para>Para instalar <application>exim4</application>, ejecute el siguiente comando: <screen>↵
@@ -2185,163 +1913,66 @@ MECHANISMS="pam"↵
         </sect3>
         <sect3 id="exim4-configuration" status="complete">
           <title>Configuración</title>
-            <para>
-            To configure <application>exim4</application>, run the following command:
-<screen>
+            <para>Para configurar <application>exim4</application>, ejecute la siguiente orden: <screen>
 <command>sudo dpkg-reconfigure exim4-config</command>
-</screen>
-            The user interface will be displayed. The user interface
-            lets you configure many parameters. For example, In
-            <application>exim4</application> the configuration files are
-            split among multiple files. If you wish to have them in one
-            file you can configure accordingly in this user interface.
-            </para>
+</screen> Se mostrará la interfaz del usuario, que le permitirá configurar muchos parámetros. Por ejemplo, en <application>exim4</application> los archivos de configuración están divididos en muchos archivos. Si desea tenerlos todos en un único archivo, puede configurarlo adecuadamente en esa interfaz de usuario.</para>
 
-            <para>
-            All the parameters you configure in the user interface are
-            stored in
-            <filename>/etc/exim4/update-exim4.conf.conf</filename> file.
-            If you wish to re-configure, either you re-run the
-            configuration wizard or manually edit this file
-            using your favourite editor. Once you configure, you can run
-            the following command to generate the master configuration
-            file:
-<screen>
+            <para>Todos los parámetros que configure en la interfaz de usuario se guardarán en el archivo <filename>/etc/exim4/update-exim4.conf.conf</filename>. Si desea volver a configurar, puede volver a ejecutar el asistente de configuración, o bien editar manualmente el archivo usando su editor favorito. Una vez haya configurado, puede ejecutar la siguiente orden para generar el archivo de configuración principal: <screen>
 <command>sudo update-exim4.conf</command>
-</screen>
-            The master configuration file, is generated and
-            it is stored in
-            <filename>/var/lib/exim4/config.autogenerated</filename>. 
-            
-            <warning>
-            <para>
-            At any time, you should not edit the master configuration
-            file,
-            <filename>/var/lib/exim4/config.autogenerated</filename>
-            manually. It is updated automatically every time you run
-            <command>update-exim4.conf</command>
-            </para>
-            </warning>
-            You can run
-            the following command to start
-            <application>exim4</application> daemon.
-<screen>
+</screen> Se generará el archivo de configuración principal, y se almacenará en <filename>/var/lib/exim4/config.autogenerated</filename>. <warning>
+            <para>En cualquier caso, no debería editar manualmente el archivo de configuración principal, <filename>/var/lib/exim4/config.autogenerated</filename>. Éste se actualiza automáticamente cada vez que se ejecuta la orden <command>update-exim4.conf</command>.</para>
+            </warning> Puede ejecutar la siguiente orden para arrancar el demonio <application>exim4</application>. <screen>
 <command>sudo /etc/init.d/exim4 start</command>
-</screen>
-            <emphasis role="strong">TODO:</emphasis> This section should
-            cover configuring SMTP AUTH with exim4. 
-            </para>
+</screen><emphasis role="strong">POR HACER:</emphasis> Esta sección debería cubrir la configuración de SMTP AUTH con exim4.</para>
         </sect3>
       </sect2>
       <sect2 id="dovecot-server" status="complete">
         <title>Servidor Dovecot</title> 
-          <para>
-          <application>Dovecot</application> is a Mail Delivery Agent, written with security
-          primarily in mind. It supports the major mailbox formats: mbox
-          or Maildir. This section explain how to set it up as an imap or
-          pop3 server.
-          </para>
+          <para><application>Dovecot</application> es un Agente de Entrega de Correo, escrito con la mirada puesta en la seguridad. Soporta los principales formatos de buzones: mbox o Maildir. Esta sección explica cómo configurar un servidor imap o pop3.</para>
         <sect3 id="dovecot-installation" status="complete">
           <title>Instalación</title>
-            <para>
-            To install <application>dovecot</application>, run the following command in the
-            command prompt:
-<screen>
+            <para>Para instalar <application>dovecot</application>, ejecute la siguiente orden en la línea de órdenes: <screen>
 <command>sudo apt-get install dovecot-common dovecot-imapd dovecot-pop3d</command>
-</screen>
-            </para>
+</screen></para>
         </sect3>
         <sect3 id="dovecot-configuration" status="complete">
           <title>Configuración</title>
-            <para>
-            To configure <application>dovecot</application>, you can edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename>. You can
-            choose the protocol you use. It could be pop3, pop3s (pop3
-            secure), imap and imaps (imap secure). A description of these protocols is beyond the scope of this guide. For further information, refer to the wikipedia articles on <ulink url="http://en.wikipedia.org/wiki/POP3">POP3</ulink> and
-            <ulink url="http://en.wikipedia.org/wiki/Internet_Message_Access_Protocol">IMAP</ulink>.
-            </para>
+            <para>Para configurar <application>dovecot</application>, puede editar el archivo <filename>/etc/dovecot/dovecot.conf</filename>. Puede elegir el protocolo que va a usar, que puede ser pop3, pop3s (pop3 seguro), imap e imaps (imap seguro). Una descripción de tales protocolos queda fuera del alcance de esta guía. Para más información, consulte los artículos de la Wikipedia en <ulink url="http://es.wikipedia.org/wiki/POP3">POP3</ulink> y <ulink url="http://es.wikipedia.org/wiki/Internet_Message_Access_Protocol">IMAP</ulink>.</para>
 
-            <para>
-            IMAPS and POP3S are more secure that the simple IMAP and
-            POP3 because they use SSL encryption to connect. Once you
-            have chosen the protocol, amend the following line in the file
-            <filename>/etc/dovecot/dovecot.conf</filename>:
-<programlisting>
+            <para>IMAPS y POP3S son más seguros que los IMAP y POP3 simples, porque usan el cifrado SSL durante la conexión. Una vez haya escogido el protocolo, corrija la siguiente línea en el archivo <filename>/etc/dovecot/dovecot.conf</filename>: <programlisting>
 ↵
 protocols = pop3 pop3s imap imaps↵
-</programlisting>
-
-            It enables the protocols when <application>dovecot</application> is started. Next, add the following line in pop3 section in the file <filename>/etc/dovecot/dovecot.conf</filename>:
-<programlisting>
+</programlisting> Esto habilita los protocolos durante el arranque de <application>dovecot</application>. A continuación, añada la siguiente línea en la sección de pop3 del archivo <filename>/etc/dovecot/dovecot.conf</filename>: <programlisting>
 ↵
 pop3_uidl_format = %08Xu%08Xv↵
-</programlisting>
-
-            Next, choose the mailbox you use. <application>Dovecot</application> supports
-            <emphasis role="strong">maildir</emphasis> and <emphasis role="strong">mbox</emphasis> formats. These are the most
-            commonly used mailbox formats. They both have their own
-            benefits and they are discussed on <ulink url="http://dovecot.org/doc/configuration.txt">the dovecot website</ulink>.
-            </para>
-            <para>
-            Once you have chosen your mailbox type, edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename> and change
-            the following line:
-<programlisting>
+</programlisting> Después, seleccione el buzón que va a user. <application>Dovecot</application> soporta los formatos <emphasis role="strong">maildir</emphasis> y <emphasis role="strong">mbox</emphasis>. Estos son los formatos de buzones más usados. Ambos tienen sus ventajas y se discuten en <ulink url="http://dovecot.org/doc/configuration.txt">el sitio web de dovecot</ulink>.</para>
+            <para>Cuando haya elegido su tipo de buzón, edite el archivo <filename>/etc/dovecot/dovecot.conf</filename> y cambie la siguiente línea: <programlisting>
 ↵
 default_mail_env = maildir:~/Maildir # (for maildir)↵
 or↵
 default_mail_env = mbox:~/mail:INBOX=/var/spool/mail/%u # (for mbox)↵
-</programlisting>
-            </para>
+</programlisting></para>
 <note>
-<para>
-You should configure your Mail Trasport Agent (MTA) to transfer the
-incoming mail to this type of mailbox if it is different from the one
-you have configured.
-</para>
+<para>Debe configurar su Agente de Transporte de Correo (MTA) para transferir el correo entrante a este tipo de buzón si es distinto al que ha configurado.</para>
 </note>
-          <para>
-          Once you have configured dovecot, start the <application>dovecot</application> daemon
-          in order to test your setup:
-
-          <screen><command>sudo /etc/init.d/dovecot start</command></screen>
-
-          If you have enabled imap, or pop3, you can also try to log in
-          with the commands <command>telnet localhost pop3</command> or
-          <command>telnet localhost</command> imap2. If you see
-          something like the following, the installation has been
-          successful:
-<programlisting>
+          <para>Cuando haya configurado dovecot, inicie el demonio de <application>dovecot</application> para poder probar su configuración: <screen><command>sudo /etc/init.d/dovecot start</command></screen> Si ha activado imap o pop3, puede además probar a conectarse con las órdenes <command>telnet localhost pop3</command> o <command>telnet localhost imap2</command>. Si ve algo parecido a lo siguiente, la instalación habrá tenido éxito: <programlisting>
 ↵
 bhuvan@rainbow:~$ telnet localhost pop3↵
 Trying 127.0.0.1...↵
 Connected to localhost.localdomain.↵
 Escape character is '^]'.↵
 +OK Dovecot ready.↵
-</programlisting>
-          </para>
+</programlisting></para>
         </sect3>
         <sect3 id="dovecot-ssl" status="complete">
           <title>Configuración Dovecot SSL</title>
-            <para>
-            To configure <application>dovecot</application> to use SSL, you can edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename> and amend
-            following lines:
-<programlisting>
+            <para>Para configurar <application>dovecot</application> con soporte SSL, puede editar el archivo <filename>/etc/dovecot/dovecot.conf</filename> y corregir las siguientes líneas: <programlisting>
 ↵
 ssl_cert_file = /etc/ssl/certs/dovecot.pem↵
 ssl_key_file = /etc/ssl/private/dovecot.pem↵
 ssl_disable = no↵
 disable_plaintext_auth = no↵
-</programlisting>
-
-          The <emphasis role="strong">cert</emphasis> and <emphasis role="strong">key</emphasis> files are created automatically
-          by <application>dovecot</application> when you install it. Please note that these keys
-          are not signed and will give "bad signature" errors when
-          connecting from a client. To avoid this, you can use
-          commercial certificates, or even better, you can use your own
-          SSL certificates.
-          </para>
+</programlisting> <application>dovecot</application> creará automáticamente los archivos <emphasis role="strong">cert</emphasis> y <emphasis role="strong">key</emphasis>  cuando lo instale. Por favor, tenga en cuenta que esas claves no están firmadas y que, por tanto, provocará errores de «firma errónea» cuando se conecte un cliente. Para evitar eso, debe usar certificados comerciales, o mejor aún, puede usar sus propios certificados SSL.</para>
 	</sect3>
 	<sect3>
 	  <title>Configuración del firewall para un servidor de correo</title>
@@ -2355,13 +1986,7 @@ disable_plaintext_auth = no↵
       </sect2>
       <sect2 id="mailman" status="complete">
         <title>Mailman</title> 
-          <para>
-          Mailman is an open source program for managing electronic mail
-          discussions and e-newsletter lists. Many open source mailing
-          lists (including all the <ulink url="http://lists.ubuntu.com">Ubuntu mailing lists</ulink>) use
-          Mailman as their mailing list software. It is powerful and easy
-          to install and maintain.
-          </para>
+          <para>Mailman es un programa open source para gestionar discusiones de correo electrónico y listas de noticias. Muchas listas de correo open source (incluyendo todas las <ulink url="http://lists.ubuntu.com">listas de correo de Ubuntu</ulink>) usan Mailman como su software de gestión de listas. Es potente y fácil de instalar y mantener.</para>
         <sect3 id="mailman-installation" status="complete">
           <title>Instalación</title>
             <para>Mailman suministra un interface web para administradores y usuarios. Por lo tanto, requiere apache con soporte mod_perl. Mailman usa un servidor de correo externo para enviar y recibir emails. Funciona perfectamente con los siguientes servidores de correo:</para>
@@ -2411,22 +2036,11 @@ disable_plaintext_auth = no↵
             <para>Esta sección asume que instaló con éxito <application>mailman</application>, <application>apache2</application>, y <application>exim4</application>. Ahora solo necesita configurarlos.</para>
           <sect4 id="mailman-conf-apache2">
             <title>Apache2</title>
-              <para>
-              Once apache2 is installed, you can add the following lines in
-              the <filename>/etc/apache2/apache2.conf</filename> file:
-<programlisting>
+              <para>Cuando se haya instalado apache2, añada las siguientes líneas en el archivo <filename>/etc/apache2/apache2.conf</filename>: <programlisting>
 ↵
 Alias /images/mailman/ "/usr/share/images/mailman/"↵
 Alias /pipermail/ "/var/lib/mailman/archives/public/"↵
-</programlisting>
-
-Mailman uses apache2 to render its CGI scripts. The mailman CGI scripts
-are installed in the <application>/usr/lib/cgi-bin/mailman</application>
-directory. So, the mailman url will be
-http://hostname/cgi-bin/mailman/. You can make changes to the
-<filename>/etc/apache2/apache2.conf</filename> file if you wish to
-change this behavior.
-              </para>
+</programlisting> Mailman usa apache2 para ejecutar sus scripts CGI. Los scripts CGI de Mailman están instalados en el directorio <application>/usr/lib/cgi-bin/mailman</application>. Por tanto, la URL de Mailman será http://nombredehost/cgi-bin/mailman/. Puede cambiar el archivo <filename>/etc/apache2/apache2.conf</filename> si desea alterar este comportamiento.</para>
           </sect4>
 
           <sect4 id="mailman-conf-exim4">
@@ -2481,13 +2095,7 @@ MM_LISTCHK=MM_HOME/lists/${lc::$local_part}/config.pck↵
           </sect4>
           <sect4 id="mailman-conf-transport">
             <title>Transporte</title>
-              <para>
-All the configuration files belonging to transport type are stored in
-the <filename>/etc/exim4/conf.d/transport/</filename> directory. You
-can add the following content to a new file named <filename>
-40_exim4-config_mailman</filename>:
-
-<programlisting>
+              <para>Todos los archivos de configuración correspondientes a un tipo de transporte se almacenan en el directorio <filename>/etc/exim4/conf.d/transport/</filename>. Puede añadir el siguiente contenido en un nuevo archivo llamado <filename> 40_exim4-config_mailman</filename>: <programlisting>
   ↵
   mailman_transport:↵
    driver = pipe↵
@@ -2500,16 +2108,11 @@ can add the following content to a new file named <filename>
     home_directory = MM_HOME↵
     user = MM_UID↵
     group = MM_GID↵
-</programlisting>
-              </para>
+</programlisting></para>
           </sect4>
           <sect4 id="mailman-conf-router">
             <title>Enrutamiento</title>
-              <para>
-All the configuration files belonging to router type are stored in the
-<filename>/etc/exim4/conf.d/router/</filename> directory. You can add the following content
-in to a new file named <filename>101_exim4-config_mailman</filename>:
-<programlisting>
+              <para>Todos los archivos de configuración correspondientes a un tipo de encaminamiento se almacenan en el directorio <filename>/etc/exim4/conf.d/router/</filename>. Puede añadir el siguiente contenido en un nuevo archivo llamado <filename>101_exim4-config_mailman</filename>: <programlisting>
   ↵
   mailman_router:↵
    driver = accept↵
@@ -2519,19 +2122,9 @@ in to a new file named <filename>101_exim4-config_mailman</filename>:
                        -confirm+* : -join : -leave : \↵
                        -owner : -request : -admin↵
    transport = mailman_transport↵
-</programlisting>
-
-              </para>
+</programlisting></para>
 <warning>
-<para>
-The order of main and transport configuration files can be in any order.
-But, the order of router configuration files must be the same.
-This particular file must appear before the
-<application>200_exim4-config_primary</application> file.
-These two configuration files contain same type of information. The
-first file takes the precedence. For more details, please refer to the
-references section.
-</para>
+<para>El orden de los archivos de configuración principal y de transporte puede ser cualquiera. Pero el orden de los archivos de configuración de encaminamiento debe ser el mismo. Este archivo en particular debe aparecer antes que el archivo <application>200_exim4-config_primary</application>. Esos dos archivos de configuración contienen el mismo tipo de información. El primer archivo tiene prioridad. Para más detalles, consulte las secciones de referencia.</para>
 </warning>
           </sect4>
           <sect4 id="mailman-conf-mailman">

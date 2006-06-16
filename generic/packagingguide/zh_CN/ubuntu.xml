@@ -400,71 +400,46 @@
 		<para>一旦创建了一个源包(全新的或者仅仅是升级/bug修正)，您可能希望发布自己的包，好让其他人也能分享自己的辛勤劳动。对于 <phrase>Ubuntu</phrase>，最有效的方法是把您做的包提交到 Universe 仓库。这些负责 Universe 仓库的社区开发者被称为万物之主(Masters of the Universe，姑且译成这种有趣的说法 :P)(<ulink url="https://wiki.ubuntu.com/MOTU">MOTU</ulink>)。<ulink url="http://revu.tauware.de">REVU</ulink> 是个基于 WEB 的工具，为大家提供了一个可上传自己的源包的场所，以便让他人查阅，供 MOTU 们审核。</para>
 
 		<sect2 id="contribute-as-uploader">
-			<title>成为一名上传贡献者</title>
+			<title>Contributing as an Uploader</title>
 		
-			<para>First, you will need to have your <ulink url="https://wiki.ubuntu.com/GPGKey">GPG Key</ulink> added to the REVU
-				keyring. This step ensures that your packages really come from you and helps track
-				uploads.</para>
+			<para>首先，你必须将<ulink url="https://wiki.ubuntu.com/GPGKey">GPG Key</ulink>添加到REVU keyring中。这样除了能够保证你提交的包确是你本人发出的，还能够帮助追踪提交信息。</para>
 	
-			<para>To add your key, send a <emphasis>signed</emphasis> email with your GnuPG
-				key ID asking to be added to the REVU keyring to
-				<email>keyring@tiber.tauware.de</email>. One of the REVU admins will
-				add you to the uploaders keyring and reply to your email. You don't
-				need a password to upload packages, only to log in to the website and
-				to reply to comments.</para>
+			<para>要添加你的密钥，发送一封附有你的GnuPG密钥ID的<emphasis>已签名</emphasis>电子邮件至 email&gt;keyring@tiber.tauware.de</para>
 
-			<note><para>It is not necessary to have your key signed by others to upload to REVU, but
-					it is a good idea to have it done at some point.</para></note>
+			<note><para>你没有必要使用你的密钥去签署其他人给REVU的上传，但签署了也会有些好处。</para></note>
 			
 			
 			<sect3 id="upload-your-packages">
-				<title>Uploading your packages</title>
+				<title>正在上传您的软件包</title>
 
-				<para>Uploading to REVU uses <application>dput</application>. The <phrase>Ubuntu</phrase>
-					version of <application>dput</application> already knows about REVU so
-					you do not need to change any configuration files. Only upload signed
-					packages, and unlike other repositories, you should always include the
-					original tarball, otherwise reviewers will not be able to look at your
-					extracted source package. In order to do so, use the options "-S -sa"
-					with <application>debuild</application> or
-					<application>dpkg-buildpackage</application> to build only the source
-					package and to include the original source in the upload.</para>
+				<para>要上传到REVU请使用<application>dput</application>查询。<phrase> Ubuntu</phrase>版本的<application>dput</application>默认支持 REVU，你不用去修改设置文件。注意，不同于其它软件仓库，上传包必须包含原始的tarball包，否则审核的人就找不到你所引用的源代码包。所以使用 <application>debuild</application>或<application>dpkg- buildpackage</application>时请加上"-S -sa"参数，以构建带有原始代码的包一同上传。</para>
 				
 				<para>构建了源码包后，使用<application>dput</application>  <filename>_source.changes</filename> 上传。<filename>_source.changes</filename>在构建源码包同时生成。</para>
 
 				<screen>dput revu *_source.changes</screen>
 
-				<note><para>If you are reuploading a changed package (after receiving
-						reviews), you may get an error like this:</para>
+				<note><para>如果您重新上传一个已更改的软件包 (在通过审阅后)，您可能收到一条这样的错误:</para>
 					
 				<screen>
-上传到revu↵
-已经在tauware.de↵
+上传到revu
+已经在tauware.de
 Doing nothing for myapp_source.changes</screen>
 			
-				<para>To fix, add the -f option to dput to force the upload or remove the
-					<filename>.upload</filename> file that was created by
-					<application>dput</application>.</para></note>
+				<para>为了解决这个问题，可以在dput后加上-f参数，强制覆盖或删除<application>dput</application>程序建立的<filename>.upload</filename>文件。</para></note>
 			
-				<para>Processing of uploads is done every five minutes, so if your upload does not show up,
-				please contact the REVU administrators by email, or join the Freenode IRC channel #ubuntu-motu.</para>
+				<para>上传处理每5分钟更新一次，所以，如果您上传的软件包没有显示出来，请通过电子邮件联系REVU管理员，或者加入Freenode的IRC频道:#ubuntu-motu</para>
 		
 			</sect3>
 		
 			<sect3 id="howto-login">
-				<title>How to login to REVU</title>
+				<title>如何登录 REVU</title>
 			
-				<para>After your first upload, you are registered automatically in the
-					database and assigned a random password. On the <ulink url="http://revu.tauware.de">REVU</ulink> website, use the email
-					address you used in the changelog file of your upload as the login and
-					click the 'recover password' link. You will be taken to a page that
-					has your encrypted password with instructions for decrypting
-					it.</para>
+				<para>在初次上传完成后，数据库会自动注册你的信息并为你分配一个随机密码。请访问<ulink url="http://revu.tauware.de">REVU</ulink>网站，使用你上传的更改日志文件中提供的电子邮件地址登录并点击“回复密码”链接。浏览器将跳转到一个网页，该网页包含了经过加密的密码以及如何恢复密码的指示。</para>
 				
 			</sect3>
 
 			<sect3 id="view-and-comment-uploads">
-				<title>View and comment uploads</title>
+				<title>查看/评论上传内容</title>
 			
 				<para>Packages uploaded to REVU are public. You can browse them without logging
 					in to the system. However, commenting on uploads is available only to registered
@@ -479,26 +454,19 @@ Doing nothing for myapp_source.changes</screen>
 		
 				<itemizedlist>
 
-					<listitem><para>You must have reviewed the package for known security
-							vulnerabilities and must provide patches for them.</para></listitem>
+					<listitem><para>您必须重审源码包已知的安全隐患，并为它们打上补丁。</para></listitem>
 					
-					<listitem><para>The package can be refused on the grounds of known
-							security problems.</para></listitem>
+					<listitem><para>该软件包可能因为安全问题被拒绝。</para></listitem>
 					
-					<listitem><para>You must have included a copyright and license file, and those
-							must allow inclusion of the package in the Universe component
-							and redistribution via Ubuntu mirrors.</para></listitem>
+					<listitem><para>你必须要有一个COPYRIGHT 和 LICENSE 文件，这些文件可以允许通过Ubuntu镜像包括在Universe包组成和分配里</para></listitem>
 					
-					<listitem><para>The package must be known to build on top of the main component
-							of the current <phrase>Ubuntu</phrase> stable release. It is permissible to require other
-							packages already in Universe.</para></listitem>
+					<listitem><para>源码包必须在现行 <phrase>Ubuntu</phrase>稳定发行版本的主要构件上编译.这样才可以调用其他已经加入系统的源码包。</para></listitem>
 				</itemizedlist>
 			</sect3>
 
 			<sect3 id="getting-help">
-				<title>Getting Help</title>
-				<para>If you need assistance on these steps, or if you have questions about REVU, you can
-					ask in #ubuntu-motu on the Freenode IRC network.</para>
+				<title>获取帮助</title>
+				<para>如果您在这些步骤上需要帮助或者您对于REVU有疑问，您可以在Freenode IRC网络的#ubuntu-motu频道提出来。</para>
 			</sect3>
 
 		</sect2>
@@ -506,7 +474,7 @@ Doing nothing for myapp_source.changes</screen>
 	</sect1>
 
 	<sect1 id="ubuntu-sync" status="complete">
-		<title>Merges and Syncs</title>
+		<title>合并与同步</title>
 
 
 
@@ -606,42 +574,37 @@ cd ~/xcdroast</screen>
 			
 			<para>Now inspect the actual changes in the source packages:</para>
 			<screen>
-debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-1.1ubuntu1.dsc | \
+↵
+debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-1.1ubuntu1.dsc | \↵
 	ubuntu.debdiff | less ubuntu.debdiff</screen>
 			
-			<para>The lines that start with - have been removed from the Debian package, and those that start
-				with + have been added to the <phrase>Ubuntu</phrase> package.</para>
+			<para>Debian软件包中以-开头的那些行已经被移除，而那些以+开头的行则被添加到<phrase>Ubuntu</phrase>软件包中。</para>
 			<para>以下内容如我们所见:</para>
 			<itemizedlist>
 				<listitem>
-					<para>In debian/rules install is being used instead of cp to install the xcdroast icon.
-						Also, there is a new line installing the .desktop file.</para>
+					<para>在debian/rules下面使用了安装程序而不是cp复制命令来安装xcdroast图标。此外，这里新添加了一行来安装.desktop文件。</para>
 				</listitem>
 				<listitem>
-					<para>In debian/changelog the changes made are added to the changelog entry.</para>
+					<para>在debian/changelog中，所作的更改被加入到changelog条目中。</para>
 				</listitem>
 				<listitem>
-					<para>In debian/dirs usr/share/applications has been added for the install lines above to
-						work properly.</para>
+					<para>在debian/dirs中加入了usr/share/applications以使得上面的安装命令行可以正确工作。</para>
 				</listitem>
 				<listitem>
 					<para>xcdroast.desktop已添加</para>
 				</listitem>
 			</itemizedlist>
 			
-			<para>Now we know how the Ubuntu source was changed. Now we need to see what has changed in
-				the Debian sources.</para>
+			<para>现在，我们知道了Ubuntu的源代码是如何被改变的。下面我们要看看对Debian源代码作了哪些改变。</para>
 			<screen>
 ↵
  debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-3.dsc &gt; debian.debdiff↵
  less debian.debdiff</screen>
-			<para>There is a lot more in this debdiff than in the last one. One way we can get a
-				better idea of what has changed is to see what files were changed in the debdiff:</para>
+			<para>debdiff相对之前的版本加入了很更多的东西。一个方法就是通过查看debdiff中哪些文件被改变了来更好地了解其中的变化。</para>
 			
 			<screen>grep diff debian.debdiff</screen>
 			
-			<para>This indicates that debian/postinst, debian/rules, debian/changelog, debian/doc-base.manual,
-				debian/control, and debian/menu were changed in the new Debian version.</para>
+			<para>这表明debian/postinst，debian/rules，debian/changelog，debian/doc-base.manual，debian/control以及debian/menu在新版的Debian中都有所改变。</para>
 			<para>Thus we can see that we need to check debian/rules to see if the <phrase>Ubuntu</phrase> changes were made.
 				We can also see that debian/dirs was not changed from the old Debian version. Let us
 				now look at the files. We can unpack the source package by using

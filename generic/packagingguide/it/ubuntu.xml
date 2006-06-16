@@ -392,76 +392,48 @@
 <!ENTITY language "en">
 ]>
 <chapter id="ubuntu-chap" status="complete">
-	<title>Ubuntu Packaging</title>
+	<title>Creazione di pacchetti per Ubuntu</title>
 
 	<sect1 id="ubuntu-upload" status="complete">
-		<title>Uploading and Review</title>
+		<title>Caricamento e revisione</title>
 
-		<para>Once you have created a source package (either a completely new package or
-			just an update/bugfix), you will want to distribute your
-			package so that other people can enjoy your hard work. The most effective way
-			to do that for <phrase>Ubuntu</phrase> is to contribute your package to the Universe repository.
-			The community developers who are responsible for the Universe repository are
-			known as Masters of the Universe (<ulink url="https://wiki.ubuntu.com/MOTU">MOTU</ulink>). <ulink url="http://revu.tauware.de">REVU</ulink> is a web-based tool that gives
-			people a place to upload their source packages for other people to look at and
-			for MOTUs to review in a structured manner.</para>
+		<para>Dopo aver creato un pacchetto sorgente (sia un pacchetto completamente nuovo sia un semplice aggiornamento/fissaggio di bug), vorrai distribuire il tuo pacchetto in modo che altre persone possano godere del tuo duro lavoro. La strada più efficace per farlo con <phrase>Ubuntu</phrase> è rendere il tuo pacchetto disponibile attraverso il repository Universe. Gli sviluppatori della comunità responsabili del repository Universe sono conosciuti come Masters of the Universe (Signori dell'Universo) (<ulink url="https://wiki.ubuntu.com/MOTU">MOTU</ulink>). <ulink url="http://revu.tauware.de">REVU</ulink> è uno strumento via web creato per fornire alle persone un posto dove caricare i loro pacchetti sorgente in modo che altri possano esaminarli e che i MOTU possano revisionarli in maniera strutturata.</para>
 
 		<sect2 id="contribute-as-uploader">
-			<title>Contributing as an Uploader</title>
+			<title>Contribuire nel caricare</title>
 		
-			<para>First, you will need to have your <ulink url="https://wiki.ubuntu.com/GPGKey">GPG Key</ulink> added to the REVU
-				keyring. This step ensures that your packages really come from you and helps track
-				uploads.</para>
+			<para>Primo, sarà necessario che la propria <ulink url="https://wiki.ubuntu.com/GPGKey">chiave GPG</ulink> sia aggiunta al portachiavi di REVU. Questo passo assicura che i tuoi pacchetti provengano veramente da te ed aiuta nel mantenere traccia dei caricamenti.</para>
 	
-			<para>To add your key, send a <emphasis>signed</emphasis> email with your GnuPG
-				key ID asking to be added to the REVU keyring to
-				<email>keyring@tiber.tauware.de</email>. One of the REVU admins will
-				add you to the uploaders keyring and reply to your email. You don't
-				need a password to upload packages, only to log in to the website and
-				to reply to comments.</para>
+			<para>Per aggiungere la propria chiave, inviare un messaggio <emphasis>firmato</emphasis> col proprio ID della chiave GnuPG a <email>keyring@tiber.tauware.de</email> chiedendo di essere aggiunto al gruppo REVU. Uno degli amministratori di REVU ti aggiungerà al gruppo dei contributori e risponderà al tuo messaggio. Non è necessaria una password per caricare i pacchetti, solo per connettersi al sito web e rispondere ai commenti.</para>
 
-			<note><para>It is not necessary to have your key signed by others to upload to REVU, but
-					it is a good idea to have it done at some point.</para></note>
+			<note><para>Non è necessario avere la propria chiave firmata da altri per caricare su REVU, ma è una buona idea che venga fatto ad un certo punto.</para></note>
 			
 			
 			<sect3 id="upload-your-packages">
-				<title>Uploading your packages</title>
+				<title>Caricare i proprii pacchetti</title>
 
-				<para>Uploading to REVU uses <application>dput</application>. The <phrase>Ubuntu</phrase>
-					version of <application>dput</application> already knows about REVU so
-					you do not need to change any configuration files. Only upload signed
-					packages, and unlike other repositories, you should always include the
-					original tarball, otherwise reviewers will not be able to look at your
-					extracted source package. In order to do so, use the options "-S -sa"
-					with <application>debuild</application> or
-					<application>dpkg-buildpackage</application> to build only the source
-					package and to include the original source in the upload.</para>
+				<para>Il caricamento su REVU utilizza <application>dput</application>. La versione di <application>dput</application> presente in <phrase>Ubuntu</phrase> è già a conoscenza di REVU, non è necessario cambiare alcun file di configurazione. Caricare soltanto pacchetti firmati, e diversamente da altri repository, includere sempre il tarball originale, altrimenti i revisori non saranno in grado di esaminare il tuo pacchetto sorgente estratto. Per fare ciò, usare le opzioni "-S -sa" con <application>debuild</application> o <application>dpkg-buildpackage</application> per creare solo il pacchetto sorgente ed includere il sorgente originale nel caricamento.</para>
 				
-				<para>After the source package is built, you can use
-					<application>dput</application> with the above config file changes to
-					upload it by specifying just the <filename>_source.changes</filename>
-					file that was created: </para>
+				<para>Dopo che il pacchetto sorgente è stato creato, usare <application>dput</application> con i cambiamenti al file di configurazione visti sopra per caricare specificando solo il file <filename>_source.changes</filename> che è stato creato:</para>
 
 				<screen>dput revu *_source.changes</screen>
 
-				<note><para>Se stai facendo di nuovo l'upload di un pacchetto modificato (dopo aver ricevuto le revisioni), potresti avere un errore del genere:</para>
+				<note><para>Se si sta facendo un nuovo caricamento di un pacchetto modificato (dopo aver ricevuto revisioni), si potrebbe avere un errore del genere:</para>
 					
 				<screen>
-Upload package to host revu
-Already uploaded to tauware.de
-Doing nothing for myapp_source.changes</screen>
+↵
+ Upload package to host revu↵
+ Already uploaded to tauware.de↵
+ Doing nothing for myapp_source.changes</screen>
 			
-				<para>To fix, add the -f option to dput to force the upload or remove the
-					<filename>.upload</filename> file that was created by
-					<application>dput</application>.</para></note>
+				<para>Per risolvere il problema, aggiungere l'opzione -f a dput per forzare il caricamento o rimuovere il file <filename>.upload</filename> che è stato creato da <application>dput</application>.</para></note>
 			
-				<para>Processing of uploads is done every five minutes, so if your upload does not show up,
-				please contact the REVU administrators by email, or join the Freenode IRC channel #ubuntu-motu.</para>
+				<para>L'elaborazione dei caricamenti è fatta ogni cinque minuti, quindi se il proprio caricamento non compare, contattare gli amministratori di REVU per posta elettronica, oppure entrare nel canale IRC Freenode #ubuntu-motu.</para>
 		
 			</sect3>
 		
 			<sect3 id="howto-login">
-				<title>Come fare il login su REVU</title>
+				<title>Come connettersi a REVU</title>
 			
 				<para>After your first upload, you are registered automatically in the
 					database and assigned a random password. On the <ulink url="http://revu.tauware.de">REVU</ulink> website, use the email
@@ -473,13 +445,9 @@ Doing nothing for myapp_source.changes</screen>
 			</sect3>
 
 			<sect3 id="view-and-comment-uploads">
-				<title>Visualizzare e commentare gli upload</title>
+				<title>Visualizzare e commentare i caricamenti</title>
 			
-				<para>Packages uploaded to REVU are public. You can browse them without logging
-					in to the system. However, commenting on uploads is available only to registered
-					users. As an uploader, you can only comment on your own uploads. This can be
-					useful to give reviewers some info on the changes you have made between two
-					uploads of your packages.</para>
+				<para>I pacchetti caricati su REVU sono pubblici. Si può esaminarli senza aver effettuato la connessione al sistema. Comunque la possibilità di lasciare commenti riguardo i caricamenti è disponibile solo agli utenti registrati. Come contributore, puoi lasciare commenti riguardanti solo i tuoi pacchetti. Questo può essere utile per dare ai revisori informazioni sui cambiamenti fatti tra un caricamento e l'altro dei tuoi pacchetti.</para>
 
 			</sect3>
 
@@ -488,26 +456,19 @@ Doing nothing for myapp_source.changes</screen>
 		
 				<itemizedlist>
 
-					<listitem><para>You must have reviewed the package for known security
-							vulnerabilities and must provide patches for them.</para></listitem>
+					<listitem><para>Si deve  essersi assicurati che il pacchetto non sia soggetto a vulnerabilità di sicurezza note e si deve eventualmente fornire correzioni per queste.</para></listitem>
 					
-					<listitem><para>The package can be refused on the grounds of known
-							security problems.</para></listitem>
+					<listitem><para>Il pacchetto potrebbe essere rifiutato in caso di problemi di sicurezza noti.</para></listitem>
 					
-					<listitem><para>You must have included a copyright and license file, and those
-							must allow inclusion of the package in the Universe component
-							and redistribution via Ubuntu mirrors.</para></listitem>
+					<listitem><para>E' necessario includere un file per il copyright e la licenza, e questi devono permettere l'inclusione del pacchetto nel componente Universe e nella ridistribuzione tramite i mirror di Ubuntu.</para></listitem>
 					
-					<listitem><para>The package must be known to build on top of the main component
-							of the current <phrase>Ubuntu</phrase> stable release. It is permissible to require other
-							packages already in Universe.</para></listitem>
+					<listitem><para>È richiesto che il pacchetto sia compilabile con la componente principale dell'attuale versione stabile di <phrase>Ubuntu</phrase>. Può essere accettata la necessità di altri pacchetti già presenti in Universe.</para></listitem>
 				</itemizedlist>
 			</sect3>
 
 			<sect3 id="getting-help">
-				<title>Getting Help</title>
-				<para>If you need assistance on these steps, or if you have questions about REVU, you can
-					ask in #ubuntu-motu on the Freenode IRC network.</para>
+				<title>Ottenere aiuto</title>
+				<para>Se è necessario assistenza in questi passaggi o ci sono domande su REVU è possibile chiedere nel canale #ubuntu-motu della rete IRC Freenode.</para>
 			</sect3>
 
 		</sect2>
@@ -515,50 +476,26 @@ Doing nothing for myapp_source.changes</screen>
 	</sect1>
 
 	<sect1 id="ubuntu-sync" status="complete">
-		<title>Merges and Syncs</title>
+		<title>Fusioni e sincronizzazioni</title>
 
 
 
 		<important><para><emphasis role="bold">Requisiti:</emphasis> build-essential, automake, gnupg, lintian, fakeroot, patchutils, debhelper and <xref linkend="gs-pbuilder"/>.</para></important>
 		
-		<para><phrase>Ubuntu</phrase> is based on the Debian Linux distribution and uses the same package
-			management system (APT). At the beginning of each <phrase>Ubuntu</phrase> development cycle, the
-			packages in <phrase>Ubuntu</phrase> are updated to those in the Debian unstable branch. However,
-			because <phrase>Ubuntu</phrase> is not the same as Debian, some of the packages need to
-			be modified to work in <phrase>Ubuntu</phrase>. There might also be bug fixes that <phrase>Ubuntu</phrase>
-			developers have introduced into the packages. You can determine whether this has
-			taken place by noting the package version. If the package version includes
-			ubuntu in it (an example would be gimp-2.2.9-3ubuntu2), then the <phrase>Ubuntu</phrase>
-			developers have made changes, and it is no longer the same as the Debian package.
-			There are more than 1000 such modified packages in the Universe repository.</para>
+		<para><phrase>Ubuntu</phrase> è basata sulla distribuzione Debian Linux e utilizza lo stesso sistema di gestione dei pacchetti (APT). All'inizio di ogni ciclo di sviluppo di <phrase>Ubuntu</phrase>, i pacchetti in <phrase>Ubuntu</phrase> vengono aggiornati a quelli presenti nel ramo unstable di Debian. Tuttavia, poiché <phrase>Ubuntu</phrase> non è la stessa cosa di Debian, alcuni dei pacchetti devono essere modificati per funzionare in <phrase>Ubuntu</phrase>. Possono anche esserci delle correzioni di bug che gli sviluppatori di <phrase>Ubuntu</phrase> hanno introdotto nei pacchetti. Si può capire se questo è successo esaminando la versione del pacchetto. Se la versione include il termine ubuntu (un esempio può essere gimp-2.2.9-3ubuntu2), allora gli sviluppatori di <phrase>Ubuntu</phrase> hanno apportato dei cambiamenti, ed il pacchetto non è più uguale a quello di Debian. Essitono più di 1000 pacchetti nel repository Universe modificati in questo modo.</para>
 		
-		<para>At the start of each Ubuntu development cycle, a decision is made regarding
-			these Ubuntu versioned packages. Of course if the Debian version hasn't
-			changed since the last <phrase>Ubuntu</phrase> release, then nothing needs to be changed.
-			However, if there is a newer version of the package in Debian, then one
-			of two things should happen. If all of the reasons for Ubuntu modifications
-			(bug fixes, dependencies, etc.) are fixed in the new Debian package,
-			then we can just take the Debian package directly. This decision is called a
-			<emphasis>sync</emphasis>. However, if the new Debian version has the same
-			issues that caused the Ubuntu version to be made, then those changes need
-			to be applied to the new Debian version, too. This decision is called <emphasis>merging</emphasis>.
-		</para>
+		<para>All'inizio di ogni ciclo di sviluppo di Ubuntu, una decisione viene presa riguardo a questi pacchetti in versione Ubuntu. Naturalmente se la versione di Debian non è cambiata dall'ultimo rilascio di <phrase>Ubuntu</phrase>, nulla deve essere cambiato. Se invece in Debian c'è una nuova versione del pacchetto, una di queste due cose succede. Se tutti i motivi per le modifiche apportate dagli sviluppatori di Ubuntu (correzioni di bug, dipendenze, ecc.) sono stati risolti, allora viene utilizzato direttamente il pacchetto Debian. Questa decisione è chiamata <emphasis>sync</emphasis> (sincronizzazione). Tuttavia, se la nuova versione Debian ha gli stessi problemi che hanno causato la creazione della versione Ubuntu, allora questi cambiamenti devono essere apportati anche alla nuova versione Debian. Questa decisione è chiamata <emphasis>merging</emphasis> (fusione).</para>
 		<sect2 id="merge-tutorial">
-			<title>Merging Tutorial</title>
-			<para>The merging process involves looking at the changes to both the Debian and
-				Ubuntu source packages and determining what has changed and which changes are
-				Ubuntu-specific. Let us now look at an example,
-				a popular CD creation program called <application>xcdroast</application>.
-			</para>
-			<para>To start, make a folder to hold our project, then navigate there:</para>
+			<title>Guida sul merging</title>
+			<para>Il processo di fusione implica esaminare i cambiamenti dei pacchetti sorgente sia di Debian che di Ubuntu, e determinare quali siano i cambiamenti e quali siano specifici di Ubuntu. Guardiamo ora un esempio, un popolare programma per la creazione di CD chiamato <application>xcdroast</application>.</para>
+			<para>Per cominciare, è necessario creare una cartella che contenga il nostro progetto, ed aprirla:</para>
 			<screen>
-mkdir ~/xcdroast
-cd ~/xcdroast</screen>
-			<para>Now download all of the source packages involved into
-				this directory:</para>
+↵
+ mkdir ~/xcdroast↵
+ cd ~/xcdroast</screen>
+			<para>Ora scaricare tutti i pacchetti sorgente necessari in questa cartella:</para>
 			<itemizedlist>
-				<listitem><para>The <application>xcdroast</application> source tarball that is used
-						by all versions:</para>
+				<listitem><para>Il tarball sorgente di <application>xcdroast</application> utilizzato da tutte le versioni:</para>
 					<itemizedlist>
 						<listitem>
 <para><ulink url="http://snapshot.debian.net/archive/2006/01/16/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15.orig.tar.gz">xcdroast_0.98+0alpha15.orig.tar.gz</ulink></para>
@@ -566,7 +503,7 @@ cd ~/xcdroast</screen>
 					</itemizedlist>
 				</listitem>
 				<listitem>
-					<para>The <phrase>Ubuntu</phrase> Breezy source package files:</para>
+					<para>I file del pacchetto sorgente di <phrase>Ubuntu</phrase> Breezy:</para>
 					<itemizedlist>
 						<listitem><para>
 <ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.dsc">xcdroast_0.98+0alpha15-1.1ubuntu1.dsc</ulink></para>
@@ -577,7 +514,7 @@ cd ~/xcdroast</screen>
 					</itemizedlist>
 				</listitem>
 				<listitem>
-					<para>The Debian source package files that the Breezy packages are derived from:</para>
+					<para>I file del pacchetto sorgente di Debian da cui sono derivati i pacchetti di Breezy:</para>
 						<itemizedlist>
 							<listitem>
 <para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.diff.gz">xcdroast_0.98+0alpha15-1.1.diff.gz</ulink></para>
@@ -588,8 +525,7 @@ cd ~/xcdroast</screen>
 						</itemizedlist>
 				</listitem>
 				<listitem>
-					<para>The new Debian source package files that the Dapper packages will be
-						derived from:</para>
+					<para>I nuovi file del pacchetto sorgente di Debian da cui saranno derivati i pacchetti di Dapper:</para>
 					<itemizedlist>
 						<listitem>
 <para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-3.dsc">xcdroast_0.98+0alpha15-3.dsc</ulink></para>
@@ -600,93 +536,73 @@ cd ~/xcdroast</screen>
 					</itemizedlist>
 				</listitem>
 			</itemizedlist>
-			<note><para>These steps can also be done by searching for the Debian packages
-				at <ulink url="packages.debian.org">packages.debian.org</ulink> and the Ubuntu
-				packages at <ulink url="packages.ubuntu.com">packages.ubuntu.com</ulink>.</para></note>
-		<tip><para>A very useful package to have installed when doing merges (or any Ubuntu packaging) is
-				<application>devscripts</application>. If you do not have that already
-				installed, install it before proceeding.</para></tip>
+			<note><para>Questi passaggi possono essere completati anche cercando in <ulink url="packages.debian.org">packages.debian.org</ulink> per i pacchetti Debian e in <ulink url="packages.ubuntu.com">packages.ubuntu.com</ulink> per i pacchetti Ubuntu.</para></note>
+		<tip><para>Un pacchetto che è estremamente utile avere installato quando si fanno fusioni (od ogni operazione di creazione di pacchetti per Ubuntu) è <application>devscripts</application>. Se ancora non dovesse essere stato installato, installarlo prima di continuare.</para></tip>
 			
-			<para>By looking at the <phrase>Ubuntu</phrase> changelog you should be able to see which differences
-				to expect between the Ubuntu package and the Debian package from which it was derived.
-				For xcdroast, the <phrase>Ubuntu</phrase> changelog can be found at
-	<ulink url="http://changelogs.ubuntu.com/changelogs/pool/universe/x/xcdroast/xcdroast_0.98+0alpha15-1.1ubuntu1/changelog">
-					changelogs.ubuntu.com</ulink>. It says that a .desktop file was fixed and properly
-				installed to close a bug reported in
-				<ulink url="https://launchpad.net/malone/bugs/2698">Malone</ulink>.
-			</para>
+			<para>Analizzando il changelog di Ubuntu si dovrebbe riuscire a capire quali differenze aspettarsi tra il pacchetto Ubuntu e quello Debian da cui è stato derivato. Per xcdroast, il changelog di <phrase>Ubuntu</phrase> si può trovare su <ulink url="http://changelogs.ubuntu.com/changelogs/pool/universe/x/xcdroast/xcdroast_0.98+0alpha15-1.1ubuntu1/changelog"> changelogs.ubuntu.com</ulink>. Dice che un file .desktop è stato corretto e propriamente installato per risolvere un bug riportato in <ulink url="https://launchpad.net/malone/bugs/2698">Malone</ulink>.</para>
 			
-			<para>Now inspect the actual changes in the source packages:</para>
+			<para>Ora si esaminano gli attuali cambiamenti nei pacchetti sorgente:</para>
 			<screen>
-debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-1.1ubuntu1.dsc | \
-	ubuntu.debdiff | less ubuntu.debdiff</screen>
+↵
+ debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-1.1ubuntu1.dsc | \↵
+ 	ubuntu.debdiff | less ubuntu.debdiff</screen>
 			
-			<para>The lines that start with - have been removed from the Debian package, and those that start
-				with + have been added to the <phrase>Ubuntu</phrase> package.</para>
-			<para>The following is what we see:</para>
+			<para>Le linee che iniziano con - sono state rimosse dal pacchetto Debian, e quelle che iniziano con + sono state aggiunte al pacchetto <phrase>Ubuntu</phrase>.</para>
+			<para>Questo è ciò che vediamo:</para>
 			<itemizedlist>
 				<listitem>
-					<para>In debian/rules install is being used instead of cp to install the xcdroast icon.
-						Also, there is a new line installing the .desktop file.</para>
+					<para>In debian/rules è stato utilizzato install al posto di cp per installare l'icona di xcdroast. Inoltre, è presente una nuova linea per l'installazione del file .desktop.</para>
 				</listitem>
 				<listitem>
-					<para>In debian/changelog the changes made are added to the changelog entry.</para>
+					<para>In debian/changelog i cambiamenti effettuati sono stati aggiunti alle note del changelog.</para>
 				</listitem>
 				<listitem>
-					<para>In debian/dirs usr/share/applications has been added for the install lines above to
-						work properly.</para>
+					<para>In debian/dirs usr/share/applications è stata aggiunta per fare in modo che le linee di installazione sopra funzionino correttamente.</para>
 				</listitem>
 				<listitem>
-					<para>xcdroast.desktop is added</para>
+					<para>xcdroast.desktop è stato aggiunto</para>
 				</listitem>
 			</itemizedlist>
 			
-			<para>Now we know how the Ubuntu source was changed. Now we need to see what has changed in
-				the Debian sources.</para>
+			<para>Adesso sappiamo come è stato modificato il sorgente di Ubuntu. È necessario ora conoscere cosa è stato cambiato nei sorgenti Debian.</para>
 			<screen>
-debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-3.dsc &gt; debian.debdiff
-less debian.debdiff</screen>
-			<para>There is a lot more in this debdiff than in the last one. One way we can get a
-				better idea of what has changed is to see what files were changed in the debdiff:</para>
+↵
+ debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-3.dsc &gt; debian.debdiff↵
+ less debian.debdiff</screen>
+			<para>n questo debdiff ci sono molte più cose che nel precedente. Un modo con cui farsi una migliore idea di cosa sia cambiato è vedere quali file siano stati modificati nel debdiff:</para>
 			
 			<screen>grep diff debian.debdiff</screen>
 			
-			<para>This indicates that debian/postinst, debian/rules, debian/changelog, debian/doc-base.manual,
-				debian/control, and debian/menu were changed in the new Debian version.</para>
-			<para>Thus we can see that we need to check debian/rules to see if the <phrase>Ubuntu</phrase> changes were made.
-				We can also see that debian/dirs was not changed from the old Debian version. Let us
-				now look at the files. We can unpack the source package by using
-				<application>dpkg-source</application>:</para>
+			<para>Questo ci indica che debian/postinst, debian/rules, debian/changelog, debian/doc-base.manual, debian/control, e debian/menu sono stati modificati nella nuova versione Debian.</para>
+			<para>Pertanto è necessario esaminare debian/rules per verificare che i cambiamenti di <phrase>Ubuntu</phrase> siano stati apportati. Inoltre debian/dirs non è stato modificato dalla vecchia versione Debian. Ora esaminiamo i file. Possiamo scompattare il pacchetto sorgente utilizzando <application>dpkg-source</application>:</para>
 			
 			<screen>dpkg-source -x xcdroast_0.98+0alpha15-3.dsc</screen>
 			
-			<para>This will decompress the xcdroast_0.98+0alpha15.orig.tar.gz file, create a xcdroast-0.98+0alpha15
-				directory, and apply the changes found in xcdroast_0.98+0alpha15-3.diff.gz.</para>
-			<para>Now navigate to the debian directory:</para>
+			<para>Questo comando scompatterà il file xcdroast_0.98+0alpha15.orig.tar.gz, creerà una cartella xcdroast-0.98+0alpha15, ed applicherà i cambiamenti trovati in xcdroast_0.98+0alpha15-3.diff.gz.</para>
+			<para>Ora entrare nella cartella Debian:</para>
 			
 			<screen>cd xcdroast-0.98+0alpha15/debian</screen>
 			
-			<para>One can see in <filename>rules</filename> that changes made by <phrase>Ubuntu</phrase> were not applied to the new Debian version.
-				This means that:</para>
+			<para>È possibile vedere in <filename>rules</filename> che i cambiamenti fatti da <phrase>Ubuntu</phrase> non sono stati applicati alla nuova versione Debian. Questo significa che:</para>
 			
 			<screen>cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps</screen>
 			
-			<para>...should be changed to:</para>
+			<para>..dovrebbe essere cambiato in:</para>
 			
 			<screen>
-#cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps
+↵
+ #cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps↵
+ ↵
+ #install desktop and icon↵
+ install -D -m 644 $(CURDIR)/debian/xcdroast.desktop \↵
+ 	$(CURDIR)/debian/xcdroast/usr/share/applications/xcdroast.desktop↵
+ install -D -m 644 $(CURDIR)/debian/xcdroast.xpm \↵
+ 	$(CURDIR)/debian/xcdroast/usr/share/pixmaps/xcdroast.xpm</screen>
 
-#install desktop and icon
-install -D -m 644 $(CURDIR)/debian/xcdroast.desktop \
-	$(CURDIR)/debian/xcdroast/usr/share/applications/xcdroast.desktop
-install -D -m 644 $(CURDIR)/debian/xcdroast.xpm \
-	$(CURDIR)/debian/xcdroast/usr/share/pixmaps/xcdroast.xpm</screen>
-
-			<para>Now in <filename>dirs</filename>, the following line needs to be added for the .desktop file to be installed:</para>
+			<para>Ora in <filename>dirs</filename>, le seguenti linee devono essere aggiunte affinché il file .desktop venga installato.</para>
 			<screen>usr/share/applications</screen>
 			
-			<para>Now we need the actual .desktop file (saved as <emphasis>debian/xcdroast.desktop</emphasis>).
-				From the ubuntu.debdiff (or the Ubuntu source package), we see that it is:</para>
+			<para>Adesso abbiamo bisogno del file .desktop attuale (salvato come <emphasis>debian/xcdroast.desktop</emphasis>). Da ubuntu.debdiff (o dal pacchetto sorgente Ubuntu), vediamo che è:</para>
 			<screen>
 [Desktop Entry]
 Encoding=UTF-8
