@@ -1505,162 +1505,80 @@ Listen 443
 				<title>Tillgång via WebDAV-protokolet via SSL-kryptering (https://)</title>
 					<para>Att komma åt ett Subversionförråd via WebDAV-protokollet med SSL-kryptering (https://) är likandant som att komma åt http:// med den enda skillnaden att du måste installera och konfigurera det digitala certifikatet på din Apache2-server.</para>
 
-					<para>
-						You can install a digital certificate issued by a signing 
-						authority like Verisign. Alternatively, you can install your 
-						own self-signed certificate.
-					</para>
-					<para>
-						This step assumes you have installed and configured a digital 
-						certificate in your Apache 2 web server. Now, to access the 
-						Subversion repository, please refer to the above section! 
-						The access methods are exactly the same, except the protocol. 
-						You must use https:// to access the Subversion repository.
-					</para>
+					<para>Du kan installera ett digitalt certifikat som givits ut av en signeringsauktoritet som Verisign. Du kan också installera ett certifikat du signerat själv.</para>
+					<para>Vi förutsätter att du har installerat och konfigurerat ett digitalt certifikat i din Apache2-webbserver. Läs sedan ovastående avdelning för att komma åt subversionförrådet! Du gör precis likadant för att komma åt det, men protokollen är olika. Du måste använda https:// för att komma åt subversionförrådet.</para>
 
 			</sect4>
 			<sect4 id="access-via-custom-protocol" status="complete">
-				<title>Access via custom protocol (svn://)</title>
-					<para> 
-					Once the Subversion repository is created, you can configure the 
-					access control. You can edit the <filename>
-					/path/to/repos/project/conf/svnserve.conf</filename> file to 
-					configure the access control.  For example, to set up 
-					authentication, you can uncomment the following lines in the 
-					configuration file: </para>
+				<title>Tillgång via ett specialprotokoll (svn://)</title>
+					<para>Så fort subversionförrådet har skapats kan du konfigurera åtkomsträttigheter. Du kan ändra filen <filename> /sökväg/till/förråd/conf/svnserve.conf</filename> för att konfigurera åtkomsträttigheter. Till exempel kan du avkommentera följande rader i konfigurationsfilen för att aktivera autentisering:</para>
 					<programlisting># [general]
 # password-db = passwd</programlisting>
 
-					<para>
-					After uncommenting the above lines, you can maintain the user 
-					list in the passwd file. So, edit the file <filename>passwd
-					</filename> in the same directory and add the new user. The 
-					syntax is as follows:
-					</para>
-					<programlisting>username = password</programlisting>
-					<para>
-					For more details, please refer to the file.
-					</para>
+					<para>När du har avkommenterat ovastående rader kan du upprätthålla en användarlista i passwd-filen. Med andra ord, redigera filen <filename>passwd </filename> i samma katalog och lägg till en ny användare. Syntaxet är såhär:</para>
+					<programlisting>användarnamn = lösenord</programlisting>
+					<para>Mer information finns i filen.</para>
 
-					<para>
-					Now, to access Subversion via the svn:// custom protocol, either 
-					from the same machine or a different machine, you can run 
-					svnserver using svnserve command. The syntax is as follows:
-					</para>
-					<programlisting>$ svnserve -d --foreground -r /path/to/repos
-# -d -- daemon mode
-# --foreground -- run in foreground (useful for debugging)
-# -r -- root of directory to serve
+					<para>För att nu komma åt Subversion via specialprotokollet svn://, antingen från samma dator eller från en annan, kan du köra svnserver med kommandot svnserve. Syntaxet är såhär:</para>
+					<programlisting>$ svnserve -d --foreground -r /sökväg/till/förråd
+# -d -- demon-läge
+# --foreground -- kör i förgrunden (användbart för felsökning)
+# -r -- serverns rotkatalog
 
-For more usage details, please refer to:
+För fler detaljer om användning, läs:
 $ svnserve --help</programlisting>
 
-					<para>Once you run this command, Subversion starts listening on default port (3690). To access the project repository, you must run the following command from a terminal prompt: </para>
+					<para>När du kör det här kommandot börjar Subversion lyssna på standardporten (3690). För att komma åt projektförrådet måste du köra följande kommando i en terminalprompt:</para>
 					<para>
 <screen>
-<command>svn co svn://hostname/project project --username user_name</command>
+<command>svn co svn://värdnamn/projekt projekt --username användarnamn</command>
 </screen>
                                         </para>
-					<para>Based on server configuration, it prompts for password. Once 
-					you are authenticated, it checks out the code from Subversion 
-					repository.  To synchronize the project repository with the local 
-					copy, you can run the <command>update</command> sub-command. The 
-					syntax of the command, entered at a terminal prompt, is as follows:
-					</para>
+					<para>Servern kommer nu att fråga efter ett lösenord enligt serverkonfigurationen. När du har autentiserat dig kommer den att checka ut koden från subversionförrådet. För att synkronisera projektförrådet med din lokala kopia kan du köra underkommandot <command>update</command>. Syntaxet för kommandot, som du skriver i en terminalpromt, är såhär:</para>
 					<para>
 <screen>
-<command>cd project_dir ; svn update</command>
+<command>cd projektkatalog ; svn update</command>
 </screen>
                                         </para>
-					<para>For more details about using each Subversion sub-command, you 
-					can refer to the manual. For example, to learn more about the co 
-					(checkout) command, please run the following command from a 
-					terminal prompt:</para>
+					<para>För fler detaljer kring hur du använder alla Subversions underkommandon kan du läsa i manualen. För att till exempel lära dig mer om kommandot co (checkout) kör du följande kommando i en terminalprompt:</para>
                     <para><screen><command>svn co help</command></screen></para>
 
 			</sect4>
 			<sect4 id="access-via-custom-protocol-with-ssl" status="complete">
-				<title>Access via custom protocol with SSL encryption (svn+ssh://)</title>
-					<para> The configuration and server process is same as in the
-					svn:// method. For details, please refer to the above section. 
-					This step assumes you have followed the above step and started 
-					the	Subversion server using <application>svnserve</application>  
-					command.</para>
+				<title>Tillgång via specialprotokoll med SSL-kryptering (svn+ssh://)</title>
+					<para>Konfigurationen och serverprocessen är samma som i svn://-metoden. Läs ovastående avdelning för fler detaljer. Det här steget förutsätter att du har följt ovastående steg och startat subversionservern med kommandot <application>svnserve</application>.</para>
 
-					<para>It is also assumed that the ssh server is running on that 
-					machine and that it is allowing incoming connections. To confirm, 
-					please try to login to that machine using ssh. If you can login, 
-					everything is perfect. If you cannot login, please address it 
-					before continuing further.</para>
+					<para>Det antas också att ssh-servern körs på den datorn och att den tillåter inkommande anslutningar. För att se till att det här stämmer, försök logga in i den datorn med ssh. Om du kan logga in är allt perfekt. Om du inte kan logga in, åtgärda det innan du fortsätter.</para>
 
-					<para>The svn+ssh:// protocol is used to access the Subversion 
-					repository using SSL encryption. The data transfer is encrypted 
-					using this method. To access the project repository (for example 
-					with a checkout), you must use the following command syntax: 
-                                        </para>
+					<para>Protokollet svn+ssh:// används för att komma åt subversionförrådet med SSL-kryptering. Dataöverföringen krypteras med den här metoden. För att komma åt projektförrådet (för att till exempel checka ut) måste du använda följande syntax:</para>
                                         <para>
 <screen>
-<command>svn co svn+ssh://hostname/var/svn/repos/project</command>
+<command>svn co svn+ssh://värdnamn/sökväg/till/förråd</command>
 </screen>
                                         </para>
 
-					<note><para> You must use the full path (/path/to/repos/project) 
-					to access the Subversion repository using this access method. 
-					</para></note>
-					<para>
-					Based on server configuration, it prompts for password. You must 
-					enter the password you use to login via ssh. Once you are 
-					authenticated, it checks out the code from the Subversion 
-					repository.
-					</para>
+					<note><para>Du måste använda hela sökvägen (/sökväg/till/förråd) för att komma åt subversionförrådet med den här åtkomstmetoden.</para></note>
+					<para>Servern kommer nu, baserat på hur den är konfigurerad, att fråga om ett lösenord. Du måste skriva in lösenordet du använder för att logga in med ssh. När du är autentiserad checkas koden ut från subversionförrådet.</para>
 			</sect4>
 			</sect3>
 
       </sect2>
       <sect2 id="cvs-server" status="complete">
-        <title>CVS Server</title> 
-          <para>
-          CVS is a version control system. You can use it to record the
-          history of source files.
-          </para>
+        <title>CVS-server</title> 
+          <para>CVS är ett versionshanteringssystem. Du kan använda det för att spara historiken för källkodsfiler.</para>
         <sect3 id="cvs-installation" status="complete">
           <title>Installation</title>
-            <para>
-              At a terminal prompt, enter the following command to install
-              <application>cvs</application>:
-
-<screen>
+            <para>Skriv följande kommando vid en terminalpromt för att installera <application>cvs</application>: <screen>
 <command>sudo apt-get install cvs</command>
-</screen>
-
-After you install <application>cvs</application>, you should install
-<application>xinetd</application> to start/stop the cvs server. At the
-prompt, enter the following command to install
-<application>xinetd</application>:
-
-<screen>
+</screen> när du har installerat <application>cvs</application> bör du installera <application>xinetd</application> för att starta/stoppa cvs-servern. Vid prompten, skriv följande kommando för att installera <application>xinetd</application>: <screen>
 <command>sudo apt-get install xinetd</command>
-</screen>
-            </para>
+</screen></para>
         </sect3>
         <sect3 id="cvs-configuration" status="complete">
           <title>Konfiguration</title>
-            <para>
-            Once you install cvs, the repository will be automatically
-            initialized. By default, the repository resides under the
-            <application>/var/lib/cvs</application> directory. You can
-            change this path by running following command:
-
-<screen>
-<command>cvs -d /your/new/cvs/repo init</command>
-</screen>
-
-Once the initial repository is set up, you can configure
-<application>xinetd</application> to start the CVS server. 
-You can copy the following lines to the <filename>
-/etc/xinetd/cvspserver</filename> file.
-
-<programlisting>
+            <para>När du installerar cvs kommer förrådet att bli automatiskt initierat. Från början ligger förrådet i katalogen <application>/var/lib/cvs</application>. Du kan änra den här sökvägen genom att köra följande kommando: <screen>
+<command>cvs -d /ditt/nya/cvs/förråd init</command>
+</screen> När det ursprungliga förrådet har skapats kan du konfigurera <application>xinetd</application> så att det startar CVS-servern. Du kan kopiera följande rader till filen <filename> /etc/xinetd/cvspserver</filename>. <programlisting>
 service cvspserver
 {
      port = 2401
@@ -1673,26 +1591,12 @@ service cvspserver
      server_args = -f --allow-root /var/lib/cvs pserver
      disable = no
 }
-</programlisting>
-
-<note>
-<para>
-Be sure to edit the repository if you have changed the default
-repository (<application>/var/lib/cvs</application>) directory.
-</para>
-</note>
-
-Once you have configured <application>xinetd</application> you 
-can start the cvs server by running following command:
-
-<screen>
+</programlisting><note>
+<para>Se till att ändra sökvägen till förrådet om du har bytt standardkatalog (<application>/var/lib/cvs</application>).</para>
+</note> När du har konfigurerat <application>xinetd</application> kan du starta cvs-servern genom att köra följande kommando: <screen>
 <command>sudo /etc/init.d/xinetd start</command>
-</screen>
-            </para>
-            <para>
-            You can confirm that the CVS server is running by issuing 
-			the following command:
-            </para>
+</screen></para>
+            <para>Du kan bekräfta att CVS-servern är igång genom att köra följande kommando:</para>
 
             <para>
 <screen>
@@ -1700,102 +1604,54 @@ can start the cvs server by running following command:
 </screen>
             </para>
 
-            <para>
-            When you run this command, you should see the following line
-            or something similar:
-            </para>
+            <para>När du kör det här kommandot bör du se följande rad, eller någon liknande:</para>
 
 <programlisting>
-tcp        0      0 *:cvspserver            *:* LISTEN 
+tcp 0 0 *:cvspserver *:* LISTEN 
 </programlisting>
 
-        <para>
-From here you can continue to add users, add new projects,
-and manage the CVS server. 
-        </para>
+        <para>Nu kan du fortsätta med att lägga till användare, lägga till projekt, och administrera CVS-servern.</para>
         <warning>
-<para>
-          CVS allows the user to add users independently of the
-underlying OS installation. Probably the easiest way is to use the Linux
-Users for CVS, although it has potential security issues. Please refer
-to the CVS manual for details.
-</para>
+<para>CVS låter användaren lägga till användare oberoende av det underliggande operativsystemet. Det enklaste sättet är förmodligen att använda Linux användare för CVS, men det har potentiella säkerhetsproblem. Läs CVS-manualen för detaljer.</para>
         </warning>
 
         </sect3>
         <sect3 id="cvs-add-projects" status="complete">
-          <title>Add Projects</title>
-            <para>
-            This section explains how to add new project to the CVS 
-			repository. Create the directory and add necessary document 
-			and source files to the directory. Now, run the following 
-			command to add this project to CVS repository:
-<screen>
-<command>cd your/project</command>
-<command>cvs import -d :pserver:username@hostname.com:/var/lib/cvs -m "Importing my project to CVS repository" . new_project start</command>
-</screen>
-
-<tip>
-<para>
-You can use the CVSROOT environment variable to store the CVS root directory.
-Once you export the CVSROOT environment variable, you can avoid using -d option to
-above cvs command.
-</para>
-</tip>
-The string <emphasis>new_project</emphasis> is a vendor
-tag, and <emphasis>start</emphasis> is a release tag.
-They serve no purpose in this context, but since CVS requires them, they
-must be present.
-
-<warning>
-<para>
-When you add a new project, the CVS user you use must have write access to the
-CVS repository (<application>/var/lib/cvs</application>). By default, the
-<application>src</application> group has write access to the CVS
-repository. So, you can add the user to this group, and he can then add and
-manage projects in the CVS repository.
-</para>
-</warning>
-            </para>
+          <title>Lägga till projekt</title>
+            <para>Den här avdelningen förklarar hur du lägger till nya projekt till CVS-förrådet. Skapa en katalog och lägg till nödvändiga dokument och källkodsfiler till den. Kör sedan följande kommando för att lägga till det här projektet till CVS-förrådet: <screen>
+<command>cd ditt/projekt</command>
+<command>cvs import -d :pserver:användarnamn@värdnamn.com:/var/lib/cvs -m "Importerar mitt projekt till CVS-förrådet" . nytt_projekt start</command>
+</screen><tip>
+<para>Du kan använda miljövariabeln CVSROOT för att lagra rootkatalogen för CVS. När du exporterar miljövariabeln CVSROOT slipper du använda alternativet -d i ovastående cvs-kommando.</para>
+</tip> Strängen <emphasis>nytt_projekt</emphasis> är en utgivartag, och <emphasis>start</emphasis> är en utgåvetag. De gör ingenting i det här sammanhanget, men eftersom CVS kräver dem måste de vara närvarande. <warning>
+<para>När du lägger till ett nytt projekt måste CVS-användaren du använder ha skrivrättigheter till CVS-förrådet (<application>/var/lib/cvs</application>). Normalt har gruppen <application>src</application> skrivrättigheter till CVS-förrådet. Om du lägger till en användare i den här gruppen kommer han med andra ord att kunna hantera projekt i CVS-förrådet.</para>
+</warning></para>
         </sect3>
       </sect2>
       <sect2 id="version-control-ref" status="complete">
         <title>Referenser</title> 
-				<para><ulink url="http://subversion.tigris.org/">Subversion Home Page</ulink></para>
-				<para><ulink url="http://svnbook.red-bean.com/">Subversion Book</ulink></para>
-				<para><ulink url="http://ximbiot.com/cvs/manual/cvs-1.11.21/cvs_toc.html">CVS Manual</ulink></para>
+				<para><ulink url="http://subversion.tigris.org/">Subversions hemsida</ulink></para>
+				<para><ulink url="http://svnbook.red-bean.com/">Subversion-bok</ulink></para>
+				<para><ulink url="http://ximbiot.com/cvs/manual/cvs-1.11.21/cvs_toc.html">CVS-manual</ulink></para>
       </sect2>
     </sect1>
 	<sect1 id="databases" status="complete">
-		<title>Databases</title>
-          <para>
-            Ubuntu provides two Database servers. They are:
-            <itemizedlist spacing="compact">
+		<title>Databaser</title>
+          <para>Ubuntu erbjuder två databasservrar. De är: <itemizedlist spacing="compact">
                 <listitem>
                     <para><application><trademark>MySQL</trademark></application></para>
                 </listitem>
                 <listitem>
                     <para><application>PostgreSQL</application></para>
                 </listitem>
-            </itemizedlist>
-            They are available in the main repository. This section
-            explains how to install and configure these database
-            servers.
-          </para>
+            </itemizedlist> De finns tillgängliga i main-förrådet. Den här avdelningen förklarar hur du installerar och konfigurerar dessa databasservrar.</para>
       <sect2 id="mysql" status="complete">
         <title>MySQL</title>
-          <para>
-          MySQL is a fast, multi-threaded, multi-user, and robust SQL
-          database server. It is intended for mission-critical, 
-		  heavy-load production systems as well as for embedding into 
-		  mass-deployed software.
-          </para>
+          <para>MySQL är en SQL-databasserver som är snabb, multitrådad, och stödjer flera användare. Den är avsedd för uppdragskritiska, hårt lastade produktionssystem så väl som för att bygga in i massinstallerad mjukvara.</para>
 
         <sect3 id="mysql-installation" status="complete">
           <title>Installation</title>
-            <para>
-            To install MySQL, run the following command from a terminal prompt:
-            </para>
+            <para>För att installlera MySQL, kör följande kommando från en terminalpromt:</para>
 
             <para>
 <screen>
@@ -1803,11 +1659,7 @@ manage projects in the CVS repository.
 </screen>
             </para>
 
-            <para>
-            Once the installation is complete, the MySQL server should be
-            started automatically. You can run the following command from a terminal prompt to
-            check whether the MySQL server is running:
-            </para>
+            <para>När installationen är färdig bör MySQL-servern startas automatiskt. Du kan köra följande kommando från en terminalprompt för att avgöra om MySQL-servern körs:</para>
 
             <para>
 <screen>
@@ -1815,15 +1667,12 @@ manage projects in the CVS repository.
 </screen>
             </para>
 
-            <para>
-            When you run this command, you should see the following line
-            or something similar:
-            </para>
+            <para>När du kör det här kommandot bör du se följande rad, eller någon liknande:</para>
 
 <programlisting>
-tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
+tcp 0 0 localhost.localdomain:mysql *:* LISTEN -
 </programlisting>
-	<para>If the server is not running correctly, you can type the following command to start it:</para>
+	<para>Om servern inte körs kan du skriva följande kommando för att starta den:</para>
             <para>
 <screen>
 <command>sudo /etc/init.d/mysql restart</command>
@@ -1833,42 +1682,27 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
         </sect3>
         <sect3 id="mysql-configuration" status="complete">
           <title>Konfiguration</title>
-            <para>
-            By default, the administrator password is not set. Once you
-            install MySQL, the first thing you must do is to configure
-            the MySQL administrator password. To do this, run the following commands:
-            </para>
+            <para>Normalt finns det inget administratörslösenord. När du har installerat MySQL är det första du ska göra att konfigurera MySQL:s administratörslösenord. För att göra det kör du följande kommandon:</para>
             <para>
 <screen>
-<command>sudo mysqladmin -u root password newrootsqlpassword</command>
+<command>sudo mysqladmin -u root password nyttsqlrootlösenord</command>
 </screen>
             </para>
             <para>
 <screen>
-<command>sudo mysqladmin -u root -h localhost password newrootsqlpassword</command>
+<command>sudo mysqladmin -u root -h localhost password nyttsqlrootlösenord</command>
 </screen>
             </para>
 
-            <para>
-            You can edit the <filename>/etc/mysql/my.cnf</filename> file to configure the basic
-            settings -- log file, port number, etc. Refer to
-            <filename>/etc/mysql/my.cnf</filename> file for more details.
-            </para>
+            <para>Du kan ändra i filen <filename>/etc/mysql/my.cnf</filename> för att konfigurera de mest grunläggande inställningarna - loggfil, portnummer, mm. Titta i filen <filename>/etc/mysql/my.cnf</filename> för fler detaljer.</para>
         </sect3>
       </sect2>
       <sect2 id="postgresql" status="complete">
         <title>PostgreSQL</title> 
-          <para>
-          PostgreSQL is an object-relational database system that has
-          the features of traditional commercial database systems with
-          enhancements to be found in next-generation DBMS systems.
-          </para>
+          <para>PostgreSQL är ett objekt-relationellt databassystem som har de funktioner traditionella kommerciella databassytem har med tillägg som du kommer hitta i nästa generations DBMS-system.</para>
         <sect3 id="postgresql-installation" status="complete">
           <title>Installation</title>
-            <para>
-            To install PostgreSQL, run the following command in the
-            command prompt:
-            </para>
+            <para>För att installera PostgreSQL, kör följande kommando i kommandoprompten:</para>
 
             <para>
 <screen>
@@ -1876,187 +1710,100 @@ tcp        0      0 localhost.localdomain:mysql           *:* LISTEN -
 </screen>
             </para>
 
-            <para>
-            Once the installation is complete, you should configure the
-            PostgreSQL server based on your needs, although the default
-            configuration is viable.</para>
+            <para>Så fort installationen är avslutad bör du konfigurera PostgreSQL-servern baserat på dina behov, men standardkonfigurationen är ganska bra.</para>
             
         </sect3>
         <sect3 id="postgresql-configuration" status="complete">
           <title>Konfiguration</title>
-            <para>By default, connection via TCP/IP is disabled.
-            PostgreSQL supports multiple client authentication methods.
-            By default, IDENT authentication method is used.  Please
-            refer <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">
-			the PostgreSQL Administrator's Guide</ulink>.</para>
+            <para>Normalt är anslutningar via TCP/IP inaktiverade. PostgreSQL stödjer flera sätt för klienter att autentisera sig, och normalt används IDENT-metoden. Läs mer i <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">PostgreSQL:s administratörsguide</ulink>.</para>
             
-            <para>The following discussion assumes that you wish to enable 
-			TCP/IP connections and use the MD5 method for client 
-			authentication. PostgreSQL configuration files are stored in the
-            <filename>/etc/postgresql/&lt;version&gt;/main</filename>
-            directory. For example, if you install PostgreSQL 7.4, the
-            configuration files are stored in the
-            <filename>/etc/postgresql/7.4/main</filename> directory.
-            </para>
+            <para>Följande text förutsätter att du vill aktivera TCP/IP-anslutningar och använda MD5-metoden för klientanslutningar. PostgreSQL:s konfigurationsfiler lagras i katalogen <filename>/etc/postgresql/&lt;version&gt;/main</filename>. Till exempel, om du installerar PostgreSQL 7.4 kommer konfigurationsfilerna att lagras i katalogen <filename>/etc/postgresql/7.4/main</filename>.</para>
             
             <tip>
-            <para>
-             To configure <application>ident</application>
-             authentication, add entries to the <filename>/etc/postgresql/7.4/main/pg_ident.conf</filename>
-             file.
-            </para>
+            <para>För att konfigurera <application>ident</application>-autentiseringen lägger du till poster till filen <filename>/etc/postgresql/7.4/main/pg_ident.conf</filename>.</para>
             </tip>
 
-            <para>To enable TCP/IP connections, edit the file <filename>/etc/postgresql/7.4/main/postgresql.conf</filename></para>
+            <para>För att aktivera TCP/IP-anslutningar, ändra i filen <filename>/etc/postgresql/7.4/main/postgresql.conf</filename></para>
 
-            <para>Locate the line <emphasis>#tcpip_socket =
-            false</emphasis> and change it to
-            <emphasis>tcpip_socket =
-            true</emphasis>. You may
-            also edit all other parameters, if you know what you are doing! 
-			For details, refer to the configuration file or to the PostgreSQL documentation.
-            </para>
+            <para>Leta rätt på raden <emphasis>#tcpip_socket = false</emphasis> och ändra den till <emphasis>tcpip_socket = true</emphasis>. Du kan också ändra på alla andra parametrar om du vet vad du gör. För fler detjaler kan du läsa i konfigurationsfilen eller i PostgreSQL:s dokumentation.</para>
 
-            <para>By default, the user credentials are not set for
-            <emphasis>MD5</emphasis> client
-            authentication. So, first it is necessary to configure the PostgreSQL server to use
-            <emphasis>trust</emphasis> client
-            authentication, connect to the database,
-            configure the password, and revert the configuration back to use
-            <emphasis>MD5</emphasis> client authentication.
-            To enable <emphasis>trust</emphasis> client
-            authentication, edit the file <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename></para>
+            <para>Normalt kan inte användarna ansluta över <emphasis>MD5</emphasis> eftersom deras uppgifter inte finns i databasen. Det första du behöver göra är därför att konfigurera PostgreSQL-servern så att den använder klientautentiseringen <emphasis>trust</emphasis>, ansluta till databasen, konfigurera lösenordet, och ställa tillbaka klientautentiseringen till <emphasis>MD5</emphasis>. För att aktivera klientautentiseringen <emphasis>trust</emphasis>, ändra i filen <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename></para>
 
-            <para>Comment out all the existing lines which use
-            <emphasis>ident</emphasis> and
-            <emphasis>MD5</emphasis>
-            client authentication and add the following
-            line:</para>
+            <para>Kommentera ut alla rader som använder klientautentiseringarna <emphasis>ident</emphasis> och <emphasis>MD5</emphasis> och lägg till följande rad:</para>
 <programlisting>
-local   all         postgres                          trust sameuser
+local all postgres trust sameuser
 </programlisting>
 
-            <para>Then, run the following command to
-            start the PostgreSQL server:
-            </para>
+            <para>Kör sedan följande kommando för att starta PostgreSQL-servern:</para>
             <para>
 <screen>
 <command>sudo /etc/init.d/postgresql start</command>
 </screen>
             </para>
-            <para>Once the PostgreSQL server is successfully started, run the following command at a terminal prompt to connect to the default
-            PostgreSQL template database</para>
+            <para>När PostgreSQL-servern har startats, kör följande kommando vid en terminalprompt för att ansluta till PostgreSQL:s standardmallsdatabas</para>
 
             <para>
 <screen>
 <command>psql -U postgres -d template1</command>
 </screen>
             </para>
-            <para>The above command connects to PostgreSQL
-            database <emphasis>template1</emphasis> as user
-            <emphasis>postgres</emphasis>. Once you connect to the PostgreSQL
-            server, you will be at a SQL prompt. You can run the
-            following SQL command at the <application>psql</application> prompt to configure the
-            password for the user <emphasis role="italics">postgres</emphasis>.</para>
+            <para>Ovastående kommando ansluter till PostgreSQL-databasen <emphasis>template1</emphasis> som användaren <emphasis>postgres</emphasis>. När du anslutit till PostgreSQL-servern kommer du att mötas av en SQL-prompt. Du kan köra följande SQL-kommandon vid prompten till <application>psql</application> för att konfigurera lösenordet för användaren <emphasis role="italics">postgres</emphasis>.</para>
 
             <para>
 <screen>
-<command>template1=# ALTER USER postgres with encrypted password 'your_password';</command>
+<command>template1=# ALTER USER postgres with encrypted password 'ditt_lösenord';</command>
 </screen>
             </para>
-            <para>After configuring the password, edit the file
-            <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename> to use
-            <emphasis>MD5</emphasis> authentication:</para>
-            <para>Comment the recently added <emphasis role="italics">trust</emphasis> line and add the following
-            line: </para>
+            <para>När du har konfigurerat lösenordet, ändra på filen <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename> för att använda <emphasis>MD5</emphasis>-autentisering:</para>
+            <para>Kommentera ut raden du nyss la till med <emphasis role="italics">trust</emphasis> och lägg istället till följande rad:</para>
 
 <programlisting>
-local   all         postgres                          md5 sameuser
+local all postgres md5 sameuser
 </programlisting>
             <warning>
-            <para>
-             The above configuration is not complete by any means. Please
-             refer <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html">
-			 the PostgreSQL Administrator's Guide</ulink> to configure more parameters.
-            </para>
+            <para>Ovastående konfiguration är på inga sätt komplett. Läs i <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html"> PostgreSQL:s administratörsguide</ulink> för att konfigurera fler parametrar.</para>
             </warning>
         </sect3>
       </sect2>
     </sect1>
 	<sect1 id="email-services" status="complete">
-		<title>Email Services</title>
-          <para>
-            The process of getting an email from one person to another over a network or
-			the Internet involves many systems working together.  Each of these systems
-			must be correctly configured for the process to work.  The sender uses a <emphasis>Mail
-			User Agent</emphasis> (MUA), or email client, to send the message through one or more
-			<emphasis>Mail Transfer Agents</emphasis> (MTA), the last of which will hand it off to a 				<emphasis>Mail Delivery Agent</emphasis> (MDA) for delivery to the 
-			recipient's mailbox, from which it
-			will be retrieved by the recipient's email client, usually via a POP3 or IMAP server.
-          </para>
+		<title>E-posttjänster</title>
+          <para>För att ett e-postmeddelande ska skickas från en person till en annan över ett nätverk eller Internet krävs det att många system arbetar tillsammans. Vart och ett av dessa system måste vara korrekt konfigurerat för att processen ska fungera. Avsändaren använder en <emphasis>Mail User Agent</emphasis> (MUA), eller en e-postklient, för att skicka meddelanden genom en eller flera <emphasis>Mail Transfer Agents</emphasis> (MTA), som skickar det vidare till en <emphasis>Mail Delivery Agent</emphasis> (MDA) för leverans till mottagarens inkorg, varifrån det kommer att hämtas av mottagarens e-postklient, vanligtvis via en POP3 eller en IMAP-server.</para>
       <sect2 id="postfix" status="complete">
         <title>Postfix</title>
-          <para>
-            <application>Postfix</application> is the default Mail Transfer Agent (MTA) in Ubuntu. It
-            attempts to be fast and easy to administer and secure. It is
-            compatible with the MTA <application>sendmail</application>. This section explains how
-            to install and configure <application>postfix</application>. It also explains how to
-            set it up as an SMTP server using a secure connection (for sending emails securely).
-          </para>
+          <para><application>Postfix</application> är den Mail Transfer Agent (MTA) som är standard i Ubuntu. Det försöker vara snabbt, enkelt att administrera och säkert. Det är kompatibelt med MTA:n <application>sendmail</application>. Den här avdelningen förklarar hur du installerar och konfigurerar <application>postfix</application>. Den förklarar också hur du sätter upp en SMTP-server som använder en säker anslutning (för att skicka e-post säkert).</para>
         <sect3 id="postfix-installation" status="complete">
           <title>Installation</title>
-            <para>
-            To install <application>postfix</application> with SMTP-AUTH and Transport Layer
-            Security (TLS), run the following command:
-<screen>
+            <para>Kör följande kommando för att installera <application>postfix</application> med SMTP-AUTH och Transport Layer Security (TLS): <screen>
 <command>sudo apt-get install postfix</command>
-</screen>
-		Simply press return when the installation process asks questions, the configuration will be done in greater detail in the next stage.
-            </para>
+</screen> Tryck helt enkelt på retur när installationsprocessen ställer frågor - vi kommer att ställa in konfigurationen mer noggrannt i nästa steg.</para>
         </sect3>
         <sect3 id="postfix-configuration" status="complete">
-          <title>Basic Configuration</title>
-            <para>
-            To configure <application>postfix</application>, run the following command:
-<screen>
+          <title>Grundläggande konfiguration</title>
+            <para>För att konfigurera <application>postfix</application> kör du följande kommando: <screen>
 <command>sudo dpkg-reconfigure postfix</command>
-</screen>
-            The user interface will be displayed. On each screen, select the following
-            values:
-            <itemizedlist spacing="compact">
+</screen> Användargränssnittet kommer att visas. Välj följande värden på respektive skärm: <itemizedlist spacing="compact">
             <listitem><para>Ok</para></listitem>
-            <listitem><para>Internet Site</para></listitem>
-            <listitem><para>NONE</para></listitem>
-            <listitem><para>mail.example.com</para></listitem>
-            <listitem><para>mail.example.com, localhost.localdomain, localhost</para></listitem>
-            <listitem><para>No</para></listitem>
+            <listitem><para>Internetsystem</para></listitem>
+            <listitem><para>INGEN</para></listitem>
+            <listitem><para>mail.exempel.com</para></listitem>
+            <listitem><para>mail.exempel.com, localhost.localdomain, localhost</para></listitem>
+            <listitem><para>Nej</para></listitem>
             <listitem><para>127.0.0.0/8</para></listitem>
-            <listitem><para>Yes</para></listitem>
+            <listitem><para>Ja</para></listitem>
             <listitem><para>0</para></listitem>
             <listitem><para>+</para></listitem>
-            <listitem><para>all</para></listitem>
-            </itemizedlist>
-            </para>
+            <listitem><para>alla</para></listitem>
+            </itemizedlist></para>
             <note>
-            <para>
-            Replace mail.example.com with your mail server hostname.
-            </para>
+            <para>Ersätt mail.exempel.com med din mailservers värdnamn.</para>
             </note>
 	 </sect3>
         <sect3 id="postfix-smtp-authentication" status="complete">
-          <title>SMTP Authentication</title>
-            <para>The next steps are to configure
-            <application>postfix</application> to use SASL for SMTP
-            AUTH. Rather than editing the configuration file directly, 
-	     you can use the <command>postconf</command> command to configure
-            all <application>postfix</application> parameters.  The
-            configuration parameters will be stored in
-            <filename>/etc/postfix/main.cf</filename> file. Later if you
-            wish to re-configure a particular parameter, you can either
-            run the command or change it manually in the file.</para>
+          <title>SMTP-autentisering</title>
+            <para>Följande steg är för att konfigurera <application>postfix</application> för att använda SASL för SMTP AUTH. Istället för att läsa konfigurationsfilen direkt kan du använda kommandot <command>postconf</command> för att konfigurera alla parametrar för <application>postfix</application>. Konfigurationsparametrarna kommer lagras i filen <filename>/etc/postfix/main.cf</filename>. Om du senare vill konfigurera om en speciell parameter kan du antingen köra det här kommandot eller ändra det direkt i filen.</para>
 	<procedure>
-		<step><para>Configure Postfix to do SMTP AUTH using SASL (saslauthd):
-<screen>
+		<step><para>Konfigurera Postfix för att använda SASL (saslauthd) för SMTP AUTH: <screen>
 postconf -e 'smtpd_sasl_local_domain ='
 postconf -e 'smtpd_sasl_auth_enable = yes'
 postconf -e 'smtpd_sasl_security_options = noanonymous'
@@ -2065,12 +1812,9 @@ postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permit_myn
 postconf -e 'inet_interfaces = all'
 echo 'pwcheck_method: saslauthd' &gt;&gt; /etc/postfix/sasl/smtpd.conf
 echo 'mech_list: plain login' &gt;&gt; /etc/postfix/sasl/smtpd.conf
-</screen>
-		</para>
+</screen></para>
 		</step>
-		<step><para>Next, configure the digital certificate 
-            for TLS. When asked questions, follow the instructions and answer appropriately.
-<screen>
+		<step><para>Konfigurera sedan det digitala certifikatet för TLS. När du får frågor, följ instruktionerna och ge ett lämpligt svar. <screen>
 openssl genrsa -des3 -rand /etc/hosts -out smtpd.key 1024
 chmod 600 smtpd.key
 openssl req -new -key smtpd.key -out smtpd.csr
@@ -2082,16 +1826,10 @@ mv smtpd.key /etc/ssl/private/
 mv smtpd.crt /etc/ssl/certs/
 mv cakey.pem /etc/ssl/private/
 mv cacert.pem /etc/ssl/certs/
-</screen>
-		</para>
-		<note><para>You can get the digital
-            certificate from a certificate authority. Alternatively, you
-            can create the certificate yourself. Refer to 
-			<xref linkend="creating-a-self-signed-certificate"/> for more 
-			details.</para></note>
+</screen></para>
+		<note><para>Du kan få det digitala certifikatet från en certifikatauktoritet. Du kan även skapa certifikatet själv. Titta på <xref linkend="creating-a-self-signed-certificate"/> för fler detaljer.</para></note>
 		</step>
-		<step><para>Configure Postfix to do TLS encryption for both incoming and outgoing mail:
-<screen>
+		<step><para>Konfigurera Postfix för att genomföra TLS-kryptering för både utgående och inkommande e-postmeddelanden: <screen>
 postconf -e 'smtpd_tls_auth_only = no'
 postconf -e 'smtp_use_tls = yes'
 postconf -e 'smtpd_use_tls = yes'
@@ -2104,57 +1842,25 @@ postconf -e 'smtpd_tls_received_header = yes'
 postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
 postconf -e 'tls_random_source = dev:/dev/urandom'
 postconf -e 'myhostname = mail.example.com'
-</screen>
-		</para>
+</screen></para>
 		</step>
 		</procedure>
             <note>
-            <para>
-            After you run all the commands, the SMTP AUTH is configured
-            with <application>postfix</application>. The self-signed
-            cerficiate is created for TLS and it is configured with
-            <application>postfix</application>.
-            </para>
+            <para>När du har kört alla kommandona är SMTP AUTH konfigurerat för <application>postfix</application>. Det självsignerade certifikatet skapas för TLS och det konfigureras av <application>postfix</application>.</para>
             </note>
-            <para>
-            Now, the file <filename>/etc/postfix/main.cf</filename>
-            should look like <ulink url="../sample/postfix_configuration">this</ulink>.
-		</para>
-		<para>
-            The postfix initial configuration is complete. Run
-            the following command to start postfix daemon:
-            <screen><command>sudo /etc/init.d/postfix start</command></screen>
-
-            Now the <application>postfix</application> daemon is installed, configured and run
-            successfully. <application>Postfix</application> supports SMTP AUTH as defined in
-            <ulink url="ftp://ftp.isi.edu/in-notes/rfc2554.txt">RFC2554</ulink>.
-            It is based on <ulink url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>. However it is still necessary to set up SASL authentication before you can use SMTP.
-            </para>
+            <para>Nu bör filen <filename>/etc/postfix/main.cf</filename> se ut <ulink url="../sample/postfix_configuration">så här</ulink>.</para>
+		<para>Nu är den ursprungliga konfigurationen av postfix färdig. Kör följande kommandon för att starta postfix-demonen: <screen><command>sudo /etc/init.d/postfix start</command></screen> Nu är <application>postfix</application> installerat, konfigurerat och startat. <application>Postfix</application> stödjer SMTP AUTH enligt vad som beskrivs i ulink url="ftp://ftp.isi.edu/in-notes/rfc2554.txt"&gt;RFC2554</para>
 	</sect3>
 	<sect3 id="sasl">
-	  <title>Configuring SASL</title>
-            <para>
-            The
-            <application>libsasl2</application>,
-            <application>sasl2-bin</application> and
-            <application>libsasl2-modules</application> are necessary to
-            enable SMTP AUTH using SASL. You can install these applications if
-            you have not installed them already.
-<screen>
+	  <title>Konfigurera SASL</title>
+            <para>Paketen <application>libsasl2</application>, <application>sasl2-bin</application> och <application>libsasl2-modules</application> är nödvändiga för att aktivera SMTP AUTH med SASL. Du kan installera dessa paket om du inte redan har dem. <screen>
 <command>apt-get install libsasl2 sasl2-bin</command>
-</screen>
-	    </para>
-	    <para>
-		A few changes are necessary to make it work properly. Because <application>Postfix</application> runs chrooted in <filename>/var/spool/postfix</filename>, <application>SASL</application> needs to be configured to run in the false root (<filename>/var/run/saslauthd</filename> becomes <filename>/var/spool/postfix/var/run/saslauthd</filename>):
-<screen>
+</screen></para>
+	    <para>Det krävs några ändringar för att det ska fungera ordentligt. Eftersom <application>Postfix</application> kör chroot:at i <filename>/var/spool/postfix</filename> behöver <application>SASL</application> konfigureras för att köras i den falska rooten (<filename>/var/run/saslauthd</filename> blir <filename>/var/spool/postfix/var/run/saslauthd</filename>): <screen>
 <command>mkdir -p /var/spool/postfix/var/run/saslauthd</command>
 <command>rm -rf /var/run/saslauthd</command>
-</screen>
-	    </para>
-	    <para>
-            To activate <application>saslauthd</application>, edit the file <filename>/etc/default/saslauthd</filename>, and change or add the START variable. In order to configure <application>saslauthd</application> to run in the false root, add the PWDIR, PIDFILE and PARAMS variables. Finally, configure the MECHANISMS variable to your liking. The file should look like this:
-
-<programlisting>
+</screen></para>
+	    <para>För att aktivera <application>saslauthd</application> måste du ändra i filen <filename>/etc/default/saslauthd</filename> och ändra eller lägg till START-variabeln. För att konfigurera <application>saslauthd</application> för att köras i den falska rooten, lägg till variablerna PWDIR, PIDFILE och PARAMS. Konfigurera till slut MECHANISMS efter eget tycke. Filen bör se ut såhär: <programlisting>
 # This needs to be uncommented before saslauthd will be run
 # automatically
 START=yes
@@ -2169,256 +1875,108 @@ PIDFILE="${PWDIR}/saslauthd.pid"
 # MECHANISMS="pam shadow"
 
 MECHANISMS="pam"
-</programlisting>
-            </para>
+</programlisting></para>
 <note>
-<para>
-If you prefer, you can use <emphasis role="strong">shadow</emphasis>
-instead of <emphasis role="strong">pam</emphasis>. This will use MD5
-hashed password transfer and is perfectly secure. The username and
-password needed to authenticate will be those of the users on the system
-you are using on the server.
-</para>
+<para>Om du föredrar kan du använda <emphasis role="strong">shadow</emphasis> istället för <emphasis role="strong">pam</emphasis>. Det här kommer skicka MD5-hashar av lösenorden, vilket är helt säkert. Användarnamnet och lösenordet som krävs för autentisering kommer att vara serverns systemanvändares användarnamn och lösenord.</para>
 </note>
-        <para>
-Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd</filename>. The saslauthd init script uses this setting to create the missing directory with the appropriate permissions and ownership:
-<screen>
+        <para>Uppdatera nu dpkgs "state" i <filename>/var/spool/portfix/var/run/saslauthd</filename>. Initskriptet för saslauthd använder den här inställningen för att skapa den saknade katalogen med lämpliga rättigheter och rätt ägare: <screen>
 <command>dpkg-statoverride --force --update --add root sasl 755 /var/spool/postfix/var/run/saslauthd</command>
-</screen>
-        </para>
+</screen></para>
         </sect3>
         <sect3 id="postfix-testing" status="complete">
-          <title>Testing</title>
-            <para>
-          SMTP AUTH configuration is complete. Now it is time to start
-          and test the setup. You can run the following command to start
-          the SASL daemon:
-            <screen><command>sudo /etc/init.d/saslauthd start</command></screen>
-
-          To see if SMTP-AUTH and TLS work properly, run the following
-          command:
-            <screen><command>telnet mail.example.com 25</command></screen>
-          After you have established the connection to the postfix mail
-          server, type:
-            <screen>ehlo mail.example.com</screen>
-          If you see the following lines among others, then everything
-          is working perfectly. Type <command>quit</command> to exit.
-<programlisting>
+          <title>Testa</title>
+            <para>Konfigurationen för SMTP AUTH är färdig. Nu är det dags att starta och testa din installation. Du kan köra följande kommando för att starta SASL-demonen: <screen><command>sudo /etc/init.d/saslauthd start</command></screen> För att se om SMTP-AUTH och TLS fungerar som det ska kan du köra följande kommando: <screen><command>telnet mail.exempel.com 25</command></screen> När du har blivit ansluten till postfixservern, skriv: <screen>ehlo mail.example.com</screen> Om du bland annat ser följande rader fungerar allt som det ska. Skriv <command>quit</command> för att avsluta. <programlisting>
 250-STARTTLS
 250-AUTH LOGIN PLAIN
 250-AUTH=LOGIN PLAIN
 250 8BITMIME
-</programlisting>
-        </para>
+</programlisting></para>
         </sect3>
       </sect2>
       <sect2 id="exim4" status="complete">
         <title>Exim4</title>
-          <para>
-            <application>Exim4</application> is is another Message Transfer
-            Agent (MTA) developed at the University of Cambridge for use
-            on Unix systems connected to the internet. Exim can be
-            installed in place of <application>sendmail</application>,
-            although the configuration of
-            <application>exim</application> is quite different to
-            that of <application>sendmail</application>.
-          </para>
+          <para><application>Exim4</application> är en annan Message Transfer Agent (MTA) som utvecklades på Cambridges universitet för att användas i Unixsystem som är internetanslutna. Exim går att installeras istället för <application>sendmail</application>, men konfigurationen av <application>exim</application> skiljer sig ganska mycket från <application>sendmails</application>.</para>
         <sect3 id="exim4-installation" status="complete">
           <title>Installation</title>
-            <para>
-            To install <application>exim4</application>, run the following command:
-<screen>
+            <para>Kör följande kommando för att installera <application>exim4</application>: <screen>
 <command>sudo apt-get install exim4 exim4-base exim4-config</command>
-</screen>
-            </para>
+</screen></para>
         </sect3>
         <sect3 id="exim4-configuration" status="complete">
           <title>Konfiguration</title>
-            <para>
-            To configure <application>exim4</application>, run the following command:
-<screen>
+            <para>Kör följande kommando för att konfigurera <application>exim4</application>: <screen>
 <command>sudo dpkg-reconfigure exim4-config</command>
-</screen>
-            The user interface will be displayed. The user interface
-            lets you configure many parameters. For example, In
-            <application>exim4</application> the configuration files are
-            split among multiple files. If you wish to have them in one
-            file you can configure accordingly in this user interface.
-            </para>
+</screen> Användargränssnittet kommer visas, som låter dig konfigurera många parametrar. Till exempel är konfigurationsfilerna för <application>exim4</application> uppdelade i många filer. Om du vill ha alla i samma fil kan du välja det i användargränssnittet.</para>
 
-            <para>
-            All the parameters you configure in the user interface are
-            stored in
-            <filename>/etc/exim4/update-exim4.conf.conf</filename> file.
-            If you wish to re-configure, either you re-run the
-            configuration wizard or manually edit this file
-            using your favourite editor. Once you configure, you can run
-            the following command to generate the master configuration
-            file:
-<screen>
+            <para>Alla parametrar du konfigurerar i användargränssnittet lagras i filen <filename>/etc/exim4/update-exim4.conf.conf</filename>. Om du vill konfigurera om det måste du antingen köra om konfigurationsguiden eller manuellt ändra på filen med din favoriteditor. När du har konfigurerat klart måste du köra följande kommando för att skapa huvudkonfigurationsfilen: <screen>
 <command>sudo update-exim4.conf</command>
-</screen>
-            The master configuration file, is generated and
-            it is stored in
-            <filename>/var/lib/exim4/config.autogenerated</filename>. 
-            
-            <warning>
-            <para>
-            At any time, you should not edit the master configuration
-            file,
-            <filename>/var/lib/exim4/config.autogenerated</filename>
-            manually. It is updated automatically every time you run
-            <command>update-exim4.conf</command>
-            </para>
-            </warning>
-            You can run
-            the following command to start
-            <application>exim4</application> daemon.
-<screen>
+</screen> Huvudkonfigurationsfilen skapas och lagras i <filename>/var/lib/exim4/config.autogenerated</filename>. <warning>
+            <para>Du bör aldrig ändra i huvudkonfigurationsfilen <filename>/var/lib/exim4/config.autogenerated</filename> själv. Den uppdateras automatiskt varje gång du kör <command>update-exim4.conf</command></para>
+            </warning> Du kan köra följande kommando för att starta demonen <application>exim4</application>. <screen>
 <command>sudo /etc/init.d/exim4 start</command>
-</screen>
-            <emphasis role="strong">TODO:</emphasis> This section should
-            cover configuring SMTP AUTH with exim4. 
-            </para>
+</screen><emphasis role="strong">Att göra:</emphasis> Den här avdelningen bör täcka konfiguration av SMTP AUTH med exim4.</para>
         </sect3>
       </sect2>
       <sect2 id="dovecot-server" status="complete">
-        <title>Dovecot Server</title> 
-          <para>
-          <application>Dovecot</application> is a Mail Delivery Agent, written with security
-          primarily in mind. It supports the major mailbox formats: mbox
-          or Maildir. This section explain how to set it up as an imap or
-          pop3 server.
-          </para>
+        <title>Dovecot-server</title> 
+          <para><application>Dovecot</application> är en Mail Delivery Agent som är skriven med största fokus på säkerhet. Den stöder de vanligaste mailbox-formaten: mbox och maildir. Den här avdelningen förklarar hur du ställer in det för att bli en imap- eller pop3-server.</para>
         <sect3 id="dovecot-installation" status="complete">
           <title>Installation</title>
-            <para>
-            To install <application>dovecot</application>, run the following command in the
-            command prompt:
+            <para>Kör följande kommando i en terminalpromt för att installera <application>dovecot</application>:
 <screen>
 <command>sudo apt-get install dovecot-common dovecot-imapd dovecot-pop3d</command>
-</screen>
-            </para>
+</screen></para>
         </sect3>
         <sect3 id="dovecot-configuration" status="complete">
           <title>Konfiguration</title>
-            <para>
-            To configure <application>dovecot</application>, you can edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename>. You can
-            choose the protocol you use. It could be pop3, pop3s (pop3
-            secure), imap and imaps (imap secure). A description of these protocols is beyond the scope of this guide. For further information, refer to the wikipedia articles on <ulink url="http://en.wikipedia.org/wiki/POP3">POP3</ulink> and
-            <ulink url="http://en.wikipedia.org/wiki/Internet_Message_Access_Protocol">IMAP</ulink>.
-            </para>
+            <para>För att konfigurera <application>dovecot</application> kan du ändra på filen <filename>/etc/dovecot/dovecot.conf</filename>. Du kan välja vilket protokoll du vill använda. Det kan vara pop3, pop3s (säker pop3), imap och imaps (säker imap). Den här guiden kommer inte att ta upp skillnaden på dessa protokoll. För mer information, läs wikipediaartiklarna om <ulink url="http://sv.wikipedia.org/wiki/POP3">POP3</ulink> och <ulink url="http://sv.wikipedia.org/wiki/IMAP">IMAP</ulink>.</para>
 
-            <para>
-            IMAPS and POP3S are more secure that the simple IMAP and
-            POP3 because they use SSL encryption to connect. Once you
-            have chosen the protocol, amend the following line in the file
-            <filename>/etc/dovecot/dovecot.conf</filename>:
-<programlisting>
+            <para>IMAPS och POP3S är mer säkra än de enklare IMAP och POP3 eftersom de använder SSL-kryptering för att ansluta. När du har valt protokoll, lägg till följande rad till filen <filename>/etc/dovecot/dovecot.conf</filename>: <programlisting>
 protocols = pop3 pop3s imap imaps
-</programlisting>
-
-            It enables the protocols when <application>dovecot</application> is started. Next, add the following line in pop3 section in the file <filename>/etc/dovecot/dovecot.conf</filename>:
-<programlisting>
+</programlisting> Det aktiverar protokollen när <application>dovecot</application> startas. Lägg sedan till följande rad till pop3-avdelningen av filen <filename>/etc/dovecot/dovecot.conf</filename>: <programlisting>
 pop3_uidl_format = %08Xu%08Xv
-</programlisting>
-
-            Next, choose the mailbox you use. <application>Dovecot</application> supports
-            <emphasis role="strong">maildir</emphasis> and <emphasis role="strong">mbox</emphasis> formats. These are the most
-            commonly used mailbox formats. They both have their own
-            benefits and they are discussed on <ulink url="http://dovecot.org/doc/configuration.txt">the dovecot website</ulink>.
-            </para>
-            <para>
-            Once you have chosen your mailbox type, edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename> and change
-            the following line:
-<programlisting>
-default_mail_env = maildir:~/Maildir # (for maildir)
-or
-default_mail_env = mbox:~/mail:INBOX=/var/spool/mail/%u # (for mbox)
-</programlisting>
-            </para>
+</programlisting> Välj nu vilken mailbox-type du använder. <application>Dovecot</application> stödjer formaten <emphasis role="strong">maildir</emphasis> och <emphasis role="strong">mbox</emphasis>. De här är de vanligaste mailbox-formaten. De har både fördelar och nackdelar, och de diskuteras på <ulink url="http://dovecot.org/doc/configuration.txt">dovecots hemsida</ulink>.</para>
+            <para>När du har valt mailbox-typ, ändra på filen <filename>/etc/dovecot/dovecot.conf</filename> och ändra följande rad: <programlisting>
+default_mail_env = maildir:~/Maildir # (för maildir)
+eller
+default_mail_env = mbox:~/mail:INBOX=/var/spool/mail/%u # (för mbox)
+</programlisting></para>
 <note>
-<para>
-You should configure your Mail Trasport Agent (MTA) to transfer the
-incoming mail to this type of mailbox if it is different from the one
-you have configured.
-</para>
+<para>Du måste konfigurera din Mail Trasport Agent (MTA) så att den skickar de inkommande e-postmeddelandena till den här typen av mailbox om den inte är samma som den du valt för dovecot.</para>
 </note>
-          <para>
-          Once you have configured dovecot, start the <application>dovecot</application> daemon
-          in order to test your setup:
-
-          <screen><command>sudo /etc/init.d/dovecot start</command></screen>
-
-          If you have enabled imap, or pop3, you can also try to log in
-          with the commands <command>telnet localhost pop3</command> or
-          <command>telnet localhost</command> imap2. If you see
-          something like the following, the installation has been
-          successful:
-<programlisting>
+          <para>När du har konfigurerat dovecot, starta demonen <application>dovecot</application> för att testa ditt system: <screen><command>sudo /etc/init.d/dovecot start</command></screen> Om du har aktiverat imap, eller pop3, kan du även försöka logga in med kommandona <command>telnet localhost pop3</command> eller <command>telnet localhost imap2</command>. Om du ser något i stil med detta lyckades din installation: <programlisting>
 bhuvan@rainbow:~$ telnet localhost pop3
 Trying 127.0.0.1...
 Connected to localhost.localdomain.
 Escape character is '^]'.
 +OK Dovecot ready.
-</programlisting>
-          </para>
+</programlisting></para>
         </sect3>
         <sect3 id="dovecot-ssl" status="complete">
-          <title>Dovecot SSL Configuration</title>
-            <para>
-            To configure <application>dovecot</application> to use SSL, you can edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename> and amend
-            following lines:
-<programlisting>
+          <title>SSL-konfiguration av Dovecot</title>
+            <para>För att få <application>dovecot</application> att använda SSL kan du ändra på filen <filename>/etc/dovecot/dovecot.conf</filename> och lägga till följande rader: <programlisting>
 ssl_cert_file = /etc/ssl/certs/dovecot.pem
 ssl_key_file = /etc/ssl/private/dovecot.pem
 ssl_disable = no
 disable_plaintext_auth = no
-</programlisting>
-
-          The <emphasis role="strong">cert</emphasis> and <emphasis role="strong">key</emphasis> files are created automatically
-          by <application>dovecot</application> when you install it. Please note that these keys
-          are not signed and will give "bad signature" errors when
-          connecting from a client. To avoid this, you can use
-          commercial certificates, or even better, you can use your own
-          SSL certificates.
-          </para>
+</programlisting> Filerna <emphasis role="strong">cert</emphasis> och <emphasis role="strong">key</emphasis> skapas automatiskt av <application>dovecot</application> när du installerar det. Notera att de här nycklarna inte är signerade och kommer att orsaka "felaktig signatur"-fel hos klienten när den ansluter. För att undvika det här kan du använda komerciella certifikat eller, ännu bättre, dina egna SSL-certifikat.</para>
 	</sect3>
 	<sect3>
-	  <title>Firewall Configuration for an Email Server</title>
-          <para>
-          To access your mail server from another computer, you must
-          configure your firewall to allow connections to the server on
-          the necessary ports.
-            <itemizedlist>
+	  <title>Brandväggskonfiguration för en e-postserver</title>
+          <para>För att komma åt din e-postserver från en annan dator måste du konfigurera din brandvägg så att den tillåter anslutningar till servern på de portar som krävs. <itemizedlist>
             <listitem><para>IMAP - 143</para></listitem>
             <listitem><para>IMAPS - 993</para></listitem>
             <listitem><para>POP3 - 110</para></listitem>
             <listitem><para>POP3S - 995</para></listitem>
-            </itemizedlist>
-          </para>
+            </itemizedlist></para>
         </sect3>
       </sect2>
       <sect2 id="mailman" status="complete">
         <title>Mailman</title> 
-          <para>
-          Mailman is an open source program for managing electronic mail
-          discussions and e-newsletter lists. Many open source mailing
-          lists (including all the <ulink url="http://lists.ubuntu.com">Ubuntu mailing lists</ulink>) use
-          Mailman as their mailing list software. It is powerful and easy
-          to install and maintain.
-          </para>
+          <para>Mailman är ett öppenkällkodsprogram för att hantera elektroniska e-postdiskussioner och e-nyhetsbrev. Många av de svarslistor öppenkällkodsvärlden har (inklussive alla <ulink url="http://lists.ubuntu.com">Ubuntus svarslistor</ulink>) använder Mailman som svarslistmjukvaran. Det är kraftfullt och enkelt att installera och underhålla.</para>
         <sect3 id="mailman-installation" status="complete">
           <title>Installation</title>
-            <para>
-            Mailman provides a web interface for the administrators
-            and users. So, it requires apache with mod_perl support.
-            Mailman uses an external mail server to send and receive 
-			emails. It works perfectly with the following mail servers:
-            </para>
+            <para>Mailman ger dig ett webbgränssnitt för att administratera användare. Det kräver därför apache med mod_perl-stöd. Mailman använder en extern mailserver för att skicka och ta emot e-post. Det fungerar perfekt tillsammans med följande e-postservrar:</para>
             <para>
             <itemizedlist spacing="compact">
                 <listitem>
@@ -2436,100 +1994,46 @@ disable_plaintext_auth = no
             </itemizedlist>
             </para>
 
-            <para>
-            We will see how to install mailman, the apache web server 
-			and the Exim mail server. If you wish to install mailman
-            with a different mail server, please refer to the references
-            section. 
-            </para>
+            <para>Vi ska nu titta på hur man installerar mailman, webbservern apache och e-postservern Exim. Om du vill installera mailman med en annan e-postserver måste du</para>
           <sect4 id="mailman-apache2">
             <title>Apache2</title>
-              <para>
-                To install apache2 you refer to <xref linkend="http-installation"/>.
-              </para>
+              <para>För att installera apache2 läser du <xref linkend="http-installation"/>.</para>
           </sect4>
           <sect4 id="mailman-exim4">
             <title>Exim4</title>
-              <para>
-              To install Exim4 you run the following commands at a terminal prompt:
-<screen>
+              <para>För att installera Exim4 kör du följande kommandon vid en terminalprompt: <screen>
 <command>sudo apt-get install exim4</command>
 <command>sudo apt-get install exim4-base</command>
 <command>sudo apt-get install exim4-config</command>
-</screen>
-
-Once exim4 is installed, the configuration files are stored in
-the <filename>/etc/exim4</filename> directory. In ubuntu, by default, the exim4 configuration files are
-split across different files. You can change this behavior by changing
-the following variable in the <filename>/etc/exim4/update-exim4.conf</filename> file:
-
-              <itemizedlist spacing="compact">
+</screen> När exim4 är installerat lagras konfigurationsfilerna i katalogen <filename>/etc/exim4</filename>. I ubuntu är normalt konfigurationsfilerna för exim4 uppdelade i flera filer. Du kan ändra det här beteendet genom att ändra på följande variabel i filen <filename>/etc/exim4/update-exim4.conf</filename>: <itemizedlist spacing="compact">
               <listitem>
                 <para><application>dc_use_split_config='true'</application></para>
               </listitem>
-              </itemizedlist>
-              </para>
+              </itemizedlist></para>
           </sect4>
           <sect4 id="mailman-mailman">
             <title>Mailman</title>
-              <para>
-              To install <application>Mailman</application>, run following command at a terminal prompt:
-<screen>
+              <para>För att installera <application>Mailman</application> kör du följande kommando vid terminalprompten: <screen>
 <command>sudo apt-get install mailman</command> 
-</screen>
-
-It copies the installation files in
-<application>/var/lib/mailman</application> directory. It installs the
-CGI scripts in <application>/usr/lib/cgi-bin/mailman</application>
-directory.  It creates <emphasis>list</emphasis> linux
-user. It creates the <emphasis>list</emphasis> linux
-group. The mailman process will be owned by this user. 
-              </para>
+</screen> Det kopierar installationsfilerna till katalogen <application>/var/lib/mailman</application>. Det installerar CGI-skripten till katalogen <application>/usr/lib/cgi-bin/mailman</application>. Det skapar linuxanvändaren <emphasis>list</emphasis>. Det skapar linuxgruppen <emphasis>list</emphasis>. Mailmanprocessen kommer att ägas av den här användaren.</para>
           </sect4>
         </sect3>
         <sect3 id="mailman-configuration" status="complete">
           <title>Konfiguration</title>
-            <para>
-            This section assumes you have successfully installed
-            <application>mailman</application>,
-            <application>apache2</application>, and
-            <application>exim4</application>. Now you just need
-            to configure them. 
-            </para>
+            <para>Den här avdelningen förutsätter att du har installerat <application>mailman</application>, <application>apache2</application> och <application>exim4</application>. Nu behöver du bara konfigurara dem.</para>
           <sect4 id="mailman-conf-apache2">
             <title>Apache2</title>
-              <para>
-              Once apache2 is installed, you can add the following lines in
-              the <filename>/etc/apache2/apache2.conf</filename> file:
-<programlisting>
+              <para>Så fort apache2 är installerat kan du lägga till följande rader till filen <filename>/etc/apache2/apache2.conf</filename>: <programlisting>
 Alias /images/mailman/ "/usr/share/images/mailman/"
 Alias /pipermail/ "/var/lib/mailman/archives/public/"
-</programlisting>
-
-Mailman uses apache2 to render its CGI scripts. The mailman CGI scripts
-are installed in the <application>/usr/lib/cgi-bin/mailman</application>
-directory. So, the mailman url will be
-http://hostname/cgi-bin/mailman/. You can make changes to the
-<filename>/etc/apache2/apache2.conf</filename> file if you wish to
-change this behavior.
-              </para>
+</programlisting> Mailman använder apache2 för att rendera sina CGI-skript. Mailmans CGI-skript installeras i katalogen <application>/usr/lib/cgi-bin/mailman</application>. Därför blir mailmans adress http://värdnamn/cgi-bin/mailman/. Du kan göra ändringar i filen <filename>/etc/apache2/apache2.conf</filename> om du vill ändra på det här beteendet.</para>
           </sect4>
 
           <sect4 id="mailman-conf-exim4">
             <title>Exim4</title>
-              <para>
-              Once Exim4 is installed, you can start the Exim server using the following
-              command from a terminal prompt:
-<screen>
+              <para>Så fort Exim4 är installerat kan du starta Exim-servern med följande kommando vid en terminalprompt: <screen>
 <command>sudo apt-get /etc/init.d/exim4 start</command>
-</screen>
-
-In order to make mailman work with exim4, you need to configure exim4.
-As mentioned earlier, by default, exim4 uses multiple configuration
-files of different types. For details, please refer to the <ulink url="http://www.exim.org">Exim</ulink> website.  To run mailman, we
-should add new a configuration file to the following configuration
-types: 
-              <itemizedlist spacing="compact">
+</screen> För att få mailman att fungera med exim4 måste du konfigurera exim4. Som vi nämnte tidigare använder exim4 från början flera konfigurationsfiler av olika slag. För fler detaljer kan du titta på <ulink url="http://www.exim.org">Exims</ulink> hemsida. För att starta mailman behöver vi lägga till en ny konfigurationsfil till följande konfigurationstyper: <itemizedlist spacing="compact">
               <listitem>
                 <para>Main</para>
               </listitem>
@@ -2539,61 +2043,42 @@ types:
               <listitem>
                 <para>Router</para>
               </listitem>
-              </itemizedlist>
-              Exim creates a master configuration file by sorting all
-              these mini configuration files. So, the order of these
-              configuration files is very important.
-              </para>
+              </itemizedlist> Exim skapar en huvudkonfigurationsfil genom att stortera alla dessa minikonfigurationsfiler. Följdaktligen är ordningen på dessa konfigurationsfiler mycket viktig.</para>
           </sect4>
           <sect4 id="mailman-conf-main">
             <title>Main</title>
-              <para>
-              All the configuration files belonging to the main type are
-              stored in the
-              <filename>/etc/exim4/conf.d/main/</filename> directory. You can add
-              the following content to a new file, named <filename>04_exim4-config_mailman</filename>:
-
-<programlisting>
+              <para>Alla konfigurationsfiler som hör till typen main lagras i katalogen <filename>/etc/exim4/conf.d/main/</filename>. Du kan lägga till följande innehåll i en ny fil, som du kallar för <filename>04_exim4-config_mailman</filename>: <programlisting>
 # start
-# Home dir for your Mailman installation -- aka Mailman's prefix
-# directory.
-# On Ubuntu this should be "/var/lib/mailman"
-# This is normally the same as ~mailman
+# Hemkatalog för din Mailman-installation - dvs Mailmans prefixkatalog.
+# I Ubuntu bör det här vara "/var/lib/mailman"
+# Det här är vanligtvis samma som ~mailman
 MM_HOME=/var/lib/mailman
 #
-# User and group for Mailman, should match your --with-mail-gid
-# switch to Mailman's configure script.  Value is normally "mailman"
+# Användare och grupp för Mailman, bör vara samma som switchen --with-mail-gid
+# till Mailmans konfigurationsskript. Är vanligen "mailman"
 MM_UID=list
 MM_GID=list
 #
-# Domains that your lists are in - colon separated list
-# you may wish to add these into local_domains as well
-domainlist mm_domains=hostname.com
+# Domäner dina listor tillhör - en kolonseparerad lista.
+# Du kanske vill lägga till dessa till local_domains också.
+domainlist mm_domains=värdnamn.com
 #
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #
-# These values are derived from the ones above and should not need
-# editing unless you have munged your mailman installation
+# Dessa värden kommer från de ovan och du bör inte behöva ändra dessa
+# om du inte har sabbat din mailmaninstallation
 #
-# The path of the Mailman mail wrapper script
+# Sökvägen till Mailmans mailskript
 MM_WRAP=MM_HOME/mail/mailman
 #
-# The path of the list config file (used as a required file when
-# verifying list addresses)
+# Sökvägen till listans konfigurationsfil (används när e-postadresser valideras)
 MM_LISTCHK=MM_HOME/lists/${lc::$local_part}/config.pck
-# end
-</programlisting>
-          </para>
+# slut
+</programlisting></para>
           </sect4>
           <sect4 id="mailman-conf-transport">
             <title>Transport</title>
-              <para>
-All the configuration files belonging to transport type are stored in
-the <filename>/etc/exim4/conf.d/transport/</filename> directory. You
-can add the following content to a new file named <filename>
-40_exim4-config_mailman</filename>:
-
-<programlisting>
+              <para>Alla konfigurationsfiler som hör till typen transport lagras i katalogen <filename>/etc/exim4/conf.d/transport/</filename>. Du kan lägga till följande innehåll i en ny fil, som du kallar för <filename> 40_exim4-config_mailman</filename>: <programlisting>
   mailman_transport:
    driver = pipe
    command = MM_WRAP \
@@ -2605,59 +2090,34 @@ can add the following content to a new file named <filename>
     home_directory = MM_HOME
     user = MM_UID
     group = MM_GID
-</programlisting>
-              </para>
+</programlisting></para>
           </sect4>
           <sect4 id="mailman-conf-router">
             <title>Router</title>
-              <para>
-All the configuration files belonging to router type are stored in the
-<filename>/etc/exim4/conf.d/router/</filename> directory. You can add the following content
-in to a new file named <filename>101_exim4-config_mailman</filename>:
-<programlisting>
+              <para>Alla konfigurationsfiler som hör till typen router lagras i katalogen <filename>/etc/exim4/conf.d/router/</filename>. Du kan lägga till följande innehåll i en ny fil, som du kallar för <filename>101_exim4-config_mailman</filename>: <programlisting>
   mailman_router:
    driver = accept
    require_files = MM_HOME/lists/$local_part/config.pck
    local_part_suffix_optional
    local_part_suffix = -bounces : -bounces+* : \
-                       -confirm+* : -join : -leave : \
-                       -owner : -request : -admin
+                     -confirm+* : -join : -leave : \
+                     -owner : -request : -admin
    transport = mailman_transport
-</programlisting>
-
-              </para>
+</programlisting></para>
 <warning>
-<para>
-The order of main and transport configuration files can be in any order.
-But, the order of router configuration files must be the same.
-This particular file must appear before the
-<application>200_exim4-config_primary</application> file.
-These two configuration files contain same type of information. The
-first file takes the precedence. For more details, please refer to the
-references section.
-</para>
+<para>Ordningen på konfigurationsfilerna för main och transport kan vara vilken som. Ordningen på router, däremot, spelar roll. Just den här filen måste vara före filen <application>200_exim4-config_primary</application>. De här två konfigurationsfilerna innehåller samma typ av konfiguration. Den första filen får bestämma. För fler detaljer kan du läsa i avdelningen referenser.</para>
 </warning>
           </sect4>
           <sect4 id="mailman-conf-mailman">
             <title>Mailman</title>
-              <para>
-Once mailman is installed, you can run it using the following command:
-<screen>
+              <para>Så fort mailman är installerat kan du starta det med följande kommando: <screen>
 <command>sudo /etc/init.d/mailman start</command>
-</screen>
-
-Once mailman is installed, you should create the default mailing list.
-Run the following command to create the mailing list:
-
-
-<screen>
+</screen> När mailman är installerat måste du skapa standardsändlistan. Kör följande kommando för att skapa sändlistan: <screen>
 <command>sudo /usr/sbin/newlist mailman</command>
-</screen>
-
-<programlisting>
-  Enter the email address of the person running the list: bhuvan at ubuntu.com
-  Initial mailman password:
-  To finish creating your mailing list, you must edit your <filename>/etc/aliases</filename> (or
+</screen><programlisting>
+  Uppge e-postadressen till den person som ansvarar för listan: bhuvan at ubuntu.com
+  Det första lösenordet för "mailman" är:
+  To finish creating your mailing list, you must edit your /etc/aliases (or
   equivalent) file by adding the following lines, and possibly running the
   `newaliases' program:
 
@@ -2673,74 +2133,34 @@ Run the following command to create the mailing list:
   mailman-subscribe:    "|/var/lib/mailman/mail/mailman subscribe mailman"
   mailman-unsubscribe:  "|/var/lib/mailman/mail/mailman unsubscribe mailman"
 
-  Hit enter to notify mailman owner...
+  Tryck [Enter] för att skicka meddelande till ägaren  av listan mailman...
 
   # 
-</programlisting>
-
-We have configured exim to recognize all emails from mailman. So, it is
-not mandatory to make any new entries in
-<filename>/etc/aliases</filename>.  If you have made any changes
-to the configuration files, please ensure that you restart those
-services before continuing to next section.
-</para>
+</programlisting> Vi har konfigurerat exim så att det känner igen alla e-postmeddelanden från mailman. Du behöver därför inte lägga till några rader till <filename>/etc/aliases</filename>. Om du har gjort några ändringar i konfigurationsfilerna måste du se till att starta om de tjänsterna innan du fortsätter till nästa avdelning.</para>
           </sect4>
         </sect3>
         <sect3 id="mailman-admin" status="complete">
           <title>Administration</title>
-<para>
-We assume you have a default installation. The
-mailman cgi scripts are still in
-<application>/usr/lib/cgi-bin/mailman/</application> directory.  Mailman
-provides a web based administration facility. To access this page, point
-your browser to the following url: 
+<para>Vi förutsätter att du har en standardinstallation. Mailmans cgi-skript finns fortfarande i katalogen <application>/usr/lib/cgi-bin/mailman/</application>. Mailman erbjuder dig ett webbaserat administrationsverktyg. För att komma åt den här sidan besöker du följande adress med en webbläsare:</para>
+<para>http://värdnamn/cgi-bin/mailman/admin</para>
 
-</para>
-<para>
-http://hostname/cgi-bin/mailman/admin
-</para>
-
-<para>
-The default mailing list, <emphasis>mailman</emphasis>,
-will appear in this screen. If you click the mailing list name, it
-will ask for your authentication password.  If you enter the correct
-password, you will be able to change administrative settings of this
-mailing list.
-
-You can create a new mailing list using command line utility
-(<command>/usr/sbin/newlist</command>).
-Alternatively, you can create a new mailing list using web interface. 
-</para>
+<para>Standardsändlistan, <emphasis>mailman</emphasis>, kommer att komma upp på skärmen. Om du klickar på sändlistenamet kommer du att bli frågad om ditt lösenord. Om du skriver rätt lösenord kommer du att kunna ändra på administrativa inställningar för den här sändlistan. Du kan skapa en ny sändlista med kommandoradsverktyget (<command>/usr/sbin/newlist</command>). Du kan även skapa en ny sändlista med webbgränssnittet.</para>
         </sect3>
         <sect3 id="mailman-users" status="complete">
-          <title>Users</title>
-<para>
-Mailman provides a web based interface for users. To access this page,
-point your browser to the following url:
-</para>
+          <title>Användare</title>
+<para>Mailman erbjuder ett webbaserat gränssnitt för användare. För att komma åt den här sidan besöker du följande adress med din webbläsare:</para>
 
-<para>
-http://hostname/cgi-bin/mailman/listinfo
-</para>
+<para>http://värdnamn/cgi-bin/mailman/listinfo</para>
 
-<para>
-The default mailing list, <emphasis>mailman</emphasis>,
-will appear in this screen. If you
-click the mailing list name, it will display the subscription form. You
-can enter your email address, name (optional), and password to subscribe.
-An email invitation will be sent to you. You can follow the
-instructions in the email to subscribe.
-</para>
+<para>Nu kommer standardsändlistan, <emphasis>mailman</emphasis>, att visas på skärmen. Om du klickar på sändlistans namn kommer du att få se ett registreringsformulär. Du kan skriva in din e-postadress, ditt namn (valfritt), och ett lösenord för att registrera dig. En e-postinbjudan kommer att skickas till dig. Du kan följa instruktionerna i e-postmeddelandet för att registrera dig.</para>
         </sect3>
         <sect3 id="mailman-references" status="complete">
           <title>Referenser</title>
 <para>
-<ulink url="http://www.list.org/mailman-install/index.html"> GNU Mailman
-- Installation Manual</ulink>
+<ulink url="http://www.list.org/mailman-install/index.html">GNU Mailman - installationsmanual</ulink>
 </para>
 <para>
-<ulink url="http://www.exim.org/howto/mailman21.html">HOWTO - Using Exim
-4 and Mailman 2.1 together</ulink>
+<ulink url="http://www.exim.org/howto/mailman21.html">HOWTO - Använd Exim 4 och Mailman 2.1 tillsammans</ulink>
 </para>
         </sect3>
       </sect2>

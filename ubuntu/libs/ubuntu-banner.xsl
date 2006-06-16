@@ -9,10 +9,10 @@
       <div id="sisternav">
         <ul>
           <li id="plain">
-            <a href="/5.10">5.10 (Breezy Badger)</a>
+            <a href="/5.10">5.10</a>
           </li>
           <li id="current">
-            <a href="/6.06">6.06 LTS (Dapper Drake)</a>
+            <a href="/6.06">6.06 LTS</a>
        	  </li>
           <li id="plain">
             <a href="/community">Community Docs</a>

@@ -462,7 +462,7 @@ Doing nothing for myapp_source.changes</screen>
 			</sect3>
 		
 			<sect3 id="howto-login">
-				<title>How to login to REVU</title>
+				<title>Einloggen bei REVU</title>
 			
 				<para>After your first upload, you are registered automatically in the
 					database and assigned a random password. On the <ulink url="http://revu.tauware.de">REVU</ulink> website, use the email
@@ -552,7 +552,7 @@ Doing nothing for myapp_source.changes</screen>
 				Ubuntu-specific. Let us now look at an example,
 				a popular CD creation program called <application>xcdroast</application>.
 			</para>
-			<para>Zu Allererst, erstellen Sie ein Ordner, in den später unser Projekt gespeichert wird und öffnen ihn anschliessend:</para>
+			<para>Erstellen Sie zunächst einen Ordner, in den später unser Projekt gespeichert wird, und öffnen Sie diesen Ordner:</para>
 			<screen>
 ↵
 mkdir ~/xcdroast↵
@@ -569,14 +569,13 @@ cd ~/xcdroast</screen>
 					</itemizedlist>
 				</listitem>
 				<listitem>
-					<para>The <phrase>Ubuntu</phrase> Breezy source package files:</para>
+					<para>Die <phrase>Ubuntu</phrase> Breezy Quellcode Paketdateien:</para>
 					<itemizedlist>
 						<listitem><para>
 <ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.dsc">xcdroast_0.98+0alpha15-1.1ubuntu1.dsc</ulink></para>
 						</listitem>
 						<listitem><para>
-<ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz">
-	xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz</ulink></para>
+<ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz">xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz</ulink></para>
 						</listitem>
 					</itemizedlist>
 				</listitem>
@@ -584,12 +583,10 @@ cd ~/xcdroast</screen>
 					<para>The Debian source package files that the Breezy packages are derived from:</para>
 						<itemizedlist>
 							<listitem>
-<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.diff.gz">
-		xcdroast_0.98+0alpha15-1.1.diff.gz</ulink></para>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.diff.gz">xcdroast_0.98+0alpha15-1.1.diff.gz</ulink></para>
 							</listitem>
 							<listitem>
-<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.dsc">
-		xcdroast_0.98+0alpha15-1.1.dsc</ulink></para>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.dsc">xcdroast_0.98+0alpha15-1.1.dsc</ulink></para>
 							</listitem>
 						</itemizedlist>
 				</listitem>
@@ -629,7 +626,7 @@ debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-1.1ubuntu1.dsc | \
 	ubuntu.debdiff | less ubuntu.debdiff</screen>
 			
 			<para>Die Zeilen die mit - beginnen wurden von dem Debian Paket entfernt, und die, die mit + beginnen wurden zu dem <phrase>Ubuntu</phrase> Paket hinzugefügt.</para>
-			<para>The following is what we see:</para>
+			<para>Folgendes sehen wir:</para>
 			<itemizedlist>
 				<listitem>
 					<para>In debian/rules install is being used instead of cp to install the xcdroast icon.
@@ -647,47 +644,38 @@ debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-1.1ubuntu1.dsc | \
 				</listitem>
 			</itemizedlist>
 			
-			<para>Now we know how the Ubuntu source was changed. Now we need to see what has changed in
-				the Debian sources.</para>
+			<para>Nun wissen wir wie der Ubuntu Quellcode geändert wurde. Jetzt müssen wir sehen was sich in den Debian Quellen geändert hat.</para>
 			<screen>
-↵
-debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-3.dsc &gt; debian.debdiff↵
+debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-3.dsc &gt; debian.debdiff
 less debian.debdiff</screen>
 			<para>There is a lot more in this debdiff than in the last one. One way we can get a
 				better idea of what has changed is to see what files were changed in the debdiff:</para>
 			
 			<screen>grep diff debian.debdiff</screen>
 			
-			<para>This indicates that debian/postinst, debian/rules, debian/changelog, debian/doc-base.manual,
-				debian/control, and debian/menu were changed in the new Debian version.</para>
-			<para>Thus we can see that we need to check debian/rules to see if the <phrase>Ubuntu</phrase> changes were made.
-				We can also see that debian/dirs was not changed from the old Debian version. Let us
-				now look at the files. We can unpack the source package by using
-				<application>dpkg-source</application>:</para>
+			<para>Dies zeigt, dass debian/postinst, debian/rules, debian/changelog, debian/doc-base.manual, debian/control, und debian/menu in der neuen Debian Version geändert wurden.</para>
+			<para>Also können wir sehen, dass wir debian/rules überprüfen müssen, um zu sehen ob die <phrase>Ubuntu</phrase> Änderungen vorgenommen wurden. Wir sehen auch, dass debian/dirs nicht von der alten Debian Version geändert wurde. Nun kommen wir zu den Dateien: wir können das Quellpaket mithilfe von <application>dpkg-source</application> entpacken:</para>
 			
 			<screen>dpkg-source -x xcdroast_0.98+0alpha15-3.dsc</screen>
 			
-			<para>This will decompress the xcdroast_0.98+0alpha15.orig.tar.gz file, create a xcdroast-0.98+0alpha15
-				directory, and apply the changes found in xcdroast_0.98+0alpha15-3.diff.gz.</para>
-			<para>Now navigate to the debian directory:</para>
+			<para>Dies wird die Datei xcdroast_0.98+0alpha15.orig.tar.gz entpacken, ein xcdroast-0.98+0alpha15 Verzeichnis erstellen und die Änderungen, die in xcdroast_0.98+0alpha15-3.diff.gz gefunden wurden anwenden.</para>
+			<para>Gehen Sie nun zu dem Debian Verzeichnis:</para>
 			
 			<screen>cd xcdroast-0.98+0alpha15/debian</screen>
 			
-			<para>One can see in <filename>rules</filename> that changes made by <phrase>Ubuntu</phrase> were not applied to the new Debian version.
-				This means that:</para>
+			<para>Wie man sehen in <filename>rules</filename> sehen kann, wurden die Änderungen von <phrase>Ubuntu</phrase> noch nicht in der neuen Debian Version angenommen. Das bedeutet, dass :</para>
 			
 			<screen>cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps</screen>
 			
-			<para>... sollte geändert werden in:</para>
+			<para>... sollte folgendermaßen geändert werden:</para>
 			
 			<screen>
-↵
-#cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps↵
-↵
-#install desktop and icon↵
-install -D -m 644 $(CURDIR)/debian/xcdroast.desktop \↵
-	$(CURDIR)/debian/xcdroast/usr/share/applications/xcdroast.desktop↵
-install -D -m 644 $(CURDIR)/debian/xcdroast.xpm \↵
+#cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps
+
+#install desktop and icon
+install -D -m 644 $(CURDIR)/debian/xcdroast.desktop \
+	$(CURDIR)/debian/xcdroast/usr/share/applications/xcdroast.desktop
+install -D -m 644 $(CURDIR)/debian/xcdroast.xpm \
 	$(CURDIR)/debian/xcdroast/usr/share/pixmaps/xcdroast.xpm</screen>
 
 			<para>Now in <filename>dirs</filename>, the following line needs to be added for the .desktop file to be installed:</para>
@@ -714,17 +702,16 @@ xcdroast (0.98+0alpha15-3<emphasis>ubuntu.debdiff</emphasis>) dapper; urgency=lo
 
   * Resynchronise with Debian.</screen>
 
-			<para>Make sure to change the version number to the correct <phrase>Ubuntu</phrase> version.
-				Also add:</para>
+			<para>Stellen Sie sicher, dass sie die Versionsnummer in die korrekte <phrase>Ubuntu</phrase> Version ändern. Also schreiben Sie:</para>
 			<screen>
 xcdroast (0.98+0alpha15-1.1ubuntu1) breezy; urgency=low
 
   * Fix and install existing .desktop file. (Closes Malone #2698)
 				
   -- Captain Packager &lt;packager@coolness.com&gt;  Sat,  1 Oct 2005 19:39:04 -0400</screen>
-			<para>between the 0.98+0alpha15-1.1 and 0.98+0alpha15-2 log entries.</para>
+			<para>Log-Einträge zwischen 0.98+0alpha15-1.1 und 0.98+0alpha15-2.</para>
 			
-			<para>Now you can build and test the new source packages. There are different ways to do this, but one example is:</para>
+			<para>Jetzt können wir die neuen Testpakete kompilieren und testen. Es gibt verschiedene Wege dies zu tun, ein Beispiel wäre:</para>
 			<screen>
 cd ..
 debuild -S

@@ -421,9 +421,9 @@
 				<note><para>Si está volviendo a subir un paquete modificado (después de recibir las revisiones), podría obtener un error como éste:</para>
 					
 				<screen>
-Upload package to host revu
-Already uploaded to tauware.de
-Doing nothing for myapp_source.changes</screen>
+Subir el paquete al servidor revu
+Ya se ha subido a tauware.de
+No hacer nada para myapp_source.changes</screen>
 			
 				<para>Para corregir, añada la opción -f a dput para forzar la subida o elimine el fichero <filename>.upload</filename> que fué creado por la aplicación <application>dput</application>.</para></note>
 			
@@ -470,7 +470,7 @@ Doing nothing for myapp_source.changes</screen>
 	</sect1>
 
 	<sect1 id="ubuntu-sync" status="complete">
-		<title>Merges and Syncs</title>
+		<title>Mezclas y sincronizaciones</title>
 
 
 
@@ -478,24 +478,10 @@ Doing nothing for myapp_source.changes</screen>
 		
 		<para><phrase>Ubuntu</phrase> está basado en la distribución Linux Debian y utiliza el mismo sistema de gestión de paquetes (APT). Al comienzo de cada ciclo de desarrollo de <phrase>Ubuntu</phrase>, los paquetes en <phrase>Ubuntu</phrase> son actualizados a aquellos de la rama inestable de Debian. De todas formas, debido a que <phrase>Ubuntu</phrase> no es lo mismo que Debian, algunos de los paquetes necesitan ser modificados para funcionar en <phrase>Uuntu</phrase>. También podría haber alguna corrección de errores que los desarrolladores de <phrase>Ubuntu</phrase> hayan introducido en los paquetes. Puede determinar si esto ha sucedido anotando la versión del paquete. Si la versión del paquete incluye ubuntu (un ejemplo podría ser gimp-2.2.9-3ubuntu2), entonces los desarrolladores de <phrase>Ubuntu</phrase> han hecho cambios, y no será el mismo que el paquete de Debian. Hay más de 1000 de tales paquetes en el repositorio Universe.</para>
 		
-		<para>At the start of each Ubuntu development cycle, a decision is made regarding
-			these Ubuntu versioned packages. Of course if the Debian version hasn't
-			changed since the last <phrase>Ubuntu</phrase> release, then nothing needs to be changed.
-			However, if there is a newer version of the package in Debian, then one
-			of two things should happen. If all of the reasons for Ubuntu modifications
-			(bug fixes, dependencies, etc.) are fixed in the new Debian package,
-			then we can just take the Debian package directly. This decision is called a
-			<emphasis>sync</emphasis>. However, if the new Debian version has the same
-			issues that caused the Ubuntu version to be made, then those changes need
-			to be applied to the new Debian version, too. This decision is called <emphasis>merging</emphasis>.
-		</para>
+		<para>Al inicio de cada ciclo de desarrollo en Ubuntu, se toman decisiones acerca de los paquetes versionados en Ubuntu. Por supuesto, si la versión Debian no ha cambiado desde la última publicación de <phrase>Ubuntu</phrase>, no es necesario cambiar nada. No obstante, si hay una versión más reciente del paquete en Debian, puede ocurrir una de estas dos cosas: si todos los posibles motivos para hacer una modificación en Ubuntu (corrección de errores, dependencias, etc) están solucionados en el nuevo paquete Debian, podemos simplemente coger el paquete de Debian tal cual. A esto se le llama un <emphasis>sync</emphasis> (del inglés «synchronize», «sincronizar»). Sin embargo, si la nueva versión de Debian tiene los problemas que ocasionaron que se crease una versión para Ubuntu, los cambios que se hicieron se deben aplicar también a la nueva versión. A esto se le llama <emphasis>merging</emphasis> («mezclar», en inglés).</para>
 		<sect2 id="merge-tutorial">
-			<title>Merging Tutorial</title>
-			<para>The merging process involves looking at the changes to both the Debian and
-				Ubuntu source packages and determining what has changed and which changes are
-				Ubuntu-specific. Let us now look at an example,
-				a popular CD creation program called <application>xcdroast</application>.
-			</para>
+			<title>Tutorial de «merging»</title>
+			<para>El proceso de «merging» implica buscar los cambios tanto para los paquetes fuente de Debian como de Ubuntu y determinar qué ha cambiado y qué cambios son específicos de Ubuntu. Veamos un ejemplo: un programa bastante frecuente de creación de CDs llamado <application>xcdroast</application>.</para>
 			<para>Para empezar, cree un directorio para nuestro proyecto, y cambiese a él.</para>
 			<screen>
 mkdir ~/xcdroast
@@ -544,18 +530,9 @@ cd ~/xcdroast</screen>
 				</listitem>
 			</itemizedlist>
 			<note><para>Estos pasos también pueden ser realizados buscando los paquetes de Debian en <ulink url="packages.debian.org">packages.debian.org</ulink> y los paquetes de Ubuntu en <ulink url="packages.ubuntu.com">packages.ubuntu.com</ulink>.</para></note>
-		<tip><para>A very useful package to have installed when doing merges (or any Ubuntu packaging) is
-				<application>devscripts</application>. If you do not have that already
-				installed, install it before proceeding.</para></tip>
+		<tip><para>Un paquete verdaderamente útil para realizar «merges» (o cualquier empaquetado para Ubuntu) es <application>devscripts</application>. Si no lo tiene, instálelo antes de continuar.</para></tip>
 			
-			<para>By looking at the <phrase>Ubuntu</phrase> changelog you should be able to see which differences
-				to expect between the Ubuntu package and the Debian package from which it was derived.
-				For xcdroast, the <phrase>Ubuntu</phrase> changelog can be found at
-	<ulink url="http://changelogs.ubuntu.com/changelogs/pool/universe/x/xcdroast/xcdroast_0.98+0alpha15-1.1ubuntu1/changelog">
-					changelogs.ubuntu.com</ulink>. It says that a .desktop file was fixed and properly
-				installed to close a bug reported in
-				<ulink url="https://launchpad.net/malone/bugs/2698">Malone</ulink>.
-			</para>
+			<para>Viendo la lista de cambios de <phrase>Ubuntu</phrase> debería ser capaz de ver qué diferencias cabe esperar entre un paquete de Ubuntu, y uno de Debian del cual se ha derivado. Para xcdroast, la lista de cambios de <phrase>Ubuntu</phrase> se puede encontrar en <ulink url="http://changelogs.ubuntu.com/changelogs/pool/universe/x/xcdroast/xcdroast_0.98+0alpha15-1.1ubuntu1/changelog"> changelogs.ubuntu.com</ulink>. Ahí dice que se reparó e instaló apropiadamente un archivo .desktop para cerrar un fallo informado en <ulink url="https://launchpad.net/malone/bugs/2698">Malone</ulink>.</para>
 			
 			<para>Ahora inspeccione los verdaderos cambios en los paquetes fuente:</para>
 			<screen>
@@ -566,15 +543,13 @@ debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-1.1ubuntu1.dsc | \
 			<para>Vemos lo siguiente:</para>
 			<itemizedlist>
 				<listitem>
-					<para>In debian/rules install is being used instead of cp to install the xcdroast icon.
-						Also, there is a new line installing the .desktop file.</para>
+					<para>En debian/rules se usa install en lugar de cp para instalar el icono de xcdroast. Además, hay una nueva línea instalando el archivo .desktop.</para>
 				</listitem>
 				<listitem>
 					<para>En debian/changelog los cambios realizados son añadidos a la entrada changelog.</para>
 				</listitem>
 				<listitem>
-					<para>In debian/dirs usr/share/applications has been added for the install lines above to
-						work properly.</para>
+					<para>En debian/dirs se ha añadido usr/share/applications para que las líneas install de arriba funcionen correctamente.</para>
 				</listitem>
 				<listitem>
 					<para>añadido xcdroast.desktop</para>
@@ -628,14 +603,11 @@ Icon=xcdroast.xpm
 Type=Application
 Categories=Application;AudioVideo;</screen>
 			
-			<para>The last change that needs to be made is in <filename>changelog</filename>. 
-				Not only do we need to add what we have just done (merge with Debian), but we 
-				should also add in the previous <phrase>Ubuntu</phrase> changelog entries. To do this, run 
-				<application>dch -i -D dapper</application> and put something to the effect of:</para>
+			<para>El último cambio que se requiere es en <filename>changelog</filename>. No sólo necesitamos añadir lo que acabamos de hacer (unir con Debian), sino que también deberíamos añadir las últimas entradas de la lista de cambios de <phrase>Ubuntu</phrase>. Para hacer esto, ejecute <application>dch -i -D dapper</application> y ponga algo a efectos de:</para>
 			<screen>
 xcdroast (0.98+0alpha15-3<emphasis>ubuntu1</emphasis>) dapper; urgency=low
 
-  * Resynchronise with Debian.</screen>
+  * Resincronizar con Debian.</screen>
 
 			<para>Asegúrese de cambiar el número de versión a la versión correcta de <phrase>Ubuntu</phrase>. También añada:</para>
 			<screen>
@@ -714,13 +686,9 @@ Categories=Qt;KDE;Utility;</screen>
 				in Dapper, your package should now automatically build and check
 				for a .pot file in po/ directory.</para>
 
-			<para>You will need the <ulink url="../files/kubuntu_01_kdepot.diff">kdepot
-					patch</ulink> (or similar; it may not apply cleanly depending on the
-				age of the admin directory).</para>
+			<para>Necesita el <ulink url="../files/kubuntu_01_kdepot.diff">parche de kdepot</ulink> (o similar; puede que no se aplque de manera limpia dependiendo de la antigüedad del directorio de admin).</para>
 
-			<para>If your package uses <application>debhelper</application> or
-				<application>cdbs</application> and includes its own kde.mk file, you need
-				to add the rules yourself.</para>
+			<para>Si su paquete utiliza <application>debhelper</application> o <application>cdbs</application> e incluye su propio archivo kde.mk, necesitará añadir las reglas por su cuenta.</para>
 
 			<para>Para <application>cdbs</application>, añada esas líneas a debian/rules:</para>
 

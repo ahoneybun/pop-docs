@@ -53,6 +53,10 @@ website: index-all
 
 	make -C kubuntu -f Makefile website pdf
 
+	@echo "Building the Xubuntu Docs . . ."
+
+	make -C xubuntu -f Makefile website pdf
+
 index-all: index-C index-be index-bn index-bo index-cs index-da index-de index-el index-es index-et index-fi index-fr index-hr index-hu index-id index-is index-it index-ja index-ka index-ko index-ku index-lt index-nb index-pl index-pt index-pt_BR index-ru index-ro index-sk index-sv index-th index-tl index-tr index-zh_CN index-zh_TW
 
 	cp libs/index.css $(BASE)
