@@ -136,6 +136,17 @@ nameserver 208.185.179.218
            </para>
             </warning>
 
+            <warning>
+            <para>
+            The changes you do in <filename>/etc/resolv.conf</filename>
+            will be erased when you reboot your machine. If you want to
+            make this change permanent, you should install
+            <application>resolvconf</application> package and update the
+            DNS information in
+            <filename>/etc/resolvconf/resolv.conf.d/base</filename>
+            file provided by that package.
+           </para>
+            </warning>
         </sect2>
         <sect2 id="managing-hosts" status="complete">
           <title>Managing Hosts</title>
@@ -370,14 +381,14 @@ nameserver 208.185.179.218
             </para>
         </sect2>
     </sect1>
-	<sect1 id="firewall-configuration" status="help">
+	<sect1 id="firewall-configuration" status="review">
 		<title>Firewall Configuration</title>
           <para>
              The Linux kernel includes the <emphasis>Netfilter</emphasis> subsystem,
 			 which is used to manipulate or decide the fate of network traffic headed into or through
 			 your server.  All modern Linux firewall solutions use this system for packet filtering.
           </para>
-        <sect2 id="firewall-introduction" status="help">
+        <sect2 id="firewall-introduction" status="review">
           <title>Firewall Introduction</title>
             <para>
               The kernel's packet filtering system would be of little use to administrators without
@@ -388,7 +399,7 @@ nameserver 208.185.179.218
 			  with it, but many frontends are available to simplify the task.
             </para>
         </sect2>
-        <sect2 id="ip-masquerading" status="help">
+        <sect2 id="ip-masquerading" status="review">
           <title>IP Masquerading</title>
             <para>
               The purpose of IP Masquerading is to allow machines with private, non-routable IP
@@ -436,7 +447,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
 			  that initiated them.
 			</para>
         </sect2>
-        <sect2 id="firewall-tools" status="help">
+        <sect2 id="firewall-tools" status="review">
           <title>Tools</title>
             <para>
               There are many tools available to help you construct a complete firewall without
@@ -457,7 +468,7 @@ sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED 
 			  applications for Windows.
             </para>
         </sect2>
-        <sect2 id="firewall-logs" status="help">
+        <sect2 id="firewall-logs" status="review">
           <title>Logs</title>
             <para>
               Firewall logs are essential for recognizing attacks, troubleshooting your
@@ -2809,8 +2820,12 @@ postconf -e 'smtpd_sasl_security_options = noanonymous'
 postconf -e 'broken_sasl_auth_clients = yes'
 postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination'
 postconf -e 'inet_interfaces = all'
-echo 'pwcheck_method: saslauthd' >> /etc/postfix/sasl/smtpd.conf
-echo 'mech_list: plain login' >> /etc/postfix/sasl/smtpd.conf
+</screen>
+Open the <filename>/etc/postfix/sasl/smtpd.conf</filename> file and add
+the following lines to end of the file:
+<screen>
+pwcheck_method: saslauthd
+mech_list: plain login
 </screen>
 		</para>
 		</step>
@@ -2824,10 +2839,10 @@ openssl x509 -req -days 3650 -in smtpd.csr -signkey smtpd.key -out smtpd.crt
 openssl rsa -in smtpd.key -out smtpd.key.unencrypted
 mv -f smtpd.key.unencrypted smtpd.key
 openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650
-mv smtpd.key /etc/ssl/private/
-mv smtpd.crt /etc/ssl/certs/
-mv cakey.pem /etc/ssl/private/
-mv cacert.pem /etc/ssl/certs/
+sudo mv smtpd.key /etc/ssl/private/
+sudo mv smtpd.crt /etc/ssl/certs/
+sudo mv cakey.pem /etc/ssl/private/
+sudo mv cacert.pem /etc/ssl/certs/
 </screen>
 		</para>
 		<note><para>You can get the digital
