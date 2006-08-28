@@ -78,7 +78,7 @@ SGBASE=../build/ubuntu/styleguide/
 
 gdeb: 
 
-all: au rn dg server package
+all: clean au rn dg server package
 
 clean:
 	rm -rf $(BASE)
