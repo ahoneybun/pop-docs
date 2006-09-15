@@ -27,8 +27,8 @@ for x in rosetta-about-ubuntu/*; do
 	y=$(basename ${x} .po)
 	echo ${y}
 	mkdir -p ${y}
-	xml2po -e -p ${x} C/about-ubuntu.xml >${y}/about-ubuntu.xml
-	xml2po -e -p ${x} ${y}/about-ubuntu-C.omf >${y}/about-ubuntu-${y}.omf
+	xml2po -k -p ${x} C/about-ubuntu.xml >${y}/about-ubuntu.xml
+	xml2po -k -p ${x} ${y}/about-ubuntu-C.omf >${y}/about-ubuntu-${y}.omf
 	sed -i -e s@\"C\"@\"${y}\"@g -e s@C/@${y}/@g ${y}/about-ubuntu-${y}.omf
 	../../validate.sh ${y}/about-ubuntu.xml
 done

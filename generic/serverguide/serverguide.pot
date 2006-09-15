@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-08-28 22:18+0100\n"
+"POT-Creation-Date: 2006-09-08 20:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2824,6 +2824,98 @@ msgstr ""
 
 #: C/network-applications.xml:3512(ulink) 
 msgid "HOWTO - Using Exim 4 and Mailman 2.1 together"
+msgstr ""
+
+#: C/network-applications.xml:3520(title) 
+msgid "Time Synchronisation with NTP"
+msgstr ""
+
+#: C/network-applications.xml:3521(para) 
+msgid "This page describes methods for keeping your computer's time accurate. This is useful for servers, but is not necessary (or desirable) for desktop machines."
+msgstr ""
+
+#: C/network-applications.xml:3524(para) 
+msgid "NTP is a TCP/IP protocol for synchronising time over a network. Basically a client requests the current time from a server, and uses it to set its own clock."
+msgstr ""
+
+#: C/network-applications.xml:3527(para) 
+msgid "Behind this simple description, there is a lot of complexity - there are tiers of NTP servers, with the tier one NTP servers connected to atomic clocks (often via GPS), and tier two and three servers spreading the load of actually handling requests across the internet. Also the client software is a lot more complex than you might think - it has to factor out communication delays, and adjust the time in a way that does not upset all the other processes that run on the server. But luckily all that complexity is hidden from you!"
+msgstr ""
+
+#: C/network-applications.xml:3530(para) 
+msgid "Ubuntu has two ways of automatically setting your time: ntpdate and ntpd."
+msgstr ""
+
+#: C/network-applications.xml:3535(title) 
+msgid "ntpdate"
+msgstr ""
+
+#: C/network-applications.xml:3536(para) 
+msgid "Ubuntu comes with ntpdate as standard, and will run it once at boot time to set up your time according to Ubuntu's NTP server. However, a server's clock is likely to drift considerably between reboots, so it makes sense to correct the time ocassionally. The easiest way to do this is to get cron to run it every day. With your favourite editor, create a file <code>/etc/cron.daily/ntpdate</code> containing:"
+msgstr ""
+
+#: C/network-applications.xml:3541(screen) 
+#, no-wrap
+msgid "ntpdate ntp.ubuntu.com\n"
+msgstr ""
+
+#: C/network-applications.xml:3546(title) 
+msgid "ntpd"
+msgstr ""
+
+#: C/network-applications.xml:3547(para) 
+msgid "ntpdate is a bit of a blunt instrument - it can only adjust the time once a day, in one big correction. The ntp daemon ntpd is far more subtle. It calculates the drift of your system clock and continuously adjusts it, so there are no large corrections that could lead to inconsistent logs for instance. The cost is a little processing power and memory, but for a modern server this is negligible."
+msgstr ""
+
+#: C/network-applications.xml:3550(para) 
+msgid "To set up ntpd:"
+msgstr ""
+
+#: C/network-applications.xml:3551(screen) 
+#, no-wrap
+msgid "sudo apt-get install ntp-simple\n"
+msgstr ""
+
+#: C/network-applications.xml:3556(title) 
+msgid "Changing Time Servers"
+msgstr ""
+
+#: C/network-applications.xml:3557(para) 
+msgid "In both cases above, your system will use Ubuntu's NTP server at <code>ntp.ubuntu.com</code> by default. This is OK, but you might want to use several servers to increase accuracy and resilience, and you may want to use time servers that are geographically closer to you. to do this for ntpdate, change the contents of <code>/etc/cron.daily/ntpdate</code> to:"
+msgstr ""
+
+#: C/network-applications.xml:3564(screen) 
+#, no-wrap
+msgid "ntpdate ntp.ubuntu.com pool.ntp.org \n"
+msgstr ""
+
+#: C/network-applications.xml:3566(para) 
+msgid "And for ntpd edit <code>/etc/ntp.conf</code> to include additional server lines:"
+msgstr ""
+
+#: C/network-applications.xml:3571(screen) 
+#, no-wrap
+msgid "ntp.ubuntu.com\nserver pool.ntp.org\n"
+msgstr ""
+
+#: C/network-applications.xml:3574(para) 
+msgid "You may notice <code>pool.ntp.org</code> in the examples above. This is a really good idea which uses round-robin DNS to return an NTP server from a pool, spreading the load between several different servers. Even better, they have pools for different regions - for instance, if you are in New Zealand, so you could use <code>nz.pool.ntp.org</code> instead of <code>pool.ntp.org</code> . Look at <ulink url=\"http://www.pool.ntp.org/\">http://www.pool.ntp.org/</ulink> for more details."
+msgstr ""
+
+#: C/network-applications.xml:3585(para) 
+msgid "You can also Google for NTP servers in your region, and add these to your configuration. To test that a server works, just type <code>sudo ntpdate ntp.server.name</code> and see what happens."
+msgstr ""
+
+#: C/network-applications.xml:3593(title) 
+msgid "Related Pages"
+msgstr ""
+
+#: C/network-applications.xml:3597(ulink) 
+msgid "NTP Support"
+msgstr ""
+
+#: C/network-applications.xml:3602(ulink) 
+msgid "The NTP FAQ and HOWTO"
 msgstr ""
 
 #: C/introduction.xml:19(para) 
