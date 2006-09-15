@@ -1969,6 +1969,106 @@ Listen 443
           </para>
       </sect2>
     </sect1>
+
+	<sect1 id="php5" status="complete">
+		<title>PHP5 - Scripting Language</title>
+      <para>PHP is a general-purpose scripting language suited for Web
+      development. The PHP script can be embedded into HTML. This
+      section explains how to install and configure PHP5 in Ubuntu
+      System with Apache2 and MySQL.</para>
+      <para> This section assumes you have installed and configured
+      Apache 2 Web Server and MySQL Database Server. You can refer to
+      Apache 2 section and MySQL sections in this document to install and
+      configure Apache 2 and MySQL respectively.</para>
+
+<sect2 id="php5-installation" status="complete">
+  <title>Installation</title>
+      <para>The PHP5 is available in Ubuntu Linux. </para>
+      
+      <procedure><step><para>
+      To install PHP5 you
+      can enter the following command in the terminal prompt:
+
+<screen>
+<command>sudo apt-get install php5-common php5 libapache2-mod-php5</command>
+</screen>
+</para>
+
+      <para>You can run PHP5 scripts from command line. to run PHP5 scripts 
+      from command line you should install
+      <application>php5-cgi</application> package. To install
+      <application>php5-cgi</application> you can enter the following
+      command in the terminal prompt:
+<screen>
+<command>sudo apt-get install php5-cgi</command>
+</screen>
+</para>
+      <para>To use <application>MySQL</application> with PHP5 you should install
+      <application>php5-mysql</application> package. To install
+      <application>php5-mysql</application> you can enter the following
+      command in the terminal prompt:
+<screen>
+<command>sudo apt-get install php5-mysql</command>
+</screen>
+</para>
+      <para>Similarly, to use <application>PostgreSQL</application> with PHP5 you should install
+      <application>php5-pgsql</application> package. To install
+      <application>php5-pgsql</application> you can enter the following
+      command in the terminal prompt:
+<screen>
+<command>sudo apt-get install php5-pgsql</command>
+</screen>
+      </para>
+			</step>
+	    </procedure>
+      </sect2>
+      <sect2 id="php5-configuration" status="complete">
+        <title>Configuration</title>
+          <para>
+          Once you install PHP5, you can run PHP5 scripts from your web
+          browser. If you have installed
+          <application>php5-cgi</application> package, you can run PHP5
+          scripts from your command prompt.
+          </para>
+
+          <para>
+          By default, the Apache 2 Web server is configured to run PHP5
+          scripts. In other words, the PHP5 module is enabled in Apache2
+          Web server automatically when you install the module. Please
+          verify if the files
+          <filename>/etc/apache2/mods-enabled/php5.conf</filename> and
+          <filename>/etc/apache2/mods-enabled/php5.load</filename>
+          exist. If they do not exists, you can enable the module using
+          <command>a2enmod</command> command.
+          </para>
+
+          <para>Once you install PHP5 related packages and enabled PHP5
+          Apache 2 module, you should restart Apache2 Web server to run
+          PHP5 scripts. You can run the following command at a terminal
+          prompt to restart your web server:
+<screen><command>sudo /etc/init.d/apache2 restart</command> </screen>
+          </para>
+      </sect2>
+      <sect2 id="php5-testing" status="complete">
+        <title>Testing</title>
+          <para>To verify your installation, you can run following PHP5
+          phpinfo script:
+          </para>
+<programlisting>
+&lt;?php
+print_r (phpinfo());
+?&gt;
+</programlisting>
+          <para>
+          You can save the content in a file
+          <filename>phpinfo.php</filename> and place it
+          under <command>DocumentRoot</command> directory of Apache2 Web
+          server. When point your browser to
+          <filename>http://hostname/phpinfo.php</filename>, it would
+          display values of various PHP5 configuration parameters.
+      </para>
+      </sect2>
+    </sect1>
 	
 	<sect1 id="squid" status="complete">
 		<title>Squid - Proxy Server</title>
@@ -2904,7 +3004,7 @@ postconf -e 'myhostname = mail.example.com'
             enable SMTP AUTH using SASL. You can install these applications if
             you have not installed them already.
 <screen>
-<command>apt-get install libsasl2 sasl2-bin</command>
+<command>sudo apt-get install libsasl2 sasl2-bin</command>
 </screen>
 	    </para>
 	    <para>
@@ -3108,7 +3208,7 @@ default_mail_env = mbox:~/mail:INBOX=/var/spool/mail/%u # (for mbox)
             </para>
 <note>
 <para>
-You should configure your Mail Trasport Agent (MTA) to transfer the
+You should configure your Mail Transport Agent (MTA) to transfer the
 incoming mail to this type of mailbox if it is different from the one
 you have configured.
 </para>
@@ -3121,7 +3221,7 @@ you have configured.
 
           If you have enabled imap, or pop3, you can also try to log in
           with the commands <command>telnet localhost pop3</command> or
-          <command>telnet localhost</command> imap2. If you see
+          <command>telnet localhost imap2</command>. If you see
           something like the following, the installation has been
           successful:
 <programlisting>
@@ -3514,5 +3614,96 @@ instructions in the email to subscribe.
 </para>
         </sect3>
       </sect2>
+     </sect1>
+
+	<sect1 id="NTP" status="complete">
+		<title>Time Synchronisation with NTP</title>
+	<para>
+This page describes methods for keeping your computer's time accurate. This is useful for servers, but is not necessary (or desirable) for desktop machines. 
+</para>
+	<para>
+NTP is a TCP/IP protocol for synchronising time over a network. Basically a client requests the current time from a server, and uses it to set its own clock.  
+</para>
+	<para>
+Behind this simple description, there is a lot of complexity - there are tiers of NTP servers, with the tier one NTP servers connected to atomic clocks (often via GPS), and tier two and three servers spreading the load of actually handling requests across the internet. Also the client software is a lot more complex than you might think - it has to factor out communication delays, and adjust the time in a way that does not upset all the other processes that run on the server. But luckily all that complexity is hidden from you! 
+</para>
+	<para>
+Ubuntu has two ways of automatically setting your time: ntpdate and ntpd. 
+</para>
+
+<sect2 id="ntpdate" status="complete">
+<title>ntpdate</title>
+	<para>
+Ubuntu comes with ntpdate as standard, and will run it once at boot time to set up your time according to Ubuntu's NTP server. However, a server's clock  is likely to drift considerably between reboots, so it makes sense to correct the time ocassionally. The easiest way to do this is to get cron to run it every day. With your favourite editor, create a file 
+<code>/etc/cron.daily/ntpdate</code>
+ containing: 
+</para>
+<screen>ntpdate ntp.ubuntu.com
+</screen>
+<para/>
+</sect2>
+      <sect2 id="ntpd" status="complete">
+<title>ntpd</title>
+	<para>
+ntpdate is a bit of a blunt instrument - it can only adjust the time once a day, in one big correction. The ntp daemon ntpd is far more subtle. It calculates the drift of your system clock and continuously adjusts it, so there are no large corrections that could lead to inconsistent logs for instance. The cost is a little processing power and memory, but for a modern server this is negligible. 
+</para>
+<para>To set up ntpd: </para>
+<screen>sudo apt-get install ntp-simple
+</screen>
+<para/>
+</sect2>
+<sect2 id="timeservers" status="complete">
+<title>Changing Time Servers</title>
+	<para>
+In both cases above, your system will use Ubuntu's NTP server at 
+<code>ntp.ubuntu.com</code>
+ by default. This is OK, but you might want to use several servers to increase accuracy and resilience, and you may want to use time servers that are geographically closer to you. to do this for ntpdate, change the contents of 
+<code>/etc/cron.daily/ntpdate</code>
+ to: 
+</para>
+<screen>ntpdate ntp.ubuntu.com pool.ntp.org 
+</screen>
+	<para>
+And for ntpd edit 
+<code>/etc/ntp.conf</code>
+ to include additional server lines: 
+</para>
+<screen>ntp.ubuntu.com
+server pool.ntp.org
+</screen>
+	<para>
+You may notice 
+<code>pool.ntp.org</code>
+ in the examples above. This is a really good idea which uses round-robin DNS to return an NTP server from a pool, spreading the load between several different servers. Even better, they have pools for different regions - for instance, if you are in New Zealand, so you could use  
+<code>nz.pool.ntp.org</code>
+ instead of 
+<code>pool.ntp.org</code>
+. Look at 
+<ulink url="http://www.pool.ntp.org/">http://www.pool.ntp.org/</ulink>
+ for more details. 
+</para>
+	<para>
+You can also Google for NTP servers in your region, and add these to your configuration. To test that a server works, just type 
+<code>sudo ntpdate ntp.server.name</code>
+ and see what happens. 
+</para>
+<para/>
+</sect2>
+	<sect2 id="relatedpages" status="complete">
+<title>Related Pages</title>
+	<itemizedlist>
+	<listitem>
+	<para>
+<ulink url="http://ntp.isc.org/bin/view/Support/WebHome">NTP Support</ulink>
+</para>
+</listitem>
+	<listitem>
+	<para>
+<ulink url="http://www.ntp.org/ntpfaq/NTP-a-faq.htm">The NTP FAQ and HOWTO</ulink>
+</para>
+</listitem>
+</itemizedlist>
+<para/>
+</sect2>
     </sect1>
 	</chapter>

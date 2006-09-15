@@ -21,29 +21,33 @@
 
 
 tar -xzvf rosetta-desktopguide.tar.gz
+rm rosetta-desktopguide/desktopguide.pot
 
 for x in rosetta-desktopguide/*; do
 	y=$(basename ${x} .po)
 	echo ${y}
 	mkdir -p ${y}
-	xml2po -e -p ${x} C/desktopguide.xml >${y}/desktopguide.xml
-	xml2po -e -p ${x} C/getting-started.xml >${y}/getting-started.xml
-	xml2po -e -p ${x} C/getting-help.xml >${y}/getting-help.xml
-	xml2po -e -p ${x} C/bookinfo.xml >${y}/bookinfo.xml
-	xml2po -e -p ${x} C/preface.xml >${y}/preface.xml
-	xml2po -e -p ${x} C/tips-and-tricks.xml >${y}/tips-and-tricks.xml
-	xml2po -e -p ${x} C/desktopguide-C.omf >${y}/desktopguide-${y}.omf
-	xml2po -e -p ${x} C/config-system.xml >${y}/config-system.xml
-	xml2po -e -p ${x} C/common-tasks.xml >${y}/common-tasks.xml
-	xml2po -e -p ${x} C/olinkdb.xml >${y}/olinkdb.xml
-	mkdir ${y}/sample
-	cp C/sample/* ${y}/sample/
-	cp C/mk ${y}/
+	xml2po -k -p ${x} C/add-applications.xml >${y}/add-applications.xml
+	xml2po -k -p ${x} C/administration.xml >${y}/administration.xml
+	xml2po -k -p ${x} C/bookinfo.xml >${y}/bookinfo.xml
+	xml2po -k -p ${x} C/config-desktop.xml >${y}/config-desktop.xml
+	xml2po -k -p ${x} C/desktopguide-C.omf >${y}/desktopguide-${y}.omf
+	xml2po -k -p ${x} C/desktopguide.xml >${y}/desktopguide.xml
+	xml2po -k -p ${x} C/games.xml >${y}/games.xml
+	xml2po -k -p ${x} C/graphics.xml >${y}/graphics.xml
+	xml2po -k -p ${x} C/internet.xml >${y}/internet.xml
+	xml2po -k -p ${x} C/linux-basics.xml >${y}/linux-basics.xml
+	xml2po -k -p ${x} C/musicandvideo.xml >${y}/musicandvideo.xml
+	xml2po -k -p ${x} C/office.xml >${y}/office.xml
+	xml2po -k -p ${x} C/partitionsandbooting.xml >${y}/partitionsandbooting.xml
+	xml2po -k -p ${x} C/preface.xml >${y}/preface.xml
+	xml2po -k -p ${x} C/printing.xml >${y}/printing.xml
+	xml2po -k -p ${x} C/programming.xml >${y}/programming.xml
 	if [ ! -e ${y}/desktopguide-${y}.omf ]; then
 		sed -e "s#\"C\"#\"${y}\"#;  s#/C/#/${y}/#" C/desktopguide-C.omf >${y}/desktopguide-${y}.omf
 	fi
+	../../validate.sh ${y}/desktopguide.xml
 
 done
-	sed -i -e "s@/C@/$y@g" $y/mk
 
 rm -rf rosetta-desktopguide
