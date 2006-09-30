@@ -22,8 +22,9 @@
 
 tar -xzvf rosetta-about-ubuntu.tar.gz
 rm rosetta-about-ubuntu/about-ubuntu.pot
+mv rosetta-about-ubuntu po
 
-for x in rosetta-about-ubuntu/*; do
+for x in po/*; do
 	y=$(basename ${x} .po)
 	echo ${y}
 	mkdir -p ${y}
@@ -33,5 +34,4 @@ for x in rosetta-about-ubuntu/*; do
 	../../validate.sh ${y}/about-ubuntu.xml
 done
 
-rm -rf rosetta-about-ubuntu*
 rm .xml2po.mo

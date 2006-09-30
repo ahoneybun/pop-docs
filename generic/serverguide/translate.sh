@@ -26,8 +26,9 @@
 
 tar -xzvf rosetta-serverguide.tar.gz
 rm rosetta-serverguide/serverguide.pot
+mv rosetta-serverguide po
 
-for x in rosetta-serverguide/*; do
+for x in po/*; do
 	y=$(basename ${x} .po)
 	echo ${y}
 	mkdir -p ${y}
@@ -47,4 +48,3 @@ for x in rosetta-serverguide/*; do
 
 done
 
-rm -rf rosetta-serverguide

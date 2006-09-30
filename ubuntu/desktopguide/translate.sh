@@ -19,11 +19,11 @@
 #    at /usr/share/common-licenses/GPL
 ####################################################################################
 
-
 tar -xzvf rosetta-desktopguide.tar.gz
 rm rosetta-desktopguide/desktopguide.pot
+mv rosetta-desktopguide po
 
-for x in rosetta-desktopguide/*; do
+for x in po/*; do
 	y=$(basename ${x} .po)
 	echo ${y}
 	mkdir -p ${y}
@@ -49,5 +49,3 @@ for x in rosetta-desktopguide/*; do
 	../../validate.sh ${y}/desktopguide.xml
 
 done
-
-rm -rf rosetta-desktopguide
