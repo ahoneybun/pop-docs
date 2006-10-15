@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="gs-chap" status="review">
+	<title>시작 하기</title>
+
+	<sect1 id="gs-bin_source" status="complete">
+		<title>바이너리와 소스 패키지</title>
+		
+		<para>Most users of a Debian-based distribution such as <phrase>Ubuntu</phrase> will never have
+			to deal with the actual source code that is used to create all of the
+			applications on their computers. Instead, the source code is compiled into
+			<emphasis>binary</emphasis> packages from
+			the <emphasis>source</emphasis> package that contains both
+			the source code itself and the rules for making the binary
+			package. Packagers upload the source packages with their
+			changes to the build systems that then compile the binary
+			packages for each architecture. A separate system
+			distributes the generated binary .deb files and source
+			changes to the repository mirrors.</para>
+
+	</sect1>
+
+	<sect1 id="gs-tools" status="review">
+		<title>패키징 도구</title>
+		
+		<para>데비안 기반의 시스템에는 특별히 패키징을 위해 작성된 많은 도구들이 있습니다. 그 들의 많은 수는 패키지를 만드는데 <emphasis>필수적</emphasis> 이지 않지만, 매우 도움이 되고 종종 반복적인 작업을 자동화 합니다. 그 도구들의 <application>man</application> 과 <application>info</application> 페이지는 정보의 좋은 소스 입니다. 그러나, 다음은 패키징을 시작하는데 필요하다고 간주되는 패키지들의 목록 입니다:</para>
+
+		<variablelist>
+			<varlistentry>
+				<term><application>build-essential</application></term>
+				<listitem><para><application>libc6-dev</application>, <application>gcc</application>, <application>g++</application>, <application>make</application> 그리고 <application>dpkg-dev</application> 에 의존하는 메타패키지 입니다. 여러분이 익숙하지 않을 한 패키지는 아마 <application>dpkg-dev</application> 일 것 입니다. 이것은 소스와 바이너리 패키지를 생성하고, 풀고, 빌드하는 <application>dpkg-buildpackage</application> 과 <application>dpkg-source</application> 같은 도구들을 가지고 있습니다.</para></listitem>
+			</varlistentry>
+
+			<varlistentry>
+				<term><application>devscripts</application></term>
+				<listitem><para>패키지 관리자의 유지보수 일을 훨씬 쉽게 하는 많은 스크립트를 가지고 있습니다. 스크립트들 중에 보통 보다 많이 사용되는 것들은 <application>debdiff</application>, <application>dch</application> 그리고 <application>debsign</application> 입니다.</para></listitem>
+			</varlistentry>
+
+			<varlistentry><term><application>debhelper</application> 와 <application>dh-make</application></term>
+				<listitem><para>보통의 패키징 작업을 자동화 하는 스크립트 입니다. <application>dh-make</application> 는 소스를 "데비안화" 하는 초기 작업을 하는데 사용되고 많은 예제 파일을 제공 합니다.</para></listitem>
+			</varlistentry>
+				
+			<varlistentry><term><application>diff</application> 와 <application>patch</application></term> <listitem><para>패치들 만들고 적용하는데 사용 합니다. 여럿의 복사본 파일을 가지는 것 보다 작은 변경은 패치로 만들어 사용하는 것이 쉽고, 깔끔하고 보다 효과적이므로 이것들은 패키징을 하는데 광범위하게 사용 됩니다.</para></listitem> </varlistentry>
+			
+			<varlistentry><term><application>gnupg</application></term>
+				<listitem><para>디지털하게 파일 (패키지를 포함한) 을 서명하는데 사용되는 PGP 를 완전하고 자유롭게 대체한 프로그램 입니다.</para></listitem>
+			</varlistentry>
+				
+			<varlistentry><term><application>fakeroot</application></term>
+				<listitem><para>루트 권한을 가지고 실행하는 명령어를 가상으로 수행 합니다. 이것은 일반 사용자로 바이너리 패키지를 만들 때 유용 합니다.</para></listitem>
+			</varlistentry>
+			
+			<varlistentry><term><application>lintian</application> 과 <application>linda</application></term>
+				<listitem><para>데비안 패키지를 버그와 정책의 위반을 보고 합니다. 일반적인 에러 외에도 데비안 정책의 많은 측면을 자동 검사하는 것을 가지고 있습니다.</para></listitem>
+			</varlistentry>
+			
+			<varlistentry><term><application>pbuilder</application></term>
+				<listitem><para>chroot 시스템을 구성하고 패키지를 chroot 내에서 만들어 줍니다. 이것은 패키지가 올바른 빌드 의존성을 가졌는지 검사하는 것과, 테스트하고 배포할 깨끗한 패키지를 만드는 것에 사용하는 이상적인 시스템 입니다.</para></listitem> </varlistentry>
+		</variablelist>
+
+	</sect1>
+
+		
+	<sect1 id="gs-pbuilder" status="complete" xreflabel="pbuilder">
+		<title>개인적 빌드 도구: pbuilder</title>
+		
+		<para>Using pbuilder as a package builder allows you to build
+			the package from within a chroot environment. You can
+			build binary packages without using
+			<application>pbuilder</application>, but you must have all the build
+			dependencies installed on your system first. However, pbuilder allows the
+			packager to check the build dependencies because the package is built within a
+			minimal <phrase>Ubuntu</phrase> installation, and the build dependencies are downloaded
+			according to the <filename>debian/control</filename> file.</para>
+
+		<para>다음은 pbuilder 환경을 설치, 사용, 갱신하기 위한 간략한 안내서 입니다. 그러나, <application>pbuilder</application> 사용 예의 많은 상세한 점은 이 안내서의 범위 밖에 있습니다. 만약 여러분이 이 프로그램의 사용에 문제가 있거나 좀 더 상세한 정보를 필요로 한다면, 많은 정보를 가진 <application>pbuilder</application> man 페이지를 읽어 보시기 바랍니다.</para>
+
+	<sect2>
+		<title>pbuilder 환경의 설치와 설정</title>
+		
+		<para>The first, and perhaps most obvious, thing to do is to
+		install <application>pbuilder</application>. If you want to
+		create a <application>pbuilder</application> for a release
+		newer than the one you currently have installed, you will need
+		to manually install the <application>debootstrap</application>
+		.deb (from <ulink url="http://packages.ubuntu.com">http://packages.ubuntu.com</ulink>) from the
+		newer release. To create a pbuilder execute:</para>
+		
+		<screen>
+sudo pbuilder create --distribution &lt;distro&gt; \
+	--othermirror "deb http://archive.ubuntu.com/ubuntu &lt;distro&gt; universe multiverse"
+		</screen>
+
+		<para>where &lt;distro&gt; is the release you want
+			(<emphasis>edgy</emphasis> for instance) to create the
+			pbuilder for. If you would like to create more than one
+			<application>pbuilder</application> environment you can
+			append the <emphasis>--basetgz</emphasis> flag with the
+			desired location for the
+			compressed <application>pbuilder</application>
+			environment.  The default
+			is <filename>/var/cache/pbuilder/base.tgz</filename>.  If
+			you do choose to use <emphasis>--basetgz</emphasis> you
+			will need to use it with the
+			other <application>pbuilder</application> commands
+			so <application>pbuilder</application> knows which
+			compressed build environment to use.</para>
+		
+		<note><para>Creating a pbuilder environment will take some
+		time as <application>debootstrap</application> essentially
+		downloads a minimal <phrase>Ubuntu</phrase> installation.</para></note>
+
+		<tip><para>A more flexible way to create a pbuilder (and
+		perhaps multiple pbuilders) is to you a shell script.</para></tip>
+
+	</sect2>	
+	
+	<sect2>
+		<title>pbuilder 사용 하기</title>
+		<para>이제 여러분은 다음의 명령을 실행하는 것처럼 소스 패키지에서 바이너리 패키지를 빌드할 수 있는, 동작하는 pbuilder 를 가졌습니다:</para>
+
+		<screen>sudo pbuilder build *.dsc</screen>
+
+		<para>이것은 현재 디렉토리 내의 모든 소스 패키지를 빌드 합니다. 결과의 .deb 과 소스 패키지는 <filename>/var/cache/pbuilder/result/</filename> 에서 찾을 수 있습니다. (이 위치는  <emphasis>--buildresult</emphasis> 플랙으로 변경할 수 있습니다.)</para>
+
+	</sect2>
+
+	<sect2>
+		<title>pbuilder 업데이트 하기</title>
+		
+		<para>여러분은 적절한 의존 패키지를 찾는 것을 확신하기 위해, 여러분의 소스 패키지를 테스팅 하는 어떤 때에도, 특히 빠르게 변경하는 개발 릴리스를 위하여 빌드를 하는 때는 현재의 pbuilder 를 항상 가져야 합니다. 여러분의 pbuilder를 갱신하기 위해, 다음을 사용 합니다:</para>
+
+		<screen>sudo pbuilder update</screen>
+
+		<para/>
+		
+		<para>만약 새로운 릴리스의 pbuilder 로 업그레이드 하기를 원한다면, <application>pbuilder update</application> 를 <emphasis>--distribution</emphasis> 플랙과 함께 사용할 수 있습니다:</para>
+
+		<screen>sudo pbuilder update --distribution &lt;newdistro&gt; --override-config</screen>
+
+	</sect2>
+	
+	<sect2>
+		<title>Multiple pbuilders</title>
+		
+		<para>All of the information so far in this section on <application>pbuilder</application> has applied to having a single <application>pbuilder</application>. If you want to create more than one <application>pbuilder</application> you can create a shell script to handle the configuration for each <application>pbuilder</application> you want to create. An example of such a shell script can be found in <filename>/usr/share/doc/pbuilder/examples/pbuilder-distribution.sh</filename>. You can simply copy this example file somewhere in your path (putting it in <filename>~/bin/</filename> and adding this directory to your execution path is convenient) and then edit it according your needs. Normally you will need to only change DISTRIBUTION and add --othermirror as above. You can then call this script instead of <application>pbuilder</application> directly.</para></sect2>
+	
+</sect1>
+
+</chapter>
+

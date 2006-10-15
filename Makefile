@@ -44,24 +44,34 @@ INDEXCHUNKXSL=libs/index-html-chunk-cust.xsl
 # Base gnome directories for output from processor
 BASE=build/
 
-website: index
+website: index-all ubuntu-book
 	@echo "Building the Ubuntu Docs . . ."
 
-	make -C ubuntu -f Makefile all pdf
+	make -C ubuntu -f Makefile website pdf
 
 	@echo "Building the Kubuntu Docs . . ."
 
-	make -C kubuntu -f Makefile all pdf
+	make -C kubuntu -f Makefile website pdf
 
-	@echo "Building the Index Page . . ."
+	@echo "Building the Xubuntu Docs . . ."
 
-index:
+	make -C xubuntu -f Makefile web pdf
 
-	xsltproc --stringparam root.filename "index" -o $(BASE) $(INDEXCHUNKXSL) website-index/C/website-index.xml
+ubuntu-book:
+
+	mkdir -p $(BASE)book/
+	cp -r book/* $(BASE)book/
+
+style:
+
 	cp libs/index.css $(BASE)
+	mkdir -p $(BASE)ubuntu/common/img/
+	cp ubuntu/libs/img/*png $(BASE)ubuntu/common/img/
 
-# This is an example target for translations, where "cc" is the country-code for the translation language.
-index-cc:
+index-all: style $(BASE)C $(BASE)af $(BASE)ar $(BASE)be $(BASE)bg $(BASE)bn $(BASE)bo $(BASE)ca $(BASE)cs $(BASE)csb $(BASE)da $(BASE)de $(BASE)de_DE $(BASE)el $(BASE)en_AU $(BASE)en_CA $(BASE)en_GB $(BASE)es $(BASE)es_ES $(BASE)es_PR $(BASE)et $(BASE)eu $(BASE)fa $(BASE)fi $(BASE)fr $(BASE)gl $(BASE)he $(BASE)hr $(BASE)hu $(BASE)id $(BASE)is $(BASE)it $(BASE)ja $(BASE)ka $(BASE)kn $(BASE)ko $(BASE)ku $(BASE)lb $(BASE)lt $(BASE)lv $(BASE)ms $(BASE)nb $(BASE)nl $(BASE)nn $(BASE)oc $(BASE)pl $(BASE)pt $(BASE)pt_BR $(BASE)ro $(BASE)ru $(BASE)sk $(BASE)sl $(BASE)sr $(BASE)sv $(BASE)th $(BASE)tl $(BASE)tr $(BASE)uk $(BASE)zh_CN $(BASE)zh_TW
 
-	xsltproc --stringparam root.filename "index.cc" -o $(BASE) $(INDEXCHUNKXSL) website-index/cc/website-index.xml
-	cp libs/index.css $(BASE)
+	cd build; for i in `ls index.*.html` ; do mv $i index.html.`echo $i | sed -e 's/index.\(.*\).html/\1/'` ; done ; cd ../
+
+$(BASE)%: website-index/%/website-index.xml
+	xsltproc --xinclude --stringparam root.filename "index" -o $@ $(INDEXCHUNKXSL) $<
+

@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % kde SYSTEM "../../libs/kde.ent">
+%kde;
+<!ENTITY % kde-general SYSTEM "/usr/share/apps/ksgmltools2/customization/obsolete/general.entities">
+%kde-general;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="linux-basics" status="complete">
+        <title>Fundamentos de Linux</title>
+        <para>Este capítulo le introduce en los conceptos básicos que resultan de utilidad cuando se está empezando con un sistema Kubuntu.</para>
+        <sect1 id="directories-file-systems" status="complete">
+            <title>Directorios y sistemas de archivos</title>
+            <para>En Linux y Unix todo es un fichero. Los directorios son ficheros, los ficheros son ficheros, y los dispositivos son ficheros. A veces a los dispositivos se les llama nodos, pero siguen siendo ficheros.</para>
+            <para>Los sistemas de ficheros de Linux y Unix se organizan en una estructura jerárquica, de tipo árbol. El nivel más alto del sistema de ficheros es <filename>/</filename> o directorio raíz. Todos los demás ficheros y directorios están bajo el directorio raíz. Por ejemplo, <filename>/home/jebediah/cheeses.odt</filename> muestra la ruta completa al fichero <filename>cheeses.odt</filename> que está en el directorio <filename>jebediah</filename>, que a su vez está bajo el directorio <filename>home</filename>, que por su parte está bajo el directorio raíz (<filename>/</filename>).</para>
+            <para>Por debajo del directorio raíz (<filename>/</filename>) hay un importante grupo de directorios común a la mayoría de las distribuciones de GNU/Linux. A continuación hay una lista de los directorios que aparecen normalmente bajo el directorio raíz (<filename>/</filename>):</para>
+            <itemizedlist>
+                <listitem>
+                    <para><filename>/bin</filename> - comandos importantes, que han sido históricamente <emphasis>bin</emphasis>arios, pero que también pueden ser scripts de shell</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/boot</filename> - Ficheros de configuración del arranque, núcleos y otros ficheros necesarios para el arranque (<emphasis>boot</emphasis>) del equipo.</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/dev</filename> - los ficheros de <emphasis>dispositivo</emphasis></para>
+                </listitem>
+                <listitem>
+                    <para><filename>/etc</filename> - ficheros de configuración, scripts de arranque, <emphasis>etc</emphasis>.</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/home</filename> - directorios personales (<emphasis>home</emphasis>) para los diferentes usuarios.</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/initrd</filename> - utilizado cuando creamos un disco RAM inicial personalizado</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/lib</filename> - librerías del sistema (<emphasis>lib</emphasis>raries)</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/lost+found</filename> - proporciona un sistema de "perdido+encontrado" (<emphasis>lost+found</emphasis>) para los ficheros que existen debajo del directorio raíz (<filename>/</filename>)</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/media</filename> - soportes extraíbles montados (cargados) automáticamente, tales como CDs, cámaras digitales, etc.</para>
+                </listitem>
+                <listitem>
+                  <para><filename>/mnt</filename> - sistemas de archivos <emphasis>m</emphasis>o<emphasis>nt</emphasis>ados manualmente en el disco duro.</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/opt</filename> - proporciona un lugar para instalar aplicaciones opcionales de terceros; éstas normalmente están compiladas de forma estática y se pueden usar en otras versiones o distribuciones de Linux</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/proc</filename> - directorio dinámico especial que mantiene información sobre el estado del sistema, incluyendo los <emphasis>proc</emphasis>esos actualmente en ejecución</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/root</filename> - directorio personal del usuario <emphasis>root</emphasis> (superusuario); también llamado "barra-root".</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/sbin</filename> - binarios y scripts importantes para el sistema, pensados normalmente para ser ejecutados como usuario root</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/srv</filename> - puede contener archivos que se <emphasis>s</emphasis>i<emphasis>rv</emphasis>en a otros sistemas</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/sys</filename> - similar al sistema de archivos /proc, con la diferencia de que contiene información del sistema no relacionada con los procesos en ejecución</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/tmp</filename> - <emphasis>t</emphasis>e<emphasis>mp</emphasis>orary files</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/usr</filename> - aplicaciones y archivos de sólo-lectura, la mayoría disponibles para todos los usuarios</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/var</filename> - archivos <emphasis>var</emphasis>iables como archivos de registros y bases de datos</para>
+                </listitem> 
+            </itemizedlist>
+        </sect1>
+        <sect1 id="permissions" status="complete">
+            <title>Permisos</title>
+            <para>Todos los archivos de un sistema Linux tienen permisos que permiten o impiden a otros verlos, modificarlos o ejecutarlos. El superusuario "root" tiene acceso a cualquier archivo del sistema. Cada archivo tiene restricciones de acceso, restricciones de usuario y está asociado a un propietario y un grupo.</para>
+            <para>Cada archivo está asegurado por las tres capas de permisos siguientes, en orden de importancia:</para>
+            <itemizedlist>
+                <listitem>
+                    <para>usuario</para>
+                    <para>se aplica al usuario que es el propietario del archivo</para>
+                </listitem>
+                <listitem>
+                    <para>grupo</para>
+                    <para>se aplica al grupo asociado al archivo</para>
+                </listitem>
+                <listitem>
+                    <para>otros</para>
+                    <para>se aplica a todos los demás usuarios</para>
+                </listitem>
+            </itemizedlist>
+            <para>Los permisos reales están dentro de cada uno de los tres conjuntos de permisos. Los permisos, junto con los distintos modos en que afectan a los archivos y a los directorios, se describen a continuación:</para>
+            <itemizedlist>
+                <listitem>
+                    <para>lectura</para>
+                    <para>los archivos pueden ser visualizados/abiertos</para>
+                    <para>el contenido del directorio se puede visualizar</para>
+                </listitem>
+                <listitem>
+                    <para>escritura</para>
+                    <para>los archivos se pueden modificar o eliminar</para>
+                    <para>el contenido del directorio se puede modificar</para>
+                </listitem>
+                <listitem>
+                    <para>ejecución</para>
+                    <para>los archivos ejecutables se pueden arrancar como un programa</para>
+                    <para>se puede entrar en los directorios</para>
+                </listitem>
+            </itemizedlist>
+            <para>Para ver y editar los permisos de archivos y directorios, abra el <menuchoice><guimenu>Menú del sistema</guimenu>
+                    <guimenuitem>Carpeta personal</guimenuitem></menuchoice>, pulse con el botón derecho sobre el archivo o directorio, y seleccione <guimenu>Propiedades</guimenu>. Los permisos se encuentran bajo la solapa <guilabel>Permisos</guilabel> y permiten editar todos los niveles de permisos, si usted es el propietario del archivo. Las opciones avanzadas de permisos (que están en la solapa <guilabel>Permisos avanzados</guilabel>) estan fuera del alcance de esta guía.</para>
+        </sect1>
+        <sect1 id="root-and-sudo" status="complete">
+
+            <title>Usuario "root" y sudo</title>
+
+            <para>El usuario root en Linux es el usuario que tiene acceso de administrdor a su sistema. El usuario normal no tiene este acceso por razones de seguridad. De cualquier forma, Kubuntu no tiene habilitado el usuario root. En su lugar, el acceso administrativo se proporciona a los usuarios individuales, quienes puede utilizar «sudo» para realizar tareas administrativas. La primera cuenta del usuario que se creó en su sistema durante la instalación, por omisión, tendrá acceso a sudo. Puedes restringir y permitir el acceso de sudo a los usuarios con la aplicación <application>Usuarios y grupos</application> (ver <xref linkend="users-and-groups"/> para más información).</para>
+
+            <para>Cuando ejecuta una aplicación que requiere privilegios de administrador, sudo le pedirá que escriba su contraseña de usuario normal. Esto asegura que aplicaciones incontroladas no puedan dañar su sistema, y sirve como recordatorio de que está a punto de realizar acciones administrativas que requieren que tenga cuidado.</para>
+
+            <para>Para usar sudo en la línea de comandos, simplemente escriba "sudo" antes del comando que desea ejecutar. Sudo le pedirá  su contraseña.</para>
+
+            <para>Sudo recordará su contraseña durante un periodo de tiempo (predeterminado a 15 minutos). Esta característica se diseñó para permitir a los usuarios realizar múltiples tareas administrativas sin tener que escribir su contraseña cada vez.</para>
+
+            <warning>
+                <para>Tenga cuidado cuando realice tareas administrativas. ¡Podría dañar su sistema!</para>
+            </warning>
+            <para>Otros trucos para usar sudo:</para>
+            <itemizedlist>
+                <listitem>
+                    <para>Para utilizar una consola de superusuario ("root"), escriba "sudo -i" en la línea de comandos.</para>
+                </listitem>
+                <listitem>
+                    <para>Todas las herramientas gráficas de configuración predeterminadas de Kubuntu ya usan sudo, así que si es neceserario se le preguntará su contraseña a través de <application>kdesu</application>, una interfaz de usurario gráfica para <application>sudo</application>.</para>
+                </listitem>
+                <listitem>
+                    <para>
+                        For more information on the
+                        <application>sudo</application> program and the
+                        absence of a root user in Kubuntu, read the <ulink url="&wiki-RootSudo;">sudo page</ulink> on the
+                        Ubuntu wiki.
+                    </para>
+                </listitem>
+            </itemizedlist>
+            <sect2 id="run-application-root" status="complete">
+                <title>Iniciar un programa manualmente con privilegios de superusuario</title>
+                <para>A veces es necesario ejecutar un programa con privilegios de superusuario. Esto es sencillo con el diálogo <application>Ejecutar comando</application>.</para>
+                <warning>
+                    <para>Por favor, tenga cuidado cuando ejecute aplicaciones con privilegios de superusuario, ya que puede dañar su sistema. Vea <xref linkend="root-and-sudo"/> para más detalles.</para>
+                </warning>
+                <procedure>
+                    <step>
+                        <para>Abrir la ventana <application>Ejecutar comando</application> tecleando: <keycombo><keycap>Alt</keycap>
+                                <keycap>F2</keycap></keycombo></para>
+                    </step>
+                    <step>
+                        <para>Escriba el nombre del programa que desea ejecutar, <emphasis>precedido</emphasis> de <application>kdesu</application> y pulse <keycap>Enter</keycap>. Por ejemplo, para lanzar el explorador de archivos <application>Konqueror</application> con privilegios de "root", escriba <screen>kdesu konqueror</screen></para>
+                    </step>
+                </procedure>
+            </sect2>
+        </sect1>
+        <sect1 id="terminals" status="complete">
+            <title>Consola</title>
+            <para>Trabajar con la línea de comandos no es una tarea tan desalentadora como muchos pudieran pensar. No se requieren conocimientos especiales para usar la línea de comandos, pues es un programa como otro cualquiera. La mayoría de las acciones realizadas en Linux pueden llevarse a cabo usando la línea de comandos. Aunque existen herramientas gráficas para la mayoría de programas, a veces esto no es suficiente. Entonces es cuando la línea de comandos cobra su utilidad.</para>
+            <para>La terminal es llamada a menudo la línea de comandos, el "prompt", o el "shell". Antes, éste era el único método por el cual el usuario interactuaba con lel ordenador; sin embargo, muchos usuarios de Linux encuentran más rápido el uso de la terminal que un método gráfico e incluso hoy día tiene algunas ventajas. Aquí aprenderá cómo usar la terminal.</para>
+            <para>El uso original de la terminal era como administrador de ficheros y de hecho todavía es usado con este fin. Usted puede usar la terminal como un navegador de archivos para administrar sus ficheros y deshacer los cambios realizados.</para>
+            <sect2 id="starting-konsole" status="complete">
+                <title>Iniciando la consola</title>
+                <para>
+                The <application>Konsole</application> can be started by
+                choosing 
+                <menuchoice>
+                    <guimenu>K-menu</guimenu>
+                    <guimenuitem>System</guimenuitem>
+                    <guimenuitem>Konsole (Terminal Program)</guimenuitem>
+                </menuchoice> 
+                from the Desktop menu system.
+                </para>
+            </sect2>
+            <sect2 id="common-commands" status="complete">
+                <title>Órdenes comunes</title>
+                <variablelist>
+                    <varlistentry>
+                        <term>Ver directorios: - ls</term>
+                        <listitem><para>El comando <application>ls</application> (LiSta) muestra los archivos diferenciados por colores y texto con formato</para></listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Crear directorios: - mkdir (nombre del directorio)</term>
+                        <listitem><para>El comando <application>mkdir</application> (del inglés MaKeDIRectory) crea un directorio.</para></listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Cambiar de Directorio: - cd (/directorio/ubicación)</term>
+                        <listitem><para>El comando <application>cd</application> (Cambiar de Directorio) cambia de su directorio actual a cualquier directorio especificado.</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Copiar Archivos/Directorios: - cp (nombre de archivo o directorio de origen) (directorio o archivo de destino)</term>
+                        <listitem><para>La orden <application>cp</application> (CoPiar) copia los archivos que usted especifique. La orden <application>cp -r</application> copia cualquier directorio que usted especifique.</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Eliminar Archivos/Directorios: -rm (el nombre del archivo o directorio).</term>
+                        <listitem><para>El comando <application>rm</application> (del Inglés ReMove, eliminar) borra el fichero con el nombre especificado. El comando <application>rm -r</application> borra el directorio especificado junto con todo su contenido.</para></listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Mover/Renombrar Archivos/Directorios: -mv (archivo o directorio)</term>
+                        <listitem><para>El comando <application>mv</application> (MoVer) mueve/renombra el archivo o directorio especificado.</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Buscar Archivos/Directorios: - locate (nombre del archivo o directorio)</term>
+                        <listitem><para>El comando <application>locate</application> busca cualquier archivo especificado. Emplea un índice de los archivos que hay en su sistema para acelerar la búsqueda. Para actualizar este índice, ejecute el comando <application>sudo updatedb</application>. Este comando se ejecuta de manera automática cada día si deja su ordenador encendido. Para ejecutarlo se requieren privilegios de administrador (véase <xref linkend="root-and-sudo"/>).</para>
+                        </listitem>
+                    </varlistentry>
+                </variablelist>
+                <para>También puede emplear comodines para encontrar uno o mas archivos, como "*" (para todos los archivos) o "?" (para encontrar un caracter).</para>
+            </sect2>
+            <sect2 status="complete">
+                <title>Cambiar a modo Consola</title>
+                <para>El método habitual para acceder a la línea de comandos en Kubuntu es iniciando una sesión de terminal (véase <xref linkend="starting-konsole"/>, arriba), pero a veces es útil entrar en la auténtica consola:</para>
+                <procedure>
+                    <step>
+                        <para>Use la combinación de teclas <keycombo><keycap>Ctrl</keycap>
+                                <keycap>Alt</keycap>
+                                <keycap>F1</keycap></keycombo> para pasarse a la primera consola.</para>
+                    </step>
+                    <step>
+                        <para>Para volver al escritorio, use la combinación de teclas <keycombo><keycap>Ctrl</keycap>
+                                <keycap>Alt</keycap>
+                                <keycap>F7</keycap></keycombo>.</para>
+                    </step>
+                </procedure>
+                <note>
+                    <para>Hay seis consolas disponibles. Cada una de ellas es accesible con las combinaciones de teclas que van desde <keycombo><keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>F1</keycap></keycombo> hasta <keycombo><keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>F6</keycap></keycombo>.</para>
+                </note>
+            </sect2>
+            <sect2 status="complete">
+                <title>Desactivar el pitido en el modo Terminal</title>
+                <procedure>
+                    <step>
+                        <para>
+                            Start a <application>Konsole</application>
+                            session, select: 
+                            <menuchoice>
+                                <guimenu>K-menu</guimenu>
+                                <guisubmenu>System</guisubmenu>
+                                <guimenuitem>Konsole (Terminal Program)</guimenuitem>
+                            </menuchoice>
+                            from the desktop menu system. 
+                        </para>
+                    </step>
+                    <step>
+                        <para>
+                            <menuchoice>
+                                <guimenu>Preferencias</guimenu>
+                                <guisubmenu>Timbre</guisubmenu>
+                                <guimenuitem>Ninguno</guimenuitem>
+                            </menuchoice>
+                        </para>
+                    </step>
+                </procedure>
+            </sect2>
+        </sect1>
+        <sect1 id="text-editing" status="complete">
+            <title>Edición de Texto</title>
+            <para>
+                All of the configurations and settings in Linux are saved in
+                text files. Even though you most often can edit configurations
+                through the graphical interface, you may occasionally have to
+                edit them by hand. 
+                <application>Kate</application> is the default Kubuntu text
+                editor, which can be launched by clicking  
+                <menuchoice>
+                    <guimenu>K-menu</guimenu>
+                    <guisubmenu>Utilities</guisubmenu>
+                    <guimenuitem>Kate (Advanced Text Editor)</guimenuitem>
+                </menuchoice> 
+                    from the desktop menu system.
+            </para>
+            <para>A veces, durante esta guía, ejecutaremos <application>Kate</application> desde la línea de comandos, usando <application>kdesu</application>, pues la mayoría de los archivos de configuración requieren privilegios de administrador (root) para poder editarlos. Le recomendamos que usted también ejecute <application>kdesu</application> en la línea de comandos cuando la guía se lo indique.</para>
+
+            <para>Si necesita usar un editor de texto en modo consola, puede emplear <application>nano</application>, un editor de texto de uso sencillo. Cuando lo ejecute desde la línea de comandos, emplee siempre el siguiente comando para evitar que el editor introduzca saltos de línea: <screen>nano -w</screen>.</para>
+            <para>Para más información sobre cómo usar <application>nano</application>, consulte la <ulink url="&wiki-Nano;"> guía en el wiki</ulink>.</para>
+            <para>Existen otros cuantos editores para terminal disponibles en Kubuntu; entre los conocidos están <application>VIM</application> y <application>Emacs</application> (los pros y contras de cada uno de ellos son objeto de discusiones amistosas en la comunidad Linux). Su uso es bastante más complejo que el de <application>nano</application>, aunque también son mucho más potentes.</para>
+        </sect1>
+                <sect1 id="users-and-groups" status="complete">
+                    <title>Usuarios y Grupos</title>
+                    <para>Para añadir usuarios o grupos a su sistema, puede usar la aplicación <application>Usuarios y grupos</application> situada en <menuchoice><guimenu>Menú K</guimenu>
+                            <guimenuitem>Opciones del sistema</guimenuitem>
+                            <guimenuitem>Usuarios y grupos</guimenuitem></menuchoice>.</para>
+                    <note>
+                        <para>Tendrá que cambiar a "Modo Administrador" para poder realizar cambios en los Usuarios y los Grupos.</para>
+                    </note>
+
+                    <para>Para añadir un nuevo usuario, pinche en <guilabel>Nuevo...</guilabel>, rellene los datos y pinche en <guilabel>OK</guilabel>. Para editar las propiedades de cada usuario, pinche en el botón <guilabel>Cambiar...</guilabel> que está en la ventana principal <guilabel>Usuarios</guilabel>.</para>
+
+                    <para>Para añadir un nuevo grupo, seleccione la pestaña <guilabel>Grupos</guilabel> y pinche en <guilabel>Nuevo...</guilabel>. Escoja un nombre para el nuevo grupo y si lo desea, cambie el valor (elegido por defecto) de <guilabel>IDentificador de grupo</guilabel>. Si intenta asignar un <guilabel>IDentificador de grupo</guilabel> que esté siendo usado, el sistema mostrará una advertencia.</para>
+
+                    <para>Puede añadir usuarios al grupo recién creado seleccionando un usuario del menú de la izquierda y pulsando en el botón <guilabel>Añadir</guilabel>. Eliminar un usuario de un grupo es tan sencillo como añadirlo: seleccione el usuario en el menú de la derecha y pinche en <guilabel>Eliminar</guilabel>. Cuando haya terminado, pinche en <guilabel>Aceptar</guilabel> y el nuevo grupo (con sus usuarios, si los introdujo) se habrá creado.</para>
+
+                    <para>Para editar las propiedades de un grupo, desde la ventana principal <guilabel>Grupos</guilabel> elija el nombre de un grupo y pulse en el botón <guilabel>Modificar...</guilabel></para>
+
+                    <para>Para eliminar un usuario o un grupo del sistema, seleccione el usuario o grupo que desea borrar y pulse <guilabel>Eliminar...</guilabel></para>
+
+                </sect1>
+            </chapter>
+

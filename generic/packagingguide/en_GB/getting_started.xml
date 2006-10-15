@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="gs-chap" status="review">
+	<title>Getting Started</title>
+
+	<sect1 id="gs-bin_source" status="complete">
+		<title>Binary and Source Packages</title>
+		
+		<para>Most users of a Debian-based distribution such as <phrase>Ubuntu</phrase> will never have
+			to deal with the actual source code that is used to create all of the
+			applications on their computers. Instead, the source code is compiled into
+			<emphasis>binary</emphasis> packages from
+			the <emphasis>source</emphasis> package that contains both
+			the source code itself and the rules for making the binary
+			package. Packagers upload the source packages with their
+			changes to the build systems that then compile the binary
+			packages for each architecture. A separate system
+			distributes the generated binary .deb files and source
+			changes to the repository mirrors.</para>
+
+	</sect1>
+
+	<sect1 id="gs-tools" status="review">
+		<title>Packaging Tools</title>
+		
+		<para>There are many tools written specifically for packaging on Debian-based systems. Many of them are not <emphasis>essential</emphasis> to creating packages but are very helpful and often automate repetitive tasks. Their <application>man</application> and <application>info</application> pages are good sources of information. However, the following is a list of packages that are deemed necessary to begin packaging:</para>
+
+		<variablelist>
+			<varlistentry>
+				<term><application>build-essential</application></term>
+				<listitem><para>is a metapackage that depends on <application>libc6-dev</application>, <application>gcc</application>, <application>g++</application>, <application>make</application>, and <application>dpkg-dev</application>. One package that you might not be familiar with is <application>dpkg-dev</application>. It contains tools such as <application>dpkg-buildpackage</application> and <application>dpkg-source</application> that are used to create, unpack, and build source and binary packages.</para></listitem>
+			</varlistentry>
+
+			<varlistentry>
+				<term><application>devscripts</application></term>
+				<listitem><para>contains many scripts that make the packager's maintenance work much easier. Some of the more commonly used are <application>debdiff</application>, <application>dch</application>, <application>debuild</application>, and <application>debsign</application>.</para></listitem>
+			</varlistentry>
+
+			<varlistentry><term><application>debhelper</application> and <application>dh-make</application></term>
+				<listitem><para>are scripts that automate common packaging tasks. <application>dh-make</application> can be used to do the initial "debianisation" and provides many example files.</para></listitem>
+			</varlistentry>
+				
+			<varlistentry><term><application>diff</application> and <application>patch</application></term> <listitem><para>are used to create and apply patches, respectively. They are used extensively in packaging because it is easier, cleaner, and more efficient to represent small changes as patches rather than to have multiple copies of a file.</para></listitem> </varlistentry>
+			
+			<varlistentry><term><application>gnupg</application></term>
+				<listitem><para>is a complete and free replacement for PGP used to digitally sign files (including packages).</para></listitem>
+			</varlistentry>
+				
+			<varlistentry><term><application>fakeroot</application></term>
+				<listitem><para>simulates running a command with root privileges. This is useful for creating binary packages as a regular user.</para></listitem>
+			</varlistentry>
+			
+			<varlistentry><term><application>lintian</application> and <application>linda</application></term>
+				<listitem><para>dissect Debian packages and report bugs and Policy violations. They contain automated checks for many aspects of Debian Policy as well as for common errors.</para></listitem>
+			</varlistentry>
+			
+			<varlistentry><term><application>pbuilder</application></term>
+				<listitem><para>constructs a chroot system and builds a package inside the chroot. It is an ideal system to use to check that a package has correct build dependencies and to build clean packages to be tested and distributed.</para></listitem> </varlistentry>
+		</variablelist>
+
+	</sect1>
+
+		
+	<sect1 id="gs-pbuilder" status="complete" xreflabel="pbuilder">
+		<title>The Personal Builder: pbuilder</title>
+		
+		<para>Using pbuilder as a package builder allows you to build
+			the package from within a chroot environment. You can
+			build binary packages without using
+			<application>pbuilder</application>, but you must have all the build
+			dependencies installed on your system first. However, pbuilder allows the
+			packager to check the build dependencies because the package is built within a
+			minimal <phrase>Ubuntu</phrase> installation, and the build dependencies are downloaded
+			according to the <filename>debian/control</filename> file.</para>
+
+		<para>The following is a brief guide to installing, using, and updating a pbuilder environment, however, there are many details of <application>pbuilder</application> usage that are outside the realm of this guide. The <application>pbuilder</application> man page has lots of information and should be consulted if you have problems or need more detailed information.</para>
+
+	<sect2>
+		<title>Installing and configuring a pbuilder environment</title>
+		
+		<para>The first, and perhaps most obvious, thing to do is to
+		install <application>pbuilder</application>. If you want to
+		create a <application>pbuilder</application> for a release
+		newer than the one you currently have installed, you will need
+		to manually install the <application>debootstrap</application>
+		.deb (from <ulink url="http://packages.ubuntu.com">http://packages.ubuntu.com</ulink>) from the
+		newer release. To create a pbuilder execute:</para>
+		
+		<screen>
+sudo pbuilder create --distribution &lt;distro&gt; \
+	--othermirror "deb http://archive.ubuntu.com/ubuntu &lt;distro&gt; universe multiverse"
+		</screen>
+
+		<para>where &lt;distro&gt; is the release you want
+			(<emphasis>edgy</emphasis> for instance) to create the
+			pbuilder for. If you would like to create more than one
+			<application>pbuilder</application> environment you can
+			append the <emphasis>--basetgz</emphasis> flag with the
+			desired location for the
+			compressed <application>pbuilder</application>
+			environment.  The default
+			is <filename>/var/cache/pbuilder/base.tgz</filename>.  If
+			you do choose to use <emphasis>--basetgz</emphasis> you
+			will need to use it with the
+			other <application>pbuilder</application> commands
+			so <application>pbuilder</application> knows which
+			compressed build environment to use.</para>
+		
+		<note><para>Creating a pbuilder environment will take some
+		time as <application>debootstrap</application> essentially
+		downloads a minimal <phrase>Ubuntu</phrase> installation.</para></note>
+
+		<tip><para>A more flexible way to create a pbuilder (and
+		perhaps multiple pbuilders) is to you a shell script.</para></tip>
+
+	</sect2>	
+	
+	<sect2>
+		<title>Using the pbuilder</title>
+		<para>Now that you have a running pbuilder you can build binary packages from the source package by invoking:</para>
+
+		<screen>sudo pbuilder build *.dsc</screen>
+
+		<para>This will build all the source packages in the current directory. The resulting .debs and source packages can be found in <filename>/var/cache/pbuilder/result/</filename> (which can be changed with the <emphasis>--buildresult</emphasis> flag).</para>
+
+	</sect2>
+
+	<sect2>
+		<title>Updating the pbuilder</title>
+		
+		<para>You should always have a current pbuilder whenever you are testing your source packages, especially when you are building for a development release that is rapidly changing, to ensure that the dependencies are properly found. To update your pbuilder, use:</para>
+
+		<screen>sudo pbuilder update</screen>
+
+		<para/>
+		
+		<para>If you would like to upgrade you pbuilder to a new release you can use <application>pbuilder update</application> in combination with the <emphasis>--distribution</emphasis> flag:</para>
+
+		<screen>sudo pbuilder update --distribution &lt;newdistro&gt; --override-config</screen>
+
+	</sect2>
+	
+	<sect2>
+		<title>Multiple pbuilders</title>
+		
+		<para>All of the information so far in this section on <application>pbuilder</application> has applied to having a single <application>pbuilder</application>. If you want to create more than one <application>pbuilder</application> you can create a shell script to handle the configuration for each <application>pbuilder</application> you want to create. An example of such a shell script can be found in <filename>/usr/share/doc/pbuilder/examples/pbuilder-distribution.sh</filename>. You can simply copy this example file somewhere in your path (putting it in <filename>~/bin/</filename> and adding this directory to your execution path is convenient) and then edit it according your needs. Normally you will need to only change DISTRIBUTION and add --othermirror as above. You can then call this script instead of <application>pbuilder</application> directly.</para></sect2>
+	
+</sect1>
+
+</chapter>
+

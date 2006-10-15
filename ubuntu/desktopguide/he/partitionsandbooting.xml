@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="partitions-booting" status="complete">
+	<title>Partitions and Booting</title>
+		<para>This section contains information about how to change the way that your computer behaves when you first turn it on, and how to access other operating systems and partitions from Ubuntu.</para>
+			<sect1 status="complete">
+				<title>עורך מחיצות גרפי</title>
+					<para><application>Gparted</application> הוא כלי גרפי לעריכת מחיצות הדיסק הקשיח.</para> 
+					<procedure>
+						<step>
+							<para>התקינו את החבילה <application>gparted</application> (ראו <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>	
+							<para>You can run the application with &gparted;.
+							</para>
+						</step>
+					</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Make Windows partitions available from Ubuntu</title>
+				<para>Windows partitions should be automatically available from any Ubuntu system. If they are not, you can make them available using the <application>Disks Manager</application>.</para>
+				<procedure>
+					<step>
+						<para>Open &disks;.</para>
+					</step>
+					<step>
+						<para>Select the correct hard disk, and click <guilabel>Partitions</guilabel>.</para>
+					</step>
+					<step>
+						<para>Select the relevant partition, and click <guilabel>Enable</guilabel>.</para>
+					</step>
+					<step>
+						<para>To unmount the partition, click <guilabel>Disable</guilabel>.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Make Windows partitions automatically available</title>
+				<para>Windows partitions should be automatically available from Ubuntu. If they are not, the following procedure will make them automatically available:</para>
+				<procedure>
+					<step>
+						<para>Read <xref linkend="listpartitiontables"/>
+						</para>
+					</step>
+					<step>
+						<para>First make a directory where the partition can be made available ("mounted"):</para>
+							<screen>
+sudo mkdir /media/windows
+							</screen>
+					</step>
+					<step>
+						<para>Next, back up your disk configuration file and open the file in a text editor with administrative privileges:
+						</para>
+						<screen>
+sudo cp /etc/fstab /etc/fstab_backup
+sudo gedit /etc/fstab
+						</screen>
+					</step>
+					<step>
+						<para>Append the following line at the end of file:
+							<programlisting>/dev/hda1 /media/windows ntfs umask=0222 0 0</programlisting>
+						</para>
+						<note>
+							<para>Replace <emphasis role="bold">/dev/hda1</emphasis> with the correct device name for your partition.</para>
+							<para>If your Windows partition uses the FAT32 filesystem, replace <emphasis role="bold">ntfs</emphasis> with <emphasis role="bold">vfat</emphasis> in the above command.</para>
+							<para>If you have a FAT32 filesystem, it is also safe to allow read-write access. To do this, change the value of <emphasis role="bold">umask</emphasis> to 0000.</para>
+						</note>
+					</step>
+					<step>
+						<para>Save the edited file (<ulink url="sample/fstab_automountntfs">an example</ulink>).</para>
+					</step>
+					<step>
+						<para>The changes will take effect when the computer is restarted.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Run a system command automatically at startup</title>
+				<para>Sometimes it can be useful to run a custom command whenever your computer starts up. To do this:</para>
+				<procedure>
+					<step>
+						<para>Edit the <application>crontab</application> with administrative privileges (see <xref linkend="root-and-sudo"/>):</para>
+							<screen>sudo crontab -e</screen>
+					</step>
+					<step>
+						<para>Insert the following line:</para>
+							<screen>@reboot /home/user/command</screen>
+					<note>
+						<para>Replace <filename>/home/user/command</filename> with the full address to your command.</para>
+					</note>
+					</step>
+					<step>
+						<para>Save the file and exit.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Change default operating system at boot</title>
+				<para>To change which operating system starts by default when the computer starts up, edit the <application>grub</application> configuration file.</para>
+				<procedure>
+					<step>
+						<para>Make a backup of the configuration file, and open it in a text editor:</para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+sudo gedit /boot/grub/menu.lst</screen>
+					</step>
+					<step>
+						<para>Find this line:</para>
+						<programlisting>...
+default 0
+...</programlisting>
+					</step>
+					<step>
+						<para>Replace with the following line:</para>
+						<programlisting>default X</programlisting>
+						<note><para>You should replace X with a number, according to the order which your operating systems appear in the configuration file. You should start counting from 0. For example, if you wish the default operating system to be the first in the list, replace X with 0, if you wish the default operating system to be the second in the list, replace X with 1, and so on.</para></note> 
+					</step>
+					<step>
+						<para>
+							Save the edited file (<ulink url="sample/menu.list_changedefaultosgrub">an example</ulink>)
+						</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Configure startup services</title>
+				<para>This requires administrative privileges (see <xref linkend="root-and-sudo"/>).</para>
+				<procedure>
+					<step>
+						<para>Run <application>Services Settings</application>:
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Services</guimenuitem>
+							</menuchoice>.
+						</para>
+					</step>
+					<step>
+						<para>Enter your password.</para>
+					</step>
+					<step>
+						<para>Select the services you want running, then click <guibutton>OK</guibutton> when done.</para>
+					</step>
+					<step>
+						<para>For greater control over the boot-up services, install the <application>bum</application> from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>), and run it:
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Boot-up Manager</guimenuitem>
+							</menuchoice>.
+						</para>
+					</step>
+				</procedure>
+			</sect1>
+	<sect1 id="other-hardware" status="complete">
+	    <title>טיפים נוספים</title>
+	    <sect2 id="listpartitiontables" status="complete">
+                <title>Check disk space usage and view the partition table</title>
+                    <procedure>
+                        <step>
+                            <para>Open &disks;.</para>
+                        </step>
+                        <step>
+                            <para>Select the <guibutton>Harddrive</guibutton>, then the <guibutton>Partitions</guibutton> tab</para>
+                        </step>
+                        <step>
+                            <para>Each partition will be listed under <guilabel>Partition List</guilabel>, with disk space and mount point.</para>
+                        </step>
+                    </procedure>
+            </sect2>
+            <sect2 status="complete">
+                <title>List devices</title>
+                            <para>To list mounted devices, in a terminal enter:</para>
+                               <screen>mount</screen>
+			    <para>The listing shows the device (such as a hard disk partition), the mount point (where you access the files), the filesystem type and the mount options.</para>
+                            <para>This example shows the hda2 hard disk partition mounted as '/', with the filesystem type ext3. The partition is mounted with two options, one to allow the device to be read from and wrote to and the other to remount the device as read only in the event of any errors.</para>
+                            <screen><computeroutput>/dev/hda2 on / type ext3 (rw,errors=remount-ro)</computeroutput></screen>				
+                            <para>To list PCI devices:</para>
+                                <screen>lspci</screen>
+                            <para>To list USB devices:</para>
+                                <screen>lsusb</screen>
+            </sect2>
+ 
+            <sect2 status="complete">
+                <title>Mount/unmount CD/DVD-ROMs manually, and show all
+                        hidden and associated files/folders</title>
+                            <para>Assuming that <filename class="devicefile">/media/cdrom0/</filename> is the location
+                                of CD/DVD-ROM</para>
+                            <para>To mount a CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo mount /media/cdrom0/ -o unhide</screen>
+                            </para>
+                            <para>To unmount a CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo umount /media/cdrom0/</screen>
+                            </para>
+            </sect2>
+	</sect1>
+</chapter>
+

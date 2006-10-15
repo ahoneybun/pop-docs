@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="ubuntu-chap" status="complete">
+	<title>Membuat Paket Ubuntu</title>
+
+	<sect1 id="ubuntu-upload" status="complete">
+		<title>Mengupload dan Mereview</title>
+
+		<para>Once you have created a source package (either a completely new package or
+			just an update/bugfix), you will want to distribute your
+			package so that other people can enjoy your hard work. The most effective way
+			to do that for <phrase>Ubuntu</phrase> is to contribute your package to the Universe repository.
+			The community developers who are responsible for the Universe repository are
+			known as Masters of the Universe (<ulink url="https://wiki.ubuntu.com/MOTU">MOTU</ulink>). <ulink url="http://revu.tauware.de">REVU</ulink> is a web-based tool that gives
+			people a place to upload their source packages for other people to look at and
+			for MOTUs to review in a structured manner.</para>
+
+		<sect2 id="contribute-as-uploader">
+			<title>Berkontribusi sebagai Uploader</title>
+		
+			<para>First, you will need to have your <ulink url="https://wiki.ubuntu.com/GPGKey">GPG Key</ulink> added to the REVU
+				keyring. This step ensures that your packages really come from you and helps track
+				uploads.</para>
+	
+			<para>REVU menggunakan account <ulink url="https://launchpad.net">Launchpad</ulink> anda untuk melihat kunci <application>gpg</application> anda jadi pastikan anda memiliki sebuah account Launchpad dan anda telah menyimpan kunci <application>gpg</application> pada profil anda. Sekali semua hal di atas sudah ada, maka anda bisa ikut bergabung sebagai tim <ulink url="https://launchpad.net/people/ubuntu-universe-contributors">Universe Contributors</ulink> kemudian kirim email ke <ulink url="mailto:admin@tiber.tauware.de">admin@tiber.tauware.de</ulink> untuk memintanya agar kunci <application>gpganda diupdate dalam REVU. Jika ini sudah selesai maka anda sudah bisa mengupload paket. Anda tidak butuh password untuk mengupload paket, kecuali pada saat log in ke website dan membalas komentar.</application></para>
+
+			<note><para>It is not necessary to have your key signed by others to upload to REVU, but
+					it is a good idea to have it done at some point.</para></note>
+			
+			
+			<sect3 id="upload-your-packages">
+				<title>Mengupload paket-paket anda</title>
+
+				<para>Uploading to REVU uses <application>dput</application>. The <phrase>Ubuntu</phrase>
+					version of <application>dput</application> already knows about REVU so
+					you do not need to change any configuration files. Only upload signed
+					packages, and unlike other repositories, you should always include the
+					original tarball, otherwise reviewers will not be able to look at your
+					extracted source package. In order to do so, use the options "-S -sa"
+					with <application>debuild</application> or
+					<application>dpkg-buildpackage</application> to build only the source
+					package and to include the original source in the upload.</para>
+				
+				<para>Setelah paket seource dibangun, anda bisa menggunakan <application>dput</application> dengan perubahan file konfigurasi di atas untuk menguploadnya dengan menetapkan file <filename>_source.changes</filename> yang telah dibuat :</para>
+
+				<screen>dput revu *_source.changes</screen>
+
+				<note><para>Jika anda mengupload ulang sebuah paket yang sudah diubah (setelah menerima review), anda akan mendapatkan error seperti ini :</para>
+					
+				<screen>
+Upload paket ke host revu
+Telah diupload ke tauware.de
+Tidak melakukan apapun untuk myapp_source.changes</screen>
+			
+				<para>Untuk memperbaiki, tambahkan option -f pada dput untuk memaksa upload atau hilangkan file <filename>.upload</filename> yang telah dibuat oleh <application>dput</application>.</para></note>
+			
+				<para>Processing of uploads is done every five minutes, so if your upload does not show up,
+				please contact the REVU administrators by email, or join the Freenode IRC channel #ubuntu-motu.</para>
+		
+			</sect3>
+		
+			<sect3 id="howto-login">
+				<title>Bagaimana masuk log ke REVU</title>
+			
+				<para>After your first upload, you are registered automatically in the
+					database and assigned a random password. On the <ulink url="http://revu.tauware.de">REVU</ulink> website, use the email
+					address you used in the changelog file of your upload as the login and
+					click the 'recover password' link. You will be taken to a page that
+					has your encrypted password with instructions for decrypting
+					it.</para>
+				
+			</sect3>
+
+			<sect3 id="view-and-comment-uploads">
+				<title>Lihat dan komentari upload-upload</title>
+			
+				<para>Packages uploaded to REVU are public. You can browse them without logging
+					in to the system. However, commenting on uploads is available only to registered
+					users. As an uploader, you can only comment on your own uploads. This can be
+					useful to give reviewers some info on the changes you have made between two
+					uploads of your packages.</para>
+
+			</sect3>
+
+			<sect3 id="additional-rules">
+				<title>Aturan-aturan tambahan</title>
+		
+				<itemizedlist>
+
+					<listitem><para>You must have reviewed the package for known security
+							vulnerabilities and must provide patches for them.</para></listitem>
+					
+					<listitem><para>The package can be refused on the grounds of known
+							security problems.</para></listitem>
+					
+					<listitem><para>You must have included a copyright and license file, and those
+							must allow inclusion of the package in the Universe component
+							and redistribution via Ubuntu mirrors.</para></listitem>
+					
+					<listitem><para>The package must be known to build on top of the main component
+							of the current <phrase>Ubuntu</phrase> stable release. It is permissible to require other
+							packages already in Universe.</para></listitem>
+				</itemizedlist>
+			</sect3>
+
+			<sect3 id="getting-help">
+				<title>Mendapatkan Bantuan</title>
+				<para>If you need assistance on these steps, or if you have questions about REVU, you can
+					ask in #ubuntu-motu on the Freenode IRC network.</para>
+			</sect3>
+
+		</sect2>
+
+	</sect1>
+
+	<sect1 id="ubuntu-sync" status="complete">
+		<title>Merges dan Syncs</title>
+
+
+
+		<important><para><emphasis role="bold">Persyaratan:</emphasis> build-essential, automake, gnupg, lintian, fakeroot, patchutils, debhelper dan <xref linkend="gs-pbuilder"/>.</para></important>
+		
+		<para><phrase>Ubuntu</phrase> is based on the Debian Linux distribution and uses the same package
+			management system (APT). At the beginning of each <phrase>Ubuntu</phrase> development cycle, the
+			packages in <phrase>Ubuntu</phrase> are updated to those in the Debian unstable branch. However,
+			because <phrase>Ubuntu</phrase> is not the same as Debian, some of the packages need to
+			be modified to work in <phrase>Ubuntu</phrase>. There might also be bug fixes that <phrase>Ubuntu</phrase>
+			developers have introduced into the packages. You can determine whether this has
+			taken place by noting the package version. If the package version includes
+			ubuntu in it (an example would be gimp-2.2.9-3ubuntu2), then the <phrase>Ubuntu</phrase>
+			developers have made changes, and it is no longer the same as the Debian package.
+			There are more than 1000 such modified packages in the Universe repository.</para>
+		
+		<para>At the start of each Ubuntu development cycle, a decision is made regarding
+			these Ubuntu versioned packages. Of course if the Debian version hasn't
+			changed since the last <phrase>Ubuntu</phrase> release, then nothing needs to be changed.
+			However, if there is a newer version of the package in Debian, then one
+			of two things should happen. If all of the reasons for Ubuntu modifications
+			(bug fixes, dependencies, etc.) are fixed in the new Debian package,
+			then we can just take the Debian package directly. This decision is called a
+			<emphasis>sync</emphasis>. However, if the new Debian version has the same
+			issues that caused the Ubuntu version to be made, then those changes need
+			to be applied to the new Debian version, too. This decision is called <emphasis>merging</emphasis>.
+		</para>
+		<sect2 id="merge-tutorial">
+			<title>Tutorial Merging</title>
+			<para>Proses merging meliputi melihat pada perubahan pada kedua paket source Debian dan Ubuntu dan menetapkan apa yang berubah dan perubahan mana yang Ubuntu-spesific. Mari kita lihat sekarang sebuah contoh, sebuah program pembuat CD yang populer yang disebut <application>xcdroast</application>.</para>
+			<para>Untuk mulai, buat folder untuk menyimpan proyek kita, dan arahkan pada:</para>
+			<screen>
+mkdir ~/xcdroast
+cd ~/xcdroast</screen>
+			<para>Sekarang download semua paket-paket source yang terbawa dalam direktori ini :</para>
+			<itemizedlist>
+				<listitem><para>Source tarball <application>xcdroast</application> yang digunakan oleh semua versi :</para>
+					<itemizedlist>
+						<listitem>
+<para><ulink url="http://snapshot.debian.net/archive/2006/01/16/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15.orig.tar.gz">xcdroast_0.98+0alpha15.orig.tar.gz</ulink></para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>The <phrase>Ubuntu</phrase> Breezy source package files:</para>
+					<itemizedlist>
+						<listitem><para>
+<ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.dsc">xcdroast_0.98+0alpha15-1.1ubuntu1.dsc</ulink></para>
+						</listitem>
+						<listitem><para>
+<ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz">xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz</ulink></para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>File-file paket source Debian yang menjadi paket-paket Breezy adalah dari :</para>
+						<itemizedlist>
+							<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.diff.gz">xcdroast_0.98+0alpha15-1.1.diff.gz</ulink></para>
+							</listitem>
+							<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.dsc">xcdroast_0.98+0alpha15-1.1.dsc</ulink></para>
+							</listitem>
+						</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>File-file paket source Debian yang menjadi paket-paket Dapper adalah dari :</para>
+					<itemizedlist>
+						<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-3.dsc">xcdroast_0.98+0alpha15-3.dsc</ulink></para>
+						</listitem>
+						<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-3.diff.gz">xcdroast_0.98+0alpha15-3.diff.gz</ulink></para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+			</itemizedlist>
+			<note><para>Langkah-langkah ini juga bisa diselesaikan dengan mencari paket-paket Debian pada <ulink url="packages.debian.org">packages.debian.org</ulink> dan paket-paket Ubuntu pada <ulink url="packages.ubuntu.com">packages.ubuntu.com</ulink>.</para></note>
+		<tip><para>Suatu paket yang sangat berguna untuk diinstal ketika melakukan merge (dari beberapa paket Ubuntu) adalah <application>devscripts</application>. Jika anda belum menginstalnya, instal sebelum melakukannya.</para></tip>
+			
+			<para>By looking at the <phrase>Ubuntu</phrase> changelog you should be able to see which differences
+				to expect between the Ubuntu package and the Debian package from which it was derived.
+				For xcdroast, the <phrase>Ubuntu</phrase> changelog can be found at
+	<ulink url="http://changelogs.ubuntu.com/changelogs/pool/universe/x/xcdroast/xcdroast_0.98+0alpha15-1.1ubuntu1/changelog">
+					changelogs.ubuntu.com</ulink>. It says that a .desktop file was fixed and properly
+				installed to close a bug reported in
+				<ulink url="https://launchpad.net/malone/bugs/2698">Malone</ulink>.
+			</para>
+			
+			<para>Sekarang memeriksa perubahan aktual pada paket-paket source :</para>
+			<screen>
+debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-1.1ubuntu1.dsc | \
+	ubuntu.debdiff | less ubuntu.debdiff</screen>
+			
+			<para>The lines that start with - have been removed from the Debian package, and those that start
+				with + have been added to the <phrase>Ubuntu</phrase> package.</para>
+			<para>Berikut ini adalah apa yang kita lihat :</para>
+			<itemizedlist>
+				<listitem>
+					<para>Dalam Debian/aturan penginstalan digunakan instead of cp untuk menginstal icon xcdroast. Juga ada satu baris baru menginstal file .desktop.</para>
+				</listitem>
+				<listitem>
+					<para>Pada debian/perubahan changelog yang dibuat ditambahkan pada entri changelog</para>
+				</listitem>
+				<listitem>
+					<para>Pada Debian/direktori usr/share/applications telah ditambahkan untuk baris-baris instal di atas untuk bekerja dengan baik.</para>
+				</listitem>
+				<listitem>
+					<para>xcdroast.desktop ditambah</para>
+				</listitem>
+			</itemizedlist>
+			
+			<para>Sekarang kita tahu bagaimana source Ubuntu diubah. Sekarang kita butuh untuk melihat apa yang telah berubah dalam source Debian.</para>
+			<screen>
+debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-3.dsc &gt; debian.debdiff
+less debian.debdiff</screen>
+			<para>Ada lebih banyak dalam debdiff ini daripada yang sebelumnya. Satu cara kita bisa mendapatkan ide yang lebih bagus dari apa yang berubah adalah file-file apa yang berubah dalam debdiff :</para>
+			
+			<screen>grep diff debian.debdiff</screen>
+			
+			<para>Ini mengindikasikan bahwa debian/postinst, debian/rules, debian/changelog, debian/doc-base.manual, debian/control, and debian/menu telah diubah dalam versi baru debian.</para>
+			<para>Thus we can see that we need to check debian/rules to see if the <phrase>Ubuntu</phrase> changes were made.
+				We can also see that debian/dirs was not changed from the old Debian version. Let us
+				now look at the files. We can unpack the source package by using
+				<application>dpkg-source</application>:</para>
+			
+			<screen>dpkg-source -x xcdroast_0.98+0alpha15-3.dsc</screen>
+			
+			<para>This will decompress the xcdroast_0.98+0alpha15.orig.tar.gz file, create a xcdroast-0.98+0alpha15
+				directory, and apply the changes found in xcdroast_0.98+0alpha15-3.diff.gz.</para>
+			<para>Now navigate to the debian directory:</para>
+			
+			<screen>cd xcdroast-0.98+0alpha15/debian</screen>
+			
+			<para>One can see in <filename>rules</filename> that changes made by <phrase>Ubuntu</phrase> were not applied to the new Debian version.
+				This means that:</para>
+			
+			<screen>cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps</screen>
+			
+			<para>...should be changed to:</para>
+			
+			<screen>
+#cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps
+
+#install desktop and icon
+install -D -m 644 $(CURDIR)/debian/xcdroast.desktop \
+	$(CURDIR)/debian/xcdroast/usr/share/applications/xcdroast.desktop
+install -D -m 644 $(CURDIR)/debian/xcdroast.xpm \
+	$(CURDIR)/debian/xcdroast/usr/share/pixmaps/xcdroast.xpm</screen>
+
+			<para>Now in <filename>dirs</filename>, the following line needs to be added for the .desktop file to be installed:</para>
+			<screen>usr/share/applications</screen>
+			
+			<para>Now we need the actual .desktop file (saved as <emphasis>debian/xcdroast.desktop</emphasis>).
+				From the ubuntu.debdiff (or the Ubuntu source package), we see that it is:</para>
+			<screen>
+[Desktop Entry]
+Encoding=UTF-8
+Name=X-CD-Roast
+Comment=Create a CD
+Exec=xcdroast
+Icon=xcdroast.xpm
+Type=Application
+Categories=Application;AudioVideo;</screen>
+			
+			<para>The last change that needs to be made is in <filename>changelog</filename>. 
+				Not only do we need to add what we have just done (merge with Debian), but we 
+				should also add in the previous <phrase>Ubuntu</phrase> changelog entries. To do this, run 
+				<application>dch -i -D dapper</application> and put something to the effect of:</para>
+			<screen>
+xcdroast (0.98+0alpha15-3<emphasis>ubuntu1</emphasis>) dapper; urgency=low
+
+  * Resynchronise with Debian.</screen>
+
+			<para>Make sure to change the version number to the correct <phrase>Ubuntu</phrase> version.
+				Also add:</para>
+			<screen>
+xcdroast (0.98+0alpha15-1.1ubuntu1) breezy; urgency=low
+
+  * Fix and install existing .desktop file. (Closes Malone #2698)
+				
+  -- Captain Packager &lt;packager@coolness.com&gt;  Sat,  1 Oct 2005 19:39:04 -0400</screen>
+			<para>between the 0.98+0alpha15-1.1 and 0.98+0alpha15-2 log entries.</para>
+			
+			<para>Now you can build and test the new source packages. There are different ways to do this, but one example is:</para>
+			<screen>
+cd ..
+debuild -S
+cd ..
+sudo pbuilder build xcdroast_0.98+0alpha15-3ubuntu1.dsc</screen>
+			
+			<para>This will recreate the source package, sign it with your default GPG key, and build the package in a pbuilder
+				environment to make sure it builds correctly. Make sure to always test your packages
+				before submitting patches. The last step is to make a debdiff that can be
+				attached to an existing bug report or given to the MOTUs in the #ubuntu-motu IRC channel. To do this,
+				we get the difference between the Debian unstable source package and the new <phrase>Ubuntu</phrase> version:
+			</para>
+			<screen>debdiff xcdroast_0.98+0alpha15-3.dsc xcdroast_0.98+0alpha15-3ubuntu1.dsc &gt; \
+	xcdroast_0.98+0alpha15-3ubuntu1.debdiff</screen>
+		</sect2>
+	</sect1>
+
+	<sect1 id="ubuntu-kubuntu" status="complete">
+		<title>Packaging for Kubuntu</title>
+		
+		<para>As one might imagine, the main packaging issues specific to Kubuntu are with
+			KDE and Qt.</para>
+		
+		<sect2 id="build-dependencies">
+			<title>Build Dependencies</title>
+	
+			<para>Kubuntu programs are mostly KDE ones. Therefore, they need to
+				Build-Depend on <filename>kdelibs4-dev</filename>. Since KDE's
+				focus is to have programs interacting, some programs might also need to
+				Build-Depend on other parts of KDE, such as
+				<filename>kdepim-dev</filename>. Be sure to get the list of
+				necessary dependencies for your program.</para>
+	
+		</sect2>
+
+		<sect2 id="desktop-files">
+			<title>Berkas Destop</title>
+		
+			<para>KDE has some specific paths. Most settings for KDE are installed in either
+				<filename>/etc/kde3/</filename> or <filename>/usr/share/apps/</filename>.
+				It is important to note that the general desktop files for KDE should go
+				to <filename>/usr/share/applications/kde/</filename>. The install path
+				for the desktop files should be fixed if they do not use this (except for
+				desktop files like service menus).  </para>
+			
+			<para>KDE desktop files also need specific entries to fit in the KMenu. A
+				minimal desktop file for a KDE program could be something like
+				this:</para>
+				
+			<screen>[Desktop Entry]
+Encoding=UTF-8
+Name=Kfoo
+Name[xx]=Kfoo
+GenericName=Bar description
+Exec=kfoo
+Icon=kfoo
+Terminal=false
+Categories=Qt;KDE;Utility;</screen>
+
+			<para>Note that the Categories field must begin with Qt;KDE;. There are
+				specific desktop file entries for KDE programs and modules that allow su to
+				declare the given programs as KCModules or autostart them when logging in.
+			</para>
+	
+		</sect2>
+		
+		<sect2 id="generating-pot-files">
+			<title>Generating .pot Files</title>
+
+			<para>Situs web terjemahan Ubuntu, <ulink url="https://launchpad.net/rosetta/">Rosetta</ulink>, saat ini telah mendukung KDE, artinya paket KDE harus mendukung Rosetta dengan membuat berkas templat .pot untuk para penterjemah. Jika Anda menggunakan <application>cdbs</application> di Dapper, paket Anda akan membuat berkas .pot secara otomatis dan silakan lihat dalam direktori po/.</para>
+
+			<para>You will need the <ulink url="../files/kubuntu_01_kdepot.diff">kdepot
+					patch</ulink> (or similar; it may not apply cleanly depending on the
+				age of the admin directory).</para>
+
+			<para>If your package uses <application>debhelper</application> or
+				<application>cdbs</application> and includes its own kde.mk file, you need
+				to add the rules yourself.</para>
+
+			<para>For <application>cdbs</application>, add these lines to debian/rules:</para>
+
+			<screen>
+common-post-build-arch::
+	mkdir -p po
+        XGETTEXT=/usr/bin/kde-xgettext sh admin/cvs.sh extract-messages
+
+clean::
+        rm -rf po</screen>
+			<para>For <application>debhelper</application>, add the following to the end of the
+				<emphasis>install</emphasis> rule:</para>
+			<screen>
+mkdir -p po
+XGETTEXT=/usr/bin/kde-xgettext sh admin/cvs.sh extract-messages</screen>
+			<para>Also for <application>debhelper</application>, add the following to the <emphasis>clean</emphasis> rule:</para>
+			<screen>
+rm -f po/*.pot</screen>
+		</sect2>
+		
+	</sect1>
+
+</chapter>
+

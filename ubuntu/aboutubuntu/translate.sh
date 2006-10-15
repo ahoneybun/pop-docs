@@ -20,16 +20,19 @@
 ####################################################################################
 
 
-tar -xzvf rosetta-about-ubuntu.tar.gz
-rm rosetta-about-ubuntu/about-ubuntu.pot
-mv rosetta-about-ubuntu po
+tar -xzvf rosetta-aboutubuntu.tar.gz
+rm rosetta-aboutubuntu/aboutubuntu.pot
+mv rosetta-aboutubuntu po
 
 for x in po/*; do
 	y=$(basename ${x} .po)
 	echo ${y}
 	mkdir -p ${y}
-	xml2po -k -p ${x} C/about-ubuntu.xml >${y}/about-ubuntu.xml
-	xml2po -k -p ${x} ${y}/about-ubuntu-C.omf >${y}/about-ubuntu-${y}.omf
+	for i in C/*; do
+		j=$(basename ${i} C/)
+		echo ${j}
+		xml2po -k -p ${x} C/${j} | replace-doctype-with.py C/${j} >${y}/${j}
+	done
 	sed -i -e s@\"C\"@\"${y}\"@g -e s@C/@${y}/@g ${y}/about-ubuntu-${y}.omf
 	../../validate.sh ${y}/about-ubuntu.xml
 done

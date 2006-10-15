@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="graphics" status="complete">
+		<title>Графика &amp; Фото</title>
+			<para>Эта секция описывает приложения для работы с фотографиями и графическим дизайном доступным для использования с Ubuntu, а так же рассказывает как настроить 3D ускорение на видеокарте.</para>
+		<sect1 id="digital-cameras" status="complete">
+			<title>Цифровые фотокамеры</title>
+				<para>Ubuntu обнаруживает большинство USB цифровых камер автоматически. Подсоедините и включите камеру, и Ubuntu спросит вас, хотели бы вы импортировать фотографии, которые она содержит. Нажмите <guibutton>Импорт</guibutton>, и Ubuntu покажет вам предварительный просмотр фотографий. Выберите куда сохранить ваши фотографии, затем нажмите <guibutton>Импорт</guibutton>, и Ubuntu сохранит фотографии на ваш жесткий диск.</para>
+				<para>Если Ubuntu вас не спрашивает разрешения импортировать фотографии:</para>
+				<procedure>
+					<step><para>Откройте &gthumb;.</para></step>
+					<step>
+						<para>Выберите <menuchoice><guimenu>Файл</guimenu>
+						<guimenuitem>Импорт фото</guimenuitem></menuchoice>.</para>
+					</step>
+				</procedure>
+				<para>Узнайте больше о <application>gThumb</application> на <xref linkend="gthumb"/>.</para>
+		</sect1>
+
+		<sect1 id="graphics-cards" status="complete">
+			<title>Графические Карты 3D</title>
+				<sect2 id="video-acceleration-introduction">
+					<title>Введение в трехмерное ускорение</title>
+					<para>Большинство видео устройств должны автоматически работать в Ubuntu. Некторые типы видео устройств, 3D ускорение (которое необходимо для некоторых игр) автоматически не поддерживается, но вы в состоянии исправить это сами.</para>
+					<para>Чтобы узнать работает ли 3D ускорение, введите в окне терминала:</para>
+					<screen>glxinfo | grep rendering</screen>
+					<para>Если ускорение 3D работает, то результатом работы будет: <screen>direct rendering: Да</screen> если нет, следуйте следующим инструкциям для включения 3D ускорения.</para>
+				</sect2>
+        	       	 <sect2 id="nvidia" status="complete">
+        		        <title>Драйверы для 3D-видеокарт Nvidia</title>
+					<para>По умолчанию, в Ubuntu у видеокарт Nvidia трехмерное ускорение отключено, так как их разработчик не выпускает драйвера с открытым исходным кодом. И тем не менее, включить 3D-ускорение возможно. Этот процесс зависит от типа Вашей видеокарты.</para>
+					<itemizedlist>
+						<listitem>
+							<para>Если у вас старые видеокарты TNT, TNT2, TNT Ultra, GeForce1 или GeForce2, то установите пакеты <application> nvidia-glx-legacy</application> и <application>nvidia-settings</application> с репозитория <quote>Restricted</quote> (смотри <xref linkend="add-applications"/>).</para>
+						</listitem>
+						<listitem>
+				<para>Если вы имеет более новую видеокарту, то установите пакет <application>nvidia-glx</application> с репозитория <quote>Restricted</quote> (смотри <xref linkend="add-applications"/>).</para>
+						</listitem>
+					</itemizedlist>
+				<para>Для настройки нового драйвера введите в терминале:</para>
+                                <screen>
+sudo nvidia-glx-config enable </screen>
+				<para>Вы можете изменить параметры настройки новых драйверов, запустив <application>nvidia-settings</application> (см. <ulink type="help" url="ghelp:user-guide#tools-run-app">руководство приложения "Выполнить"</ulink> для справки о том, как запустить приложение, не используя меню). Если вы желаете, добавьте запись меню для этой программы (см. <ulink type="help" url="ghelp:user-guide#menu-editor">руководство редактора меню</ulink> для сведений о том, как добавить записи меню).</para>
+            </sect2>
+            <sect2 id="installatidriver" status="complete">
+                <title>Драйвер для видеокарт ATI</title>
+				<para>Большинство ATI видеокарт хорошо работают с Ubuntu автоматически. Для проверки работы 3D ускорения на вашей видеокарте смотрите <xref linkend="video-acceleration-introduction"/>.</para>
+				<para>если оно не работает:</para>
+				<procedure>
+					<step><para>Установите пакет <application>xorg-driver-fglrx</application> с репозитория <quote>Restricted</quote> (смотри <xref linkend="add-applications"/>).</para></step> 
+					<step>
+					<para>Для настройки нового драйвера введите в терминале:</para>
+				<screen>sudo dpkg-reconfigure xserver-xorg</screen>
+				<para>Согласитесь на автоматичское определение вашей видеокарты, и при запросе драйвера выберите <guibutton>fglrx</guibutton>.</para>
+					</step>
+				</procedure>
+				<para>Для вступления изменений в силу перезагрузите компьютер.</para>
+	    </sect2>
+	    </sect1>
+
+		<sect1 id="gthumb" status="complete">
+			<title>Просмотрщик изображений gThumb</title>
+				<para><application>gThumb</application> - это продвинутый просмотрщик и обозреватель изображений. Имеет множество полезных функций, таких как просмотр файловой системы, показ слайдов, каталоги рисунков, создание веб-альбомов, импорт с камеры, запись рисунков на CD, пакетные операции с файлами и функции быстрого редактирования рисунков таких как, например, преобразования и операции с цветом.</para>
+				<para><application>gThumb</application> по умолчанию включен в Ubuntu. Для его запускавыберите &gthumb;.</para>
+				<para>Инструкции по работе с <application>gThumb</application> находятся в его меню <guimenu>Помощь</guimenu>.</para>
+				<para>Для более профессионального редактирования фотографий &amp; изображений обратите внимение на <application>The GIMP</application>.</para>
+		</sect1>
+		<sect1 id="gimp" status="complete">
+			<title>The GIMP (Gnu Image Manipulation Program)</title>
+			<para><application>The GIMP</application> позволяет вам рисовать, закрашивать, изменять изображения и многое другое. GIMP включает в себя функциональность и расширения других распространенных графических редакторов.</para>
+				<para><application>The GIMP</application> установлен в Ubuntu по умолчанию, вы можете его запустить, выбрав &gimp;.</para>
+			<itemizedlist>
+				<listitem><para><ulink url="http://gimp.org/">Веб сайт GIMP</ulink></para></listitem>
+			</itemizedlist>
+		</sect1>
+		<sect1 id="inkscape" status="complete">
+			<title>Редактор векторной графики Inkscape</title>
+				<para><application>Inkscape</application> - это мощный редактор для работы с форматом SVG (Scalable Vector Graphics).</para>
+				<procedure>
+					<step>
+						<para>Установите пакет <application>inkscape</application> (см. <xref linkend="add-applications"/>).</para>
+					</step>
+					<step>
+						<para>Для запуска <application>Inkscape</application> выберите &inkscape;.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 id="blender" status="complete">
+			<title>Программа трехмерного моделирования Blender</title>
+				<para><application>Blender</application> - интегрированный пакет для моделирования, анимации, обработки, пост-продукции, интерактивного создания и проигрывания 3d графики.</para>
+				<procedure>
+					<step>
+						<para>Установите пакет <application>blender</application> (см. <xref linkend="add-applications"/>).</para>
+					</step>
+					<step>
+						<para>Для запуска <application>Blender</application> выберите &blender3d;.</para>
+					</step>
+				</procedure>
+		</sect1>
+	</chapter>
+

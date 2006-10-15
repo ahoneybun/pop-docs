@@ -1,0 +1,38 @@
+#!/usr/bin/make -f
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+
+DEB_COMPRESS_EXCLUDE := .bz2 .css .dcl .docbook -license .tag .sty .el
+
+build-stamp:
+	touch build-stamp
+
+build: build-stamp
+	make -C kubuntu kdeb
+
+install/kubuntu-docs::
+	# *.desktop files to make documents appear in khelpcenter
+	dh_install kubuntu/khelpdesktop/kubuntu/*.desktop usr/share/apps/khelpcenter/plugins/kubuntu/
+	# this is the .directory file for proper naming in khelpcenter.
+	dh_install kubuntu/khelpdesktop/kubuntu/.directory usr/share/apps/khelpcenter/plugins/kubuntu/
+	# now add a pinch of css
+	dh_install build/kubuntu/common/kubuntu-default.css usr/share/doc/kde/HTML/en/common/
+	# and here goes the documentation.
+	dh_install build/kubuntu/about-kubuntu/C/* usr/share/doc/kde/HTML/en/kubuntu/about-kubuntu/
+	dh_install build/kubuntu/desktopguide/C/* usr/share/doc/kde/HTML/en/kubuntu/desktopguide/
+	dh_install build/kubuntu/release-notes/C/* usr/share/doc/kde/HTML/en/kubuntu/krelease-notes/
+	dh_install build/kubuntu/serverguide/C/* usr/share/doc/kde/HTML/en/kubuntu/serverguide/
+	dh_install build/kubuntu/packagingguide/C/* usr/share/doc/kde/HTML/en/kubuntu/packagingguide/
+	dh_install build/kubuntu/images/* usr/share/doc/kde/HTML/en/images/
+	sed -i "s/\.\.\/\.\.\//file:\/\/\/usr\/share\/doc\/kde\/HTML\/en\//" debian/kubuntu-docs/usr/share/doc/kde/HTML/en/kubuntu/about-kubuntu/index.html
+
+	# install doc-base files
+	dh_install debian/kubuntu-desktopguide usr/share/doc-base
+	dh_install debian/kubuntu-serverguide usr/share/doc-base
+	dh_install debian/kubuntu-packagingguide usr/share/doc-base
+
+clean::
+	# clean up
+	make -C kubuntu clean
+	rm -f build-stamp
+	rm -rf debian/kubuntu-docs

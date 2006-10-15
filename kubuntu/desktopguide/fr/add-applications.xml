@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % kde SYSTEM "../../libs/kde.ent">
+%kde;
+<!ENTITY % kde-general SYSTEM "/usr/share/apps/ksgmltools2/customization/obsolete/general.entities">
+%kde-general;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="add-applications" status="review">
+    <title>Ajouter, supprimer et mettre à jour des applications</title>
+    <para>Ce chapitre est un guide complet de l'ajout, de la suppression et de la mise à jour d'applications sur un système Kubuntu.</para>
+    <sect1 id="introduction-to-add-applications" status="writing">
+        <title>Introduction</title>
+        <para>Il existe plusieurs manières de gérer vos applications dans Kubuntu. Pour ajouter ou supprimer des applications vous avez besoin d'utiliser un <emphasis>gestionnaire de paquets</emphasis>. Dans ce chapitre sont décrits les gestionnaires de paquets suivants :</para>
+        <itemizedlist>
+            <listitem>
+                <para><application>Ajout/Suppression de programmes</application> - c'est est la manière la plus simple de gérer vos programmes.</para>
+            </listitem>
+            <listitem>
+                <para><application>Adept</application> - ce programme graphique permet de gérer les programmes de manière avancée.</para>
+            </listitem>
+            <listitem>
+                <para><application>APT</application> - c'est un puissant programme en ligne de commande pour la gestions des paquets.</para>
+            </listitem>
+        </itemizedlist>
+        <para>Vous pouvez également souhaiter augmenter le nombre de programmes disponibles à travers vos gestionnaires de paquets. Tous les programmes existants pour Kubuntu ne sont pas disponibles par défaut. Vous aurez peut-être besoin d'ajouter des dépôts supplémentaires afin de les rendre disponibles : cette procédure est décrite dans ce chapitre.</para>
+        <para>Enfin, ce chapitre explique comment mettre à jour votre système.</para>
+			<note>
+                <para>Vous ne pouvez pas avoir plusieurs gestionnaires de paquets lancés en même temps. Par exemple, si vous avez ouvert l'<application>Ajout/Suppression de programmes</application> et que vous essayez de lancer <application>Adept</application>, cela échouera avec un message d'erreur. Fermez l'application déjà ouverte avant d'en relancer une nouvelle.</para>
+			</note>
+
+    </sect1>
+	    <sect1 id="kde-app-install" status="review">
+		<title>Ajout/Suppression de programmes</title>
+			<para><application>Add/Remove Programs</application> is a simple
+                graphical way of installing and removing applications in
+                Kubuntu. To launch <application>Add/Remove
+                    Programs</application>, choose 
+				<menuchoice>
+					<guimenu>K Menu</guimenu>
+					<guimenuitem>Add/Remove Programs</guimenuitem>
+				</menuchoice> from the desktop menu system.
+			</para>
+			<note>
+			<para>Démarrer <application>Ajout/Suppression de programmes</application> nécessite des privilèges d'administrateur (voir <xref linkend="root-and-sudo"/>).</para>
+			</note>
+			<para>Pour installer de nouvelles applications, choisissez une catégorie à droite, puis cochez la case des logiciels que vous souhaitez installer. Cliquez sur <guimenu>Appliquer les modifications</guimenu> et les programmes sélectionnés seront téléchargés et installés automatiquement, ainsi que tous les logiciels nécessaires à leur bon fonctionnement. La sélection par défaut se limite aux logiciels KDE, mais il est possible d'installer des applications GNOME en choisissant « GNOME » dans le menu déroulant sous la barre de menu.</para>
+
+            <para>Si vous connaissez le nom du programme que vous recherchez, vous pouvez également utiliser la fonction <guibutton>Recherche</guibutton> depuis la barre d'outils.</para>
+            <para>Les logiciels provenant d'autres dépôts peuvent être installés en cochant les cases Voir : <emphasis>non supporté</emphasis> et <emphasis>logiciels propriétaires</emphasis>, <emphasis role="bold">si les dépôts correspondants sont activés</emphasis> dans votre liste de dépôts. Pour plus d'informations, voir <xref linkend="extra-repositories"/>.</para>
+		</sect1>
+    <sect1 id="adept" status="complete">
+        <title>Gestionnaire de paquets Adept</title>
+        <para>
+            &appshort; is a graphical frontend to the
+            <application>APT</application> package management system for the K
+            Desktop Environment (KDE).  &appshort; provides an easy-to-use
+            interface with which users can perform software management
+            operations.</para>
+        <para>&appshort; can be started from the K menu system or the command line. In order to
+            start &appshort;, you will be required to provide your password.</para>
+        <para>To start &appshort; from the menu system select <menuchoice>
+                <guimenu>K Menu</guimenu>
+                <guisubmenu>System</guisubmenu>
+                <guimenuitem>Adept (Package Manager)</guimenuitem>
+            </menuchoice>. </para>
+        <para>Pour démarrer &appshort; depuis la ligne de commande :</para>
+        <programlisting>kdesu adept </programlisting>
+        <para>Both methods require that you enter your password. This will run &appshort; with
+            root privileges which will be required in order to perform the requested operations. It
+            is therefore advised that you use &appshort; with caution since improper usage could
+            lead to the removal, deletion, or corruption of software packages that are required to
+            preserve system integrity.</para>
+        <para>
+            For more help with using &appshort;, please refer to the <ulink url="help:/adept/index.html">Adept Handbook</ulink>.
+        </para>
+    </sect1>
+    <sect1 id="apt-get" status="complete">
+        <title>APT</title>
+        <para><application>APT</application> (Advanced Packaging Tool) est un puissant système de gestion de paquets, sur lequel les programmes graphiques  <application>Ajout/Suppression de programmes</application> et <application>Adept</application> sont basés.</para>
+        <note>
+            <para>Le lancement d'<application>APT</application> exige les droits d'administrateur (voir <xref linkend="root-and-sudo"/>).</para>
+        </note>
+
+        <para>Voici quelques commandes courantes qui peuvent être utilisées avec <application>APT</application> :</para>
+        <itemizedlist>
+            <listitem>
+                <para>Installer des paquets : <screen>sudo apt-get install <emphasis>nomdupaquet</emphasis></screen></para>
+            </listitem>
+            <listitem>
+                <para>Retirer des paquets : <screen>sudo apt-get remove <emphasis>nomdupaquet</emphasis></screen></para>
+            </listitem>
+            <listitem>
+                <para>Chercher des paquets : <screen>apt-cache search <emphasis>mot-clé</emphasis></screen></para>
+            </listitem>
+            <listitem>
+                <para>Mettre à jour la liste des paquets disponibles : <screen>sudo apt-get update</screen></para>
+            </listitem>
+            <listitem>
+                <para>Mettre à jour votre système avec les mises-à-jour disponibles : <screen>sudo apt-get dist-upgrade</screen></para>
+            </listitem>
+            <listitem>
+                <para>Lister des commandes et des options supplémentaires : <screen>apt-get help</screen></para>
+            </listitem>
+        </itemizedlist>
+        <tip>
+            <para>For further information about the use of <application>APT</application>, you can read the comprehensive <ulink url="&debian-apt;">Debian APT User Manual</ulink>.
+            </para>
+        </tip>
+    </sect1>
+	<sect1 id="manual-install" status="complete">
+        <title>Installation manuelle</title>
+        <para>Bien que la méthode conseillée d'installation de programmes soit le gestionnaire de paquets décrit dans <xref linkend="add-applications"/>, vous pouvez également télécharger et installer des paquets individuels de logiciels. Il y a de nombreux types de paquets destinés à Linux. La plupart d'entre eux sont associés au gestionnaire de paquet propre à chaque distribution de Linux.</para>
+
+        <para>Si vous trouvez le paquet d'une application que vous souhaitez installer, il est recommandé de vérifier s'il existe un paquet natif de l'application pour Kubuntu, disponible à travers un gestionnaire de paquets, auquel cas vous devriez installer cette version à la place. Cela garantit que le programme est parfaitement compatible avec votre système. S'il n'existe pas de paquet disponible à travers le gestionnaire de paquets, vous pouvez l'installer manuellement. La procédure d'installation dépend du type de paquet.</para>
+        <sect2 id="install-deb" status="complete">
+            <title>Installer/Désinstaller des fichiers .deb</title>
+            <para>Les paquets associés à Kubuntu portent l'extension <emphasis>.deb</emphasis> à cause de l'étroite parenté de Kubuntu avec la distribution GNU/Linux Debian. Vous pouvez télécharger et installer des fichiers <emphasis>.deb</emphasis> individuellement. Pour cela, vous aurez besoin de droits d'administration (cf. <xref linkend="root-and-sudo"/>).</para>
+            <procedure>
+                <step>
+                    <para>
+                        To install a .deb file, simply <mousebutton>Right</mousebutton> click on the .deb file, and choose 
+                        <menuchoice>
+                            <guimenu>Kubuntu Package Menu</guimenu>
+                            <guimenuitem>Install Package</guimenuitem>
+                        </menuchoice>.
+                    </para>
+                </step>
+                <step>
+                    <para>Vous pouvez par ailleurs installer un fichier .deb en tapant dans une console :</para>
+                    <screen>sudo dpkg -i package_file.deb</screen>
+                </step>
+                <step>
+                    <para>Pour désinstaller un fichier .deb, supprimez-le en utilisant <application>Adept</application>, ou tapez :</para>
+                    <screen>sudo apt-get remove package_name</screen>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="alien" status="complete">
+            <title>Convertir des fichiers .rpm en fichiers .deb</title>
+            <para>Les fichiers Red Hat Package Manager (extension <emphasis>.rpm</emphasis>) sont un autre type de paquets. Il n'est pas recommandé de les installer sur un système Kubuntu. On trouve presque toujours un paquet <emphasis>.deb</emphasis> équivalent pour Kubuntu. Cependant, dans le cas où ce serait absolument indispensable, un fichier <emphasis>.rpm</emphasis> peut être converti en un fichier <emphasis>.deb</emphasis> à l'aide du programme <application>alien</application>.</para>
+            <procedure>
+                <step>
+                    <para>Installer le programme <application>alien</application> (<xref linkend="add-applications"/>).</para>
+                </step>
+                <step>
+                    <para>Saisissez la commande suivante dans un terminal, avec les droits d'administrateur :</para>
+                    <screen>sudo alien package_file.rpm</screen>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="tarballs" status="complete">
+            <title>Installer depuis le code source</title>
+            <para>Les fichiers portant l'extension <emphasis>.tar.gz</emphasis> ou <emphasis>.tar.bz2</emphasis> sont des paquets dits <emphasis>tarballs</emphasis> ou <emphasis>sources</emphasis>, largement utilisés dans la communauté Linux. Si aucun paquet Kubuntu natif n'est disponible dans les dépôt Kubuntu, vous pouvez essayer de compiler le logiciel à partir de ses sources. Vous trouverez des astuces sur la compilation de logiciel sur la page <ulink url="https://wiki.ubuntu.com/CompilingSoftware">Compiling Software</ulink> du Wiki Ubuntu.</para>
+        </sect2>
+	</sect1>
+    <sect1 id="extra-repositories" status="complete">
+        <title>Gérer les dépôts</title>
+        <sect2 status="complete"><title>Qu'entend-on par dépôts ?</title>
+            <para>Il y a des milliers de programmes pouvant être installés librement sur Kubuntu. Ces programmes sont stockés dans des archives logicielles appelées (<emphasis>dépôts</emphasis>) et mis à disposition pour une installation depuis Internet. Cela rend l'installation de nouveaux programmes sous Linux très simple, mais aussi très sûre, car chaque programme que vous installez est compilé spécialement pour Kubuntu et vérifié avant d'être installé. Pour organiser les logiciels, les dépôts Kubuntu sont classés en quatre groupes : <emphasis>Main</emphasis>, <emphasis>Restricted</emphasis>, <emphasis>Universe</emphasis>, et <emphasis>Multiverse</emphasis>.</para> 
+            <para>La méthode utilisée pour déterminer à quelle catégorie de dépôts le logiciel appartient se base sur deux points :</para>
+            <itemizedlist>
+                <listitem>
+                    <para>Le niveau de support fournit par les équipes de développement de ce programme</para>
+                </listitem>
+                <listitem>
+                    <para>The level of compliance the program has to the <ulink url="&ubuntu-philosophy;">Free Software Philosophy</ulink></para>
+                </listitem>
+            </itemizedlist>
+            <para>Vous pouvez trouver plus d'information à propos des dépôts disponibles sur le <ulink url="http://doc.ubuntu-fr.org/applications/apt/depots">Wiki francophone Ubuntu-fr</ulink>.</para>
+            <para>Le CD d'installation standard de Kubuntu contient des logiciels issus des catégories <emphasis>Main</emphasis> et <emphasis>Restricted</emphasis>. Une fois que votre système s'est informé des emplacements de ces répertoires sur Internet, de nombreux programmes deviennent disponibles à l'installation. En utilisant les outils de gestion de paquets déjà installés sur votre système, vous pouvez chercher, installer et mettre à jour n'importe quel logiciel directement depuis Internet, sans avoir besoin du CD.</para>
+        </sect2>
+        <sect2 status="complete"><title>Retirer le dépôt CD-ROM</title>
+            <para>The Kubuntu Install CD-ROM is included in the repositories after installation. This can cause &appshort; to ask for the CD-ROM when installing packages. It is possible to disable this repository so that &appshort; relies solely on the internet repositories.</para> 
+            <para>Pour désactiver le dépot CD-ROM :</para>
+            <procedure>
+                <step>
+                    <para>Start &appshort; by choosing 
+                        <menuchoice>
+                            <guimenu>K Menu</guimenu>
+                            <guisubmenu>System</guisubmenu>
+                            <guimenuitem>Adept (Package Manager)</guimenuitem>
+                        </menuchoice> 
+                        from the Desktop menu system.
+                    </para>
+                </step>
+                <step>
+                    <para> Select 
+                        <menuchoice>
+                            <guimenu>View</guimenu>
+                            <guimenuitem>Manage Repositories</guimenuitem>
+                        </menuchoice>
+                        in the <application>Adept</application> package manager window.
+                    </para>
+                </step>
+                <step>
+                    <para>Trouvez la ligne commençant par « cdrom: », cliquez la ligne avec le bouton <mousebutton>droit</mousebutton> de votre souris et sélectionnez <guimenuitem>Désactiver</guimenuitem>.</para>
+                </step>
+                <step>
+                    <para>Cliquez sur <guibutton>Appliquer</guibutton> pour enregistrer vos modifications et quittez en utilisant le bouton <guibutton>Fermer</guibutton>.</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 status="complete">
+            <title>Ajout de dépôts supplémentaires</title>
+            <para>Pour avoir accès aux dépôts supplémentaires :</para>
+            <procedure>
+                <step>
+                    <para>Start &appshort; by choosing 
+                        <menuchoice>
+                            <guimenu>K Menu</guimenu>
+                            <guisubmenu>System</guisubmenu>
+                            <guimenuitem>Adept (Package Manager)</guimenuitem>
+                        </menuchoice> 
+                        from the Desktop menu system.
+                    </para>
+                </step>
+                <step>
+                    <para> Select 
+                        <menuchoice>
+                            <guimenu>View</guimenu>
+                            <guimenuitem>Manage Repositories</guimenuitem>
+                        </menuchoice>
+                        in the <application>Adept</application> package manager window.
+                    </para>
+                </step>
+                <step>
+                    <para>Pour activer le dépôt <emphasis>Universe</emphasis>, trouvez la ligne comprenant l'élément Universe, faites un clic <mousebutton>droit</mousebutton> sur la ligne et sélectionnez <guimenuitem>Activer</guimenuitem>.</para>
+                    <note>
+                        <para>Après l'ajout de ce dépôt, vous pourrez installer la majeure partie des logiciels libres sur votre ordinateur. Ces logiciels sont maintenus par un groupe de volontaires soigneusement sélectionnés au sein de la communauté Kubuntu, mais ne sont pas soutenus par l'équipe de développement principale de Kubuntu et n'incluent pas nécessairement de mises-à-jour de sécurité.</para>
+                    </note>
+                </step>
+                <step>
+                    <para>Pour activer le dépôt <emphasis>Multiverse</emphasis>, trouvez les lignes (deux d'entre elles) contenant l'élément Universe et cliquez le mot « universe ». Modifiez la sélection pour faire apparaître « universe multiverse ». Faites un clic <mousebutton>droit</mousebutton> sur la ligne et sélectionnez <guimenuitem>Activer</guimenuitem> pour activer le dépôt si ce n'est déjà fait.</para>
+                    <warning>
+                        <para>L'ajout de ce dépôt implique que des logiciels qui ont été identifiés comme <emphasis>non-libres</emphasis> pourront être installés sur votre système. Ces logiciels peuvent être interdits par certaines législations. Vous devriez vérifier, avant toute installation d'un logiciel de ce dépôt, que les lois de votre pays vous permettent de l'utiliser. Encore une fois, les mises à jour de sécurité de ces logiciels ne sont pas toujours disponibles.</para>
+                    </warning>
+                </step>
+                <step><para>Cliquez sur <guibutton>Appliquer</guibutton> pour enregistrer vos modifications et quittez en utilisant le bouton <guibutton>Fermer</guibutton>.</para>
+                </step>
+            </procedure>
+        </sect2>
+    </sect1>
+    <sect1 id="updates" status="complete">
+        <title>Mises-à-jour</title>
+        <para>Il arrive que les développeurs de Kubuntu publient de nouvelles fonctionnalités ou des mises-à-jour de sécurité pour les applications et les paquetages du système de Kubuntu.</para>
+        <para>Quand ces mises a jour seront disponibles, Kubuntu vous en informera par une icône d'avertissement rouge dans la zone de notification. Pour mettre à jour votre système, cliquez sur cet avertissement, entrez votre mot de passe et cliquez sur le bouton <guibutton>Récupérer la liste des mises à jour</guibutton>.</para>
+        <para>L'application <application>Mise à jour Adept</application> vous listera les mises a jour disponibles : pour télécharger ces mises à jour cliquez sur le bouton <guibutton>Appliquer les mises à jour</guibutton>. Kubuntu va alors télécharger et installer les mises à jour disponibles depuis internet.</para>
+        <para>Quand <application>Mise à jour Adept</application> aura fini de mettre a jour votre système, fermez la fenêtre en cliquant sur le bouton <guibutton>Quitter</guibutton></para>
+        <note>
+            <para>Après avoir installé certaines mises à jour importantes, il peut être nécessaire de redémarrer votre ordinateur. Si c'est le cas, Kubuntu vous en informera par un popup et une icône dans votre zone de notification.</para>
+        </note>
+    </sect1>
+</chapter>
+

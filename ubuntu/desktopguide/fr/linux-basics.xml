@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-fr SYSTEM "../../../ubuntu/libs/gnome-menus-fr.ent">
+%gnome-menus-fr;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="linux-basics" status="review">
+	<title>Les bases de Linux</title>
+				<para>Linux est inspiré du système d'exploitation Unix, apparu en 1969, couramment utilisé et en constant développement depuis cette date. Beaucoup de conventions adoptées par Unix le sont aussi par Linux et sont essentielles pour la compréhension des bases du système.</para>
+				<para>Unix était essentiellement conçu pour être utilisé en ligne de commande, et cet héritage se ressent encore dans Linux. Ainsi, l'interface graphique avec ses fenêtres, ses icônes et ses menus est construite au-dessus d'une interface en ligne de commande. De plus, cela signifie que le système de fichiers de Linux est structuré pour être facilement gérable et accessible en ligne de commande.</para>
+		<sect1 id="directories-file-systems" status="complete">
+			<title>Répertoires et systèmes de fichiers</title>
+				<para>Les systèmes de fichiers Linux et Unix sont organisés selon une structure hiérarchique, en forme d'arbre. Le niveau le plus élevé du système de fichier est <filename>/</filename>, encore appelé <emphasis>répertoire (ou dossier) racine</emphasis>. Sous Unix ou Linux, tout est vu comme des fichiers - disques durs, partitions, supports amovibles, etc. Cela signifie que tous les autres fichiers et répertoires (y compris les autres disques et partitions) sont placés en-dessous du répertoire racine.</para>
+				<para>Par exemple, <filename>/home/jebediah/fromages.odt</filename> est le chemin absolu du fichier <filename>fromages.odt</filename> qui se trouve dans le répertoire <filename>jebediah</filename>, lui-même situé dans le répertoire <filename>home</filename> qui se trouve lui aussi dans le répertoire racine (<filename>/</filename>).</para>
+				<para>En-dessous du répertoire racine (<filename>/</filename>) se trouve un ensemble de répertoires système importants et communs à la plupart des distributions Linux existantes. Ci-après sont listés les répertoires trouvés habituellement en dessous du répertoire racine (<filename>/</filename>) :</para>
+					<itemizedlist>
+						<listitem>
+							<para><filename>/bin</filename> - applications <emphasis>bin</emphasis>aires importantes ;</para>
+						</listitem>
+						<listitem>
+							<para><filename>/boot</filename> - fichiers requis pour <emphasis>démarrer</emphasis> l'ordinateur</para>
+						</listitem>
+						<listitem>
+							<para><filename>/dev</filename> - fichiers de périphériques (<emphasis>dev</emphasis>ices) ;</para>
+						</listitem>
+						<listitem>
+							<para><filename>/etc</filename> - (Editing Text Config) fichiers de configuration, scripts de démarrage, <emphasis>etc.</emphasis> ;</para>
+						</listitem>
+						<listitem>
+							<para><filename>/home</filename> - répertoires personnels (<emphasis>home</emphasis>) des utilisateurs ;</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lib</filename> - bibliothèques (<emphasis>lib</emphasis>raries) système ;</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lost+found</filename> - fournit un système d'objets perdus+trouvés (<emphasis>lost+found</emphasis>) pour les fichiers se trouvant dans le répertoire racine (<filename>/</filename>) ;</para>
+						</listitem>
+						<listitem>
+							<para><filename>/media</filename> - <emphasis>media</emphasis> montés (chargés) et amovibles comme des CDs, appareils photo numériques, clés USB, etc. ;</para>
+						</listitem>
+						<listitem>
+							<para><filename>/mnt</filename> - systèmes de fichiers <emphasis>m</emphasis>o<emphasis>nt</emphasis>és ;</para>
+						</listitem>
+						<listitem>
+							<para><filename>/opt</filename> - emplacement pour installer des applications <emphasis>opt</emphasis>ionnelles ;</para>
+						</listitem>
+						<listitem>
+							<para><filename>/proc</filename> - répertoire dynamique spécial qui tient à jour des informations sur l'état du système, y compris les <emphasis>proc</emphasis>essus actifs ;</para>
+						</listitem>
+						<listitem>
+							<para><filename>/root</filename> - répertoire personnel du super-utilisateur (<emphasis>root</emphasis>), prononcez « slash-route » ;</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sbin</filename> - <emphasis>bin</emphasis>aires <emphasis>s</emphasis>ystème importants ;</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sys</filename> - contient des informations sur le <emphasis>sys</emphasis>ème</para>
+						</listitem>
+						<listitem>
+							<para><filename>/tmp</filename> - fichiers <emphasis>t</emphasis>e<emphasis>mp</emphasis>oraires ;</para>
+						</listitem>
+						<listitem>
+							<para><filename>/usr</filename> - applications et fichiers généralement accessibles à tous les utilisateurs (<emphasis>us</emphasis>e<emphasis>r</emphasis>s) ;</para>
+						</listitem>
+						<listitem>
+							<para><filename>/var</filename> - fichiers <emphasis>var</emphasis>iables tels que journaux et bases de données.</para>
+						</listitem> 
+					</itemizedlist>
+		</sect1>
+
+		<sect1 id="permissions" status="review">
+			<title>Droits d'accès</title>
+                       <para>Tous les fichiers d'un système Linux sont liés à un système de gestion de droits (permissions) qui autorisent ou empêchent d'autres personnes de les ouvrir, de les modifier ou de les exécuter. Le super-utilisateur (encore appelé administrateur ou « root ») a la possibilité d'accéder à tous les fichiers du système. Chaque fichier a des restrictions d'accès, des restrictions par rapport aux utilisateurs et est associé à un couple propriétaire/groupe.</para>
+                       <para>Tous les fichiers sont sécurisés par les trois jeux de permissions suivants, par ordre d'importance :</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>Utilisateur</emphasis></para>
+                           <para>s'applique à l'utilisateur propriétaire du fichier</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>Groupe</emphasis></para>
+                           <para>s'applique au groupe qui est associé au fichier</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>Autres</emphasis></para>
+                           <para>s'applique à tous les autres utilisateurs</para>
+                         </listitem>
+                       </itemizedlist>
+                       <para>Les droits d'accès réels figurent dans chacun de ces trois jeux de droits d'accès. Les droits d'accès ainsi que leurs différences d'application selon qu'il s'agit d'un fichier ou d'un répertoire, sont précisées ci-dessous :</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>Lecture</emphasis></para>
+                           <para>les fichiers peuvent être affichés/ouverts ;</para>
+                           <para>le contenu du répertoire peut être affiché.</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>écriture</emphasis></para>
+                           <para>les fichiers peuvent être modifiés ou supprimés ;</para>
+                           <para>le contenu du répertoire peut être modifié.</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>Exécution</emphasis></para>
+                           <para>les fichiers exécutables peuvent être lancés en tant que programme ;</para>
+                           <para>il est possible d'entrer dans les répertoires.</para>
+                         </listitem>
+                       </itemizedlist>
+				<para>Pour voir et éditer les permissions sur les fichiers et les répertoires, ouvrez le <phrase>&home-folder;</phrase> et faites un clic-droit sur un fichier ou un répertoire. Ensuite sélectionnez <guimenu>Propriétés</guimenu>. L'onglet <guilabel>Permissions</guilabel> permet de modifier toutes les permissions si vous êtes le propriétaire du fichier.</para>
+				<para>Pour en savoir plus sur les permissions des fichiers dans Linux, lisez la page sur <ulink url="&wiki-filepermissions;">les permissions des fichiers</ulink> sur le Wiki d'Ubuntu.</para>
+		</sect1>
+
+
+		<sect1 id="terminals" status="review">
+		<title>Terminaux</title>
+            <para>Travailler en ligne de commande n'est pas aussi effrayant qu'on pourrait le penser. Il n'y a pas de connaissance particulière exigée pour savoir comment utiliser la ligne de commande, c'est un programme comme un autre. La plupart des opérations sous Linux peuvent être effectuées en ligne de commande, et même s'il existe des interfaces graphiques pour de nombreux programmes, celles-ci ne permettent pas toujours de tout faire. C'est là que la ligne de commande devient utile.</para>
+    	      <para>Le terminal est souvent appelé invite de commande ou shell. Par le passé, c'était par ce moyen que l'utilisateur agissait sur l'ordinateur ; les utilisateurs de Linux ont découvert qu'il était parfois plus rapide d'utiliser le shell qu'une interface graphique, et le terminal garde donc ses partisans aujourd'hui. Vous allez maintenant apprendre à utiliser le terminal.</para>
+				<para>L'utilisation première du terminal était la navigation dans le système de fichiers, et c'est toujours une utilisation fréquente lorsque l'environnement graphique est défaillant. Vous pouvez utiliser le terminal comme un navigateur de fichiers et pour annuler des modifications.</para>
+		<sect2 id="starting-a-terminal" status="review">
+			<title>Lancement du Terminal</title>
+				<para>Pour lancer un <application>Terminal</application> choisissez &terminal;.</para>
+		</sect2>
+		<sect2 id="common-commands" status="review">
+			<title>Commandes les plus utilisées</title>
+				<variablelist>
+					<varlistentry>
+						<term>Voir le contenu du répertoire - ls</term>
+							<listitem><para>La commande <application>ls</application> <emphasis>l</emphasis>i<emphasis>s</emphasis>te les fichiers avec du texte mis en forme en différentes couleurs.</para></listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Créer un répertoire - mkdir (nom du répertoire)</term>
+							<listitem><para>La commande <application>mkdir</application> permet de créer un répertoire (<emphasis>m</emphasis>a<emphasis>k</emphasis>e <emphasis>dir</emphasis>ectory en anglais).</para></listitem>
+					</varlistentry>
+					<varlistentry>
+		    			<term>Changer de répertoire- cd (/chemin/du/répertoire)</term>
+		    				<listitem><para>La commande <application>cd</application> permet de passer du répertoire courant au répertoire que vous spécifiez (<emphasis>c</emphasis>hange <emphasis>d</emphasis>irectory).</para>
+		    				</listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Copier des fichiers ou des répertoires - cp (nom du fichier ou du répertoire) (répertoire ou nom du fichier de destination)</term>
+		    				<listitem><para>La commande <application>cp</application> va <emphasis>c</emphasis>o<emphasis>p</emphasis>ier tous les fichiers spécifiés. La commande <application>cp -r</application> va <emphasis>c</emphasis>o<emphasis>p</emphasis>ier tous les répertoires spécifiés.</para>
+		    				</listitem>
+		    		</varlistentry>
+		    		<varlistentry>
+		    			<term>Supprimer des fichiers ou des répertoires - rm (nom du fichier ou du répertoire)</term>
+	            		<listitem><para>La commande <application>rm</application> supprime (<emphasis>r</emphasis>e<emphasis>m</emphasis>ove) tout fichier spécifié. La commande <application>rm -rf</application> supprime tout répertoire spécifié.</para></listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Renommer des fichiers ou des répertoires - mv (nom du fichier ou du répertoire)</term>
+							<listitem><para>La commande <application>mv</application> renomme ou déplace (<emphasis>m</emphasis>o<emphasis>v</emphasis>e) tout fichier ou répertoire spécifié.</para>
+		    				</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Trouver des fichiers ou des répertoires - locate (nom du fichier ou du répertoire)</term>
+							<listitem><para>La commande <application>locate</application> recherche dans l'ordinateur tout nom de fichier spécifié. Elle utilise un index des fichiers présents sur l'ordinateur pour accélérer son fonctionnement. Pour mettre à jour cet index, exécutez la commande <application>updatedb</application>. Cette commande s'exécute automatiquement chaque jour si l'ordinateur reste allumé. Elle doit être exécutée avec des droits d'administrateur (voir <xref linkend="root-and-sudo"/>).</para>
+							</listitem>
+					</varlistentry>
+					</variablelist>
+			<para>Il est également possible d'utiliser des caractères joker pour trouver un ou plusieurs fichiers, comme « * » (tous fichiers) ou « ? » (pour trouver un caractère).</para>
+			<para>Pour une introduction plus complète à la ligne de commande sous Linux, veuillez lire <ulink url="&wiki-BasicCommands;">l'introduction à la ligne de commande</ulink> sur le wiki d'Ubuntu.</para>
+		</sect2>
+		<sect2 status="complete">
+			<title>Basculer en mode console</title>
+				<para>La méthode classique pour accéder à la ligne de commande sous Ubuntu est de lancer un terminal (voir <xref linkend="starting-a-terminal"/> ci-dessus). Cependant, il est parfois utile de basculer vers une véritable console :</para>
+				<procedure>
+					<step>
+						<para>Utiliser le raccourci clavier <keycombo><keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap></keycombo> pour basculer vers la première console.</para>
+					</step>
+					<step>
+						<para>Pour revenir au mode Bureau, utilisez le raccourci clavier <keycombo><keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F7</keycap></keycombo>.</para>
+					</step>
+				</procedure>
+					<note>
+						<para>Il y a six consoles disponible. Chacune d'elles est accessible avec les raccourcis clavier <keycombo><keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap></keycombo> jusqu'à <keycombo><keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F6</keycap></keycombo>.</para>
+					</note>
+		</sect2>
+		<sect2 status="review">
+			<title>Désactiver le bip en mode terminal</title>
+				<procedure>
+					<step>
+						<para>Pour démarrer une session de <application>Terminal</application>, sélectionnez : <phrase>&terminal;</phrase> depuis le menu du bureau.</para>
+					</step>
+					<step>
+						<para><menuchoice><guimenu>Éditer</guimenu>
+								<guimenuitem>Profile Courant...</guimenuitem></menuchoice>. Sélectionnez l'onglet <guibutton>Général</guibutton>. Décochez le <guilabel>bip du Terminal</guilabel>.</para>
+					</step>
+				</procedure>
+		</sect2>
+	</sect1>
+
+	<sect1 id="text-editing" status="review">
+  			<title>Édition de texte</title>
+ 			<para>Toute la configuration et les paramètres dans Linux sont enregistrés dans des fichiers textes. Même si, le plus souvent, vous pouvez modifier la configuration via une interface graphique, il se peut que, occasionnellement, vous ayez à l'éditer à la main. <application>Gedit</application> est l'éditeur de texte par défaut de Ubuntu, que vous pouvez exécuter en cliquant sur &text-editor; dans le menu du bureau.</para>
+ 			<para>Au fil de la lecture de ce guide vous verrez parfois que <application>Gedit</application> est lancé en ligne de commande en utilisant <application>gksudo</application>, ceci a pour effet de lancer <application>Gedit</application> avec les droits d'administrateur en vue de modifier des fichiers de configuration.</para>
+			<para>Si vous avez besoin d'un éditeur de texte en ligne de commande, vous pouvez vous servir de <application>nano</application> qui est simple à utiliser. Lorsque vous le lancez en ligne de commande, utilisez systématiquement la commande suivante pour être sûr que l'éditeur n'introduise pas de sauts de ligne : <screen>nano -w</screen></para>
+			<para>Pour plus d'informations sur l'utilisation de <application>nano</application>, référez-vous au <ulink url="&wiki-Nano;">guide dans le wiki</ulink>.</para>
+			<para>Différents éditeurs sont disponibles en mode terminal sous Ubuntu. Les plus populaires sont notamment <application>VIM</application> et <application>Emacs</application> (les avantages et inconvénients de chacun sont une source de nombreux débats amicaux au sein de la communauté Linux). Ils sont en général plus difficiles à utiliser que nano, mais sont également plus puissants.</para>
+	</sect1>
+
+		<sect1 id="users-and-groups" status="review">
+			<title>Utilisateurs et groupes</title>
+			<para>Pour ajouter des utilisateurs ou des groupes sur votre ordinateur, vous pouvez utiliser l'application <application>Utilisateurs et groupes</application> située dans &users-groups;.</para>
+			<note>
+				<para>Pensez à vous  déconnecter puis vous reconnecter pour que les changements soient pris en compte.</para>
+			</note>
+			<para>Pour ajouter un nouvel utilisateur, cliquez sur <guilabel>Ajouter un utilisateur…</guilabel>, saisissez les informations dans les différents champs, puis cliquez sur <guilabel>Ok</guilabel>. Pour modifier les propriétés d'un utilisateur donné, sélectionnez-le dans l'onglet <guilabel>Utilisateurs</guilabel> de la fenêtre principale puis cliquez sur le bouton <guilabel>Propriétés</guilabel>.</para>
+			<para>Pour ajouter un nouveau groupe, sélectionnez l'onglet <guilabel>Groupes</guilabel> et cliquez sur <guilabel>Ajouter un groupe…</guilabel>. Choisissez un nom pour le nouveau groupe et, si vous le souhaitez, changez la valeur par défaut de l'<guilabel>ID Groupe</guilabel>. Si vous tentez d'attribuer un <guilabel>ID Groupe</guilabel> déjà utilisé, le système vous en informera.</para>
+			<para>Vous pouvez ajouter des utilisateurs au groupe nouvellement créé en en sélectionnant un depuis le menu de gauche puis en cliquant sur le bouton <guilabel>Ajouter</guilabel>. Enlever un utilisateur d'un groupe est aussi simple que d'en ajouter un : sélectionnez-en un dans le menu de droite et cliquez sur <guilabel>Enlever</guilabel>. Lorsque vous avez fini, cliquez sur <guilabel>OK</guilabel>, et le nouveau groupe, avec, le cas échéant, ses utilisateurs, sera créé.</para>
+			<para>Pour ajouter des utilisateurs ou des groupes à votre système, vous pouvez utiliser l'application <application>Utilisateurs et groupes</application> qui se trouve dans <menuchoice><guimenu>Système</guimenu><guimenuitem>Administration</guimenuitem><guimenuitem>Utilisateurs et groupes</guimenuitem></menuchoice>.</para>
+			<para>Pour supprimer un utilisateur ou un groupe du système, sélectionnez l'utilisateur ou le groupe que vous désirez enlever et cliquez sur <guilabel>Supprimer</guilabel>.</para>
+		</sect1>
+
+</chapter>
+

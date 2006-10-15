@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="partitions-booting" status="complete">
+	<title>Subdiskoj kaj Startigo</title>
+		<para>This section contains information about how to change the way that your computer behaves when you first turn it on, and how to access other operating systems and partitions from Ubuntu.</para>
+			<sect1 status="complete">
+				<title>Grafika Subdiska Redaktilo</title>
+					<para><application>Gparted</application> estas grafika ilo por redakti subdiskajn difinojn.</para> 
+					<procedure>
+						<step>
+							<para>Instalu la pakaĵon <application>gparted</application> (vidu <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>	
+							<para>You can run the application with &gparted;.
+							</para>
+						</step>
+					</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Make Windows partitions available from Ubuntu</title>
+				<para>Windows partitions should be automatically available from any Ubuntu system. If they are not, you can make them available using the <application>Disks Manager</application>.</para>
+				<procedure>
+					<step>
+						<para>Open &disks;.</para>
+					</step>
+					<step>
+						<para>Select the correct hard disk, and click <guilabel>Partitions</guilabel>.</para>
+					</step>
+					<step>
+						<para>Elektu la volatan subdiskon, kaj klaku al <guilabel>Ŝalti</guilabel>.</para>
+					</step>
+					<step>
+						<para>Por malmunti la subdiskon, klaku al <guilabel>Malŝalti</guilabel>.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Make Windows partitions automatically available</title>
+				<para>Windows partitions should be automatically available from Ubuntu. If they are not, the following procedure will make them automatically available:</para>
+				<procedure>
+					<step>
+						<para><xref linkend="listpartitiontables"/></para>
+					</step>
+					<step>
+						<para>Unue faru dosierujon kie eblas igi la subdiskon alirebla ("muntita"):</para>
+							<screen>
+sudo mkdir /media/windows
+							</screen>
+					</step>
+					<step>
+						<para>Next, back up your disk configuration file and open the file in a text editor with administrative privileges:
+						</para>
+						<screen>
+sudo cp /etc/fstab /etc/fstab_backup
+sudo gedit /etc/fstab
+						</screen>
+					</step>
+					<step>
+						<para>Postglui la jenan linion ĉe la fino de la dosiero: <programlisting>/dev/hda1 /media/windows ntfs umask=0222 0 0</programlisting></para>
+						<note>
+							<para>Anstataŭu de <emphasis role="bold">/dev/hda1</emphasis> per la ĝusta ila nomo por via subdisko.</para>
+							<para>Se via Windows-subdisko uzas la FAT32-sistemon, anstataŭu de <emphasis role="bold">ntfs</emphasis> per <emphasis role="bold">vfat</emphasis> en la supra komando.</para>
+							<para>Se vi havas FAT32-sistemon, estas sendanĝere ebligi legan kaj skriban aliron. Por fari tion, ŝanĝu la valoron de <emphasis role="bold">umask</emphasis> al 0000.</para>
+						</note>
+					</step>
+					<step>
+						<para>Save the edited file (<ulink url="sample/fstab_automountntfs">an example</ulink>).</para>
+					</step>
+					<step>
+						<para>La ŝanĝoj ekefikos kiam la komputilo restartas.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Ruligi sisteman komandon je starto</title>
+				<para>Sometimes it can be useful to run a custom command whenever your computer starts up. To do this:</para>
+				<procedure>
+					<step>
+						<para>Redaktu al la <application>crontab</application> kun administraj atingopermesoj (see <xref linkend="root-and-sudo"/>):</para>
+							<screen>sudo crontab -e</screen>
+					</step>
+					<step>
+						<para>Tajpu la jenan linion:</para>
+							<screen>@reboot /home/user/command</screen>
+					<note>
+						<para>Anstataŭu la komandon <filename>/home/user/command</filename> per la tuta vojo de via komando.</para>
+					</note>
+					</step>
+					<step>
+						<para>Konservu la dosieron kaj eliru.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Change default operating system at boot</title>
+				<para>To change which operating system starts by default when the computer starts up, edit the <application>grub</application> configuration file.</para>
+				<procedure>
+					<step>
+						<para>Make a backup of the configuration file, and open it in a text editor:</para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+sudo gedit /boot/grub/menu.lst</screen>
+					</step>
+					<step>
+						<para>Trovu ĉi tiun linion:</para>
+						<programlisting>...
+default 0
+...</programlisting>
+					</step>
+					<step>
+						<para>Anstataŭu ĝin per la jena linio:</para>
+						<programlisting>default X</programlisting>
+						<note><para>You should replace X with a number, according to the order which your operating systems appear in the configuration file. You should start counting from 0. For example, if you wish the default operating system to be the first in the list, replace X with 0, if you wish the default operating system to be the second in the list, replace X with 1, and so on.</para></note> 
+					</step>
+					<step>
+						<para>
+							Save the edited file (<ulink url="sample/menu.list_changedefaultosgrub">an example</ulink>)
+						</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Configure startup services</title>
+				<para>Tio bezonas administrajn atingopermesojn (see <xref linkend="root-and-sudo"/>).</para>
+				<procedure>
+					<step>
+						<para>Run <application>Services Settings</application>:
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Services</guimenuitem>
+							</menuchoice>.
+						</para>
+					</step>
+					<step>
+						<para>Tajpu vian pasvorton</para>
+					</step>
+					<step>
+						<para>Select the services you want running, then click <guibutton>OK</guibutton> when done.</para>
+					</step>
+					<step>
+						<para>For greater control over the boot-up services, install the <application>bum</application> from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>), and run it:
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Boot-up Manager</guimenuitem>
+							</menuchoice>.
+						</para>
+					</step>
+				</procedure>
+			</sect1>
+	<sect1 id="other-hardware" status="complete">
+	    <title>Aliaj Konsiletoj</title>
+	    <sect2 id="listpartitiontables" status="complete">
+                <title>Kontrolu la diskan uzkvanton kaj rigardu la subdiskan tabelon.</title>
+                    <procedure>
+                        <step>
+                            <para>Open &disks;.</para>
+                        </step>
+                        <step>
+                            <para>Elektu la butonon <guibutton>Durdisko</guibutton>, kaj tiam la tabon <guibutton>Subdiskoj</guibutton></para>
+                        </step>
+                        <step>
+                            <para>Ĉiu subdisko listiĝos sub <guilabel>Subdiska Listo</guilabel>, kun diskokvanto kaj muntoloko.</para>
+                        </step>
+                    </procedure>
+            </sect2>
+            <sect2 status="complete">
+                <title>Listigi disponaĵojn</title>
+                            <para>To list mounted devices, in a terminal enter:</para>
+                               <screen>mount</screen>
+			    <para>La listo vidigas la disponaĵon (ekzemple subdiskon), la surmetingon (kie aliri la dosierojn), la dosiersisteman tipon kaj la surmetajn agordojn.</para>
+                            <para>Ĉi tiu ekzemplo montras la subdiskon hda2 surmetitan kiel '/', kun la dosiersistema tipo ext3. La subdisko estas surmetita kun du agordoj, unu ebligas legi de la disponaĵo kaj skribi al ĝi, kaj la alia ebligas resurmeti la disponaĵon kiel nurlegeblan okaze de eventualaj eraroj.</para>
+                            <screen><computeroutput>/dev/hda2 on / type ext3 (rw,errors=remount-ro)</computeroutput></screen>				
+                            <para>Por listigi PCI-disponaĵojn:</para>
+                                <screen>lspci</screen>
+                            <para>Por listigi USB-disponaĵojn:</para>
+                                <screen>lsusb</screen>
+            </sect2>
+ 
+            <sect2 status="complete">
+                <title>Surmeti/demeti KD/CVD-ojn mane, kaj vidigi ĉiujn kaŝitajn kaj aligitajn dosierojn/dosierujojn.</title>
+                            <para>Supozante ke <filename class="devicefile">/media/cdrom0/</filename> estas la surmetingo de KD/CVD</para>
+                            <para>To mount a CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo mount /media/cdrom0/ -o unhide</screen>
+                            </para>
+                            <para>To unmount a CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo umount /media/cdrom0/</screen>
+                            </para>
+            </sect2>
+	</sect1>
+</chapter>
+

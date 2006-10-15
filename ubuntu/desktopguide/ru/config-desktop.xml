@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="desktop-tips" status="complete">
+			<title>Дополнительные настройки рабочего стола</title>
+			  <para>Этот раздел дает некоторые советы по тонкой настройке рабочего окружения Ubuntu(<application>GNOME</application>), а также файлового менеджера (<application>Наутилус</application>).</para>
+
+		<sect1 status="complete">
+				<title>Автоматический вход в сеанс при загрузке компьютера</title>
+				<para>Для автоматического входа в сеанс при загрузке компьютера:</para>
+				<procedure>
+					<step>
+						<para>Выберите &login-screen-setup;.</para>
+					</step>
+					<step>
+						<para>Выберите <guibutton>Безопасность</guibutton>, и включите <guilabel>Автоматический вход в сеанс</guilabel>.</para>
+					</step>
+					<step>
+						<para>Выберите, какую учетную запись вы хотите использовать для входа.</para>
+					</step>
+				</procedure>
+			<para>На большинстве компьютеров не рекомендуется это использовать, так как это небезопасно и другие люди могут получить доступ к вашим данным.</para>
+		</sect1>	
+
+		<sect1 status="complete">
+			<title>Открытие файла с правами суперпользователя из файлового менеджера</title>
+			<para>Чтобы открыть файл с административными привилегиями в диспетчере файлов, вы должны добавить сценарий к <application>Nautilus</application>.</para>
+			<warning><para>Открывать файлы с административными привилегиями - риск безопасности. Всегда будьте уверенны в том, что знаете файл, который открываете.</para></warning>
+			<procedure>
+				<step><para>Откройте новый файл для редактирования в существующей папке : <screen>gedit $HOME/.gnome2/nautilus-scripts/Открыть\ как\ суперпользователь</screen></para>
+				</step>
+				<step>
+						<para>Добавте эти строки в новый файл:</para>
+						<programlisting>for uri in $NAUTILUS_SCRIPT_SELECTED_URIS; do
+gksudo·"gnome-open·$uri"·&amp;
+done</programlisting>
+				</step>
+				<step>
+						<para>Сохраните измененный файл (<ulink url="sample/nautilus_open_as_administrator">пример</ulink>)</para>
+				</step>
+				<step>
+						<para>Сделайте измененный файл исполняемым: <screen>chmod +x $HOME/.gnome2/nautilus-scripts/Открыть\ как\ Суперпользователь</screen></para>
+				</step>
+			</procedure>
+						<para>Теперь вы можете открыть файл как администратор, щелкнув правой кнопкой мыши на нём и выбрав <menuchoice><guimenuitem>Сценарии</guimenuitem>
+								<guimenuitem>Открыть как администратор</guimenuitem></menuchoice>.</para>
+		</sect1>
+     <sect1 id="fonts" status="complete">
+		<title>Установка дополнительных шрифтов</title>
+				<para>Эта секция описывает, как установить дополнительные шрифты из архивов Ubuntu.</para>
+							<para>Для <emphasis role="bold">international fonts</emphasis>установите эти пакеты с репозитария <quote>Universe</quote> (смотри <xref linkend="add-applications"/>):</para>
+			<itemizedlist>
+				<listitem><para>xfonts-intl-arabic</para></listitem>
+				<listitem><para>xfonts-intl-asian</para></listitem>
+				<listitem><para>xfonts-intl-chinese</para></listitem>
+				<listitem><para>xfonts-intl-chinese-big</para></listitem>
+				<listitem><para>xfonts-intl-european</para></listitem>
+				<listitem><para>xfonts-intl-japanese</para></listitem>
+				<listitem><para>xfonts-intl-japanese-big</para></listitem>
+				<listitem><para>xfonts-intl-phonetic</para></listitem>
+			</itemizedlist>
+							<para>Для <emphasis role="bold">основных шрифтов TrueType от Microsoft</emphasis>, установите пакет <application>msttcorefonts</application> из репозитория <quote>Multiverse</quote> (см. <xref linkend="add-applications"/>).</para>
+							<para>Для <emphasis role="bold">Шрифтов Ghostscript</emphasis> установите пакет <application>gsfonts-x11</application> (см. <xref linkend="add-applications"/>).</para>
+							<para>После установки нового шрифта, обновите файлы информации шрифта введя в терминале:</para>
+							<screen>sudo fc-cache -f -v</screen>
+			<para>Если вы предпочитаете загрузить определенные шрифты вручную, вы можете установить их просто и легко открыв файловый менеджер и набрав <application>fonts:///</application> в строке адреса (см <ulink type="help" url="ghelp:user-guide#nautilus-location-bar">руководство файлового менеджера</ulink> об использовании строки адреса). Затем вы можете просто перетащить загруженный шрифт в существующую группу шрифтов.</para>
+		</sect1>
+		<sect1 status="complete">
+				<title>Архиватор RAR</title>
+					<procedure>
+						<step>
+							<para>Установите пакет rar с репозитория <quote>Multiverse</quote> (смотри <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>
+							<para>Запустите команду: <screen>
+sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen></para>
+						</step>
+						<step>
+							<para>Чтобы открыть архив rar, запустите его двойным нажатием левой кнопки мыши.</para>
+						</step>
+					</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Система аплетов для рабочего стола GNOME</title>
+				<para><application>gDesklets</application> - это система привнесения на рабочий стол таких мини-программ(desklets), как прогноз погоды, обзоры новостей, просмотр системной информации или управление музыкальным проигрывателем, и сочетающих в себе приятный внешний вид и удобство использования.</para>
+				<procedure>
+					<step>
+							<para>Установите пакеты <application>gdesklets</application> и <application>gdesklets-data</application> из репозитория <quote>Universe</quote> (см <xref linkend="add-applications"/>).</para>
+					</step>
+					<step>
+							<para>Выберите: <menuchoice><guimenu>Приложения</guimenu>
+									<guisubmenu>Вспомогательные программы</guisubmenu>
+									<guimenuitem>gDesklets</guimenuitem></menuchoice></para>
+					</step>
+					<step><para>Для справки посетите <ulink url="http://www.gdesklets.org/">сайт gDesklets</ulink></para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Скрытие недавно открытых документов из меню Переход</title>
+				<para>Чтобы скрыть <guilabel>Недавно использовавшиеся документы</guilabel> из меню <guilabel>Переход</guilabel>, откройте терминал и запустите команду:</para><screen>chmod 400 ~/.recently-used</screen>
+				<para>Чтобы вызвать меню снова, введите команду:</para><screen>chmod 600 ~/.recently-used</screen>
+		</sect1>
+		<sect1 status="complete">
+			<title>Показ иконок Компьютер, Домашняя папка и Корзина на рабочем столе GNOME</title>
+				<procedure>
+					<step>
+						<para>Откройте <application>Редактор конфигурации</application>, запустив программу <filename>gconf-editor</filename> (см. <ulink type="help" url="ghelp:user-guide#tools-run-app">инструкцию по приложения запуску приложений</ulink> для сведений о запуске программ без использования меню).</para>
+					</step>
+					<step>
+						<para>Выберите <menuchoice><guimenu>apps</guimenu>
+								<guisubmenu>nautilus</guisubmenu>
+								<guimenuitem>desktop</guimenuitem></menuchoice>.</para>
+					</step>
+					<step>
+						<para>Включите <guilabel>computer_icon_visible</guilabel>, <guilabel>home_icon_visible</guilabel> и <guilabel>trash_icon_visible</guilabel>. Изменения сразу вступят в силу.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 id="restartgnomewithoutreboot" status="complete">
+			<title>Перезапуск сессии GNOME без перезагрузки компьютера</title>
+			<procedure>
+				<step>
+						<para>Сохраните данные и закройте все открытые приложения</para>
+			          </step>
+			          <step>
+            				<para>Используйте комбинацию клавиш <keycombo><keycap>Ctrl</keycap>
+						<keycap>Alt</keycap>
+						<keycap>Backspace</keycap></keycombo> для перезапуска GNOME.</para>
+           			</step>
+           			<step>
+            				<para>Если <keycombo><keycap>Ctrl</keycap>
+                <keycap>Alt</keycap>
+                <keycap>Backspace</keycap></keycombo> выключен, то введите <screen>sudo /etc/init.d/gdm restart</screen></para>
+						<para>(см. <xref linkend="disableCtrlAltBackspace"/> для выключения <keycombo><keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>Backspace</keycap></keycombo>.)</para>
+				</step>
+			</procedure>
+		</sect1>
+		<sect1 id="disableCtrlAltBackspace" status="complete">
+			<title>Блокировка комбинации Ctrl-Alt-Backspace при перезапуске X</title>
+				<procedure>
+					<step>
+						<para>Сделайте резервную копию вашего существующего файла <filename>/etc/X11/xorg.conf</filename>: <screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup</screen></para>
+					</step>
+					<step>
+					<para>Откройте <filename>/etc/X11/xorg.conf</filename> для редактирования: <screen>sudo gedit /etc/X11/xorg.conf</screen></para>
+					</step>
+					<step>
+						<para>Вставьте эти строки в конец файла: <programlisting>Section	"ServerFlags"
+Option	"DontZap"	"yes"
+EndSection</programlisting></para>
+					</step>
+					<step>
+						<para>Сохраните измененный файл (<ulink url="sample/xorg.conf_disablectrlaltbackspacegnome">например</ulink>).</para>
+					</step>
+					<step>
+						<para>Изменения войдут в силу при следующем запуске среду GNOME. Если вы хотите сразу активировать изменения, перезапустите GNOME вручную (см. <xref linkend="restartgnomewithoutreboot"/>).</para>
+					</step>
+				</procedure>
+		</sect1>
+
+	</chapter>
+

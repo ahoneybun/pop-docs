@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-id SYSTEM "../../../ubuntu/libs/gnome-menus-id.ent">
+%gnome-menus-id;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="graphics" status="complete">
+		<title>Grafik &amp; Foto</title>
+			<para>Bagian ini menguraikan manajemen foto dan aplikasi untuk disain grafis yang tersedia untuk digunakan dalam Ubuntu, dan menguraikan bagaimana menyetel peranti grafik 3d.</para>
+		<sect1 id="digital-cameras" status="complete">
+			<title>Kamera Digital</title>
+				<para>Kebanyakan kamera digital USB sudah otomatis terdeteksi oleh Ubuntu. Cukup colok dan nyalakan kamera digital USB Anda. Ubuntu kemudian akan menanyakan apakah Anda ingin mengimpor foto dari kamera.  Klik <guibutton>Import</guibutton>, Ubuntu akan menampilkan preview foto tersebut. Pilih lokasi untuk menyimpan foto, kemudian klik <guibutton>Import</guibutton>, Ubuntu kemudian akan menyimpan foto Anda ke dalam hard drive.</para>
+				<para>Jika tidak keluar pertanyaan untuk mengimpor foto Anda:</para>
+				<procedure>
+					<step><para>Buka &gthumb;.</para></step>
+					<step>
+						<para>Pilih <menuchoice><guimenu>File</guimenu>
+						<guimenuitem>Import Photos</guimenuitem></menuchoice>.</para>
+					</step>
+				</procedure>
+				<para>Lihat <xref linkend="gthumb"/> untuk informasi lebih lanjut mengenai<application>gThumb</application>.</para>
+		</sect1>
+
+		<sect1 id="graphics-cards" status="complete">
+			<title>Kartu Grafik 3D</title>
+				<sect2 id="video-acceleration-introduction">
+					<title>Pengenalan ke Akselerasi Video 3D</title>
+					<para>Kebanyakan perangkat keras video akan langsung bekerja secara otomatis dalam Ubuntu. Akan tetapi beberapa tipe dari perangkat keras video, akselerasi 3D (dibutuhkan oleh beberapa permainan) tidak didukung secara otomatis, tetapi Anda dapat memperbaiki hal ini sendiri.</para>
+					<para>Untuk mengetahui apakah akselerasi 3D acceleration sudah berkerja atau tidak, ketikan dalam terminal:</para>
+					<screen>glxinfo | grep rendering</screen>
+					<para>Jika akselerasi 3D sudah bekerja, hasilnya akan seperti ini: <screen>direct rendering: Yes</screen> Jika tidak, ikuti instruksi berikut untuk mengaktifkan akselerasi 3D.</para>
+				</sect2>
+        	       	 <sect2 id="nvidia" status="complete">
+        		        <title>Driver Kartu Video Nvidia 3D</title>
+					<para>Di Ubuntu dukungan akselerasi 3D pada kartu Video Nvidia tidak diaktifkan secara otomatis, karena pabrik pembuatnya tidak merilis driver source drivers. Akan tetapi Anda dapat mengaktifkan sendiri akselerasi 3D tersebut. Proses ini tergantung pada jenis dari kartu video yang Anda miliki.</para>
+					<itemizedlist>
+						<listitem>
+							<para>Jika Anda memiliki kartu grafik lama seperti TNT, TNT2, TNT Ultra, GeForce1 atau GeForce2, instal paket <application>nvidia-glx-legacy</application> dan <application>nvidia-settings</application> dari repositori <quote>Restricted</quote> (lihat <xref linkend="add-applications"/>).</para>
+						</listitem>
+						<listitem>
+				<para>Jika Anda memiliki kartu grafik terbaru, instal paket <application>nvidia-glx</application> dari repositori <quote>Restricted</quote> (lihat <xref linkend="add-applications"/>).</para>
+						</listitem>
+					</itemizedlist>
+				<para>Untuk menyetel driver baru, masukkan dalam terminal:</para>
+                                <screen>
+sudo nvidia-glx-config enable </screen>
+				<para>Anda dapat menyesuaikan setting dari driver baru dengan menjalankan <application>nvidia-settings</application>(lihat <ulink type="help" url="ghelp:user-guide#tools-run-app">manual menjalankan aplikasi</ulink> untuk bantuan bagaimana menjalankan aplikasi tanpa melalui menu). Jika menginginkannya, Anda dapat menambah entri menu untuk program ini (lihat <ulink type="help" url="ghelp:user-guide#menu-editor">manual penyuntingan menu</ulink> untuk bantuan bagaimana menambah entri menu).</para>
+            </sect2>
+            <sect2 id="installatidriver" status="complete">
+                <title>Driver Kartu Video ATI 3D</title>
+				<para>Banyak kartu video ATI yang bekerja baik secara otomatis pada Ubuntu. Untuk memeriksa apakah akselerasi 3D sudah bekerja, lihat <xref linkend="video-acceleration-introduction"/>.</para>
+				<para>Jika tidak bekerja:</para>
+				<procedure>
+					<step><para>Instal paket <application>xorg-driver-fglrx</application> dari repositori <quote>Restricted</quote> (lihat <xref linkend="add-applications"/>).</para></step> 
+					<step>
+					<para>Untuk menyetel driver baru, masukkan dalam terminal:</para>
+				<screen>sudo dpkg-reconfigure xserver-xorg</screen>
+				<para>Pilih otomatis mendeteksi kartu video Anda, dan pilih driver <guibutton>fglrx</guibutton> saat ditanyakan.</para>
+					</step>
+				</procedure>
+				<para>Restart komputer agar perubahan dapat terjadi.</para>
+	    </sect2>
+	    </sect1>
+
+		<sect1 id="gthumb" status="complete">
+			<title>gThumb Image Viewer</title>
+				<para><application>gThumb</application> adalah penilik dan peramban gambar tingkat lanjut. Mempunyai banyak fitur, seperti dapat meramban sistem berkas, salin salindia, katalog gambar, membuat album foto, impor kamera, membakar CD gambar, memproses beberapa berkas sekaligus, dan fitur menyunting gambar dengan cepat seperti transformasi dan manipulasi warna.</para>
+				<para><application>gThumb</application> disertakan secara default di Ubuntu. Untuk menjalankannya, pilih &gthumb;.</para>
+				<para>Untuk mencari bantuan seputar <application>gThumb</application>, gunakan item yang ada di menu <guimenu>Help</guimenu>.</para>
+				<para>Untuk penyuntingan foto &amp; gambar tingkat lanjut, lihat <application>The GIMP</application>.</para>
+		</sect1>
+		<sect1 id="gimp" status="complete">
+			<title>The GIMP (Gnu Image Manipulation Program)</title>
+			<para>Dengan <application>GIMP</application> Anda dapat menggambar, mewarnai, menyunting gambar, dan banyak lagi! GIMP menyertakan beberapa fungsi dan plug-in dari program penyuntingan dan pengolahan gambar lainnya.</para>
+				<para><application>The GIMP</application> telah terinstal secara default di Ubuntu, dan dapat dijalankan dengan memilih &gimp;.</para>
+			<itemizedlist>
+				<listitem><para><ulink url="http://gimp.org/">Situs Web GIMP</ulink></para></listitem>
+			</itemizedlist>
+		</sect1>
+		<sect1 id="inkscape" status="complete">
+			<title>Inkscape Vector Graphics Editor</title>
+				<para><application>Inkscape</application> adalah editor untuk gambar dengan format SVG (Scalable Vector Graphics).</para>
+				<procedure>
+					<step>
+						<para>Instal paket <application>inkscape</application> (lihat <xref linkend="add-applications"/>).</para>
+					</step>
+					<step>
+						<para>Untuk menjalankan <application>Inkscape</application> pilih &inkscape;.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 id="blender" status="complete">
+			<title>Blender 3d Modeller</title>
+				<para><application>Blender</application> adalah suite 3d untuk modelling, animasi, rendering, post-produksi, menciptakan gambar interaktif dan untuk memutar berkas 3d.</para>
+				<procedure>
+					<step>
+						<para>Instal paket <application>blender</application> (lihat <xref linkend="add-applications"/>).</para>
+					</step>
+					<step>
+						<para>Untuk menjalankan <application>Blender</application> pilih &blender3d;.</para>
+					</step>
+				</procedure>
+		</sect1>
+	</chapter>
+

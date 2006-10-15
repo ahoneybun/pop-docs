@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-fr SYSTEM "../../../ubuntu/libs/gnome-menus-fr.ent">
+%gnome-menus-fr;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="programming" status="complete">
+		<title>Développement</title>
+			<para>Cette section contient des informations de base destinées aux personnes souhaitant utiliser Ubuntu pour écrire et exécuter leur propres programmes.</para>
+			<sect1 id="build-essential" status="complete">
+				<title>Compilateurs de base</title>
+				<para>Compiler des programmes requiert des paquets qui ne sont pas installés par défaut. Vous pouvez tous les installer en une seule fois en installant le paquet <application>build-essential</application> (voir <xref linkend="add-applications"/>).</para>
+			</sect1>
+            <sect1 id="java" status="complete">
+                <title>Environnement d'exécution de Java (JRE 1.5)</title>
+                <note>
+                    <para>Ces instructions sont pour les ordinateurs équipés d'un processeur de type <emphasis>x86</emphasis> ou <emphasis>amd64</emphasis> uniquement. Pour les ordinateurs équipés d'un processeur de type <emphasis>PowerPC</emphasis>, veuillez vous référer à <ulink url="https://help.ubuntu.com/community/Java">Aide Ubuntu en ligne</ulink>.</para>
+                </note>
+                <note>
+                    <para>A l'heure où nous écrivons ces lignes, J2SE est à la version 5.0 Update 6. Cela a pu évoluer. Si vous ne voyez pas cette version sur le site internet de Sun, veuillez télécharger la dernière version proposée.</para>
+                </note>
+                <procedure>
+                    <step>
+                        <para>Allez sur <ulink url="http://java.com/fr/download/manual.jsp">http://java.com/fr/download/manual.jsp</ulink> et cliquez sur le bouton <quote>Télécharger</quote> en regard de «Linux (fichier auto-extractible)».</para>
+                    </step>
+                    <step>
+                        <para>Enregistrez jre-1_5_0_06-linux-i586.bin sur votre disque dur.</para>
+                        <note>
+                            <para>Si vous utilisez un ordinateur doté d'un processeur <emphasis>amd64</emphasis>, remplacez <emphasis>jre-1_5_0_06-linux-i586.bin</emphasis> par
+<emphasis>jre-1_5_0_06-linux-amd64.bin</emphasis>.</para> 
+                        </note> 
+                    </step>
+                    <step>
+                        <para>Installez le paquet <application>java-package</application> depuis le dépôt <quote>Multiverse</quote> (voir <xref linkend="add-applications"/>).</para>
+                    </step>
+                    <step>
+                        <para>Rendez le fichier téléchargé exécutable. En ligne de commande, allez dans le répertoire où vous avez téléchargé le fichier et tapez <screen>chmod +x jre-1_5_0_06-linux-i586.bin</screen></para>
+                    </step>
+                    <step>
+                        <para>Pour installer le JRE, vous devez d'abord construire un paquet Ubuntu. Tapez <screen>fakeroot make-jpkg jre-1_5_0_06-linux-i586.bin</screen></para>
+                    </step>
+                    <step>
+                        <para>Puis installez le paquet que vos venez de construire : <screen>sudo dpkg -i sun-j2re1.5_1.5.0+update06_i386.deb</screen></para>
+                    </step>
+                    <step>
+                    		<para>Pour permettre à votre système d'utiliser Java de Sun au lieu du Java open-source GIJ (qui propose moins de fonctionnalités) installé par défaut, tapez : <screen>sudo update-alternatives --config java</screen> et choisissez l'option qui contient <filename>j2re1.5-sun</filename> dans son nom.</para>
+                    </step>
+                </procedure>
+            </sect1>
+			<sect1 status="complete">
+				<title>Outils de développement</title>
+				<para>Voici quelques uns des Environnements de Développement Intégrés (EDIs ou IDEs en anglais), éditeurs, et autres outils de développement disponibles sous Ubuntu.</para>
+					<itemizedlist>
+						<listitem><para><ulink url="http://anjuta.sourceforge.net/">Anjuta</ulink> est un environnement de développement intégré (IDE) pour les langages C et C++ ;</para>
+						</listitem>
+						<listitem><para><ulink url="http://www.bazaar-ng.org/">Bazaar-NG</ulink> est un outil de contrôle de version décentralisé utilisé pour le développement d'Ubuntu ;</para>
+						</listitem>
+						<listitem><para><ulink url="http://bluefish.openoffice.nl/index.html">Bluefish</ulink> est un éditeur puissant pour les créateurs de pages web et les programmeurs expérimentés ;</para>
+						</listitem>
+						<listitem><para><ulink url="http://www.eclipse.org/">Eclipse</ulink> est un IDE pour Java et d'autres langages de programmation. Des programmes propriétaires comme JBuilder se basent dessus ;</para>
+						</listitem>
+						<listitem><para><ulink url="http://www.die-offenbachs.de/detlev/eric3.html">Eric</ulink> est un environnement de développement complet pour Python et Ruby ;</para>
+						</listitem>
+						<listitem><para><ulink url="http://glade.gnome.org/">Glade</ulink> est un créateur d'interface utilisateur pour construire des applications Gnome ;</para>
+						</listitem>
+						<listitem><para><ulink url="http://www.python.org/idle/">IDLE</ulink> est l'IDE de Python construit avec la boîte à outils graphiques Tkinter ;</para>
+						</listitem>
+						<listitem><para><ulink url="http://www.kdevelop.org/">KDevelop</ulink> est un IDE pour KDE qui supporte de nombreux langages de programmation ;</para>
+						</listitem>
+						<listitem><para><ulink url="http://www.monodevelop.com/Main_Page">MonoDevelop</ulink> est un IDE pour écrire des applications mono/.net en C# et d'autres langages ;</para>
+						</listitem>
+						<listitem><para><ulink url="http://www.netbeans.org/index.html">NetBeans</ulink> est un IDE Java qui offre le support de CVS et un créateur de formulaires.</para>
+						</listitem>
+					</itemizedlist>
+			</sect1>
+			<sect1 status="complete">
+				<title>Apprendre à programmer</title>	
+				<sect2 id="diveintopython" status="complete">
+					<title><citetitle>Dive into Python (Plongez au cœur de Python)</citetitle></title>
+					<para><citetitle>Dive Into Python</citetitle> est un livre pour apprendre à programmer en Python, destiné aux programmeurs possédant déjà une expérience de la programmation.</para>
+					<itemizedlist>
+						<listitem><para><ulink url="file:///usr/share/doc/diveintopython/html/toc/index.html">Lire <citetitle>Dive into Python (Plongez au cœur de Python)</citetitle></ulink></para></listitem>
+					</itemizedlist>
+				</sect2>			
+				<sect2 id="pygtk-tutorial" status="complete">
+					<title>Tutoriel PyGTK</title>
+						<para>Le tutoriel PyGTK est un didacticiel sur le développement avec la boîte à outils graphique qui est fréquemment employée pour développer des applications Ubuntu. Il suppose une connaissance préalable de Python, mais pas forcément de GTK.</para>
+						<procedure>
+							<step>
+								<para>Installez le paquet <application>python-gtk2-tutorial</application> (voir <xref linkend="add-applications"/>).</para>
+								<note><para>Vous aurez besoin d'utiliser le <application>gestionnaire de paquets Synaptic</application> pour installer ce paquet.</para></note>
+							</step>
+							<step>
+								<para>Pour accéder à la documentation, rendez-vous sur <ulink url="file:///usr/share/doc/python-gtk2-tutorial/html/index.html">python-gtk-tutorial</ulink>.</para>
+							</step>
+						</procedure>
+				</sect2>
+				<sect2 id="devhelp" status="complete">
+					<title>Devhelp</title>
+						<para><application>Devhelp</application> est une application qui permet de consulter la documentation que vous avez installée et d'y effectuer des recherches.</para>
+						<procedure>
+							<step>
+								<para>Installez le paquet <application>devhelp</application> (voir <xref linkend="add-applications"/>).</para>
+							</step>
+							<step>
+								<para>Choisir <menuchoice><guimenu>Applications</guimenu>
+										<guisubmenu>Programmer</guisubmenu>
+										<guimenuitem>Aide aux développeurs</guimenuitem></menuchoice></para>
+							</step>	
+					</procedure>
+				</sect2>	
+			</sect1>
+</chapter>
+

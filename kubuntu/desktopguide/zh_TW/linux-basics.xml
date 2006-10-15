@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % kde SYSTEM "../../libs/kde.ent">
+%kde;
+<!ENTITY % kde-general SYSTEM "/usr/share/apps/ksgmltools2/customization/obsolete/general.entities">
+%kde-general;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="linux-basics" status="complete">
+        <title>Linux 基礎篇</title>
+        <para>
+        This chapter introduces you to basic concepts which are useful when
+        getting started with a Kubuntu system.
+        </para>
+        <sect1 id="directories-file-systems" status="complete">
+            <title>目錄與檔案系統</title>
+            <para>在 Linux 或類 Unix 系統中，任何東西都被視為檔案。目錄是檔案、檔案當然是檔案、甚至硬體裝置也是檔案。硬體通常會被稱為節點 (node)，但它們本質上依然被視作檔案。</para>
+            <para>Linux 和 Unix 檔案系統是按樹型結構分級組織的。檔案系統的最上層是 <filename>/</filename> 或者根目錄，其他檔案或目錄都在根目錄下。例如，<filename>/home/jebediah/cheeses.odt</filename>表示的是<filename>cheeses.odt</filename>檔案的完整路徑，而<filename>cheeses.odt</filename>檔案是在<filename>jebediah</filename>目錄下，<filename>jebediah</filename>又是在<filename>home</filename>目錄下，<filename>home</filename>則是在根(<filename>/</filename>)目錄下。</para>
+            <para>根 (<filename>/</filename>) 目錄下的一系列目錄對每個 Linux 發行版都很重要。下列是根 (<filename>/</filename>) 目錄下一些目錄的清單。</para>
+            <itemizedlist>
+                <listitem>
+                    <para><filename>/bin</filename> - important commands, which historically have been <emphasis>bin</emphasis>ary, but may also be shell scripts</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/boot</filename> - 開機 (<emphasis>boot</emphasis>) 配置檔案、核心 (kernel) 和其它<emphasis>開機</emphasis> 時所需的檔案</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/dev</filename> - 裝置 (<emphasis>dev</emphasis>ice) 檔案</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/etc</filename> - 配置檔、啟動命令稿、等等 (<emphasis>etc</emphasis>)。</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/home</filename> - 不同使用者的家 (<emphasis>home</emphasis>) 目錄</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/initrd</filename> - used when creating a customized <emphasis>init</emphasis>ial <emphasis>R</emphasis>AM <emphasis>D</emphasis>isk</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/lib</filename> - 系統函式庫 (<emphasis>lib</emphasis>raries)</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/lost+found</filename> - 提供根 (<filename>/</filename>) 目錄之下檔案的失物認領 (<emphasis>lost+found</emphasis>) 系統</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/media</filename> - automatically mounted (loaded) removable <emphasis>media</emphasis> such as CDs, digital cameras, etc.</para>
+                </listitem>
+                <listitem>
+                  <para><filename>/mnt</filename> - 硬碟上手動掛載 (<emphasis>m</emphasis>ou<emphasis>nt</emphasis>ed) 的檔案系統</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/opt</filename> - provides a location for <emphasis>opt</emphasis>ional (3rd party) applications to be installed; these are usually statically compiled and can be used in other versions or Linux distributions</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/proc</filename> - 特別的動態目錄，用以維護系統訊息和狀態，包括正在執行的進程 (<emphasis>proc</emphasis>esses) 的訊息</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/root</filename> - 系統管理員 (<emphasis>root</emphasis>) 使用者的家目錄，發音為「slash-root」</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/sbin</filename> - important <emphasis>s</emphasis>ystem <emphasis>bin</emphasis>aries and scripts, usually intended to be run as the root user</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/srv</filename> - 可包含用於向其它系統提供服務  (<emphasis>s</emphasis>e<emphasis>rv</emphasis>ed) 的檔案</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/sys</filename> - similar to the /proc filesystem, but contains <emphasis>sys</emphasis>tem information not related to running processes</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/tmp</filename> - 臨時 (<emphasis>t</emphasis>e<emphasis>mp</emphasis>orary) 檔案</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/usr</filename> - applications and read-only files that are mostly available for all <emphasis>us</emphasis>e<emphasis>r</emphasis>s to access</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/var</filename> - 經常變化的 (<emphasis>var</emphasis>iable) 檔案，諸如記錄或者資料庫等</para>
+                </listitem> 
+            </itemizedlist>
+        </sect1>
+        <sect1 id="permissions" status="complete">
+            <title>權限</title>
+            <para>Linux 系統的所有檔案都有表示其允許或拒絕其他人查看、修改或執行它們的權限。超級使用者「root」可以存取系統中任何檔案。每個檔案都有存取限制，使用者限制以及擁有者／群組關聯。</para>
+            <para>每個檔案具有如下三層權限，依照重要性排列：</para>
+            <itemizedlist>
+                <listitem>
+                    <para>使用者</para>
+                    <para>適用於該檔案的擁有者</para>
+                </listitem>
+                <listitem>
+                    <para>群組</para>
+                    <para>適用於該檔案所屬的群組</para>
+                </listitem>
+                <listitem>
+                    <para>其他</para>
+                    <para>適用於其他所有使用者</para>
+                </listitem>
+            </itemizedlist>
+            <para>三種權限中的是實際權限。這些權限適用於檔案和目錄的方式如下：</para>
+            <itemizedlist>
+                <listitem>
+                    <para>讀取</para>
+                    <para>可以顯示／開啟檔案</para>
+                    <para>可以顯示目錄內容</para>
+                </listitem>
+                <listitem>
+                    <para>寫入</para>
+                    <para>可以編輯或者刪除檔案</para>
+                    <para>可以修改目錄內容</para>
+                </listitem>
+                <listitem>
+                    <para>執行</para>
+                    <para>可執行檔案可以被當作程式執行</para>
+                    <para>可以進入目錄</para>
+                </listitem>
+            </itemizedlist>
+            <para>
+                To view and edit the permissions on files and directories, open
+                the 
+                <menuchoice>
+                    <guimenu>System Menu</guimenu>
+                    <guimenuitem>Home Folder</guimenuitem>
+                </menuchoice>,
+                right-click on a file or directory, then
+                select <guimenu>Properties</guimenu>.  The permissions are found under the
+                <guilabel>Permissions</guilabel> tab and allow for the editing of all
+                permission levels, if you are the owner of the file.  Advanced permission
+                settings (such as in the <guilabel>Advanced Permissions</guilabel> tab) 
+		are outside of the scope of this guide.
+            </para>
+        </sect1>
+        <sect1 id="root-and-sudo" status="complete">
+
+            <title>系統管理員 (Root) 及 Sudo</title>
+
+            <para>
+                The root user in Linux is the user which has
+                administrative access to your system. Normal users do not have
+                this access for security reasons. However, Kubuntu does not
+                enable the root user. Instead, administrative access is given
+                to individual users, who may use the "sudo" application to
+                perform administrative tasks. The first user account you
+                created on your system during installation will, by default,
+                have access to sudo. You can restrict and enable sudo access
+                to users with the <application>Users and Groups</application>
+                application (see <xref linkend="users-and-groups"/> for more
+                information).
+            </para>
+
+            <para>當您執行需要 root 特權的應用程式時， sudo 會提示您輸入您的普通使用者的密碼，這樣可以確保程式不會損壞您的系統，還可提醒您，您要進行的是管理動作，一定要小心！</para>
+
+            <para>要在命令列中使用 sudo，只需在您需要執行的命令前加上「sudo」即可。 Sudo 會提示您輸入您的密碼。</para>
+
+            <para>Sudo 會在一段時間內記住您的密碼（預設是15分鐘），此功能使得使用者在執行多個系統管理的命令時，不用每次都要輸入密碼。</para>
+
+            <warning>
+                <para>進行管理任務時請小心 -- 您可能會損壞您的系統！</para>
+            </warning>
+            <para>使用 sudo 的一些其他技巧：</para>
+            <itemizedlist>
+                <listitem>
+                    <para>要使用「root」終端機，可以在指令列中輸入「sudo -i」</para>
+                </listitem>
+                <listitem>
+                    <para>Kubuntu 的預設圖形化設定工具都已經使用 <application>sudo</application>，因此當要使用<application>kdesu</application>（<application>sudo</application>的圖形化前端），您得輸入密碼。</para>
+                </listitem>
+                <listitem>
+                    <para>
+                        For more information on the
+                        <application>sudo</application> program and the
+                        absence of a root user in Kubuntu, read the <ulink url="&wiki-RootSudo;">sudo page</ulink> on the
+                        Ubuntu wiki.
+                    </para>
+                </listitem>
+            </itemizedlist>
+            <sect2 id="run-application-root" status="complete">
+                <title>手動以 Root 特權執行程式</title>
+                <para>有時您得以 root 的特權執行程式。您只需使用<application>執行指令</application>對話框即可。</para>
+                <warning>
+                    <para>當您以 root 特權執行應用程式的時候一定要小心，因為您可能會損壞您的系統。更多細節請看 <xref linkend="root-and-sudo"/> 。</para>
+                </warning>
+                <procedure>
+                    <step>
+                        <para>Open the <application>Run Command</application> dialog by typing:
+                            <keycombo>
+                                <keycap>Alt</keycap>
+                                <keycap>F2</keycap>
+                            </keycombo>
+                        </para>
+                    </step>
+                    <step>
+                        <para>依次輸入：<application>kdesu</application> <emphasis>你想要執行的程式名</emphasis>，再按 <keycap>Enter</keycap>。比如，輸入<screen>kdesu konqueror</screen>就可以 root 特權執行檔案管理員 <application>Konqueror</application>。</para>
+                    </step>
+                </procedure>
+            </sect2>
+        </sect1>
+        <sect1 id="terminals" status="complete">
+            <title>終端機</title>
+            <para>以指令列的方式工作並非如你想的那樣令人畏懼。和其它程式相比而言，使用指令列並不需要特別的知識。大多數 Linux 上的事情都可以經由指令列完成。盡管很多程式都有圖形化的工具，但有時候它們仍然不夠好。這就是指令列來的順手的地方。</para>
+            <para>終端機也經常稱為命令提示符或者 shell。在過去，這是人和電腦交互的方式﹔然而，Linux 使用者發現使用 shell 可以比圖形化的工具更快，並且在今天仍然具備某些優點。在這裡您將學習如何使用終端機。</para>
+            <para>終端機的最初用途是檔案瀏覽器，實際上它仍然被用作檔案瀏覽器。你可以使用終端機作為檔案瀏覽器來在你的檔案中導航並撤銷的所作的改變。</para>
+            <sect2 id="starting-konsole" status="complete">
+                <title>開啟終端機</title>
+                <para>
+                The <application>Konsole</application> can be started by
+                choosing 
+                <menuchoice>
+                    <guimenu>K-menu</guimenu>
+                    <guimenuitem>System</guimenuitem>
+                    <guimenuitem>Konsole (Terminal Program)</guimenuitem>
+                </menuchoice> 
+                from the Desktop menu system.
+                </para>
+            </sect2>
+            <sect2 id="common-commands" status="complete">
+                <title>常用指令</title>
+                <variablelist>
+                    <varlistentry>
+                        <term>檢視目錄：- ls</term>
+                        <listitem><para><application>ls</application> (LiSt) 透過不同顏色及特定格式列出檔案</para></listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>建立目錄：- mkdir (目錄名稱)</term>
+                        <listitem><para><application>mkdir</application> (MaKeDIRectory) 能建立目錄。</para></listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>變更目錄： - cd (/目錄/位置)</term>
+                        <listitem><para><application>cd</application> (Change Directory) 用以從當前目錄進入您指定的目錄。</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>複製檔案／目錄： - cp (檔案或目錄名稱) (至目錄或檔案名稱)</term>
+                        <listitem><para><application>cp</application> (CoPy) 命令用以複製您指定的檔案。<application>cp -r</application>用以複製指定的目錄。</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>移除檔案／目錄： - rm (檔案或目錄名稱)</term>
+                        <listitem><para><application>rm</application> (ReMove) 命令將刪除您所指定的檔案。<application>rm -r</application> 命令將刪除您所指定的目錄和該目錄中所有的內容。</para></listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>移動／重新命名 檔案／目錄： - mv (檔案或目錄名稱)</term>
+                        <listitem><para><application>mv</application> 命令移動／重新命名任何您指定的檔案或目錄。</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>找尋檔案／目錄： - locate (檔案或目錄名稱)</term>
+                        <listitem><para><application>locate</application> 命令將會搜尋任何您指定的檔案名，為了加快速度，它使用了您系統中的一個檔案索引。要更新這個索引，需要執行 <application>sudo updatedb</application> 這條命令。如果您保持開機，這條命令每天都會被自動執行，它需要管理員權限來執行（參見 <xref linkend="root-and-sudo"/>）。</para>
+                        </listitem>
+                    </varlistentry>
+                </variablelist>
+                <para>您也可以使用萬用字符來匹配一個或多個檔案，如「*」（匹配所有檔案）或「?」（匹配一個字元）。</para>
+            </sect2>
+            <sect2 status="complete">
+                <title>切換至主控台模式</title>
+                <para>在 Kubuntu 中存取命令行的一般方法是啟動終端機（參見上面的 <xref linkend="starting-konsole"/>），但有您需要切換到一個真正的主控台。</para>
+                <procedure>
+                    <step>
+                        <para>Use the <keycombo>
+                                <keycap>Ctrl</keycap>
+                                <keycap>Alt</keycap>
+                                <keycap>F1</keycap>
+                            </keycombo>
+                            shortcut keys to switch to the first console.
+                        </para>
+                    </step>
+                    <step>
+                        <para>To switch back to Desktop mode, use the <keycombo>
+                                <keycap>Ctrl</keycap>
+                                <keycap>Alt</keycap>
+                                <keycap>F7</keycap>
+                            </keycombo> shortcut keys.
+                        </para>
+                    </step>
+                </procedure>
+                <note>
+                    <para>There are six consoles available. Each one is accessible with the
+                        shortcut keys <keycombo>
+                            <keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>F1</keycap>
+                            </keycombo> to <keycombo>
+                            <keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>F6</keycap>
+                        </keycombo>.
+                    </para>
+                </note>
+            </sect2>
+            <sect2 status="complete">
+                <title>關掉終端機響聲</title>
+                <procedure>
+                    <step>
+                        <para>
+                            Start a <application>Konsole</application>
+                            session, select: 
+                            <menuchoice>
+                                <guimenu>K-menu</guimenu>
+                                <guisubmenu>System</guisubmenu>
+                                <guimenuitem>Konsole (Terminal Program)</guimenuitem>
+                            </menuchoice>
+                            from the desktop menu system. 
+                        </para>
+                    </step>
+                    <step>
+                        <para>
+                            <menuchoice>
+                                <guimenu>設定</guimenu>
+                                <guisubmenu>響鈴</guisubmenu>
+                                <guimenuitem>無</guimenuitem>
+                            </menuchoice>
+                        </para>
+                    </step>
+                </procedure>
+            </sect2>
+        </sect1>
+        <sect1 id="text-editing" status="complete">
+            <title>文字編輯</title>
+            <para>
+                All of the configurations and settings in Linux are saved in
+                text files. Even though you most often can edit configurations
+                through the graphical interface, you may occasionally have to
+                edit them by hand. 
+                <application>Kate</application> is the default Kubuntu text
+                editor, which can be launched by clicking  
+                <menuchoice>
+                    <guimenu>K-menu</guimenu>
+                    <guisubmenu>Utilities</guisubmenu>
+                    <guimenuitem>Kate (Advanced Text Editor)</guimenuitem>
+                </menuchoice> 
+                    from the desktop menu system.
+            </para>
+            <para>在這篇指南中的任何地方，<application>Kate</application> 總是在命令行中使用 <application>kdesu</application> 來執行，這是因為大多數設定檔案都需要管理員特權才能修改。您最好也採用這篇指南中的方法在命令行中執行 <application>kdesu</application> 應用程式。</para>
+
+            <para>如果您需要在命令列中使用文字編輯器，那麼您可以使用 nano 這個易用的文字編輯器。當要從命令列中執行它時，請使用下面這個命令以確保編輯器不會自動換行：<screen>nano -w</screen></para>
+            <para>For more information about how to use <application>nano</application>, refer to the <ulink url="&wiki-Nano;">guide on the wiki</ulink>.
+            </para>
+            <para>Kubuntu 裡還有另外一些終端機模式的編輯器，比較流行的是 <application>VIM</application> 和 <application>Emacs</application>（Linux 社群裡有一些關於此二者優劣的爭論）。這些使用起來比 <application>nano</application> 要複雜，但功能較之也強大多了。</para>
+        </sect1>
+                <sect1 id="users-and-groups" status="complete">
+                    <title>使用者及群組</title>
+                    <para>To add users or groups to your system, you can use the <application>Users And Groups</application> application located in 
+                        <menuchoice>
+                            <guimenu>K-menu</guimenu>
+                            <guimenuitem>System Settings</guimenuitem>
+                            <guimenuitem>Users and Groups</guimenuitem>
+                        </menuchoice> 
+                        .</para>
+                    <note>
+                        <para>要變更使用者及群組的設定，需要進入「管理員模式」。</para>
+                    </note>
+
+                    <para>要增加新使用者，點擊<guilabel>新增...</guilabel>，填好資料後按<guilabel>OK</guilabel>。要編輯每個使用者的屬性，點擊 <guilabel>使用者</guilabel>視窗中的<guilabel>修改...</guilabel>按鈕。</para>
+
+                    <para>要增加新群組，選取<guilabel>群組</guilabel>分頁，點擊<guilabel>新增...</guilabel>。給新增的群組選擇一個名稱，您還可以更改預設的<guilabel>群組 ID</guilabel>值。如果您分配一個已經使用的<guilabel>群組 ID</guilabel>，系統會給您警告訊息。</para>
+
+                    <para>你可以將使用者加入到新增的群組中。經由從左邊的選單，選擇使用者，然後單擊<guilabel>加入</guilabel>按鈕。從群組中刪除一個使用者和加入使用者一樣簡單：從右邊的選單中選擇使用者，然後單擊<guilabel>移除</guilabel>。一旦準備好後，單擊<guilabel>OK</guilabel>。此時，如成功插入，就會自動建立含使用者的新群組。</para>
+
+                    <para>要編輯群組的屬性，點擊 <guilabel>群組</guilabel>視窗中的<guilabel>修改...</guilabel>按鈕。</para>
+
+                    <para>要移除系統內的使用者或群組，選取要刪除的使用者或群組，點擊<guilabel>刪除...</guilabel>。</para>
+
+                </sect1>
+            </chapter>
+

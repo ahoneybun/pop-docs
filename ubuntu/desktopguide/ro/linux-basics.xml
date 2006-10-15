@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="linux-basics" status="review">
+	<title>Informaţii de bază Linux</title>
+				<para>Linux este inspirat de sistemul de operare Unix care a apărut pentru prima dată îm anul 1969 şi care este în continuare folosit şi dezvoltat. Multe dintre convenţiile de design din spatele Unix există şi în Linux şi sunt importante pentru înţelegerea fundamentelor sistemului.</para>
+				<para>Unix a fost iniţial orientat către interfaţa în linia de comandă, moştenire implementată şi în Linux. Astfel, interfaţa utilizator grafică cu ferestre, iconuri şi meniuri sunt construite pe baza interfeţei în linia de comandă. Mai mult, aceasta înseamnă că sistemul de fişiere Linux este structurat astfel încât să fie uşor de administrat şi accesat din linia de comandă.</para>
+		<sect1 id="directories-file-systems" status="complete">
+			<title>Directoare şi sisteme de fişiere</title>
+				<para>Sistemele de fişiere Linux şi Unix sunt organizate într-o structură ierarhică, sub formă de arbore. Cel mai înalt nivel al sistemului de fişiere este <filename>/</filename> sau <emphasis>directorul root (rădăcină)</emphasis>. În filozofia de implementare Unix şi Linux, orice este considerat un fişier - incluzând hard-disk-urile, partiţiile şi mediile amovibile. Aceasta înseamnă că toate celelalte fişiere şi directoare (incluzând alte disk-uri şi partiţii) există sub directorul root.</para>
+				<para>De exemplu, <filename>/home/jebediah/cheeses.odt</filename> arată calea corectă şi completă către fişierul <filename>cheeses.odt</filename> ce există în directorul <filename>jebediah</filename> care se află în directorul <filename>home</filename> directory, care, la rândul său se găseşte îm directorul root (<filename>/</filename>).</para>
+				<para>Sub dierctorul root (<filename>/</filename>) se găseşte un set important de directoare sistem care sunt comune celor mai multe distribuţii Linux actuale. În continuare veţi găsi o listă a acestor directoare care se găsesc direct sub directorul root (<filename>/</filename>):</para>
+					<itemizedlist>
+						<listitem>
+							<para><filename>/bin</filename> - aplicaţiile <emphasis>bin</emphasis>are importante</para>
+						</listitem>
+						<listitem>
+							<para><filename>/boot</filename> - files that are required to <emphasis>boot</emphasis> the computer
+							</para>
+						</listitem>
+						<listitem>
+							<para><filename>/dev</filename> - fişierele pentru manipularea dispozitivelor (<emphasis>dev</emphasis>ice)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/etc</filename> - fişierele de configurare, scripturile de pornire, <emphasis>etc</emphasis>...</para>
+						</listitem>
+						<listitem>
+							<para>filename&gt;/home</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lib</filename> - bibliotecile sistem (<emphasis>lib</emphasis>)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lost+found</filename> -furnizează un sistem de recuperare a fişierelor pierdute şi găsite <emphasis>lost+found</emphasis> sub directorul root (<filename>/</filename>)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/media</filename> - medii amovibile (removable <emphasis>media</emphasis>) montate sau încărcate cum ar fi CD-urile, camerele digitale, etc...</para>
+						</listitem>
+						<listitem>
+							<para><filename>/mnt</filename> - sistemele de fişiere <emphasis>m</emphasis>o<emphasis>nt</emphasis>ate</para>
+						</listitem>
+						<listitem>
+							<para><filename>/opt</filename> - furnizează o locaţie pentru instalarea aplicaţiilor <emphasis>opt</emphasis>ionale</para>
+						</listitem>
+						<listitem>
+							<para><filename>/proc</filename> - director dinamic special care menţine informaţii despre starea sistemului, inclusiv a <emphasis>proc</emphasis>eselor care rulează</para>
+						</listitem>
+						<listitem>
+							<para><filename>/root</filename> - directorul utilizatorului <emphasis>root</emphasis> , pronunţat 'slash-root'</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sbin</filename> - fişiere binare de sistem (<emphasis>s</emphasis>ystem <emphasis>bin</emphasis>aries)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sys</filename> - contains information about the <emphasis>sys</emphasis>tem
+							</para>
+						</listitem>
+						<listitem>
+							<para><filename>/tmp</filename> - fişierele <emphasis>t</emphasis>e<emphasis>mp</emphasis>orare</para>
+						</listitem>
+						<listitem>
+							<para><filename>/usr</filename> - aplicaţiile şi fişierele ce pot fi accesate de toţi utilizatorii (<emphasis>us</emphasis>e<emphasis>r</emphasis>s)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/var</filename> - fişierele <emphasis>var</emphasis>iable cum ar fi jurnalele (logs) şi bazele de date</para>
+						</listitem> 
+					</itemizedlist>
+		</sect1>
+
+		<sect1 id="permissions" status="review">
+			<title>Permisiuni</title>
+                       <para>Toate fişierele de pe un sistem Linux au permisiuni care permit sau restricţionează alte persoane în a vizualiza, modifica sau executa aceste fişiere. Super utilizatorul "root" are capacitatea de a accesa orice fişier din sistem. Fiecare fişier are restricţii de acces şi are asociat un proprietar sau un grup.</para>
+                       <para>Fiecare fişier este securizat de următoarele trei seturi de permisiuni, în ordinea importanţei acestora:</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>utilizator</emphasis></para>
+                           <para>se aplică utilizatorului care este proprietarul fişierului</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>grup</emphasis></para>
+                           <para>se aplică grupului ce este asociat cu fişierul</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>alţii</emphasis></para>
+                           <para>se aplică tuturor celorlalţi utiliyatori</para>
+                         </listitem>
+                       </itemizedlist>
+                       <para>În cadrul acestui set de permisiuni se găsesc permisiunile propriu-zise. Permisiunile, împreună cu modul în care acestea se aplicp fişierelor şi directoarelor sunt detaliate mai jos:</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>citire (read)</emphasis></para>
+                           <para>fişierele pot fi vizualizate/deschise</para>
+                           <para>conţinutul directoarelor poate fi afişat</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>scriere (write)</emphasis></para>
+                           <para>fişierele pot fi editate sau şterse</para>
+                           <para>conţinutul directoarelor poate fi modificat</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>execuţie (execute)</emphasis></para>
+                           <para>fişierele executabile care pot rula ca un program</para>
+                           <para>directoarele pot fi introduse</para>
+                         </listitem>
+                       </itemizedlist>
+				<para>To view and edit the permissions on files and directories, open the <phrase>&home-folder;</phrase> and right-click on a file or directory. Then select <guimenu>Properties</guimenu>.  The permissions exist under the <guilabel>Permissions</guilabel> tab and allow for the editing of all permission levels, if you are the owner of the file.
+				</para>
+				<para>To learn more about file permissions in Linux, read the <ulink url="&wiki-filepermissions;">file permissions page</ulink> in the Ubuntu Wiki.
+				</para>
+		</sect1>
+
+
+		<sect1 id="terminals" status="review">
+		<title>Terminalul</title>
+            <para>Lucrând din linia de comandă nu vă întârzia îndeplinirea sarcinilor după cum probabil credeţi. Nu este nevoie de nici un fel de cunoştinţe de specialitate pentru a şti cum să folosiţi linia de comandă; este un program ca oricare altul. Majoritatea lucrurilor pot fi realizate în Linux utilizând linia de comandă, deşi există utilitare grafice pentru majoritatea programelor, uneori acestea nu sunt de ajuns. Acesta este momentul în care linia de comandă devine extrem de utilă.</para>
+    	      <para>Terminalul este adesea denumit "command prompt" sau "shell". În trecut, aceasta era modalitatea prin care utilizatorul interacţiona cu calculatorul, deşi utilizatorii au descoperit că utilizarea shell-ului poate aduce la îndeplinire sarcinile de administrare mai rapid decât metodele grafice şi încă această metodă este des folosită. Aici puteţi învăţa cum să folosiţi terminalul.</para>
+				<para>Utilizarea iniţială a terminalului a fost aceea de a servi ca navigator de fişiere şi încă mai este folosit în acest scop, în cazul unor erori la interfaţa grafică. Puteţi folosi terminalul ca un navigator de fişiere li să rectifocaţi modificările anterioare.</para>
+		<sect2 id="starting-a-terminal" status="review">
+			<title>Pornirea Terminalului</title>
+				<para>To start <application>Terminal</application> choose &terminal;.
+				</para>
+		</sect2>
+		<sect2 id="common-commands" status="review">
+			<title>Cele mai folosite comenzi</title>
+				<variablelist>
+					<varlistentry>
+						<term>View Directories - ls
+						</term>
+							<listitem><para><application>ls</application> (LiSt) listează fişierele în culori diferite în format text</para></listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Create Directories - mkdir (directory name)
+						</term>
+							<listitem><para>Comanda <application>mkdir</application> (MaKeDIRectory) va crea un nou director.</para></listitem>
+					</varlistentry>
+					<varlistentry>
+		    			<term>Change Directories - cd (/directory/location)
+		    			</term>
+		    				<listitem><para>Comanda <application>cd</application> (ChangeDirectory) va schimba directorul curent cu orice alt director specificat.</para>
+		    				</listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Copy Files/Directories - cp (file or directory name) (to directory or filename)
+		    			</term>
+		    				<listitem><para>Comanda <application>cp</application> (CoPy) ca copia orice fişier specificat. Comanda <application>cp -r</application> va copia orice director specificat.</para>
+		    				</listitem>
+		    		</varlistentry>
+		    		<varlistentry>
+		    			<term>Remove Files/Directories - rm (file or directory name)</term>
+	            		<listitem><para>Comanda <application>rm</application> (ReMove) va şterge orice fişier specificat. Comanda <application>rm -rf</application> va şterge orice director specificat.</para></listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Rename Files/Directories - mv (file or directory name)</term>
+							<listitem><para>comanda <application>mv</application> (MoVe) va redenumi/muta orice fişier sau director specificat.</para>
+		    				</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Find Files/Directories - locate (file or directory name)</term>
+							<listitem><para>Comanda <application>locate</application> va căuta pe calculatorul dumneavoastră numele de fişier specificat. Se foloseşte un index al fişierelor de pe sistem pentru a returna rapid un rezultat: pentru actualizarea indexului lansaţi comanda <application>updatedb</application>. Această comandă este lansată zilnic, dacă lăsaţi calculatorul deschis. Trebuie rulată folosind privilegii administrative (vezi <xref linkend="root-and-sudo"/>).</para>
+							</listitem>
+					</varlistentry>
+					</variablelist>
+			<para>Puteţi folosi metacarctere pentru a selecta unul sau mai multe fişiere, cum ar fi "*" (pentru toate fişierele) sau "?" (pentru a înlocui un singur caracter).</para>
+			<para>For a more thorough introduction to the Linux command line, please read the <ulink url="&wiki-BasicCommands;">command line introduction</ulink> on the Ubuntu wiki.
+			</para>
+		</sect2>
+		<sect2 status="complete">
+			<title>Comutarea în modul consolă</title>
+				<para>Metoda uzuală de acces din linia de comandă în Ubuntu este de a porni un terminal (vezi <xref linkend="starting-a-terminal"/> mai sus), totuşi uneori este folositor să comutaţi pe consola reală:</para>
+				<procedure>
+					<step>
+						<para>Use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo>
+							shortcut keys to switch to the first console.
+						</para>
+					</step>
+					<step>
+						<para>To switch back to Desktop mode, use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F7</keycap>
+							</keycombo> shortcut keys.
+						</para>
+					</step>
+				</procedure>
+					<note>
+						<para>There are six consoles available. Each one is accessible with the
+							shortcut keys <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo> to <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F6</keycap>
+							</keycombo>.
+						</para>
+					</note>
+		</sect2>
+		<sect2 status="review">
+			<title>Dezactivarea sunetului în Terminal</title>
+				<procedure>
+					<step>
+						<para>
+						Start a <application>Terminal</application>
+						session,
+						select: <phrase>&terminal;</phrase>
+						from the desktop menu system. 
+						</para>
+					</step>
+					<step>
+						<para>
+							<menuchoice>
+								<guimenu>Edit</guimenu>
+								<guimenuitem>Current Profile...</guimenuitem>
+							</menuchoice>
+							. Select the
+							<guibutton>General</guibutton> tab. Uncheck the
+							<guilabel>Terminal bell</guilabel>
+							checkbox.
+						</para>
+					</step>
+				</procedure>
+		</sect2>
+	</sect1>
+
+	<sect1 id="text-editing" status="review">
+  			<title>Editare text</title>
+ 			<para>All of the configurations and settings in Linux are saved in text files. Even though you most often can edit configurations through the graphical interface, you may occasionally have to edit them by hand. <application>Gedit</application> is the default Ubuntu text editor, which you can launch by clicking &text-editor; on the desktop menu system.
+ 			</para>
+ 			<para>Veţi observa că uneori în acest ghid, <application>Gedit</application> este lansat din linia de comandă folosind <application>gksudo</application>, ce rulează <application>Gedit</application> cu privilegii administrative, pentru a modifica fişiere de configuraţie.</para>
+			<para>Dacă aveţi nevoie să folosiţi un editor în linia de comandă, puteţi folosi <application>nano</application>, care este un editor de texte simplu şi uşor de folosit. Când  îl lansaţi din linia de comandă, folosiţi întotdeauna comanda următoare, care asigură faptul că editorul nu va introduce linii noi: <screen>nano -w</screen></para>
+			<para>For more information about how to use <application>nano</application>, refer to the <ulink url="&wiki-Nano;">guide on the wiki</ulink>.
+			</para>
+			<para>Este de asemenea o serie de alte editoare bazate pe terminal disponibile în Ubuntu, printre cele mai populare enumerăm <application>VIM</application> şi <application>Emacs</application> (argumente pro şi contra sunt motive de dezbateri amicabile în cadrul comunităţii Linux). Acestea sunt adesea ceva mai complexe în utilizare decât <application>nano</application>, dar sunt de asemenea mai puternice.</para>
+	</sect1>
+
+		<sect1 id="users-and-groups" status="review">
+			<title>Utilizatori şi grupuri</title>
+			<para>To add users or groups to your system, you can use the <application>Users And Groups</application> application located in &users-groups;.
+			</para>
+			<note>
+				<para>Remember to log off and log back in order for the changes to become effective.
+				</para>
+			</note>
+			<para>Pentru a adăuga un nou utilizator, faceţi click pe <guilabel>Adăugare utilizator</guilabel>, completaţi câmpurile liber şi apoi click pe <guilabel>OK</guilabel>. Pentru editarea proprietăţilor fiecărui utilizator, click pe butonul <guilabel>Proprietăţi</guilabel> din fereastra principală <guilabel>Utilizatori</guilabel>.</para>
+			<para>Pentru a adăuga un nou grup, selectaţi tabul <guilabel>Groups</guilabel> şi click pe <guilabel>Adăugare grup</guilabel>. Alegeţi un nume pentru noul grup şi, dacă doriţi, schimbaţi valoarea implicită <guilabel>GID</guilabel>. Dacă doriţi să alocaţi un identificator de grup (<guilabel>GID</guilabel>) ce este deja folosit, sistemul va afişa un mesaj de atenţionare.</para>
+			<para>Puteţi adăuga utilizatori grupukui nou creat prin selectarea unui utilizator din meniul din stânga şi apăsând butonul <guilabel>Adaugă</guilabel>. Ştergerea unui utilizator este la fel de simplă ca şi adăugarea unuia: selectaţi un utilizator din meniul din dreapta şi apoi click pe <guilabel>Şterge</guilabel>. Când sunteţi gata, apăsaţi <guilabel>OK</guilabel> şi noul grup, împreună cu utilizatorii asociaţi dacă au fost selectaţi, va fi creat.</para>
+			<para>Pentru editarea proprietăţilor unui grup, din cadrul ferestrei principale <guilabel>Grupuri</guilabel>, alegeţi numele grupului şi click pe butonul <guilabel>Proprietăţi</guilabel>.</para>
+			<para>Pentru a şterge un utilizator sau grup din sistem, selectaţi utilizatorul sau grupul dorit a fi şters şi click pe <guilabel>Şterge</guilabel>.</para>
+		</sect1>
+
+</chapter>
+

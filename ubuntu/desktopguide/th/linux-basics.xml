@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="linux-basics" status="review">
+	<title>ลีนุกซ์ขั้นพื้นฐาน</title>
+				<para>ลีนุกซ์ ได้แรงบันดาลใจมาจากระบบปฏิบัติการยูนิกซ์ (Unix) ซึ่งเริ่มนำออกมาใช้ในปี ค.ศ. 1968, และก็ได้มีการพัฒนาเรื่อยๆตั้งแต่นั้นมา. ระเบียบแบบแผนการออกแบบของยูนิกซ์ก็ได้นำมาใช้ในลีนุกซ์และเป็นพื้นฐานในการเข้าใจของระบบ</para>
+				<para>ยูนิกซ์ในตอนแรกถูกออกแบบให้รับคำสั่งที่ผู้ใช้พิมพ์ให้,และนั่นก็ยังถ่ายทอดมายังลีนุกซ์. ดังนั้นการสื่อสารแบบ กราฟฟิกที่ใช้วินโดร์,ไอคอน,เมนู เป็นการต่อยอดขึ้นมาจากการสื่อสารแบบพิมพ์คำสั่ง. นั่นหมายความว่าโครงสร้างของระบบไฟล์สามารถจัดการและเข้าถึงข้อมูลได้ง่ายด้วยวิธีพิมพ์คำสั่ง</para>
+		<sect1 id="directories-file-systems" status="complete">
+			<title>ระบบแฟ้มและไฟล์</title>
+				<para>ระบบไฟล์ของลีนุกซ์และยูนกซ์จัดแบ่งออกเป็นลำดับชั้นเหมือนต้นไม้กลับหัว. จุดสูงสุดของระบบไฟล์คือ<filename>/</filename> หรือ <emphasis>แฟ้มราก (root directory)</emphasis>.ความคิดในการออกแบบระบบลีนุกซ์หรือยูนิกซ์, ทุกอย่างให้ถือเป็นไฟล์หมดไม่ว่าจะเป็นฮาดดิกส์, ส่วนของฮาดดิกส์, สื่อบันทึกที่ถอดเก็บได้. นั่นหมายความว่าทุกแฟ้มและไฟล์รวมทั้งฮาดดิกส์ตัวอื่นจะอยู่ภายใต้แฟ้มราก(root directory).</para>
+				<para>ยกตัวอย่างเช่น, <filename>/home/jebediah/cheeses.odt</filename> แสดงถึงตำแหน่งของไฟล์ <filename>cheeses.odt</filename> ที่อยู่ในแฟ้ม <filename>jebediah</filename> ซึ่งก็อยู่ในแฟ้ม <filename>home</filename> ซึ่งก็อยู่ในแฟ้มราก(<filename>/</filename>).</para>
+				<para>ภายใต้แฟ้มราก (<filename>/</filename>) นี้จะมีกลุ่มของแฟ้มที่สำคัญต่อระบบปฏิบั</para>
+					<itemizedlist>
+						<listitem>
+							<para><filename>/bin</filename> - แฟ้มเก็บโปรแกรมสำคัญ</para>
+						</listitem>
+						<listitem>
+							<para><filename>/boot</filename> - files that are required to <emphasis>boot</emphasis> the computer
+							</para>
+						</listitem>
+						<listitem>
+							<para><filename>/dev</filename> - ไฟล์เกียวกับ<emphasis>อุปกรณ์ (dev)ice</emphasis>ของเตรื่อง</para>
+						</listitem>
+						<listitem>
+							<para><filename>/etc</filename> - ไฟล์ปรับแต่ง, ไฟล์คำสั่งเริ่มต้น, <emphasis>อื่นๆ</emphasis>...</para>
+						</listitem>
+						<listitem>
+							<para><filename>/home</filename> - ไดเล็กตอรี่(directories)ส่วนตัวของผู้ใช้เครื่องนี้</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lib</filename> - ไฟล์ที่ระบบใช้ร่วมกัน(<emphasis>lib</emphasis>raries)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lost+found</filename> - ไฟล์ที่ระบบทำตกหล่นเสียหายที่หาเจอด้วยระบบซ่อมบำรุง</para>
+						</listitem>
+						<listitem>
+							<para><filename>/media</filename> - แฟ้มสำหรับติดตั้งอุปกรณ์อ่านสื่อที่ถอดเก็บได้(removable media)เช่นซีดี,กล้องถ่ายรูปและอื่นๆ.</para>
+						</listitem>
+						<listitem>
+							<para><filename>/mnt</filename> - แฟ้มสำหรับติดตั้งไฟล์ของระบบ(filesystems)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/opt</filename> - สำหรับติดตั้งโปรแกรมเสริม (optional applications)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/proc</filename> - แฟ้มพิเศษสำหรับบันทึกข้อมูลเกี่ยวกับสถานะของระบบ รวมทั้งชิ้นงาน(processes)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/root</filename> - แฟ้มส่วนตัวของเจ้านายใหญ่ ราก(root)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sbin</filename> - แฟ้มเก็บโปรแกรมสำคัญของระบบ</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sys</filename> - contains information about the <emphasis>sys</emphasis>tem
+							</para>
+						</listitem>
+						<listitem>
+							<para><filename>/tmp</filename> - แฟ้มเก็บไฟล์ชั่วคราว</para>
+						</listitem>
+						<listitem>
+							<para><filename>/usr</filename> - แฟ้มเก็บโปรแกรมและไฟล์ข้อมูลที่ผู้ใช้ทุกคนอาจเข้าถึงได้</para>
+						</listitem>
+						<listitem>
+							<para><filename>/var</filename> - แฟ้มเก็บไฟล์ที่เปลี่ยนแปลงตลอดเวลาเช่น ไฟล์บันทึกเหตุการณ์ต่างๆ (logs) ,ฐานข้อมูล (database)</para>
+						</listitem> 
+					</itemizedlist>
+		</sect1>
+
+		<sect1 id="permissions" status="review">
+			<title>ระบบควบคุม</title>
+                       <para>ทุกไฟล์ในลีนุกซ์จะมีระบบควบคุมที่อนุญาตหรือป้องกันใม่ให้ผู้ใช้ ดู,แก้ไข,ปฏิบัติ (viewing, modifying, executing). จะมีแต่เจ้านายใหญ่ชื่อ "root" เท่านั้นที่สามารถผ่านระบบควบคุมเข้าถึงข้อมูลในทุกไฟล์ได้. ทุกไฟล์จะมีระบบควบคุมการกระทำต่อข้อมูล(อ่าน,แก้ไข,ปฏิบัติ), ใครสามารถเข้าถึงข้อมูลได้ (เจ้าของ,กลุ่มสมาชิก,คนอื่นๆ).</para>
+                       <para>ในแต่ละไฟล์จะถูกป้องกันด้วยระบบควบคุม 3 ชั้นตามลำดับความสำคัญดังนี้</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>เจ้าของ</emphasis></para>
+                           <para>ใช้กับผู้ใช้ที่เป็นเจ้าของของไฟล์</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>กลุ่ม</emphasis></para>
+                           <para>ใช้กับกลุ่มที่เจ้าของไฟล์เป็นสมาชิกอยู่</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>คนอื่น</emphasis></para>
+                           <para>ใช้กับผู้ใช้อื่นที่ไม่อยู่ในกลุ่มสมาชิกเดียวกัน</para>
+                         </listitem>
+                       </itemizedlist>
+                       <para>ในแต่ละชั้นของระบบควบคุมจะมีชั้นอนุญาต, ชั้นอนุญาตและการตีความหมายที่ใช้กับแฟ้มและไฟล์มี่ดังนี้</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>อ่าน</emphasis></para>
+                           <para>ไฟล์สามารถเปิด/แสดงข้อมูล</para>
+                           <para>แฟ้มสามารถแสดงรายการของไฟล์</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>เขียน</emphasis></para>
+                           <para>ไฟล์สามารถถูกแก้ไขหรือลบทิ้ง</para>
+                           <para>รายการไฟล์ในแ้ฟ้มสามารถถูกแก้ไข</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>เริ่มปฏิบัติการ</emphasis></para>
+                           <para>ไฟล์ปฏิบัติการได้ (executable files) สามารถเรียกใช้ได้เหมือนโปรแกรม</para>
+                           <para>สามารถเข้าไปในแฟ้มได้</para>
+                         </listitem>
+                       </itemizedlist>
+				<para>To view and edit the permissions on files and directories, open the <phrase>&home-folder;</phrase> and right-click on a file or directory. Then select <guimenu>Properties</guimenu>.  The permissions exist under the <guilabel>Permissions</guilabel> tab and allow for the editing of all permission levels, if you are the owner of the file.
+				</para>
+				<para>To learn more about file permissions in Linux, read the <ulink url="&wiki-filepermissions;">file permissions page</ulink> in the Ubuntu Wiki.
+				</para>
+		</sect1>
+
+
+		<sect1 id="terminals" status="review">
+		<title>เทอร์มินัล</title>
+            <para>ทำงานกับคำสั่งโดยตรงนั้นไม่ยากอย่างที่ท่านคิด. ท่านไม่ต้องมีความรู้พิเศษในการที่จะใช้คำสั่ง,มันก็เหมือนกับโปรแกรมอื่นๆ. งานส่วนใหญ่ในลีนุกซ์สามารถสำเร็จได้ด้วยคำสั่ง,ถึงแม้ว่าจะมีโปรแกรมแบบกราฟิกให้ใช้แทนเกือบทุกโปรแกรม,บางครั้งยังใช้ไม่ได้.ต้องใช้คำสั่งช่วย.</para>
+    	      <para>เทอร์มินัล บางครั้งก็เรียกว่า command prompt or the shell. ในสมัยก่อนนี่เป็นวิธีเดียวในการสั่งงานให้กับคอมพิวเตอร์. อย่างไรก็ตามผู้ใช้ของลีนุกซ์ค้นพบว่าการใช้คำสั่งบางครั้งรวดเร็วกว่าการใช้แบบกราฟิกและยังเป็นจริงจนถึงทุกวันนี้. นี่จะสอนวิธีใช้เทอร์มินัล.</para>
+				<para>เดิมที่เทอร์มินัลใช้สำหรับดูรายการของไฟล์และยังใช้อยู่เมื่อระบบกราฟิกมีปัญหา. ท่านสามารถใช้เทอร์มินัลค้นหาไฟล์และคืนไฟล์ใหอยู่ในสภาพเดิมก่อนแก้ไขได้.</para>
+		<sect2 id="starting-a-terminal" status="review">
+			<title>เรียกใช้เทอร์มินัล</title>
+				<para>To start <application>Terminal</application> choose &terminal;.
+				</para>
+		</sect2>
+		<sect2 id="common-commands" status="review">
+			<title>คำสั่งที่ใช้บ่อย</title>
+				<variablelist>
+					<varlistentry>
+						<term>View Directories - ls
+						</term>
+							<listitem><para>โปรแกรม <application>ls</application> (LiSt) แสดงรายการของไฟล์เป็นสีๆที่เรียบเรียงสมบรูณแล้ว</para></listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Create Directories - mkdir (directory name)
+						</term>
+							<listitem><para>คำสั่ง <application>mkdir</application> (MaKeDIRectory) จะสร้างแฟ้มใหม่ขึ้น.</para></listitem>
+					</varlistentry>
+					<varlistentry>
+		    			<term>Change Directories - cd (/directory/location)
+		    			</term>
+		    				<listitem><para>คำสั่ง <application>cd</application> (ChangeDirectory) จะเปลี่ยนแฟ้มปัจจุบันของท่านเป็นแฟ้มใหม่ที่ท่านสั่ง.</para>
+		    				</listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Copy Files/Directories - cp (file or directory name) (to directory or filename)
+		    			</term>
+		    				<listitem><para>โปรแกรม <application>cp</application> (CoPy) จะทำสำเนาไฟล์ที่ท่านต้องการ. คำสั่ง <application>cp -r</application> จะทำสำเนาแฟ้มที่ท่านต้องการ.</para>
+		    				</listitem>
+		    		</varlistentry>
+		    		<varlistentry>
+		    			<term>Remove Files/Directories - rm (file or directory name)</term>
+	            		<listitem><para>คำสั่ง <application>rm</application> (ReMove) จบลบไฟล์ที่ท่านสั่ง. คำสั่ง <application>rm -rf</application> จะลบแฟ้มที่ท่านสั่ง.</para></listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Rename Files/Directories - mv (file or directory name)</term>
+							<listitem><para>คำสั่ง <application>mv</application> (MoVe) จะเปลี่ยนหรือย้ายไฟล์หรือแฟ้มตามที่ท่านสั่ง.</para>
+		    				</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Find Files/Directories - locate (file or directory name)</term>
+							<listitem><para>คำสั่ง  <application>locate</application>จะค้นเครื่องของคุณสำหรับไฟล์ใดๆที่คุณเจาะจง มันจะใช้ดัชนีของไฟล์ในระบบของคุณเพื่อที่จะทำงานได้อย่างรวดเร็ว ปรับปรุงดัชนีนี้ด้วยคำสั่ง <application>updatedb</application> คำสั่งนี้จะถูกเรียกโดยอัตโนมัติทุกวันถ้าคุณเปิดเครื่องไว้ คำสั่งนี้ต้องเรียกใช้ด้วยระดับบริหารสิทธิพิเศษ(administrative privileges)(see <xref linkend="root-and-sudo"/>).</para>
+							</listitem>
+					</varlistentry>
+					</variablelist>
+			<para>ท่านสามารถใช้ตัวแปร (wildcards) เพื่อเลือกหลายๆไฟล์ได้,เช่น "*" (สำหรับทุกไฟล์) or "?" (สำหรับเทียบเท่าหนึ่งตัวอักษร).</para>
+			<para>For a more thorough introduction to the Linux command line, please read the <ulink url="&wiki-BasicCommands;">command line introduction</ulink> on the Ubuntu wiki.
+			</para>
+		</sect2>
+		<sect2 status="complete">
+			<title>เปลี่ยนเป็นจอคอนโซ (Console mode)</title>
+				<para>ปกติในอูบันตูจะใช้เทอร์มินัลในการพิมพ์คำสั่ง(อ่าน <xref linkend="starting-a-terminal"/> above) ,อย่างไรก็ตามบางครั้งจะดีกว่าถ้าเปลี่ยนไปใช้คอนโซลจริงๆ:</para>
+				<procedure>
+					<step>
+						<para>Use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo>
+							shortcut keys to switch to the first console.
+						</para>
+					</step>
+					<step>
+						<para>To switch back to Desktop mode, use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F7</keycap>
+							</keycombo> shortcut keys.
+						</para>
+					</step>
+				</procedure>
+					<note>
+						<para>There are six consoles available. Each one is accessible with the
+							shortcut keys <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo> to <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F6</keycap>
+							</keycombo>.
+						</para>
+					</note>
+		</sect2>
+		<sect2 status="review">
+			<title>หยุดเสียงบี้บ (beep)ในเทอร์มินัล</title>
+				<procedure>
+					<step>
+						<para>
+						Start a <application>Terminal</application>
+						session,
+						select: <phrase>&terminal;</phrase>
+						from the desktop menu system. 
+						</para>
+					</step>
+					<step>
+						<para>
+							<menuchoice>
+								<guimenu>Edit</guimenu>
+								<guimenuitem>Current Profile...</guimenuitem>
+							</menuchoice>
+							. Select the
+							<guibutton>General</guibutton> tab. Uncheck the
+							<guilabel>Terminal bell</guilabel>
+							checkbox.
+						</para>
+					</step>
+				</procedure>
+		</sect2>
+	</sect1>
+
+	<sect1 id="text-editing" status="review">
+  			<title>ปรับแต่งข้อความ (Text Editing)</title>
+ 			<para>All of the configurations and settings in Linux are saved in text files. Even though you most often can edit configurations through the graphical interface, you may occasionally have to edit them by hand. <application>Gedit</application> is the default Ubuntu text editor, which you can launch by clicking &text-editor; on the desktop menu system.
+ 			</para>
+ 			<para>บางแห่งในคู่มือนี้, โปรแกรม <application>Gedit</application> ถูกเรียกโดยใช้คำสั่ง <application>gksudo</application>,ซึ่งเรียกใช้โปรแกรม<application>Gedit</application> ด้วยระดับจัดการ (administrative privileges), เพื่อที่จะสามารถแก้ไขไฟล์ปรับแต่งได้( configuration files).</para>
+			<para>ถ้าคุณต้องการใช้โปรแกรมแก้ไขข้อความจากบรรทัดคำสั่งคุณสามารถใช้โปรแกรม<application>nano</application>ซึ่งเป็นโปรแกรมที่ใช้ง่ายๆสำหรับแก้ไขข้อความ เมื่อเรียกใช้จากบรรทัดคำสั่งกรุณาใช้คำสั่งแบบนี้เสมอเพื่อที่จะแน่ใจว่าโปรแกรมไม่ได้แบ่งบรรทัดใหม่เข้าไป:<screen>nano -w</screen></para>
+			<para>For more information about how to use <application>nano</application>, refer to the <ulink url="&wiki-Nano;">guide on the wiki</ulink>.
+			</para>
+			<para>มีหลายโปรแกรมแก้ไขข้อความที่ใช้ในเทอร์มินัลได้ในอูบันตู ที่นิยมกันคือโปรแกรม<application>VIM</application>และ <application>Emacs</application>(ข้อดีและข้อเสียของแต่ละอันทำให้เกิดการอภิปรายเล่นๆขึ้นในชุมชนลีนุกซ์) โปรแกรมเหล่านี้ใช้ยากกว่าโปรแกรม<application>nano</application>แต่มีความสามารถมากกว่า</para>
+	</sect1>
+
+		<sect1 id="users-and-groups" status="review">
+			<title>ผู้ใช้และกลุ่มผู้ใช้</title>
+			<para>To add users or groups to your system, you can use the <application>Users And Groups</application> application located in &users-groups;.
+			</para>
+			<note>
+				<para>Remember to log off and log back in order for the changes to become effective.
+				</para>
+			</note>
+			<para>เพิ่มผู้ใช้ใหม่,คลิก <guilabel>Add user</guilabel>, กรอกข้อมูลจากนั้นคลืก<guilabel>OK</guilabel>.แก้ไขข้อมูลของผู้ใช้,คลิกปุ่ม <guilabel>Properties</guilabel>ซึ่งอยู่ในหน้าหลักของ <guilabel>Users</guilabel></para>
+			<para>เพิ่มกลุ่มใหม่โดยเลือกแถบ<guilabel>Groups</guilabel>และคลิก<guilabel>Add group</guilabel>.เลือกชื่อสำหรับกลุ่มใหม่และถ้าคุณต้องการเปลี่ยนค่าที่กำหนดไว้สำหรับ<guilabel>Group ID</guilabel> ถ้าคุณพยายามใส่<guilabel>Group ID</guilabel>ที่ใช้แล้วระบบจะเตือนคุณ</para>
+			<para>คุณสามารถเพิ่มผู้ใช้เข้าไปในกลุ่มที่สร้างขึ้นโดยเลือกผู้ใช้จากเมนูด้านซ้ายและคลิกปุ่ม<guilabel>Add</guilabel> ลบผู้ใช้ออกก็ง่ายเหมือนเพิ่ม: เลือกผู้ใช้จากเมนูด้านขวาแล้วคลิก<guilabel>Remove</guilabel> เมื่อเสร็จแล้วคลิก <guilabel>OK</guilabel>และกลุ่มใหม่กับผู้ใช้ถ้าใส่จะถูกสร้างขึ้น</para>
+			<para>แก้ไขข้อมูลของกลุ่ม,จากหน้าหลักของ <guilabel>Groups</guilabel>,เลือกชื่อของกลุ่มและคลิกปุ่ม <guilabel>Properties</guilabel>.</para>
+			<para>ลบผู้ใช้หรือกลุ่มออกจากระบบ,เลือกผู้ใช้หริอกลุ่มที่ท่านต้องการจะลบออกและคลิก <guilabel>Delete</guilabel>.</para>
+		</sect1>
+
+</chapter>
+

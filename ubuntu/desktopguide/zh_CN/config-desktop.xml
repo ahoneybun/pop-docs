@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-zh_CN SYSTEM "../../../ubuntu/libs/gnome-menus-zh_CN.ent">
+%gnome-menus-zh_CN;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="desktop-tips" status="complete">
+			<title>Advanced Desktop Configuration</title>
+			  <para>这一节详细讲述Ubuntu桌面环境(<application>GNOME</application>)及文件管理器(<application>Nautilus</application>)使用和定制方面的一些技巧。</para>
+
+		<sect1 status="complete">
+				<title>Log in automatically when the computer starts</title>
+				<para>To log in automatically when the computer starts:</para>
+				<procedure>
+					<step>
+						<para>
+							Choose &login-screen-setup;.
+						</para>
+					</step>
+					<step>
+						<para>Select <guibutton>Security</guibutton>, and turn on <guilabel>Enable Automatic Login</guilabel>.
+						</para>
+					</step>
+					<step>
+						<para>Choose the account you want to log in as.
+						</para>
+					</step>
+				</procedure>
+			<para>This is not recommended for most computers, as it is not secure and may give other people access to your information.</para>
+		</sect1>	
+
+		<sect1 status="complete">
+			<title>从文件管理器中使用管理权限打开文件</title>
+			<para>To open files with administrative privileges from the file manager, you need to add a script to <application>Nautilus</application>.
+			</para>
+			<warning><para>Opening files with administrative privileges is a security risk. Always ensure that you are familiar with the file that you are opening.</para></warning>
+			<procedure>
+				<step><para>请在相关目录下打开并编辑一个新文件，命令如下：
+<screen>gedit $HOME/.gnome2/nautilus-scripts/Open\ as\ Administrator</screen></para>
+				</step>
+				<step>
+						<para>Enter these lines in the new file:</para>
+						<programlisting>for uri in $NAUTILUS_SCRIPT_SELECTED_URIS; do↵
+gksudo "gnome-open $uri" &amp;↵
+done</programlisting>
+				</step>
+				<step>
+						<para>Save the edited file (<ulink url="sample/nautilus_open_as_administrator">an example</ulink>)
+						</para>
+				</step>
+				<step>
+						<para>给编辑后的文件加上可执行权限：<screen>chmod +x $HOME/.gnome2/nautilus-scripts/以管理员权限打开</screen></para>
+				</step>
+			</procedure>
+						<para>You can now open a file as an administrator by right-clicking on it and choosing <menuchoice>
+								<guimenuitem>Scripts</guimenuitem>
+								<guimenuitem>Open as Administrator</guimenuitem>
+							</menuchoice>.
+						</para>
+		</sect1>
+     <sect1 id="fonts" status="complete">
+		<title>安装外加字体</title>
+				<para>本节将介绍如何从 Ubuntu 存档中安装外加字体。</para>
+							<para>For <emphasis role="bold">international fonts</emphasis>, install these packages from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>):
+							</para>
+			<itemizedlist>
+				<listitem><para>xfonts-intl-arabic</para></listitem>
+				<listitem><para>xfonts-intl-asian</para></listitem>
+				<listitem><para>xfonts-intl-chinese</para></listitem>
+				<listitem><para>xfonts-intl-chinese-big</para></listitem>
+				<listitem><para>xfonts-intl-european</para></listitem>
+				<listitem><para>xfonts-intl-japanese</para></listitem>
+				<listitem><para>xfonts-intl-japanese-big</para></listitem>
+				<listitem><para>xfonts-intl-phonetic</para></listitem>
+			</itemizedlist>
+							<para>For <emphasis role="bold">Microsoft TrueType core fonts</emphasis>, install the <application>msttcorefonts</application> package from the <quote>Multiverse</quote> repository (see <xref linkend="add-applications"/>).
+							</para>
+							<para>对于 <emphasis role="bold">Ghostscript fonts</emphasis>，可以安装 <application>gsfonts-x11</application> 软件包 (参见 <xref linkend="add-applications"/>)。</para>
+							<para>After installing any new font, rebuild the font information files by entering in a Terminal:
+							</para>
+							<screen>sudo fc-cache -f -v</screen>
+			<para>If you prefer to download individual fonts by hand, you can install them simply and easily by opening a file manager, and typing <application>fonts:///</application> into the location bar (see <ulink type="help" url="ghelp:user-guide#nautilus-location-bar">the file manager manual</ulink> for how to use the location bar). Then you can simply drag the font you downloaded into the group of existing fonts.</para>
+		</sect1>
+		<sect1 status="complete">
+				<title>RAR 压缩包</title>
+					<procedure>
+						<step>
+							<para>Install the rar package from the <quote>Multiverse</quote> repository (see <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>
+							<para>运行：<screen>↵
+sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen></para>
+						</step>
+						<step>
+							<para>要打开 rar 文件，双击该文件即可。</para>
+						</step>
+					</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>高级桌面小程序</title>
+				<para><application>gDesklets</application> 是一个为您桌面提供赏心悦目而且实用的迷你小程序 (desklets) 的系统，这些程序包括天气预报、自动新闻接收、系统信息显示或音乐播放控制等。</para>
+				<procedure>
+					<step>
+							<para>Install the <application>gdesklets</application> and <application>gdesklets-data</application> packages from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>).
+							</para>
+					</step>
+					<step>
+							<para>Choose: 
+								<menuchoice>
+									<guimenu>Applications</guimenu>
+									<guisubmenu>Accessories</guisubmenu>
+									<guimenuitem>gDesklets</guimenuitem>
+								</menuchoice>
+							</para>
+					</step>
+					<step><para>欲知更多信息，请访问 <ulink url="http://www.gdesklets.org/">gDesklets 网站</ulink></para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>在位置菜单中隐藏最近的文档</title>
+				<para>要隐藏 <guilabel>位置</guilabel> 菜单里的 <guilabel>最近的文档</guilabel>，打开终端运行如下命令：</para><screen>chmod 400 ~/.recently-used</screen>
+				<para>To show the menu again, run the command:</para><screen>chmod 600 ~/.recently-used</screen>
+		</sect1>
+		<sect1 status="complete">
+			<title>在 GNOME 中显示 计算机，用户主文件夹 和 回收站 等桌面图标。</title>
+				<procedure>
+					<step>
+						<para>Open the <application>Configuration Editor</application>, by running the program <filename>gconf-editor</filename> (see <ulink type="help" url="ghelp:user-guide#tools-run-app">the run application manual</ulink> for help on how to run an application without using the menu).
+						</para>
+					</step>
+					<step>
+						<para>Choose
+							<menuchoice>
+								<guimenu>apps</guimenu>
+								<guisubmenu>nautilus</guisubmenu>
+								<guimenuitem>desktop</guimenuitem>
+							</menuchoice>.
+						</para>
+					</step>
+					<step>
+						<para>Turn on <guilabel>computer_icon_visible</guilabel>, <guilabel>home_icon_visible</guilabel>, and <guilabel>trash_icon_visible</guilabel>. The changes take effect immediately.
+						</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 id="restartgnomewithoutreboot" status="complete">
+			<title>不重启电脑的同时重启 GNOME</title>
+			<procedure>
+				<step>
+						<para>保存并关闭所有打开的应用程序。</para>
+			          </step>
+			          <step>
+            				<para>Use the <keycombo>
+						<keycap>Ctrl</keycap>
+						<keycap>Alt</keycap>
+						<keycap>Backspace</keycap>
+						</keycombo>
+							 shortcut keys to restart GNOME.
+					</para>
+           			</step>
+           			<step>
+            				<para>If <keycombo>
+                <keycap>Ctrl</keycap>
+                <keycap>Alt</keycap>
+                <keycap>Backspace</keycap>
+							</keycombo>
+              is disabled, type
+						<screen>sudo /etc/init.d/gdm restart</screen>
+            </para>
+						<para>(See <xref linkend="disableCtrlAltBackspace"/> to disable <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>Backspace</keycap>
+							</keycombo>.)
+						</para>
+				</step>
+			</procedure>
+		</sect1>
+		<sect1 id="disableCtrlAltBackspace" status="complete">
+			<title>不让Ctrl-Alt-Backspace组合键重启X</title>
+				<procedure>
+					<step>
+						<para>用下面的命令备份<filename>/etc/X11/xorg.conf</filename> 文件： <screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup</screen></para>
+					</step>
+					<step>
+					<para>Open <filename>/etc/X11/xorg.conf</filename> for editing:
+						<screen>sudo gedit /etc/X11/xorg.conf</screen>
+					</para>
+					</step>
+					<step>
+						<para>将以下行加到文件最后：<programlisting>Section	"ServerFlags"
+Option	"DontZap"	"yes"
+EndSection</programlisting></para>
+					</step>
+					<step>
+						<para>Save the edited file (<ulink url="sample/xorg.conf_disablectrlaltbackspacegnome">an example</ulink>).</para>
+					</step>
+					<step>
+						<para>这个改变将在下一次登入 GNOME 时生效。如果您想该改变立即生效，手动重启 GNOME。(参见 <xref linkend="restartgnomewithoutreboot"/>)</para>
+					</step>
+				</procedure>
+		</sect1>
+
+	</chapter>
+

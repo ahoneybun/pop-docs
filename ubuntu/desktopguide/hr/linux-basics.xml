@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-hr SYSTEM "../../../ubuntu/libs/gnome-menus-hr.ent">
+%gnome-menus-hr;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="linux-basics" status="review">
+	<title>Osnove Linuxa</title>
+				<para>Linux je inspirian UNIX operativnim sustavom koji se prvi put pojavio 1969. godine i koji je od tad u stalnoj uporabi i razvoju. Mnoge zamisli u UNIX sustavima također postoje u Linuxu i nužne su za shvaćanje osnova rada sustava.</para>
+				<para>UNIX je prvenstveno orijentiran prema sučelju s naredbenim retkom i tu ostavštinu njeguje i Linux. Stoga, grafičko sučelje sa prozorima, slikama i izbornicima je samo nadogradnja na osnovno sučelje s naredbenim retkom. Čak štoviše, Linux datotečni sustav je složen tako da mu se jednostavno može pristupiti putem naredbenog retka.</para>
+		<sect1 id="directories-file-systems" status="complete">
+			<title>Direktoriji i datotečni sustavi</title>
+				<para>Linux i UNIX datotečni sustavi su organizirani u hijerarhijsku strukturu, poput stabla. Najviši stupanj datotečnog sustava je <filename>/</filename> ili <emphasis>root direktorij</emphasis>. U UNIX i Linux filozofiji, sve se smatra datotekom - uključujući čvrste diskove, pariticije i uklonjive medije. To znači da sve druge datoteke i direktoriji (uključujući druge diskove i particije) postoje pod početnim root direktorijem.</para>
+				<para>Na primjer, <filename>/home/jurica/upute.odt</filename> pokazuje ispravnu punu putanju do datoteke <filename>upute.odt</filename> koja postoji u <filename>jurica</filename> direktoriju, koji se nalazi unutar <filename>home</filename> direktorija, a koji pak je pod glavnim, root (<filename>/</filename>) direktorijem.</para>
+				<para>Ispod root (<filename>/</filename>) direktorija, postoji grupa važnih direktorija za sustav, koji su zajednički na svim Linux distribucijama. Lista koja slijedi je popis zajedničkih direktorija koji se nalazi odmah ispod root (<filename>/</filename>) direktorija:</para>
+					<itemizedlist>
+						<listitem>
+							<para><filename>/bin</filename> - važni <emphasis>programi</emphasis></para>
+						</listitem>
+						<listitem>
+							<para><filename>/boot</filename> - files that are required to <emphasis>boot</emphasis> the computer
+							</para>
+						</listitem>
+						<listitem>
+							<para><filename>/dev</filename> - direktorij koji sadrži <emphasis>uređaje</emphasis> računala</para>
+						</listitem>
+						<listitem>
+							<para><filename>/etc</filename> - konfiguracijske datoteke, skripte za podizanje sustava...</para>
+						</listitem>
+						<listitem>
+							<para><filename>/home</filename> - <emphasis>početni</emphasis> direktoriji svih korisnika računala</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lib</filename>  - važne <emphasis>biblioteke</emphasis> sustava</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lost+found</filename> - pruža <emphasis>izgubljeno/pronađeno</emphasis> sustav za datoteke koji postoje pod root (<emphasis>/</emphasis>) direktorijem</para>
+						</listitem>
+						<listitem>
+							<para><filename>/media</filename> - montirani, izmjenjivi <emphasis>uređaji</emphasis> poput CD-a, digitalnih fotoaparata, USB ključeva, itd...</para>
+						</listitem>
+						<listitem>
+							<para><filename>/mnt</filename> - <emphasis>montirani</emphasis> datotečni sustavi</para>
+						</listitem>
+						<listitem>
+							<para><filename>/opt</filename> - mjesto gdje se instaliraju <emphasis>opcionalni</emphasis> programi</para>
+						</listitem>
+						<listitem>
+							<para><filename>/proc</filename> - posebni dinamički direktorij koji sadrži infromacije o stanju sustava, uključujući i trenutno pokrenute <emphasis>procese</emphasis></para>
+						</listitem>
+						<listitem>
+							<para><filename>/root</filename> - početni direktorij za <emphasis>root</emphasis>-a; administratora sustava</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sbin</filename> - važni <emphasis>sustavni</emphasis> programi</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sys</filename> - contains information about the <emphasis>sys</emphasis>tem
+							</para>
+						</listitem>
+						<listitem>
+							<para><filename>/tmp</filename> - <emphasis>privremene</emphasis> datoteke</para>
+						</listitem>
+						<listitem>
+							<para><filename>/usr</filename> - programi i datoteke koje su uglavnom za uporabu <emphasis>korisnika</emphasis></para>
+						</listitem>
+						<listitem>
+							<para><filename>/var</filename> - <emphasis>varijabilne</emphasis> datoteke poput zapisa i baza podataka</para>
+						</listitem> 
+					</itemizedlist>
+		</sect1>
+
+		<sect1 id="permissions" status="review">
+			<title>Dozvole</title>
+                       <para>Sve datoteke na Linux sustavu imaju dozvole koje mogu onemogućiti druge da ih vide, izmjene ili izvrše. Korisnik "root" ima mogućnost pristupanja svim datotekama na sustavu. Svaka datoteka ima pristupne dozvole, ograničenje korisnika i imaju pridruženog vlasnika/grupu.</para>
+                       <para>Svaka datoteka je osigurana putem slijedeća tri seta dozvola, po redu važnosti:</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>korisnik</emphasis></para>
+                           <para>odnosi se na korisnika koji je vlasnik datoteke</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>grupa</emphasis></para>
+                           <para>odnosi se na grupu kojoj je datoteka pridružena</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>drugo</emphasis></para>
+                           <para>primjenjuje se na druge korisnike</para>
+                         </listitem>
+                       </itemizedlist>
+                       <para>Unutar svakog od tri seta dozvola postoje prave dozvole. Dozvole, sa opisom kakvog utjecaja imaju na datoteke i direktorije, opisane su ovdje:</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>čitanje</emphasis></para>
+                           <para>datoteke mogu biti prikazane/otvorene</para>
+                           <para>sadržaj direktorija se može prikazati</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>pisanje</emphasis></para>
+                           <para>datoteke se mogu uređivati</para>
+                           <para>sadržaj direktorija može se mjenjati</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>izvršavanje</emphasis></para>
+                           <para>izvršne se datoteke mogu pokretati kao program</para>
+                           <para>direktorijima se može pristupiti</para>
+                         </listitem>
+                       </itemizedlist>
+				<para>To view and edit the permissions on files and directories, open the <phrase>&home-folder;</phrase> and right-click on a file or directory. Then select <guimenu>Properties</guimenu>.  The permissions exist under the <guilabel>Permissions</guilabel> tab and allow for the editing of all permission levels, if you are the owner of the file.
+				</para>
+				<para>To learn more about file permissions in Linux, read the <ulink url="&wiki-filepermissions;">file permissions page</ulink> in the Ubuntu Wiki.
+				</para>
+		</sect1>
+
+
+		<sect1 id="terminals" status="review">
+		<title>Terminali</title>
+            <para>Raditi u naredbenom retku nije tako teško kao što mislite. Ne treba nikakvo posebno znanje da bi se koristio naredbeni redak; to je program poput svakog drugog. Na Linuxu se sve može napraviti putem naredbenog retka. Iako postoje grafički alati za većinu programa, oni ponekad nisu dostatni. U tim slučajevima naredbeni redak postaje vrlo praktičan.</para>
+    	      <para>Terminal se često naziva naredbeni redak ili školjka (eng: shell). Prije je to bio jedini način interakcije korisika sa računalom, ali su Linux korisnici otkrili da uporaba školjke može biti brža metoda od uporabe grafičkih alata. Taj zaključak vrijedi i danas. Ovdje ćete naučiti služiti se terminalom.</para>
+				<para>Prvobitna ideja terminala je bila da posluži kao pretraživač datoteka i dan danas se tako koristi u slučaju kada grafički programi zakažu. Možete koristiti terminal kao pretraživač datoteka i šetati se između njih i povratiti promjene koje ste napravili.</para>
+		<sect2 id="starting-a-terminal" status="review">
+			<title>Pokretanje terminala</title>
+				<para>To start <application>Terminal</application> choose &terminal;.
+				</para>
+		</sect2>
+		<sect2 id="common-commands" status="review">
+			<title>Zajedničke naredbe</title>
+				<variablelist>
+					<varlistentry>
+						<term>View Directories - ls
+						</term>
+							<listitem><para><application>ls</application> (LiSt) izlistava datoteke u različitim bojama.</para></listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Create Directories - mkdir (directory name)
+						</term>
+							<listitem><para><application>mkdir</application> (MaKeDIRectory) naredba će izraditi direktorij.</para></listitem>
+					</varlistentry>
+					<varlistentry>
+		    			<term>Change Directories - cd (/directory/location)
+		    			</term>
+		    				<listitem><para><application>cd</application> (ChangeDirectory) naredba će promjeniti tekući direktorij u direktorij koji navedete naredbi.</para>
+		    				</listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Copy Files/Directories - cp (file or directory name) (to directory or filename)
+		    			</term>
+		    				<listitem><para><application>cp</application> (CoPy) naredba će kopirati datoteku koju navedete. <application>cp -r</application> naredba će kopirati bilo koji direktorij koji navedete.</para>
+		    				</listitem>
+		    		</varlistentry>
+		    		<varlistentry>
+		    			<term>Remove Files/Directories - rm (file or directory name)</term>
+	            		<listitem><para><application>rm</application> (ReMove) naredba će obrisati bilo koju datoteku koju navedete. <application>rm -rf</application> naredba će u potpunosti ukloniti direktorij koji navedete.</para></listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Rename Files/Directories - mv (file or directory name)</term>
+							<listitem><para><application>mv</application> (MoVe) naredba će preimanovati/premjestiti bilo koju datoteku ili direktorij koji navedete.</para>
+		    				</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Find Files/Directories - locate (file or directory name)</term>
+							<listitem><para><application>locate</application> naredba će pretražiti vaše računalo za datotekom koju navedete. Koristi indeksiranje datoteka na vašem sustavu kako bi brže radila; za obnavljanje indeksa pokrenite <application>updatedb</application>. Ova se naredba sama automatski pokreće svaki dan, ako ostavite vaše računalo upaljenim. Mora se pokrenuti sa ovlastima administratora (pogledajte xref linkend="root-and-sudo"/&gt;).</para>
+							</listitem>
+					</varlistentry>
+					</variablelist>
+			<para>Možete koristiti i zamjenske znakove kako biste odabrali jednu ili više datoteka, kao što su "*" za više znakova ili "?" za jedan znak.</para>
+			<para>For a more thorough introduction to the Linux command line, please read the <ulink url="&wiki-BasicCommands;">command line introduction</ulink> on the Ubuntu wiki.
+			</para>
+		</sect2>
+		<sect2 status="complete">
+			<title>Prebacivanje u konzolu</title>
+				<para>Uobičajena metoda pristupa naredbenog retka u Ubuntu je pokretanje terminala (pogledajte <xref linkend="starting-a-terminal"/>), ali ponekad je korisno prebaciti se u pravu konzolu:</para>
+				<procedure>
+					<step>
+						<para>Use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo>
+							shortcut keys to switch to the first console.
+						</para>
+					</step>
+					<step>
+						<para>To switch back to Desktop mode, use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F7</keycap>
+							</keycombo> shortcut keys.
+						</para>
+					</step>
+				</procedure>
+					<note>
+						<para>There are six consoles available. Each one is accessible with the
+							shortcut keys <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo> to <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F6</keycap>
+							</keycombo>.
+						</para>
+					</note>
+		</sect2>
+		<sect2 status="review">
+			<title>Onemogući signalni zvuk u Terminalu</title>
+				<procedure>
+					<step>
+						<para>
+						Start a <application>Terminal</application>
+						session,
+						select: <phrase>&terminal;</phrase>
+						from the desktop menu system. 
+						</para>
+					</step>
+					<step>
+						<para>
+							<menuchoice>
+								<guimenu>Edit</guimenu>
+								<guimenuitem>Current Profile...</guimenuitem>
+							</menuchoice>
+							. Select the
+							<guibutton>General</guibutton> tab. Uncheck the
+							<guilabel>Terminal bell</guilabel>
+							checkbox.
+						</para>
+					</step>
+				</procedure>
+		</sect2>
+	</sect1>
+
+	<sect1 id="text-editing" status="review">
+  			<title>Uređivanje teksta</title>
+ 			<para>All of the configurations and settings in Linux are saved in text files. Even though you most often can edit configurations through the graphical interface, you may occasionally have to edit them by hand. <application>Gedit</application> is the default Ubuntu text editor, which you can launch by clicking &text-editor; on the desktop menu system.
+ 			</para>
+ 			<para>Ponekad kroz ovaj priručnik, <application>Gedit</application> se pokreće iz naredbenog retka koristeći <application>gksudo</application>, koji pokreće <application>Gedit</application> s administrativnim ovlastima, kako bi se mogle urediti konfiguracijske datoteke.</para>
+			<para>Ako morate koristiti uređivač teksta unutar naredbenog retka, možete koristiti <application>nano</application>, jednostavni uređivač teksta. Ako ga pokrećete iz naredbenog retka, uvijek koristite ovu naredbu, koja osigurava da uređivač ne lomi linije: <screen>nano -w</screen></para>
+			<para>For more information about how to use <application>nano</application>, refer to the <ulink url="&wiki-Nano;">guide on the wiki</ulink>.
+			</para>
+			<para>Postoji još mnogo drugih uređivača u terminalu, a dostupni su u Ubuntuu. Vrlo popularni su <application>VIM</application> i <application>Emacs</application> (prednosti i nedostaci ova dva često su tema prijateljskih rasprava unutar Linux zajednice). Oni su kompliciraniji za uporabu od <application>nano</application>a, ali su također mnogo moćniji.</para>
+	</sect1>
+
+		<sect1 id="users-and-groups" status="review">
+			<title>Korisnici i grupe</title>
+			<para>To add users or groups to your system, you can use the <application>Users And Groups</application> application located in &users-groups;.
+			</para>
+			<note>
+				<para>Remember to log off and log back in order for the changes to become effective.
+				</para>
+			</note>
+			<para>Kako biste dodali novog korisnika, kliknite na <guilabel>Dodaj korisnika</guilabel>, ispunite sve podatke i kliknite <guilabel>U redu</guilabel>. Kako biste uredili informacije o korisniku, kliknite <guilabel>Svojstva</guilabel> tipku na glavnom <guilabel>Korisnici</guilabel> prozoru.</para>
+			<para>Kako biste dodali grupu, odaberite <guilabel>Groupe</guilabel> karticu i kliknite na <guilabel>Dodaj grupu</guilabel>. Odaberite ima za grupu i, ako želite, promjenite uobičajenu vrijednost za <guilabel>ID grupe (GID)</guilabel>. Ako pokušate postaviti ID Grupe koji se već koristi, sustav će vas upozoriti.</para>
+			<para>Možete dodati korisnike u novoizrađene grupe tako da odaberete korisnika sa lijevog izbornika i kliknete na <guilabel>Dodaj</guilabel> tipku. Korisnika možete ukloniti tako da odaberete korisnika i pritiskom na <guilabel>Ukloni</guilabel> ga uklonite. Kada ste završili sa promjenama, kliknite na <guilabel>U redu</guilabel> i nove grupe sa korisnicima će biti izrađene.</para>
+			<para>Ako želite promjeniti svojstva grupe, na <guilabel>Groupe</guilabel> glavnom prozoru odaberite grupu i kliknite na <guilabel>Svojstva</guilabel> tipku.</para>
+			<para>Kako biste uklonili korisnika ili grupu, odaberite korisnika ili grupu koju želite obrisati i kliknite na <guilabel>Obriši</guilabel>.</para>
+		</sect1>
+
+</chapter>
+

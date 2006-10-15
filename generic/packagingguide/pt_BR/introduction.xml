@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="intro-chap" status="review">
+	<title id="intro">Introdução</title>
+	
+	<para>Welcome to the <phrase>Ubuntu</phrase> Packaging Guide! This guide is
+		primarily addressed to those who would like to make and
+		maintain <phrase>Ubuntu</phrase> packages. Although many of the concepts in
+		this guide could be used to make binary packages for personal
+		use, it is designed for those people wanting to distribute
+		their packages to and for others. While it is also written
+		with the <phrase>Ubuntu</phrase> Linux distribution in mind, it should also
+		be useful for any Debian-based distribution.</para>
+
+	<para>There are several reasons you might want to learn how to
+		package for Ubuntu.  First, building and fixing <phrase>Ubuntu</phrase>
+		packages is a great way to contribute to the <phrase>Ubuntu</phrase>
+		community. It is also a good way to learn how <phrase>Ubuntu</phrase> and the
+		applications you have installed work. Maybe you want to
+		install a package that is not in the <phrase>Ubuntu</phrase>
+		repositories. Hopefully after you have completed this guide
+		you will have the tools and knowledge you need to do all of
+		these things.</para>
+
+	<para> HTML and PDF versions of the manual are available online
+			at <ulink url="http://help.ubuntu.com">the Ubuntu
+			Documentation website</ulink>.  </para>
+	
+	<para> You can buy this guide in book form from <ulink url="http://www.lulu.com/ubuntu-doc">our Lulu store</ulink>. You will only pay for
+		the price of printing and postage.  </para>
+
+	<sect1 id="intro-wtb" status="writing">
+	  <title>Where to Begin</title>
+	  <para>If you are completely new to Debian-based packaging then
+	  you will want to read this guide completely through, paying
+	  special attention to <xref linkend="intro-prereq"/>,
+	  <xref linkend="gs-chap"/>, and
+	  <xref linkend="basic-chap"/>. People who are experienced with
+	  Debian-based packaging will find <xref linkend="ubuntu-chap"/>
+	  and <xref linkend="bugs-chap"/> most helpful. </para>
+	</sect1>
+
+	<sect1 id="intro-prereq" status="review">
+		<title>Pré-requisitos</title>
+			
+		<para>This guide assumes that the reader has a reasonable
+			knowledge of building and installing software from source
+			on Linux distributions. The guide also uses the Command
+			Line Interface (CLI) throughout, so you should be
+			comfortable using a terminal. You should be able to at
+			least use the following:</para>
+
+		<itemizedlist>
+		  <listitem><para><emphasis role="bold">make:</emphasis> GNU
+				Make is a very important software building tool. It is
+				used to transform a complex compilation task into a
+				trivial one. It is important that you know how to use
+				it, because we will store most of the information
+				about the packaging process in a
+				Makefile. Documentation is available at
+				the <ulink url="http://www.gnu.org/software/make/manual/make.html">GNU
+			</ulink> website.</para></listitem>
+
+		  <listitem><para><emphasis role="bold">./configure:</emphasis>This script is
+				included in almost all Linux source, especially for
+				software written in compiled languages such as C and
+				C++. It is used to generate a Makefile (file used
+				by <application>make</application>) that is properly
+				configured for your system. Standard Debian packaging
+				tools use it, so it is important that you know what
+				the <filename>configure</filename> script
+				does. Information on <filename>./configure</filename>
+				can be found in the <application>make</application>
+				documentation.</para></listitem>
+							
+		  <listitem><para><emphasis role="bold">Apt/Dpkg:</emphasis>
+				Beyond the basic use of installing
+				programs, <application>apt</application>
+				and <application>dpkg</application> have many features
+				that are useful for packaging.</para>
+			<itemizedlist>
+				
+			  <listitem><para><emphasis role="bold">apt-cache
+						dump</emphasis> - lists every package in the
+						cache. This command is especially helpful in
+						combination with
+						a <application>grep</application> pipe such
+						as <application>apt-cache dump | grep
+						foo</application> to search for packages whose
+						names or dependencies
+						include <quote>foo</quote>.</para></listitem>
+
+				<listitem><para><emphasis role="bold">apt-cache
+						policy</emphasis> - lists the repositories
+						(main/restricted/universe/multiverse) in which
+						a package exists.</para></listitem>
+
+				<listitem><para><emphasis role="bold">apt-cache show </emphasis> - exibe informações sobre um pacote binário.</para></listitem>
+
+				<listitem><para><emphasis role="bold">apt-cache showsrc </emphasis> - exibe informações sobre um pacote fonte.</para></listitem>
+
+				<listitem><para><emphasis role="bold">apt-cache rdepends </emphasis> - mostra as dependências reversas de um pacote (com cada pacote requerido um a um).</para></listitem>
+
+				<listitem><para><emphasis role="bold">dpkg
+						-S </emphasis> - lists the binary package to
+						which a particular file
+						belongs. </para></listitem>
+
+				<listitem><para><emphasis role="bold">dpkg
+						-l </emphasis> - lists currently installed
+						packages. This is similar
+						to <application>apt-cache dump</application>
+						but for installed packages.</para></listitem>
+	
+				<listitem><para><emphasis role="bold">dpkg -c </emphasis> - lists the
+						contents of a binary package. It is useful for ensuring that
+						files are installed to the right places.</para></listitem>
+
+				<listitem><para><emphasis role="bold">dpkg
+						-f </emphasis> - shows the control file for a
+						binary package. It is useful for ensuring that
+						the dependencies are
+						correct.</para></listitem>
+
+				<listitem><para><emphasis role="bold">grep-dctrl</emphasis> - searches
+						for specialized information in packages. It is
+						a specific use of
+						the <application>grep</application> package
+						(but not installed by
+						default).</para></listitem>
+
+			</itemizedlist>
+				
+		  </listitem>
+
+		  <listitem><para><emphasis role="bold">diff and
+				patch:</emphasis> The <application>diff</application>
+				program can be used to compare two files and to make
+				patches. A typical example might be <application>diff
+				-ruN file.old file.new &gt;
+				file.diff</application>. This command will create a
+				diff (recursively if directories are used) that shows
+				the changes, or
+				<quote>delta</quote>, between the two files.</para>
+
+			<para>The <application>patch</application> program is used
+				to apply a patch (usually created
+				by <application>diff</application> or another similar
+				program) to a file or directory. To apply the patch
+				created above, we can invoke <application>patch -p0
+				&lt; file.diff</application>. The
+				<emphasis>-p</emphasis>
+				tells <application>patch</application> how much it
+				should strip from the paths for the file names in the
+				patch.  -p0 means to strip nothing, or leave the path
+				intact.</para>
+			
+		  </listitem>
+
+		</itemizedlist>
+		
+	</sect1>
+
+</chapter>
+

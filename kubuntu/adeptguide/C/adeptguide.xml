@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [ 
+<!ENTITY legal SYSTEM "gpl.xml">
+<!ENTITY appversion "1.0">
+<!ENTITY app "<application>Adept Package Manager</application>">
+<!ENTITY appshort "<application>Adept</application>">
+<!ENTITY manrevision "0.1">
+<!ENTITY date "October 2005">
+<!ENTITY language "&EnglishAmerican;">
+]>
+<!--<?yelp:chunk-depth 3?>-->
+<article lang="%language;">
+    <title>Adept</title>
+    <articleinfo>
+        <copyright>
+            <year>2005</year>
+            <holder>
+                <ulink url="https://wiki.ubuntu.com/DocumentationTeam">Ubuntu Documentation
+                Team</ulink>
+            </holder>
+        </copyright>
+        <publisher>
+            <publishername>
+                <ulink url="https://wiki.ubuntu.com/DocumentationTeam">Ubuntu Documentation
+                Team</ulink>
+            </publishername>
+        </publisher>
+        <authorgroup>
+            	<author>
+			<firstname>Jonathan</firstname>
+			<surname>Jesse</surname>
+			<email>jjesse@iserv.net</email>
+		</author>
+		<author>
+                <firstname>Troy</firstname>
+                <surname>Williams</surname>
+                <affiliation>
+                    <orgname>
+                        <ulink url="http://www.judesource.com">judesource</ulink>
+                    </orgname>
+                </affiliation>
+                <email>troywill1@gmail.com</email>
+            </author>
+        </authorgroup>
+        <revhistory>
+	    <revision>
+	    	<revnumber>0.2</revnumber>
+		<date>March 2006</date>
+		<revremark>Documented using &appversion; under Kubuntu Dapper (v.6.04).</revremark>
+	    </revision>
+            <revision>
+                <revnumber>0.1</revnumber>
+                <date>October 26, 2005</date>
+                <revremark>Documented using &appversion; under Kubuntu Breezy (v5.10).</revremark>
+            </revision>
+        </revhistory>
+        <abstract>
+            <para>This guide explains how to use the &app; (&appshort;).</para>
+        </abstract>
+    </articleinfo>
+    <sect1 id="introduction" status="draft">
+        <title>Introduction</title>
+        <para>The &app; is a graphical frontend to the <application>APT</application> package
+            management system for the K Desktop Environment (KDE). Modeled along the lines of
+                <application>Kapture</application>, another graphical interface developed for KDE,
+            &appshort; provides an easy-to-use and familiar interface with which users can
+            perform software management operations.</para>
+        <para>&appshort; can be started from the K menu system or the command line. In order to
+            start &appshort; you will be required to provide your password.</para>
+        <para>To start &appshort; from the menu system select <menuchoice>
+                <guimenu>K Menu</guimenu>
+                <guisubmenu>System</guisubmenu>
+                <guimenuitem>Adept (Package Manager)</guimenuitem>
+            </menuchoice>. </para>
+        <para>To start &appshort; from the command line:</para>
+        <programlisting>
+                sudo adept
+                </programlisting>
+        <para>Both methods require that you enter your password. This will run &appshort; with
+            root privileges which will be required in order to perform the requested operations. It
+            is therefore advised that you use &appshort; with caution since improper usage could
+            lead to the removal, deletion, or corruption of software packages that are required to
+            preserve system integrity.</para>
+    </sect1>
+    <sect1 id="get-started" status="draft">
+        <title>Getting Started</title>
+        <para>On startup, &appshort; will build the dependency tree for all installed software
+            packages and then display the main window.</para>
+        <figure id="main-window">
+            <title>Main Window</title>
+            <screenshot>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="figures/C/adept.png" format="PNG"/>
+                    </imageobject>
+                    <caption>Adept: Main Window</caption>
+                </mediaobject>
+            </screenshot>
+        </figure>
+        <para>The main window is comprised of the following regions:</para>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <xref linkend="adept-menus" endterm="title-adept-menus"/>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <xref linkend="adept-toolbar" endterm="title-adept-toolbar"/>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <xref linkend="adept-filters" endterm="title-adept-filters"/>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <xref linkend="adept-list" endterm="title-adept-list"/>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <xref linkend="adept-status" endterm="title-adept-status"/>
+                </para>
+            </listitem>
+        </itemizedlist>
+        <sect2 id="adept-menus" status="draft">
+            <title id="title-adept-menus">Menu Bar</title>
+            <para>The Menu Bar provides the following menus and options:</para>
+            <variablelist>
+                <varlistentry>
+                    <term>Adept</term>
+                    <listitem>
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                    <emphasis>Fetch Updates</emphasis>: Reload the list of packages
+                                    from known software repositories.</para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>Manage Repositories</emphasis>: View/manage the list
+                                    of known software repositories.</para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>Commit Changes</emphasis>: Apply changes (i.e.
+                                    install, remove, upgrade) that have been marked since the last
+                                    Commit Changes operation.</para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>Safe Upgrade</emphasis>: Mark the equivalent of the
+                                        <emphasis>APT</emphasis> command
+                                    <emphasis>upgrade</emphasis>.</para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>Full Upgrade</emphasis>: Mark the equivalent of the
+                                        <emphasis>APT</emphasis> command
+                                    <emphasis>dist-upgrade</emphasis>.</para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>Quit</emphasis>: Terminate the application.</para>
+                            </listitem>
+                        </itemizedlist>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Edit</term>
+                    <listitem>
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                    <emphasis>Undo</emphasis>: Undo the last action (this will not
+                                    undo a <emphasis>Commit Changes</emphasis> action).</para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>Redo</emphasis>: Redo the last 'undone'
+                                action.</para>
+                            </listitem>
+                        </itemizedlist>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Settings</term>
+                    <listitem>
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                    <emphasis>Hide Toolbar</emphasis>: Hide the icon-based
+                                toolbar.</para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>Hide Statusbar</emphasis>: Hide the statusbar located
+                                    at the bottom of the window.</para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>Configure Shortcuts...</emphasis>: Configure keyboard
+                                    shortcuts for common actions.</para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>Configure Toolbars...</emphasis>: Configure the layout
+                                    and actions represented in the icon-based toolbar.</para>
+                            </listitem>
+                        </itemizedlist>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Help</term>
+                    <listitem>
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                    <emphasis>Adept Manager Handbook</emphasis>: This
+                                document.</para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>What's This?</emphasis>: Context-sensitive help for
+                                    this applicaiton.</para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>Report Bug...</emphasis>: Report a bug to the
+                                    KDE-based Bugzilla repository.</para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>About Adept Manager</emphasis>: Information (i.e.
+                                    version, author, etc.) about this application.</para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>About KDE</emphasis>: Information (i.e. version,
+                                    authors, etc.) about KDE.</para>
+                            </listitem>
+                        </itemizedlist>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+        </sect2>
+        <sect2 id="adept-toolbar" status="draft">
+            <title id="title-adept-toolbar">Toolbar</title>
+            <para>The toolbar provides the following actions from left to right:<variablelist>
+                    <varlistentry>
+                        <term>
+                            <inlinemediaobject>
+                                <imageobject>
+                                    <imagedata fileref="figures/C/adept_update.png" format="PNG"/>
+                                </imageobject>
+                            </inlinemediaobject>
+                        </term>
+                        <listitem>
+                            <para>Reload the list of packages from known software repositories.
+                            </para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>
+                            <inlinemediaobject>
+                                <imageobject>
+                                    <imagedata fileref="figures/C/adept_commit.png" format="PNG"/>
+                                </imageobject>
+                            </inlinemediaobject>
+                        </term>
+                        <listitem>
+                            <para>Commit all marked changes to the system.</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>
+                            <inlinemediaobject>
+                                <imageobject>
+                                    <imagedata fileref="figures/C/adept_distupgrade.png" format="PNG"
+                                    />
+                                </imageobject>
+                            </inlinemediaobject>
+                        </term>
+                        <listitem>
+                            <para>Mark all packages tagged as 'upgradable' for installation.</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>
+                            <inlinemediaobject>
+                                <imageobject>
+                                    <imagedata fileref="figures/C/adept_preview.png" format="PNG"/>
+                                </imageobject>
+                            </inlinemediaobject>
+                        </term>
+                        <listitem>
+                            <para>Preview all the changes that are marked on your system without
+                                actually committing those changes.</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>
+                            <inlinemediaobject>
+                                <imageobject>
+                                    <imagedata fileref="figures/C/undo.png" format="PNG"/>
+                                </imageobject>
+                            </inlinemediaobject>
+                        </term>
+                        <listitem>
+                            <para>Undo the last marked change (must be done prior to commit)</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>
+                            <inlinemediaobject>
+                                <imageobject>
+                                    <imagedata fileref="figures/C/redo.png" format="PNG"/>
+                                </imageobject>
+                            </inlinemediaobject>
+                        </term>
+                        <listitem>
+                            <para>Redo the last marked change that was 'un-done'.</para>
+                        </listitem>
+                    </varlistentry>
+                </variablelist>
+            </para>
+        </sect2>
+        <sect2 id="adept-filters" status="draft">
+            <title id="title-adept-filters">Active Filters</title>
+            <para>The top pane is known as the Active Filters section. Comprised of drop lists, a
+                dialog box and check boxes, it enables you to select categories containing
+                predefined filters, or in the case of the <emphasis>Quick Filter</emphasis> dialog,
+                filters you define yourself. When selected, filters serve to reduce the number of
+                packages displayed in <xref linkend="adept-list" endterm="title-adept-list"/>. </para>
+            <screenshot>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="figures/C/category-filters.png" format="PNG"/>
+                    </imageobject>
+                </mediaobject>
+            </screenshot>
+            <para>The following categories are available:</para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        <xref linkend="use" endterm="title-use"/>
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <xref linkend="role" endterm="title-role"/>
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <xref linkend="interface" endterm="title-interface"/>
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <xref linkend="works-with" endterm="title-works-with"/>
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <xref linkend="quick-filter" endterm="title-quick-filter"/>
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <xref linkend="state-filter" endterm="title-state-filter"/>
+                    </para>
+                </listitem>
+            </itemizedlist>
+            <sect3 id="use" status="draft">
+                <title id="title-use">Use</title>
+                <para>The <emphasis>Use</emphasis> Easy Tag Filter allows the filtering of packages
+                    based on their usage, such as browsing, chatting or editing applications (to
+                    name a very few).</para>
+                <screenshot>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="figures/C/use-filter.png" format="PNG"/>
+                        </imageobject>
+                        <caption>Use Easy Tag Filter</caption>
+                    </mediaobject>
+                </screenshot>
+            </sect3>
+            <sect3 id="role" status="draft">
+                <title id="title-role">Role</title>
+                <para>Displays a list of filters arranged by <emphasis>Role</emphasis>, such as
+                    utility, source or server based packages.</para>
+                <screenshot>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="figures/C/role-filter.png" format="PNG"/>
+                        </imageobject>
+                        <caption>Role Easy Tag Filter</caption>
+                    </mediaobject>
+                </screenshot>
+            </sect3>
+            <sect3 id="interface" status="draft">
+                <title id="title-interface">Interface</title>
+                <para>Displays a list of filters related to <emphasis>Interface</emphasis>
+                    characteristics. For example, web, X11 or commandline based packages.</para>
+                <screenshot>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="figures/C/interface-filter.png" format="PNG"/>
+                        </imageobject>
+                        <caption>Interface Easy Tag Filter</caption>
+                    </mediaobject>
+                </screenshot>
+            </sect3>
+            <sect3 id="works-with" status="draft">
+                <title id="title-works-with">Works With</title>
+                <para>Allows the selection of filters that define the package in terms of what it
+                        <emphasis>Works With</emphasis>. These could be pacakages related to MP3,
+                    images or mail.</para>
+                <screenshot>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="figures/C/works-with-filter.png" format="PNG"/>
+                        </imageobject>
+                        <caption>Works With Easy Tag Filter</caption>
+                    </mediaobject>
+                </screenshot>
+            </sect3>
+            <sect3 id="quick-filter" status="draft">
+                <title id="title-quick-filter">Quick Filter</title>
+                <para>A dialog box provided for custom filtering. This filter will search for the
+                    supplied term in the name, short description or maintainer name portions of the
+                    package information.</para>
+                <screenshot>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="figures/C/quick-filter.png" format="PNG"/>
+                        </imageobject>
+                        <caption>Quick Filter</caption>
+                    </mediaobject>
+                </screenshot>
+            </sect3>
+            <sect3 id="state-filter" status="draft">
+                <title id="title-state-filter">State Filter</title>
+                <para>The <emphasis>State Filter</emphasis> provides convenient and easy check boxes
+                    which allow the filtering of packages by their state (i.e. Not Installed,
+                    Installed, Upgradable) or marked action (i.e. Keep, Install, Remove, Upgrade).</para>
+                <screenshot>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="figures/C/state-filter.png" format="PNG"/>
+                        </imageobject>
+                        <caption>State Filter</caption>
+                    </mediaobject>
+                </screenshot>
+            </sect3>
+        </sect2>
+        <!-- Troy Williams:  Ended editing at this point: need to put Adept screenshots in to this point. -->
+        <sect2 id="adept-list" status="draft">
+            <title id="title-adept-list">Package List</title>
+            <para>The bottom pane is known as the Package List. Package listings are dependent on
+                the criteria defined by the filters selected in <xref linkend="adept-filters"
+                    endterm="title-adept-filters"/>.</para>
+            <screenshot>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="figures/C/package-list.png" format="PNG"/>
+                    </imageobject>
+                </mediaobject>
+            </screenshot>
+            <para>Listed packages are displayed in tabular form. Each package is a single record and
+                provides the following information about the properties of displayed packages:</para>
+            <variablelist>
+                <varlistentry>
+                    <term>Package</term>
+                    <listitem>
+                        <para>The logical name of the package.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Status</term>
+                    <listitem>
+                        <para><emphasis>Not Installed</emphasis>, <emphasis>Installed</emphasis>,
+                                <emphasis>Upgradable</emphasis>.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Action</term>
+                    <listitem>
+                        <para><emphasis>Keep</emphasis>, <emphasis>Install</emphasis>,
+                                <emphasis>Remove</emphasis>, <emphasis>Upgrade</emphasis>.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Description</term>
+                    <listitem>
+                        <para>A short description of the function of the package.
+                            <mousebutton>Left</mousebutton> clicking on a package name in the
+                            Package List presents a more detailed description, as well as a button
+                            that allows an action to be taken against the package (i.e. install,
+                            remove, etc.).</para>
+                        <screenshot>
+                            <mediaobject>
+                                <imageobject>
+                                    <imagedata fileref="figures/C/package-list-long.png" format="PNG"/>
+                                </imageobject>
+                                <caption>Detailed Description and Action Availability</caption>
+                            </mediaobject>
+                        </screenshot>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+        </sect2>
+        <sect2 id="adept-status" status="draft">
+            <title id="title-adept-status">Status Bar</title>
+            <para>The Status Bar, located at the bottom of the main window, will display the
+                progress of operations and the current package state on the system. For example, how
+                many packages are marked for installation and the total count of packages installed
+                on the system.</para>
+            <screenshot>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="figures/C/status-bar.png" format="PNG"/>
+                    </imageobject>
+                </mediaobject>
+            </screenshot>
+        </sect2>
+    </sect1>
+    <sect1 id="software-management" status="review">
+        <title>Software Management</title>
+        <sect2 id="reload-source-list" status="review">
+            <title>Reloading Source Lists</title>
+            <para>When new software sources have been added to the <application>APT</application>
+                software sources list, the list of packages contained in the repository must be
+                reloaded. For already existing software sources, &appshort; will already have a
+                list of all software residing in a repository. This list is updated on a regular
+                basis, normally once a day. Updates can be forced by clicking the <guibutton>Fetch
+                    Updates</guibutton> button located on the toolbar or by selecting <menuchoice>
+                    <guimenu>Adept</guimenu>
+                    <guimenuitem>Fetch Updates</guimenuitem>
+                </menuchoice>.</para>
+            <para>During the Fetch Updates operation the status of the fetch operation for each
+                software repository is shown by the <interface>Fetch Progress</interface> dialog.</para>
+            <screenshot>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="figures/C/adept-fetch.png" format="PNG"/>
+                    </imageobject>
+                </mediaobject>
+            </screenshot>
+            <para>The <interface>Fetch Progress</interface> provides the following information about
+                each fetch operation:</para>
+            <variablelist>
+                <varlistentry>
+                    <term>Progress</term>
+                    <listitem>
+                        <para>A progress bar displaying completion in percentage for each software
+                            repository package list.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Description</term>
+                    <listitem>
+                        <para>The location (URL) and repository name from which the package list was
+                            reloaded.</para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+        </sect2>
+        <sect2 id="commit-changes" status="draft">
+            <title>Committing Changes</title>
+            <para>With &appshort;, none of the changes you have made will be applied to your
+                system until you commit the changes. To commit the changes, you may either select <menuchoice>
+                    <guimenu>Adept</guimenu>
+                    <guisubmenu>Commit Changes</guisubmenu>
+                </menuchoice> or, more simply, click the second icon option in the toolbar. If you
+                have selected to install packages, it will first download all the requested packages
+                and then install them accordingly. Also, packages that are selected for removal and
+                upgrade will also be applied.</para>
+<!-- Added by Hil freehil@gmail.com -->
+<para>
+Sometimes few packages require users to configure them in the installation process.
+If this happens, you need to make selections in the text console within &appshort; before you can proceed to the next package installation.
+Usually packages that require user configurations can be reconfigured by the following command:</para>
+    <programlisting>
+        sudo dpkg-reconfigure packages
+    </programlisting>
+            <para>After these changes have been committed, the package list will refresh to reflect
+                the changes made to the system.</para>
+        </sect2>
+        <sect2 id="repo-mgmt" status="draft">
+            <title>Managing Repositories</title>
+            <para>&appshort; includes a mechanism with which to manage software repositories. To
+                view and/or manage the repositories, select <menuchoice>
+                    <guimenu>Adept</guimenu>
+                    <guisubmenu>Manage Repositories</guisubmenu>
+                </menuchoice>. To add a repository, enter the repository information into the New
+                Repository dialog box and <mousebutton>left</mousebutton> click the
+                <guibutton>Add</guibutton> button. <mousebutton>Left</mousebutton> click the
+                    <guibutton>Apply</guibutton> button to save the changes, or
+                <mousebutton>left</mousebutton> click the <guibutton>Reset</guibutton> button to
+                abort the addition.</para>
+            <para>In order to take advantage of the addition of new repositories, a <emphasis>Fetch
+                    Updates</emphasis> must be performed after the addition.</para>
+            <screenshot>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="figures/C/repo-man.png" format="PNG"/>
+                    </imageobject>
+                    <caption>Manage Repositories</caption>
+                </mediaobject>
+            </screenshot>
+        </sect2>
+    </sect1>
+    <sect1 id="app-about" status="draft">
+        <title>About &app;</title>
+        <para>&appshort; was written by Peter Rockai (<email>me@mornfall.net</email>). To get
+            more information about the &app;, please visit the <ulink
+                url="http://web.ekhis.org/adept.html" type="http">Adept Web Page</ulink>. </para>
+        <para>To report a bug or make a suggestion regarding the &app; please use the bug
+            reporting system at <ulink url="http://bugs.kde.org" type="http">KDE Bugzilla</ulink>.
+            To make a suggestion or report a bug related to this manual, please contact the mailing
+            list <email>ubuntu-doc@lists.ubuntu.com</email> or join the
+            <emphasis>#ubuntu-doc</emphasis> IRC channel on <emphasis>&irc-server;</emphasis>.
+            You can also contact the Kubuntu developers on the <emphasis>#kubuntu-devel</emphasis>
+            IRC channel on <emphasis>&irc-server;</emphasis>.</para>
+        <para>This manual was written by Troy Williams (<email>troywill1@gmail.com</email>). It is
+            based on the <emphasis>Kynaptic Package Manager Guide</emphasis> written by Sean Wheller
+                (<email>sean@inwords.co.za</email>), Kontantinos Giannaros
+                (<email>francisg@gmail.com</email>) and Troy Williams. You may contact me directly
+            or via the channels listed above.</para>
+        <para>This program is distributed under the terms of the GNU General Public license as
+            published by the Free Software Foundation (FSF); either version 2 of the License, or (at
+            your option) a later version. A copy of this license can be found below , or in the file
+            included with the source code of this application. </para>
+    </sect1>
+    <!-- Appendix with GPL --> &legal;</article>

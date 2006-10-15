@@ -1,0 +1,952 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % kde SYSTEM "../../libs/kde.ent">
+%kde;
+<!ENTITY % kde-general SYSTEM "/usr/share/apps/ksgmltools2/customization/obsolete/general.entities">
+%kde-general;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="configuring-your-system-chap" status="help">
+    <title id="configuring-your-system">設定您的系統</title>
+    <para>本章包含設定系統的資訊。</para>
+    <sect1 id="desktop-tips" status="complete">
+        <title>桌面小技巧</title>
+        <para>這個章節詳細介紹一些使用或自訂桌面的技巧。它們在解決桌面環境（稱為 <application>KDE</application> ）設定和檔案管理時（稱為 <application>Konqueror</application>）非常有用。</para> 
+        <sect2 id="kde-startup" status="complete">
+            <title>KDE 啟動時自動執行程式</title>
+            <procedure>
+                <step>
+                    <para>當 KDE 啟動後，利用它的功能<emphasis>工作階段管理</emphasis>，能輕易地設定自動執行程式。利用它，您能調整 KDE 要怎樣啟動。</para>
+                </step>
+                <step>
+                    <para>
+                        Choose 
+                        <menuchoice>
+                            <guimenu>K-Menu</guimenu>
+                            <guisubmenu>System Settings</guisubmenu>
+                            <guimenuitem>Session Manager</guimenuitem>
+		    </menuchoice> from the Advanced tab on the top and then under <emphasis>Advanced User Settings</emphasis> section. Click the <guibutton>Session Manager</guibutton> button on the right. Ensure that the <guibutton>Restore manually saved session</guibutton> checkbox is enabled. 
+                    </para>
+                </step>
+                <step>
+                    <para>
+                Launch all the applications you want running <emphasis>everytime you log in</emphasis>. Once you have everything set to your satisfaction, click choose 
+                        <menuchoice>
+                            <guimenu>K-Menu</guimenu>
+                            <guisubmenu>Save Session</guisubmenu>
+                        </menuchoice>. Every time you start KDE, you will return to this configuration.
+                    </para>
+                </step>
+                <step>
+                    <para>另外的一種方法是將您想要自動啟動的應用程式的桌面項從 <filename>/usr/share/applications</filename> 複製到 <filename>~/.kde/Autostart</filename>目錄。</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="login-kde-automatic" status="complete">
+            <title>當電腦啟動後自動登入到 KDE</title>
+            <para>當電腦啟動後自動登入一個帳號是可以的。不建議大多數的電腦使用者這樣做，因為這不安全和有可能允許其它的使用者獲得你的資訊。</para>
+            <procedure>
+                <step>
+                    <para>
+                        <menuchoice>
+                            <guimenu>K-選單</guimenu>
+                            <guisubmenu>系統設定</guisubmenu>
+			    <guisubmenu>Advanced</guisubmenu>
+                            <guimenuitem>登入管理員</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+                <step>
+                    <para>單擊<guibutton>管理員模式...</guibutton>，然後輸入你的使用者密碼以取得管理員特權。</para></step>
+                <step>
+                    <para>選取<guibutton>便利</guibutton>分頁。啟動<guilabel>啟用自動登入</guilabel>，然後從下拉選單中選擇要自動登入的使用者並選擇合適的延遲時間。</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="restartkdewithoutreboot" status="complete">
+            <title>重啟 KDE 而毋需重啟電腦</title>
+            <procedure>
+                <step>
+                    <para>儲存並關閉所有開啟的應用程式。</para>
+                </step>
+                <step>
+                    <para>Use the <keycombo>
+                            <keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>Backspace</keycap>
+                        </keycombo>
+                        shortcut keys to restart KDE.
+                    </para>
+                </step>
+                <step>
+                    <para>If <keycombo>
+                            <keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>Backspace</keycap>
+                        </keycombo>
+                        is disabled, type
+                        <screen>sudo /etc/init.d/kdm restart</screen>
+                    </para>
+                    <para>(See <xref linkend="disableCtrlAltBackspace"/> to disable <keycombo>
+                            <keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>Backspace</keycap>
+                        </keycombo>.)
+                    </para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="disableCtrlAltBackspace" status="complete">
+            <title>不讓 Ctrl-Alt-Backspace 組合鍵重啟 X</title>
+            <procedure>
+                <step>
+                    <para>備份已有的 <filename>/etc/X11/xorg.conf</filename> 檔案。 <screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup</screen></para>
+                </step>
+                <step>
+                    <para>使用 <screen>kdesu kate /etc/X11/xorg.conf</screen>，開啟 <filename>/etc/X11/xorg.conf</filename> 來編輯</para>
+                </step>
+                <step>
+                    <para>將下面的行加入到檔案結尾：<programlisting>
+Section	"ServerFlags"
+ Option	"DontZap"	"yes"
+ EndSection
+</programlisting></para>
+                </step>
+                <step>
+                    <para>儲存編輯過的檔案。（<ulink url="../sample/xorg.conf_disablectrlaltbackspacegnome">例子</ulink>）</para>
+                </step>
+                <step>
+                    <para>變更將在你下一次登入 KDE 時生效。如果你想馬上使變更生效，那麼手動重啟 KDE。（參見 <xref linkend="restartkdewithoutreboot"/>。）</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="run-application" status="complete">
+            <title>手動啟動程式</title>
+            <para>有時手動啟動程式是很有用的，例如：當程式沒有選單項目。這可以使用<application>執行命令</application> 對話框來完成。</para>
+            <procedure>
+                <step>
+                    <para>Open the <application>Run Command</application> dialog by typing:
+                        <keycombo>
+                            <keycap>Alt</keycap>
+                            <keycap>F2</keycap>
+                        </keycombo>
+                    </para>
+                </step>
+                <step>
+                    <para>輸入你想執行的程式名稱，然後按<keycap>Enter</keycap>鍵。</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="numlock-on-startup" status="complete">
+            <title>Automatically turn on <keycap>NumLock</keycap> when KDE starts</title>
+            <procedure>
+                <step>
+                    <para>
+                        <menuchoice>
+                            <guimenu>K-選單</guimenu>
+                            <guisubmenu>系統設定</guisubmenu>
+                            <guimenuitem>鍵盤</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+                <step>
+                    <para>選上<guilabel>啟動 KDE 時打開 NumLock</guilabel>這個選項，使<guibutton>打開</guibutton> 變為可選。單擊<guibutton>套用</guibutton> 儲存你的設定。</para>
+                </step>
+            </procedure>
+            <para>這些改變會在下次登入 KDE 時生效。如果你想馬上測驗一下，關閉 NumLock 並且馬上重啟 KDE（啟動方法請看<xref linkend="restartkdewithoutreboot"/>）。</para>
+        </sect2>
+        <sect2 id="firefox-help-handler" status="complete">
+            <title>可以使用<application><phrase>Firefox</phrase></application>處理 help:// 連結。</title>
+            <para>您還可以在<application>Firefox</application>使用 <application>help://</application> 協議開啟。</para>
+            <procedure>
+                <step>
+                    <para>
+			    Start <application>Firefox</application> by choosing left
+                        <menuchoice>
+                            <guimenu>K-Menu</guimenu>
+                            <guisubmenu>Internet</guisubmenu>
+                            <guimenuitem>Firefox</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+                <step>
+                    <para>在位址列中鍵入：<emphasis>about:config</emphasis>。</para>
+                </step>
+                <step>
+                    <para>
+                        <mousebutton>Right</mousebutton> click on the list, select 
+                        <menuchoice>
+                            <guimenu>New</guimenu>
+                            <guisubmenu>Boolean</guisubmenu>
+                        </menuchoice> 
+                        Type <emphasis role="bold">network.protocol-handler.external.help</emphasis> as <emphasis>Preference Name</emphasis> and <emphasis role="bold">true</emphasis> as <emphasis>Value</emphasis>
+                    </para>
+                </step>
+                <step>
+                    <para>
+                        <mousebutton>Right</mousebutton> click again on the list, select <menuchoice>
+                            <guimenu>New</guimenu>
+                            <guisubmenu>String</guisubmenu>
+                        </menuchoice> 
+                        Type <emphasis role="bold">network.protocol-handler.app.help</emphasis> as <emphasis>Preference Name</emphasis> and <emphasis role="bold">khelpcenter</emphasis> as <emphasis>Value</emphasis>
+                    </para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="menu-editing" status="complete">
+            <title>編輯 <application>K-選單</application></title>
+            <para>利用 <application>KDE 選單編輯器</application>，您能自訂您的選單並且能夠加入一些安裝後未有自動加入的程式項。</para>
+            <para>要增加一個選單項:</para>
+            <procedure>
+                <step>
+                    <para>右鍵單擊<application>KDE 選單編輯器</application>，再選擇<guimenuitem>選單編輯器</guimenuitem>開啟<application>KDE 選單編輯器</application>。</para>
+                </step>
+                <step>
+                  <para>在<application>KDE 選單編輯器</application>的左面板，選擇子選單，新的項會出現。</para>
+                </step>
+                <step>
+                    <para>Choose 
+                        <menuchoice>
+                            <guimenu>File</guimenu>
+                            <guimenuitem>New Item</guimenuitem>
+                        </menuchoice>. In the <guilabel>New Item</guilabel> window, choose a <guilabel>Name</guilabel>. Then add the <guilabel>Description</guilabel>, <guilabel>Comment</guilabel>, and <guilabel>Command</guilabel>. Select the icon by clicking on <guilabel>Icon</guilabel>. The <guilabel>Command</guilabel> will usually be the package name, <guilabel>Name</guilabel> is what will appear on the menu, and the <guilabel>Comment</guilabel> will appear in the tooltip that appears near the menu entry. <guilabel>Icons</guilabel> are chosen from <filename>/usr/share/pixmaps</filename> directory by default, or can be chosen from anywhere in your files.
+                    </para>
+                </step>
+            </procedure>
+            <para>要改變項目的順序，在<application>KDE 選單編輯器</application>中拖動項目，。</para>
+        </sect2>
+        <sect2 id="desktop-applets" status="complete">
+            <title>進階桌面小程式</title>
+            <para><application>Superkaramba</application> 是個在您的桌面上提供迷你程式（桌面小程式, desklets），諸如天氣預報、新聞快報、系統資訊顯示、或音樂播放控制的系統。他們一起令您的桌面變得更有趣及更有用。</para>
+            <procedure>
+                <step>
+                    <para>從 <emphasis>Universe</emphasis> 套件庫安裝 <application>superkaramba</application>（參閱 <xref linkend="extra-repositories"/>）。</para>
+                </step>
+                <step>
+                    <para>Choose: 
+                        <menuchoice>
+                            <guimenu>K-Menu</guimenu>
+                            <guisubmenu>Utilities</guisubmenu>
+                            <guimenuitem>Superkaramba</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+                <step><para>造訪 <ulink url="http://www.superkaramba.com/">SuperKaramba 網站下載小程式。</ulink></para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="fonts" status="complete">
+            <title>安裝額外字型</title>
+            <para>本節介紹如何從 Kubuntu 封存安裝額外的字型。</para>
+            <procedure>
+                <step>
+                    <para>對於 <emphasis role="bold">國際字型</emphasis>，可以從 <emphasis>Universe</emphasis> 套件庫中安裝以下軟體套件（參見 <xref linkend="add-applications"/>）：</para>
+                    <para>
+                        <literallayout>
+xfonts-intl-arabic
+ xfonts-intl-asian
+ xfonts-intl-chinese
+ xfonts-intl-chinese-big
+ xfonts-intl-european
+ xfonts-intl-japanese
+ xfonts-intl-japanese-big
+ xfonts-intl-phoneti
+                        </literallayout>
+                    </para>
+                </step>
+                <step>
+                    <para>對於 <emphasis role="bold">Microsoft TrueType 核心字型</emphasis> ，可以從<emphasis>Multiverse</emphasis> 套件庫中安裝 <application>msttcorefonts /application&gt;</application></para>
+                </step>
+                <step>
+                    <para>對於 <emphasis role="bold">Ghostscript 字型</emphasis>，可以安裝 <application>gsfonts-x11</application> 套件（參見 <xref linkend="add-applications"/>）。</para>
+                    </step>						<step>
+                    <para>安裝新字型後，需要在終端提示符後輸入以下命令以重建字型資訊檔案：</para>
+                    <screen>sudo fc-cache -f -v</screen>
+                </step>
+            </procedure>
+            <para>如您偏好手動下載個別字型，您可以開啟 <application>Konqueror</application> 並在位置列中鍵入 <application>fonts:/// </application></para>
+        </sect2>
+    </sect1>
+    <sect1 id="file-managing" status="complete">
+        <title>檔案</title>
+        <sect2 id="konqueror-hidden-file" status="complete">
+            <title>在 <application><phrase>Konqueror</phrase></application> 裡顯示隱藏的檔案和資料夾</title>
+            <procedure>
+                <step>
+                    <para>In <application>Konqueror</application>, use the 
+                        <menuchoice>
+                            <guimenu>View</guimenu>
+                            <guimenuitem>Show Hidden Files</guimenuitem>
+                        </menuchoice>
+                        to toggle hidden files and folders on and off. 
+                    </para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="default-open-with" status="complete">
+            <title>變更檔案類型的預設「開啟方式」程式</title>
+            <procedure>
+                <step>
+                    <para>In <application>Konqueror</application>, <mousebutton>right</mousebutton> click on the file and choose 
+                        <menuchoice>
+                            <guimenu>Open With</guimenu>
+                            <guisubmenu>Other...</guisubmenu>
+                        </menuchoice> 
+                        from the menu that appears. A list of applications appears.</para>
+                </step>
+                <step>
+                    <para>選取您希望用來開啟該檔案類型的預設應用程式。如果該應用程式不在清單中，請使用 <guibutton>加入</guibutton> 按鈕將其加入至清單中。</para>
+                </step>
+                <step>
+                    <para>選擇<guilabel>記住該檔案類型的應用程式關聯</guilabel>。點擊套用您的<guibutton>Ok</guibutton>變更。</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="krename" status="complete">
+            <title>一次過重新命名一目錄下的所有檔案</title>
+            <para>使用 <application>Krename</application>，可以根據您的命名規則重新命名多於一個檔案。</para>
+            <procedure>
+                <step>
+                    <para>從 <emphasis>Universe</emphasis> 套件庫中安裝 <application>Krename</application>（詳見<xref linkend="extra-repositories"/>）。</para>
+                </step>
+                <step>
+                    <para>
+                        Launch <application>Krename</application> by choosing 
+                        <menuchoice>
+                            <guimenu>K-menu</guimenu>
+                            <guisubmenu>Utilities</guisubmenu>
+                            <guimenuitem>Krename</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="rar-files" status="complete">
+            <title>開啟 <application>RAR</application> 檔案</title>
+            <procedure>
+                <step>
+                    <para>要開啟 <application>rar</application> 檔案，從 <emphasis>Multiverse</emphasis> 套件庫安裝 <application>unrar</application> 套件（參見 <xref linkend="extra-repositories"/>）。</para>
+                </step>
+                <step>
+                    <para>要開啟 rar 檔案，雙擊之。</para>
+                </step>
+            </procedure>
+        </sect2>
+    </sect1>
+    <sect1 id="partitions-booting" status="writing">
+        <title>分割區和開機</title>
+        <sect2 id="partition-editor" status="complete">
+            <title>圖形分割區編輯器</title>
+            <procedure>
+                <step>
+                    <para>安裝<application>qtparted</application> (參見<xref linkend="extra-repositories"/>)。</para>
+                </step>
+                <step>
+                    <para>You can run the application with:
+                        <menuchoice>
+                            <guimenu>K-Menu</guimenu>
+                            <guisubmenu>System</guisubmenu>
+                            <guimenuitem>QtParted</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+            </procedure>
+        </sect2>
+            <sect2 id="listpartitiontables" status="complete">
+                <title>檢查硬碟已用空間和分區表</title>
+                <procedure>
+                    <step>
+                        <para>Launch 
+                            <menuchoice>
+                                <guimenu>K-Menu</guimenu>
+                                <guisubmenu>System Settings</guisubmenu>
+				<guisubmenu>Advanced</guisubmenu>
+                                <guimenuitem>Disks &amp; Filesystems</guimenuitem>
+                            </menuchoice>
+                        </para>
+                    </step>
+                    <step>
+                        <para>
+                            Each partition will be listed under
+                            <guilabel>Available Disks and
+                                Filesystems</guilabel> details of each
+                            partition.
+                        </para>
+                    </step>
+                </procedure>
+            </sect2>
+            <sect2 id="listmounteddevices" status="complete">
+                <title>在終端裡顯示已掛載的裝置</title>
+                <para>要在終端裡顯示已掛載的裝置，執行如下命令：</para>
+                <screen>mount</screen>
+                <para>這個清單顯示裝置（如一個硬碟分割區）、掛載點（您可以存取檔案的地方）、檔案系統類型和一些 mount 命令選項。</para>
+                <para>這個例子顯示出 hda2 硬碟分區掛載點是「/」，檔案系統類型是 ext3。這個分割區被掛載時有兩個選項，一個是允許以讀寫方式存取這個裝置，另一個就是當有錯誤發生時以只讀方式重新掛載這個裝置。</para>
+                <screen><computeroutput>/dev/hda2 on / type ext3 (rw,errors=remount-ro)</computeroutput></screen>				
+        </sect2>
+        <sect2 id="mount-unmount-windows-partitions" status="complete">
+            <title>掛載／卸載 Windows 分割區</title>
+            <procedure>
+                <step>
+                    <para>參閱 <xref linkend="listpartitiontables"/></para>
+                </step>
+                <step>
+                    <para>首先，建立可用於掛載的目錄：</para>
+                    <screen>sudo mkdir /mnt/windows</screen>
+                </step>
+                <step>
+                    <para>下一步，執行如下命令以只讀模式掛載 Windows 的NTFS 分割區：</para>
+                    <screen>sudo mount /dev/hdaX /mnt/windows/ -t ntfs -o ro,umask=0222</screen>
+                    <para>假如您的 Windows 使用的是 FAT32 分割區，那麼您可以放心的以讀寫模式存取此分區。使用如下命令，而不是上面的：<screen>sudo mount /dev/hdaX /mnt/windows/ -t vfat -o umask=0000</screen>。</para>
+                    <note>
+                        <para>用您正確的分割區名替代<emphasis role="bold">/dev/hdaX</emphasis>。</para>
+                    </note>
+                </step>
+                <step>
+                    <para>欲卸載分割區，執行如下命令：</para>
+		<screen>sudo umount /mnt/windows/</screen>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="mount-unmount-at-bootup" status="writing">
+            <title>開機時掛載 Windows 分割區</title>
+            <procedure>
+                <step>
+                    <para>參閱 <xref linkend="listpartitiontables"/></para>
+                </step>
+                <step>
+                    <para>首先，建立可用於掛載的目錄：</para>
+		<screen>sudo mkdir /mnt/windows</screen>
+                </step>
+                <step>
+                    <para>Next, backup your configuration file for mounting drives and open the file in a text editor with administrative privileges:</para>
+		<screen>sudo cp /etc/fstab /etc/fstab_backup
+kdesu kate /etc/fstab</screen>
+                </step>
+                <step>
+                  <para>假如您的 Windows 分割區使用的是 NTFS 格式，請將下行追加到檔案結尾<programlisting>/dev/hdaX /mnt/windows ntfs ro,umask=0222 0 0</programlisting></para>
+                    <para>假如您的 Windows 分區使用的是 FAT32 格式，您可以安全的以讀寫模式存取此分區。請將下行追加到檔案結尾<programlisting>/dev/hdaX /mnt/windows vfat umask=0000 0 0</programlisting></para>
+                        <note>
+                            <para>用您正確的分割區名替代<emphasis role="bold">/dev/hdaX</emphasis>。</para>
+                        </note>
+                </step>
+                <step>
+                    <para>儲存已編輯的檔案 (<ulink url="../sample/fstab_automountntfs">an example</ulink>)。</para>
+                </step>
+                <step>
+                    <para>參閱<xref linkend="remountfstabwithoutreboot"/>.</para>
+                </step>
+            </procedure>
+        </sect2>
+            <sect2 id="remountfstabwithoutreboot" status="complete">
+                <title>無須重開機而重新掛載 /etc/fstab</title>
+                <procedure>
+                    <step>
+                        <para>
+                            <screen>sudo mount -a</screen>
+                        </para>
+                    </step>
+                </procedure>
+            </sect2>
+		<sect2 id="run-on-bootup" status="complete">
+			<title>啟動時自動執行系統命令</title>
+				<para>有時它對於將自訂命令加入到啟動程序中將是很有用的，這樣您的電腦在每次啟動時都可以執行它。</para>
+				<procedure>
+					<step>
+						<para>以管理員權限編輯<application>crontab</application>(參見 <xref linkend="root-and-sudo"/>)：</para>
+							<screen>sudo crontab -e</screen>
+					</step>
+					<step>
+						<para>插入下行：</para>
+							<screen>@reboot /home/user/command</screen>
+					<note>
+						<para>將<filename>/home/user/command</filename>換成您的命令的全路徑。</para>
+					</note>
+					</step>
+					<step>
+						<para>儲存檔案，離開。</para>
+					</step>
+				</procedure>
+		</sect2>
+        <sect2 id="change-default-os" status="complete">
+		<title>更改開機時的預設操作系統</title>
+            <procedure>
+                <step>
+                    <para>備份您的啟動設定檔案，並用文字編輯器開啟它：</para>
+                    <screen>sudocp /boot/grub/menu.lst 
+/boot/grub/menu.lst_backup
+kdesu kate /boot/grub/menu.lst</screen>
+                </step>
+                <step>
+                    <para>尋找此行：</para>
+                    <programlisting>
+...
+default 0
+...
+                    </programlisting>
+                </step>
+                <step>
+                    <para>用以下行替換：</para>
+                    <programlisting>default X_sequence</programlisting>
+                </step>
+                <step>
+                    <para>儲存編輯好的檔案(<ulink url="../sample/menu.list_changedefaultosgrub"> an example</ulink>)。</para>
+	    </step>
+            </procedure>
+        </sect2>
+        <sect2 id="boot-menu-visible" status="complete">
+            <title>使開機選單可見</title>
+            <para>預設下，啟動選單是隱藏的，你需要按<keycap>Esc</keycap>鍵查看開機選單。但當我們設定後，開機選單預設為顯示的。</para>
+            <procedure>
+                <step>
+                    <para>備份您的啟動設定檔案，並用文字編輯器開啟它：</para>
+                    <screen>sudocp /boot/grub/menu.lst 
+/boot/grub/menu.lst_backup
+kdesu kate /boot/grub/menu.lst</screen>
+                </step>
+                <step>
+                    <para>找到這行：<screen># hiddenmenu</screen>，將前面的註釋號<emphasis>#</emphasis>去掉，變成：<screen>hiddenmenu</screen>，儲存檔案 (<ulink url="../sample/menu.list_unhidemenu">例子</ulink>)。</para>
+            </step>
+        </procedure>
+    </sect2>
+        <sect2 id="change-timeout" status="complete">
+            <title>改變開機選單的逾時等待</title>
+            <procedure>
+                <step>
+                    <para>
+                        <screen>
+sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+kdesu kate /boot/grub/menu.lst</screen>
+                    </para>
+                </step>
+                <step>
+                    <para>尋找此行</para>
+                    <programlisting>
+...
+ timeout 
+ ...
+                    </programlisting>
+                </step>
+                <step>
+                    <para>替換為</para>
+                    <programlisting>timeout X_seconds</programlisting>
+                </step>
+                <step>
+                    <para>儲存檔案(<ulink url="../sample/menu.list_increasedecreasetimeoutgrub">例子</ulink>)。</para>
+                </step>
+            </procedure>
+        </sect2>
+    </sect1>
+    <sect1 id="hardware" status="help">
+        <title>硬體</title>
+        <sect2 id="digital-cameras" status="complete">
+            <title>數碼相機</title>
+            <para>大多數 USB 類型的數碼相機都能被 Kubuntu 自動識別。將插口插上再開啟數字相機，Kubuntu 會問你是否從數字相機輸入相片。單擊<guibutton>匯入</guibutton>按鈕，Kubuntu 會先對相機進行預覽。選擇電腦上的一個位置進行儲存，再單擊<guibutton>匯入</guibutton>”按鈕。Kubuntu 將儲存相片到你的電腦中。</para>
+            <para>
+            If you do not get the auto-import popup with your camera, it might
+            be worth installing <application>digiKam</application> from the
+            <emphasis>Universe</emphasis> repository (see <xref linkend="extra-repositories"/>).
+            Launch <application>digiKam</application> after installation by
+            choosing 
+            <menuchoice>
+                <guimenu>K-Menu</guimenu>
+                <guisubmenu>Graphics</guisubmenu>
+                <guimenuitem>digiKam (Photo Management)</guimenuitem>
+            </menuchoice>
+            from the desktop menu system.
+            </para> 
+        </sect2>
+        <sect2 id="graphics-cards" status="complete">
+            <title>3D 圖形卡</title>
+            <sect3 id="installnvidiadriver" status="complete">
+                <title>3D Nvidia 顯卡卡驅動程式</title>
+                <procedure>
+                    <step>
+                        <para>從 <emphasis>Restricted</emphasis>套件庫安裝 <application>nvidia-glx</application> 套件 (參見<xref linkend="add-applications"/>)。</para> 
+                    </step>
+                    <step>
+                        <para>
+                            <screen>
+sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup
+sudo nvidia-glx-config enable </screen>
+                        </para>
+                    </step>
+                    <step>
+                        <para>您也許會經由執行程式<application>nvidia-settings</application> (參見<xref linkend="run-application"/>章節)來調整新的驅動設定。如果你願意，可以在選單中加入相應的項目 (參見<xref linkend="menu-editing"/>)</para>
+                    </step>
+                    <step>
+                        <para>請參閱 不經由重啟系統來重新啟動 KDE<xref linkend="restartkdewithoutreboot"/></para>
+                    </step>
+                </procedure>
+            </sect3>
+            <sect3 status="complete">
+                <!-- Mostly copied from UDG, need to keep updated with it. If someone can go over this section, it might be better -->
+                <title>在啟動時不顯示 Nvidia 圖形標誌</title>
+                <procedure>
+                    <step>
+                        <para>請參閱 安裝 Nvidia 驅動程式<xref linkend="installnvidiadriver"/></para>
+                    </step>
+                    <step>
+                        <para>
+                            <screen>
+sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup
+kdesu kate /etc/X11/xorg.conf</screen>
+                        </para>
+                    </step>
+                    <step>
+                        <para>找這一段</para>
+                        <para>
+                            <programlisting>
+...
+Section "Device"
+Identifier	"NVIDIA Corporation NV11 [GeForce2 MX/MX 400]"
+Driver		"nvidia"
+BusID		"PCI:1:0:0"</programlisting>
+                        </para>
+                    </step>
+                    <step>
+                        <para>在這一段後加入</para>
+                        <para>
+                            <programlisting>
+Option "NoLogo"</programlisting>
+                        </para>
+                    </step>
+                    <step>
+                        <para>儲存檔案( <ulink url="../sample/xorg.conf_disablenvidialogo"> an example</ulink>)</para>
+                    </step>
+                    <step>
+                        <para>請參閱 不經由重啟系統來重新啟動 KDE<xref linkend="restartkdewithoutreboot"/></para>
+                    </step>
+                </procedure>
+            </sect3>
+            <!-- unconfirmed ATI drivers, someone who owns an ATI card please confirm that this works -->
+            <sect3 id="installatidriver" status="complete">
+                <title>ATI 顯示卡的 3D 驅動程式</title>
+                <procedure>
+                    <step>
+                        <para>從 <emphasis>Restricted</emphasis> 套件庫中安裝 <application>xorg-driver-fglrx</application> 套件 (參見 <xref linkend="add-applications"/>)。</para> 
+                    </step>
+                    <step>
+                        <para><screen>
+echo fglrx | sudo tee -a /etc/modules
+ sudo depmod -a ; sudo modprobe fglrx
+ sudo
+cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup
+sudo sed -i -e 's/"ati"/"fglrx"/' /etc/X11/xorg.conf</screen></para>
+                    </step>
+                    <step>
+                        <para>如果你使用 NForce2-based 主板，你必須：</para>
+                        <para><screen>kdesu kate /etc/X11/xorg.conf</screen></para>
+                        <para>更改<quote>Section "Device"</quote>段，加入如下：</para>
+                        <para><screen>Option "UseInternalAGPGART" "no"</screen></para>
+                    </step>
+                    <step>
+                        <para>重啟你的電腦以使變更生效。</para>
+                    </step>
+                </procedure>
+            </sect3>
+        </sect2>
+        <sect2 id="wireless-cards" status="complete">
+            <title>無線網路卡</title>
+            <para>大多數無線網路卡能被 Kubuntu 自動識別安裝。Kubuntu 支援的無線網路卡列表可從<ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsWirelessNetworkCards">Ubuntu Wiki</ulink>上找到。請加入上你的無線網路卡到上面。</para> 
+            <para>有些網卡在 Kubuntu 裡可能做不到開箱即用，如此的話，請參閱<ulink url="https://wiki.ubuntu.com/WirelessTroubleshootingGuide">Wireless Troubleshooting Guide</ulink>，這裡有很多資源可以求助您解決問題。</para>
+            <para>在 Kubuntu 中，關於無線網路卡的的資訊，請參照 </para>
+            <sect3 status="complete">
+                <title>列出無線裝置</title>
+                <procedure>
+                    <step>
+                        <para>要列出 PCI 裝置：</para>
+                        <screen>lspci -v</screen>
+                    </step>
+                    <step>
+                        <para>要列出 USB 裝置：</para>
+                        <screen>lsusb -v</screen>
+                    </step>
+                </procedure>
+            </sect3>
+        </sect2> 
+        <sect2 id="config-keyboard" status="complete">
+            <title>設定鍵盤</title>
+        <sect3 id="keyboard-shortcuts" status="complete">
+            <title>變更鍵盤快捷鍵</title>
+            <para>
+                You might want to modify the default keyboard shortcuts in Kubuntu. To do so, choose 
+                <menuchoice>
+                    <guimenu>K-Menu</guimenu>
+                    <guisubmenu>System Settings</guisubmenu>
+                    <guimenuitem>Regional &amp; Language</guimenuitem>
+                </menuchoice>
+                from the desktop menu system. Select <guibutton>Keyboard Shortcuts</guibutton> button to modify your keyboard shortcuts.
+            </para>
+        </sect3>
+        <sect3 id="multiple-keyboard-layouts" status="complete">
+          <title>多鍵盤配置</title>
+          <para>您可能要使用多個鍵盤配置。這對於您輸入多種語言時很有用。</para>
+          <para>要加入新的鍵盤配置：</para>
+          <procedure>
+            <step>
+               <para>Choose: 
+                 <menuchoice>
+                    <guimenu>K-Menu</guimenu>
+                    <guisubmenu>System Settings</guisubmenu>
+                    <guisubmenu>Regional &amp; Language</guisubmenu>
+                    <guimenuitem>Keyboard Layout</guimenuitem>
+                 </menuchoice>
+               </para>
+            </step>
+            <step>
+              <para>在<guilabel>配置</guilabel>分頁內，選中<guilabel>啟用鍵盤配置</guilabel>。</para>
+            </step>
+            <step>
+              <para>選擇您想使用的鍵盤配置的國家的名稱，然後單擊 <guibutton>t加入</guibutton>。在<guilabel>可用配置</guilabel>中會出現相應的國家。</para>
+            </step>
+            <step>
+              <para>在<guilabel>可用配置</guilabel>列表裡點擊國家名稱，在<guilabel>配置變種</guilabel>裡選擇相應國家的。這對於一個國家裡使用多種語言來說很重要。</para>
+            </step>
+            <step>
+              <para>點擊<guibutton>套用</guibutton>以儲存設定。</para>
+            </step>
+            <step>
+              <para>系統列內的<emphasis>國旗圖示</emphasis>顯示正在使用的鍵盤配置，點擊<emphasis>國旗圖示</emphasis>可以切換到其它鍵盤配置。</para>
+            </step>
+          </procedure>
+        </sect3>
+        <sect3 id="skim" status="complete">
+            <title>輸入非拉丁字元</title>
+            <para><application>Skim</application>是輸入非拉丁字元的 KDE 圖形使用者介面面版。要使用<application>Skim</application>來輸入你的母語：</para>
+            <procedure>
+                <step>
+                    <para>確保您已經安裝了<application>語言支援</application>。如果您安裝系統時選擇了您的母語，那麼這個套件就已經被安裝了。</para>
+                </step>
+                <step>
+                    <para> Press 
+                        <keycombo>
+                            <keycap>Ctrl</keycap>
+                            <keycap>Space</keycap>
+                        </keycombo> 
+                        to activate it and enter characters.
+                    </para>
+                </step>
+                <step>
+                    <para><mousebutton>右鍵</mousebutton>單擊系統匣中的圖示，設定<application>Skim</application>，並選擇<menuchoice><guimenu>設定</guimenu></menuchoice>。</para>
+                </step>
+            </procedure>
+        </sect3>
+    </sect2>
+
+        <sect2 id="modems" status="complete">
+            <title>數據機</title>
+            <sect3 id="winmodems" status="complete">		
+                <title>Winmodems</title>
+                <para>大多數 winmodems 在 Kubuntu 下預設不能使用，但是能找到驅動程式來用這類數據機。首先您要確定您的 winmodem 使用的是什麼芯片：</para>
+                <para>
+                    <screen>
+wget -c <ulink url="&scanmodem-url;">&scanmodem-url;</ulink> 
+gunzip -c &scanmodem-gz; &gt; scanModem 
+chmod +x scanModem
+sudo ./scanModem 
+kate Modem/ModemData.txt</screen>
+                </para>
+                <para>檢查 Kate 裡的內容，應該有列出您的數據機的芯片。一旦知道是什麼芯片，按照<ulink url="https://wiki.ubuntu.com/SettingUpModems">SettingUpModems</ulink>設定你的數據機。</para>
+            </sect3>
+            <sect3 id="adsl" status="complete">
+                <title>ADSL 數據機</title>
+                <para>所有使用網卡來連接的 PPPOE 和 ADSL (部分 USB 的) 數據機都可以被 Kubuntu 支援。對於路由器式的 ADSL 數據機，只需連接好，按照您的 ISP 的指導設定，在 Kubuntu 的網路裡設定好就可以了。關於 PPPOE 數據機的訊息，參見Ubuntu 的 wiki<ulink url="https://wiki.ubuntu.com/ADSLPPPoE">ADSLPPoE</ulink>。</para>
+            </sect3>
+        </sect2>
+        <sect2 id="printers" status="help">
+                <sect2info>
+                    <authorblurb> 
+                        <para>本章節需要一些愛好者。我對印表機了解不是很多。</para> 
+                    </authorblurb>
+                </sect2info>
+            <title>印表機</title>
+            <para>Some printers will be automatically detected by Kubuntu; for those that are not, choose 
+                <menuchoice>
+                    <guimenu>K-Menu</guimenu>
+                    <guisubmenu>System Settings</guisubmenu>
+                    <guimenuitem>Printers</guimenuitem>
+                </menuchoice>
+                then choose 
+                <menuchoice>
+                    <guimenu>Add</guimenu>
+                    <guimenuitem>Add Printer/Class</guimenuitem>
+                </menuchoice>
+                and run the Printer Install Wizard.
+            </para>
+            <para>一些印表機可能需要更多的步驟進和安裝。請在 <ulink url="http://www.linuxprinting.org/">LinuxPrinting.org</ulink>或<ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsPrinters">進行查詢。</ulink></para>
+        </sect2>
+        <sect2 id="cdroms" status="complete">
+            <title>CDROM</title>
+            <sect3 status="complete">
+                <title>啟用 DMA，以加速 CD/DVD-ROM 存取</title>
+                <procedure>
+                    <step>
+                        <para>假定 <filename class="devicefile">/dev/cdrom</filename>是 CD/DVD-ROM 的位置</para>
+                    </step>
+                    <step>
+                        <para>
+                            <screen>
+sudo hdparm -d1 /dev/cdrom
+sudo cp /etc/hdparm.conf /etc/hdparm.conf_backup
+kdesu kate /etc/hdparm.conf</screen>
+                        </para>
+                    </step>
+                    <step>
+                        <para>檔案結尾加入如下:</para>
+                        <para>
+                            <programlisting>
+/dev/cdrom {
+dma = on
+}</programlisting>
+                        </para>
+                    </step>
+                    <step>
+                        <para>儲存已編輯的檔案 (<ulink url="../sample/hdparm.conf_speedupcddvdrom">例子</ulink>)</para>
+                    </step>
+                </procedure>
+            </sect3>
+            <sect3 status="complete">
+                <title>掛載光碟顯示並所有隱藏和已關聯的檔案</title>
+                <procedure>
+                    <step>
+                        <para>假定 <filename class="devicefile">/media/cdrom0/</filename> 是CD/DVD-ROM 的位置</para>
+                    </step>
+                    <step>
+                        <para>要掛載 CD/DVD-ROM</para>
+                        <para>
+                            <screen>sudo mount /media/cdrom0/ -o unhide</screen>
+                        </para>
+                    </step>
+                    <step>
+                        <para>要卸載 CD/DVD-ROM</para>
+                        <para>
+                            <screen>sudo umount /media/cdrom0/</screen>
+                        </para>
+                    </step>
+                </procedure>
+            </sect3>
+            <sect3 status="complete">
+                <title>手動強行彈出 CD/DVD-ROMs</title>
+                <procedure>
+                    <step>
+                        <para>
+                            <screen>sudo eject</screen>
+                        </para>
+                    </step>
+                </procedure>
+            </sect3>
+        </sect2>
+    </sect1>
+    <sect1 id="networking" status="complete">
+        <title>網路</title>
+        <sect2 status="complete">
+            <title>變更電腦名稱</title>
+            <procedure>
+                <step>
+                    <para>
+                        <menuchoice>
+                            <guimenu>K-選單</guimenu>
+                            <guisubmenu>系統設定</guisubmenu>
+                            <guimenuitem>網路設定</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+                <step>
+                    <para>單擊<guibutton>管理員模式...</guibutton>，然後輸入你的使用者密碼以取得管理員特權。</para></step>
+                <step>
+                    <para>選擇<guibutton>網域名稱系統（DNS）</guibutton>，在<guilabel>主機名稱</guilabel>中輸入電腦的名稱。</para>
+                </step>
+                <step>
+                    <para>點擊 <guibutton>套用</guibutton>，關閉所有程式並重新開機。</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 status="complete">
+            <title>使用 <application>Konqueror</application> 檢視遠端 SSH, FTP 和 SFTP 伺服器</title>
+            <procedure>
+                <step>
+                    <para>在 <guilabel>位置列</guilabel> 裡輸入如下內容：</para>
+                    <para>對於 SSH，可以使用：<screen><phrase>ssh</phrase>://使用者名稱@ssh.server.com</screen></para>
+                    <para>對於 FTP，使用<screen>ftp://使用者名稱@ftp.server.com</screen></para>
+                    <para>對於 SFTP，使用：<screen><phrase>sftp</phrase>://使用者名稱@sftp.server.com</screen></para>
+                    <para>將使用者名稱替換成您的使用者名稱，並將 @ 符號後的字元完全替換成伺服器地址。如有必要將會提示您輸入密碼。如果無需使用者名 (匿名)，請省略使用者名稱和 @ 符號。</para>
+                    <para>你也可以手動設定你的密碼，將上面的一個改為：<screen>ftp://使用者名稱:密碼@ftp.server.com</screen></para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="networking-utils" status="complete">
+            <title>網路工具</title>
+            <sect3 id="firewall" status="complete">
+                <!-- No KDE equivalent -->
+                <title>Guarddog 防火牆</title>
+                <para>防火牆可以保護系統遠離未經授權的存取。一般情況下，在 Kubuntu 系統中不需要安裝防火牆軟體，因為在預設情況下，所有對系統的存取都是禁止的。然而，如果你執行哪些允許其他計算機存取的服務（例如Apache 網頁服務）的話，我們建議您安裝一個防火牆軟體。<application>Guarddog</application> 是一個允許您在圖形界面下控制 Linux 下防火牆的軟體。</para>
+                <procedure>
+                    <step>
+                        <para>從 <emphasis>Universe</emphasis> 套件庫裡安裝 <application>Guarddog</application>(參見 <xref linkend="extra-repositories"/>)。</para>
+                    </step>
+                    <step>
+                        <para>After it is installed, run the <application>Guarddog</application> by choosing 
+                            <menuchoice>
+                                <guimenu>K-Menu</guimenu>
+                                <guisubmenu>System</guisubmenu>
+                                <guimenuitem>Guarddog</guimenuitem>
+                            </menuchoice>
+                        </para>
+                    </step>
+                    <step>
+                        <para><application>以管理員身分執行 -KDE su</application>對話框你輸入<emphasis>你自己的</emphasis>密碼</para>
+                    </step>
+                    <step>
+                        <para>在<application>防火牆設定</application>視窗裡點擊 <guibutton>求助</guibutton>獲得使用<application>Guarddog</application>的詳細求助。</para>
+                    </step>
+                </procedure>
+            </sect3>
+            <sect3 status="complete">
+                <!-- No KDE equivalent -->
+                <title>圖形化網路監視器</title>
+                <para>Etherape 使用不同大小的圓形來顯示不同主機之間的網路活動。</para>
+                <procedure>
+                    <step>
+                        <para>從 <emphasis>Universe</emphasis> 套件庫裡安裝 <application>etherape</application>(參見 <xref linkend="extra-repositories"/>)。</para>
+                    </step>
+                    <step>
+                        <para>Choose:
+                            <menuchoice>
+                                <guimenu>K-Menu</guimenu>
+                                <guisubmenu>Internet</guisubmenu>
+                                <guimenuitem>Etherape</guimenuitem>
+                            </menuchoice>
+                        </para>
+                    </step>
+                </procedure>
+            </sect3>
+            <sect3 status="complete">
+                <!-- No KDE equivalent -->
+                <title>網路流量分析器</title>
+                <para>Ethereal 是一個實時獲取網路套件並顯示其內容的網路流量分析/嗅探器</para>
+                <procedure>
+                    <step>
+                        <para>從 <emphasis>Universe</emphasis> 套件庫 (see <xref linkend="extra-repositories"/>) 安裝<application>ethereal</application> 套件。</para>
+                    </step>
+                    <step>
+                        <para>Choose:
+                            <menuchoice>
+                                <guimenu>K-Menu</guimenu>
+                                <guisubmenu>Internet</guisubmenu>
+                                <guimenuitem>Ethereal</guimenuitem>
+                            </menuchoice>
+                        </para>
+                    </step>
+                </procedure>
+            </sect3>
+        </sect2>
+    </sect1>
+</chapter>
+

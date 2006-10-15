@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<appendix id="appendix-chap" status="complete">
+	<title>Appendix</title>
+
+	<sect1 id="appendix-resources" status="complete">
+		<title>Additional Resources</title>
+	
+		<para><emphasis role="bold">Debian Resources</emphasis>
+            <itemizedlist>
+
+                <listitem><para><ulink url="http://www.debian.org/doc/manuals/maint-guide/"> Debian New Maintainers Guide</ulink> - Good resource for learning to package.</para></listitem>
+
+                <listitem><para><ulink url="http://www.debian.org/doc/debian-policy/"> Debian Policy</ulink> - The essential Policy manual for Debian and Debian-based distros.</para></listitem>
+
+                <listitem><para><ulink url="http://www.debian.org/doc/manuals/developers-reference/"> Debian Developer's Reference</ulink> - Specific information for Debian Developers but has some items of interest for packagers.</para></listitem>
+
+				<listitem><para><ulink url="http://www.netfort.gr.jp/~dancer/column/libpkg-guide/libpkg-guide.html">Library Packaging Guide</ulink> - Guide for packaging libraries.</para></listitem>
+
+				<listitem><para><ulink url="http://women.alioth.debian.org/wiki/index.php/English/PackagingTutorial">Debian Women Packaging Tutorial</ulink> - Another good introduction to Debian packaging.</para></listitem>
+
+			</itemizedlist></para>
+
+		<para><emphasis role="bold">Other Resources</emphasis>
+			<itemizedlist>
+
+				<listitem><para><ulink url="http://www-106.ibm.com/developerworks/linux/library/l-debpkg.html">IBM Packaging Tutorial</ulink></para></listitem>
+
+				<listitem><para><ulink url="https://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml">Duckcorp CDBS Documentation</ulink></para></listitem>
+	
+				<listitem><para><ulink url="https://wiki.ubuntu.com/MOTU/Documentation">Ubuntu MOTU Documentation</ulink></para></listitem>
+		
+				<listitem><para><ulink url="https://wiki.ubuntu.com/KubuntuPackagingGuide">Kubuntu Packaging Guide</ulink></para></listitem>
+
+            </itemizedlist>
+		</para>
+
+	</sect1>
+
+	<sect1 id="appendix-chroot" status="complete" xreflabel="chroot">
+		<title>Chroot Environment</title>
+
+		<para>A chroot environment is commonly used for development-related work and is basically an install of build-related software. It is always a good idea to do development work in a chroot environment, as it often requires the installation of development packages (whose main purpose is for building packages). An example is when a certain application requires the headers and development version of a library to build (e.g. <application>libabc-dev</application>). A normal user would not require the development version of <application>libabc</application>. Thus it is better to install such development packages in a chroot, leaving the normal operating environment clean and uncluttered. First, install the required packages:</para>
+		
+		<screen>sudo apt-get install dchroot debootstrap</screen>
+
+		<important><para>Make sure to install at least the version of
+				<application>debootstrap</application> that is from the
+				<phrase>Ubuntu</phrase> release for which you are trying to create the chroot.
+				You may have to download it from <ulink url="http://packages.ubuntu.com">packages.ubuntu.com</ulink>
+				and manually install it with <application>dpkg
+					-i</application>.</para></important>
+		
+		<para>The next steps are to create, configure, and enter the chroot environment.</para>
+		
+		<screen>
+sudo mkdir /var/chroot
+echo "mychroot /var/chroot" | sudo tee -a /etc/dchroot.conf
+sudo debootstrap --variant=buildd edgy /var/chroot/ http://archive.ubuntu.com/ubuntu/</screen>
+		
+		<note><para>Creating a chroot environment will take some time as
+				<application>debootstrap</application> downloads and configures a
+				minimal <phrase>Ubuntu</phrase> installation.</para></note>
+		
+		<screen>sudo cp /etc/resolv.conf /var/chroot/etc/resolv.conf
+sudo cp /etc/apt/sources.list /var/chroot/etc/apt/
+sudo chroot /var/chroot/</screen>
+
+		<para>In order to be able to use apt in the chroot, add Ubuntu sources to the chroot's apt sources. For the moment, ignore any warnings about package authentication:</para>
+		
+		<screen>
+echo "deb     http://archive.ubuntu.com/ubuntu edgy main restricted \
+	universe multiverse" &gt; /etc/apt/sources.list
+echo "deb-src http://archive.ubuntu.com/ubuntu edgy main restricted \
+	universe multiverse" &gt;&gt; /etc/apt/sources.list
+apt-get update
+apt-get install build-essential dh-make automake pbuilder gnupg lintian \
+	wget debconf devscripts gnupg sudo
+apt-get update
+exit</screen>
+
+		<para>Run the following command to configure locales:</para>
+		
+		<screen>
+sudo chroot /var/chroot/
+apt-get install dialog language-pack-en
+exit</screen>
+
+		<note><para> If you want support for a language other than
+		English replace <emphasis>en</emphasis>
+		in <application>language-pack-en</application> with the
+		appropriate language code.</para></note>
+
+		<para>Next, fix the user and root passwords for the chroot environment. The last line below is to avoid sudo warnings when resolving in the chroot environment:</para>
+		
+		<screen>
+sudo cp /etc/passwd /var/chroot/etc/
+sudo sed 's/\([^:]*\):[^:]*:/\1:*:/' /etc/shadow | sudo tee /var/chroot/etc/shadow
+sudo cp /etc/group /var/chroot/etc/
+sudo cp /etc/hosts /var/chroot/etc/</screen>
+
+		<para>To enable sudo, set up your root password and the first sudo user in the admin group (for the chroot environment). In the following commands, substitute "&lt;user&gt;" with the username that will be used in the chroot environment:</para>
+		
+		<screen>
+sudo cp /etc/sudoers /var/chroot/etc/
+sudo chroot /var/chroot/
+dpkg-reconfigure passwd
+passwd &lt;user&gt;
+exit</screen>
+
+		<para>The system fstab needs to be modified so that the chroot environment will have access to the system home directories, temp directory, etc. Note that the actual system home directory is used in the chroot environment.</para>
+		
+		<screen>sudo editor /etc/fstab</screen>
+		
+		<para>Add these lines:</para>
+		<screen>
+/home           /var/chroot/home        none    bind            0       0
+/tmp            /var/chroot/tmp         none    bind            0       0 
+proc-chroot     /var/chroot/proc        proc    defaults        0       0 
+devpts-chroot   /var/chroot/dev/pts     devpts  defaults        0       0 </screen>
+
+		<para>Mount the new fstab entries</para>
+		
+		<screen>sudo mount -a</screen>
+		
+		<para>The default bash profile includes chroot information in the prompt. To make this visible:</para>
+		
+		<screen>
+sudo chroot /var/chroot/
+echo mychroot &gt; /etc/debian_chroot
+exit</screen>
+
+		<para>Now use your chroot (you may omit the -c mychroot if there's only one or you just want the first one in <filename>/etc/dchroot.conf</filename>). The -d parameter means that your environment will be preserved. This parameter is generally useful if you want chrooted applications to seamlessly use your X server, your session manager, etc.</para>
+		
+		<screen>dchroot -c mychroot -d</screen>
+	
+	</sect1>
+
+	<sect1 id="appendix-examples" status="complete">
+		<title><application>dh_make</application> example files</title>
+
+		<variablelist>
+			<varlistentry>
+				<term>Readme.Debian</term>
+				
+				<listitem><para>This file is used to document changes that you
+						have made to the original upstream source that other
+						people might need to know or information
+						specific to Debian or <phrase>Ubuntu</phrase>.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>conffiles.ex</term>
+				
+				<listitem><para>If the package installs a configuration file, when the package is upgraded <application>dpkg</application> can prompt a user whether to keep his or her version if modified or install the new version. Such configuration files should be listed in <filename>conffiles</filename> (one per line). Do not list configuration files that are only modified by the package or have to be set up by the user to work.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>cron.d.ex</term>
+
+				<listitem><para>If your package requires regularly scheduled tasks to operate properly, you can use this file to configure it. If you use this file, rename it to <filename>cron.d</filename>.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>dirs</term>
+
+				<listitem><para>This file specifies the directories that are needed but the normal installation procedure (<application>make install</application>application) somehow doesn't create.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>docs</term>
+
+				<listitem><para>This file specifies the filenames of documentation files that <application>dh_installdocs</application> will install into the temporary directory.</para></listitem>
+				
+			</varlistentry>
+			
+			<varlistentry>
+				<term>emacsen-*.ex</term>
+
+				<listitem><para>This file specifies Emacs files that will be bytecompiled at install time. They are installed into the temporary directory by <application>dh_installemacsen</application>.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>init.d.ex</term>
+
+				<listitem><para>If your package is a daemon that needs to be
+						run at system startup rename this file to
+						<filename>init.d</filename> and adjust it to your
+						needs. </para></listitem>
+			
+			</varlistentry>
+
+			<varlistentry>
+				<term>manpage.1.ex and manpage.sgml.ex</term>
+
+				<listitem><para>These files are templates for <application>man</application> pages if the package does not already have one.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>menu.ex</term>
+
+				<listitem><para>This file is used to add your package to the
+						Debian menu. <phrase>Ubuntu</phrase> does not use Debian menu files
+						but uses the <ulink url="http://www.freedesktop.org">freedesktop.org</ulink>
+						standard <ulink url="http://standards.freedesktop.org/desktop-entry-spec/latest/">.desktop</ulink>
+						files.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>watch.ex</term>
+
+				<listitem><para>The package maintainer can use the <application>uscan</application> program and a <filename>watch</filename> file to check for a new upstream source tarball.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>ex.package.doc-base</term>
+
+				<listitem><para>This file is used to register your package's documentation (other than <application>man</application> and <application>info</application> pages) with <application>doc-base</application>.</para></listitem>
+				
+			</varlistentry>	
+
+			<varlistentry>
+				<term>postinst.ex, preinst.ex, postrm.ex, and prerm.ex</term>
+
+				<listitem><para>These maintainer scripts are run by <application>dpkg</application> when the package is installed, upgraded, or removed.</para></listitem>
+				
+			</varlistentry>
+
+		</variablelist>
+
+		<tip><para>For more details refer to the <ulink url="http://www.debian.org/doc/maint-guide/ch-dother.en.html">Debian New Maintainer's Guide</ulink>.</para></tip>
+			
+	</sect1>
+
+	
+	<sect1 id="appendix-debhelper" status="complete">
+		<title>List of <application>debhelper</application> scripts</title>
+
+<itemizedlist>
+
+<listitem>
+		<para>dh_builddeb</para>
+</listitem>
+
+<listitem>
+		<para>dh_clean</para>
+</listitem>
+
+<listitem>
+		<para>dh_compress</para>
+</listitem>
+
+<listitem>
+		<para>dh_desktop</para>
+</listitem>
+
+<listitem>
+		<para>dh_fixperms</para>
+</listitem>
+
+<listitem>
+		<para>dh_gconf</para>
+</listitem>
+
+<listitem>
+		<para>dh_gencontrol</para>
+</listitem>
+
+<listitem>
+		<para>dh_iconcache</para>
+</listitem>
+
+<listitem>
+		<para>dh_install</para>
+</listitem>
+
+<listitem>
+		<para>dh_installcatalogs</para>
+</listitem>
+
+<listitem>
+		<para>dh_installchangelogs</para>
+</listitem>
+
+<listitem>
+		<para>dh_installcron</para>
+</listitem>
+
+<listitem>
+		<para>dh_installdeb</para>
+</listitem>
+
+<listitem>
+		<para>dh_installdebconf</para>
+</listitem>
+
+<listitem>
+		<para>dh_installdefoma</para>
+</listitem>
+
+<listitem>
+		<para>dh_installdirs</para>
+</listitem>
+
+<listitem>
+		<para>dh_installdocs</para>
+</listitem>
+
+<listitem>
+		<para>dh_installemacsen</para>
+</listitem>
+
+<listitem>
+		<para>dh_installexamples</para>
+</listitem>
+
+<listitem>
+		<para>dh_installinfo</para>
+</listitem>
+
+<listitem>
+		<para>dh_installinit</para>
+</listitem>
+
+<listitem>
+		<para>dh_installlogcheck</para>
+</listitem>
+
+<listitem>
+		<para>dh_installlogrotate</para>
+</listitem>
+
+<listitem>
+		<para>dh_installman</para>
+</listitem>
+
+<listitem>
+		<para>dh_installmenu</para>
+</listitem>
+
+<listitem>
+		<para>dh_installmime</para>
+</listitem>
+
+<listitem>
+		<para>dh_installmodules</para>
+</listitem>
+
+<listitem>
+		<para>dh_installpam</para>
+</listitem>
+
+<listitem>
+		<para>dh_installppp</para>
+</listitem>
+
+<listitem>
+		<para>dh_installtexfonts</para>
+</listitem>
+
+<listitem>
+		<para>dh_installwm</para>
+</listitem>
+
+<listitem>
+		<para>dh_installxfonts</para>
+</listitem>
+
+<listitem>
+		<para>dh_installxmlcatalogs</para>
+</listitem>
+
+<listitem>
+		<para>dh_link</para>
+</listitem>
+
+<listitem>
+		<para>dh_listpackages</para>
+</listitem>
+
+<listitem>
+		<para>dh_makeshlibs</para>
+</listitem>
+
+<listitem>
+		<para>dh_md5sums</para>
+</listitem>
+
+<listitem>
+		<para>dh_perl</para>
+</listitem>
+
+<listitem>
+		<para>dh_python</para>
+</listitem>
+
+<listitem>
+		<para>dh_scrollkeeper</para>
+</listitem>
+
+<listitem>
+		<para>dh_shlibdeps</para>
+</listitem>
+
+<listitem>
+		<para>dh_strip</para>
+</listitem>
+
+<listitem>
+		<para>dh_testdir</para>
+</listitem>
+
+<listitem>
+		<para>dh_testroot</para>
+</listitem>
+
+<listitem>
+		<para>dh_usrlocal</para>
+</listitem>
+
+</itemizedlist>
+
+
+	</sect1>
+
+</appendix>
+

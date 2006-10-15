@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="linux-basics" status="review">
+	<title>Linuksaj Fundamentoj</title>
+				<para>Linukson inspiris la mastruma sistemo Unikso, kiu aperis en 1969, kaj daŭre uzatas kaj evoluas ĝis nun. Multaj projektaj konvencioj malantaŭ Unikso ankaŭ ĉeestas en Linukso kaj estas centraj al komprenado de la bazoj de la sistemo.</para>
+				<para>Unikso ĉefe estas orientita al la komandlinia interfaco, kaj tiu heredaĵo daŭras en Linukso. Tial, la grafika interfaco, kun ties fenestroj, bildsimboloj kaj menuoj, estas konstruita super baza komandlinia interfaco. Plue, tio signifas ke la dosiera sistemo de Linukso estas konstruita por esti facile mastrumebla kaj alirebla de la komandlinio.</para>
+		<sect1 id="directories-file-systems" status="complete">
+			<title>Dosierujoj kaj Dosieraj Sistemoj</title>
+				<para>Linuksaj kaj Uniksaj dosieraj sistemoj estas organizitaj laŭ hierarkia, arbsimila strukturo. La plej alta nivelo de la dosiera sistemo estas la <filename>/</filename> aŭ <emphasis>radika dosierujo</emphasis>. En la Uniksa kaj Linuksa projekta filozofio, oni konsideras ĉion dosiero - inkluzive de diskoj, subdiskoj kaj forpreneblaj iloj. Tio signifas ke ĉiuj aliaj dosieroj kaj dosierujoj (inkluzive de diskoj kaj subdiskoj) ekzistas sub la radika dosierujo.</para>
+				<para>Ekzemple, <filename>/home/jebediah/fromaĝoj.odt</filename> montras la tutan vojon al la dosiero <filename>fromaĝoj.odt</filename>, kiu troviĝas en la dosierujo <filename>jebediah</filename>, kiu estas sub la dosierujo <filename>home</filename>, kiu laŭvice estas sub la radika dosierujo (<filename>/</filename>).</para>
+				<para>Sub la radika dosierujo (<filename>/</filename>), troviĝas aro da gravaj sistemaj dosierujoj, kiuj estas komunaj al la plejmulto da Linuksaj distribuoj uzataj. Jen listo de oftaj dosierujoj kiuj troviĝas rekte sub la radika dosierujo (<filename>/</filename>):</para>
+					<itemizedlist>
+						<listitem>
+							<para>(<filename>/bin</filename>) - gravaj <emphasis>duumaj</emphasis> (kompilitaj) aplikaĵoj</para>
+						</listitem>
+						<listitem>
+							<para><filename>/boot</filename> - files that are required to <emphasis>boot</emphasis> the computer
+							</para>
+						</listitem>
+						<listitem>
+							<para><filename>/dev</filename> - dosieroj pri <emphasis>aparatoj</emphasis></para>
+						</listitem>
+						<listitem>
+							<para><filename>/etc</filename> - konfiguraj dosieroj, startigaj skriptoj, <emphasis>ktp</emphasis>...</para>
+						</listitem>
+						<listitem>
+							<para><filename>/home</filename> - <emphasis>hejma</emphasis> dosierujo de la loka uzulo</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lib</filename> - <emphasis>bibliotekoj</emphasis> de la sistemo</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lost+found</filename> - sistemo por <emphasis>perditaj kaj trovitaj</emphasis> dosieroj kiuj ekzistas sub la radika dosierujo (<filename>/</filename>)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/media</filename> - muntitaj (instalitaj) malmunteblaj  <emphasis>iloj</emphasis> ekzemple KD-oj, duumaj fotiloj, ktp...</para>
+						</listitem>
+						<listitem>
+							<para><filename>/mnt</filename> - <emphasis>muntitaj</emphasis> (instalitaj) dosieraj sistemoj</para>
+						</listitem>
+						<listitem>
+							<para><filename>/opt</filename> - loko por instali <emphasis>nedevigajn</emphasis> aplikaĵojn</para>
+						</listitem>
+						<listitem>
+							<para><filename>/proc</filename> - speciala dinamika dosierujo por informo pri la stato de la sistemo, inkluzive de aktuale rulantaj <emphasis>procedoj</emphasis></para>
+						</listitem>
+						<listitem>
+							<para><filename>/root</filename> - hejma dosierujo de la speciala uzulo '<emphasis>root</emphasis>', prononco: 'oblikvo rut'</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sbin</filename> - gravaj <emphasis>sistemaj duumaj</emphasis> dosieroj (ruligeblaj)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sys</filename> - contains information about the <emphasis>sys</emphasis>tem
+							</para>
+						</listitem>
+						<listitem>
+							<para><filename>/tmp</filename> - <emphasis>portempaj</emphasis> dosieroj</para>
+						</listitem>
+						<listitem>
+							<para><filename>/usr</filename> - aplikaĵoj kaj dosieroj kutime alireblaj de ĉiuj <emphasis>uzuloj</emphasis></para>
+						</listitem>
+						<listitem>
+							<para><filename>/var</filename> - <emphasis>variablaj</emphasis> dosieroj, ekzemple protokoloj kaj datumbazoj</para>
+						</listitem> 
+					</itemizedlist>
+		</sect1>
+
+		<sect1 id="permissions" status="review">
+			<title>Atingopermesoj</title>
+                       <para>Ĉiuj dosieroj en Linuksa sistemo havas atingopermesojn, kiuj permesas aŭ malpermesas al aliaj uzuloj vidi, modifi aŭ ruligi. La ĉefuzanto ('root') povas aliri ajnan dosieron en la sistemo. Ĉiu dosiero havas alirajn limigojn, kaj uzulajn limigojn kaj havas asocion kun posedanto kaj grupo.</para>
+                       <para>Ĉiun dosieron sekurigas tri aroj da atingopermesoj, laŭ ordo de graveco, por:</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>uzulo</emphasis></para>
+                           <para>rilatas al la uzulo kiu posedas la dosieron</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>grupo</emphasis></para>
+                           <para>rilatas al la grupo kiu havas asocion kun la dosiero</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>alia</emphasis></para>
+                           <para>rilatas al ĉiuj aliaj uzuloj</para>
+                         </listitem>
+                       </itemizedlist>
+                       <para>En ĉiu el la tri atingopermesaroj estas la veraj permesoj. La permesoj, kune kun kiel ili rilatas malsame al dosieroj kaj al dosierujoj, estas skizitaj jene:</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>legi</emphasis></para>
+                           <para>povas malfermi/vidigi la dosieron</para>
+                           <para>povas vidigi la dosierujon</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>skribi</emphasis></para>
+                           <para>povas redakti aŭ forigi la dosieron</para>
+                           <para>povas modifi la enhavon de dosierujo</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>ruligi</emphasis></para>
+                           <para>povas ruligi la dosieron kiel programon</para>
+                           <para>povas eniri la dosierujon</para>
+                         </listitem>
+                       </itemizedlist>
+				<para>To view and edit the permissions on files and directories, open the <phrase>&home-folder;</phrase> and right-click on a file or directory. Then select <guimenu>Properties</guimenu>.  The permissions exist under the <guilabel>Permissions</guilabel> tab and allow for the editing of all permission levels, if you are the owner of the file.
+				</para>
+				<para>To learn more about file permissions in Linux, read the <ulink url="&wiki-filepermissions;">file permissions page</ulink> in the Ubuntu Wiki.
+				</para>
+		</sect1>
+
+
+		<sect1 id="terminals" status="review">
+		<title>Terminaloj</title>
+            <para>Labori ĉe la komandlinio ne estas tiel timige kiel oni supozas. Neniu speciala scio estas bezonata por scipovi kiel utiligi la komandlinion. Ĝi estas programo kiel ĉiuj aliaj. Oni povas fari preskaŭ ĉion ĉe la komandlinio, kvankam ekzistas grafikaj iloj por la plejmulto da programoj, ili foje ne sufiĉas. Tiam la komandlinio ekutilas.</para>
+    	      <para>La terminalon oni ofte nomas la komandlinio aŭ ŝelo. Antaŭlonge, oni ĉiam interagis tiel kun la komputilo, tamen uzantoj de Linukso trovas ke uzi la ŝelon ofte estas pli rapide ol uzi grafikan metodon kaj ankoraŭ meritas uzon nuntempe. Ĉi tie vi lernos kiel uzi la terminalon.</para>
+				<para>La originala uzo de la terminalo estis por foliumi dosierojn kaj ĝi ankoraŭ uzatas tiel, okaze ke la grafika ilo misfunkcias. Vi povas uzi la terminalon kiel foliumilon, por navigi viajn dosierojn kaj malfari ŝanĝojn jam faritajn.</para>
+		<sect2 id="starting-a-terminal" status="review">
+			<title>Startigi la Terminalon</title>
+				<para>To start <application>Terminal</application> choose &terminal;.
+				</para>
+		</sect2>
+		<sect2 id="common-commands" status="review">
+			<title>Oftaj Komandoj</title>
+				<variablelist>
+					<varlistentry>
+						<term>View Directories - ls
+						</term>
+							<listitem><para>La <application>ls</application> (LiSt) listigos dosierojn en diversaj koloroj kun aranĝita teksto</para></listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Create Directories - mkdir (directory name)
+						</term>
+							<listitem><para>La <application>mkdir</application>(MaKeDIRectory) kreos dosierujon.</para></listitem>
+					</varlistentry>
+					<varlistentry>
+		    			<term>Change Directories - cd (/directory/location)
+		    			</term>
+		    				<listitem><para>La komando <application>cd</application> (ChangeDirectory) ŝanĝos de via aktuala dosierujo al la dosiero kiun vi specifas.</para>
+		    				</listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Copy Files/Directories - cp (file or directory name) (to directory or filename)
+		    			</term>
+		    				<listitem><para>La komando <application>cp</application> (CoPy) kopios dosierojn specifitajn. La komando <application>cp -r</application> kopios dosierujojn specifitajn.</para>
+		    				</listitem>
+		    		</varlistentry>
+		    		<varlistentry>
+		    			<term>Remove Files/Directories - rm (file or directory name)</term>
+	            		<listitem><para>La komando <application>rm</application> (ReMove) forigos dosiero(j)n specifita(j)n. La komando <application>rm -rf</application> forigos dosierujo(j)n specifita(j)n.</para></listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Rename Files/Directories - mv (file or directory name)</term>
+							<listitem><para>La komando <application>mv</application> (MoVe) renomos/movos dosiero(j)n aŭ dosierujo(j)n specifita(j)n.</para>
+		    				</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Find Files/Directories - locate (file or directory name)</term>
+							<listitem><para>La komando <application>locate</application> serĉos en via komputilo por dosiero specifita. Ĝi uzas indekson de la dosieroj en via sistemo por rapide funkcii. Por ĝisdatigi la indekson ruligu la komandon <application>updatedb</application>. Tiu komando aŭtomate rulas ĉiutage, se vi lasas vian komputilon rulanta. Ĝi bezonas ĉefuzulajn atingopermesojn (vidu <xref linkend="root-and-sudo"/>).</para>
+							</listitem>
+					</varlistentry>
+					</variablelist>
+			<para>Oni povas ankaŭ uzi ĵokerojn por kongrui al unu aŭ pliaj dosieroj, ekzemple "*" (por ĉiuj dosieroj) aŭ "?" por kongrui al unu signo).</para>
+			<para>For a more thorough introduction to the Linux command line, please read the <ulink url="&wiki-BasicCommands;">command line introduction</ulink> on the Ubuntu wiki.
+			</para>
+		</sect2>
+		<sect2 status="complete">
+			<title>Ŝalti al Konzolo</title>
+				<para>La kutima metodo aliri komandlinion en Ubuntu estas startigi terminalon (see <xref linkend="starting-a-terminal"/> supre, kvankam foje utilas ŝalti al vera konzolo:</para>
+				<procedure>
+					<step>
+						<para>Use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo>
+							shortcut keys to switch to the first console.
+						</para>
+					</step>
+					<step>
+						<para>To switch back to Desktop mode, use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F7</keycap>
+							</keycombo> shortcut keys.
+						</para>
+					</step>
+				</procedure>
+					<note>
+						<para>There are six consoles available. Each one is accessible with the
+							shortcut keys <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo> to <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F6</keycap>
+							</keycombo>.
+						</para>
+					</note>
+		</sect2>
+		<sect2 status="review">
+			<title>Malŝalti la pepon en Terminalo.</title>
+				<procedure>
+					<step>
+						<para>
+						Start a <application>Terminal</application>
+						session,
+						select: <phrase>&terminal;</phrase>
+						from the desktop menu system. 
+						</para>
+					</step>
+					<step>
+						<para>
+							<menuchoice>
+								<guimenu>Edit</guimenu>
+								<guimenuitem>Current Profile...</guimenuitem>
+							</menuchoice>
+							. Select the
+							<guibutton>General</guibutton> tab. Uncheck the
+							<guilabel>Terminal bell</guilabel>
+							checkbox.
+						</para>
+					</step>
+				</procedure>
+		</sect2>
+	</sect1>
+
+	<sect1 id="text-editing" status="review">
+  			<title>Redakti Tekston</title>
+ 			<para>All of the configurations and settings in Linux are saved in text files. Even though you most often can edit configurations through the graphical interface, you may occasionally have to edit them by hand. <application>Gedit</application> is the default Ubuntu text editor, which you can launch by clicking &text-editor; on the desktop menu system.
+ 			</para>
+ 			<para>Foje en ĉi tiu gvidlibro, <application>Gedit</application> estas ruligita per la komandlinio uzante <application>gksudo</application>, kiu ruligas al <application>Gedit</application> kun ĉefuzulaj permesoj, por modifi konfigurajn dosierojn.</para>
+			<para>Se vi bezonas uzi redaktilon per la komandlinio, vi povas uzi de <application>nano</application>, kiu estas simple uzebla redaktilo. Uzante ĝin per la komandlinio, ĉiam uzu la jenan komandon, kiu certigas ke la redaktilo ne enmetos linisaltojn: <screen>nano -w</screen></para>
+			<para>For more information about how to use <application>nano</application>, refer to the <ulink url="&wiki-Nano;">guide on the wiki</ulink>.
+			</para>
+			<para>Kelkaj aliaj terminalbazitaj redaktiloj disponeblas en Ubuntu. Inter la popularaj estas <application>VIM</application> kaj <application>Emacs</application> (la favoraj kaj malfavoraj trajtoj de ĉiu instigas multan amikecan debatadon en la Linuksa komunumo). Uzi tiujn ofte estas pli komplekse ol ĉe <application>nano</application>, sed ili ankaŭ estas pli potencaj.</para>
+	</sect1>
+
+		<sect1 id="users-and-groups" status="review">
+			<title>Uzuloj kaj Grupoj</title>
+			<para>To add users or groups to your system, you can use the <application>Users And Groups</application> application located in &users-groups;.
+			</para>
+			<note>
+				<para>Remember to log off and log back in order for the changes to become effective.
+				</para>
+			</note>
+			<para>Por aldoni novan uzulon, klaku al <guilabel>Aldoni uzulon</guilabel>, tajpu la datumojn en la kampoj, kaj klaku al <guilabel>Akcepti</guilabel>. Por redakti la atributojn de uzulo, klaku al butono <guilabel>Atributoj</guilabel>, kiu troviĝas en la ĉefa fenestro <guilabel>Uzuloj</guilabel>.</para>
+			<para>Por aldoni novan grupon, elektu la tabon <guilabel>Grupoj</guilabel> kaj klaku al <guilabel>Aldoni grupon</guilabel>. Elektu nomon por la nova grupo kaj, se vi deziras, ŝanĝi la defaŭltan valoron por la <guilabel>Grupa Idento</guilabel>. Se vi provas uzi de <guilabel>Grupa Idento</guilabel> jam uzata, la sistemo avertos vin.</para>
+			<para>Vi povas aldoni uzulojn al la nove kreita grupo elektante uzulon de la maldekstra menuo kaj klakante al butono <guilabel>Aldoni</guilabel>, Forigi uzanton estas same simple: elektu uzulon de la dekstra menuo kaj klaku al <guilabel>Forigi</guilabel>. Kiam vi estas preta, klaku al <guilabel>Akcepti</guilabel> kaj la nova grupo, kun ties uzuloj, se enmetitaj, estos kreita.</para>
+			<para>Por redakti la atributojn de grupo, de en la ĉefa fenestro <guilabel>Grupoj</guilabel>, elektu grupan nomon kaj klaku al la butono <guilabel>Atributoj</guilabel>.</para>
+			<para>Por forigi uzulon aŭ grupon el la sistemo, elektu la uzulon aŭ grupon forigotan kaj klaku al <guilabel>Forigi</guilabel>.</para>
+		</sect1>
+
+</chapter>
+

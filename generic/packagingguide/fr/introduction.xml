@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="intro-chap" status="review">
+	<title id="intro">Introduction</title>
+	
+	<para>Bienvenue sur le guide de création de paquet &ubuntu; ! Ce guide s'adresse principalement à ceux qui voudraient créer et maintenir des paquets &ubuntu;. Bien que de nombreux concepts dans ce guide puissent être utilisés pou créer des paquet binaires en vue d'un usage personnel, il est conçu pour les personnes qui veulent distribuer leur paquets aux, et pour, les autres. Bien qu'il soit écrit en ayant la distribution &ubuntu; en tête, il pourra également être utile pou n'importe quelle distribution basée sur Debian.</para>
+
+	<para>Il pourrait y avoir de multiples rasions pour lesquelles vous voulez apprendre à créer des paquets pour &ubuntu;. Tout d'abord, construire et corriger des paquets &ubuntu; est une excellente manière de contribuer à la communauté &ubuntu;. C'est également une bonne façon d'apprendre comment &ubuntu; et les applications que vous avez installées fonctionnent. Peut-être que vous voulez installer un paquet qui n'est pas dans les dépôts &ubuntu;. Heureusement après avoir lu ce guide, vous aurez le savoir et les outils dont vous avez besoin pour faire tout cela.</para>
+
+	<para>Les versions HTML et PDF de ce manuel sont disponible sur <ulink url="&ubuntu-documentation;">le site de la documentation Ubuntu</ulink>.</para>
+	
+	<para>Vous pouvez acheter ce manuel sous forme de livre sur <ulink url="&lulu-store;">notre boutique Lulu</ulink>. Vous ne paierez que l'impression et les frais d'envoi.</para>
+
+	<sect1 id="intro-wtb" status="writing">
+	  <title>Où commencer</title>
+	  <para>Si vous êtes totalement novice sur la création de paquets basés sur Debian, alors vous voudrez lire ce guide d'un bout à l'autre, en prêtant particulièrement attention à <xref linkend="intro-prereq"/>, <xref linkend="gs-chap"/>, et <xref linkend="basic-chap"/>. Les personnes expérimentés en matière d'empaquetage Debian trouveront <xref linkend="ubuntu-chap"/> et <xref linkend="bugs-chap"/> plus utiles.</para>
+	</sect1>
+
+	<sect1 id="intro-prereq" status="review">
+		<title>Prérequis</title>
+			
+		<para>Ce guide part du principe que le lecteur a une connaissance raisonnable de la construction et installation de logiciels depuis les sources sur Linux. Ce guide utilise également intensivement  l'interface en ligne de commande, vous devez donc vous sentir à l'aise dans l'utilisation d'une console. Vous devez être minimum capable d'utiliser ce qui suit :</para>
+
+		<itemizedlist>
+		  <listitem><para><emphasis role="bold">make :</emphasis> GNU Make est un outil de construction de logiciels très important. Il est utilisé pour  transformer un travail de compilation complexe en quelque chose de trivial. Il est important que vous sachiez comment l'utiliser, car il stockera la majeure partie de l'information sur le processus d'empaquetage dans un fichier Makefile. La documentation est disponible sur le site web <ulink url="http://www.gnu.org/software/make/manual/make.html">GNU</ulink>.</para></listitem>
+
+		  <listitem><para><emphasis role="bold">./configure :</emphasis> Ce script est fourni dans pratiquement toutes les sources Linux, particulièrement pour les logiciels écrits dans des langages compilés comme C et C++. Il est utilisé pour générer un Makefile (fichier utilisé par <application>make</application>) qui est configuré de manière adéquate pour votre système. Les outils standards d'empaquetage Debian l'utilisent, il est donc important que vous sachiez ce que le script <filename>configure</filename> fait. L'information sur <filename>./configure</filename> peut être trouvée dans la documentation de <application>make</application>.</para></listitem>
+							
+		  <listitem><para><emphasis role="bold">Apt/Dpkg :</emphasis> En dehors de l'usage basique d'installation d'applications, <application>apt</application> et <application>dpkg</application> possèdent de nombreuses fonctionnalités qui sont utiles pour la création de paquets.</para>
+			<itemizedlist>
+				
+			  <listitem><para><emphasis role="bold">apt-cache dump</emphasis> - liste tous les paquet dans le cache. Cette commande est particulièrement pratique en association avec une redirection vers <application>grep</application> comme <application>apt-cache dump | grep foo</application> pour rechercher des paquets dont le nom ou les dépendances incluent <quote>foo</quote>.</para></listitem>
+
+				<listitem><para><emphasis role="bold">apt-cache policy</emphasis> - liste les dépôts (main/restricted/universe/multiverse) dans lesquels des paquets existent.</para></listitem>
+
+				<listitem><para><emphasis role="bold">apt-cache show </emphasis> - affiche des informations sur le paquet binaire.</para></listitem>
+
+				<listitem><para><emphasis role="bold">apt-cache showsrc </emphasis> - affiche des informations sur le paquet source.</para></listitem>
+
+				<listitem><para><emphasis role="bold">apt-cache rdepends </emphasis> - montre les dépendances inverses pour un paquet (quels paquets nécessitent celui qu'on demande).</para></listitem>
+
+				<listitem><para><emphasis role="bold">dpkg -S </emphasis> - montre le paquet binaire auquel appartient un certain fichier</para></listitem>
+
+				<listitem><para><emphasis role="bold">dpkg -l </emphasis> - montre les paquets actuellement installés. Ceci est similaire à <application>apt-cache dump</application> mais pour les paquets installés.</para></listitem>
+	
+				<listitem><para><emphasis role="bold">dpkg -c </emphasis> - montre les contenus d'un paquet binaire. Cette commande est utile pour s'assurer que les fichiers sont installés aux bons endroits.</para></listitem>
+
+				<listitem><para><emphasis role="bold">dpkg -f </emphasis> - montre le fichier de contrôle pour un paquet binaire. Cette commande est utile pour s'assurer que les dépendances sont correctes.</para></listitem>
+
+				<listitem><para><emphasis role="bold">grep-dctrl</emphasis> - permet la recherche d'informations spécialisées dans les paquets. C'est un usage spécifique du paquet <application>grep</application> (mais pas installé par défaut).</para></listitem>
+
+			</itemizedlist>
+				
+		  </listitem>
+
+		  <listitem><para><emphasis role="bold">diff and patch :</emphasis> Le programme <application>diff</application> peut être utilisé pour comparer deux fichier et créer des patches.</para>
+
+			<para>Le programme <application>patch</application> est utilisé pour appliquer un correctif (patch) (habituellement créé par <application>diff</application> ou un autre programme similaire) sur un fichier ou un dossier. Afin d'appliquer le correctif créé ci-dessus, nous pourrions invoquer <application>patch -p0 &lt; file.diff</application>. Le <emphasis>-p</emphasis> indique à <application>patch</application> la tolérance applicable aux chemins contenus dans le correctif. -p0 indique de ne rien modifier.</para>
+			
+		  </listitem>
+
+		</itemizedlist>
+		
+	</sect1>
+
+</chapter>
+

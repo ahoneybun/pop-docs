@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-it SYSTEM "../../../ubuntu/libs/gnome-menus-it.ent">
+%gnome-menus-it;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="partitions-booting" status="complete">
+	<title>Partizioni e avvio del sistema</title>
+		<para>Questa sezione contiene informazioni riguardo i cambiamenti da apportare per modificare il comportamento del computer all'avvio e come accedere ad altri sistemi operativi e partizioni da Ubuntu</para>
+			<sect1 status="complete">
+				<title>Editor grafico di partizioni</title>
+					<para><application>Gparted</application> è uno strumento grafico per modificare le partizioni del disco.</para> 
+					<procedure>
+						<step>
+							<para>Installare il pacchetto <application>gparted</application> (consultare <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>	
+							<para>È possibile avviare l'applicazione scegliendo &gparted;.</para>
+						</step>
+					</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Rendere le partizioni di Windows disponibili da Ubuntu</title>
+				<para>Le partizioni di Windows dovrebbero essere automaticamente rilevate da Ubuntu. Se ciò non fosse, è possibile renderle disponibili utilizzando l'applicazione <application>Dischi</application>.</para>
+				<procedure>
+					<step>
+						<para>Scegliere &disks;.</para>
+					</step>
+					<step>
+						<para>Selezionare il disco fisso corretto e fare clic su <guilabel>Partizioni</guilabel>.</para>
+					</step>
+					<step>
+						<para>Selezionare la partizione e fare clic su <guilabel>Abilita</guilabel>.</para>
+					</step>
+					<step>
+						<para>Per smontare la partizione fare clic su <guilabel>Disabilita</guilabel>.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Rendere le partizioni di Windows automaticamente disponibili</title>
+				<para>Le partizioni di Windows dovrebbero essere automaticamente disponibili da Ubuntu. Se ciò non fosse, procedere come segue:</para>
+				<procedure>
+					<step>
+						<para>Leggere <xref linkend="listpartitiontables"/></para>
+					</step>
+					<step>
+						<para>Per prima cosa creare una directory dove la partizione può essere resa disponibile ("montata"):</para>
+							<screen>
+sudo mkdir /media/windows
+							</screen>
+					</step>
+					<step>
+						<para>Quindi fare una copia di riserva del file di configurazione dei dischi e aprirlo, con privilegi amministrativi, in un editor di testo:</para>
+						<screen>
+sudo cp /etc/fstab /etc/fstab_backup
+gksudo gedit /etc/fstab
+						</screen>
+					</step>
+					<step>
+						<para>Accodare la riga seguente alla fine del file: <programlisting>/dev/hda1 /media/windows ntfs umask=0222 0 0</programlisting></para>
+						<note>
+							<para>Sostituire <emphasis role="bold">/dev/hda1</emphasis> con il nome del dispositivo corretto per la vostra partizione.</para>
+							<para>Se la partizione Windows utilizza il file system FAT32, sostituire nell'esempio precedente <emphasis role="bold">ntfs</emphasis> con <emphasis role="bold">vfat</emphasis>.</para>
+							<para>Se il file system è di tipo FAT32, è considerato sicuro permettere l'accesso in lettura e scrittura. Per fare questo, cambiare il valore di <emphasis role="bold">umask</emphasis> a 0000.</para>
+						</note>
+					</step>
+					<step>
+						<para>Salvare il file modificato (<ulink url="sample/fstab_automountntfs">un esempio</ulink>).</para>
+					</step>
+					<step>
+						<para>I cambiamenti avranno effetto dopo un riavvio del computer.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Eseguire un comando di sistema all'avvio</title>
+				<para>A volte può essere utile eseguire un comando personalizzato all'avvio del computer. Per fare ciò:</para>
+				<procedure>
+					<step>
+						<para>Modificare <application>crontab</application> con privilegi di amministrazione (consultare <xref linkend="root-and-sudo"/>):</para>
+							<screen>sudo crontab -e</screen>
+					</step>
+					<step>
+						<para>Inserire la seguente riga:</para>
+							<screen>@reboot /home/utente/comando</screen>
+					<note>
+						<para>Sostituire <filename>/home/utente/comando</filename> con l'indirizzo completo del comando.</para>
+					</note>
+					</step>
+					<step>
+						<para>Salvare il file e uscire.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Cambiare il sistema operativo predefinito di avvio</title>
+				<para>Per cambiare il sistema operativo con cui si avvia il computer, è necessario modificare il file di configurazione di <application>grub</application>.</para>
+				<procedure>
+					<step>
+						<para>Fare una copia di riserva del file e aprirlo in un editor di testo:</para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+gksudo gedit /boot/grub/menu.lst</screen>
+					</step>
+					<step>
+						<para>Cercare la seguente riga:</para>
+						<programlisting>...
+default 0
+...</programlisting>
+					</step>
+					<step>
+						<para>Sostituirla con la seguente riga:</para>
+						<programlisting>default X</programlisting>
+						<note><para>Sostituire X con un numero a seconda dell'ordine con cui i diversi sistemi operativi compaiono nel file di configurazione, iniziando a contare da 0. Per esempio, se si desidera che il sistema operativo predefinito sia il primo della lista, sostituire X con uno 0. Se invece si desidera che il sistema operativo predefinito sia il secondo, sostituire X con un 1 e così via.</para></note> 
+					</step>
+					<step>
+						<para>Salvare il file modificato (<ulink url="sample/menu.list_changedefaultosgrub">un esempio</ulink>)</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Configurare i servizi di avvio</title>
+				<para>Sono necessari privilegi di amministratore (consultare <xref linkend="root-and-sudo"/>).</para>
+				<procedure>
+					<step>
+						<para>Avviare <application>Impostazioni servizi</application>: <menuchoice><guimenu>Sistema</guimenu>
+								<guisubmenu>Amministrazione</guisubmenu>
+								<guimenuitem>Servizi</guimenuitem></menuchoice>.</para>
+					</step>
+					<step>
+						<para>Inserire la propria password.</para>
+					</step>
+					<step>
+						<para>Selezionare i servizi da attivare, quindi fare clic su <guibutton>OK</guibutton>.</para>
+					</step>
+					<step>
+						<para>Per un maggiore controllo dei servizi di avvio, installare l'applicazione <application>bum</application> dal repository <quote>Universe</quote> (consultare <xref linkend="add-applications"/>) e avviarla: <menuchoice><guimenu>Sistema</guimenu>
+								<guisubmenu>Amministrazione</guisubmenu>
+								<guimenuitem>Boot-up Manager</guimenuitem></menuchoice>.</para>
+					</step>
+				</procedure>
+			</sect1>
+	<sect1 id="other-hardware" status="complete">
+	    <title>Altri consigli</title>
+	    <sect2 id="listpartitiontables" status="complete">
+                <title>Controllare l'utilizzo del disco e visualizzare la tabella delle partizioni</title>
+                    <procedure>
+                        <step>
+                            <para>Scegliere &disks;.</para>
+                        </step>
+                        <step>
+                            <para>Selezionare il <guibutton>Disco rigido</guibutton>, quindi la scheda <guibutton>Partizioni</guibutton></para>
+                        </step>
+                        <step>
+                            <para>Le partizioni sono elencate nella <guilabel>Lista delle partizioni</guilabel>, a lato sono mostrati dimensione e percorso d'accesso.</para>
+                        </step>
+                    </procedure>
+            </sect2>
+            <sect2 status="complete">
+                <title>Elencare i dispositivi</title>
+                            <para>Per elencare i dispositivi montati, in un terminale digitare:</para>
+                               <screen>mount</screen>
+			    <para>La lista mostra i dispositivi (come le partizioni di un disco fisso), i percorsi d'accesso (per accedere ai file), il tipo di filesystem e, tra parentesi, le opzioni di mount.</para>
+                            <para>Questo esempio mostra la partizione del disco fisso hda2 montato come «/» con ext3 come filesystem. La partizione è montata con due opzioni, una permette al dispositivo di essere letto e scritto e l'altra rimonta il dispositivo in sola lettura nel caso di errori.</para>
+                            <screen><computeroutput>/dev/hda2 on / type ext3 (rw,errors=remount-ro)</computeroutput></screen>				
+                            <para>Per elencare i dispositivi PCI:</para>
+                                <screen>lspci</screen>
+                            <para>Per elencare i dispositivi USB:</para>
+                                <screen>lsusb</screen>
+            </sect2>
+ 
+            <sect2 status="complete">
+                <title>Montare/Smontare CD/DVD-ROM manualmente e mostrare tutti i file e cartelle nascosti e associati</title>
+                            <para>Assumendo che <filename class="devicefile">/media/cdrom0/</filename> sia la posizione del CD/DVD-ROM</para>
+                            <para>Per montare un CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo mount /media/cdrom0/ -o unhide</screen>
+                            </para>
+                            <para>Per smontare un CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo umount /media/cdrom0/</screen>
+                            </para>
+            </sect2>
+	</sect1>
+</chapter>
+

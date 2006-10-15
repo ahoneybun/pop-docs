@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-sv SYSTEM "../../../ubuntu/libs/gnome-menus-sv.ent">
+%gnome-menus-sv;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="linux-basics" status="review">
+	<title>Grunderna i Linux</title>
+				<para>Linux är inspirerat av operativsystemet Unix som kom till 1969, och har sedan dess hela tiden använts och utvecklats. En stor del av designen bakom Unix finns också i Linux och är centrala för förståelsen av grunderna i systemet.</para>
+				<para>Unix var först och främst byggt för kommandoradsgränssnitt, och det arvet har följt med till Linux. Därför är det grafiska användargränssnittet med sina fönster, ikoner och menyer byggda ovanpå ett enkelt kommandoradsgränssnitt. Det här innebär även att Linux filsystem är uppbyggt för att vara enkelt att hantera och komma åt från kommandoraden.</para>
+		<sect1 id="directories-file-systems" status="complete">
+			<title>Mappar och filsystem</title>
+				<para>Linux och Unix filsystem är ordnade i en hierarkisk, trädlik struktur. Den högsta punkten i filsystemet är <filename>/</filename> eller <emphasis>root-katalogen</emphasis>. Enligt Unix och Linux design är allt en fil - inklusive hårddiskar, partitioner och borttagbar media. Det här innebär att alla andra filer och kataloger (inklusive andra hårddiskar och partitioner) ligger under root-katalogen.</para>
+				<para>Till exempel visar <filename>/home/jebediah/cheeses.odt</filename> den korrekta, fullständiga sökvägen till filen <filename>cheeses.odt</filename> som ligger i katalogen <filename>jebediah</filename> som ligger i katalogen <filename>home</filename>, som i sin tur ligger under root-katalogen (<filename>/</filename>).</para>
+				<para>Under root-katalogen (<filename>/</filename>) finns det ett antal viktiga sytemkataloger som är vanliga i nästan alla Linuxdistributioner som används. Följande är en lista över vanliga kataloger som finns i root-katalogen (<filename>/</filename>):</para>
+					<itemizedlist>
+						<listitem>
+							<para><filename>/bin</filename> viktiga <emphasis>bin</emphasis>ära program</para>
+						</listitem>
+						<listitem>
+							<para><filename>/boot</filename> - files that are required to <emphasis>boot</emphasis> the computer
+							</para>
+						</listitem>
+						<listitem>
+							<para><filename>/dev</filename> - alla enheter (<emphasis>dev</emphasis>ice på engelska)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/etc</filename> - konfigurationsfiler, uppstartsskript, <emphasis>etc</emphasis>...</para>
+						</listitem>
+						<listitem>
+							<para><filename>/home</filename> - lokala användares hemkataloger (<emphasis>home</emphasis> på engelska)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lib</filename> - systembibliotek (<emphasis>lib</emphasis>raries på engelska)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lost+found</filename> - ger dig upphittade filer som fanns under root-katalogen (<filename>/</filename>)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/media</filename> - monterad (laddad) borttagbar <emphasis>media</emphasis> som CD-skivor, digitalkameror, mm...</para>
+						</listitem>
+						<listitem>
+							<para><filename>/mnt</filename> - <emphasis>m</emphasis>o<emphasis>nt</emphasis>erade filesystem</para>
+						</listitem>
+						<listitem>
+							<para><filename>/opt</filename> - erbjuder dig en plats att installera valfria (<emphasis>opt</emphasis>ional) program</para>
+						</listitem>
+						<listitem>
+							<para><filename>/proc</filename> - en speciell dynamisk katalog som håller ordning på information om systemet, däribland de <emphasis>proc</emphasis>esser som körs</para>
+						</listitem>
+						<listitem>
+							<para><filename>/root</filename> - <emphasis>root</emphasis>-användarens hemkatalog, uttalas 'slash-root'</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sbin</filename> - viktiga <emphasis>s</emphasis>ystem<emphasis>bin</emphasis>ärer</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sys</filename> - contains information about the <emphasis>sys</emphasis>tem
+							</para>
+						</listitem>
+						<listitem>
+							<para><filename>/tmp</filename> - <emphasis>t</emphasis>e<emphasis>mp</emphasis>orära filer</para>
+						</listitem>
+						<listitem>
+							<para><filename>/usr</filename> - program och filer som för det mesta är tillgängliga för alla användare (<emphasis>us</emphasis>e<emphasis>r</emphasis>s på engelska)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/var</filename> - föränderliga (<emphasis>var</emphasis>iable) filer som loggar och databaser</para>
+						</listitem> 
+					</itemizedlist>
+		</sect1>
+
+		<sect1 id="permissions" status="review">
+			<title>Rättigheter</title>
+                       <para>Alla filer i ett Linuxsystem har rättigheter som tillåter eller hindrar andra från att titta på, modifiera, eller köra dem. Superanvändaren "root" har möjligheten att komma åt alla filer i datorn. Varje fil har restriktioner för tillgång, användare, samt har en ägare och en grupptillhörighet.</para>
+                       <para>Varje fil går att säkra med följande tre rättigheter, ordnade efter viktighet:</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>användare (user)</emphasis></para>
+                           <para>gäller den användaren som äger filen</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>grupp (group)</emphasis></para>
+                           <para>gäller den gruppen som filen tillhör</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>andra (other)</emphasis></para>
+                           <para>gäller alla andra användare</para>
+                         </listitem>
+                       </itemizedlist>
+                       <para>I var och en av de tre uppsättningarna rättigheter finns de faktiska rättigheterna. Rättigheterna, tillsammans med hur deras funktion skiljer sig mellan filer och mappar, förklaras nedan:</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>läsa (read)</emphasis></para>
+                           <para>filerna kan visas/öppnas</para>
+                           <para>kataloginnehåll kan visas</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>skriva (write)</emphasis></para>
+                           <para>filerna kan redigeras eller tas bort</para>
+                           <para>kataloginnehåll kan ändras</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>körbara (execute)</emphasis></para>
+                           <para>körbara filer kan köras som program</para>
+                           <para>kataloger går att gå in i</para>
+                         </listitem>
+                       </itemizedlist>
+				<para>To view and edit the permissions on files and directories, open the <phrase>&home-folder;</phrase> and right-click on a file or directory. Then select <guimenu>Properties</guimenu>.  The permissions exist under the <guilabel>Permissions</guilabel> tab and allow for the editing of all permission levels, if you are the owner of the file.
+				</para>
+				<para>To learn more about file permissions in Linux, read the <ulink url="&wiki-filepermissions;">file permissions page</ulink> in the Ubuntu Wiki.
+				</para>
+		</sect1>
+
+
+		<sect1 id="terminals" status="review">
+		<title>Terminaler</title>
+            <para>Att arbeta vid en kommandorad är inte så skrämmande som man kan tro. Det krävs ingen speciell kunskap för att kunna använda en kommandorad: det är ett program som alla andra. Nästan allt i Linux kan göras med en kommandorad, och även om det finns grafiska verktyg för de flesta program är de inte alltid tillräckliga. Det är här kommandoraden är användbar.</para>
+    	      <para>Terminalen kallas oftast för kommandoraden eller skalet. Förr i tiden var det såhär en användare kommunicerade med en dator, och även om det inte är så längre har Linuxanvändare upptäckt att det ofta går snabbare att använda ett skal än en grafisk motsvarighet, så därför används kommandorader än idag. Här får du lära dig hur du använder en terminal.</para>
+				<para>Ursprungligen var en terminal en filhanterare, och den går fortfarande att använda som en filhanterare om det grafiska gränssnittet inte fungerar. Du kan använda terminalen som en filhanterare för att leta upp dina filer och ångra ändringarna du har gjort.</para>
+		<sect2 id="starting-a-terminal" status="review">
+			<title>Starta terminalen</title>
+				<para>To start <application>Terminal</application> choose &terminal;.
+				</para>
+		</sect2>
+		<sect2 id="common-commands" status="review">
+			<title>Vanliga kommandon</title>
+				<variablelist>
+					<varlistentry>
+						<term>View Directories - ls
+						</term>
+							<listitem><para>Kommandot <application>ls</application> (LiSt) listar filer i olika färger med formaterad text</para></listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Create Directories - mkdir (directory name)
+						</term>
+							<listitem><para>Kommandot <application>mkdir</application> (MaKeDIRectory) skapar en katalog.</para></listitem>
+					</varlistentry>
+					<varlistentry>
+		    			<term>Change Directories - cd (/directory/location)
+		    			</term>
+		    				<listitem><para>Kommandot <application>cd</application> (ChangeDirectory) kommer att flytta dig från den nuvarande katalogen till den katalog du skriver.</para>
+		    				</listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Copy Files/Directories - cp (file or directory name) (to directory or filename)
+		    			</term>
+		    				<listitem><para>Kommandot <application>cp</application> (CoPy) kopierar alla filer du specificerar. Kommandot <application>cp -r</application> kommer att kopiera alla kataloger du specificerar.</para>
+		    				</listitem>
+		    		</varlistentry>
+		    		<varlistentry>
+		    			<term>Remove Files/Directories - rm (file or directory name)</term>
+	            		<listitem><para>Kommandot <application>rm</application> (ReMove) kommer att ta bort alla filnamn du specificerar. Kommandot <application>rm -rf</application> kommer att ta bort alla kataloger du specificerar.</para></listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Rename Files/Directories - mv (file or directory name)</term>
+							<listitem><para>Kommandot <application>mv</application> (MoVe) byter namn/flyttar på de filer du specificerar.</para>
+		    				</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Find Files/Directories - locate (file or directory name)</term>
+							<listitem><para>Kommandot <application>locate</application> kommer att söka i din dator efter det filnamn du skriver. Det använder ett index över filerna på din dator för att vara snabbt: för att uppdatera det, kör kommandot <application>updatedb</application>. Det här kommandot körs automatiskt varje dag om du lämnar den igång. Det behöver köras med administrativa rättigheter (se <xref linkend="root-and-sudo"/>).</para>
+							</listitem>
+					</varlistentry>
+					</variablelist>
+			<para>Du kan också använda jokertecken för att matcha en eller flera filer, som "*" (för alla filer) eller "?" (för att matcha ett tecken).</para>
+			<para>For a more thorough introduction to the Linux command line, please read the <ulink url="&wiki-BasicCommands;">command line introduction</ulink> on the Ubuntu wiki.
+			</para>
+		</sect2>
+		<sect2 status="complete">
+			<title>Växla till konsolläge</title>
+				<para>Det vanliga sättet att komma åt kommandoraden i Ubuntu är att starta en terminal (se <xref linkend="starting-a-terminal"/> ovan), men ibland är det användbart att växla till en riktig konsol:</para>
+				<procedure>
+					<step>
+						<para>Use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo>
+							shortcut keys to switch to the first console.
+						</para>
+					</step>
+					<step>
+						<para>To switch back to Desktop mode, use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F7</keycap>
+							</keycombo> shortcut keys.
+						</para>
+					</step>
+				</procedure>
+					<note>
+						<para>There are six consoles available. Each one is accessible with the
+							shortcut keys <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo> to <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F6</keycap>
+							</keycombo>.
+						</para>
+					</note>
+		</sect2>
+		<sect2 status="review">
+			<title>Stänga av det pipande ljudet i terminalen</title>
+				<procedure>
+					<step>
+						<para>
+						Start a <application>Terminal</application>
+						session,
+						select: <phrase>&terminal;</phrase>
+						from the desktop menu system. 
+						</para>
+					</step>
+					<step>
+						<para>
+							<menuchoice>
+								<guimenu>Edit</guimenu>
+								<guimenuitem>Current Profile...</guimenuitem>
+							</menuchoice>
+							. Select the
+							<guibutton>General</guibutton> tab. Uncheck the
+							<guilabel>Terminal bell</guilabel>
+							checkbox.
+						</para>
+					</step>
+				</procedure>
+		</sect2>
+	</sect1>
+
+	<sect1 id="text-editing" status="review">
+  			<title>Textredigering</title>
+ 			<para>All of the configurations and settings in Linux are saved in text files. Even though you most often can edit configurations through the graphical interface, you may occasionally have to edit them by hand. <application>Gedit</application> is the default Ubuntu text editor, which you can launch by clicking &text-editor; on the desktop menu system.
+ 			</para>
+ 			<para>Ibland körs <application>Gedit</application> från en kommandorad med <application>gksudo</application> i den här guiden, vilket kör <application>Gedit</application> med administrativa rättigheter för att ändra på konfigurationsfiler.</para>
+			<para>Om du behöver använda en textredigerare i en kommandorad kan du använda <application>nano</application>, vilket är en enkel textredigerare. När du kör den från en kommandorad, använd alltid följande kommando, vilket ser till att textredigeraren inte lägger till några radbrytningar: <screen>nano -w</screen></para>
+			<para>For more information about how to use <application>nano</application>, refer to the <ulink url="&wiki-Nano;">guide on the wiki</ulink>.
+			</para>
+			<para>Det finns också några andra terminalbaserade textredigerare tillgängliga i Ubuntu. Några populära är <application>VIM</application> och <application>Emacs</application> (fördelarna och nackdelarna med respektive texteditor har orsakat mycket debatt bland linuxanvändare). De här är mer komplexa än <application>nano</application>, men är även mer kraftfulla.</para>
+	</sect1>
+
+		<sect1 id="users-and-groups" status="review">
+			<title>Användare och grupper</title>
+			<para>To add users or groups to your system, you can use the <application>Users And Groups</application> application located in &users-groups;.
+			</para>
+			<note>
+				<para>Remember to log off and log back in order for the changes to become effective.
+				</para>
+			</note>
+			<para>För att lägga till en ny användare, klicka på <guilabel>Lägg till användare...</guilabel>. Fyll i datafälten, och klicka sedan på <guilabel>OK</guilabel>. För att ändra egenskaper för respektive användare, klicka på knappen <guilabel>Egenskaper</guilabel> som finns i huvudfönstret i fliken <guilabel>Användare</guilabel>.</para>
+			<para>För att lägga till en ny grupp, välj fliken <guilabel>Grupper</guilabel> och klicka på <guilabel>Lägg till grupp...</guilabel>. Välj ett namn på den nya gruppen och, om du vill, ändra standardvärdet för <guilabel>Grupp-id</guilabel>. Om du försöker avända ett <guilabel>Grupp-id</guilabel> som redan används kommer du att bli varnad.</para>
+			<para>Du kan lägga till användaren till den nyligen skapade gruppen genom att välja en användare från den vänstra menyn och klicka på knappen <guilabel>Lägg till</guilabel>. Att ta bort en användare är lika enkelt som att lägga till en: välj användaren från den högra menyn, och klicka på <guilabel>Ta bort</guilabel>. Klicka på <guilabel>OK</guilabel> när du är färdig, så kommer den nya gruppen med eventuella användare att skapas.</para>
+			<para>För att ändra egenskaperna för en grupp, välj en grupps namn från huvudfönstret i fliken <guilabel>Grupper</guilabel>, och klicka på knappen <guilabel>Egenskaper</guilabel>.</para>
+			<para>För att ta bort en användare eller en grupp från systemet, välj användaren eller gruppen du vill ta bort, och klicka på <guilabel>Ta bort</guilabel>.</para>
+		</sect1>
+
+</chapter>
+

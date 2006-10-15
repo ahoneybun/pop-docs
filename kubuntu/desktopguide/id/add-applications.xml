@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % kde SYSTEM "../../libs/kde.ent">
+%kde;
+<!ENTITY % kde-general SYSTEM "/usr/share/apps/ksgmltools2/customization/obsolete/general.entities">
+%kde-general;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="add-applications" status="review">
+    <title>Menambah, Menghapus dan Memutakhirkan Aplikasi</title>
+    <para>Bab ini adalah panduan menyeluruh untuk menambah, menghapus dan memutakhirkan aplikasi pada sistem Kubuntu.</para>
+    <sect1 id="introduction-to-add-applications" status="writing">
+        <title>Pengenalan</title>
+        <para>Ada beberapa cara untuk mengatur aplikasi anda di Ubuntu. Untuk menambah atau menghapus aplikasi, anda perlu menggunakan <emphasis>manajer paket</emphasis>. Manajer Paket ini akan dijelaskan dalam bab ini:</para>
+        <itemizedlist>
+            <listitem>
+                <para><application>Add/Remove Programs</application> - ada cara tersingkat untuk mengelola program.</para>
+            </listitem>
+            <listitem>
+                <para><application>Adept</application> - program berbasis grafis ini membantu anda lebih lanjut untuk mengelola program.</para>
+            </listitem>
+            <listitem>
+                <para><application>APT</application> - program baris perintah handal untuk mengelola program.</para>
+            </listitem>
+        </itemizedlist>
+        <para>Anda mungkin ingin menambah jumlah program yang tersedia untuk diinstal melalui manajer paket anda. Tidak semua program yang ada untuk Kubuntu tersedia secara langsung. Anda harus menambah gudang tambahan agar paket tersebut tersedia: hal itu juga akan dijelaskan dalam bab ini.</para>
+        <para>Terakhir, bab ini menjelaskan bagaimana memutakhirkan sistem anda</para>
+			<note>
+                <para>Anda hanya dapat menjalankan satu aplikasi manajemen paket setiap kali. Sebagai contoh, jika anda menjalankan <application>Add/Remove Programs</application> dan mencoba menjalankan <application>Adept</application>, maka akan gagal. Tutup aplikasi yang dijalankan sebelum anda meluncurkan yang baru.</para>
+			</note>
+
+    </sect1>
+	    <sect1 id="kde-app-install" status="review">
+		<title>Add/Remove Programs</title>
+			<para><application>Add/Remove Programs</application> adalah cara mudah berbasis grafis untuk menginstal dan menghapus aplikasi di Kubuntu. Untuk menjalankan <application>Add/Remove Programs</application>, pilih <menuchoice><guimenu>K Menu</guimenu>
+					<guimenuitem>Add/Remove Programs</guimenuitem></menuchoice> dari sistem menu desktop.</para>
+			<note>
+			<para>Menjalankan<application>Add/Remove Programs</application> butuh hak istimewa pengelolaan (lihat <xref linkend="root-and-sudo"/>).</para>
+			</note>
+			<para>Untuk menambah aplikasi baru pilih kategori yang ada di sebelah kiri, lalu centang kotak aplikasi yang ingin anda instal. Klik <guimenu>Apply</guimenu> dan program pilihan anda akan diunduh dan diinstal secara otomatis, aplikasi tambahan yang diperlukan juga akan diinstal. Pilihan standar terbatas pada kumpulan aplikasi KDE, tapi aplikasi GNOME juga dapat diinstal dengan memilih paket tersebut dari menu dropdown yang ada di atas.</para>
+
+            <para>Cara lain, jika anda tahu nama program yang anda inginkan, gunakan alat  <guibutton>Search</guibutton> di bagian atas.</para>
+            <para>Perangkat lunak dari gudang tambahan dapat diinstal dengan mengaktifkan Tampilan: <emphasis>unsupported</emphasis> dan Tampilan: <emphasis>proprietary software</emphasis> centang kotak <emphasis role="bold"> if they are enabled</emphasis> di senarai gudang anda. Untuk informasi lebih lanjut, lihat <xref linkend="extra-repositories"/></para>
+		</sect1>
+    <sect1 id="adept" status="complete">
+        <title>Adept Package Manager</title>
+        <para>&appshort; adalah antarmuka grafis sistem manajemen paket <application>APT</application> untuk K Desktop Environment (KDE). &appshort; menyediakan antarmuka yang mudah digunakan sehingga pengguna dapat melakukan berbagai kegiatan manajemen paket.</para>
+        <para>&appshort; dapat dijalankan dari sistem K menu atau dari baris perintah. Agar dapat menjalankan &appshort;, anda diharuskan memasukkan password anda.</para>
+        <para>Untuk menjalankan &appshort; dari sistem menu pilih <menuchoice><guimenu>K Menu</guimenu>
+                <guisubmenu>System</guisubmenu>
+                <guimenuitem>Adept (Package Manager)</guimenuitem></menuchoice>.</para>
+        <para>Untuk menjalankan &appshort; dari baris perintah:</para>
+        <programlisting>kdesu adept </programlisting>
+        <para>Kedua cara tadi mewajibkan anda untuk memasukkan password. Hal ini akan menjalankan &appshort; dengan hak istimewa root yang diperlukan untuk menjalankan operasi yang diminta. Maka disarankan anda untuk menggunakan &appshort; secara hati-hati karena penggunaan yang salah dapat menyebabkan perangkat lunak terbuang, terhapus, atau rusaknya ketergantungan yang diperlukan agar integritas paket terjaga.</para>
+        <para>Untuk bantuan lebih lanjut mengenai penggunaan &appshort;, silakan lihat <ulink url="help:/adept/index.html">Adept Handbook</ulink>.</para>
+    </sect1>
+    <sect1 id="apt-get" status="complete">
+        <title>APT</title>
+        <para><application>APT</application> (Advanced Packaging Tool) adalah sistem manajemen paket handal, yang merupakan dasar untuk aplikasi berbasis grafis seperti <application>Add/Remove Programs</application> dan <application>Adept</application>. <application>APT</application> menangani masalah ketergantungan secara otomatis dan melakukan operasi lain pada paket sistem untuk mengizinkan instalasi dari paket yang diinginkan.</para>
+        <note>
+            <para>Menjalankan <application>APT</application> butuh hak istimewa pengelolaan (lihat <xref linkend="root-and-sudo"/>).</para>
+        </note>
+
+        <para>Beberapa perintah umum yang dapat digunakan pada <application>APT</application>:</para>
+        <itemizedlist>
+            <listitem>
+                <para>Menginstal paket: <screen>sudo apt-get install <emphasis>nama paket</emphasis></screen></para>
+            </listitem>
+            <listitem>
+                <para>Menghapus paket: <screen>sudo apt-get remove <emphasis>nama paket</emphasis></screen></para>
+            </listitem>
+            <listitem>
+                <para>Mencari paket: <screen>apt-cache search <emphasis>kata kunci</emphasis></screen></para>
+            </listitem>
+            <listitem>
+                <para>Mengambil senarai baru dari paket yang tersedia: <screen>sudo apt-get update</screen></para>
+            </listitem>
+            <listitem>
+                <para>Memutakhirkan sistem: <screen>sudo apt-get dist-upgrade</screen></para>
+            </listitem>
+            <listitem>
+                <para>Senarai perintah dan opsi lebih lanjut: <screen>apt-get help</screen></para>
+            </listitem>
+        </itemizedlist>
+        <tip>
+            <para>Untuk informasi lebih jelas tentang penggunaan <application>APT</application>, anda dapat membaca panduan menyeluruh <ulink url="&debian-apt;">Manual Pengguna APT Debian</ulink>.</para>
+        </tip>
+    </sect1>
+	<sect1 id="manual-install" status="complete">
+        <title>Instalasi secara Manual</title>
+        <para>Meskipun metoda instalasi program yang disarankan adalah menggunakan manajer paket seperti dijelaskan di <xref linkend="add-applications"/>, anda dapat juga mengunduh dan menginstal berkas paket individu yang berisi perangkat lunak. Ada beragam jenis berkas paket di Linux. Kebanyakan dari jenis berkas ini sengaja diperuntukkan bagi manajer paket dari distribusi Linux tertentu.</para>
+
+        <para>Jika anda mencari paket aplikasi yang ingin anda instal, anda disarankan memeriksa terlebih dahulu apakah aplikasi tersebut memiliki paket khusus Kubuntu dengan mencarinya di manajer paket, dan jika tersedia anda disarankan menggunakan paket tersebut. Hal ini menjamin program tadi sepenuhnya cocok dengan sistem anda. Jika paket yang anda cari tidak tersedia di manajer paket, anda dapat menginstalnya secara manual. Prosedur instalasi tergantung dari jenis berkas paket.</para>
+        <sect2 id="install-deb" status="complete">
+            <title>Instal/Uninstal berkas .deb</title>
+            <para>Berkas paket yang diperuntukkan bagi Kubuntu mempunyai akhiran <emphasis>.deb</emphasis> karena hubungan dekat Kubuntu dengan distribusi Debian GNU/Linux. Anda dapat mengunduh dan menginstal berkas <emphasis>.deb</emphasis> secara individu. Anda perlu hak istimewa pengelolaan untuk melakukan hal ini (lihat <xref linkend="root-and-sudo"/>).</para>
+            <procedure>
+                <step>
+                    <para>Untuk menginstal berkas .deb, klik <mousebutton>Right</mousebutton> (kanan) di berkas .deb, lalu pilih <menuchoice><guimenu>Kubuntu Package Menu</guimenu>
+                            <guimenuitem>Install Package</guimenuitem></menuchoice>.</para>
+                </step>
+                <step>
+                    <para>Sebagai alternatif, anda dapat pula menginstal berkas .deb dengan membuka terminal lalu mengetikkan:</para>
+                    <screen>sudo dpkg -i berkas_paket.deb</screen>
+                </step>
+                <step>
+                    <para>Untuk menguninstal berkas .deb, hapus menggunakan <application>Adept</application>, atau ketik:</para>
+                    <screen>sudo apt-get remove nama_paket</screen>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="alien" status="complete">
+            <title>Konversi berkas .rpm ke berkas .deb</title>
+            <para>Tipe lain dari berkas paket adalah berkas <emphasis>Red Hat Package Manager</emphasis> yang mempunyai akhiran <emphasis>.rpm</emphasis>. Tidak direkomendasikan untuk menginstal berkas ini pada sistem Kubuntu. Dalam semua kasus, paket <emphasis>.deb</emphasis> khusus untuk Kubuntu sudah tersedia. Akan tetapi, jika benar-benar penting, berkas <emphasis>.rpm</emphasis> dapat dikonversi ke paket <emphasis>.deb</emphasis> dengan menggunakan program <application>alien</application>.</para>
+            <procedure>
+                <step>
+                    <para>Instal program <application>alien</application> (<xref linkend="add-applications"/>).</para>
+                </step>
+                <step>
+                    <para>Jalankan perintah berikut dalam terminal, dengan hak istimewa pengelolaan:</para>
+                    <screen>sudo alien package_file.rpm</screen>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="tarballs" status="complete">
+            <title>Instal dari Sumber</title>
+            <para>Berkas dengan akhiran <emphasis>.tar.gz</emphasis> atau <emphasis>.tar.bz2</emphasis> adalah berkas paket yang dikenal sebagai paket <emphasis>tarball</emphasis> atau <emphasis>sumber yang digunakan secara luas di Linux. Jika tidak ada paket asli untuk Kubuntu yang tersedia di semua gudang Kubuntu, anda dapat mencoba untuk mengompilasi paket dari sumbernya. Untuk tips kompilasi perangkat lunak, lihat halaman Kompilasi Perangat Lunak di Wiki Ubuntu.</emphasis></para>
+        </sect2>
+	</sect1>
+    <sect1 id="extra-repositories" status="complete">
+        <title>Mengelola Gudang</title>
+        <sect2 status="complete"><title>Apa itu Gudang</title>
+            <para>Ada ribuan program siap instal yang tersedia di Kubuntu. Program-program ini tersimpan di arsip (<emphasis>gudang</emphasis>) perangkat lunak dan sengaja dibuat untuk instalasi program melalui Internet. Ini menjadikan instalasi program baru di Linux sangat mudah, dan juga sangat aman, karena tiap program yang anda instal khusus dibuat untuk Kubuntu dan telah diperiksa dengan teliti sebelum diinstal. Untuk mengatur perangkat lunak, gudang Kubuntu dibagi menjadi empat kelompok: <emphasis>Main</emphasis>, <emphasis>Restricted</emphasis>, <emphasis>Universe</emphasis>, dan <emphasis>Multiverse</emphasis>.</para> 
+            <para>Dasar pemikiran penentuan perangkat lunak mana yang akan masuk kategori mana didasarkan atas dua faktor:</para>
+            <itemizedlist>
+                <listitem>
+                    <para>Tingkat sokongan paguyuban pengembang perangkat lunak yang tersedia untuk program.</para>
+                </listitem>
+                <listitem>
+                    <para>Tingkat pemenuhan syarat apakah program sesuai dengan <ulink url="&ubuntu-philosophy;">Filosofi Perangkat Lunak Bebas</ulink>.</para>
+                </listitem>
+            </itemizedlist>
+            <para>Anda dapat menemukan informasi lebih lanjut mengenai Gudang yang tersedia <ulink url="http://www.ubuntu.com/ubuntu/components">di situs web</ulink>.</para>
+            <para>CD Instal standar Kubuntu memuat beberapa perangkat lunak dari kategori <emphasis>Main</emphasis> dan <emphasis>Restricted</emphasis>. Bila sistem anda mengetahui lokasi untuk gudang online, lebih banyak program perangkat lunak yang tersedia untuk instalasi. Dengan menggunakan alat manajemen paket yang sudah terinstal pada sistem anda, anda dapat mencari, menginstal dan memutakhirkan setiap bagian dari perangkat lunak langsung melalui Internet, tanpa membutuhkan CD lagi.</para>
+        </sect2>
+        <sect2 status="complete"><title>Menghapus Gudang CD-ROM</title>
+            <para>Kubuntu Install CD-ROM ikut disertakan dalam gudang setelah instalasi. Ini dapat menyebabkan &appshort; selalu menanyakan CD-ROM ketika instalasi paket. Dimungkinkan untuk menonaktifkan gudang ini sehingga &appshort; hanya mengandalkan gudang di internet.</para> 
+            <para>Untuk menonaktifkan gudang CD-ROM:</para>
+            <procedure>
+                <step>
+                    <para>Jalankan &appshort; dengan memilih <menuchoice><guimenu>K Menu</guimenu>
+                            <guisubmenu>System</guisubmenu>
+                            <guimenuitem>Adept (Package Manager)</guimenuitem></menuchoice> dari sistem menu Desktop.</para>
+                </step>
+                <step>
+                    <para>Pilih <menuchoice><guimenu>View</guimenu>
+                            <guimenuitem>Manage Repositories</guimenuitem></menuchoice> di jendela manajer paket <application>Adept</application>.</para>
+                </step>
+                <step>
+                    <para>Cari baris di gudang yang dimulai dengan "cdrom:", klik <mousebutton>right</mousebutton> (kanan) baris tersebut, lalu pilih <guimenuitem>Disable</guimenuitem>.</para>
+                </step>
+                <step>
+                    <para>Klik <guibutton>Apply</guibutton> untuk menyimpan perubahan anda, dan kemudian keluar menggunakan <guibutton>Close</guibutton>.</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 status="complete">
+            <title>Menambah Gudang Tambahan</title>
+            <para>Untuk mengaktifkan gudang tambahan:</para>
+            <procedure>
+                <step>
+                    <para>Jalankan &appshort; dengan memilih <menuchoice><guimenu>K Menu</guimenu>
+                            <guisubmenu>System</guisubmenu>
+                            <guimenuitem>Adept (Package Manager)</guimenuitem></menuchoice> dari sistem menu Desktop.</para>
+                </step>
+                <step>
+                    <para>Pilih <menuchoice><guimenu>View</guimenu>
+                            <guimenuitem>Manage Repositories</guimenuitem></menuchoice> di jendela manajer paket <application>Adept</application>.</para>
+                </step>
+                <step>
+                    <para>Untuk mengaktifkan gudang <emphasis>Universe</emphasis>, temukan baris dalam gudang yang berisi Komponen Universe, dan klik <mousebutton>right</mousebutton> (kanan) baris lalu pilih <guimenuitem>Enable</guimenuitem>.</para>
+                    <note>
+                        <para>Menambah gudang ini berarti semesta Perangkat Lunak Bebas akan tersedia untuk diinstal pada sistem anda. Perangkat lunak ini disokong oleh kelompok sukarelawan dalam Komunitas Kubuntu yang dipilih dengan cermat, tetapi tidak disokong oleh paguyuban inti pengembang Kubuntu dan tidak disertakan pemutakhiran keamanan.</para>
+                    </note>
+                </step>
+                <step>
+                    <para>Untuk mengaktifkan gudang <emphasis>Multiverse</emphasis>, temukan baris dalam gudang (ada dua) yang berisi Komponen Universe, dan klik kata "universe". Sunting baris ini sehingga terbaca "universe multiverse". Klik <mousebutton>Right</mousebutton> (kanan) baris dan pilih <guimenuitem>Enable</guimenuitem> untuk mengaktifkan gudang jika belum diaktifkan.</para>
+                    <warning>
+                        <para>Menambah gudang ini berarti perangkat lunak yang digolongkan sebagai <emphasis>tidak bebas</emphasis> akan tersedia untuk diinstal pada sistem anda. Perangkat lunak ini mungkin tidak diizinkan dalam beberapa wilayah yurisdiksi. Ketika anda menginstal setiap paket dari gudang ini, anda harus memastikan bahwa hukum negara anda mengizinkan penggunaan paket ini. Serta, perangkat lunak ini tidak disertakan pemutakhiran keamanan.</para>
+                    </warning>
+                </step>
+                <step><para>Klik <guibutton>Apply</guibutton> untuk menyimpan perubahan anda, dan kemudian keluar menggunakan <guibutton>Close</guibutton>.</para>
+                </step>
+            </procedure>
+        </sect2>
+    </sect1>
+    <sect1 id="updates" status="complete">
+        <title>Pemutakhiran</title>
+        <para>Terkadang pengembang Kubuntu meluncurkan pemutakhiran fitur dan keamanan untuk aplikasi dan paket dalam sistem Kubuntu."</para>
+        <para>Saat pemutakhiran ini tersedia, Kubuntu akan memberitahukan anda ikon merah dalam baki sistem. Untuk memutakhirkan sistem anda, klik tombol merah, masukkan kata sandi anda dan klik <guibutton>Fetch List of Updates</guibutton>.</para>
+        <para>Program <application>Adept Updater</application> akan memunculkan senarai pemutakhiran aplikasi : untuk mengunduh dan menginstalasi pemutakhiran ini klik <guibutton>Apply Updates</guibutton>. Kubuntu lalu akan mengunduh dan menginstal pemutakhiran yang tersedia dari Internet.</para>
+        <para>Saat <application> Adept Updater </application> selesai memutakhirkan sistem anda, tutup jendela pop-up dengan menekan tombol <guibutton>Quit</guibutton>.</para>
+        <note>
+            <para>Setelah menginstal beberapa pemutakhiran penting, sistem mungkin perlu untuk menghidupkan ulang komputer anda. Jika demikian, Kubuntu akan memberitahu anda dengan menu pop up dan ikon pada sudut baki sistem anda.</para>
+        </note>
+    </sect1>
+</chapter>
+

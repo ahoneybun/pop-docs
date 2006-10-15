@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % kde SYSTEM "../../libs/kde.ent">
+%kde;
+<!ENTITY % kde-general SYSTEM "/usr/share/apps/ksgmltools2/customization/obsolete/general.entities">
+%kde-general;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="add-applications" status="review">
+    <title>Přidávání, odebírání a update aplikací</title>
+    <para>Tato kapitola je kompletní průvodce přidávání, odebírání a aktualizace aplikací v Kubuntu.</para>
+    <sect1 id="introduction-to-add-applications" status="writing">
+        <title>Úvod</title>
+        <para>Existuje několik způsobů pro správu aplikací v Kubuntu. Pro přidávání nebo odebírání aplikací v Ubuntu potřebujete používat <emphasis>správce balíků</emphasis>. Následující správci balíků jsou popisovány v této kapitole:</para>
+        <itemizedlist>
+            <listitem>
+                <para><application>Přidat/Odebrat programy</application> - nejjednodušší cesta ke správě programů.</para>
+            </listitem>
+            <listitem>
+                <para><application>Adept</application> - grafický program pro správu programů.</para>
+            </listitem>
+            <listitem>
+                <para><application>APT</application> - výkonný program v příkazové řádce pro správu programů.</para>
+            </listitem>
+        </itemizedlist>
+        <para>Můžete také zvýšit počet programů dostupných k instalaci pomocí správce balíků. Ne všechny programy, které pro Kubuntu existují jsou dostupné defaultně. Možná budete muset přidat extra repozitáře: toto je také popsáno v této kapitole.</para>
+        <para>Konečně, tato kapitola popisuje jak aktualizovat systém.</para>
+			<note>
+                <para>Můžete používat jen jeden správce balíků současně. Např., když běží <application>Přidat/Odebrat programy</application> a pokusíte se spustit <application>Adept</application>, skončí to chybou. Zavřete běžící aplikaci před tím než spustíte jinou.</para>
+			</note>
+
+    </sect1>
+	    <sect1 id="kde-app-install" status="review">
+		<title>Přidat/Odebrat programy</title>
+			<para><application>Add/Remove Programs</application> is a simple
+                graphical way of installing and removing applications in
+                Kubuntu. To launch <application>Add/Remove
+                    Programs</application>, choose 
+				<menuchoice>
+					<guimenu>K Menu</guimenu>
+					<guimenuitem>Add/Remove Programs</guimenuitem>
+				</menuchoice> from the desktop menu system.
+			</para>
+			<note>
+			<para>Spuštění <application>Přidat/Odebrat programy</application> vyžaduje administrátorská práva (viz. </para>
+			</note>
+			<para>Pro instalaci nové aplikace vlevo vyberte kategorii, pak zaškrtněte políčko u aplikace, kterou chcete nainstalovat. Klikněte na <guimenu>Aplikovat</guimenu>, poté se vybraný program stáhne a instaluje automaticky, takto můžete nainstalovat každou aplikaci, kterou chcete. Defaultně je výběr omezen na KDE aplikace, ale GNOME aplikace nainstalujete přes seznam nahoře.</para>
+
+            <para>Alternativně, když znáte jméno programu, můžete použít nástroj <guibutton>Hledat</guibutton>.</para>
+            <para>Software z dalších repozitářů může být nainstalován povolením <emphasis>unsupported</emphasis> a <emphasis>proprietary software</emphasis> v zaškrtávacím políčku, <emphasis role="bold"> jestliže jsou povoleny</emphasis> v seznamu repozitářů. Pro další informace navštivte <xref linkend="extra-repositories"/></para>
+		</sect1>
+    <sect1 id="adept" status="complete">
+        <title>Správce balíků Adept</title>
+        <para>
+            &appshort; is a graphical frontend to the
+            <application>APT</application> package management system for the K
+            Desktop Environment (KDE).  &appshort; provides an easy-to-use
+            interface with which users can perform software management
+            operations.</para>
+        <para>&appshort; can be started from the K menu system or the command line. In order to
+            start &appshort;, you will be required to provide your password.</para>
+        <para>To start &appshort; from the menu system select <menuchoice>
+                <guimenu>K Menu</guimenu>
+                <guisubmenu>System</guisubmenu>
+                <guimenuitem>Adept (Package Manager)</guimenuitem>
+            </menuchoice>. </para>
+        <para>To start &appshort; from the command line:</para>
+        <programlisting>kdesu adept </programlisting>
+        <para>Both methods require that you enter your password. This will run &appshort; with
+            root privileges which will be required in order to perform the requested operations. It
+            is therefore advised that you use &appshort; with caution since improper usage could
+            lead to the removal, deletion, or corruption of software packages that are required to
+            preserve system integrity.</para>
+        <para>
+            For more help with using &appshort;, please refer to the <ulink url="help:/adept/index.html">Adept Handbook</ulink>.
+        </para>
+    </sect1>
+    <sect1 id="apt-get" status="complete">
+        <title>APT</title>
+        <para><application>APT</application> (Pokročilý balíčkovací nástroj) je výkonný správce balíků, grafické programy popisované výše <application>Přidat/Odebrat programy</application> a <application>Adept</application> jsou na něm založené. <application>APT</application> automaticky spravuje závislosti a jiné operace s balíčky umožňující instalaci požadovaných balíčku(ků).</para>
+        <note>
+            <para>Spuštění <application>APT</application> vyžaduje administrátorská práva (viz. </para>
+        </note>
+
+        <para>Některé běžné příkazy, které lze použít s <application>APT</application>:</para>
+        <itemizedlist>
+            <listitem>
+                <para>Instalace balíků: <screen>sudo apt-get install <emphasis>název_balíčku</emphasis></screen></para>
+            </listitem>
+            <listitem>
+                <para>Odstranění balíků: <screen>sudo apt-get remove <emphasis>název_balíčku</emphasis></screen></para>
+            </listitem>
+            <listitem>
+                <para>Hledání balíků: <screen>apt-cache search <emphasis>klíčové slovo</emphasis></screen></para>
+            </listitem>
+            <listitem>
+                <para>Získání nových seznamů balíků: <screen>sudo apt-get update</screen></para>
+            </listitem>
+            <listitem>
+                <para>Aktualizace systému dostupnými aktualizacemi: <screen>sudo apt-get upgrade</screen></para>
+            </listitem>
+            <listitem>
+                <para>Seznam dalších příkazů a voleb: <screen>apt-get help</screen></para>
+            </listitem>
+        </itemizedlist>
+        <tip>
+            <para>For further information about the use of <application>APT</application>, you can read the comprehensive <ulink url="&debian-apt;">Debian APT User Manual</ulink>.
+            </para>
+        </tip>
+    </sect1>
+	<sect1 id="manual-install" status="complete">
+        <title>Ruční instalace</title>
+        <para>Ačkoli preferovaná metoda instalace programů je pomocí správce balíků popsaná v <xref linkend="add-applications"/>, můžete stáhnout a nainstalovat soubor obsahující software. Je mnoho druhů Linuxových balíčkových souborů. Většina z nich je asociována s nějakou Linuxovou distribucí.</para>
+
+        <para>Když najdete aplikaci, kterou chcete nainstalovat, tak se ujistěte jestli není dostupná přes správce balíků a v takovém případě ji skrz něj nainstalujte. To zajistí, že program je kompatibilní s systémem. Jestliže není balík dostupný pomocí správce balíků, můžete ho nainstalovat ručně. Instalační procedura závisí na typu souboru.</para>
+        <sect2 id="install-deb" status="complete">
+            <title>Instalace/odinstalace <emphasis>.deb</emphasis> souborů</title>
+            <para>Soubory asociované s Kubuntu mají příponu <emphasis>.deb</emphasis>, protože Ubuntu je postavené na Debianu. Můžete stáhnout a nainstalovat individuální <emphasis>.deb</emphasis> soubor. Potřebujete administrátorská práva pro instalaci <emphasis>.deb</emphasis> souborů (viz. </para>
+            <procedure>
+                <step>
+                    <para>
+                        To install a .deb file, simply <mousebutton>Right</mousebutton> click on the .deb file, and choose 
+                        <menuchoice>
+                            <guimenu>Kubuntu Package Menu</guimenu>
+                            <guimenuitem>Install Package</guimenuitem>
+                        </menuchoice>.
+                    </para>
+                </step>
+                <step>
+                    <para>Případně můžete <emphasis>.deb</emphasis> soubor nainstalovat tak, že otevřete terminál a zadáte:</para>
+                    <screen>sudo dpkg -i balíčkový_soubor.deb</screen>
+                </step>
+                <step>
+                    <para>Pro odinstalaci .deb souboru použijte <application>Adept</application> nebo napište:</para>
+                    <screen>sudo apt-get remove package_name</screen>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="alien" status="complete">
+            <title>Převod <emphasis>.rpm</emphasis> souboru na <emphasis>.deb</emphasis> soubor</title>
+            <para>Jiným typem balíčkových souborů jsou Red Hat Package Manager soubory, které mají příponu <emphasis>.rpm</emphasis>. Nedoporučuje se je instalovat do systému Kubuntu. Ve většině případů je k dispozici i <emphasis>.deb</emphasis> balík pro Kubuntu. Pokud je to ale nevyhnutelně nutné, lze převést <emphasis>.rpm</emphasis> soubor na <emphasis>.deb</emphasis> balík pomocí aplikace <application>alien</application>.</para>
+            <procedure>
+                <step>
+                    <para>Nainstalujte aplikaci <application>alien</application> (</para>
+                </step>
+                <step>
+                    <para>Spusťte v terminálu, se správcovskými oprávněními, následující příkaz:</para>
+                    <screen>sudo alien package_file.rpm</screen>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="tarballs" status="complete">
+            <title>Instalace ze zdrojových kódů</title>
+            <para>Soubory s příponou <emphasis>.tar.gz</emphasis> nebo <emphasis>.tar.bz2</emphasis> jsou balíčky známé jako <emphasis>tary</emphasis>, které jsou široce používány v Linuxu. Jestliže není dostupní nativní balík pro Kubuntu, můžete ho zkompilovat ze zdrojů. Pro tipy ohledně kompilace navštivte <ulink url="https://wiki.ubuntu.com/CompilingSoftware">Compiling Software</ulink> na Ubuntu Wiki.</para>
+        </sect2>
+	</sect1>
+    <sect1 id="extra-repositories" status="complete">
+        <title>Správa repozitářů</title>
+        <sect2 status="complete"><title>Co jsou repozitáře?</title>
+            <para>Pro instalaci do Kubuntu jsou k dispozici tisíce programů. Tyto programy jsou uloženy v softwarových archívech (<emphasis>repozitářích</emphasis>) a jsou volně dostupné pro instalaci přes Internet. To činí instalaci nového programu v Linuxu velmi jednoduchou a zároveň bezpečnou, protože každý program, který instalujete, je sestaven speciálně pro Kubuntu a otestován. Pro přehlednost jsou repozitáře Kubuntu rozděleny do čtyř kategorií: <emphasis>Main</emphasis>, <emphasis>Restricted</emphasis>, <emphasis>Universe</emphasis>, a <emphasis>Multiverse</emphasis>.</para> 
+            <para>Základní pravidlo pro určení, do které kategorie je software zařazen, se zakládá na dvou faktorech:</para>
+            <itemizedlist>
+                <listitem>
+                    <para>Úroveň podpory softwaru poskytovaná vývojářským týmem pro program.</para>
+                </listitem>
+                <listitem>
+                    <para>The level of compliance the program has to the <ulink url="&ubuntu-philosophy;">Free Software Philosophy</ulink></para>
+                </listitem>
+            </itemizedlist>
+            <para>Více informací o dostupných Repozitářích můžete najít na </para>
+            <para>Standardní instalační CD Kubuntu obsahuje některý software z kategorií <emphasis>Main</emphasis> a <emphasis>Restricted</emphasis>. Jakmile má Váš systém informace o Internetových adresách s umístění repozitářů, lze nainstalovat mnohem více programů. S použitím nástrojů pro správu balíků, které jsou součástí Vašeho systému, můžete vyhledávat, instalovat a aktualizovat libovolné části softwaru přímo z Internetu bez potřeby CD.</para>
+        </sect2>
+        <sect2 status="complete"><title>Odstranění CD-ROM repozitáře</title>
+            <para>The Kubuntu Install CD-ROM is included in the repositories after installation. This can cause &appshort; to ask for the CD-ROM when installing packages. It is possible to disable this repository so that &appshort; relies solely on the internet repositories.</para> 
+            <para>Pro zakázaní CD-ROM repozitáře:</para>
+            <procedure>
+                <step>
+                    <para>Start &appshort; by choosing 
+                        <menuchoice>
+                            <guimenu>K Menu</guimenu>
+                            <guisubmenu>System</guisubmenu>
+                            <guimenuitem>Adept (Package Manager)</guimenuitem>
+                        </menuchoice> 
+                        from the Desktop menu system.
+                    </para>
+                </step>
+                <step>
+                    <para> Select 
+                        <menuchoice>
+                            <guimenu>View</guimenu>
+                            <guimenuitem>Manage Repositories</guimenuitem>
+                        </menuchoice>
+                        in the <application>Adept</application> package manager window.
+                    </para>
+                </step>
+                <step>
+                    <para>Najděte řádek začínající "cdrom:", <mousebutton>pravým</mousebutton> klikněte a vyberte <guimenuitem>Zakázat</guimenuitem>.</para>
+                </step>
+                <step>
+                    <para>Klikněte na <guibutton>Aplikovat</guibutton> pro uložení změn a  ukončete pomocí <guibutton>Zavřít</guibutton>.</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 status="complete">
+            <title>Přidání dodatečných repozitářů</title>
+            <para>Povolit dodatečné zdroje:</para>
+            <procedure>
+                <step>
+                    <para>Start &appshort; by choosing 
+                        <menuchoice>
+                            <guimenu>K Menu</guimenu>
+                            <guisubmenu>System</guisubmenu>
+                            <guimenuitem>Adept (Package Manager)</guimenuitem>
+                        </menuchoice> 
+                        from the Desktop menu system.
+                    </para>
+                </step>
+                <step>
+                    <para> Select 
+                        <menuchoice>
+                            <guimenu>View</guimenu>
+                            <guimenuitem>Manage Repositories</guimenuitem>
+                        </menuchoice>
+                        in the <application>Adept</application> package manager window.
+                    </para>
+                </step>
+                <step>
+                    <para>Pro povolení repozitáře <emphasis>Universe</emphasis>, najděte řádek s Universe Component a <mousebutton>pravým</mousebutton> klikněte a vyberte <guimenuitem>Povolit</guimenuitem>.</para>
+                    <note>
+                        <para>Přidání tohoto repozitáře znamená, že budete moci nainstalovat většinu svobodného software. Tento software je podporovaný pečlivě vybranou skupinou dobrovolníků z komunity Kubuntu, ale není podporovaný jádrem vývojářského týmu Kubuntu a nemusí obsahovat bezpečnostní aktualizace.</para>
+                    </note>
+                </step>
+                <step>
+                    <para>Pro povolení repozitáře <emphasis>Multiverse</emphasis>, najděte řádek obsahující Universe Component a klikněte na "universe". Upravte ho na "universe multiverse". <mousebutton>Pravým</mousebutton> klikněte a vyberte <guimenuitem>Povolit</guimenuitem>.</para>
+                    <warning>
+                        <para>Přidání tohoto repozitáře zapříčiní, že software klasifikovaný jako <emphasis>non-free</emphasis> bude dostupný pro instalaci do Vašeho systému. Tento software nemusí být povolený v některých jurisdikcích. Při instalaci každého balíčku z tohoto repozitáře, byste měl ověřit, jestli zákony Vaší země dovolují jeho používání. Tento software nemusí obsahovat bezpečnostní aktualizace.</para>
+                    </warning>
+                </step>
+                <step><para>Klikněte na <guibutton>Aplikovat</guibutton> pro uložení změn a  ukončete pomocí <guibutton>Zavřít</guibutton>.</para>
+                </step>
+            </procedure>
+        </sect2>
+    </sect1>
+    <sect1 id="updates" status="complete">
+        <title>Aktualizace</title>
+        <para>Čas od času uvolní vývojáři Kubuntu bezpečnostní aktualizace a vylepšení aplikací a balíků pro Kubuntu systém</para>
+        <para>Jakmile jsou tyto aktualizace dostupné, Kubuntu Vás informuje červenou ikonou na liště. Aktualizaci systému provedete kliknutím na červené tlačítko, zadáním svého hesla a kliknutím na <guibutton>Získat seznam aktualizací</guibutton>.</para>
+        <para><application>Adept Updater</application> zobrazí seznam dostupných aktualizací: pro stažení a instalaci aktualizace <guibutton>Aplikovat aktualizace</guibutton>. Kubuntu stáhne a nainstaluje aktualizace z internetu.</para>
+        <para>Poté co <application>Adept Updater</application> dokončí aktualizaci systému, zavřete okno kliknutím na <guibutton>Ukončit</guibutton>.</para>
+        <note>
+            <para>Po instalaci některých aktualizací je třeba restartovat počítač. V tomto případě Kubuntu informuje vyskakovacím oknem a oknem na liště.</para>
+        </note>
+    </sect1>
+</chapter>
+

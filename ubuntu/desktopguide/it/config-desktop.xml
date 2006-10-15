@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-it SYSTEM "../../../ubuntu/libs/gnome-menus-it.ent">
+%gnome-menus-it;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="desktop-tips" status="complete">
+			<title>Configurazione avanzata del desktop</title>
+			  <para>Questa sezione fornisce dei suggerimenti per usare e personalizzare l'ambiente desktop di Ubuntu (chiamato <application>GNOME</application>) e il file manager (chiamato <application>Nautilus</application>).</para>
+
+		<sect1 status="complete">
+				<title>Login automatico all'avvio del computer</title>
+				<para>Per effettuare il login automatico all'avvio del computer:</para>
+				<procedure>
+					<step>
+						<para>Scegliere &login-screen-setup;.</para>
+					</step>
+					<step>
+						<para>Selezionare <guibutton>Sicurezza</guibutton> e scegliere <guilabel>Abilitare login automatico</guilabel>.</para>
+					</step>
+					<step>
+						<para>Scegliere l'account con cui effettuare il login.</para>
+					</step>
+				</procedure>
+			<para>Questa opzione non è molto sicura su molti computer dato che può consentire l'accesso ai propri dati a persone indesiderate.</para>
+		</sect1>	
+
+		<sect1 status="complete">
+			<title>Aprire file dal file manager con privilegi di amministratore</title>
+			<para>Per aprire file con permessi di amministratore dal file manager, è necessario aggiungere uno script a <application>Nautilus</application>.</para>
+			<warning><para>Aprire file con privilegi di amministratore è un rischio per la sicurezza. Assicurarsi di conoscere il contenuto del file che si vuole aprire.</para></warning>
+			<procedure>
+				<step><para>Creare un nuovo file nella directory degli script: <screen>gedit $HOME/.gnome2/nautilus-scripts/Apri\ come\ amministratore</screen></para>
+				</step>
+				<step>
+						<para>Inserire queste righe nel nuovo file:</para>
+						<programlisting>for uri in $NAUTILUS_SCRIPT_SELECTED_URIS; do
+gksudo "gnome-open $uri" &amp;
+done</programlisting>
+				</step>
+				<step>
+						<para>Salvare il file (<ulink url="sample/nautilus_open_as_administrator">un esempio</ulink>)</para>
+				</step>
+				<step>
+						<para>Rendere il file modificato eseguibile: <screen>chmod +x $HOME/.gnome2/nautilus-scripts/Apri\ come\ amministratore</screen></para>
+				</step>
+			</procedure>
+						<para>È ora possibile aprire un file con privilegi di amministratore facendo clic col tasto destro del mouse e scegliendo <menuchoice><guimenuitem>Script</guimenuitem>
+								<guimenuitem>Apri come amministratore</guimenuitem></menuchoice>.</para>
+		</sect1>
+     <sect1 id="fonts" status="complete">
+		<title>Installare tipi di caratteri aggiuntivi</title>
+				<para>Questa sezione descrive come installare tipi di caratteri aggiuntivi dagli archivi di Ubuntu.</para>
+							<para>Per avere <emphasis role="bold">caratteri internationazionali</emphasis>, installare i seguenti pacchetti dal repository <quote>Universe</quote> (consultare <xref linkend="add-applications"/>):</para>
+			<itemizedlist>
+				<listitem><para>xfonts-intl-arabic</para></listitem>
+				<listitem><para>xfonts-intl-asian</para></listitem>
+				<listitem><para>xfonts-intl-chinese</para></listitem>
+				<listitem><para>xfonts-intl-chinese-big</para></listitem>
+				<listitem><para>xfonts-intl-european</para></listitem>
+				<listitem><para>xfonts-intl-japanese</para></listitem>
+				<listitem><para>xfonts-intl-japanese-big</para></listitem>
+				<listitem><para>xfonts-intl-phonetic</para></listitem>
+			</itemizedlist>
+							<para>Per i caratteri <emphasis role="bold">Microsoft TrueType</emphasis>, installare il pacchetto <application>msttcorefonts</application> dal repository <quote>Multiverse</quote> (consultare <xref linkend="add-applications"/>).</para>
+							<para>Per i <emphasis role="bold">caratteri Ghostscript</emphasis> installare il pacchetto <application>gsfonts-x11</application> (consultare <xref linkend="add-applications"/>).</para>
+							<para>Dopo aver installato un nuovo carattere è necessario ricostruire le informazioni sui caratteri digitando in un terminale:</para>
+							<screen>sudo fc-cache -f -v</screen>
+			<para>Se si preferisce scaricare tipi di caratteri da internet è possibile installarli semplicemente aprendo una finestra del file manager e digitando <application>fonts://</application> nella barra della posizione (consultare <ulink type="help" url="ghelp:user-guide#nautilus-location-bar">il manuale del file manager per l'utilizzo della barra della posizione). </ulink></para>
+		</sect1>
+		<sect1 status="complete">
+				<title>Archivi RAR</title>
+					<procedure>
+						<step>
+							<para>Installare il pacchetto rar dal repository <quote>Multiverse</quote> (consultare <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>
+							<para>In un terminale digitare: <screen>
+sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen></para>
+						</step>
+						<step>
+							<para>Per aprire un file rar, fare doppio clic su di esso.</para>
+						</step>
+					</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Applet da scrivania avanzate</title>
+				<para><application>gDesklets</application> è un sistema per tenere sulla scrivania mini programmi (desklet), come previsioni del tempo, ticker azionari, informazioni di sistema o controlli del riproduttore musicale, in una relazione simbiotica tra utilità e piacere visivo.</para>
+				<procedure>
+					<step>
+							<para>Installare i pacchetti <application>gdesklets</application> e <application>gdesklets-data</application> dal repository <quote>Universe</quote> (consultare <xref linkend="add-applications"/>).</para>
+					</step>
+					<step>
+							<para>Scegliere <menuchoice><guimenu>Applicazioni</guimenu>
+									<guisubmenu>Accessori</guisubmenu>
+									<guimenuitem>gDesklets</guimenuitem></menuchoice></para>
+					</step>
+					<step><para>Per maggiori informazioni consultare il sito web di <ulink url="http://www.gdesklets.org/">gDesklets</ulink></para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Nascondere la voce «Documenti recenti» nel menù Risorse</title>
+				<para>Per nascondere <guilabel>Documenti recenti dal menRisorse aprire un terminale e digitare:</guilabel></para><screen>chmod 400 ~/.recently-used</screen>
+				<para>Per mostrare nuovamente il menù, eseguire il comando:</para><screen>chmod 600 ~/.recently-used</screen>
+		</sect1>
+		<sect1 status="complete">
+			<title>Visualizzare le icone Computer, Home e Cestino</title>
+				<procedure>
+					<step>
+						<para>Avviare <application>Editor della configurazione</application> eseguendo il comando <application>gconf-editor (consultare il manuale di Esegui applicazione per come avviare un'applicazione senza l'utilizzo dei men</application></para>
+					</step>
+					<step>
+						<para>Scegliere <menuchoice><guimenu>apps</guimenu>
+								<guisubmenu>nautilus</guisubmenu>
+								<guimenuitem>desktop</guimenuitem></menuchoice>.</para>
+					</step>
+					<step>
+						<para>Scegliere le opzioni <guilabel>computer_icon_visible</guilabel>, <guilabel>home_icon_visible</guilabel> e <guilabel>trash_icon_visible</guilabel>. I cambiamenti hanno effetto immediato.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 id="restartgnomewithoutreboot" status="complete">
+			<title>Riavviare GNOME senza riavviare il computer</title>
+			<procedure>
+				<step>
+						<para>Salvare i dati e chiudere tutte le applicazioni aperte.</para>
+			          </step>
+			          <step>
+            				<para>Utilizzare la scorciatoia <keycombo><keycap>Ctrl</keycap>
+						<keycap>Alt</keycap>
+						<keycap>Backspace</keycap></keycombo> per riavviare GNOME.</para>
+           			</step>
+           			<step>
+            				<para>Se la scorciatoia <keycombo><keycap>Ctrl</keycap>
+                <keycap>Alt</keycap>
+                <keycap>Backspace</keycap></keycombo> è disabilitata, in un terminale digitare <screen>sudo /etc/init.d/gdm restart</screen></para>
+						<para>(Consultare <xref linkend="disableCtrlAltBackspace"/> per disabilitare <keycombo><keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>Backspace</keycap></keycombo>.)</para>
+				</step>
+			</procedure>
+		</sect1>
+		<sect1 id="disableCtrlAltBackspace" status="complete">
+			<title>Prevenire il riavvio di X con i tasti scorciatoia Ctrl-Alt-Backspace</title>
+				<procedure>
+					<step>
+						<para>Creare una copia di backup del file <filename>/etc/X11/xorg.conf</filename>: <screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup</screen></para>
+					</step>
+					<step>
+					<para>Aprire il file <filename>/etc/X11/xorg.conf</filename>: <screen>gksudo gedit /etc/X11/xorg.conf</screen></para>
+					</step>
+					<step>
+						<para>Aggiungere le seguenti righe alla fine del file: <programlisting>Section  "ServerFlags"
+Option   "DontZap"   "yes"
+EndSection</programlisting></para>
+					</step>
+					<step>
+						<para>Salvare il file modificato (<ulink url="sample/xorg.conf_disablectrlaltbackspacegnome">un esempio</ulink>).</para>
+					</step>
+					<step>
+						<para>I cambiamenti saranno applicati al successivo login a GNOME. Se si desidera applicare immediatamente i cambiamenti, riavviare GNOME manualmente (consultare <xref linkend="restartgnomewithoutreboot"/>).</para>
+					</step>
+				</procedure>
+		</sect1>
+
+	</chapter>
+

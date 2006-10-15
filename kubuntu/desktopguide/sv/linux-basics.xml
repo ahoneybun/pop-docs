@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % kde SYSTEM "../../libs/kde.ent">
+%kde;
+<!ENTITY % kde-general SYSTEM "/usr/share/apps/ksgmltools2/customization/obsolete/general.entities">
+%kde-general;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="linux-basics" status="complete">
+        <title>Grunderna i Linux</title>
+        <para>
+        This chapter introduces you to basic concepts which are useful when
+        getting started with a Kubuntu system.
+        </para>
+        <sect1 id="directories-file-systems" status="complete">
+            <title>Kataloger och filsystem</title>
+            <para>I Linux och Unix är allting en fil. Kataloger är filer, filer är filer och enheter är filer. Enheter hänvisas oftast till som noder, men de är fortfarande filer.</para>
+            <para>Linux och Unix filsystem är organiserade i en rangordnad, trädliknande struktur. Den högsta nivån i filsystemet är <filename>/</filename>, eller rootkatalogen. Alla andra filer och kataloger ligger i rootkatalogen. Till exempel: <filename>/home/jebediah/cheeses.odt</filename> visar den korrekta, fullständiga sökvägen till filen <filename>cheeses.odt</filename> som ligger i katalogen <filename>jebediah</filename>. Denna ligger i katalogen <filename>home</filename>, som i sin tur ligger i rootkatalogen (<filename>/</filename>).</para>
+            <para>I rootkatalogen (<filename>/</filename>) ligger en uppsättning viktiga kataloger som återfinns i flertalet Linuxdistributioner. Följande är en lista över de vanliga katalogerna som ligger direkt i rootkatalogen (<filename>/</filename>):</para>
+            <itemizedlist>
+                <listitem>
+                    <para><filename>/bin</filename> - important commands, which historically have been <emphasis>bin</emphasis>ary, but may also be shell scripts</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/boot</filename> - konfigurationsfiler, kärnor och andra filer som används vid datorns uppstart (<emphasis>boot</emphasis> på engelska)</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/dev</filename> - alla enheter (<emphasis>dev</emphasis>ice på engelska)</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/etc</filename> - konfigurationsfiler, uppstartsskript, <emphasis>etc</emphasis>.</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/home</filename> - innehåller <emphasis>hem</emphasis>kataloger för olika användare</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/initrd</filename> - used when creating a customized <emphasis>init</emphasis>ial <emphasis>R</emphasis>AM <emphasis>D</emphasis>isk</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/lib</filename> - systembibliotek (<emphasis>lib</emphasis>raries på engelska)</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/lost+found</filename> - ger dig upphittade filer som fanns under root-katalogen (<filename>/</filename>)</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/media</filename> - automatically mounted (loaded) removable <emphasis>media</emphasis> such as CDs, digital cameras, etc.</para>
+                </listitem>
+                <listitem>
+                  <para><filename>/mnt</filename> - manuellt <emphasis>m</emphasis>o<emphasis>nt</emphasis>erade filsystem på din hårddisk</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/opt</filename> - provides a location for <emphasis>opt</emphasis>ional (3rd party) applications to be installed; these are usually statically compiled and can be used in other versions or Linux distributions</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/proc</filename> - en speciell dynamisk katalog som håller ordning på information om systemet, däribland de <emphasis>proc</emphasis>esser som körs</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/root</filename> - <emphasis>root</emphasis>-användarens hemkatalog, uttalas "slash-root"</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/sbin</filename> - important <emphasis>s</emphasis>ystem <emphasis>bin</emphasis>aries and scripts, usually intended to be run as the root user</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/srv</filename> - kan innehålla filer som <emphasis>s</emphasis>e<emphasis>rv</emphasis>eras åt andra system</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/sys</filename> - similar to the /proc filesystem, but contains <emphasis>sys</emphasis>tem information not related to running processes</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/tmp</filename> - <emphasis>t</emphasis>e<emphasis>mp</emphasis>orära filer</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/usr</filename> - applications and read-only files that are mostly available for all <emphasis>us</emphasis>e<emphasis>r</emphasis>s to access</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/var</filename> - <emphasis>var</emphasis>iabla filer såsom loggar och databaser</para>
+                </listitem> 
+            </itemizedlist>
+        </sect1>
+        <sect1 id="permissions" status="complete">
+            <title>Rättigheter</title>
+            <para>Alla filer på ett Linuxsystem har rättigheter som tillåter eller förhindrar andra att se, modifiera eller exekvera dem. Superanvändaren "root" har möjlighet att komma åt alla filer på systemet.</para>
+            <para>Varje fil säkras genom följande tre lager av rättigheter, sorterade efter prioritet:</para>
+            <itemizedlist>
+                <listitem>
+                    <para>användare (user)</para>
+                    <para>gäller den användaren som äger filen</para>
+                </listitem>
+                <listitem>
+                    <para>grupp (group)</para>
+                    <para>gäller den gruppen som filen tillhör</para>
+                </listitem>
+                <listitem>
+                    <para>andra (other)</para>
+                    <para>gäller alla andra användare</para>
+                </listitem>
+            </itemizedlist>
+            <para>I var och en av de tre uppsättningarna rättigheter finns de faktiska rättigheterna. Rättigheterna, tillsammans med hur deras funktion skiljer sig mellan filer och mappar, förklaras nedan:</para>
+            <itemizedlist>
+                <listitem>
+                    <para>läsa (read)</para>
+                    <para>filerna kan visas/öppnas</para>
+                    <para>kataloginnehåll kan visas</para>
+                </listitem>
+                <listitem>
+                    <para>skriva (write)</para>
+                    <para>filerna kan redigeras eller tas bort</para>
+                    <para>kataloginnehåll kan ändras</para>
+                </listitem>
+                <listitem>
+                    <para>körbara (execute)</para>
+                    <para>körbara filer kan köras som program</para>
+                    <para>kataloger går att gå in i</para>
+                </listitem>
+            </itemizedlist>
+            <para>
+                To view and edit the permissions on files and directories, open
+                the 
+                <menuchoice>
+                    <guimenu>System Menu</guimenu>
+                    <guimenuitem>Home Folder</guimenuitem>
+                </menuchoice>,
+                right-click on a file or directory, then
+                select <guimenu>Properties</guimenu>.  The permissions are found under the
+                <guilabel>Permissions</guilabel> tab and allow for the editing of all
+                permission levels, if you are the owner of the file.  Advanced permission
+                settings (such as in the <guilabel>Advanced Permissions</guilabel> tab) 
+		are outside of the scope of this guide.
+            </para>
+        </sect1>
+        <sect1 id="root-and-sudo" status="complete">
+
+            <title>Root och sudo</title>
+
+            <para>
+                The root user in Linux is the user which has
+                administrative access to your system. Normal users do not have
+                this access for security reasons. However, Kubuntu does not
+                enable the root user. Instead, administrative access is given
+                to individual users, who may use the "sudo" application to
+                perform administrative tasks. The first user account you
+                created on your system during installation will, by default,
+                have access to sudo. You can restrict and enable sudo access
+                to users with the <application>Users and Groups</application>
+                application (see <xref linkend="users-and-groups"/> for more
+                information).
+            </para>
+
+            <para>När du kör ett program som kräver root-privilegier kommer sudo att be dig skriva in ditt vanliga lösenord. Det här ser till att fientliga program inte kan skada ditt system, och påminner dig om att du kommer att utföra administrativa åtgärder som kräver att du är försiktig!</para>
+
+            <para>För att använda sudo när du är vid en kommandorad, skriv helt enkelt "sudo" innan kommandot du vill köra. Sudo kommer sedan att be dig om ditt lösenord.</para>
+
+            <para>Sudo kommer att komma ihåg ditt lösenord en stund (som standard 15 minuter). Den här funktionen designades för att låta användare utföra flera administrativa uppgifter utan att bli tjatade på om lösenordet varje gång.</para>
+
+            <warning>
+                <para>Var försiktig när du utför administrativa sysslor, du kan skada ditt system!</para>
+            </warning>
+            <para>Några andra tips när du använder sudo:</para>
+            <itemizedlist>
+                <listitem>
+                    <para>För att få en "root"-terminal, skriv "sudo -i" i en kommandorad.</para>
+                </listitem>
+                <listitem>
+                    <para>Alla de grafiska konfigurationsverktyg som följer med Kubuntu använder redan sudo, så de kommer att fråga dig om ditt lösenord om det behövs med <application>kdesu</application>, som är ett grafiskt gränssnitt för <application>sudo</application>.</para>
+                </listitem>
+                <listitem>
+                    <para>
+                        For more information on the
+                        <application>sudo</application> program and the
+                        absence of a root user in Kubuntu, read the <ulink url="&wiki-RootSudo;">sudo page</ulink> on the
+                        Ubuntu wiki.
+                    </para>
+                </listitem>
+            </itemizedlist>
+            <sect2 id="run-application-root" status="complete">
+                <title>Starta ett program manuellt med root-rättigheter</title>
+                <para>
+                    Sometimes it is necessary to run a program with root
+                    privileges. This is easy to do with the <application>Run
+                        Command</application> dialog.
+                </para>
+                <warning>
+                    <para>Var försiktig när du kör program med root-rättigheter eftersom du kan skada ditt system. Se <xref linkend="root-and-sudo"/> för fler detaljer.</para>
+                </warning>
+                <procedure>
+                    <step>
+                        <para>Open the <application>Run Command</application> dialog by typing:
+                            <keycombo>
+                                <keycap>Alt</keycap>
+                                <keycap>F2</keycap>
+                            </keycombo>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Skriv <emphasis>först</emphasis> <application>kdesu</application> följt av namnet på programmet du vill starta och tryck på <keycap>Enter</keycap>. För att till exempel starta filhanteraren <application>Konqueror</application> med root-rättigheter skriver du <screen>kdesu konqueror</screen></para>
+                    </step>
+                </procedure>
+            </sect2>
+        </sect1>
+        <sect1 id="terminals" status="complete">
+            <title>Terminalen</title>
+            <para>Att arbeta vid en kommandorad är inte så skrämmande som man kan tro. Det krävs ingen speciell kunskap för att kunna använda en kommandorad: det är ett program som alla andra. Nästan allt i Linux kan göras med en kommandorad, och även om det finns grafiska verktyg för de flesta program är de inte alltid tillräckliga. Det är här kommandoraden är användbar.</para>
+            <para>Terminalen kallas oftast för kommandoraden eller skalet. Förr i tiden var det såhär en användare kommunicerade med en dator, och även om det inte är så längre har Linuxanvändare upptäckt att det ofta går snabbare att använda ett skal än en grafisk motsvarighet, så därför används kommandorader än idag. Här får du lära dig hur du använder en terminal.</para>
+            <para>Ursprungligen var en terminal en filhanterare, och den går fortfarande att använda som en filhanterare om det grafiska gränssnittet inte fungerar. Du kan använda terminalen som en filhanterare för att leta upp dina filer och ångra ändringarna du har gjort.</para>
+            <sect2 id="starting-konsole" status="complete">
+                <title>Starta terminalen</title>
+                <para>
+                The <application>Konsole</application> can be started by
+                choosing 
+                <menuchoice>
+                    <guimenu>K-menu</guimenu>
+                    <guimenuitem>System</guimenuitem>
+                    <guimenuitem>Konsole (Terminal Program)</guimenuitem>
+                </menuchoice> 
+                from the Desktop menu system.
+                </para>
+            </sect2>
+            <sect2 id="common-commands" status="complete">
+                <title>Vanliga kommandon</title>
+                <variablelist>
+                    <varlistentry>
+                        <term>Visa kataloger: - ls</term>
+                        <listitem><para>Kommandot <application>ls</application> (LiSt) listar filer i olika färger med formaterad text</para></listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Skapa kataloger: - mkdir (katalognamn)</term>
+                        <listitem><para>Kommandot <application>mkdir</application> (MaKeDIRectory) skapar en katalog.</para></listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Byt katalog: - cd (/katalog/plats)</term>
+                        <listitem><para>Kommandot <application>cd</application> (ChangeDirectory) kommer att flytta dig från den nuvarande katalogen till den katalog du skriver.</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Kopiera filer/kataloger: - cp (fil- eller katalognamn) (till katalog eller filnamn)</term>
+                        <listitem><para>Kommandot <application>cp</application> (CoPy) kopierar alla filer du specificerar. Kommandot <application>cp -r</application> kommer att kopiera alla kataloger du specificerar.</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Ta bort filer/kataloger: - rm (fil- eller katalognamn)</term>
+                        <listitem><para>Kommandot <application>rm</application> (ReMove) kommer att ta bort alla filnamn du specificerar. Kommandot <application>rm -rf</application> kommer att ta bort alla kataloger du specificerar.</para></listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Flytta/döp om filer/kataloger: - mv (fil- eller katalognamn)</term>
+                        <listitem><para>Kommandot <application>mv</application> (MoVe) flyttar/byter namn på de filer du specificerar.</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Hitta filer/kataloger: - locate (fil- eller katalognamn)</term>
+                        <listitem><para>Kommandot <application>locate</application> kommer att söka i din dator efter det filnamn du skriver. Det använder ett index över filerna på din dator för att vara snabbt. För att uppdatera det, kör kommandot <application>updatedb</application>. Det här kommandot körs automatiskt varje dag om du lämnar den igång. Det behöver köras med administrativa rättigheter (se <xref linkend="root-and-sudo"/>).</para>
+                        </listitem>
+                    </varlistentry>
+                </variablelist>
+                <para>Du kan också använda jokertecken för att matcha en eller flera filer, som "*" (för alla filer) eller "?" (för att matcha ett tecken).</para>
+            </sect2>
+            <sect2 status="complete">
+                <title>Växla till konsolläge</title>
+                <para>Det vanliga sättet att komma åt kommandoraden i Kubuntu är att starta en terminal (se <xref linkend="starting-konsole"/> ovan), men ibland är det användbart att växla till en riktig konsol:</para>
+                <procedure>
+                    <step>
+                        <para>Use the <keycombo>
+                                <keycap>Ctrl</keycap>
+                                <keycap>Alt</keycap>
+                                <keycap>F1</keycap>
+                            </keycombo>
+                            shortcut keys to switch to the first console.
+                        </para>
+                    </step>
+                    <step>
+                        <para>To switch back to Desktop mode, use the <keycombo>
+                                <keycap>Ctrl</keycap>
+                                <keycap>Alt</keycap>
+                                <keycap>F7</keycap>
+                            </keycombo> shortcut keys.
+                        </para>
+                    </step>
+                </procedure>
+                <note>
+                    <para>There are six consoles available. Each one is accessible with the
+                        shortcut keys <keycombo>
+                            <keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>F1</keycap>
+                            </keycombo> to <keycombo>
+                            <keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>F6</keycap>
+                        </keycombo>.
+                    </para>
+                </note>
+            </sect2>
+            <sect2 status="complete">
+                <title>Stänga av det pipande ljudet i terminalen</title>
+                <procedure>
+                    <step>
+                        <para>
+                            Start a <application>Konsole</application>
+                            session, select: 
+                            <menuchoice>
+                                <guimenu>K-menu</guimenu>
+                                <guisubmenu>System</guisubmenu>
+                                <guimenuitem>Konsole (Terminal Program)</guimenuitem>
+                            </menuchoice>
+                            from the desktop menu system. 
+                        </para>
+                    </step>
+                    <step>
+                        <para>
+                            <menuchoice>
+                                <guimenu>Inställningar</guimenu>
+                                <guisubmenu>Bell</guisubmenu>
+                                <guimenuitem>None</guimenuitem>
+                            </menuchoice>
+                        </para>
+                    </step>
+                </procedure>
+            </sect2>
+        </sect1>
+        <sect1 id="text-editing" status="complete">
+            <title>Text Editing</title>
+            <para>
+                All of the configurations and settings in Linux are saved in
+                text files. Even though you most often can edit configurations
+                through the graphical interface, you may occasionally have to
+                edit them by hand. 
+                <application>Kate</application> is the default Kubuntu text
+                editor, which can be launched by clicking  
+                <menuchoice>
+                    <guimenu>K-menu</guimenu>
+                    <guisubmenu>Utilities</guisubmenu>
+                    <guimenuitem>Kate (Advanced Text Editor)</guimenuitem>
+                </menuchoice> 
+                    from the desktop menu system.
+            </para>
+            <para>
+                At times in this guide, <application>Kate</application> is run
+                from the command line using <application>kdesu</application>, as most
+                configuration files require root privileges to alter them. It is recommended
+                that you also run <application>kdesu</application> from the
+                command line when shown in this guide.
+            </para>
+
+            <para>If you need to use a text editor from the command line, you can use <application>nano</application>, which is a simple to use text editor. When running it from the command line, always use the following command, which ensures that the editor will not introduce line breaks:<screen>nano -w</screen>
+            </para>
+            <para>For more information about how to use <application>nano</application>, refer to the <ulink url="&wiki-Nano;">guide on the wiki</ulink>.
+            </para>
+            <para>There are also quite a few other terminal-based editors available in Kubuntu, popular ones include <application>VIM</application> and <application>Emacs</application> (the pros and cons of each are cause for much friendly debate within the Linux community). These are often more complex to use than <application>nano</application>, but are also more powerful.
+            </para>
+        </sect1>
+                <sect1 id="users-and-groups" status="complete">
+                    <title>Users and Groups</title>
+                    <para>To add users or groups to your system, you can use the <application>Users And Groups</application> application located in 
+                        <menuchoice>
+                            <guimenu>K-menu</guimenu>
+                            <guimenuitem>System Settings</guimenuitem>
+                            <guimenuitem>Users and Groups</guimenuitem>
+                        </menuchoice> 
+                        .</para>
+                    <note>
+                        <para>
+                            You will need to change into the "Administrator Mode" to make changes to Users and Groups.</para>
+                    </note>
+
+                    <para>
+                        To add a new user, click on <guilabel>New...</guilabel>, fill in the data fields then click <guilabel>OK</guilabel>.  To edit the properties of each user, click the <guilabel>Modify...</guilabel> button located in the main <guilabel>Users</guilabel> window.
+                    </para>
+
+                    <para>
+                        To add a new group, select the <guilabel>Groups</guilabel> tab and click <guilabel>New...</guilabel>. Choose a name for the new group and, if you want, change the default value for the <guilabel>Group ID</guilabel>. If you try to allocate a <guilabel>Group ID</guilabel> that is in use, the system will warn you.</para>
+
+                    <para>You can add users to the newly created group by selecting a user from the left menu and clicking on the <guilabel>Add</guilabel> button.  Removing a user from a group is as simple as adding one: select the user from the right menu then click <guilabel>Remove</guilabel>.  When you are ready, click <guilabel>OK</guilabel> and the new group with its users, if inserted, will be created.</para>
+
+                    <para>To edit the properties of a group, from within the <guilabel>Groups</guilabel> main window, choose a group name and click on the <guilabel>Modify...</guilabel> button.</para>
+
+                    <para>To remove a user or a group from the system, select the user or group you want to delete and click <guilabel>Delete...</guilabel>.</para>
+
+                </sect1>
+            </chapter>
+

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="desktop-tips" status="complete">
+			<title>Configuración Avanzada do Escritorio</title>
+			  <para>Nesta sección detállanse algúns trucos para a utilización e personalización do ambiente de traballo Ubuntu (chamado <application>GNOME</application>), e do xestor de ficheiros (chamado <application>Nautilus</application>).</para>
+
+		<sect1 status="complete">
+				<title>Entrar automaticamente cando se inicie o computador</title>
+				<para>Para entrar automaticamente cando se inicie o ordenador:</para>
+				<procedure>
+					<step>
+						<para>Escolle &login-screen-setup;.</para>
+					</step>
+					<step>
+						<para>Escolle <guibutton>Securanza</guibutton>, e activa <guilabel>Permitir a Entrada Automática</guilabel>.</para>
+					</step>
+					<step>
+						<para>Escolle a conta coa que queres entrar.</para>
+					</step>
+				</procedure>
+			<para>Isto non é recomendábel para a maioría dos computadores, xa que non é seguro e pode permitir que outras persoas teñan acceso á túa información.</para>
+		</sect1>	
+
+		<sect1 status="complete">
+			<title>Abrir ficheiros con privilexios administrativos a partir do xestor de ficheiros</title>
+			<para>Para abrir ficheiros con privilexios administrativos desde o xestor de ficheiros, teraslle que engadir un guión a <application>Nautilus</application>.</para>
+			<warning><para>Abrir ficheiros con privilexios administrativos é un risco de seguranza. Asegúrate sempre de estar familiarizado co que estás a abrir.</para></warning>
+			<procedure>
+				<step><para>Abre un ficheiro novo para editar no directorio correspondente: <screen>gedit $HOME/.gnome2/nautilus-scripts/Open\ as\ Administrator</screen></para>
+				</step>
+				<step>
+						<para>Introduce estas liñas no novo ficheiro:</para>
+						<programlisting>for uri in $NAUTILUS_SCRIPT_SELECTED_URIS; do
+gksudo "gnome-open $uri" 
+done</programlisting>
+				</step>
+				<step>
+						<para>Salva o ficheiro editado (<ulink url="sample/nautilus_open_as_administrator">un exemplo</ulink>)</para>
+				</step>
+				<step>
+						<para>Fai que o ficheiro modificado sexa executábel: <screen>chmod +x $HOME/.gnome2/nautilus-scripts/Abrir\ como\ Administrador</screen></para>
+				</step>
+			</procedure>
+						<para>Poderás abrir un ficheiro como administrador clicando co botón dereito e escollendo <menuchoice><guimenuitem>Scripts</guimenuitem>
+								<guimenuitem>Abrir como Administrador</guimenuitem></menuchoice>.</para>
+		</sect1>
+     <sect1 id="fonts" status="complete">
+		<title>Instalar Fontes Extra</title>
+				<para>Esta sección describe como instalar fontes extra a partir dos repositorios Ubuntu.</para>
+							<para>Para <emphasis role="bold">tipos de letra internacionais</emphasis>, instala estes pacotes desde o depósito <quote>Universe</quote> (consulta <xref linkend="add-applications"/>):</para>
+			<itemizedlist>
+				<listitem><para>xfonts-intl-arabic</para></listitem>
+				<listitem><para>xfonts-intl-asian</para></listitem>
+				<listitem><para>xfonts-intl-chinese</para></listitem>
+				<listitem><para>xfonts-intl-chinese-big</para></listitem>
+				<listitem><para>xfonts-intl-european</para></listitem>
+				<listitem><para>xfonts-intl-japanese</para></listitem>
+				<listitem><para>xfonts-intl-japanese-big</para></listitem>
+				<listitem><para>xfonts-intl-phonetic</para></listitem>
+			</itemizedlist>
+							<para>Para as <emphasis role="bold">Microsoft TrueType core fonts</emphasis>, instala o pacote <application>msttcorefonts</application> desde o depósito <quote>Multiverse</quote> repository (consulta <xref linkend="add-applications"/>).</para>
+							<para>Para <emphasis role="bold">fontes Ghostscript</emphasis>, instala o pacote <application>gsfonts-x11</application> (consulta <xref linkend="add-applications"/>).</para>
+							<para>Unha vez instalada un tipo de letra novo, reconstrúe os ficheiros de información sobre as fotnes introducindo o seguinte nun Terminal:</para>
+							<screen>sudo fc-cache -f -v</screen>
+			<para>Se prefires descarregar tipos de letra individuais, pódelo facer simplemente e doadamente abrindo un xestor de ficheiros e escribindo <application>fonts:///</application> na barra de localización (consulta <ulink type="help" url="ghelp:user-guide#nautilus-location-bar">o manual do xestor de ficheiros</ulink> para saber como usar a barra de localización). E logo abonda con arrastrar a fonte que baixaches cabo do grupo de fontes existentes.</para>
+		</sect1>
+		<sect1 status="complete">
+				<title>Arquivador RAR</title>
+					<procedure>
+						<step>
+							<para>Instala o pacote rar desde o depósito <quote>Multiverse</quote> (consulta <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>
+							<para>Executa: <screen>
+sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen></para>
+						</step>
+						<step>
+							<para>Para abrir un ficheiro rar, efectúa duplo-clique no mesmo.</para>
+						</step>
+					</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Applets Avanzadas do Ambiente de Traballo</title>
+				<para><application>gDesklets</application> é un sistema que trae mini-programas (desklets) para o teu ambiente de traballo, tais como previsións meterolóxicas, noticias, mostradores con información sobre o sistema, controis de reprodución de música, etc. nunha relación simbiótica entre utilidade e atractivo visual.</para>
+				<procedure>
+					<step>
+							<para>Instala o pacotes <application>gdesklets</application> e <application>gdesklets-datadesde o repositorio Universe ( consulta ).</application></para>
+					</step>
+					<step>
+							<para>Escolle: <menuchoice><guimenu>Applicións</guimenu>
+									<guisubmenu>Accesorios</guisubmenu>
+									<guimenuitem>gDesklets</guimenuitem></menuchoice></para>
+					</step>
+					<step><para>Para máis información, visita o <ulink url="http://www.gdesklets.org/">sitio web gDesklets</ulink></para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Agochar Documentos Recentes no menú Lugares</title>
+				<para>Para esconder <guilabel>Documentos Recentes</guilabel> do menú <guilabel>Lugares</guilabel>, abre unha consola e executa o comando:</para><screen>chmod 400 ~/.recently-used</screen>
+				<para>Para mostrar o menú de novo, executa o comando:</para><screen>chmod 600 ~/.recently-used</screen>
+		</sect1>
+		<sect1 status="complete">
+			<title>Mostrar as iconas de escritorio Ordenador, Persoal e Lixo en GNOME</title>
+				<procedure>
+					<step>
+						<para>Abre o <application>Editor de Configuración</application> executando o programa <filename>gconf-editor</filename> (consulta <ulink type="help" url="ghelp:user-guide#tools-run-app">o manual da aplicación run</ulink> para axuda acerca de como executar unha aplicación sen utilizar o menú).</para>
+					</step>
+					<step>
+						<para>Escolle <menuchoice><guimenu>apps</guimenu>
+								<guisubmenu>nautilus</guisubmenu>
+								<guimenuitem>desktop</guimenuitem></menuchoice>.</para>
+					</step>
+					<step>
+						<para>Activa <guilabel>icona_do_computador_visíbel, icona_persoal_vis e icona_do_lixo_vis. As modificaci</guilabel></para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 id="restartgnomewithoutreboot" status="complete">
+			<title>Reiniciar GNOME sen reiniciar o computador</title>
+			<procedure>
+				<step>
+						<para>Grava e fecha todas as aplicacións abertas.</para>
+			          </step>
+			          <step>
+            				<para>Usa os atallos de teclado <keycombo><keycap>Ctrl</keycap>
+						<keycap>Alt</keycap>
+						<keycap>Borrar para tras</keycap></keycombo> para reiniciar o GNOME.</para>
+           			</step>
+           			<step>
+            				<para>Se <keycombo><keycap>Ctrl</keycap>
+                <keycap>Alt</keycap>
+                <keycap>Borrar para tras</keycap></keycombo> están desactivadas, teclea <screen>sudo /etc/init.d/gdm restart</screen></para>
+						<para>(Consulta <xref linkend="disableCtrlAltBackspace"/> para desactivar <keycombo><keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>Borrado para tras</keycap></keycombo>.)</para>
+				</step>
+			</procedure>
+		</sect1>
+		<sect1 id="disableCtrlAltBackspace" status="complete">
+			<title>Evitar que as teclas de atallo Ctrl-Alt-Backspace reinicien o X</title>
+				<procedure>
+					<step>
+						<para>Fai unha copia de seguranza do ficheiro existente <filename>/etc/X11/xorg.conf</filename>: <screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup</screen></para>
+					</step>
+					<step>
+					<para>Abre <filename>/etc/X11/xorg.conf</filename> para modificar: <screen>sudo gedit /etc/X11/xorg.conf</screen></para>
+					</step>
+					<step>
+						<para>Adiciona as liñas seguintes ao final do ficheiro: <programlisting>Section	"ServerFlags"
+Option	"DontZap"	"yes"
+EndSection</programlisting></para>
+					</step>
+					<step>
+						<para>Salva o ficheiro editado (<ulink url="sample/xorg.conf_disablectrlaltbackspacegnome">un exemplo</ulink>).</para>
+					</step>
+					<step>
+						<para>A alteración terá efecto da próxima vez que iniciares a sesión no GNOME. Se desexas que a alteración teña efecto de inmediato, reinicia o GNOME manualmente. (Consulta <xref linkend="restartgnomewithoutreboot"/>.)</para>
+					</step>
+				</procedure>
+		</sect1>
+
+	</chapter>
+

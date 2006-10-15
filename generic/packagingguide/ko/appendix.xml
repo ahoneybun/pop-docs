@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<appendix id="appendix-chap" status="complete">
+	<title>부록</title>
+
+	<sect1 id="appendix-resources" status="complete">
+		<title>추가적 자원</title>
+	
+		<para><emphasis role="bold">데비안 자원</emphasis>
+            <itemizedlist>
+
+                <listitem><para><ulink url="http://www.debian.org/doc/manuals/maint-guide/"> 데비안 새 패키지 관리자 안내서</ulink> - 패키지를 배우는 좋은 자원 입니다.</para></listitem>
+
+                <listitem><para><ulink url="http://www.debian.org/doc/debian-policy/"> 데비안 정책</ulink> - 데비안과 데비안 기반 배포판을 위한 필수적인 정책 지도서.</para></listitem>
+
+                <listitem><para><ulink url="http://www.debian.org/doc/manuals/developers-reference/"> 데비안 개발자의 참조</ulink> - 데비안 개발자를 위한 특정 정보 그러나 몇 가지 패키지 관리자를 위한 흥미로운 아이템들을 가지고 있습니다.</para></listitem>
+
+				<listitem><para><ulink url="http://www.netfort.gr.jp/~dancer/column/libpkg-guide/libpkg-guide.html">라이브러리 패키징 안내서</ulink> - 라이브러리를 패키징 하기 위한 안내서.</para></listitem>
+
+				<listitem><para><ulink url="http://women.alioth.debian.org/wiki/index.php/English/PackagingTutorial">Debian Women 패키징 지침서</ulink> - 또다른 데비안 패키징에 대한 좋은 소개.</para></listitem>
+
+			</itemizedlist></para>
+
+		<para><emphasis role="bold">여타 자원</emphasis>
+			<itemizedlist>
+
+				<listitem><para><ulink url="http://www-106.ibm.com/developerworks/linux/library/l-debpkg.html">IBM 패키징 지도서</ulink></para></listitem>
+
+				<listitem><para><ulink url="https://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml">Duckcorp CDBS 문서</ulink></para></listitem>
+	
+				<listitem><para><ulink url="https://wiki.ubuntu.com/MOTU/Documentation">우분투 MOTU 문서</ulink></para></listitem>
+		
+				<listitem><para><ulink url="https://wiki.ubuntu.com/KubuntuPackagingGuide">쿠분투 패키징 안내서</ulink></para></listitem>
+
+            </itemizedlist>
+		</para>
+
+	</sect1>
+
+	<sect1 id="appendix-chroot" status="complete" xreflabel="chroot">
+		<title>Chroot 환경</title>
+
+		<para>chroot 환경은 개발과 관련된 작업을 위하여 일반적으로 사용이 되고 기본적으로 빌드 관련된 소프트웨어의 설치 입니다. chroot 환경에서 개발 작업을 하는 것은 언제나 좋은 생각이고, 그것은 자주 개발 패키지의 설치를 요구 합니다. (주요 목적이 패키지를 만들기 위해서 입니다.) 하나의 예는, 특정 프로그램은 헤더와 라이브러리의 개발 버전을 (예를 들어, <application>libabc-dev</application>) 요구 합니다. 보통의 사용자는 <application>libabc</application> 의 개발 버전을 필요로 하지 않습니다. 그러므로 chroot 내에 그러한 개발 패키지를 설치하는 것이 좋고, 보통의 작업 환경은 깨끗하고 정돈되게 남겨 둡니다. 우선은 필요한 패키지를 설치 합니다:</para>
+		
+		<screen>sudo apt-get install dchroot debootstrap</screen>
+
+		<important><para>Make sure to install at least the version of
+				<application>debootstrap</application> that is from the
+				<phrase>Ubuntu</phrase> release for which you are trying to create the chroot.
+				You may have to download it from <ulink url="http://packages.ubuntu.com">packages.ubuntu.com</ulink>
+				and manually install it with <application>dpkg
+					-i</application>.</para></important>
+		
+		<para>다음 단계는 chroot 환경을 만들고, 설정하고, 진입하는 것 입니다.</para>
+		
+		<screen>
+sudo mkdir /var/chroot
+echo "mychroot /var/chroot" | sudo tee -a /etc/dchroot.conf
+sudo debootstrap --variant=buildd edgy /var/chroot/ http://archive.ubuntu.com/ubuntu/</screen>
+		
+		<note><para>Creating a chroot environment will take some time as
+				<application>debootstrap</application> downloads and configures a
+				minimal <phrase>Ubuntu</phrase> installation.</para></note>
+		
+		<screen>sudo cp /etc/resolv.conf /var/chroot/etc/resolv.conf
+sudo cp /etc/apt/sources.list /var/chroot/etc/apt/
+sudo chroot /var/chroot/</screen>
+
+		<para>chroot에서 apt 사용을 하는 것이 가능하려면, chroot의 apt sources에 우분투 sources를 더합니다. 어떤 때, 패키지 인증에 대한 경고를 하는 것은 무시 합니다:</para>
+		
+		<screen>
+echo "deb     http://archive.ubuntu.com/ubuntu edgy main restricted \
+	universe multiverse" &gt; /etc/apt/sources.list
+echo "deb-src http://archive.ubuntu.com/ubuntu edgy main restricted \
+	universe multiverse" &gt;&gt; /etc/apt/sources.list
+apt-get update
+apt-get install build-essential dh-make automake pbuilder gnupg lintian \
+	wget debconf devscripts gnupg sudo
+apt-get update
+exit</screen>
+
+		<para>locales 를 설정하기 위해 다음의 명령을 실행 합니다:</para>
+		
+		<screen>
+sudo chroot /var/chroot/
+apt-get install dialog language-pack-en
+exit</screen>
+
+		<note><para> If you want support for a language other than
+		English replace <emphasis>en</emphasis>
+		in <application>language-pack-en</application> with the
+		appropriate language code.</para></note>
+
+		<para>다음은, chroot 환경을 위해 사용자와 루트의 암호를 고치는 것 입니다. 아래의 마지막 줄은 chroot 환경을 찾을 때 sudo 경고를 피하기 위해서 입니다.</para>
+		
+		<screen>
+sudo cp /etc/passwd /var/chroot/etc/
+sudo sed 's/\([^:]*\):[^:]*:/\1:*:/' /etc/shadow | sudo tee /var/chroot/etc/shadow
+sudo cp /etc/group /var/chroot/etc/
+sudo cp /etc/hosts /var/chroot/etc/</screen>
+
+		<para>sudo를 사용하려면, 여러분의 root 패스워드와 관리자 그룹(chroot 환경을 위한)에 첫 번째 sudo 사용자로 만듭니다. chroot 환경에서 "&lt;user&gt;" 대신에 여러분의 사용자 이름을 넣고 다음 명령을 사용 합니다:</para>
+		
+		<screen>
+sudo cp /etc/sudoers /var/chroot/etc/
+sudo chroot /var/chroot/
+dpkg-reconfigure passwd
+passwd &lt;user&gt;
+exit</screen>
+
+		<para>시스템 fstab은 변경될 필요가 있고 그래야 chroot 환경이 시스템 홈 디렉토리들, 임시 디렉토리 등을 사용할 수 있습니다. chroot 환경에서 실제 시스템 홈 디렉토리가 사용되는 것을 주의 하십시오.</para>
+		
+		<screen>sudo editor /etc/fstab</screen>
+		
+		<para>이 줄들을 더합니다:</para>
+		<screen>
+/home /var/chroot/home none bind 0 0
+/tmp /var/chroot/tmp none bind 0 0 
+proc-chroot /var/chroot/proc proc defaults 0 0 
+devpts-chroot /var/chroot/dev/pts devpts defaults 0 0 </screen>
+
+		<para>새로운 fstab 항목 마운트</para>
+		
+		<screen>sudo mount -a</screen>
+		
+		<para>기본 설정 bash 프로파일은 프롬프트에 chroot 정보를 포함 합니다. 이것을 보이게 만드려면:</para>
+		
+		<screen>
+sudo chroot /var/chroot/
+echo mychroot &gt; /etc/debian_chroot
+exit</screen>
+
+		<para>이제 여러분의 chroot를 사용 합니다. (아마도 혼자이거나 <filename>/etc/dchroot.conf</filename> 내의 첫 번째 사용자가 되기를 원한다면 -c mychroot를 제외할 수 있습니다.) -d 파라미터는 여러분의 환경이 예약되었다는 의미 입니다. 이 파라미터는 chroot된 프로그램이 X 서버, 세션 관리자 등을 끊임없이 사용한다면 보통 유용 합니다.</para>
+		
+		<screen>dchroot -c mychroot -d</screen>
+	
+	</sect1>
+
+	<sect1 id="appendix-examples" status="complete">
+		<title><application>dh_make</application> 예제 파일</title>
+
+		<variablelist>
+			<varlistentry>
+				<term>Readme.Debian</term>
+				
+				<listitem><para>This file is used to document changes that you
+						have made to the original upstream source that other
+						people might need to know or information
+						specific to Debian or <phrase>Ubuntu</phrase>.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>conffiles.ex</term>
+				
+				<listitem><para>만약 패키지가 설정 파일을 설치한다면,  패키지가 업그레이드될 때 <application>dpkg</application>는 변경된 사용자의 버전을 간직할 것인지 또는 새 버전을 설치할 것인지를 사용자에게 물어볼 수 있습니다. 이러한 설정 파일은 한줄에 하나씩 <filename>conffiles</filename> 파일 내에 반드시 나열되어야 합니다. 패키지에 의해서만 변경된 설정 파일이나 사용자에 의해 작업을 하여 설정되어야 하는 파일은 나열하지 마십시오.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>cron.d.ex</term>
+
+				<listitem><para>만약 여러분의 패키지가 적절하게 동작하기 위하여 정기적으로 스케쥴된 작업을 요구한다면, 그것을 설정하기 위하여 이 파일을 사용할 수 있습니다. 만약 이 파일을 사용한다면, 그것을 <filename>cron.d</filename> 로 이름을 변경 하십시오.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>dirs</term>
+
+				<listitem><para>이 파일은 필요하지만 보통의 설치 절차(<application>make install</application> 프로그램)가 만들지 않은 디렉토리를 지정 합니다.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>docs</term>
+
+				<listitem><para>이 파일은 <application>dh_installdocs</application> 가 임시 디렉토리에 설치할 문서 파일들의 파일 이름을 지정 합니다.</para></listitem>
+				
+			</varlistentry>
+			
+			<varlistentry>
+				<term>emacsen-*.ex</term>
+
+				<listitem><para>이 파일은 설치시에 바이트 컴파일되는 Emacs 파일들을 지정 합니다. 그것들은 <application>dh_installemacsen</application> 에 의해 임시 디렉토리에 설치 됩니다.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>init.d.ex</term>
+
+				<listitem><para>If your package is a daemon that needs to be
+						run at system startup rename this file to
+						<filename>init.d</filename> and adjust it to your
+						needs. </para></listitem>
+			
+			</varlistentry>
+
+			<varlistentry>
+				<term>manpage.1.ex 와 manpage.sgml.ex</term>
+
+				<listitem><para>이 파일들은, 패키지가 이미 가지고 있지 않을 경우, <application>man</application> 페이지를 위한 양식들 입니다.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>menu.ex</term>
+
+				<listitem><para>This file is used to add your package to the
+						Debian menu. <phrase>Ubuntu</phrase> does not use Debian menu files
+						but uses the <ulink url="http://www.freedesktop.org">freedesktop.org</ulink>
+						standard <ulink url="http://standards.freedesktop.org/desktop-entry-spec/latest/">.desktop</ulink>
+						files.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>watch.ex</term>
+
+				<listitem><para>패키지 관리자는 새로운 업스트림 소스 tarball을 점검하기 위하여 <application>uscan</application> 프로그램과 <filename>watch</filename> 파일을 사용할 수 있습니다.</para></listitem>
+				
+			</varlistentry>
+
+			<varlistentry>
+				<term>ex.package.doc-base</term>
+
+				<listitem><para>이 파일은 <application>doc-base</application>로 여러분의 패키지 문서(<application>man</application>과 <application>info</application> 페이지를 제외한) 를 등록하기 위하여 사용 합니다.</para></listitem>
+				
+			</varlistentry>	
+
+			<varlistentry>
+				<term>postinst.ex, preinst.ex, postrm.ex, 그리고 prerm.ex</term>
+
+				<listitem><para>이 패키지 관리자 스크립트는 <application>dpkg</application> 에 의해 패키지가 설치, 업그레이드, 또는 삭제될 때 실행 됩니다.</para></listitem>
+				
+			</varlistentry>
+
+		</variablelist>
+
+		<tip><para>더 상세한 것은 <ulink url="http://www.debian.org/doc/maint-guide/ch-dother.en.html">데비안 새로운 패키지 관리자 안내서</ulink> 를 참조 하십시오.</para></tip>
+			
+	</sect1>
+
+	
+	<sect1 id="appendix-debhelper" status="complete">
+		<title><application>debhelper</application> 스크립트 목록</title>
+
+<itemizedlist>
+
+<listitem>
+		<para>dh_builddeb</para>
+</listitem>
+
+<listitem>
+		<para>dh_clean</para>
+</listitem>
+
+<listitem>
+		<para>dh_compress</para>
+</listitem>
+
+<listitem>
+		<para>dh_desktop</para>
+</listitem>
+
+<listitem>
+		<para>dh_fixperms</para>
+</listitem>
+
+<listitem>
+		<para>dh_gconf</para>
+</listitem>
+
+<listitem>
+		<para>dh_gencontrol</para>
+</listitem>
+
+<listitem>
+		<para>dh_iconcache</para>
+</listitem>
+
+<listitem>
+		<para>dh_install</para>
+</listitem>
+
+<listitem>
+		<para>dh_installcatalogs</para>
+</listitem>
+
+<listitem>
+		<para>dh_installchangelogs</para>
+</listitem>
+
+<listitem>
+		<para>dh_installcron</para>
+</listitem>
+
+<listitem>
+		<para>dh_installdeb</para>
+</listitem>
+
+<listitem>
+		<para>dh_installdebconf</para>
+</listitem>
+
+<listitem>
+		<para>dh_installdefoma</para>
+</listitem>
+
+<listitem>
+		<para>dh_installdirs</para>
+</listitem>
+
+<listitem>
+		<para>dh_installdocs</para>
+</listitem>
+
+<listitem>
+		<para>dh_installemacsen</para>
+</listitem>
+
+<listitem>
+		<para>dh_installexamples</para>
+</listitem>
+
+<listitem>
+		<para>dh_installinfo</para>
+</listitem>
+
+<listitem>
+		<para>dh_installinit</para>
+</listitem>
+
+<listitem>
+		<para>dh_installlogcheck</para>
+</listitem>
+
+<listitem>
+		<para>dh_installlogrotate</para>
+</listitem>
+
+<listitem>
+		<para>dh_installman</para>
+</listitem>
+
+<listitem>
+		<para>dh_installmenu</para>
+</listitem>
+
+<listitem>
+		<para>dh_installmime</para>
+</listitem>
+
+<listitem>
+		<para>dh_installmodules</para>
+</listitem>
+
+<listitem>
+		<para>dh_installpam</para>
+</listitem>
+
+<listitem>
+		<para>dh_installppp</para>
+</listitem>
+
+<listitem>
+		<para>dh_installtexfonts</para>
+</listitem>
+
+<listitem>
+		<para>dh_installwm</para>
+</listitem>
+
+<listitem>
+		<para>dh_installxfonts</para>
+</listitem>
+
+<listitem>
+		<para>dh_installxmlcatalogs</para>
+</listitem>
+
+<listitem>
+		<para>dh_link</para>
+</listitem>
+
+<listitem>
+		<para>dh_listpackages</para>
+</listitem>
+
+<listitem>
+		<para>dh_makeshlibs</para>
+</listitem>
+
+<listitem>
+		<para>dh_md5sums</para>
+</listitem>
+
+<listitem>
+		<para>dh_perl</para>
+</listitem>
+
+<listitem>
+		<para>dh_python</para>
+</listitem>
+
+<listitem>
+		<para>dh_scrollkeeper</para>
+</listitem>
+
+<listitem>
+		<para>dh_shlibdeps</para>
+</listitem>
+
+<listitem>
+		<para>dh_strip</para>
+</listitem>
+
+<listitem>
+		<para>dh_testdir</para>
+</listitem>
+
+<listitem>
+		<para>dh_testroot</para>
+</listitem>
+
+<listitem>
+		<para>dh_usrlocal</para>
+</listitem>
+
+</itemizedlist>
+
+
+	</sect1>
+
+</appendix>
+

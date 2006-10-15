@@ -1,0 +1,19 @@
+#! /bin/sh
+set -e
+
+#DEBHELPER#
+
+case "$1" in
+  remove|deconfigure|failed-upgrade)
+    update-alternatives --remove firefox-homepage \
+	/usr/share/doc/kde/HTML/en/kubuntu/about-kubuntu/index.html
+
+    if which install-docs >/dev/null 2>&1; then
+      install-docs -r kubuntu-desktopguide
+      install-docs -r kubuntu-serverguide
+      install-docs -r kubuntu-packagingguide
+    fi
+
+
+  ;;
+esac

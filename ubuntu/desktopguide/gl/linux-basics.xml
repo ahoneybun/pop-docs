@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="linux-basics" status="review">
+	<title>Rudimentos de Linux</title>
+				<para>Linux está inspirado no sistema operativo Unix, que apareceu por vez primeira en 1969 e que desde entón foi usado e desenvolvido sempre. Moitas das convencións de deseño por detrás do Unix tamén existen no Linux e son centrais para a comprensión do básico do sistema.</para>
+				<para>O Unix orientábase principalmente para a interface de liña de comandos, e ese legado é continuado no Linux. Así, a interface gráfica do utilizador, coas súas xanelas, iconas e menús, constrúense por riba dunha interface básica de liña de comandos. Adicionalmente, isto significa que o sistema de ficheiros de Linux está estruturado para ser facilmente accesíbel e facil de xestionar a partir da liña de comandos.</para>
+		<sect1 id="directories-file-systems" status="complete">
+			<title>Directorios e Sistemas de Ficheiros</title>
+				<para>Os sistemas de ficheiros de Linux e Unix organízanse nunha estrutura hierárquica, en forma de árbore. O nivel máis elevado do sistema de ficheiros é <filename>/</filename> ou <emphasis>directorio root</emphasis> ("root" significa "raiz"). Na filosofía de deseño Unix e Linux, todo se considera un ficheiro - incluindo discos ríxidos, particións e medios removíbeis. Isto significa que todos os ficheiros e directorios (incluindo discos e particións) existen baixo o directorio root.</para>
+				<para>Por exemplo, <filename>/home/Sabela/queixos.odt</filename> mostra o camiño correcto e completo para o ficheiro <filename>queixos.odt</filename> que existe no directorio <filename>Sabela</filename> que está sob o directorio root (<filename>/</filename>).</para>
+				<para>Baixo o directorio root (<filename>/</filename>) existe um conxunto importante de directorios de sistema que son comúns á maioría das distribucións Linux en uso. A listaxe seguinte contén os directorios comúns que existen directamente sob o directorio root:</para>
+					<itemizedlist>
+						<listitem>
+							<para><filename>/bin</filename> - aplicacións <emphasis>bin</emphasis>arias importantes</para>
+						</listitem>
+						<listitem>
+							<para><filename>/boot</filename> - ficheiros precisos para <emphasis>iniciar</emphasis> o computador</para>
+						</listitem>
+						<listitem>
+							<para><filename>/dev</filename> - os ficheiros de <emphasis>dispositivos</emphasis> (do inglés "device", "dispositivo")</para>
+						</listitem>
+						<listitem>
+							<para><filename>/etc</filename> - ficheiros de configuración, guións de arranque, <emphasis>etc</emphasis>...</para>
+						</listitem>
+						<listitem>
+							<para><filename>/home</filename> - directorios persoais dos usuarios locais (do inglés <emphasis>home</emphasis>)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lib</filename> - bibliotecas de sistema (do inglés <emphasis>lib</emphasis>raries)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lost+found</filename> - fornece un sistema de obxectos perdidos para ficheiros que existen sob o directorio root (<filename>/</filename>).</para>
+						</listitem>
+						<listitem>
+							<para><filename>/media</filename> - <emphasis>medios</emphasis> removíbeis montados (carregados), tais como CDs, cámaras dixitais, etc...</para>
+						</listitem>
+						<listitem>
+							<para><filename>/mnt</filename> - sistemas de ficheiros <emphasis>m</emphasis>o<emphasis>nt</emphasis>ados</para>
+						</listitem>
+						<listitem>
+							<para><filename>/opt</filename> - fornece unha localización para aplicacións opcionais a seren instaladas (do inglés <emphasis>opt</emphasis>ional)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/proc</filename> - directorio especial dinámico que mantén información acerca do estado do sistema, incluindo os <emphasis>proc</emphasis>esos actuais en execución.</para>
+						</listitem>
+						<listitem>
+							<para><filename>/root</filename> - directorio persoal do usuario <emphasis>root</emphasis></para>
+						</listitem>
+						<listitem>
+							<para><filename>/sbin</filename> - <emphasis>bin</emphasis>arios de <emphasis>s</emphasis>istema importantes</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sys</filename> - contén información sobre o <emphasis>sis</emphasis>tema</para>
+						</listitem>
+						<listitem>
+							<para><filename>/tmp</filename> - ficheiros <emphasis>t</emphasis>e<emphasis>mp</emphasis>orarios</para>
+						</listitem>
+						<listitem>
+							<para><filename>/usr</filename> - aplicacións e ficheiros que están maioritariamente disponíbeis para acceso de todos os utilizadores.</para>
+						</listitem>
+						<listitem>
+							<para><filename>/var</filename> - ficheiros <emphasis>var</emphasis>iábeis tais como rexistros e bases de datos</para>
+						</listitem> 
+					</itemizedlist>
+		</sect1>
+
+		<sect1 id="permissions" status="review">
+			<title>Permisos</title>
+                       <para>Todos os ficheiros dun sistema Linux teñen permisos que permiten ou impiden que outros usuarios os vexan, modifiquen ou executen. O superutilizador "root" ten a capacidade de acceder a calquer ficheiro do sistema. Cada ficheiro ten restricións de acceso e restricións de utilizador, así como unha asociación a un propietario/grupo.</para>
+                       <para>Todos os ficheiros están protexidos polos tres conxuntos de permisos seguintes, en orde de importancia:</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>usuario</emphasis></para>
+                           <para>aplícase ao usuario que é dono do ficheiro</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>grupo</emphasis></para>
+                           <para>aplícase ao grupo que está asociado co ficheiro</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>outro</emphasis></para>
+                           <para>aplícase a todos os demais usuarios</para>
+                         </listitem>
+                       </itemizedlist>
+                       <para>Dentro de cada un dos tres grupos de permisos existen os permisos reais. Os permisos, xunto coa maneira en que se aplican aos ficheiros e directorios, aparecen esbozados abaixo:</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>lectura</emphasis></para>
+                           <para>os ficheiros poden ser visualizados/abertos</para>
+                           <para>o contido do directorio pode ser visualizado</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>escrita</emphasis></para>
+                           <para>os ficheiros poden ser editados ou eliminados</para>
+                           <para>o contido do directorio pode ser modificado</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>execución</emphasis></para>
+                           <para>os ficheiros executábeis pódense lanzar como programas</para>
+                           <para>nos directorios pódese entrar</para>
+                         </listitem>
+                       </itemizedlist>
+				<para>Para ver e modificar os permisos de ficheiros e directorios, abre o <phrase>carta persoal; e fai clic dereito sobre un ficheiro ou directorio. Vai entPropiedades. Os permisos estPermisos e permiten modificar todos os niveis de permisos se ti es o propietario do ficheiro.</phrase></para>
+				<para>Para aprender máis sobre os permisos de ficheiros en Linux, le a <ulink url="&wiki-filepermissions;">páxina de permisos de ficheiros</ulink> no Wiki de Ubuntu.</para>
+		</sect1>
+
+
+		<sect1 id="terminals" status="review">
+		<title>Terminais</title>
+            <para>Traballar na liña de comandos non é unha tarefa tan difícil como poideras pensar. Non é necesario nengún coñecemento especial para saber utilizar a liña de comandos, é un programa como outro calquer. A maior parte das tarefas en Linux pódense realizar usando a liña de comandos. Apesar de existiren ferramentas gráficas para a maior parte dos programas, por veces son insuficientes.  Eis cando a liña de comandos se torna útil.</para>
+    	      <para>O terminal chámase moitas veces "liña de comandos" ou "consola" ("prompt" ou "shell"). En tempos pasados, esta era a maneira en que o usuario interaxía co ordenador. Porén, os usuarios de Linux descobriron que o uso dunha consola pode ser máis rápido que un método gráfico e daí que ainda ten algún mérito hoxe en día. Aquí aprenderás a utilizar un terminal.</para>
+				<para>Orixinalmente, o terminal utilizábase como navegador de ficheiros e, de feito, ainda se usa como tal no caso de que falle o ambiente gráfico. Podes utilizar o terminal como navegador de ficheiros e desfacer as mudanzas que se teñan feito.</para>
+		<sect2 id="starting-a-terminal" status="review">
+			<title>Iniciar un Terminal</title>
+				<para>Para iniciar o <application>Terminal</application>, escolle &terminal;.</para>
+		</sect2>
+		<sect2 id="common-commands" status="review">
+			<title>Comandos Comúns</title>
+				<variablelist>
+					<varlistentry>
+						<term>Ver Directorios -ls</term>
+							<listitem><para>O comando <application>ls</application> (LiSta) lista os ficheiros en cores diferentes con texto formatado</para></listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Crear Directorios - mkdir (nome do directorio)</term>
+							<listitem><para>O comando <application>mkdir</application> (do inglés MaKeDIRectory) crea un directorio novo.</para></listitem>
+					</varlistentry>
+					<varlistentry>
+		    			<term>Mudar de Directorio - cd (/directorio/localización)</term>
+		    				<listitem><para>O comando <application>cd</application> (de "ChangeDirectory") pasará do directorio actual no que esteas a calquer outro directorio que especifiques.</para>
+		    				</listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Copiar Ficheiros/Directorios - cp (nome do ficheiro ou directorio) (para directorio ou nome de dicheiro)</term>
+		    				<listitem><para>O comando <application>cp</application> (de "CoPy") copiará calquer ficheiro que especificares. O comando <application>cp -r</application> copiará calquer directorio que especificares.</para>
+		    				</listitem>
+		    		</varlistentry>
+		    		<varlistentry>
+		    			<term>Eliminar Ficheiros/Directorios - rm (nome de ficheiro ou de directorio)</term>
+	            		<listitem><para>O comando <application>rm</application> (ReMover) elimina calquer ficheiro que especifiques. O comando <application>rm -rf</application> elimina calquer directorio que especifiques.</para></listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Mudar o nome de Ficheiros/Directorios - mv (nome de ficheiro ou directorio)</term>
+							<listitem><para>O comando <application>mv</application> (MoVer) renomea/elimina calquer ficheiro ou directorio que especifiques.</para>
+		    				</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Procurar Ficheiros/Directorios - locate (nome de ficheiro ou directorio)</term>
+							<listitem><para>O comando <application>locate</application> procura no computador por calquer ficheiro que especifiques. Usa un índice dos ficheiros do teu ordenador para funcionar rapidamente: para actualizar este índice executa o comando <application>updatedb</application>. Este comando execútase automaticamente cada día se se deixa o computador ligado. Necesita de privilexios de administrador (consulta <xref linkend="root-and-sudo"/>).</para>
+							</listitem>
+					</varlistentry>
+					</variablelist>
+			<para>Tamén podes usar "comodíns" para facer coincidir con un ou máis ficheiros, tais como "*" (para todos os ficheiros) ou "?" (para facer coincidir un carácter).</para>
+			<para>Para unha introdución máis extensa á liña de comandos de Linux, le a <ulink url="&wiki-BasicCommands;">introdución á liña de comandos</ulink> no wiki de Ubuntu.</para>
+		</sect2>
+		<sect2 status="complete">
+			<title>Pasar ao modo de Consola</title>
+				<para>O método habitual de acceso á lilña de comandos no Ubuntu é iniciar unha consola (consulta <xref linkend="starting-a-terminal"/> acima). Porén, por veces resulta útil pasar a unha consola real:</para>
+				<procedure>
+					<step>
+						<para>Usa as teclas de atallo <keycombo><keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap></keycombo> para pasar á primeira consola.</para>
+					</step>
+					<step>
+						<para>Para voltar ao modo Escritorio, usa as teclas de atallo <keycombo><keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F7</keycap></keycombo>.</para>
+					</step>
+				</procedure>
+					<note>
+						<para>Dispós de seis consolas. Podes acceder a cada unha delas coas teclas de atallo
+<keycombo><keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap></keycombo> até <keycombo><keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F6</keycap></keycombo>.</para>
+					</note>
+		</sect2>
+		<sect2 status="review">
+			<title>Desactivar o pitido no modo de Consola</title>
+				<procedure>
+					<step>
+						<para>Lanza unha sesión de <application>Terminal</application>, escolle: <phrase>&terminal;</phrase> desde o sistema de menú do escritorio.</para>
+					</step>
+					<step>
+						<para><menuchoice><guimenu>Editar</guimenu>
+								<guimenuitem>Perfil Actual...</guimenuitem></menuchoice>. Escolle a pestana <guibutton>Xeral</guibutton>. Tíralle a selección a <guilabel>Campá do Terminal</guilabel>.</para>
+					</step>
+				</procedure>
+		</sect2>
+	</sect1>
+
+	<sect1 id="text-editing" status="review">
+  			<title>Edición de Texto</title>
+ 			<para>Todas as configuracións en Linux se gardan en ficheiros de texto. Mesmo se o máis normal é que modifiques as configuracións mediante a interface gráfica, pode ser que algunhas veces teñas que editalos a man. <application>Gedit</application> é o editor de texto de Ubuntu por omisión, que podes abrir clicando en edi de texto; no sistema de men</para>
+ 			<para>Por veces, nesta guía <application>Gedit</application> execútase a partir da liña de comandos utilizando <application>gksudo</application>, o que executa o <application>Gedit</application> con privilexios administrativos, de forma a poder modificar os ficheiros de configuración.</para>
+			<para>Se precisares usar un editor de texto a partir da liña de comandos, podes recorrer a <application>nano</application>, que é un editor de texto simple e facil de utilizar. Cando o executes a partir da liña de comandos, usa sempre o seguinte comando, que asegura que o editor non introduce quebras de liña: <screen>nano -w</screen></para>
+			<para>Para máis información sobre como usar <application>nano</application>, consulta a <ulink url="&wiki-Nano;">guía na wiki</ulink>.</para>
+			<para>Existen bastantes outros editores de textos baseados en liña de comandos en Ubuntu; os máis populares inclúen <application>VIM</application> e o <application>Emacs</application> (os pros e contras de cada un son causa de moitos debates amigábeis na comunidade Linux). Estes son máis complexos de usar que o <application>nano</application>, mais son tamén máis poderosos.</para>
+	</sect1>
+
+		<sect1 id="users-and-groups" status="review">
+			<title>Usuarios e Grupos</title>
+			<para>Para engadir usuarios ou grupos ao teu sistema, podes usar a aplicación <application>Usuarios E Grupos</application>, que se atopa en &users-groups;.</para>
+			<note>
+				<para>Lembra fechar a sesión e volver a entrar para que se realicen as modificacións.</para>
+			</note>
+			<para>Para engadir un usuario novo, clica en <guilabel>Engadir usuario</guilabel>, enche os campos de datos e clica en <guilabel>OK</guilabel>. Para modificar as propiedades de cada usuario, clica no botón <guilabel>Propiedades</guilabel> localizado na xanela principal <guilabel>Usuarios</guilabel>.</para>
+			<para>Para adicionar un grupo novo, selecciona a pestana <guilabel>Grupos</guilabel> e clica guilabel&gt;Engadir grupo</para>
+			<para>Podes engadir usuarios ao grupo recén creado seleccionando un usuario do menú da esquerda e clicando no botón <guilabel>Engadir</guilabel>. Eliminar un usuario é tan simple como engadir: selecciona un usuario do menú da dereita e clica <guilabel>Eliminar</guilabel>. Cando remates, clica <guilabel>OK</guilabel> e crearase o novo grupo, cos seus usuarios, se inseridos.</para>
+			<para>Para modificar as propiedades dun grupo, desde dentro da xanela princial <guilabel>Grupos</guilabel>, escolle o nome dun grupo e clica no botón <guilabel>Propiedades</guilabel>.</para>
+			<para>Para eliminar un usuario ou grupo do sistema, selecciona o usuario ou grupo que queres eliminar e clica <guilabel>Eliminar</guilabel>.</para>
+		</sect1>
+
+</chapter>
+

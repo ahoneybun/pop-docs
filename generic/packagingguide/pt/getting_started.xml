@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="gs-chap" status="review">
+	<title>Getting Started</title>
+
+	<sect1 id="gs-bin_source" status="complete">
+		<title>Pacotes Fonte e Binários</title>
+		
+		<para>Most users of a Debian-based distribution such as <phrase>Ubuntu</phrase> will never have
+			to deal with the actual source code that is used to create all of the
+			applications on their computers. Instead, the source code is compiled into
+			<emphasis>binary</emphasis> packages from
+			the <emphasis>source</emphasis> package that contains both
+			the source code itself and the rules for making the binary
+			package. Packagers upload the source packages with their
+			changes to the build systems that then compile the binary
+			packages for each architecture. A separate system
+			distributes the generated binary .deb files and source
+			changes to the repository mirrors.</para>
+
+	</sect1>
+
+	<sect1 id="gs-tools" status="review">
+		<title>Ferramentas de Empacotamento</title>
+		
+		<para>Existem muitas ferramentas escritas especialmente para empacotamento em sistemas baseados no Debian. Muitas delas não são <emphasis>essenciais</emphasis> para criar pacotes mas são muito úteis e muitas vezes automatizam tarefas repetitivas. As suas páginas de <application>man</application> e <application>info</application> são boas fontes de informação. No entanto, o seguinte é uma lista de pacotes que julgamos que são necessários para começar a criar pacotes:</para>
+
+		<variablelist>
+			<varlistentry>
+				<term><application>build-essential</application></term>
+				<listitem><para>é um metapacote que depende de <application>libc6-dev</application>, <application>gcc</application>, <application>g++</application>, <application>make</application>, e <application>dpkg-dev</application>. Um pacote com o qual não deve estar familiarizado é o <application>dpkg-dev</application>. Contém ferramentas tais como <application>dpkg-buildpackage</application> e <application>dpkg-source</application> que são usadas para criar, desempacotar, e construir pacotes fonte e binários.</para></listitem>
+			</varlistentry>
+
+			<varlistentry>
+				<term><application>devscripts</application></term>
+				<listitem><para>contém muitos scripts que fazem com que o trabalho de manutenção do responsável pelo pacote seja mais fácil. Alguns dos mais comuns usados são <application>debdiff</application>, <application>dch</application>, <application>debuild</application>, e <application>debsign</application>.</para></listitem>
+			</varlistentry>
+
+			<varlistentry><term><application>debhelper</application> e <application>dh-make</application></term>
+				<listitem><para>são scripts que automatizam tarefas comuns de empacotamento. <application>dh-make</application> pode ser usado para a "debianização" inicial e fornece muitos ficheiros exemplo.</para></listitem>
+			</varlistentry>
+				
+			<varlistentry><term><application>diff</application> e <application>patch</application></term> <listitem><para>são usados para criar e aplicar correcções, respectivamente. São usados extensivamente no empacotamento porque é mais fácil, limpo, e mais eficiente para representar pequenas alterações como correcções em vez de ter múltiplas cópias de um ficheiro.</para></listitem> </varlistentry>
+			
+			<varlistentry><term><application>gnupg</application></term>
+				<listitem><para>é um substituto completamente livre do PGP usado para assinar digitalmente ficheiros (incluindo pacotes).</para></listitem>
+			</varlistentry>
+				
+			<varlistentry><term><application>fakeroot</application></term>
+				<listitem><para>simula um comando em execução com privilégios de root.  Isto é útil para criar pacotes binários como um utilizador normal.</para></listitem>
+			</varlistentry>
+			
+			<varlistentry><term><application>lintian</application> e <application>linda</application></term>
+				<listitem><para>disseca pacotes Debian e relata erros e violações de Políticas. Contêm verificações automáticas para muitos dos aspectos das políticas Debian bem como para erros comuns.</para></listitem>
+			</varlistentry>
+			
+			<varlistentry><term><application>pbuilder</application></term>
+				<listitem><para>constrói um sistema chroot e cria um pacote dentro do chroot. É um sistema ideal para usar para verificar que um pacote tem dependências correctas de criação e para criar pacotes limpos para serem testados e distribuidos.</para></listitem> </varlistentry>
+		</variablelist>
+
+	</sect1>
+
+		
+	<sect1 id="gs-pbuilder" status="complete" xreflabel="pbuilder">
+		<title>O Construtor Pessoal: pbuilder</title>
+		
+		<para>Using pbuilder as a package builder allows you to build
+			the package from within a chroot environment. You can
+			build binary packages without using
+			<application>pbuilder</application>, but you must have all the build
+			dependencies installed on your system first. However, pbuilder allows the
+			packager to check the build dependencies because the package is built within a
+			minimal <phrase>Ubuntu</phrase> installation, and the build dependencies are downloaded
+			according to the <filename>debian/control</filename> file.</para>
+
+		<para>O seguinte é um guia breve para instalar, usar, e actualizar um ambiente pbuilder. No entanto, existem muitos detalhes de uso do <application>pbuilder</application>  que saem fora dos horizontes deste guia. A página do man do <application>pbuilder</application> tem muita informação e deve ser consultada se tiver problemas ou precisar de informação mais detalhada.</para>
+
+	<sect2>
+		<title>Instalar e Configurar um ambiente pbuilder</title>
+		
+		<para>The first, and perhaps most obvious, thing to do is to
+		install <application>pbuilder</application>. If you want to
+		create a <application>pbuilder</application> for a release
+		newer than the one you currently have installed, you will need
+		to manually install the <application>debootstrap</application>
+		.deb (from <ulink url="http://packages.ubuntu.com">http://packages.ubuntu.com</ulink>) from the
+		newer release. To create a pbuilder execute:</para>
+		
+		<screen>
+sudo pbuilder create --distribution &lt;distro&gt; \
+	--othermirror "deb http://archive.ubuntu.com/ubuntu &lt;distro&gt; universe multiverse"
+		</screen>
+
+		<para>where &lt;distro&gt; is the release you want
+			(<emphasis>edgy</emphasis> for instance) to create the
+			pbuilder for. If you would like to create more than one
+			<application>pbuilder</application> environment you can
+			append the <emphasis>--basetgz</emphasis> flag with the
+			desired location for the
+			compressed <application>pbuilder</application>
+			environment.  The default
+			is <filename>/var/cache/pbuilder/base.tgz</filename>.  If
+			you do choose to use <emphasis>--basetgz</emphasis> you
+			will need to use it with the
+			other <application>pbuilder</application> commands
+			so <application>pbuilder</application> knows which
+			compressed build environment to use.</para>
+		
+		<note><para>Creating a pbuilder environment will take some
+		time as <application>debootstrap</application> essentially
+		downloads a minimal <phrase>Ubuntu</phrase> installation.</para></note>
+
+		<tip><para>Uma maneira mais flexível para criar um pbuilder (e talvez vários pbuilders) é usar um script de shell.</para></tip>
+
+	</sect2>	
+	
+	<sect2>
+		<title>Using the pbuilder</title>
+		<para>Agora que tem um pbuilder a correr pode criar pacotes binários a partir do pacote fonte invocando:</para>
+
+		<screen>sudo pbuilder build *.dsc</screen>
+
+		<para>Isto irá construir todos os pacotes fonte na directoria actual. Os .debs resultantes e pacotes fonte podem ser encontrados em <filename>/var/cache/pbuilder/result/</filename> (que pode ser mudado com a marca <emphasis>--buildresult</emphasis>).</para>
+
+	</sect2>
+
+	<sect2>
+		<title>Actualizando o pbuilder</title>
+		
+		<para>Deve ter sempre um pbuilder actualizado sempre que estiver a testar os seus pacotes fonte, especialmente quando estiver a construir para uma versão de desenvolvimento que está a mudar rápidamente, para assegurar que as dependências são encontradas adequadamente. Para actualizar o seu pbuilder, use:</para>
+
+		<screen>sudo pbuilder update</screen>
+
+		<para/>
+		
+		<para>Se quiser actualizar o seu pbuilder para uma nova versão pode usar <application>pbuilder update</application> em combinação com a opção <emphasis>--distribution</emphasis>:</para>
+
+		<screen>sudo pbuilder update --distribution &lt;newdistro&gt; --override-config</screen>
+
+	</sect2>
+	
+	<sect2>
+		<title>Múltiplos pbuilders</title>
+		
+		<para>Toda a informação até agora nesta secção acerca do <application>pbuilder</application> aplicou-se para um único <application>pbuilder</application>. Se quer criar mais de um <application>pbuilder</application> pode criar um script de shell para lidar com a configuração para cada <application>pbuilder</application> que quiser criar. Um exemplo de um tal script de shell pode ser encontrado em <filename>/usr/share/doc/pbuilder/examples/pbuilder-distribution.sh</filename>. Pode simplesmente copiar este exemplo algures para o seu caminho (colocando isto em <filename>~/bin/</filename> e adicionando a directoria ao seu caminho de execução é conveniente) e a seguir editá-lo de acordo com as suas necessidades. Normalmente precisará apenas de mudar DISTRIBUTION e adicionar --othermirror como em cima. Pode executar este script em vez do <application>pbuilder</application> directamente.</para></sect2>
+	
+</sect1>
+
+</chapter>
+

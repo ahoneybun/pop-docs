@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="linux-basics" status="review">
+	<title>Základy Linuxu</title>
+				<para>Linux je inšpirovaný operačným systémom Unix, ktorý sa po prvý krát objavil v roku 1969 a od tej doby je v nepretržitom nasadení a vývoji. Mnohé konvencie dizajnu Unixu tiež existujú v Linuxe a tvoria jadro pre pochopenie základov systému.</para>
+				<para>Unix bol hlavne orientovaný ako rozhranie príkazového riadku a táto výsada sa prenáša aj na Linux. Teda grafické používateľské rozhranie so svojimi oknami, ikonami a menu sú postavené na základnom rozhraní príkazového riadku. Okrem toho to znamená, že súborový systém Linuxu je štrukturovaný tak, aby bol ľahko spravovateľný a prístupný z príkazového riadku.</para>
+		<sect1 id="directories-file-systems" status="complete">
+			<title>Adresáre a súborové systémy</title>
+				<para>Súborové systému Linuxu a Unixu sú organizované do hierarchickej stromovej štruktúry. Najvyššia úroveň súborového systému je <filename>/</filename> alebo <emphasis>root adresár</emphasis>. Podľa filozofie návrhu Unixu a Linuxu sa všetko považuje za súbor - vrátane pevných diskov, partícií a vymeniteľných médií. To znamená, že všetky ostatné súbory a adresáre (vrátane diskov a partícií) existujú pod root adresárom.</para>
+				<para>Napríklad, <filename>/home/peter/dokument.odt</filename> ukazuje správnú celú cestu k súboru <filename>dokument.odt</filename>, ktorý sa nachádza v adresári <filename>peter</filename>, ktorý je pod adresárom <filename>home</filename>, ktorý je pre zmenu pod root (<filename>/</filename>) adresárom.</para>
+				<para>Pod root (<filename>/</filename>) adresárom existuje sada dôležitých systémových adresárov, ktoré sú spoločné pre väčšinu Linuxových distribúcií, ktoré sa používajú. Následujúce je zoznam spoločných adresárov, ktoré sú priamo pod root (<filename>/</filename>) adresárom:</para>
+					<itemizedlist>
+						<listitem>
+							<para><filename>/bin</filename> - dôležité <emphasis>bin</emphasis>árne aplikácie</para>
+						</listitem>
+						<listitem>
+							<para><filename>/boot</filename> - files that are required to <emphasis>boot</emphasis> the computer
+							</para>
+						</listitem>
+						<listitem>
+							<para><filename>/dev</filename> - súbory zariadení <emphasis>dev</emphasis></para>
+						</listitem>
+						<listitem>
+							<para><filename>/etc</filename> - konfiguračné súbory, spúštacie skripty, <emphasis>etc</emphasis>...</para>
+						</listitem>
+						<listitem>
+							<para><filename>/home</filename> - domovské <emphasis>home</emphasis> adresáre lokálnych používateľov</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lib</filename> - systémové knižnice <emphasis>lib</emphasis></para>
+						</listitem>
+						<listitem>
+							<para><filename>/lost+found</filename> - poskytuje systém <emphasis>lost+found</emphasis> ("straty a nálezy") pre súbory, ktoré existujú pod root (<filename>/</filename>) adresárom</para>
+						</listitem>
+						<listitem>
+							<para><filename>/media</filename> - pripojené (načítané) vymeniteľné <emphasis>média</emphasis> ako sú CD, digitálne fotoaparáty, atď...</para>
+						</listitem>
+						<listitem>
+							<para><filename>/mnt</filename> - na<emphasis>m</emphasis>o<emphasis>nt</emphasis>ované súborové systémy</para>
+						</listitem>
+						<listitem>
+							<para><filename>/opt</filename> - poskytuje inštalačné umiestnenie pre voliteľné aplikácie <emphasis>opt</emphasis></para>
+						</listitem>
+						<listitem>
+							<para><filename>/proc</filename> - špeciálný dynamický adresár, ktorý spravuje informácie o stave systému, vrátane momentálne bežiacich <emphasis>proc</emphasis>esov</para>
+						</listitem>
+						<listitem>
+							<para><filename>/root</filename> - domovský adresár používateľa <emphasis>root</emphasis>, vyslovuje sa 'rút'</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sbin</filename> - dôležité <emphasis>s</emphasis>ystémové <emphasis>bin</emphasis>árky</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sys</filename> - contains information about the <emphasis>sys</emphasis>tem
+							</para>
+						</listitem>
+						<listitem>
+							<para><filename>/tmp</filename> - dočasné (angl. <emphasis>t</emphasis>e<emphasis>mp</emphasis>orary) súbory</para>
+						</listitem>
+						<listitem>
+							<para><filename>/usr</filename> - programy a súbory, ktoré sú väčšinou prístupné pre všetkých používateľov (angl. <emphasis>us</emphasis>e<emphasis>r</emphasis>s)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/var</filename> - <emphasis>var</emphasis>iabilné súbory ako sú logy a databázy</para>
+						</listitem> 
+					</itemizedlist>
+		</sect1>
+
+		<sect1 id="permissions" status="review">
+			<title>Prístupové práva</title>
+                       <para>Všetky súbory v systéme Linux majú prístupové práva, ktoré umožňujú alebo znemožňujú iným ich prezerať, meniť alebo spúšťať. Superpoužívateľ "root" (administrátor) má právo pristupovať ku všetkým súborom v systéme. Každý súbor má svoje obmedzenia prístupu, používateľské obmedzenia a má asociáciu vlastník/skupina.</para>
+                       <para>Každý súbor je zabezpečný tromi nasledujúcimi typmi prístupu, v poradí dôležitosti:</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>používateľ</emphasis></para>
+                           <para>vzťahuje sa na používateľa, ktorý je vlastníkom súboru</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>skupina</emphasis></para>
+                           <para>vzťahuje sa na skupinu, ktorá je priradená k súboru</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>ostatní</emphasis></para>
+                           <para>vzťahuje sa na všetkých ostatných používateľov</para>
+                         </listitem>
+                       </itemizedlist>
+                       <para>Pre každý z týchto troch typov prístupu sú nastavená vlastné práva. Práva, spolu so spôsobom akým sa rôzne aplikujú na súbory a adresáre, sú načrtnuté nižšie:</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>čítanie</emphasis></para>
+                           <para>súbory je možné zobraziť/otvoriť</para>
+                           <para>obsah adresára je možné zobraziť</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>zápis</emphasis></para>
+                           <para>súbory je možné upravovať a mazať</para>
+                           <para>obsah adresára je možné meniť</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>spustenie</emphasis></para>
+                           <para>spustiteľné súbory je možné spustiť ako program</para>
+                           <para>je možné vstúpiť do adresára</para>
+                         </listitem>
+                       </itemizedlist>
+				<para>To view and edit the permissions on files and directories, open the <phrase>&home-folder;</phrase> and right-click on a file or directory. Then select <guimenu>Properties</guimenu>.  The permissions exist under the <guilabel>Permissions</guilabel> tab and allow for the editing of all permission levels, if you are the owner of the file.
+				</para>
+				<para>To learn more about file permissions in Linux, read the <ulink url="&wiki-filepermissions;">file permissions page</ulink> in the Ubuntu Wiki.
+				</para>
+		</sect1>
+
+
+		<sect1 id="terminals" status="review">
+		<title>Terminály</title>
+            <para>Práca v príkazovom riadku nie je tak skľučujúca úloha ako by ste si mohli myslieť. Žiadne špeciálne vedomosti nie sú nutné na to, aby ste vedeli ako používať príkazový riadok, je to len program ako všetky ostatné. Väčšina vecí v Linuxe sa dá urobiť pomocou príkazového riadku, i keď pre väčšinu programov existujú grafické nástroje, niekedy to nestačí. V takýchto prípadoch je príkazový riadok užitočný.</para>
+    	      <para>Terminál sa často nazýva príkazový prompt alebo shell. V dábnych časoch to bol spôsob akým používateľ pracoval s počítačom, avšak používatelia Linuxu zistili, že použitie príkazového riadku môže byť rýchlejšie než grafická metóda, a preto aj dnes má svoje výhody. Tu sa naučíte ako používať terminál.</para>
+				<para>Pôvodné použitie terminálu bolo prezeranie súborov a skutočne sa stále na tento účel používa, v prípade zlyhania grafického prostredia. Terminál môžete používať ako prehliadač súborov na navigáciu vo vašich súboroch a vrátiť zmeny, ktoré boli vykonané.</para>
+		<sect2 id="starting-a-terminal" status="review">
+			<title>Spustenie Terminálu</title>
+				<para>To start <application>Terminal</application> choose &terminal;.
+				</para>
+		</sect2>
+		<sect2 id="common-commands" status="review">
+			<title>Bežné príkazy</title>
+				<variablelist>
+					<varlistentry>
+						<term>View Directories - ls
+						</term>
+							<listitem><para><application>ls</application> (LiSt) vymenúva súbory v rôznych farbách s plne formátovaným textom.</para></listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Create Directories - mkdir (directory name)
+						</term>
+							<listitem><para>Príkaz <application>mkdir</application> (MaKeDIRectory) vytvorí adresár.</para></listitem>
+					</varlistentry>
+					<varlistentry>
+		    			<term>Change Directories - cd (/directory/location)
+		    			</term>
+		    				<listitem><para>Príkaz <application>cd</application> (ChangeDirectory) zmení váš aktuálny adresár na ten, ktorý určíte.</para>
+		    				</listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Copy Files/Directories - cp (file or directory name) (to directory or filename)
+		    			</term>
+		    				<listitem><para>Príkaz <application>cp</application> (CoPy) skopíruje všetky súbory, ktoré určíte. Príkaz <application>cp -r</application> skopíruje všetky adresáre, ktoré určíte.</para>
+		    				</listitem>
+		    		</varlistentry>
+		    		<varlistentry>
+		    			<term>Remove Files/Directories - rm (file or directory name)</term>
+	            		<listitem><para>Príkaz <application>rm</application> (ReMove) odstráni akýkoľvek súbor, ktorý určíte. Príkaz <application>rm -rf</application> odstráni akýkoľvek adresár, ktorý určíte.</para></listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Rename Files/Directories - mv (file or directory name)</term>
+							<listitem><para>Príkaz <application>mv</application> (MoVe) premenuje/presunie akýkoľvek súbor alebo adresár, ktorý určíte.</para>
+		    				</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Find Files/Directories - locate (file or directory name)</term>
+							<listitem><para>Príkaz <application>locate</application> vyhľadá vo vašom počítači akýkoľvek súbor, ktorý určíte. Používa index súborov vo vašom systéme pre rýchlu prácu: pre aktualizáciu tohto indexu spustite príkaz <application>updatedb</application>. Tento príkaz sa automaticky spúšťa každý deň, ak necháte svoj počítač zapnutý. Musí byť spustený s administrátorskými privilégiami (pozri <xref linkend="root-and-sudo"/>).</para>
+							</listitem>
+					</varlistentry>
+					</variablelist>
+			<para>Tiež môžete použiť zástupné znaky pre zhodu jedného alebo viacerých súborov ako sú "*" (pre súbory) alebo "?" (pre zhodu jedného znaku).</para>
+			<para>For a more thorough introduction to the Linux command line, please read the <ulink url="&wiki-BasicCommands;">command line introduction</ulink> on the Ubuntu wiki.
+			</para>
+		</sect2>
+		<sect2 status="complete">
+			<title>Prepnutie do konzoly</title>
+				<para>Bežný spôsob prístupu príkazového riadku v Ubuntu je spustiť terminál (pozri <xref linkend="starting-a-terminal"/> vyššie), ale niekedy je užitočné prepnúť sa do skutočnej konzoly:</para>
+				<procedure>
+					<step>
+						<para>Use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo>
+							shortcut keys to switch to the first console.
+						</para>
+					</step>
+					<step>
+						<para>To switch back to Desktop mode, use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F7</keycap>
+							</keycombo> shortcut keys.
+						</para>
+					</step>
+				</procedure>
+					<note>
+						<para>There are six consoles available. Each one is accessible with the
+							shortcut keys <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo> to <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F6</keycap>
+							</keycombo>.
+						</para>
+					</note>
+		</sect2>
+		<sect2 status="review">
+			<title>Zakázať zvuk pípnutia v Terminálovom móde</title>
+				<procedure>
+					<step>
+						<para>
+						Start a <application>Terminal</application>
+						session,
+						select: <phrase>&terminal;</phrase>
+						from the desktop menu system. 
+						</para>
+					</step>
+					<step>
+						<para>
+							<menuchoice>
+								<guimenu>Edit</guimenu>
+								<guimenuitem>Current Profile...</guimenuitem>
+							</menuchoice>
+							. Select the
+							<guibutton>General</guibutton> tab. Uncheck the
+							<guilabel>Terminal bell</guilabel>
+							checkbox.
+						</para>
+					</step>
+				</procedure>
+		</sect2>
+	</sect1>
+
+	<sect1 id="text-editing" status="review">
+  			<title>Úprava textu</title>
+ 			<para>All of the configurations and settings in Linux are saved in text files. Even though you most often can edit configurations through the graphical interface, you may occasionally have to edit them by hand. <application>Gedit</application> is the default Ubuntu text editor, which you can launch by clicking &text-editor; on the desktop menu system.
+ 			</para>
+ 			<para><application>Gedit</application> je v tomto sprievodcovi občas spúšťaný z príkazového riadku využítím programu <application>gksudo</application>, ktorý spúšťa <application>Gedit</application> s právami administrátora na úpravu konfiguračných súborov.</para>
+			<para>Ak potrebujete použiť textový editor z príkazového riadku, môžete použiť <application>nano</application>, čo je ľahko použiteľný textový editor. Pri spúšťaní z príkazového riadku vždy používajte následujúci príkaz, ktorý zabezpečí, že editor nebude zalamovať dlhé riadky: <screen>nano -w</screen></para>
+			<para>For more information about how to use <application>nano</application>, refer to the <ulink url="&wiki-Nano;">guide on the wiki</ulink>.
+			</para>
+			<para>V Ubuntu sa tiež nachádza zopár iných editorov založených na termináli, obľúbené sú <application>VIM</application> a <application>Emacs</application> (klady a zápory každého sú dôvodom pre priateľské debaty v rámci Linuxovej komunity). Často sú o mnoho zložitejšie na použitie než <application>nano</application>, ale sú tiež o mnoho silnejšie.</para>
+	</sect1>
+
+		<sect1 id="users-and-groups" status="review">
+			<title>Používatelia a skupiny</title>
+			<para>To add users or groups to your system, you can use the <application>Users And Groups</application> application located in &users-groups;.
+			</para>
+			<note>
+				<para>Remember to log off and log back in order for the changes to become effective.
+				</para>
+			</note>
+			<para>Pre pridanie nového používateľa, kliknite na <guilabel>Pridať používateľa</guilabel>, vyplňte polia údajmi a potom kliknite na <guilabel>OK</guilabel>. Na úpravu vlastností používateľa, kliknite na tlačidlo <guilabel>Vlastnosti</guilabel>, ktoré sa nachádza v hlavnom okne <guilabel>Používateľa</guilabel>.</para>
+			<para>Pre pridanie novej skupiny, vyberte záložku <guilabel>Skupiny</guilabel> a kliknite na <guilabel>Pridať skupinu</guilabel>. Vyberte názov pre novú skupinu a ak si prajete, zmeňte východiskovú hodnotu pre <guilabel>ID Skupiny</guilabel>. Ak sa pokúsite vybrať <guilabel>ID Skupiny</guilabel> ktoré sa v systéme už používa, tak systém vás bude varovať.</para>
+			<para>Pridať používateľov do novovytvorenej skupiny môžete tak, že vyberiete používateľa z ľavého menu a kliknete na tlačidlo <guilabel>Pridať</guilabel>. Odstránenie používateľa zo skupiny je jednoduché ako pridávanie: vyberiete používateľa z pravého menu a potom kliknete na <guilabel>Odstrániť</guilabel>. Ak ste skončili, kliknite na <guilabel>OK</guilabel> a nová skupina s jej užívateľmi bude vytvorená.</para>
+			<para>Pre úpravu vlastností skupiny vo vnútri hlavného okna <guilabel>Skupiny</guilabel>, vyberte názov skupiny a kliknite na tlačidlo <guilabel>Vlastnosti</guilabel>.</para>
+			<para>Na odstránenie používateľa alebo skupiny zo systému, vyberte používateľa alebo skupinu, ktorú chcete zmazať a kliknite na <guilabel>Odstrániť</guilabel></para>
+		</sect1>
+
+</chapter>
+

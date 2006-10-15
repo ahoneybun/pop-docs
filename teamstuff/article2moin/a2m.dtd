@@ -1,0 +1,85 @@
+<!-- DTD for art2moin
+     art2moin XSLT converts a DocBook article to Moin markup
+     CREATION INFO:
+        Author: Jeff Schering
+        Date: May 17, 2005
+        Version: 0.1
+     REVISION INFO:
+        Author: Jeff Schering
+        Date: June 5, 2005
+        Version: 0.2
+        Description: added rudimentary support for <table> and <informaltable>
+     REVISION INFO:
+        Author: 
+        Date: 
+        Version: 0.3
+        
+     License: CC-BY-SA. see http://creativecommons.org/licenses/by-sa/2.0/
+-->
+
+<!-- entity definitions -->
+<!ENTITY % inline-markup
+  "menuchoice|command|application|filename|
+  subscript|superscript|emphasis|citetitle" >
+<!ENTITY % block-markup
+  "title|para|itemizedlist|orderedlist|programlisting|literallayout|mediaobject|
+  caution|important|note|tip|warning|table|informaltable" >
+
+<!-- the root element -->
+<!ELEMENT article (%block-markup; | sect1)* >
+
+<!-- block elements -->
+<!ELEMENT sect1 (%block-markup; | sect2)* >
+<!ELEMENT sect2 (%block-markup; | sect3)* >
+<!ELEMENT sect3 (%block-markup; | sect4)* >
+<!ELEMENT sect4 (%block-markup;)* >
+<!ELEMENT caution (para) >
+<!ELEMENT important (para) >
+<!ELEMENT note (para) >
+<!ELEMENT tip (para) >
+<!ELEMENT warning (para) >
+<!ELEMENT programlisting (#PCDATA) >
+<!ELEMENT literallayout (#PCDATA) >
+<!ELEMENT mediaobject (imageobject, textobject) >
+<!ELEMENT imageobject (imagedata) >
+<!ELEMENT textobject (phrase) >
+<!ELEMENT phrase (#PCDATA) >
+<!ELEMENT table (title, tgroup+) >
+<!ELEMENT informaltable (tgroup+) >
+<!ELEMENT tgroup (thead?, tbody+) >
+<!ELEMENT thead (row)+ >
+<!ELEMENT tbody (row)+ >
+<!ELEMENT row (entry)+ >
+<!ELEMENT entry (#PCDATA | %inline-markup; )* >
+
+<!ELEMENT title (#PCDATA) >
+<!ELEMENT para (#PCDATA | %inline-markup; )* >
+<!ELEMENT itemizedlist (orderedlist | itemizedlist | listitem)* >
+<!ELEMENT orderedlist (orderedlist | itemizedlist | listitem)* >
+<!ELEMENT listitem (para | orderedlist | itemizedlist)* >
+
+
+<!-- inline elements -->
+<!ELEMENT command (#PCDATA) >
+<!ELEMENT application (#PCDATA) >
+<!ELEMENT filename (#PCDATA) >
+<!ELEMENT menuchoice (guimenu, (guisubmenu*, guimenuitem)?) >
+<!ELEMENT guimenu (#PCDATA) >
+<!ELEMENT guisubmenu (#PCDATA) >
+<!ELEMENT guimenuitem (#PCDATA) >
+<!ELEMENT subscript (#PCDATA) >
+<!ELEMENT superscript (#PCDATA) >
+<!ELEMENT emphasis (#PCDATA) >
+<!ELEMENT citetitle (#PCDATA) >
+<!-- Note: although inline-markup is allowed in ulink, the xslt will ignore it
+     because Moin can't display italics, bold, etc in hyperlinks. -->
+<!ELEMENT ulink (#PCDATA | %inline-markup; )* >
+
+<!-- attributes -->
+<!ATTLIST emphasis role CDATA #IMPLIED>
+<!ATTLIST tgroup cols CDATA #IMPLIED>
+<!ATTLIST ulink
+      type CDATA #IMPLIED
+      url  CDATA #REQUIRED
+      >
+

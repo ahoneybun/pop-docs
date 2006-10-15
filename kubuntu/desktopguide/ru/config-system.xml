@@ -1,0 +1,953 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % kde SYSTEM "../../libs/kde.ent">
+%kde;
+<!ENTITY % kde-general SYSTEM "/usr/share/apps/ksgmltools2/customization/obsolete/general.entities">
+%kde-general;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="configuring-your-system-chap" status="help">
+    <title id="configuring-your-system">Настройка системы</title>
+    <para>В этой главе рассматривается настройка системы.</para>
+    <sect1 id="desktop-tips" status="complete">
+        <title>Советы и подсказки</title>
+        <para>В этой секци описываются некоторые приёмы использования и настройки рабочего стола. Они относятся преимущественно к графической среде (<application>KDE</application>) и файловому менеджеру (<application>Konqueror</application>).</para> 
+        <sect2 id="kde-startup" status="complete">
+            <title>Автоматическое выполнение программ во время запуска KDE</title>
+            <procedure>
+                <step>
+                    <para>Самый простой способ настройки автоматического запуска программ при загрузке KDE - использовать функцию <emphasis>Управление сеансами</emphasis>. Вы можете настроить поведение KDE при каждом входе в систему так, как вам необходимо.</para>
+                </step>
+                <step>
+                    <para>
+                        Choose 
+                        <menuchoice>
+                            <guimenu>K-Menu</guimenu>
+                            <guisubmenu>System Settings</guisubmenu>
+                            <guimenuitem>Session Manager</guimenuitem>
+		    </menuchoice> from the Advanced tab on the top and then under <emphasis>Advanced User Settings</emphasis> section. Click the <guibutton>Session Manager</guibutton> button on the right. Ensure that the <guibutton>Restore manually saved session</guibutton> checkbox is enabled. 
+                    </para>
+                </step>
+                <step>
+                    <para>
+                Launch all the applications you want running <emphasis>everytime you log in</emphasis>. Once you have everything set to your satisfaction, click choose 
+                        <menuchoice>
+                            <guimenu>K-Menu</guimenu>
+                            <guisubmenu>Save Session</guisubmenu>
+                        </menuchoice>. Every time you start KDE, you will return to this configuration.
+                    </para>
+                </step>
+                <step>
+                    <para>Другой способ заключается в копировании ярлыков приложений из <filename>/usr/share/applications</filename>, которые вы хотите запускать при каждом входе в систему, в каталог <filename>~/.kde/Autostart</filename>.</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="login-kde-automatic" status="complete">
+            <title>Автоматический вход в KDE при загрузке компьютера</title>
+            <para>Можно выполнять вход пользователя в систему автоматически при загрузке компьютера. Для большинства компьютеров это не рекомендуется, так как это небезопасно и может позволить другим пользователям получить доступ к вашей информации.</para>
+            <procedure>
+                <step>
+                    <para>
+                        <menuchoice>
+                            <guimenu>K-меню</guimenu>
+                            <guisubmenu>Системные настройки</guisubmenu>
+			    <guisubmenu>Advanced</guisubmenu>
+                            <guimenuitem>Менеджер входа в систему</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+                <step>
+                    <para>Нажмите на <guibutton>Административный режим...</guibutton> и введите ваш пароль, чтобы получить административные привилегии.</para></step>
+                <step>
+                    <para>Выберите закладку <guibutton>Удобства</guibutton>. Установите флажок <guilabel>Включить автоматический вход в систему</guilabel> и выберите пользователя, который будет автоматически входить в систему из выпадающего меню, а также задержку по времени.</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="restartkdewithoutreboot" status="complete">
+            <title>Перезапуск KDE без перезагрузки компьютера</title>
+            <procedure>
+                <step>
+                    <para>Сохраните все данные и закройте все приложения.</para>
+                </step>
+                <step>
+                    <para>Use the <keycombo>
+                            <keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>Backspace</keycap>
+                        </keycombo>
+                        shortcut keys to restart KDE.
+                    </para>
+                </step>
+                <step>
+                    <para>If <keycombo>
+                            <keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>Backspace</keycap>
+                        </keycombo>
+                        is disabled, type
+                        <screen>sudo /etc/init.d/kdm restart</screen>
+                    </para>
+                    <para>(Смотрите <xref linkend="disableCtrlAltBackspace"/> для отключения <keycombo><keycap>Ctrl</keycap>
+                                      <keycap>Alt</keycap>
+                                      <keycap>Backspace</keycap></keycombo>.)</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="disableCtrlAltBackspace" status="complete">
+            <title>Блокировка комбинации клавиш Ctrl-Alt-Backspace для предотвращения перезапуска X</title>
+            <procedure>
+                <step>
+                    <para>Сделайте копию существующего файла <filename>/etc/X11/xorg.conf</filename>. <screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup</screen></para>
+                </step>
+                <step>
+                    <para>Открайте в редакторе <filename>/etc/X11/xorg.conf</filename>. <screen>kdesu kate /etc/X11/xorg.conf</screen></para>
+                </step>
+                <step>
+                    <para>Вставьте эти строки в конец файла: <programlisting>
+Section	"ServerFlags"
+Option	"DontZap"	"yes"
+EndSection
+</programlisting></para>
+                </step>
+                <step>
+                    <para>Сохраните изменённый файл. (<ulink url="../sample/xorg.conf_disablectrlaltbackspacegnome">пример</ulink>)</para>
+                </step>
+                <step>
+                    <para>Изменения вступят в силу при следующем входе в KDE. Также, вы можете перезапустить KDE вручную (см. <xref linkend="restartkdewithoutreboot"/>).</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="run-application" status="complete">
+            <title>Запуск программ вручную</title>
+            <para>Запускать программу вручную необходимо, например, если она не имеет соответствующего пункта в меню. Это легко сделать с помощью диалога <application>Выполнить команду</application>. Введите имя программы и нажмите <keycap>Enter</keycap>.</para>
+            <procedure>
+                <step>
+                    <para>Open the <application>Run Command</application> dialog by typing:
+                        <keycombo>
+                            <keycap>Alt</keycap>
+                            <keycap>F2</keycap>
+                        </keycombo>
+                    </para>
+                </step>
+                <step>
+                    <para>Также, если вы знаете точное имя програмы, то, вместо того, чтобы искать её в меню, вызовите minicli (<application>Выполнить команду</application>), нажав F2, и введите первые буквы её имени, после чего в поле ввода высветится серым цветом оставшаяся часть имени. Теперь вам только остаётся нажать <keycap>Enter</keycap>. Это называется "автоматическое завершение". Если оно выключено, его можно включить через контекстное меню поля ввода. Если вы быстро набираете, то такой способ запуска будет намного быстрее и проще.</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="numlock-on-startup" status="complete">
+            <title>Automatically turn on <keycap>NumLock</keycap> when KDE starts</title>
+            <procedure>
+                <step>
+                    <para>
+                        <menuchoice>
+                            <guimenu>K-меню</guimenu>
+                            <guisubmenu>Системные настройки</guisubmenu>
+                            <guimenuitem>Клавиатура</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+                <step>
+                    <para>Установите флажок <guibutton>Вкл</guibutton> под надписью <guilabel>Состояние NumLock при запуске KDE</guilabel>. Чтобы сохранить настройки, нажмите на кнопку <guibutton>Применить</guibutton>.</para>
+                </step>
+            </procedure>
+            <para>Изменения вступят в силу при следующем входе в KDE. Если хотите попробовать прямо сейчас, отключите NumLock и перезапустите KDE. (см. <xref linkend="restartkdewithoutreboot"/>).</para>
+        </sect2>
+        <sect2 id="firefox-help-handler" status="complete">
+            <title>Поддержка протокола help:// в <application><phrase>Firefox</phrase></application></title>
+            <para>Если вы хотите, чтобы <application>Firefox</application> мог открывать ссылки протокола  <application>help://</application>, то</para>
+            <procedure>
+                <step>
+                    <para>
+			    Start <application>Firefox</application> by choosing left
+                        <menuchoice>
+                            <guimenu>K-Menu</guimenu>
+                            <guisubmenu>Internet</guisubmenu>
+                            <guimenuitem>Firefox</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+                <step>
+                    <para>Введите <emphasis>about:config</emphasis> в адресной строке</para>
+                </step>
+                <step>
+                    <para>
+                        <mousebutton>Right</mousebutton> click on the list, select 
+                        <menuchoice>
+                            <guimenu>New</guimenu>
+                            <guisubmenu>Boolean</guisubmenu>
+                        </menuchoice> 
+                        Type <emphasis role="bold">network.protocol-handler.external.help</emphasis> as <emphasis>Preference Name</emphasis> and <emphasis role="bold">true</emphasis> as <emphasis>Value</emphasis>
+                    </para>
+                </step>
+                <step>
+                    <para>
+                        <mousebutton>Right</mousebutton> click again on the list, select <menuchoice>
+                            <guimenu>New</guimenu>
+                            <guisubmenu>String</guisubmenu>
+                        </menuchoice> 
+                        Type <emphasis role="bold">network.protocol-handler.app.help</emphasis> as <emphasis>Preference Name</emphasis> and <emphasis role="bold">khelpcenter</emphasis> as <emphasis>Value</emphasis>
+                    </para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="menu-editing" status="complete">
+            <title>Редактирование <application>K-Меню</application></title>
+            <para>В состав Kubuntu входит приложение <application>Редактор меню KDE</application>, позволяющее вам настроить меню и добавлять ярлыки для запуска программ, в случае если последние не устанавливают ярлыки автоматически.</para>
+            <para>Для того чтобы добавить пункт меню:</para>
+            <procedure>
+                <step>
+                    <para>Откройте <application>Редактор меню KDE</application>, кликнув правой кнопкой мыши на кнопке K-меню и выбрав <guimenuitem>Редактор меню</guimenuitem>.</para>
+                </step>
+                <step>
+                  <para>В левой панели приложения <application>Редактор меню KDE</application> выберите подменю, в котором дожен находиться новый пункт меню.</para>
+                </step>
+                <step>
+                    <para>Choose 
+                        <menuchoice>
+                            <guimenu>File</guimenu>
+                            <guimenuitem>New Item</guimenuitem>
+                        </menuchoice>. In the <guilabel>New Item</guilabel> window, choose a <guilabel>Name</guilabel>. Then add the <guilabel>Description</guilabel>, <guilabel>Comment</guilabel>, and <guilabel>Command</guilabel>. Select the icon by clicking on <guilabel>Icon</guilabel>. The <guilabel>Command</guilabel> will usually be the package name, <guilabel>Name</guilabel> is what will appear on the menu, and the <guilabel>Comment</guilabel> will appear in the tooltip that appears near the menu entry. <guilabel>Icons</guilabel> are chosen from <filename>/usr/share/pixmaps</filename> directory by default, or can be chosen from anywhere in your files.
+                    </para>
+                </step>
+            </procedure>
+            <para>Для того чтобы изменить порядок следования пунктов меню, перетащите пункт меню мышью в окне <application>Редактор меню KDE</application>.</para>
+        </sect2>
+        <sect2 id="desktop-applets" status="complete">
+            <title>Расширенная система аплетов</title>
+            <para><application>Superkaramba</application> - это система, устанавливающая на рабочий стол маленькие и удобные в использовании программы (десклеты), такие как предсказатель погоды, новости, системный монитор или компонент управления музыкальным проигрывателем.</para>
+            <procedure>
+                <step>
+                    <para>Установите приложение  <application>superkaramba</application> из репозитория  <emphasis>Universe</emphasis> (см. <xref linkend="extra-repositories"/>).</para>
+                </step>
+                <step>
+                    <para>Choose: 
+                        <menuchoice>
+                            <guimenu>K-Menu</guimenu>
+                            <guisubmenu>Utilities</guisubmenu>
+                            <guimenuitem>Superkaramba</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+                <step><para>Для загрузки дополнительных аплетов посетите вебсайт <ulink url="http://www.superkaramba.com/">SuperKaramba</ulink>.</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="fonts" status="complete">
+            <title>Установка дополнительных шрифтов</title>
+            <para>В этой секции рассматривается установка дополнительных шрифтов из архивов Kubuntu.</para>
+            <procedure>
+                <step>
+                    <para>Для получения <emphasis role="bold">международных шрифтов</emphasis> установите следующие пакеты из репозитория <emphasis>Universe</emphasis> (см. <xref linkend="add-applications"/>):</para>
+                    <para>
+                        <literallayout>
+xfonts-intl-arabic
+xfonts-intl-asian
+xfonts-intl-chinese
+xfonts-intl-chinese-big
+xfonts-intl-european
+xfonts-intl-japanese 
+xfonts-intl-japanese-big
+xfonts-intl-phonetic
+                        </literallayout>
+                    </para>
+                </step>
+                <step>
+                    <para>Для получения <emphasis role="bold">TrueType шрифтов Microsoft</emphasis> установите пакет <application>msttcorefonts</application> из репозитория <emphasis>Multiverse</emphasis> (см. <xref linkend="add-applications"/>).</para>
+                </step>
+                <step>
+                    <para>Для получения <emphasis role="bold">Шрифтов Ghostscript</emphasis> установите пакет <application>gsfonts-x11</application> (см. <xref linkend="add-applications"/>).</para>
+                    </step>						<step>
+                    <para>После установки любого нового шрифта обновите конфигурацию шрифтов, выполнив следующую команду в терминале:</para>
+                    <screen>sudo fc-cache -f -v</screen>
+                </step>
+            </procedure>
+            <para>Если вы предпочитаете загружать шрифты самостоятельно, вы можете легко их установить, открыв <application>Konqueror</application> и набрав <application>fonts:///</application> в адресной строке. После этого можете установить шрифт для всей системы или только для себя, перетащив файл в соответствующую папку.</para>
+        </sect2>
+    </sect1>
+    <sect1 id="file-managing" status="complete">
+        <title>Файлы</title>
+        <sect2 id="konqueror-hidden-file" status="complete">
+            <title>Показывать скрытые файлы и папки в <application><phrase>Konqueror</phrase></application></title>
+            <procedure>
+                <step>
+                    <para>In <application>Konqueror</application>, use the 
+                        <menuchoice>
+                            <guimenu>View</guimenu>
+                            <guimenuitem>Show Hidden Files</guimenuitem>
+                        </menuchoice>
+                        to toggle hidden files and folders on and off. 
+                    </para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="default-open-with" status="complete">
+            <title>Смена программы "Открыть с помощью" для типа файлов</title>
+            <procedure>
+                <step>
+                    <para>In <application>Konqueror</application>, <mousebutton>right</mousebutton> click on the file and choose 
+                        <menuchoice>
+                            <guimenu>Open With</guimenu>
+                            <guisubmenu>Other...</guisubmenu>
+                        </menuchoice> 
+                        from the menu that appears. A list of applications appears.</para>
+                </step>
+                <step>
+                    <para>Выберите приложение по умолчанию для запуска данного типа файлов. Если приложения нет в списке, воспользуйтесь кнопкой <guibutton>Добавить</guibutton> для добавления приложения в список.</para>
+                </step>
+                <step>
+                    <para>Поставьте флажок <guilabel>Использовать для всех файлов такого типа</guilabel>. Нажмите <guibutton>Ok</guibutton> для сохранения изменений.</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="krename" status="complete">
+            <title>Пакетное переименование всех файлов в каталоге</title>
+            <para>С помощью программы <application>Krename</application> можно переименовывать файлы по определённой вами схеме именования.</para>
+            <procedure>
+                <step>
+                    <para>Установите приложение <application>Krename</application> из репозитория  <emphasis>Universe</emphasis> (см. <xref linkend="extra-repositories"/>).</para>
+                </step>
+                <step>
+                    <para>
+                        Launch <application>Krename</application> by choosing 
+                        <menuchoice>
+                            <guimenu>K-menu</guimenu>
+                            <guisubmenu>Utilities</guisubmenu>
+                            <guimenuitem>Krename</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="rar-files" status="complete">
+            <title>Открытие файлов <application>RAR</application></title>
+            <procedure>
+                <step>
+                    <para>Для работы с архивами <application>rar</application> установите пакет <application>unrar</application> из репозитория <emphasis>Multiverse</emphasis> (см. <xref linkend="extra-repositories"/>)</para>
+                </step>
+                <step>
+                    <para>Для открытия архива rar щёлкните на нём два раза левой кнопки мыши.</para>
+                </step>
+            </procedure>
+        </sect2>
+    </sect1>
+    <sect1 id="partitions-booting" status="writing">
+        <title>Разделы и загрузка</title>
+        <sect2 id="partition-editor" status="complete">
+            <title>Графический редактор логических разделов диска</title>
+            <procedure>
+                <step>
+                    <para>Установите пакет <application>qtparted</application> (см. <xref linkend="extra-repositories"/>).</para>
+                </step>
+                <step>
+                    <para>You can run the application with:
+                        <menuchoice>
+                            <guimenu>K-Menu</guimenu>
+                            <guisubmenu>System</guisubmenu>
+                            <guimenuitem>QtParted</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+            </procedure>
+        </sect2>
+            <sect2 id="listpartitiontables" status="complete">
+                <title>Проверка свободного места на диске и просмотр таблицы разделов</title>
+                <procedure>
+                    <step>
+                        <para>Launch 
+                            <menuchoice>
+                                <guimenu>K-Menu</guimenu>
+                                <guisubmenu>System Settings</guisubmenu>
+				<guisubmenu>Advanced</guisubmenu>
+                                <guimenuitem>Disks &amp; Filesystems</guimenuitem>
+                            </menuchoice>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Каждый раздел будет виден в списке <guilabel>Доступные диски и файловые системы</guilabel>.</para>
+                    </step>
+                </procedure>
+            </sect2>
+            <sect2 id="listmounteddevices" status="complete">
+                <title>Вывод списка подключенных устройств в терминале</title>
+                <para>Для получения списка подключенных устройств в терминале выполните следующую команду:</para>
+                <screen>mount</screen>
+                <para>В списке будут указаны устройства (в т.ч. разделы дисков), точки монтирования (где находятся файлы, расположенные в них), файловые системы и опции монтирования.</para>
+                <para>В этом примере раздел hda2 жёсткого диска с файловой системой ext3 подключен как '/'. Раздел подключен с двумя параметрами: один позволяет читать с устройства и записывать на него, другой - переподключать его в режиме только чтение в случае каких-либо ошибок.</para>
+                <screen><computeroutput>/dev/hda2 on / type ext3 (rw,errors=remount-ro)</computeroutput></screen>				
+        </sect2>
+        <sect2 id="mount-unmount-windows-partitions" status="complete">
+            <title>Подключение/отключение разделов Windows</title>
+            <procedure>
+                <step>
+                    <para>Прочтите это: <xref linkend="listpartitiontables"/></para>
+                </step>
+                <step>
+                    <para>Сначала, создайте каталог, в который будет подключаться раздел:</para>
+                    <screen>sudo mkdir /mnt/windows</screen>
+                </step>
+                <step>
+                    <para>Затем, выполните следующую команду для монтирования NTFS-раздела Windows в режиме только чтение:</para>
+                    <screen>sudo mount /dev/hdaX /mnt/windows/ -t ntfs -o ro,umask=0222</screen>
+                    <para>На момент написания руководства доступна версия драйвера, позволяющая подключать раздел с доступом на запись, находящаяся в стадии тестирования, см. <ulink url="http://sourceforge.net/mailarchive/message.php?msg_id=36545558">анонс</ulink>.
+
+Если ваш раздел Windows содержит файловую систему FAT32, можно без опасения использовать доступ на запись. В этом случае выполните команду <screen>sudo mount /dev/hdaX /mnt/windows/ -t vfat -o umask=0000</screen> вместо приведенной выше.</para>
+                    <note>
+                        <para>Замените <emphasis role="bold">/dev/hdaX</emphasis> соответствующим именем устройства для вашего раздела.</para>
+                    </note>
+                </step>
+                <step>
+                    <para>Для отключения раздела выполните следующую команду:</para>
+		<screen>sudo umount /mnt/windows/</screen>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="mount-unmount-at-bootup" status="writing">
+            <title>Автоподключение разделов Windows при загрузке</title>
+            <procedure>
+                <step>
+                    <para>Прочтите это: <xref linkend="listpartitiontables"/></para>
+                </step>
+                <step>
+                    <para>Сначала, создайте каталог, в который будет подключаться раздел:</para>
+		<screen>sudo mkdir /mnt/windows</screen>
+                </step>
+                <step>
+                    <para>Далее, сделайте архивную копию конфигурационного файла для подключения разделов и откройте его в текстовом редакторе с административными привилегиями:</para>
+		<screen>sudo cp /etc/fstab /etc/fstab_backup
+kdesu kate /etc/fstab</screen>
+                </step>
+                <step>
+                  <para>Если раздел Windows использует файловую систему NTFS, вставьте следующую строку в конец файла <programlisting>/dev/hdaX /mnt/windows ntfs ro,umask=0222 0 0</programlisting></para>
+                    <para>Если раздел Windows использует файловую систему FAT32, можно без опасения использовать доступ на запись. Вставьте следующую строку в конец файла <programlisting>/dev/hdaX /mnt/windows vfat umask=0000 0 0</programlisting> вместо приведенной выше.</para>
+                        <note>
+                            <para>Замените <emphasis role="bold">/dev/hdaX</emphasis> соответствующим именем устройства для вашего раздела.</para>
+                        </note>
+                </step>
+                <step>
+                    <para>Сохраните изменённый файл (<ulink url="../sample/fstab_automountntfs">пример</ulink>).</para>
+                </step>
+                <step>
+                    <para>Прочтите <xref linkend="remountfstabwithoutreboot"/>.</para>
+                </step>
+            </procedure>
+        </sect2>
+            <sect2 id="remountfstabwithoutreboot" status="complete">
+                <title>Переподключение /etc/fstab без перезагрузки</title>
+                <procedure>
+                    <step>
+                        <para>
+                            <screen>sudo mount -a</screen>
+                        </para>
+                    </step>
+                </procedure>
+            </sect2>
+		<sect2 id="run-on-bootup" status="complete">
+			<title>Выполнение системной команды при загрузке</title>
+				<para>Может потребоваться добавить определённую команду в процесс запуска, чтобы она выполнялась при каждой загрузке. Для этого:</para>
+				<procedure>
+					<step>
+						<para>Откройте <application>crontab</application> с правами суперпользователя (см. <xref linkend="root-and-sudo"/>):</para>
+							<screen>sudo crontab -e</screen>
+					</step>
+					<step>
+						<para>Вставьте следующую строку:</para>
+							<screen>@reboot /home/user/command</screen>
+					<note>
+						<para>Замените <filename>/home/user/command</filename> на полный путь к вашему сценарию.</para>
+					</note>
+					</step>
+					<step>
+						<para>Сохраните файл и закройте редактор.</para>
+					</step>
+				</procedure>
+		</sect2>
+        <sect2 id="change-default-os" status="complete">
+		<title>Изменение операционной системы по умолчанию при загрузке</title>
+            <procedure>
+                <step>
+                    <para>Создайте резервную копию вашего конфигурационного файла загрузки и откройте его в текстовом редакторе:</para>
+                    <screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+kdesu kate /boot/grub/menu.lst</screen>
+                </step>
+                <step>
+                    <para>Найдите эту строку:</para>
+                    <programlisting>
+...
+default 0
+...
+                    </programlisting>
+                </step>
+                <step>
+                    <para>Замените её на следующую строку:</para>
+                    <programlisting>default X_sequence</programlisting>
+                </step>
+                <step>
+                    <para>Сохраните изменённый файл (<ulink url="../sample/menu.list_changedefaultosgrub">пример</ulink>)</para>
+	    </step>
+            </procedure>
+        </sect2>
+        <sect2 id="boot-menu-visible" status="complete">
+            <title>Активация меню загрузки</title>
+            <para>Изначально меню загрузки скрыто и для его вывода надо нажимать <keycap>Esc</keycap>. Его можно сделать видимым по умолчанию следуя инструкциям ниже.</para>
+            <procedure>
+                <step>
+                    <para>Создайте резервную копию вашего конфигурационного файла загрузки и откройте его в текстовом редакторе:</para>
+                    <screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+kdesu kate /boot/grub/menu.lst</screen>
+                </step>
+                <step>
+                    <para>Найдите строку <screen># hiddenmenu</screen> и раскомментируйте её, убрав <emphasis>#</emphasis> в начале строки, чтобы строка выглядела так: <screen>hiddenmenu</screen> Сохраните отредактированный файл (<ulink url="../sample/menu.list_unhidemenu">пример</ulink>)</para>
+            </step>
+        </procedure>
+    </sect2>
+        <sect2 id="change-timeout" status="complete">
+            <title>Изменение времени ожидания загрузочного меню</title>
+            <procedure>
+                <step>
+                    <para>
+                        <screen>
+sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+kdesu kate /boot/grub/menu.lst</screen>
+                    </para>
+                </step>
+                <step>
+                    <para>Найдите эту строку</para>
+                    <programlisting>
+...
+timeout 3
+...
+                    </programlisting>
+                </step>
+                <step>
+                    <para>Замените ее следующей строкой</para>
+                    <programlisting>timeout </programlisting>
+                </step>
+                <step>
+                    <para>Сохраните изменённый файл (<ulink url="../sample/fstab_automountntfs">пример</ulink>).</para>
+                </step>
+            </procedure>
+        </sect2>
+    </sect1>
+    <sect1 id="hardware" status="help">
+        <title>Аппаратное обеспечение</title>
+        <sect2 id="digital-cameras" status="complete">
+            <title>Цифровые фотокамеры</title>
+            <para>Большинство цифровых USB-фотокамер обнаруживаются Kubuntu автоматически. Просто подключите вашу цифровую фотокамеру к USB и включите её (для некоторых амер последнее делать не требуется). Kubuntu предложит импортировать снимки на компьютер. Нажмите <guibutton>Импортировать</guibutton> и Kubuntu покажет уменьшенные копии ваших снимков. Выберите каталог, в который вы желаете импортировать снимки, и нажмите <guibutton>Импортировать</guibutton>. Kubuntu сохранит снимки на жёсткий диск.</para>
+            <para>
+            If you do not get the auto-import popup with your camera, it might
+            be worth installing <application>digiKam</application> from the
+            <emphasis>Universe</emphasis> repository (see <xref linkend="extra-repositories"/>).
+            Launch <application>digiKam</application> after installation by
+            choosing 
+            <menuchoice>
+                <guimenu>K-Menu</guimenu>
+                <guisubmenu>Graphics</guisubmenu>
+                <guimenuitem>digiKam (Photo Management)</guimenuitem>
+            </menuchoice>
+            from the desktop menu system.
+            </para> 
+        </sect2>
+        <sect2 id="graphics-cards" status="complete">
+            <title>Графические 3D-карты</title>
+            <sect3 id="installnvidiadriver" status="complete">
+                <title>Драйверы для 3D-видеокарт Nvidia</title>
+                <procedure>
+                    <step>
+                        <para>Установите пакет <application>nvidia-glx</application> из репозитория <emphasis>Restricted</emphasis> (см. <xref linkend="add-applications"/>).</para> 
+                    </step>
+                    <step>
+                        <para>
+                            <screen>
+sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup 
+sudo nvidia-glx-config enable </screen>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Параметры нового драйвера можно изменить с помощью приложения <application>nvidia-settings</application> (см. <xref linkend="run-application"/>). При желании вы можете добавить его в меню (см. <xref linkend="menu-editing"/>).</para>
+                    </step>
+                    <step>
+                        <para>Прочтите <xref linkend="restartkdewithoutreboot"/></para>
+                    </step>
+                </procedure>
+            </sect3>
+            <sect3 status="complete">
+                <!-- Mostly copied from UDG, need to keep updated with it. If someone can go over this section, it might be better -->
+                <title>Отключение логотипа Nvidia Graphics при загрузке</title>
+                <procedure>
+                    <step>
+                        <para>Прочтите <xref linkend="installnvidiadriver"/></para>
+                    </step>
+                    <step>
+                        <para>
+                            <screen>
+sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup 
+kdesu kate /etc/X11/xorg.conf</screen>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Найдите эту секцию</para>
+                        <para>
+                            <programlisting>
+...
+Section "Device"
+Identifier	"NVIDIA Corporation NV11 [GeForce2 MX/MX 400]"
+Driver		"nvidia"
+BusID		"PCI:1:0:0"</programlisting>
+                        </para>
+                    </step>
+                    <step>
+                        <para>После неё вставьте следующую строку</para>
+                        <para>
+                            <programlisting>
+Option "NoLogo"</programlisting>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Сохраните изменённый файл  ( <ulink url="../sample/xorg.conf_disablenvidialogo"> пример</ulink>)</para>
+                    </step>
+                    <step>
+                        <para>Прочтите <xref linkend="restartkdewithoutreboot"/></para>
+                    </step>
+                </procedure>
+            </sect3>
+            <!-- unconfirmed ATI drivers, someone who owns an ATI card please confirm that this works -->
+            <sect3 id="installatidriver" status="complete">
+                <title>Драйвер для видеокарт ATI</title>
+                <procedure>
+                    <step>
+                        <para>Установите пакет <application>xorg-driver-fglrx</application><emphasis> из репозитория <emphasis>Restricted</emphasis> (см. <xref linkend="add-applications"/>).</emphasis></para> 
+                    </step>
+                    <step>
+                        <para><screen>
+echo fglrx | sudo tee -a /etc/modules
+sudo depmod -a ; sudo modprobe fglrx
+sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup 
+sudo sed -i -e 's/"ati"/"fglrx"/' /etc/X11/xorg.conf</screen></para>
+                    </step>
+                    <step>
+                        <para>Если ваша материнская плата основана на чипсете NVidia NForce2, вам также необходимо сделать следующее:</para>
+                        <para><screen>kdesu kate /etc/X11/xorg.conf</screen></para>
+                        <para>Добавьте в <quote>Section "Device"</quote> следующую строку</para>
+                        <para><screen>Option "UseInternalAGPGART" "no"</screen></para>
+                    </step>
+                    <step>
+                        <para>Перезапустите компьютер для вступления изменений в силу.</para>
+                    </step>
+                </procedure>
+            </sect3>
+        </sect2>
+        <sect2 id="wireless-cards" status="complete">
+            <title>Беспроводные сетевые карты</title>
+            <para>Многие беспроводные карты определяются автоматически во время установки Kubuntu. Полный список беспроводных карт, работающих в Kubuntu, можно найти в <ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsWirelessNetworkCards">Ubuntu Wiki</ulink>. Пожалуйста, добавьте свою беспроводную карту в список, если она работает в Kubuntu.</para> 
+            <para>Некоторые карты могут не работать сразу после установки. В таком случае, обратитесь к <ulink url="https://wiki.ubuntu.com/WirelessTroubleshootingGuide">Wireless Troubleshooting Guide</ulink> на сайте Ubuntu Wiki, где можно найти решения множества вопросов по беспроводным картам.</para>
+            <para>Вся информация по работе с беспроводными сетями в Kubuntu собрана на странице <ulink url="https://wiki.ubuntu.com/WifiDocs">Wireless Networking Central</ulink> на сайте Ubuntu Wiki.</para>
+            <sect3 status="complete">
+                <title>Вывод списка устройств беспроводной связи</title>
+                <procedure>
+                    <step>
+                        <para>Для вывода списка устройств PCI:</para>
+                        <screen>lspci -v</screen>
+                    </step>
+                    <step>
+                        <para>Для вывода списка устройств USB:</para>
+                        <screen>lsusb -v</screen>
+                    </step>
+                </procedure>
+            </sect3>
+        </sect2> 
+        <sect2 id="config-keyboard" status="complete">
+            <title>Настройка клавиатуры</title>
+        <sect3 id="keyboard-shortcuts" status="complete">
+            <title>Смена комбинаций клавиш</title>
+            <para>
+                You might want to modify the default keyboard shortcuts in Kubuntu. To do so, choose 
+                <menuchoice>
+                    <guimenu>K-Menu</guimenu>
+                    <guisubmenu>System Settings</guisubmenu>
+                    <guimenuitem>Regional &amp; Language</guimenuitem>
+                </menuchoice>
+                from the desktop menu system. Select <guibutton>Keyboard Shortcuts</guibutton> button to modify your keyboard shortcuts.
+            </para>
+        </sect3>
+        <sect3 id="multiple-keyboard-layouts" status="complete">
+          <title>Несколько раскладок клавиатуры</title>
+          <para>Вы можете использовать более одной раскладки клавиатуры, что полезно, когда вы пишете на разных языках.</para>
+          <para>Для добавления раскладки клавиатуры:</para>
+          <procedure>
+            <step>
+               <para>Choose: 
+                 <menuchoice>
+                    <guimenu>K-Menu</guimenu>
+                    <guisubmenu>System Settings</guisubmenu>
+                    <guisubmenu>Regional &amp; Language</guisubmenu>
+                    <guimenuitem>Keyboard Layout</guimenuitem>
+                 </menuchoice>
+               </para>
+            </step>
+            <step>
+              <para>Найдите секцию InputDevice.</para>
+            </step>
+            <step>
+              <para>Добавьте в неё (или измените их значение, если они уже присутствуют) параметры XkbLayout и XkbOptions, оставив прежние значения для всех остальных, например: <programlisting>
+Section "InputDevice"
+  Identifier "Keyboard0"
+  Driver "keyboard"
+  Option "CoreKeyboard"
+  Option "XkbRules" "xfree86"
+  Option "XkbModel" "pc105"
+  Option "XkbLayout" "us,ru(winkeys)"
+  Option "XkbOptions" "grp:caps_toggle,grp_led:scroll"
+EndSection
+</programlisting></para>
+            </step>
+            <step>
+              <para>Переключение раскладок будет осуществляться клавишей CapsLock для всех окон одновременно. Об активности русской раскладки будут говорить светоиды на клавиатуре ScrollLock и CapsLock</para>
+            </step>
+            <step>
+              <para>Использовать клавишу CapsLock для переключения раслкадок удобней, но, если вы привыкли к Ctrl+Shift и не хотите расставаться со своей привычкой, укажите caps_toggle вместо ctrl_shift_toggle</para>
+            </step>
+            <step>
+              <para>Сохраните файл. Изменеия вступят в силу при следующем (пере)запуске компьютера. Для пользователей edgy: в системе должен быть установлен пакет xkb-data.</para>
+            </step>
+          </procedure>
+        </sect3>
+        <sect3 id="skim" status="complete">
+            <title>Экранный ввод иероглифов</title>
+            <para><application>Skim</application> это графическая панель KDE для ввода любых нелатинских символов, но обычно используется для ввода иероглифов. Для того чтобы использовать <application>Skim</application> для ввода на вашем родном языке:</para>
+            <procedure>
+                <step>
+                    <para>Убедитесь, что пакет <application>language-support</application> установлен. Если при установке вы выбрали ваш родной язык, значит он уже установлен.</para>
+                </step>
+                <step>
+                    <para> Press 
+                        <keycombo>
+                            <keycap>Ctrl</keycap>
+                            <keycap>Space</keycap>
+                        </keycombo> 
+                        to activate it and enter characters.
+                    </para>
+                </step>
+                <step>
+                    <para>Настройка <application>Skim</application>: щёлкните правой кнопкой мыши на его значке в системном лотке и выберите <menuchoice><guimenu>Настройка</guimenu></menuchoice></para>
+                </step>
+            </procedure>
+        </sect3>
+    </sect2>
+
+        <sect2 id="modems" status="complete">
+            <title>Модемы</title>
+            <sect3 id="winmodems" status="complete">		
+                <title>Win-модемы</title>
+                <para>Большинство win-модемов по умолчанию не поддерживаются в Kubuntu, однако можно найти для них драйверы в Интернете. Во-первых, вам необходимо определить чипсет модема:</para>
+                <para>
+                    <screen>
+wget -c <ulink url="&scanmodem-url;">&scanmodem-url;</ulink> 
+gunzip -c &scanmodem-gz; &gt; scanModem 
+chmod +x scanModem
+sudo ./scanModem 
+kate Modem/ModemData.txt</screen>
+                </para>
+                <para>Проверьте вывод в Kate, он должен показывать, на каком чипсете построен ваш модем. Как только вы это узнаете, выполните инструкции для вашего модема в <ulink url="https://wiki.ubuntu.com/SettingUpModems">SettingUpModems</ulink>.</para>
+            </sect3>
+            <sect3 id="adsl" status="complete">
+                <title>ADSL-модемы</title>
+                <para>Kubuntu поддерживает все модемы PPOE и ADSL, использующие интерфейс ethernet для соединения (и некоторые, использующие USB). В случае ADSL-модема-роутера просто присоедините его и настройте в соответствии с инструкциями вашего ISP, а также настройте сеть в Kubuntu. О PPPOE-модемах см. <ulink url="https://wiki.ubuntu.com/ADSLPPPoE">ADSLPPoE</ulink> на сайте Ubuntu wiki.</para>
+            </sect3>
+        </sect2>
+        <sect2 id="printers" status="help">
+                <sect2info>
+                    <authorblurb> 
+                        <para>Следующая секция нуждается в доработке.</para> 
+                    </authorblurb>
+                </sect2info>
+            <title>Принтеры</title>
+            <para>Some printers will be automatically detected by Kubuntu; for those that are not, choose 
+                <menuchoice>
+                    <guimenu>K-Menu</guimenu>
+                    <guisubmenu>System Settings</guisubmenu>
+                    <guimenuitem>Printers</guimenuitem>
+                </menuchoice>
+                then choose 
+                <menuchoice>
+                    <guimenu>Add</guimenu>
+                    <guimenuitem>Add Printer/Class</guimenuitem>
+                </menuchoice>
+                and run the Printer Install Wizard.
+            </para>
+            <para>Некоторые принтеры требуют дальнейшей настройки. Просмотрите базу данных на <ulink url="http://www.linuxprinting.org/">LinuxPrinting.org</ulink> и проверьте <ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsPrinters">Ubuntu Wiki's Printer page</ulink> на наличие возможной информации по Вашему принтеру.</para>
+        </sect2>
+        <sect2 id="cdroms" status="complete">
+            <title>Приводы оптических накопителей</title>
+            <sect3 status="complete">
+                <title>Ускорение доступа к CD/DVD-ROM (включение DMA)</title>
+                <procedure>
+                    <step>
+                        <para>Далее предполагается, что <filename class="devicefile">/dev/cdrom</filename> - это файл привода CD/DVD-ROM</para>
+                    </step>
+                    <step>
+                        <para>
+                            <screen>
+sudo hdparm -d1 /dev/cdrom 
+sudo cp /etc/hdparm.conf /etc/hdparm.conf_backup 
+kdesu kate /etc/hdparm.conf</screen>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Вставьте следующие строки в конец файла</para>
+                        <para>
+                            <programlisting>
+/dev/cdrom {
+dma = on
+}</programlisting>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Сохраните изменённый файл (<ulink url="../sample/hdparm.conf_speedupcddvdrom">пример</ulink>)</para>
+                    </step>
+                </procedure>
+            </sect3>
+            <sect3 status="complete">
+                <title>Подключение носителей CD/DVD-ROM и вывод всех скрытых и связанных файлов</title>
+                <procedure>
+                    <step>
+                        <para>Далее предполагается, что <filename class="devicefile">/media/cdrom0/</filename> - это точка включения файловой системы носителя CD/DVD-ROM</para>
+                    </step>
+                    <step>
+                        <para>Для подключения носителя CD/DVD-ROM</para>
+                        <para>
+                            <screen>sudo mount /media/cdrom0/ -o unhide</screen>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Для исключения файловой системы носителя CD/DVD-ROM из системы:</para>
+                        <para>
+                            <screen>sudo umount /media/cdrom0/</screen>
+                        </para>
+                    </step>
+                </procedure>
+            </sect3>
+            <sect3 status="complete">
+                <title>Открытие лотка CD/DVD-ROM</title>
+                <procedure>
+                    <step>
+                        <para>
+                            <screen>sudo eject</screen>
+                        </para>
+                    </step>
+                </procedure>
+            </sect3>
+        </sect2>
+    </sect1>
+    <sect1 id="networking" status="complete">
+        <title>Работа в сети</title>
+        <sect2 status="complete">
+            <title>Смена имени компьютера</title>
+            <procedure>
+                <step>
+                    <para>
+                        <menuchoice>
+                            <guimenu>K-меню</guimenu>
+                            <guisubmenu>Настройки системы</guisubmenu>
+                            <guimenuitem>Параметры сети</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+                <step>
+                    <para>Нажмите на <guibutton>Административный режим...</guibutton> и введите ваш пароль, чтобы получить административные привилегии.</para></step>
+                <step>
+                    <para>Выберите вкладку <guibutton>Система доменных имён</guibutton>. Введите имя компьютера в поле <guilabel>Имя хоста</guilabel>.</para>
+                </step>
+                <step>
+                    <para>Нажмите <guibutton>Применить</guibutton>, закройте все запущенные приложения и перезагрузите компьютер.</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 status="complete">
+            <title>Работа с удалёнными серверами SSH, FTP и SFTP с помощью <application>Konqueror</application></title>
+            <procedure>
+                <step>
+                    <para>В поле <guilabel>Адресная строка</guilabel> введите следующее:</para>
+                    <para>Для SSH введите такой адрес: <screen><phrase>ssh</phrase>://имя-пользователя@ssh.server.com</screen></para>
+                    <para>Для FTP: <screen>ftp://имя-пользователя@ftp.server.com</screen></para>
+                    <para>Для SFTP: <screen><phrase>sftp</phrase>://имя-пользователя@sftp.server.com</screen></para>
+                    <para>Замените имя-пользователя на своё имя пользователя и замените всё после символа @ на адрес нужного сервера. При необходимости будет запрошен пароль. Если имя пользователя указывать не требуется (анонимное подключение), не указывайте и знак @.</para>
+                    <para>Пароль также можно ввести в строке адреса, например для FTP адрес станет таким: <screen>ftp://имя-пользователя:пароль@ftp.server.com</screen></para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="networking-utils" status="complete">
+            <title>Сетевые утилиты</title>
+            <sect3 id="firewall" status="complete">
+                <!-- No KDE equivalent -->
+                <title>Брандмауэр Guarddog</title>
+                <para>Межсетевой экран (брандмауэр) защищает компьютерную систему от несанкционированного доступа. Как правило, не обязательно устанавливать межсетевой экран в систему Kubuntu, так как по умолчанию доступ к системе закрыт. Однако если если вы используете какие-либо службы, доступ к которым могут иметь другие компьютеры (например, веб-сервер Apache), рекомендуется установить межсетевой экран. <application>Guarddog</application> - это программа, помогающая управлять межсетевым экраном через графический интерфейс.</para>
+                <procedure>
+                    <step>
+                        <para>Установите приложение <application>Guarddog</application> из репозитория <emphasis>Universe</emphasis> (см. <xref linkend="extra-repositories"/>).</para>
+                    </step>
+                    <step>
+                        <para>After it is installed, run the <application>Guarddog</application> by choosing 
+                            <menuchoice>
+                                <guimenu>K-Menu</guimenu>
+                                <guisubmenu>System</guisubmenu>
+                                <guimenuitem>Guarddog</guimenuitem>
+                            </menuchoice>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Введите <emphasis>Ваш</emphasis> пароль в диалоговом окне <application>Запустить как суперпользователь -KDE su</application>, когда оно появится.</para>
+                    </step>
+                    <step>
+                        <para>Для получения более подробной информации по использованию <application>Guarddog</application>, нажмите кнопку <guibutton>Справка</guibutton> в окне <application>Настройка межсетевого экрана</application>.</para>
+                    </step>
+                </procedure>
+            </sect3>
+            <sect3 status="complete">
+                <!-- No KDE equivalent -->
+                <title>Графический сетевой монитор</title>
+                <para>Etherape показывает сетевую активность различных хостов используя циклы разного размера.</para>
+                <procedure>
+                    <step>
+                        <para>Установите приложение <application>etherape</application> из репозитория <emphasis>Universe</emphasis>  (см. <xref linkend="extra-repositories"/>).</para>
+                    </step>
+                    <step>
+                        <para>Choose:
+                            <menuchoice>
+                                <guimenu>K-Menu</guimenu>
+                                <guisubmenu>Internet</guisubmenu>
+                                <guimenuitem>Etherape</guimenuitem>
+                            </menuchoice>
+                        </para>
+                    </step>
+                </procedure>
+            </sect3>
+            <sect3 status="complete">
+                <!-- No KDE equivalent -->
+                <title>Анализатор сетевого трафика</title>
+                <para>Ethereal - сниффер/анализатор сетевого трафика. Он отлавливает пакеты в сети и отображает их содержимое в реальном времени.</para>
+                <procedure>
+                    <step>
+                        <para>Установите приложение <application>ethereal</application> из репозитория <emphasis>Universe</emphasis> (см. <xref linkend="extra-repositories"/>).</para>
+                    </step>
+                    <step>
+                        <para>Choose:
+                            <menuchoice>
+                                <guimenu>K-Menu</guimenu>
+                                <guisubmenu>Internet</guisubmenu>
+                                <guimenuitem>Ethereal</guimenuitem>
+                            </menuchoice>
+                        </para>
+                    </step>
+                </procedure>
+            </sect3>
+        </sect2>
+    </sect1>
+</chapter>
+

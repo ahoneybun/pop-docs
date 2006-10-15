@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "&EnglishAmerican;">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="package-management" status="complete">
+	<title>Pakethantering</title>
+        <para>Ubuntu ger dig ett heltäckande pakethanteringssystem för installation, uppgradering, konfigurering och borttagning av program. Förutom att ge dig tillgång till en organiserad grund av över 17 000 programpaket till din Ubuntudator stödjer även pakethanteraren beroendehantering och programuppdateringskontroller.</para>
+        <para>Flera verktyg finns tillgängliga för att interagera med Ubuntus pakethanteringssystem, från enkla kommandoradsverktyg som enkelt går att automatisera av systemadministratörer, till ett enkelt grafiskt gränssnitt som är enkelt att använda för de som är nya med Ubuntu.</para>
+  <sect1 id="package-management-introduction" status="complete">
+	<title>Introduktion</title>
+        <para>Ubuntus pakethanteringssystem är baserat på samma system som används av distributionen Debian GNU/Linux. Paketfilerna innehåller alla nödvändiga filer, meta-data, och instruktioner för att lägga till en speciell funktion eller ett speciellt program till din Ubuntudator.</para>
+        <para>Debianpaketfiler har vanligtvis filändelsen ".deb" och finns oftast i <emphasis role="italics">förråd</emphasis>, som är paketsamlingar som finns i olika medium, som CD-skivor eller online. Paketen finns vanligtvis i ett förkompilerat, binärt, format. Installationen är därför väldigt snabb och kräver inte att du kompilerar några program själv.</para>
+        <para>Många komplexa program använder konceptet <emphasis role="italics">beroenden</emphasis>. Beroenden är extra paket som krävs av det första paketet för att det ska fungera ordentligt. Till exempel kräver röstsyntespaketet <application>Festival</application> på paketet <application>festvox-kalpc16k</application>, vilket är ett paket som tillhandahåller en av rösterna som används av programmet. För att <application>Festival</application> ska fungera måste alla beroenden installeras tillsammans med Festival-paketet. Pakethanteringsprogrammen i Ubuntu gör det här automatiskt.</para>
+  </sect1>
+  <sect1 id="apt-get" status="complete">
+	<title>Apt-Get</title>
+        <para>Kommandot <application>apt-get</application> är ett kraftfullt kommandoradsverktyg som används för att arbeta med Ubuntus <emphasis>Advanced Packaging Tool</emphasis> (APT) som utför uppgifter som installation av nya programpaket, uppgradering av existerande programpaket, uppdatering av paketlistorna, och till och med uppgradering av hela Ubuntusystemet.</para>
+        <para>Eftersom det är ett enkelt kommandoradsverktyg har <application>apt-get</application> flera fördelar, jämfört med andra pakethanteringsverktyg som finns tillgängliga i Ubuntu för serveradministratörer. Vissa av de här fördelarna är att det går enkelta tt använda över enkla terminalanslutningar (SSH) och möjligheten att användas i systemadministrationsscript, som i sin tur kan automatiseras av schemaläggaren <application>cron</application>.</para>
+        <para>Här följer några några vanliga sätt att använda <application>apt-get</application>:</para>
+		<para>For further information about the use of <application>APT</application>, read the comprehensive <ulink url="&debian-apt;">Debian APT User Manual</ulink> or type: <screen>apt-get help</screen></para>
+  </sect1>
+
+  <sect1 id="aptitude" status="complete">
+	<title>Aptitude</title>
+        <para><application>Aptitude</application> är ett menydrivet, textbaserat användargränssnitt till systemet <emphasis>Advanced Packaging Tool</emphasis> (APT). Många av de vanligare pakethanteringsfunktionerna, som installation, borttagning och uppgradering, utförs i <application>Aptitude</application> genom att trycka på en knapp.</para>
+        <para><application>Aptitude</application> är bäst att använda i icke-grafiska terminalmiljöer för att se till att kommondotangenterna fungerar ordentligt. Du kan starta <application>Aptitudesom en vanlig anv
+sudo aptitude
+</application></para>
+        <para>När <application>Aptitude</application> startar kommer du att se en menyrad högst upp på skärmen och två rutor under menyraden. Den övre rutan innehåller paketkategorier, som <emphasis role="italics">Nya paket</emphasis> och <emphasis role="italics">Inte installerade paket</emphasis>. Den undre rutan innehåller information som har med paketen och paketkategorierna att göra.</para>
+        <para>Att använda <application>Aptitude</application> för pakethantering är relativt enkelt, och användargränssnittet gör vanliga uppgifter enkla att utföra. Här följer exempel på hur några populära pakethanteringsfunktioner utförs i <application>Aptitude</application>:</para>
+        <itemizedlist>
+               <listitem>
+                <para><emphasis role="bold">Installera paket</emphasis>: För att installera ett paket, lokalisera det via paketkategorin Inte installerade paket, till exempel, genom att använda tangentbordets piltangenter och tangenten <keycap>ENTER</keycap>, och markera paketet du vill installera. Efter att paketet är markerat, tryck på tangenten <keycap>+</keycap>, och paketposten bör nu bli <emphasis role="italics">grön</emphasis>, vilket innebär att det har valts för installation. Tryck nu på <keycap>g</keycap> för att få se en sammanfattning över ändringar. Tryck <keycap>g</keycap> igen och du kommer att bli frågad om att bli root för att slutföra installationen. Tryck <keycap>ENTER</keycap>, och du möts av en lösenordsprompt. Skriv in din användares lösenord för att bli root. Till slut, tryck på <keycap>g</keycap> en gång till, och du kommer att bli frågad om du vill ladda ner paketet. Välj <emphasis role="italics">Fortsätt</emphasis>, och nerladdningen av paket kommer börja.</para>
+               </listitem>
+               <listitem>
+                <para><emphasis role="bold">Ta bort paket</emphasis>: För att ta bort ett paket, leta rätt på det via Installerade paket-kategorin, till exempel, genom att använda tangentbordets piltangenter och tangenten <keycap>ENTER</keycap>, och markera paketet du vill ha. Efter att paketet är markerat, tryck på tangenten <keycap>-</keycap>, och paketposten bör nu bli <emphasis role="italics">rosa</emphasis>, vilket visar på att det har markerats för borttagning. Tryck nu på <keycap>g</keycap> för att få se en sammanfattning över ändringar. Tryck på <keycap>g</keycap> igen och du kommer att bli frågad om att bli root för att slutföra installationen. Tryck <keycap>ENTER</keycap>, och du möts av en lösenordsprompt. Skriv in din användares lösenord för att bli root. Till slut, tryck på <keycap>g</keycap> en gång till, och du kommer att bli frågad om du vill ladda ner paketet. Välj <emphasis role="italics">Fortsätt</emphasis>, och borttagningen av paket kommer börja.</para>
+               </listitem>
+               <listitem>
+                <para><emphasis role="bold">Uppdatera paketlistorna</emphasis>: För att uppdatera paketlistorna, tryck helt enkelt på tangenten <keycap>u</keycap> och du kommer att bli frågad om att bli root för att slutföra installationen. Tryck <keycap>ENTER</keycap>, och du möts av en lösenordsprompt. Skriv in din användares lösenord för att bli root. Uppdateringen av paketlistorna kommer börja. Välj OK när nerladdningsdialogen visas för att avsluta processen.</para>
+               </listitem>
+               <listitem>
+                <para><emphasis role="bold">Uppgradera paket</emphasis>: För att uppgradera paket, utför uppdateringen av paketlistorna enligt instruktionerna ovan, och skriv sedan ett <keycap>U</keycap> för att markera alla uppgraderingsbara paket för uppgradering. Tryck nu <keycap>g</keycap> för att få se en sammanfattning över ändringar. Tryck <keycap>g</keycap> igen och du kommer att bli frågad om att bli root för att slutföra installationen. Tryck <keycap>ENTER</keycap>, och du möts av en lösenordsprompt. Skriv in din användares lösenord för att bli root. Till slut, tryck på <keycap>g</keycap> en gång till, och du kommer att bli frågad om du vill ladda ner paketet. Välj <emphasis role="italics">Fortsätt</emphasis>, och nerladdningen av paket kommer börja.</para>
+               </listitem>
+        </itemizedlist>
+        <para>Den första kollumnen i den övre rutan i huvudfönstret visar information om vilken status paketet har, och använder följande beteckningar för att beskriva detta: <itemizedlist>
+        <listitem>
+        <para><emphasis role="bold">i</emphasis>: Installerat paket.</para>
+        </listitem>
+        <listitem>
+        <para><emphasis role="bold">c</emphasis>: Paketet är inte installerat, men paketets konfigurationsfiler finns kvar i systemet</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">p</emphasis>: Totalt borttaget från systemet</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">v</emphasis>: Virtuellt paket</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">B</emphasis>: Trasigt paket</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">u</emphasis>: Filerna är uppackade, men paketet är ännu inte konfigurerat</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">C</emphasis>: Halvkonfigurerat - konfigureringen misslyckades vilket måste åtgärdas.</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">H</emphasis>: Halvinstallerat - borttagningen misslyckades vilket måste åtgärdas.</para>
+        </listitem>
+        </itemizedlist></para>
+        <para>För att avsluta Aptitude, tryck helt enkelt på <keycap>q</keycap> och bekräfta att du vill avsluta. Det finns många fler funktioner tillgängliga från Aptitudes meny, som du når genom att trycka på <keycap>F10</keycap>.</para>
+  </sect1>
+	<sect1 id="configuration" status="complete">
+		<title>Konfiguration</title>
+          <para>Konfigurationen för förråden som <emphasis>Advanced Packaging Tool</emphasis> (APT) använder lagras i konfigurationsfilen /etc/apt/sources.list. Ett exempel på den här filen visas här, tillsammans med information om att lägga till och ta bort förråd från filen.</para>
+          <para><ulink url="../sample/sources.list">Här</ulink> finns ett enkelt exempel på en grundläggande <filename>/etc/apt/sources.list</filename>.</para>
+          <para>Du kan redigera filen för att aktivera eller avaktivera förråd. Om du till exempel vill avaktivera Ubuntu CD-skivan, så att du slipper stoppa in den i datorn när ändringar av paketen utförs, kommentera helt enkelt ut den lämpliga raden för CD-skivan, som finns överst i filen:</para>
+          <para>
+<screen>
+# no more prompting for CD-ROM please
+# deb cdrom:[Ubuntu 6.06 _Dapper Drake_ - Release i386 (20060329.1)]/ dapper main restricted
+</screen>
+          </para>
+          
+    </sect1>
+	<sect1 id="extra-repositories" status="complete">
+		<title>Extra förråd</title>
+          <para>Förutom de förråden som stödjs officiellt av Ubuntu finns det dessutom fler förråd som sköts av användare. Dessa förråd gör att du kan installera ytterligare tusentals paket. Två av de populäraste förråden är <emphasis>Universe</emphasis> och <emphasis>Multiverse</emphasis>. De här förråden stödjs inte officiellt av Ubuntu, och det är därför de inte aktiveras automatiskt, men de erbjuder paket som bör vara säkra att använda på din Ubuntudator.</para>
+		  <note><para>Paketen i Multiverse-förrådet har ofta licensproblem som förhindrar att de distribueras med ett fritt operativsystem, och de kan vara olagliga i ditt land.</para></note>
+          <warning>
+          <para>Tänk på att varken <emphasis>Universe</emphasis> eller <emphasis>Multiverse</emphasis> innehåller paket med officiellt stöd. Det här innebär att det inte nödvändigtvis kommer att finnas säkerhetsuppdatering för de här paketen.</para>
+          </warning>
+          <para>Många andra paketkällor finns tillgängliga som ibland bara erbjuder ett enda paket, vilket ofta är fallet om paketkällan tillhandahålls av utvecklaren av programmet. Du bör dock alltid vara försiktig när du använder andra paketkällor än de som medföljer. Undersök källan och paketen noga innan du genomför en installation, eftersom vissa paketkällor och paketen i dem kan göra att ditt system blir instabilt eller slutar fungera på ett eller annat sätt.</para>
+          <para>För att aktivera förråden <emphasis>Universe</emphasis> och <emphasis>Multiverse</emphasis>, ändra på <filename>/etc/apt/sources.list</filename> och avkommentera de lämpliga raderna:</para>
+          <para>
+<screen>
+# We want Multiverse and Universe repositories, please
+
+deb http://archive.ubuntu.com/ubuntu dapper universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu dapper universe multiverse
+</screen>
+          </para>
+          <sect2 id="extra-repositories-references" status="complete">
+                <title>Referenser</title>
+                <para>
+                <ulink url="https://wiki.ubuntu.com/AddingRepositoriesHowto">Hur du lägger till förråd (Ubuntus Wiki) (engelska)</ulink>
+                </para>
+          </sect2>
+    </sect1>
+	</chapter>
+
