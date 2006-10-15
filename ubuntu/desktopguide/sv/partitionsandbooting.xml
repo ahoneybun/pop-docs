@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-sv SYSTEM "../../../ubuntu/libs/gnome-menus-sv.ent">
+%gnome-menus-sv;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="partitions-booting" status="complete">
+	<title>Partitionering och uppstart</title>
+		<para>This section contains information about how to change the way that your computer behaves when you first turn it on, and how to access other operating systems and partitions from Ubuntu.</para>
+			<sect1 status="complete">
+				<title>Grafisk partitionsredigerare</title>
+					<para><application>Gparted</application> är ett grafiskt verktyg för att ändra hårddiskpartitioner.</para> 
+					<procedure>
+						<step>
+							<para>Installera paketet <application>gparted</application> (se <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>	
+							<para>You can run the application with &gparted;.
+							</para>
+						</step>
+					</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Make Windows partitions available from Ubuntu</title>
+				<para>Windows partitions should be automatically available from any Ubuntu system. If they are not, you can make them available using the <application>Disks Manager</application>.</para>
+				<procedure>
+					<step>
+						<para>Open &disks;.</para>
+					</step>
+					<step>
+						<para>Select the correct hard disk, and click <guilabel>Partitions</guilabel>.</para>
+					</step>
+					<step>
+						<para>Välj partitionen du är intresserad av, och klicka på <guilabel>Aktivera</guilabel></para>
+					</step>
+					<step>
+						<para>För att avmontera partitionen, klicka på <guilabel>Avaktivera</guilabel>.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Make Windows partitions automatically available</title>
+				<para>Windows partitions should be automatically available from Ubuntu. If they are not, the following procedure will make them automatically available:</para>
+				<procedure>
+					<step>
+						<para>Läs <xref linkend="listpartitiontables"/></para>
+					</step>
+					<step>
+						<para>Först gör du en mapp där partitionen ska göras åtkomlig ("monteras"):</para>
+							<screen>
+sudo mkdir /media/windows
+							</screen>
+					</step>
+					<step>
+						<para>Next, back up your disk configuration file and open the file in a text editor with administrative privileges:
+						</para>
+						<screen>
+sudo cp /etc/fstab /etc/fstab_backup
+sudo gedit /etc/fstab
+						</screen>
+					</step>
+					<step>
+						<para>Lägg till följande rad i slutet av filen: <programlisting>/dev/hda1 /media/windows ntfs umask=0222 0 0</programlisting></para>
+						<note>
+							<para>Ersätt <emphasis role="bold">/dev/hda1</emphasis> med det korrekta enhetsnamnet på din partition.</para>
+							<para>Om din Windowspartition använder filsystemet FAT32 ersätter du <emphasis role="bold">ntfs</emphasis> med <emphasis role="bold">vfat</emphasis> i ovanstående kommando.</para>
+							<para>Om du har ett FAT32-filsystem är det säkert att dela ut läs- och skrivrättigheter. Detta gör du genom att ändra värdet på <emphasis role="bold">umask</emphasis> till 0000.</para>
+						</note>
+					</step>
+					<step>
+						<para>Save the edited file (<ulink url="sample/fstab_automountntfs">an example</ulink>).</para>
+					</step>
+					<step>
+						<para>Ändringarna börjar gälla när du har startat om datorn.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Kör ett systemkommando automatiskt vid uppstart</title>
+				<para>Sometimes it can be useful to run a custom command whenever your computer starts up. To do this:</para>
+				<procedure>
+					<step>
+						<para>Ändra på <application>crontab</application> med administrativa rättigheter (se <xref linkend="root-and-sudo"/>):</para>
+							<screen>sudo crontab -e</screen>
+					</step>
+					<step>
+						<para>Lägg till följande rad:</para>
+							<screen>@reboot /home/användare/kommando</screen>
+					<note>
+						<para>Ersätt <filename>/home/användare/kommando</filename> med den fullständiga sökvägen till ditt kommando</para>
+					</note>
+					</step>
+					<step>
+						<para>Spara filen och avsluta.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Change default operating system at boot</title>
+				<para>To change which operating system starts by default when the computer starts up, edit the <application>grub</application> configuration file.</para>
+				<procedure>
+					<step>
+						<para>Make a backup of the configuration file, and open it in a text editor:</para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+sudo gedit /boot/grub/menu.lst</screen>
+					</step>
+					<step>
+						<para>Hitta den här raden:</para>
+						<programlisting>...
+default 0
+...</programlisting>
+					</step>
+					<step>
+						<para>Ersätt den med följande rad:</para>
+						<programlisting>default X</programlisting>
+						<note><para>You should replace X with a number, according to the order which your operating systems appear in the configuration file. You should start counting from 0. For example, if you wish the default operating system to be the first in the list, replace X with 0, if you wish the default operating system to be the second in the list, replace X with 1, and so on.</para></note> 
+					</step>
+					<step>
+						<para>
+							Save the edited file (<ulink url="sample/menu.list_changedefaultosgrub">an example</ulink>)
+						</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Configure startup services</title>
+				<para>Det här kräver administrativa rättigheter (se <xref linkend="root-and-sudo"/>).</para>
+				<procedure>
+					<step>
+						<para>Run <application>Services Settings</application>:
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Services</guimenuitem>
+							</menuchoice>.
+						</para>
+					</step>
+					<step>
+						<para>Skriv in ditt lösenord.</para>
+					</step>
+					<step>
+						<para>Select the services you want running, then click <guibutton>OK</guibutton> when done.</para>
+					</step>
+					<step>
+						<para>For greater control over the boot-up services, install the <application>bum</application> from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>), and run it:
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Boot-up Manager</guimenuitem>
+							</menuchoice>.
+						</para>
+					</step>
+				</procedure>
+			</sect1>
+	<sect1 id="other-hardware" status="complete">
+	    <title>Andra tips</title>
+	    <sect2 id="listpartitiontables" status="complete">
+                <title>Kontrollera hårddiskanvändning och visa partitionstabellen</title>
+                    <procedure>
+                        <step>
+                            <para>Open &disks;.</para>
+                        </step>
+                        <step>
+                            <para>Välj <guibutton>Hårddisk</guibutton>, och sedan fliken <guibutton>Partitioner</guibutton></para>
+                        </step>
+                        <step>
+                            <para>Varje partition listas under <guilabel>Partitionslista</guilabel> med ledigt utrymme och monteringspunkt.</para>
+                        </step>
+                    </procedure>
+            </sect2>
+            <sect2 status="complete">
+                <title>Lista enheter</title>
+                            <para>To list mounted devices, in a terminal enter:</para>
+                               <screen>mount</screen>
+			    <para>Listan visar enheten (så som en hårddiskpartition), monteringspunkten (var du kommer åt filerna), filsystemstypen och monteringsalternativ.</para>
+                            <para>Detta exempel visar hårddiskspartitionen hda2 monterad som '/', med filsystemstypen ext3. Partitionen är monterad med två alternativ, det ena för att tillåta läsning från och skrivning till enheten och det andra för att återmontera enheten med enbart läs-rättigheter om något fel uppstår.</para>
+                            <screen><computeroutput>/dev/hda2 on / type ext3 (rw,errors=remount-ro)</computeroutput></screen>				
+                            <para>För att lista alla PCI-enheter:</para>
+                                <screen>lspci</screen>
+                            <para>För att lista alla USB-enheter:</para>
+                                <screen>lsusb</screen>
+            </sect2>
+ 
+            <sect2 status="complete">
+                <title>Montera/avmontera CD/DVD-ROM-skivor manuellt, och visa alla dolda och tillhörande filer/mappar</title>
+                            <para>Om vi antar att <filename class="devicefile">/media/cdrom0/</filename> är platsen för din CD/DVD-ROM</para>
+                            <para>To mount a CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo mount /media/cdrom0/ -o unhide</screen>
+                            </para>
+                            <para>To unmount a CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo umount /media/cdrom0/</screen>
+                            </para>
+            </sect2>
+	</sect1>
+</chapter>
+

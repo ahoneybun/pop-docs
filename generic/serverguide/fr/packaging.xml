@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "&EnglishAmerican;">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="package-management" status="complete">
+	<title>Gestion des paquets</title>
+        <para>Ubuntu dispose d'un système complet de gestion de paquets pour l'installation, la configuration et la suppression de programmes. Ce système permet non seulement d'accéder à une base de données contenant plus de 17 000 paquets logiciels pour votre ordinateur Ubuntu, mais aussi de gérer les résolutions de dépendances ainsi que les vérifications de mises à jour.</para>
+        <para>Divers outils pour interagir avec le système de gestion de paquets d'Ubuntu sont disponibles, allant des utilitaires en simple ligne de commande qui peuvent aisément être automatisés par les administrateurs système, jusqu'à une interface graphique simple à utiliser pour les débutants sur Ubuntu.</para>
+  <sect1 id="package-management-introduction" status="complete">
+	<title>Introduction</title>
+        <para>Le système de gestion des paquets d'Ubuntu est dérivé du même système utilisé par la distribution GNU/Linux Debian. Les paquets contiennent tous les fichiers nécessaires, ainsi que les méta-données et les instructions permettant d'implémenter une fonctionnalité particulière ou une application logicielle dans votre ordinateur Ubuntu.</para>
+        <para>Les paquets Debian portent généralement l'extension ".deb", et sont situés dans des <emphasis role="italics">dépôts</emphasis> qui sont des collections de paquets existants sur divers médias, tels que les CD-ROM ou Internet. Les paquets sont généralement au format binaire précompilé, ce qui rend leur installation rapide et ne requiert aucune compilation de logiciel.</para>
+        <para>Un grand nombre de paquets évolués utilisent le concept de <emphasis role="italics">dépendances</emphasis>. Les dépendances sont des paquets additionnels requis par le paquet principal pour fonctionner correctement. Par exemple, l'application de synthèse vocale <application>Festival</application> nécessite <application>festvox-kalpc16k</application>, qui est un paquet fournissant une des voix utilisées par le logiciel. Pour que <application>Festival</application> fonctionne, toutes ses dépendances devront être installées en même temps que le paquet principal. Les outils de gestion d'applications d'Ubuntu le feront automatiquement.</para>
+  </sect1>
+  <sect1 id="apt-get" status="complete">
+	<title>Apt-Get</title>
+        <para>La commande <application>apt-get</application> est un puissant outil en ligne de commande travaillant avec l'<emphasis>Advanced Packaging Tool</emphasis> (APT) d'Ubuntu, offrant des fonctionnalités telles que l'installation de nouveaux logiciels, la mise à jour de ceux déjà existants, le rafraîchissement des index de paquets et même la mise à niveau complète de votre système Ubuntu.</para>
+        <para>Étant un simple outil en ligne de commande, <application>apt-get</application> a de nombreux avantages par rapport aux autres outils de gestion de paquets disponibles dans Ubuntu pour les administrateurs de serveurs. Ces avantages comprennent la facilité d'utilisation à travers de simples connections terminal (SSH) et la possibilité d'être utilisé dans des scripts d'administration système, qui peuvent à leur tour être automatisés par l'utilitaire de planification <application>cron</application>.</para>
+        <para>Quelques exemples d'utilisation habituelle de l'utilitaire <application>apt-get</application> :<itemizedlist>
+               <listitem>
+                <para><emphasis role="bold">Installation d'un paquet</emphasis> : L'installation de paquets en utilisant l'outil <application>apt-get</application> est relativement simple. Par exemple, pour installer le scanner réseau <emphasis role="italics">nmap</emphasis>, entrez la commande suivante : <screen>
+<command>sudo apt-get install nmap</command>
+</screen></para>
+                </listitem>
+                <listitem>
+                <para><emphasis role="bold">Suppression d'un paquet</emphasis> : la suppression d'un paquet ou de paquets est également un processus simple et direct. Pour supprimer le paquet nmap installé dans l'exemple précédent, entrez la commande suivante : <screen>
+<command>sudo apt-get remove nmap</command>
+</screen></para>
+                <tip>
+                <para><emphasis role="bold">Paquets multiples</emphasis> : vous pouvez spécifier plusieurs paquets à installer ou à supprimer en les séparant par des espaces.</para>
+                </tip>
+                </listitem>
+                <listitem>
+                <para><emphasis role="bold">Mettre à jour l'index des paquets</emphasis> : l'index des paquets de APT est principalement une base de données des paquets disponibles dans les dépôts listés dans le fichier <filename>/etc/apt/sources.list</filename>. Pour synchroniser l'index local avec les derniers changements effectués sur les dépôts, tapez cette ligne de commande :<screen>
+<command>sudo apt-get update</command>
+</screen></para>
+                </listitem>
+                <listitem>
+                <para><emphasis role="bold">Mettre à jour les paquets</emphasis> : au cours du temps, des versions mises à jour des paquets installés sur votre ordinateur peuvent être mises en ligne dans les dépôts (des mises à jour de sécurité par exemple). Pour mettre à jour votre système, mettez d'abord à jour l'index des paquet comme expliqué ci-dessus, puis tapez :<screen>
+<command>sudo apt-get upgrade</command>
+</screen></para>
+                <para>Si un paquet a besoin d'installer ou de supprimer de nouvelles dépendances lorsqu'il est mis à jour, il ne sera pas mis à jour par la commande <emphasis>upgrade</emphasis>. Pour une mise à jour de ce type, il est nécessaire d'utiliser la commande <emphasis role="italics">dist-upgrade</emphasis>.</para>
+                <para>Vous pouvez également entièrement mettre à niveau votre système Ubuntu d'une version majeure à une autre en utilisant dist-upgrade. Par exemple, pour mettre à niveau Ubuntu de la version 5.10 à la version &distro-rev;, vous devez d'abord vous assurer de remplacer les dépôts existants 5.10 par ceux de &distro-rev; dans le fichier <filename>/etc/apt/sources.list</filename>, puis exécuter <application>apt-get update</application> comme détaillé ci-dessus, et enfin faire la mise à jour du système en tapant : <screen>↵
+<command>sudo apt-get dist-upgrade</command>↵
+</screen></para>
+                <para>Au bout d'un temps assez considérable, votre ordinateur sera mis à niveau vers la nouvelle version. En général, quelques étapes supplémentaires sont nécessaires et sont expliquées dans les notes de révision de la version vers laquelle vous avez fait  la mise à niveau.</para>
+                <para>Les actions de la commande <application>apt-get</application>, tel que l'ajout ou la suppression de paquets, sont inscrites dans le fichier /var/log/dpkg.log.</para>
+                </listitem>
+        </itemizedlist></para>
+		<para>Pour plus d'informations sur l'utilisation d'<application>APT</application>, lisez le <ulink url="&debian-apt;">Manuel d'utilisation APT Debian</ulink>, très complet, ou tapez : <screen>apt-get help</screen></para>
+  </sect1>
+
+  <sect1 id="aptitude" status="complete">
+	<title>Aptitude</title>
+        <para><application>Aptitude</application> est une application en mode texte mais avec des menus, et servant d'interface à <emphasis>Advanced Packaging Tool</emphasis> (APT). Beaucoup des fonctions communes de gestion des paquets, comme l'installation, la désinstallation, et la mise à jour, sont effectuées dans <application>Aptitude</application> avec des commandes utilisant une seule touche, qui sont généralement des lettres minuscules.</para>
+        <para>Il est préférable d'utiliser <application>Aptitude</application> dans un terminal non graphique pour s'assurer un bon fonctionnement des touches de commandes. Vous pouvez démarrer <application>Aptitude</application> en tant qu'utilisateur normal avec la commande suivante dans un terminal: <screen>
+<command>sudo aptitude</command>
+</screen></para>
+        <para>Au démarrage d'<application>Aptitude</application>, vous verrez une barre de menu en haut de l'écran et deux panneaux sous cette barre. Le panneau du haut contient les catégories des paquets, telles que <emphasis role="italics">Nouveaux Paquets</emphasis> et <emphasis role="italics">Paquets Non Installés</emphasis>. Le panneau du bas contient les informations relatives aux paquets et catégories de paquets.</para>
+        <para>Utiliser <application>Aptitude</application> pour la maintenance des paquets est relativement direct, et l'interface utilisateur simplifie les tâches courantes. Les exemples suivants sont des opérations de maintenance habituelles des paquets,  effectuées à la manière d'<application>Aptitude</application> :</para>
+        <itemizedlist>
+               <listitem>
+                <para><emphasis role="bold">Installer des paquets</emphasis>: pour installer un paquet, localisez-le avec la catégories "Paquets non installés", par exemple, en utilisant les touches fléchées du clavier et en appuyant sur <keycap>Entrée</keycap>, puis sélectionnez le paquet que vous voulez installer. Appuyez ensuite sur la touche <keycap>+</keycap>, et la couleur du paquet deviendra <emphasis role="italics">verte</emphasis>, indiquant qu'il est sélectionné pour être installé. Appuyez maintenant sur la touche <keycap>g</keycap> pour avoir un liste des actions possibles. Appuyez à nouveau sur <keycap>g</keycap>, et on vous demandera de devenir super-utilisateur pour continuer. Appuyez sur <keycap>Entrée</keycap> pour avoir une invite et tapez le mot de passe pour vous identifier en tant que super-utilisateur. Enfin, appuyez sur <keycap>g</keycap> une fois de plus et il vous sera demandé de télécharger le paquet. Appuyez sur <keycap>Entrée</keycap> à l'invite <emphasis role="italics">Continuer</emphasis> pour que le téléchargement et l'installation commencent.</para>
+               </listitem>
+               <listitem>
+                <para><emphasis role="bold">Désinstaller des paquets</emphasis> : pour désinstaller un paquet, localisez le avec la catégories "Paquets installés", par exemple, en utilisant les touches fléchées du clavier et en appuyant sur <keycap>Entrée</keycap>, puis sélectionnez le paquet que vous voulez désinstaller. Appuyez ensuite sur la touche <keycap>-</keycap>, et la couleur du paquet deviendra <emphasis role="italics">rose</emphasis>, indiquant qu'il est sélectionné pour être désinstallé. Appuyez maintenant sur la touche <keycap>g</keycap> pour avoir un liste des actions possibles. Appuyez à nouveau sur <keycap>g</keycap>, et on vous demandera de devenir super-utilisateur pour continuer. Appuyez sur <keycap>Entrée</keycap> pour avoir une invite et tapez le mot de passe pour vous identifier en tant que super-utilisateur. Appuyez sur <keycap>Entrée</keycap> à l'invite <emphasis role="italics">Continuer</emphasis> pour que la désinstallation commence.</para>
+               </listitem>
+               <listitem>
+                <para><emphasis role="bold">Mettre à jour l'index des paquets</emphasis> : pour mettre à jour l'index des paquets, appuyez sur la touche <keycap>u</keycap>, on vous demandera alors de devenir super-utilisateur pour continuer. Appuyez sur <keycap>Entrée</keycap> pour avoir une invite et tapez le mot de passe pour vous identifier en tant que super-utilisateur. La mise à jour de l'index va commencer. Appuyez sur keycap&gt;Entrée</para>
+               </listitem>
+               <listitem>
+                <para><emphasis role="bold">Mettre à jour des paquets</emphasis> : pour mettre à jour des paquets,  suivez la procédure ci-dessus pour mettre à jour l'index, puis appuyez sur la touche <keycap>U</keycap> pour marquer tous les paquets que vous pouvez mettre à jour. Appuyez maintenant sur la touche <keycap>g</keycap> pour avoir un liste des actions possibles. Appuyez à nouveau sur <keycap>g</keycap>, on vous demandera alors de devenir super-utilisateur pour continuer. Appuyez sur <keycap>Entrée</keycap> pour avoir une invite et tapez le mot de passe pour vous identifier en tant que super-utilisateur. Enfin, appuyez sur <keycap>g</keycap> une fois de plus et il vous sera demandé de télécharger le paquet. Appuyez sur <keycap>Entrée</keycap> à l'invite <emphasis role="italics">Continuer</emphasis> pour que le téléchargement et la mise à jour des paquets commencent.</para>
+               </listitem>
+        </itemizedlist>
+        <para>La première colonne d'information affichée dans la liste des paquets du panneau du haut, lorsqu'on examine réellement des paquets, liste l'état actuel du paquet et utilise la syntaxe suivante pour décrire l'état du paquet: <itemizedlist>
+        <listitem>
+        <para><emphasis role="bold">i</emphasis> : paquet installé.</para>
+        </listitem>
+        <listitem>
+        <para><emphasis role="bold">c</emphasis> : le paquet n'est plus installé, mais sa configuration est conservée sur le système</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">p</emphasis> : purgé du système</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">v</emphasis> : paquet virtuel</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">B</emphasis> : paquet cassé</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">u</emphasis> : fichiers décompressés, mais paquet pas encore configuré</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">C</emphasis> : partiellement configuré, la configuration a échouée et nécessite une correction</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">H</emphasis>: partiellement installé, la suppression a échoué et nécessite une correction</para>
+        </listitem>
+        </itemizedlist></para>
+        <para>Pour quitter Aptitude, appuyez simplement sur la touche <keycap>q</keycap> et confirmez que vous désirez fermer le logiciel. Beaucoup d'autres fonctions sont disponibles à partir du menu d'Aptitude, en appuyant sur la touche <keycap>F10</keycap>.</para>
+  </sect1>
+	<sect1 id="configuration" status="complete">
+		<title>Configuration</title>
+          <para>La liste des dépôts utilisée par <emphasis>Advanced Packaging Tool</emphasis> (APT) est enregistrée dans le fichier de configuration /etc/apt/sources.list. Un exemple de ce fichier est présenté ici, de même que les informations pour ajouter ou supprimer des liens vers des dépôts dans ce fichier.</para>
+          <para><ulink url="../sample/sources.list">Ceci</ulink> est un exemple simple d'un fichier <filename>/etc/apt/sources.list</filename> typique.</para>
+          <para>Vous pouvez éditer le fichier pour activer ou désactiver certains dépôts. Par exemple, pour désactiver la nécessité d'insérer le CD-ROM Ubuntu à chaque fois que vous faites une opération sur les paquets, mettez simplement en commentaire la ligne appropriée qui se trouve au début du fichier :</para>
+          <para>
+<screen>
+# no more prompting for CD-ROM please
+# deb cdrom:[Ubuntu 6.06 _Dapper Drake_ - Release i386 (20060329.1)]/ dapper main restricted
+</screen>
+          </para>
+          
+    </sect1>
+	<sect1 id="extra-repositories" status="complete">
+		<title>Dépôts supplémentaires</title>
+          <para>En plus des dépôts officiellement supportés par Ubuntu, il en existe d'autres maintenus par la communauté et qui offrent un grand nombre de paquets supplémentaires. Deux de ces dépôts les plus populaires sont <emphasis>Universe</emphasis> et <emphasis>Multiverse</emphasis>. Bien qu'ils ne soient pas officiellement supportés par Ubuntu, ce pourquoi ils ne sont pas activés par défaut, ils proposent généralement des paquets sûrs et ne présentant aucun risque pour votre ordinateur.</para>
+		  <note><para>Les paquets situés dans le dépôt Multiverse ont souvent des licences particulières qui les empêchent d'être distribués avec un système d'exploitation libre, et ils peuvent être illégaux dans votre pays.</para></note>
+          <warning>
+          <para>Soyez attentifs au fait que ni le dépôt <emphasis>Universe</emphasis> ni le dépôt <emphasis>Multiverse</emphasis> ne contiennent des paquets officiellement supportés. Il peut donc ne pas y avoir de mises à jour de sécurité pour ces paquets.</para>
+          </warning>
+          <para>De nombreuses autres sources de paquets sont disponibles, et ne proposent parfois qu'un seul paquet, c'est le cas des sources proposés par les développeurs d'une application unique. Vous devriez cependant toujours faire très attention quand vous utilisez des sources exotiques. Recherchez des sources et des paquets avec prudence avant d'effectuer une installation. Certains paquets provenant de sources non fiables peuvent rendre votre système instable ou inutilisable à certains égards.</para>
+          <para>Pour activer les dépôts <emphasis>Universe</emphasis> et <emphasis>Multiverse</emphasis>, éditez le fichier <filename>/etc/apt/sources.list</filename> et supprimez les commentaires des lignes appropriées :</para>
+          <para>
+<screen>
+# Nous désirons les dépôts Multiverse et Universe
+
+deb http://archive.ubuntu.com/ubuntu dapper universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu dapper universe multiverse
+</screen>
+          </para>
+          <sect2 id="extra-repositories-references" status="complete">
+                <title>Références</title>
+                <para>
+                <ulink url="https://wiki.ubuntu.com/AddingRepositoriesHowto">Méthode pour ajouter des Dépôts (Wiki Ubuntu)</ulink>
+                </para>
+          </sect2>
+    </sect1>
+	</chapter>
+

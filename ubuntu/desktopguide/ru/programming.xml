@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="programming" status="complete">
+		<title>Разработка ПО</title>
+			<para>Этот раздел содержит базовую информацию для желающих использовать Ubuntu для написания и выполнения своих собственных программ.</para>
+			<sect1 id="build-essential" status="complete">
+				<title>Базовые компиляторы</title>
+				<para>Компилируемой программе нужны пакеты, которые не были установлены по умолчанию. Вы можете установить их при помощи <application>build-essential</application> пакета (смотрите <xref linkend="add-applications"/>)</para>
+			</sect1>
+            <sect1 id="java" status="complete">
+                <title>Среда исполнения Java (1.5)</title>
+                <note>
+                    <para>Эти инструкции только для <emphasis>i386</emphasis> и <emphasis>amd64</emphasis> компьютеров. Для <emphasis>PowerPC</emphasis> машин, зайдите на <ulink url="https://help.ubuntu.com/community/Java">Онлайн помощь Ubuntu </ulink>.</para>
+                </note>
+                <note>
+                    <para>На время написания этого была доступна J2SE версии 5.0 Update 6. Возможны изменения. Если вы не нашли этой версии на сайте Sun, загрузите наиболее свежую версию.</para>
+                </note>
+                <procedure>
+                    <step>
+                        <para>На странице <ulink url="&java-download;">&java-download;</ulink> кликните на <quote>Download JRE 5.0 Update 6</quote>. Не выбирайте ссылку вместе с NetBeans.</para>
+                    </step>
+                    <step>
+                        <para>Сначала вы должны принять условия лицензии, затем выбрать <quote>самораспаковывающийся файл Linux</quote> и загрузить jre-1_5_0_06-linux-i586.bin на свой жесткий диск.</para>
+                        <note>
+                            <para>Если у вас система на базе <emphasis>amd64</emphasis>, пожалуйста замените <emphasis>jre-1_5_0_06-linux-i586.bin</emphasis> на <emphasis>jre-1_5_0_06-linux-amd64.bin</emphasis>.</para> 
+                        </note> 
+                    </step>
+                    <step>
+                        <para>Установить пакет <application>java-package</application> из репозитория <quote>Multiverse</quote> (смотрите <xref linkend="add-applications"/>).</para>
+                    </step>
+                    <step>
+                        <para>Сделайте загруженный файл запускаемым. В командной строке перейдите в папку, в которую вы скачали файл и наберите <screen>chmod +x jre-1_5_0_06-linux-i586.bin</screen></para>
+                    </step>
+                    <step>
+                        <para>Чтобы установить JRE, сначала соберите пакет Ubuntu. Наберите <screen>fakeroot make-jpkg jre-1_5_0_06-linux-i586.bin</screen></para>
+                    </step>
+                    <step>
+                        <para>Затем установите пакет, который вы собрали: <screen>sudo dpkg -i sun-j2re1.5_1.5.0+update06_i386.deb</screen></para>
+                    </step>
+                    <step>
+                    		<para>Чтобы использовать на вашей системе Sun Java вместо свободного (но с меньшими возможностями) аналога GIJ, устанавливаемого по умолчанию, запустите: <screen>sudo update-alternatives --config java</screen> и выберете пункт, имеющий <filename>j2re1.5-sun</filename> в названии.</para>
+                    </step>
+                </procedure>
+            </sect1>
+			<sect1 status="complete">
+				<title>Средства разработки</title>
+				<para>Это разные Интегрированые Среды Разработки (ИСР), редакторы, и другие программы разработки для Ubuntu.</para>
+					<itemizedlist>
+						<listitem><para><ulink url="http://anjuta.sourceforge.net/">Anjuta</ulink> - Интегрированная Среда Разработки программного обеспечения на C и C++.</para>
+						</listitem>
+						<listitem><para><ulink url="http://www.bazaar-ng.org/">Bazaar-NG</ulink> - децентрализированная система контроля над версиями для разработки Ubuntu.</para>
+						</listitem>
+						<listitem><para><ulink url="http://bluefish.openoffice.nl/index.html">Bluefish</ulink> - мощный редактор для опытных веб-дизайнеров и программистов.</para>
+						</listitem>
+						<listitem><para><ulink url="http://www.eclipse.org/">Eclipse</ulink> - IDE для Java и других языков программирования. Он составляет основу для программ с закрытым исходным кодом вроде JBuilder.</para>
+						</listitem>
+						<listitem><para><ulink url="http://www.die-offenbachs.de/detlev/eric3.html">Eric</ulink> - полнофункциональная  IDE для Python и Ruby.</para>
+						</listitem>
+						<listitem><para><ulink url="http://glade.gnome.org/">Glade</ulink> - дизайнер интерфейсов пользователя для создания приложений GNOME.</para>
+						</listitem>
+						<listitem><para><ulink url="http://www.python.org/idle/">IDLE</ulink> - Python IDE построенная с использованием набора Tkinter GUI.</para>
+						</listitem>
+						<listitem><para><ulink url="http://www.kdevelop.org/">KDevelop</ulink> - IDE для KDE , которая поддерживает множество языков программирования.</para>
+						</listitem>
+						<listitem><para><ulink url="http://www.monodevelop.com/Main_Page">MonoDevelop</ulink> - IDE для написания mono/.net приложений на C# и других языках.</para>
+						</listitem>
+						<listitem><para><ulink url="http://www.netbeans.org/index.html">NetBeans</ulink> - это среда разработки на Java с поддержкой CVS и графического редактора форм.</para>
+						</listitem>
+					</itemizedlist>
+			</sect1>
+			<sect1 status="complete">
+				<title>Обучение тому как программировать</title>	
+				<sect2 id="diveintopython" status="complete">
+					<title><citetitle>Погружение в Python</citetitle></title>
+					<para><citetitle>Dive Into Python</citetitle> - книга для обучения программированию на Python, предназначенная для программистов с уже имеющимся опытом.</para>
+					<itemizedlist>
+						<listitem><para><ulink url="file:///usr/share/doc/diveintopython/html/toc/index.html">Прочтите <citetitle>Погружение в Python</citetitle></ulink></para></listitem>
+					</itemizedlist>
+				</sect2>			
+				<sect2 id="pygtk-tutorial" status="complete">
+					<title>Руководство PyGTK</title>
+						<para>Руководство PyGTK это руководство по разработке с помощью графического набора, часто используемого при создании приложений под Ubuntu. Оно подразумевает, что у вас есть базовые знания Python, но не обязательно GTK.</para>
+						<procedure>
+							<step>
+								<para>Установите <application>python-gtk2-tutorial</application>  (см. <xref linkend="add-applications"/>).</para>
+								<note><para>Для установки этого пакета Вам понадобится <application>Программа управления пакетами Synaptic</application>.</para></note>
+							</step>
+							<step>
+								<para>Чтобы прочитать документацию, откройте <ulink url="file:///usr/share/doc/python-gtk2-tutorial/html/index.html">python-gtk-tutorial</ulink>.</para>
+							</step>
+						</procedure>
+				</sect2>
+				<sect2 id="devhelp" status="complete">
+					<title>Devhelp</title>
+						<para><application>Devhelp</application> приложение для чтения и поиска среди всей установленной вами документации.</para>
+						<procedure>
+							<step>
+								<para>Установите пакет <application>devhelp</application>  (см. <xref linkend="add-applications"/>).</para>
+							</step>
+							<step>
+								<para>Выберите <menuchoice><guimenu>Приложения</guimenu>
+										<guisubmenu>Программирование</guisubmenu>
+										<guimenuitem>Справка по разработке</guimenuitem></menuchoice>.</para>
+							</step>	
+					</procedure>
+				</sect2>	
+			</sect1>
+</chapter>
+

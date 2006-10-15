@@ -1,0 +1,856 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="basic-chap" status="complete">
+	<title>Contruction basique de paquets</title>
+
+	<para>Deux des problèmes que rencontrent les créateurs de paquets débutants sont qu'il existe de nombreuses manières pour créer des paquets, et que plusieurs outils sont disponibles pour effectuer cette tâche. Nous allons voir trois exemples avec les systèmes de construction courants. En premier, nous n'utiliserons aucun outil d'assistance à la construction. Cette approche est généralement la plus difficile et n'est pas très utilisée en pratique, mais elle donne une vision plus en profondeur du processus de création des paquets. En second, nous utiliserons <application>debhelper</application>, le système de construction le plus utilsé dans Debian. Celui-ci aide le créateur de paquets en automatisant les tâches répétitives. En troisième, nous donnerons un bref aperçu de <emphasis role="bold">C</emphasis>ommon <emphasis role="bold">D</emphasis>ebian <emphasis role="bold">B</emphasis>uild <emphasis role="bold">S</emphasis>ystem (<application>CDBS</application>), un système de construction plus élaboré qui utilise <application>debhelper</application>.</para>
+
+	<tip><para>Le développement de paquet requiert souvent l'installation de nombreux paquets (notamment les paquets <application>-dev</application> qui contiennent les en-têtes (headers) et d'autres fichiers de développement courants) qui ne font pas partie d'un installation de base &ubuntu;. Si vous voulez éviter l'installation de paquets supplémentaires ou si vous voulez développer pour une version différente d'&ubuntu; (celle de développement par exemple) de celle que vous avez, l'utilisation d'un environnement chroot est fortement recommandée. Un guide pour configurer un environnement <xref linkend="appendix-chroot"/> se trouve dans l'appendice.</para></tip>
+
+	
+	<sect1 id="basic-scratch" status="complete">
+		<title>Créer un paquet en partant de zéro</title>
+		
+		<important><para><emphasis role="bold">Paquets prérequis (Requirements):</emphasis> build-essential, automake, gnupg, lintian, fakeroot and <xref linkend="gs-pbuilder"/>.</para>
+		</important>
+					
+		<para>Dans cet exemple, nous utiliserons l'application GNU <application/>http://www.gnu.org/software/hello/hello.html"&gt;hello</para>
+		<screen>
+mkdir ~/hello
+cd ~/hello
+wget http://ftp.gnu.org/gnu/hello/hello-2.1.1.tar.gz</screen>
+
+		<para>Nous allons également comparer notre paquet avec celui qui est déjà dans le dépôt &ubuntu;. Pour l'instant nous le placerons dans le répertoire <filename>ubuntu</filename> ainsi nous pourrons l'examiner plus tard. Pour obtenir le paquet source, assurez vous d'avoir une ligne «deb-src» pour le dépôt main dans votre fichier <filename>/etc/apt/sources.list</filename>. Ensuite faites simplement :</para>
+
+		<screen>
+mkdir ubuntu
+cd ubuntu
+apt-get source hello
+cd ..</screen>
+		
+		<note><para>Contrairement à la majorité des commandes <application>apt-get</application>, il n'est pas nécessaire d'avoir les privilèges du super-utilisateur pour obtenir le paquet source, car il est téléchargé dans le répertoire en cours. En fait, il est recommandé d'utiliser <application>apt-get source</application> <emphasis>uniquement</emphasis> en tant qu'utilisateur normal, ainsi vous pourrez ensuite éditer les fichiers du paquet source sans avoir besoin des privilèges du super-utilisateur.</para></note>
+		
+		<para>Ce que la commande <application>apt-get source</application> fait est :</para>
+		
+		<orderedlist>
+
+			<listitem><para>Télécharge le paquet source. Un paquet source contient habituellement un fichier .dsc décrivant le paquet et fournissant les sommes MD5 du paquet source, un fichier .orig.tar.gz contenant le code source de l'auteur, et un fichier .diff.gz contenant les correctifs (patchs) à appliquer sur le code source avec les informations de mise en paquet.</para></listitem>
+
+			<listitem><para>Décompresser le .orig.tar.gz dans le dossier courant.</para></listitem>
+
+			<listitem><para>Appliquer le .diff.gz décompressé au dossier source non compressé.</para></listitem>
+
+			</orderedlist>
+
+		<para>Si vous téléchargez manuellement le paquet source (fichiers .dsc, .orig.tar.gz, .diff.gz), vous pouvez les décompresser comme le fait <application>apt-get source</application> en utilisant <application>dpkg-source</application> comme suit :</para>
+		<para><screen>dpkg-source -x *.dsc</screen></para>
+
+		<para>La première chose à faire est une copie de l'archive d'origine, parfois appelée « upstream », dans le format suivant : <filename>&lt;packagename&gt;_&lt;version&gt;.orig.tar.gz</filename>. Cette étape permet de faire deux choses. Tout d'abord, cela crée deux copies du code source. Si vous modifiez ou supprimez par accident la copie de travail, vous pouvez utilisez celle que vous avez téléchargée. Ensuite, cela ne fait pas partie des bonnes pratiques de l'empaquetage de modifier l'archive originelle du code source à moins que cela ne soit absolument nécessaire. Reportez-vous à <xref linkend="basic-mistakes"/> pour plus de détails à ce sujet.</para>
+
+		<screen>
+cp hello-2.1.1.tar.gz hello_2.1.1.orig.tar.gz
+tar -xzvf hello_2.1.1.orig.tar.gz</screen>
+
+		<warning><para>Le tiret de soulignement, "_", entre le nom du paquet (hello) et le numéro de version, et non le trait d'union "-", est très important. Votre paquet ne serait pas construit correctement comme un paquet Debian natif.</para></warning>
+
+		<para>Nous avons maintenant un répertoire <filename>hello-2.1.1</filename> qui contient les fichiers source. Nous devons maintenant créer le répertoire <application>debian</application> personnalisé où toute l'information de construction de paquet est stockée, nous permettant de séparer les fichiers de construction de paquet des fichiers source de l'application.</para>
+
+		<screen>
+mkdir hello-2.1.1/debian
+cd hello-2.1.1/debian/</screen>
+
+		<para>Nous avons maintenant besoin de créer les fichiers essentiels à n'importe quel paquet source &ubuntu; : <filename>changelog</filename>, <filename>control</filename>, <filename>copyright</filename>, et <filename>rules</filename>. Ce sont les fichiers nécessaires pour construire les paquets binaire (fichiers .deb) à partir du code source originel (upstream). Examinons chacun à tour de rôle.</para>
+		
+		<sect2>
+			<title>changelog</title>
+			
+			<para>Le fichier <filename>changelog</filename> (journal des changements) est, comme son nom l'indique (pour les anglophones), une liste des changements réalisés pour chaque version. Il a un format spécifique qui donne le nom du paquet, sa version, la distribution, les changements et la personne qui a fait les changements à un moment donné. Si vous avez une clé GPG, soyez certain d'utiliser les même noms et courriels dans le fichier <filename>changelog</filename> que ceux que vous avez dans votre clé. Ce qui suit est un modèle pour <filename>changelog</filename>, veuillez noter que son contenu doit être en anglais, même si ce modèle est traduit pour plus de compréhension.</para>
+			<screen>
+paquet (version) distribution; urgency=urgency
+
+  * détails du changement
+    plus de détails
+  * d'autres détails
+
+-- Nom du mainteneur &lt;courriel&gt;[deux espaces] date</screen>
+
+			<para>Le format (de la date en particulier) est important. La date doit être au format défini par la RFC822. Elle peut être obtenue à l'aide du programme <application>822-date</application>.</para>
+
+			<para>Voici un simple fichier <filename>changelog</filename> pour <application>hello</application> :</para>
+
+			<screen>
+hello (2.1.1-1) edgy; urgency=low
+
+   * New upstream release with lots of bug fixes.
+
+-- Captain Packager &lt;packager@coolness.com&gt;  Wed,  5 Apr 2006 22:38:49 -0700</screen>
+
+			<para>Veuillez noter que la version est suffixée d'un -1, c'est ce qu'on appelle la révision Debian, qui est utilisée pour que le paquet puisse être mis à jour (pour corriger des bogues par exemple) avec de nouveaux paquets utilisant la même version de source.</para>
+
+			<note><para>&ubuntu; et Debian ont des schémas de numérotation des versions légèrement différents afin d'éviter les conflits entre paquets ayant la même version source. Si un paquet Debian a été changé dans &ubuntu;, un suffixe <emphasis>ubuntuX</emphasis> (où <emphasis>X</emphasis> est le numéro de révision) est ajouté au nom de la version Debian. Ainsi si le paquet <application>hello</application> a été modifié dans &ubuntu; le nom de la version sera <filename>2.1.1-1ubuntu1</filename>. Si un paquet logiciel n'existe pas dans Debian, alors le numéro de révision Debian est <emphasis>0</emphasis> (<emphasis>i.e.</emphasis>, <filename>2.1.1-0ubuntu1</filename>).</para></note>
+		
+			<para>Examinez maintenant le <filename>changelog</filename> pour le paquet source  &ubuntu; que nous avons téléchargé précedemment :</para>
+
+			<screen>
+less ../../ubuntu/hello-2.1.1/debian/changelog</screen>
+
+			<para>Notez que dans ce cas <emphasis>distribution</emphasis> est <emphasis>unstable</emphasis> (une branche Debian), car le paquet Debian n'a pas été modifié par &ubuntu;. Pensez à définir <emphasis>distribution</emphasis> avec votre version de distribution.</para>
+
+			<para>À ce moment, créez un fichier <filename>changelog</filename> dans le dossier <filename>debian</filename> où vous devriez déjà être.</para>
+			
+		</sect2>
+
+		<sect2>
+			<title>control</title>
+			<para>Le fichier control contient les informations que le gestionnaire de paquets (comme <application> apt-get</application>,<application>synaptic</application>,et <application>aptitude</application>) utilise, dépendances de construction, information sur le mainteneur, et beaucoup plus.</para>
+			<para>Pour le paquet &ubuntu; <application>hello</application>, le fichier control ressemble à ceci :</para>
+			<para><screen>Source: hello
+Section: devel
+Priority: optional
+Maintainer: Captain Packager &lt;packager@coolness.com&gt;
+Standards-Version: 3.6.1
+
+Package: hello
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: The classic greeting, and a good example
+ The GNU hello program produces a familiar, friendly greeting. It
+ allows non-programmers to use a classic computer science tool which
+ would otherwise be unavailable to them.
+ 
+ Seriously, though: this is an example of how to do a Debian
+ package.
+ It is the Debian version of the GNU Project's `hello world' program
+ (which is itself an example for the GNU Project).</screen></para>
+
+			<para>Créez le fichier <filename>control</filename> en utilisant les informations ci-dessus (en vous assurant de fournir votre propre information dans le champ <emphasis>Maintainer</emphasis>).</para>
+			
+			<para>Le premier paragraphe donne des informations sur le paquet source. Parcourons chaque ligne:</para>
+			<itemizedlist>
+				
+				<listitem><para><emphasis role="bold">Source:</emphasis> C'est le nom du paquet source. Dans notre cas : <emphasis>hello</emphasis>.</para></listitem>
+
+				<listitem><para><emphasis role="bold">Section:</emphasis> Les dépôts apt sont subdivisés en sections afin de faciliter le parcours et la catégorisation des logiciels. Dans notre cas <application>hello</application> appartient à la section <emphasis>devel</emphasis>.</para></listitem>
+
+				<listitem><para><emphasis role="bold">Priority:</emphasis>(Priorité) Ceci définit l'importance du paquet pour les utilisateurs. Elle peut être l'une des suivantes:</para>
+
+					<itemizedlist>
+					
+						<listitem><para><emphasis role="bold">Required</emphasis> - Les paquets sont essentiels pour un fonctionnement correct du système. S'il sont supprimés il est à peu près sûr que votre système sera détruit de manière irréversible.</para></listitem>
+						
+						<listitem><para><emphasis role="bold">Important</emphasis> - ensemble minimal de paquets pour un système utilisable. Enlever ces paquets ne détruira pas de manière irréversible votre système, mais ils sont généralement considérés comme des outils importants sans lesquels une installation de Linux ne serait pas complète. Note : Ceci n'inclut pas de choses telles que Emacs ou même le serveur graphique X.</para></listitem>
+						
+						<listitem><para><emphasis role="bold">Standard</emphasis> - Se comprend de lui-même.</para></listitem>
+						
+						<listitem><para><emphasis role="bold">Optional</emphasis> (Optionnel) - dans cette catégorie se trouvent essentiellement des paquets non-requis, le gros des paquets. Cependant, ces paquets ne doivent pas entrer en conflit entre eux.</para></listitem>
+						
+						<listitem><para><emphasis role="bold">Extra</emphasis> - paquets qui peuvent entrer en conflit avec l'une des catégories ci-dessus. Elle est également utilisée pour des paquets spécialisés qui ne seraient utiles qu'à des personnes qui connaissent la fonction du paquet.</para></listitem>
+					
+					</itemizedlist>
+				</listitem>
+
+				<listitem><para><emphasis role="bold">Maintainer</emphasis> : Le mainteneur du paquet avec son courriel</para></listitem>
+
+				<listitem><para><emphasis role="bold">Standards-Version</emphasis> : La version de la <ulink url="http://www.debian.org/doc/debian-policy/">ligne de conduite Debian (Debian Policy)</ulink> à laquelle le paquet adhère (dans ce cas, la version 3.6.1). Un moyen simple de trouver la version actuelle est <emphasis>apt-cache show debian-policy | grep Version</emphasis>.</para></listitem>
+
+				<listitem><para><emphasis role="bold">Build-Depends</emphasis> : L'un des champs les plus importants et souvent source de bogues. Cette ligne liste les paquets binaires (et leurs versions si nécessaire) devant être installés pour créer le(s) paquet(s) binaires(s) depuis le paquet source. Les paquets essentiels sont requis par <emphasis>build-essential</emphasis> et ne doivent pas être inclus dans la ligne Build-Depends. Dans le cas de <application>hello</application>, tous les paquets font partie de build-essential, donc la ligne Build-Depends n'est pas nécessaire. La liste des paquets build-essential peut être trouvée à <filename>/usr/share/doc/build-essential/list</filename>.</para></listitem>
+			
+			</itemizedlist>
+
+		
+			<para>Le second paragraphe est destiné au paquet binaire qui sera construit depuis la source. Si de multiples paquets binaires sont construits depuis le paquet source, il devrait y avoir une section pour <emphasis>chacun</emphasis>. À nouveau, parcourons les lignes :</para>
+			
+			<itemizedlist>
+			
+				<listitem><para><emphasis role="bold">Package</emphasis> : Le nom du paquet binaire. Souvent, pour de simples programmes (tels que <application>hello</application>), le nom du paquet source et le paquet binaire sont les mêmes.</para></listitem>
+				
+				<listitem><para><emphasis role="bold">Architecture</emphasis> : Les architectures pour lesquelles le paquet binaire sera construit. Par exemple :</para>
+					
+					<itemizedlist>
+						
+						<listitem><para><emphasis role="bold">all</emphasis> - La source n'est <emphasis>pas</emphasis> dépendante de l'architecture. Les programmes qui utilisent Python ou d'autres langages interprétés l'utiliseront. Le paquet binaire résultant se terminera par <filename>_all.deb</filename>.</para></listitem>
+
+						<listitem><para><emphasis role="bold">any</emphasis> - La source <emphasis>est</emphasis> dépendante de l'architecture et pourra compiler sur toute architecture supportée. Il y aura un fichier .deb pour chaque architecture (<filename>_i386.deb</filename> par exemple).</para></listitem>
+
+						<listitem><para>Un sous-ensemble d'architectures (i386, amd64, ppc, etc.) peut être listé pour indiquer que la source est dépendante de l'architecture et ne fonctionnera pas sur toutes les architectures supportées par Ubuntu.</para></listitem>
+
+					</itemizedlist></listitem>
+
+				<listitem><para><emphasis role="bold">Depends</emphasis> : La liste des paquets dont le paquet binaire dépend pour son fonctionnement. Pour <application>hello</application>, nous voyons <filename>${shlibs:Depends}</filename>, qui est une variable qui se substitue aux bibliothèques partagées nécessaires. Voyez la page de man <filename>dpkg-source</filename> pour plus d'information.</para></listitem>
+
+				<listitem><para><emphasis role="bold">Recommends</emphasis> : Utilisé pour les paquets fortement recommandés et habituellement installés avec ce paquet. Certains gestionnaire de paquets, notamment <application>aptitude</application>, installent automatiquement les paquets recommandés.</para></listitem>
+
+				<listitem><para><emphasis role="bold">Suggests</emphasis> : Utilisé pour les paquets similaires ou utiles lorsque ce paquet est installé.</para></listitem>
+				
+				<listitem><para><emphasis role="bold">Conflicts</emphasis> : Utilisé pour les paquets qui entreront en conflit avec ce paquet. Ceux-ci ne peuvent pas être installés en même temps. Si l'un est installé, l'autre sera désinstallé.</para></listitem>
+
+				<listitem><para><emphasis role="bold">Description</emphasis> : Les mainteneurs de paquets utilisent aussi bien les descriptions courtes et longues. La mise en forme est :</para>
+					
+<screen>Description: &lt;single line synopsis&gt;
+ &lt;extended description over several lines&gt;</screen>
+
+						<para>Notez qu'il y a un espace devant chaque ligne de la description longue . Plus d'informations sur comment rédiger une bonne description sont disponibles sur <ulink url="http://people.debian.org/~walters/descriptions.html">http://people.debian.org/~walters/descriptions.html</ulink>.</para></listitem>
+				
+			</itemizedlist>
+					
+		</sect2>
+
+		<sect2>
+			<title>copyright</title>
+
+			<para>Ce fichier fournit les informations sur le droit de copie (copyright). Généralement, l'information au sujet du copyright se trouve dans le fichier <filename>COPYING</filename> dans le dossier de la source du programme. Ce fichier devrait inclure des informations telles que le nom de l'auteur et de l'empaqueteur, l'URL d'où vient la source, une ligne de Copyright avec l'année et le détenteur du copyright ainsi que le texte du copyright lui-même. Un exemple serait (NdT : toujours en anglais !) :</para>
+
+			<screen>This package was debianized by {Your Name} &lt;your email address&gt;
+{Date}
+
+It was downloaded from: {URL of webpage} 
+
+Upstream Author(s): {Name(s) and email address(es) of author(s)}
+
+Copyright:
+	Copyright (C) {Year(s)} by {Author(s)} {Email address(es)}
+
+License:
+
+</screen>
+
+			<para>Comme chacun l'imagine, <application>hello</application> est sous licence GPL. Dans ce cas il est plus facile de simplement copier le fichier <filename>copyright</filename> depuis le paquet &ubuntu; :</para>
+
+			<screen>
+cp ../../ubuntu/hello-2.1.1/debian/copyright .</screen>
+
+			<para>Vous devez inclure le copyright complet sauf si c'est la GPL, la LGPL, la licence BSD, la licence Artistique (Artistic License), auquel cas, vous pouvez vous référer au fichier correspondant dans le dossier <filename>/usr/share/common-licenses/</filename>.</para>
+
+			<para>Notez que le fichier <filename>copyright</filename> du paquet &ubuntu; inclut une note de licence pour la documentation. il est important que <emphasis>tous</emphasis> les fichiers de la source soit couvert par une note de licence.</para>
+			
+		</sect2>	
+
+		<sect2 id="basic-scratch-rules">
+			<title>rules</title>
+			
+			<para>Le fichier <filename>rules</filename> est un Makefile exécutable qui contient des règles pour construire le paquet binaire à partir des paquets source. Pour <application>hello</application> il sera plus facile d'utiliser le <filename>rules</filename> du paquet &ubuntu; :</para>
+
+			<screen>#!/usr/bin/make -f
+# Sample debian/rules file - for GNU Hello.
+# Copyright 1994,1995 by Ian Jackson.
+# I hereby give you perpetual unlimited permission to copy,
+# modify and relicense this file, provided that you do not remove
+# my name from the file itself. (I assert my moral right of
+# paternity under the Copyright, Designs and Patents Act 1988.)
+# This file may have to be extensively modified
+
+package = hello
+docdir = debian/tmp/usr/share/doc/$(package)
+
+CC = gcc
+CFLAGS = -g -Wall
+INSTALL_PROGRAM = install
+
+ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+  CFLAGS += -O2
+endif
+ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+  INSTALL_PROGRAM += -s
+endif
+
+build:
+        $(checkdir)
+        ./configure --prefix=/usr
+        $(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)"
+        touch build
+
+clean:
+        $(checkdir)
+        rm -f build
+        -$(MAKE) -i distclean
+        rm -rf *~ debian/tmp debian/*~ debian/files* debian/substvars
+
+binary-indep: checkroot build
+        $(checkdir)
+# There are no architecture-independent files to be uploaded
+# generated by this package. If there were any they would be
+# made here.
+
+binary-arch: checkroot build
+        $(checkdir)
+        rm -rf debian/tmp
+        install -d debian/tmp/DEBIAN $(docdir)
+        install -m 755 debian/postinst debian/prerm debian/tmp/DEBIAN
+        $(MAKE) INSTALL_PROGRAM="$(INSTALL_PROGRAM)" \
+                prefix=$$(pwd)/debian/tmp/usr install
+        cd debian/tmp &amp;&amp; mv usr/info usr/man usr/share
+        cp -a NEWS debian/copyright $(docdir)
+        cp -a debian/changelog $(docdir)/changelog.Debian
+        cp -a ChangeLog $(docdir)/changelog
+        cd $(docdir) &amp;&amp; gzip -9 changelog changelog.Debian
+        gzip -r9 debian/tmp/usr/share/man
+        gzip -9 debian/tmp/usr/share/info/*
+        dpkg-shlibdeps debian/tmp/usr/bin/hello
+        dpkg-gencontrol -isp
+        chown -R root:root debian/tmp
+        chmod -R u+w,go=rX debian/tmp
+        dpkg --build debian/tmp ..
+
+define checkdir
+        test -f src/$(package).c -a -f debian/rules
+endef
+
+binary: binary-indep binary-arch
+
+checkroot:
+        $(checkdir)
+        test $$(id -u) = 0
+
+ PHONY: binary binary-arch binary-indep clean checkroot
+</screen>
+
+			<para>Nous allons parcourir ce fichier en détail. Une des premières parties que vous verrez est la déclaration de quelques variables :</para>
+			<screen>package = hello
+docdir = debian/tmp/usr/share/doc/$(package)
+
+CC = gcc
+CFLAGS = -g -Wall
+INSTALL_PROGRAM = install
+
+ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O2
+endif
+ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+	INSTALL_PROGRAM += -s
+endif
+</screen>
+			<para>Cette section définit le CFLAGS pour le compilateur et prend aussi en charge les <filename>noopt</filename> et <filename>nostrip</filename> DEB_BUILD_OPTIONS pour le déboguage.</para>
+			
+			<para>Ensuite on trouve la règle <filename>build</filename></para>
+			<screen>build:
+        $(checkdir)
+	./configure --prefix=/usr
+	$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)"
+	touch build</screen>
+			<para>Cette règle exécute <emphasis>./configure</emphasis> avec l'argument --prefix adéquat, exécute <emphasis>make</emphasis> et crée un fichier <filename>build</filename> qui constitue un horodatage (marqueur temporel) de la construction afin d'éviter des compilations multiples erronées.</para>
+			<para>La règle suivante, <filename>clean</filename>, exécute <emphasis>make -i distclean</emphasis> et supprime les fichiers créés durant la construction du paquet.</para>
+
+			<screen>clean:
+	$(checkdir)
+	rm -f build
+	-$(MAKE) -i distclean
+	rm -rf *~ debian/tmp debian/*~ debian/files* debian/substvars</screen>
+
+			<para>Ensuite, nous voyons une règle vide <filename>binary-indep</filename>, parce qu'il n'y a pas de fichiers indépendants de l'architecture qui sont créés dans ce paquet.</para>
+
+			<para>Il y a, cependant, plusieurs fichiers dépendants de l'architecture, alors <filename>binary-arch</filename> est utilisé :</para>
+
+			<screen>binary-arch: checkroot build
+		$(checkdir)
+		rm -rf debian/tmp
+		install -d debian/tmp/DEBIAN $(docdir)
+		install -m 755 debian/postinst debian/prerm debian/tmp/DEBIAN
+		$(MAKE) INSTALL_PROGRAM="$(INSTALL_PROGRAM)" \
+		prefix=$$(pwd)/debian/tmp/usr install
+		cd debian/tmp &amp;&amp; mv usr/info usr/man usr/share
+		cp -a NEWS debian/copyright $(docdir)
+		cp -a debian/changelog $(docdir)/changelog.Debian
+		cp -a ChangeLog $(docdir)/changelog
+		cd $(docdir) &amp;&amp; gzip -9 changelog changelog.Debian
+		gzip -r9 debian/tmp/usr/share/man
+		gzip -9 debian/tmp/usr/share/info/*
+		dpkg-shlibdeps debian/tmp/usr/bin/hello
+		dpkg-gencontrol -isp
+		chown -R root:root debian/tmp
+		chmod -R u+w,go=rX debian/tmp
+		dpkg --build debian/tmp ..</screen>
+			
+			<para>Premièrement, notez que cette règle appelle la règle <filename>checkroot</filename> afin de s'assurer que le paquet est construit en tant que super-utilisateur et appelle la règle <filename>build</filename> pour compiler la source. Les fichiers <filename>debian/tmp/DEBIAN</filename> et <filename>debian/tmp/usr/share/doc/hello</filename> sont ensuite créés, le fichier <filename>postinst</filename> et les scripts <filename>prerm&gt;</filename> sont installés dans <filename>debian/tmp/DEBIAN</filename>. Ensuite <emphasis>make install</emphasis> est lancé avec un préfixe qui installe dans le répertoire <filename>debian/tmp/usr</filename>.Après quoi, les fichiers de documentation (NEWS, ChangeLog et le changelog Debian) sont comprimés par gzip et installés. <emphasis>dpkg-shlibdeps</emphasis> est invoqué pour trouver les dépendances de librairies partagées de l'exécutable <application>hello</application>, et stocke la liste dans le fichier <filename>debian/substvars</filename> pour la variable ${shlibs:Depends} dans <filename>control</filename>. Ensuite, <emphasis>dpkg-gencontrol</emphasis> est lancé pour créer un fichier control pour le paquet binaire et réalise les remplacements créés par <emphasis>dpkg-shlibdeps</emphasis>. Finalement, après avoir défini les permissions de <filename>debian/tmp</filename>, <emphasis>dpkg --build</emphasis> est lancé pour construire le paquet binaire .deb et le déposer dans le dossier parent.</para>
+
+		</sect2>
+
+		<sect2> 
+			<title>postint et prerm</title> 
+			
+			<para>Les fichiers <filename>postinst</filename> et <filename>prerm</filename> sont des exemples de scripts de mainteneur. Ce sont des scripts shell qui sont exécutés respectivement, après l'installation et avant la suppression, du paquet. Dans le cas du paquet &ubuntu; <application>hello</application>, ils sont utilisés pour installer (et supprimer) le fichier info. Poursuivez et copiez les dans le répertoire courant <filename>debian</filename>.</para>
+
+			<screen>
+cp ../../ubuntu/hello-2.1.1/debian/postinst .
+cp ../../ubuntu/hello-2.1.1/debian/prerm .</screen>
+		
+		</sect2>
+
+		<sect2>
+			<title>Construire le paquet source</title>
+			
+			<para>Maintenant que nous avons parcouru les fichiers dans le répertoire <filename>debian</filename> pour <application>hello</application> en détail, nous pouvons construire les paquets source (et binaire). Déplaçons-nous d'abord à la racine de la source extraite.</para>
+			
+			<para><screen>cd ..</screen></para>
+			
+			<para>Maintenant nous construisons le paquet source en utilisant <application>dpkg-buildpackage</application>:</para>
+			
+			<para><screen>dpkg-buildpackage -S -rfakeroot</screen></para>
+			
+			<para> The -S flag tells
+				<application>dpkg-buildpackage</application> to build a source
+				package, and the -r flag tells it to use
+				<application>fakeroot</application> to allow us to have fake
+				root privileges when making the package.
+				<application>dpkg-buildpackage</application> will take the
+				<filename>.orig.tar.gz</filename> file and produce a
+				<filename>.diff.gz</filename> (the difference between
+				the original tarball from the author and the directory we
+				have created, <filename>debian/</filename> and its contents)
+				and a <filename>.dsc</filename> file that has the
+				description and md5sums for the source package. The
+				<filename>.dsc</filename> and
+				<filename>*_source.changes</filename> (used for uploading the
+				source package) files are signed using your GPG key.</para>
+				
+			<warning><para>If you do not have a <application>gpg</application> key set up you will get an error from <application>debuild</application>. You can either set up a <application>gpg</application> key or use the <emphasis>-us -uc</emphasis> keys with <application>debuild</application> to turn off signing. However, you will not be able to have your packages uploaded to Ubuntu without signing them.</para></warning>
+			
+			<tip><para>To make sure <application>debuild</application> finds the right <application>gpg</application> key you should set the DEBFULLNAME and DEBEMAIL environment variables (in your <filename>~/.bashrc</filename> for instance) to the name and email address you use for your <application>gpg</application> key and in the <filename>debian/changelog</filename></para> <para>Some people have reported that they were unable to get <application>debuild</application> to find their <application>gpg</application> key properly, even after setting the above environment variables. To get around this you can give <application>debuild</application> the <emphasis>-k&lt;keyid&gt;</emphasis> flag where &lt;keyid&gt; is your <application>gpg</application> key ID.</para></tip>
+
+			
+			<para>En plus du paquet source, nous pouvons aussi compiler le paquet binaire avec <application>pbuilder</application>:</para>
+			
+			<para><screen>sudo pbuilder build ../*.dsc</screen></para>
+
+			<para>Utiliser <application>pbuilder</application> pour construire les paquets binaires est très important. Cela garantit que les dépendances de construction sont correctes, car <application>pbuilder</application> fournit un environnement minimal, ainsi toutes les dépendances nécessaires à la construction sont déterminées par le fichier <filename>control</filename>.</para>
+			
+			<para>Nous pouvons contrôler le paquet source pour les erreurs courantes avec <application>lintian</application></para>
+			
+			<screen>cd ..
+lintian -i *.dsc</screen>
+			
+		</sect2>
+
+	</sect1>
+
+	<sect1 id="basic-debhelper" status="complete">
+		<title>Créer des paquets avec debhelper</title>
+		
+		<important><para><emphasis role="bold">Prérequis : </emphasis> Les prérequis de <xref linkend="basic-scratch"/> ainsi que debhelper et dh-make</para> </important>
+
+		<para>En tant qu'empaqueteur, vous créerez rarement des paquets de zéro comme nous venons de le faire dans la section précédente. Comme vous pouvez l'imaginer, plusieurs des tâches et une grande partie de l'information dans le fichier <filename>rules</filename> sont communs aux paquets. Afin de faciliter et de rendre plus efficace la mise en paquets, vous pouvez utiliser <application>debhelper</application> pour vous aider dans ces tâches. Dephelper est un ensemble de scripts Perl (préfixés par <emphasis>dh_</emphasis>) qui automatisent le processus de construction de paquets. Avec ces scripts, la construction d'un paquet Debian devient passablement simple.</para>
+
+		<para>In this example, we will again build the GNU Hello package, but this
+			time we will be comparing our work to the Ubuntu
+			<application>hello-debhelper</application> package. Again,
+			create a directory where you will be working: </para>
+
+		<screen>mkdir ~/hello-debhelper
+cd ~/hello-debhelper
+wget http://ftp.gnu.org/gnu/hello/hello-2.1.1.tar.gz
+mkdir ubuntu
+cd ubuntu</screen>
+		
+
+		<para>Then, get the Ubuntu source package:</para>
+
+		<screen>apt-get source hello-debhelper
+cd ..</screen>
+
+		<para>Comme dans l'exemple précédent, la première chose que nous devons faire et de décompresser l'archive tar originale (amont - upstream).</para>
+
+		<screen>tar -xzvf hello-2.1.1.tar.gz</screen>
+
+		<para>Au lieu de copier l'archive tar originale vers <filename>hello_2.1.1.orig.tar.gz</filename> comme nous l'avons fait dans l'exemple précédent, nous allons laisser <application>dh_make</application> faire le travail pour nous. La seule chose à faire est de renommer le paquet source afin qu'il soit de la forme <emphasis>&lt;nom_de_paquet&gt;-&lt;version&gt;</emphasis> ou nom_de_paquet est en minuscules. Dans ce cas, déballer simplement l'archive produit un répertoire source correctement nommé et nous pouvons nous y placer :</para>
+
+		<screen>cd hello-2.1.1</screen>
+
+		<para>Pour créer la «debianisation» initiale de la source nous allons utiliser <application>dh_make</application></para>
+
+		<screen>
+dh_make -e votre.adrresse@mainteneur -f ../hello-2.1.1.tar.gz
+		</screen>
+
+		<para>dh_make vous posera ensuite une série de questions:</para>
+
+		<screen>
+Type of package: single binary, multiple binary, library, kernel module or cdbs?
+[s/m/l/k/b] <emphasis role="bold">s</emphasis></screen>
+
+		<screen>
+Maintainer name : Captain Packager
+Email-Address : packager@coolness.com
+Date : Thu, 6 Apr 2006 10:07:19 -0700
+Package Name : hello
+Version : 2.1.1
+License : blank
+Type of Package : Single
+Hit &lt;enter&gt; to confirm: <emphasis role="bold">Entrée</emphasis></screen>
+
+		<caution><para>Ne lancez <application>dh_make -e</application> qu'une seule fois. Si vous le lancez une seconde fois, il ne fonctionnera pas correctement. Si vous voulez effectuer une modification, ou si vous avez fait une erreur, supprimer le répertoire source et refaites une nouvelle décompression de l'archive tar originale. Ensuite vous pourrez revenir dans le répertoire source et réessayer.</para></caution>
+		
+		<para>La commande <application>dh_make -e</application> fait deux choses :</para>
+
+		<orderedlist> 
+			
+			<listitem><para>Crée le fichier <filename>hello_2.1.1.orig.tar.gz</filename> dans le répertoire parent.</para></listitem>
+
+			<listitem><para>Crée les fichiers de base utilisés dans <filename>debian/</filename> et plusieurs fichiers de gabarit (template) (.ex) qui peuvent être utiles.</para></listitem>
+			
+		</orderedlist>
+
+		<para>Le programme <application>Hello</application> n'est pas très compliqué, et comme nous l'avons vu dans <xref linkend="basic-scratch"/>, la mise en paquet ne demande pas beaucoup plus que les fichiers basiques. À cet effet, retirons les fichiers <filename>.ex</filename> :</para>
+
+		<screen>cd debian
+rm *.ex *.EX</screen>
+
+		<para>Pour <application>hello</application>, vous aurez aussi besoin des fichiers  <filename>README.Debian</filename> (fichier README (en français : LISEZ-MOI) pour les choses spécifiques à Debian, pas le README du programme), <filename>dirs</filename> (utilisé par <application>dh_installdirs</application> pour créer les répertoires nécessaires), <filename>docs</filename> (utilisé par <application>dh_installdocs</application> pour installer la documentation du programme) ou <filename>info</filename> (utilisé par <application>dh_installinfo</application> pour installer le fichier d'information) dans le répertoire <filename>debian</filename>. Pour plus d'information sur ces fichiers, voyez <xref linkend="appendix-examples"/>.</para>
+
+		<para>À ce moment, vous ne devriez avoir que les fichiers <filename>changelog</filename>, <filename>compat</filename>, <filename>control</filename>, <filename>copyright</filename>, et <filename>rules</filename> dans le répertoire <filename>debian</filename>. Depuis <xref linkend="basic-scratch"/>, le seul nouveau fichier est <filename>compat</filename>, qui est un fichier contenant la version du <application>debhelper</application> (dans ce cas 4) utilisé.</para>
+
+		<para>Dans ce cas, vous allez devoir faire un léger ajustement du fichier <filename>changelog</filename> pour refleter le changement du nom de paquet de <application>hello</application> en <application>hello-debhelper</application> :</para>
+
+		<screen>
+hello-debhelper (2.1.1-1) edgy; urgency=low
+
+  * Initial release
+
+  -- Captain Packager &lt;packager@coolness.com&gt;  Thu,  6 Apr 2006 10:07:19 -0700</screen>
+		
+		<para>By using <application>debhelper</application>, the only
+			things we need to change in <filename>control</filename> are the
+			name (substituting <application>hello</application> for
+			<application>hello-debhelper</application>) and adding
+			<application>debhelper (&gt;= 4.0.0)</application> to the
+			<emphasis>Build-Depends</emphasis> field for the source
+			package. The Ubuntu package for
+			<application>hello-debhelper</application> looks like:</para>
+
+		<screen>
+Source: hello-debhelper
+Section: devel
+Priority: extra
+Maintainer: Capitan Packager &lt;packager@coolness.com&gt;
+Standards-Version: 3.6.1
+Build-Depends: debhelper (&gt;= 4)
+
+Package: hello-debhelper
+Architecture: any
+Depends: ${shlibs:Depends}
+Conflicts: hello
+Provides: hello
+Replaces: hello
+Description: The classic greeting, and a good example
+ The GNU hello program produces a familiar, friendly greeting. It
+ allows non-programmers to use a classic computer science tool which
+ would otherwise be unavailable to them.
+ .
+ Seriously, though: this is an example of how to do a Debian package.
+ It is the Debian version of the GNU Project's `hello world' program
+ (which is itself an example for the GNU Project).
+ 
+This is the same as the hello package, except it uses debhelper to
+ make the deb. Please see debhelper as to what it is.
+		</screen>
+
+		<para>We can copy the <filename>copyright</filename> file and the
+			<filename>postinst</filename> and <filename>prerm</filename>
+			scripts from the Ubuntu
+			<application>hello-debhelper</application> package, as they have
+			not changed since <xref linkend="basic-scratch"/>. We will also
+			copy the <filename>rules</filename> file so we can inspect
+			it.</para>
+
+		<screen>
+cp ../../ubuntu/hello-debhelper-2.1.1/debian/copyright .
+cp ../../ubuntu/hello-debhelper-2.1.1/debian/postinst .
+cp ../../ubuntu/hello-debhelper-2.1.1/debian/prerm .
+cp ../../ubuntu/hello-debhelper-2.1.1/debian/rules .</screen>
+
+		<para>Le dernier fichier que nous devons examiner est <filename>rules</filename>, où la puissance des scripts <application>debhelper</application> peut être remarquée. La version <application>debhelper</application> de <filename>rules</filename> est légèrement plus compacte (54 lignes contre 72 lignes dans la version issue de <xref linkend="basic-scratch-rules"/>).</para>
+
+		<para>La version de <application>debhelper</application> ressemble à :</para>
+
+		<screen> #!/usr/bin/make -f
+
+package = hello-debhelper
+
+CC = gcc
+CFLAGS = -g -Wall
+
+ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+  CFLAGS += -O2
+endif
+
+#export DH_VERBOSE=1
+
+clean:
+        dh_testdir
+        dh_clean
+        rm -f build
+        -$(MAKE) -i distclean
+
+install: build
+        dh_clean
+        dh_installdirs
+        $(MAKE) prefix=$(CURDIR)/debian/$(package)/usr \
+                mandir=$(CURDIR)/debian/$(package)/usr/share/man \
+                infodir=$(CURDIR)/debian/$(package)/usr/share/info \
+                install
+
+build:
+        ./configure --prefix=/usr
+        $(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)"
+        touch build
+
+binary-indep: install
+# There are no architecture-independent files to be uploaded
+# generated by this package. If there were any they would be
+# made here.
+
+binary-arch: install
+        dh_testdir -a
+        dh_testroot -a
+        dh_installdocs -a NEWS
+        dh_installchangelogs -a ChangeLog
+        dh_strip -a
+        dh_compress -a
+        dh_fixperms -a
+        dh_installdeb -a
+        dh_shlibdeps -a
+        dh_gencontrol -a
+        dh_md5sums -a
+        dh_builddeb -a
+
+binary: binary-indep binary-arch
+
+.PHONY: binary binary-arch binary-indep clean checkroot
+			</screen>
+
+		<para>Vous remarquerez que les tâches comme tester si vous êtes dans le bon répertoire (<application>dh_testdir</application>), s'assurer que vous construisez le paquet avec les privilèges super-utilisateur (<application>dh_testroot</application>), installer la documentation (<application>dh_installdocs</application> et <application>dh_installchangelogs</application>), et nettoyer après la construction (<application>dh_clean</application>) sont prises en charge automatiquement. De nombreux paquets beaucoup plus complexes que <application>hello</application> ont des fichiers <filename>rules</filename> qui ne sont pas plus lourds car les scripts <application>debhelper</application> prennent en charge la plupart des tâches. Pour une liste complète des scripts <application>debhelper</application>, référez vous aux pages de <application>man</application>. C'est un exercice utile de lire la page de man (elle sont courtes et bien écrites) pour chaque script utilisé dans le fichier <filename>rules</filename> ci-dessus.</para>
+
+			<sect2>
+			<title>Construire le paquet source</title>
+			
+			<para>Maintenant que nous avons parcouru les fichiers du répertoire <filename>debian</filename> pour <application>hello-debhelper</application>, nous pouvons construire les paquets source et binaire. Tout d'abord revenons dans le répertoire source :</para>
+			
+			<para><screen>cd ..</screen></para>
+			
+			<para>Maintenant nous construisont le paquet source en utilisant <application>debuild</application>, un script d'emballage pour <application>dpkg-buildpackage</application> :</para>
+			
+			<para><screen>debuild -S</screen></para>
+				
+			<para>le paquet binaire en utilisant <application>pbuilder</application> :</para>
+			
+			<para><screen>sudo pbuilder build ../*.dsc</screen></para>
+
+			<para>et finalement nous contrôlons le paquet source pour les erreurs courantes en utilisant <application>lintian</application> :</para>
+			
+			<screen>cd ..
+lintian -i *.dsc</screen>
+			
+		</sect2>
+	
+	</sect1>
+
+	<sect1 id="basic-cdbs" status="complete">
+		<title>Empaqueter avec CDBS</title>
+
+		<para>CDBS est un outil qui utilise debhelper pour afin de rendre la construction et la maintenance de paquets Debian encore plus simple. Il a plusieurs avantages :</para>
+
+			<itemizedlist>
+				<listitem><para>Il produit un <filename>debian/rules</filename> court, lisible et efficace.</para></listitem>
+				
+				<listitem><para>Il automatise debhelper et autotools pour vous, afin de ne pas avoir à se préoccuper des tâches répétitives.</para></listitem>
+				
+				<listitem><para>Il vous aide à vous concentrer sur les problèmes d'empaquetage plus importants, parce qu'il vous aide sans limiter la personnalisation.</para></listitem>
+				
+				<listitem><para>Ses fonctionnalités ont été largement testées, afin que vous ne dussiez point recourir à de sombres bidouilles pour résoudre des problèmes communs.</para></listitem>
+				
+				<listitem><para>Passer à CDBS est simple</para></listitem>
+				
+				<listitem><para>Il est extensible</para></listitem>
+			</itemizedlist>
+		
+		<sect2>
+			<title>Utiliser CDBS dans les paquets</title>
+		
+			<para>Using CDBS for Ubuntu packages is very easy. After adding 
+				<application>cdbs</application> to the Build-Depends in 
+				<filename>debian/control</filename>, a basic
+				<filename>debian/rules</filename> file using CDBS can fit in 2 lines. 
+				For a simple C/C++ application with no extra rules, such as
+				<application>hello</application>, <filename>debian/rules</filename> can
+				look like this :</para>
+
+			<screen>#!/usr/bin/make -f
+				
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/autotools.mk</screen>
+
+			<para>C'est tout ce dont vous avez besoin pour construire un programme ! CDBS prend en charge l'installation et le nettoyage. Vous pouvez alors utiliser les fichiers <filename>.install</filename> et <filename>.info</filename> pour ajuster votre paquet avec les fonctions debhelper usuelles dans les diverses sections de <filename>debian/rules</filename>.</para>
+
+			<warning><para>N'utilisez pas DEB_AUTO_UPDATE_DEBIAN_CONTROL:=yes pour modifier automatiquement <filename>debian/control</filename>. Cela peut engendrer des défauts, et Debian le considère comme un motif pour rejeter l'entrée d'un paquet dans les archives. Pour plus d'information, voyez <ulink url="http://ftp-master.debian.org/REJECT-FAQ.html"> http://ftp-master.debian.org/REJECT-FAQ.html</ulink>.</para></warning>
+			
+			<para>Comme vous pouvez le voir, CDBS travaille principalement en plaçant des fichiers Makefile <filename>.mk</filename> dans <filename>debian/rules</filename>. Le paquet <application>cdbs</application> fournit de tel fichiers dans filename&gt;/usr/share/cdbs/1/</para>
+
+			<itemizedlist>
+				
+				<listitem><para><filename>rules/debhelper.mk</filename> : appelle debhelper dans toutes les sections requises</para></listitem>
+			
+				<listitem><para><filename>rules/dpatch.mk</filename> : Vous permet d'utiliser dpatch pour patcher facilement la source</para></listitem>
+				
+				<listitem><para><filename>rules/simple-patchsys.mk</filename> : Fournit un moyen très simple pour patcher la source</para></listitem>
+				
+				<listitem><para><filename>rules/tarball.mk</filename>: Vous permet de construire des paquets en utilisant l'archive compressé dans le paquet</para></listitem>
+				
+				<listitem><para><filename>class/autotools.mk</filename> : Appelle autotools dans toutes les sections requises</para></listitem>
+				
+				<listitem><para><filename>class/gnome.mk</filename> : Construit les applications GNOME (requiert un champ Build-Depends adéquat dans <filename>debian/control</filename>)</para></listitem>
+				
+				<listitem><para><filename>class/kde.mk</filename> : Construit les applications KDE (requiert un champ Build-Depends adéquat dans <filename>debian/control</filename>)</para></listitem>
+				
+				<listitem><para><filename>class/python-distutils.mk</filename> : Facilite l'empaquetage des programmes Python</para></listitem>
+			
+			</itemizedlist>
+		</sect2>
+		
+		<sect2>
+			<title>Plus d'information sur CDBS</title>
+		
+			<para>Pour plus d'information sur CDBS, consulter le guide de Marc Dequènes sur <ulink url="https://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml">https://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml</ulink>.</para>
+		
+		</sect2>
+	</sect1>
+
+	<sect1 id="basic-mistakes" status="complete">
+		<title>Erreurs courantes</title>
+			
+		<sect2 id="basic-ex_files">
+			<title>Fichiers d'exemples dh_make</title>
+			
+			<para>Lorsque vous utilisez dh_make pour réaliser la «débianisation» initiale, des fichiers d'exemple pour des tâches diverses sont créés dans le répertoire <filename>debian/</filename>. Les modèles ont une extension .ex. Si vous voulez en utiliser un, renommez le en enlevant l'extension. Si vous n'en avez pas besoin, supprimez le pour conserver un répertoire <filename>debian/</filename> propre.</para>
+
+		</sect2>
+
+		<sect2 id="basic-orig-tarball">
+			<title>Modifier l'archive originale</title>
+
+			<para>Il existe deux types de paquets source, natif et non-natif. Un paquet natif est un paquet spécifique à &ubuntu;/Debian. Il possède un répertoire <filename>debian/</filename> contenant l'information d'empaquetage et tous les changements compris dans l'archive originale (habituellement &lt;nomdupaquet&gt;_&lt;version&gt;.tar.gz). Les paquets non-natifs sont plus courants. Un paquet non-natif subdivise le paquet source en une archive &lt;nomdupaquet&gt;_&lt;version&gt;.orig.tar.gz qui est identique à la source originale téléchargée depuis la site du projet et un fichier .diff.gz qui contient toutes le différences (répertoire <filename>debian/</filename> et patches) avec l'archive source originale.</para>
+
+			<para>Voici une liste de problèmes potentiels lorsque vous modifiez l'archive originale :</para>
+		
+			<orderedlist>
+
+				<listitem><para>Reproductibilité</para>
+
+					<para>Si vous ne prenez que le .diff.gz et le .dsc, vous ou un autre n'avez qucun moyen de reproduire les modifications dans l'archive originale.</para></listitem>
+
+				<listitem><para>Possibilité de mise à niveau</para>
+		
+					<para>Il est beaucoup plus facile de mettre à niveau vers une nouvelle version amont (upstream) de l'auteur, si le fichier .orig.tar.gz est conservé et qu'il y a une séparation claire entre la source originale (upstream) et les modifications effectuées pour produire un paquet source &ubuntu;.</para> </listitem>
+
+				<listitem><para>Synchronisation de Debian vers </para>
+
+					<para>Modifier l'archive originale rend difficile la synchronisation depuis Debian vers &ubuntu;. Normalement seuls les fichiers .diff.gz et .dsc changent pour une même version de la souce originale(upstream), alors que le fichier .orig.tar.gz est partagé par toutes les révisions Debian ou &ubuntu;. Il est beaucoup plus difficile de synchroniser si les sommes de contrôle MD5 du fichier .orig.tar.gz ne sont pas les mêmes.</para> </listitem>
+
+				<listitem><para>Usage du contrôle de révision pour les paquets Debian</para>
+					
+					<para>Si vous utilisez svn (<application>svn-buildpackage</application>) pour gérer votre paquet Debian, vous n'y stockez habituellement pas l'archive originale. Si quelqu'un d'autre effectue une vérification, il devra obtenir l'archive originale séparément. D'autres systèmes de contrôle de révision peuvent être utilsés uniquement pour les fichiers d'empaquetage (<filename>debian/</filename>, etc.) et non pour la source complète. Cependant si le .orig.tar.gz est différent, alors il y a évidemment un problème.</para></listitem>
+
+				<listitem><para>Vérifications de sécurité</para>
+
+					<para>Considérons une situation où quelqu'un <emphasis>veut</emphasis> introduire un rootkit/backdoor ou autre chose malfaisante. Si l'archive originale est intacte, on peut être facilement contôler au travers du .diff.gz si la personne qui a modifié le paquet a essayé de faire quelque chose de malfaisant. Si l'archive a été modifiée, vous devrez aussi vérifier les différences entre l'archive et la source originale.</para>
+		
+						<note><para>Vous devez toujours encore faire confiance aux auteurs du logiciel pour qu'ils ne fassent rien de mauvais, mais le fait de changer l'original ne change rien au problème.</para></note></listitem>
+
+				<listitem><para>Le diff.gz</para>
+						
+					<para>La possibilité d'utiliser le .diff.gz pour refléter les modifications par rapport à l'archive originale existe, ainsi il est aisé d'effectuer des modifications sans toucher à l'archive originale.</para></listitem>
+				
+			</orderedlist>
+
+
+			<para><emphasis role="bold">Il est acceptable de modifier l'archive source si l'un ou plus des points suivant se vérifie :</emphasis></para>
+
+			<itemizedlist>
+	
+				<listitem><para>Il contient des parties non libres qui ne peuvent être redistribuées. Supprimez ces parties et notez le dans l'empaquetage. Souvent de tels paquets utilisent «dfsg» (pour Debian Free Software Guidlines) dans le nom du paquet et/ou dans la version pour indiquer que des parties non libres ont été supprimées.</para></listitem>
+					
+				<listitem><para>Les auteurs fournissent seulement une source compressée avec bzip2.</para>
+					<itemizedlist>
+						
+						<listitem><para>Faites seulement <application>bunzip2</application> sur le .tar.bz2 et <application>gzip -9 </application> sur le tar résultant.</para></listitem>
+							
+						<listitem><para>La somme de contrôle MD5 du .tar que vous fournissez et celle du .tar original doivent correspondre !</para></listitem>
+	
+						<listitem><para>Éventuellement, fournissez une règle get-orig-source dans debian/rules qui fait cette conversion automatiquement.</para></listitem>
+					
+					</itemizedlist>
+				</listitem>
+					
+				<listitem><para>Inporté directement depuis SVN</para>
+					<itemizedlist>
+						<listitem><para>Fournissez une règle get-orig-source dans debian/rules</para></listitem>
+					</itemizedlist>
+				</listitem>
+	
+			</itemizedlist>
+
+			<para><emphasis role="bold">Les points suivants sont <emphasis>not</emphasis> des motifs pour modifier l'archive d'origine :</emphasis></para>
+			
+			<itemizedlist>
+				
+				<listitem><para>Mauvaise diposition des répertoires</para>
+					
+					<note><para><application>dpkg-source</application> est assez flexible et permet de produire une bonne disposition des répertoires même si :</para>
+						
+					<itemizedlist>
+						
+						<listitem><para>Le répertoire à l'intérieur de l'archive n'est pas nommé &lt;upstream&gt;-&lt;version&gt;.</para></listitem>
+				
+						<listitem><para>Il n'y a pas de sous-répertoire à l'intérieur de l'archive.</para></listitem>
+					</itemizedlist>
+					</note>
+			
+				</listitem>
+			
+				<listitem><para>Certains fichiers doivent être supprimés pour conserver un .diff.gz léger (i.e. les fichiers créés par autotools). Tout ce qui doit être supprimé doit être supprimé dans la règle <application>clean</application>. Comme le .diif.gz est créé par diif -u, vous ne verrez pas de fichiers supprimés dans le .diff.gz.</para></listitem>
+										
+				<listitem><para>Fichiers devant être modifiés. Les fichiers qui doivent être modifiés doivent aller dans le .diff.gz. C'est son rôle !</para></listitem>
+				
+				<listitem><para>Mauvais droits d'accès sur les fichiers. Vous pouvez utiliser <filename>debian/rules</filename> pour faire cela.</para></listitem>
+	
+			</itemizedlist>
+			
+			
+			<tip><para>Que dois-je faire avec un .orig.tar.gz qui contient déjà un répertoire <filename>debian/</filename> ?</para>
+					
+				<para>Ne le ré-empaquetez pas. Vous pouvez demander aux auteurs de supprimer le répertoire debian/ et de fournir un .diff.gz. Ceci facilitera la relecture de leur travail, et cela sépare l'empaquetage de la source du programme.</para>
+			</tip>
+				
+			<note><para>C'est toujours une bonne idée de contacter les auteurs du programme et de leur demander si vous pouvez corriger des problèmes autoconf, la disposition des répertoires, une adresse de la Free Software Foundation obsolète dans les fichiers COPYRIGHT, ou d'autres choses qui ne sont pas spécifiques à l'empaquetage mais qui peuvent s'avérer pratiques pour vous afin que vous n'ayez pas à «patcher» la source dans le .diff.gz.</para></note>
+		
+		</sect2>
+
+		<sect2>
+			<title>Information de copyright</title>
+
+			<para>Le fichier <filename>debian/copyright</filename> devrait contenir :</para>
+			
+			<itemizedlist>
+				
+				<listitem><para>Les informations de licence pour <emphasis>tous</emphasis> les fichiers dans la source. parfois les auteurs mettent une licence dans <filename>COPYING</filename> mais ont des informations de licence différentes pour certains fichiers dans la source.</para></listitem>
+
+				<listitem><para>L'année et le tenant du copyright</para></listitem>
+
+				<listitem><para>La licence <emphasis>complète</emphasis>, a moins que ce ne soit une des licences trouvées dans <filename>/usr/share/common-licenses</filename>, auquel cas vous devriez seuleument inclure un préambule.</para></listitem>
+
+			</itemizedlist>
+				
+		</sect2>
+
+	</sect1>
+
+</chapter>
+

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="bugs-chap" status="complete">
+	<title>Buggar</title>
+	
+	<para>En av de saker du nästan garanterat kommer att stå inför som en paketerare är buggar i programmet självt, eller i din paketering. Paketeringsbuggar är oftast ganska enkla att fixa. Eftersom paketerare ofta är de första som frå höra om buggar i programmet från användarna av deras distribution(er) så är det också de som lägger till temporära fixar och är ansvariga för att skicka buggrapporter och fixar vidare till ursprungsförfattarna (upstream).</para>
+
+	<para>The <ulink url="https://wiki.ubuntu.com/BugSquad">Ubuntu Bug
+			Squad</ulink> is the Quality Assurance (QA) team for <phrase>Ubuntu</phrase>. The
+		people in the team work tirelessly to make <phrase>Ubuntu</phrase> a better place. They
+		keep track of all the bugs in the <phrase>Ubuntu</phrase> Distribution and make sure
+		that major bugs don't go unnoticed by the developers. Anyone can join
+		the Bug Squad and it is a great entry point for people wanting to
+		contribute to <phrase>Ubuntu</phrase>. The Bug Squad can be found on the
+		<emphasis>#ubuntu-bugs</emphasis> IRC channel on
+		<emphasis>irc.ubuntu.com</emphasis></para>
+
+	<sect1 status="complete">
+	  <title>Bugghanteringssystem</title>
+
+	  <para> In order to track bugs (both software and packaging), many distributions have
+		  developed bug tracking systems to manage bug reports and to notify the package
+		  maintainers and reporters of changes. The table below shows some of the Debian
+		  and <phrase>Ubuntu</phrase> tools for tracking bugs.</para>
+
+	<para><emphasis role="bold">Bugghanteringssystem (Bug Tracking Systems, BTS)</emphasis></para>
+	<para>Debian: <ulink url="http://bugs.debian.org">http://bugs.debian.org</ulink></para>
+	<para><phrase>Ubuntu</phrase> : <ulink url="http://launchpad.net/malone/distros/ubuntu">http://launchpad.net/malone/distros/ubuntu</ulink>				
+	</para>
+	<para><emphasis role="bold">Buggar för speciella paket</emphasis></para>
+	<para>Debian : http://bugs.debian.org/<emphasis>&lt;paketnamn&gt;</emphasis></para>
+	<para><phrase>Ubuntu</phrase> : use search at <phrase>Ubuntu</phrase> BTS </para>
+	<para><emphasis role="bold">Buggar för källpaket</emphasis></para>
+	<para>Debian : http://bugs.debian.org/src:<emphasis>&lt;paketnamn&gt;</emphasis></para>
+	<para><phrase>Ubuntu</phrase> : https://launchpad.net/distros/ubuntu/+source/<emphasis>&lt;packagename&gt;</emphasis>/+bugs</para>
+	<para><emphasis role="bold">Paketinformation</emphasis></para>
+	<para>Debian : <ulink url="http://packages.debian.org">http://packages.debian.org</ulink> or http://packages.qa.debian.org/<emphasis>&lt;packagename&gt;</emphasis>
+	</para>
+	<para><phrase>Ubuntu</phrase> : <ulink url="http://packages.ubuntu.com">http://packages.ubuntu.com</ulink> or
+	https://launchpad.net/distros/ubuntu/+source/<emphasis>&lt;packagename&gt;</emphasis>
+	for source packages
+	</para>
+			
+	</sect1>
+
+	<sect1 status="complete">
+		<title>Buggtips</title>
+
+		<sect2>
+			<title>Korrekt källpaket</title>
+			
+			<para>Genom att tilldela buggar till paket hjälper du till med att skicka buggrapporter till utvecklaren/utvecklarna som troligast kan hjälpa till. Genom att se till att den här informationen stämmer ökar du chansen för att buggen fixas snabbt. Ofta är det oklart vilket paket som innehåller buggen, och i de här fallen är det passande att tilldela buggen till Ubuntu. Om buggen är tilldelad ett paket som helt klart inte stämmer, och du inte vet vilket paket som är rätt, ändra det till Ubuntu.</para>
+
+			<para>Rätt paket för buggar i Linuxkärnan är <application>linux</application>, oavsett vilket paket som används (det finns många paket som innehåller Linuxkärnor)</para>
+		</sect2>
+		
+		<sect2>
+			<title>Bekräfta problem</title> 
+
+			<para>Om en bugg är markerad "Unconfirmed" är det hjälpsamt för dig att försöka reproducera problemet och beskriva resultatet i Malone. Om du kan bekräfta problemet, ändra statusen till "Confirmed". Om du inte kan bekräfta problemet är det ändå värdefull information som bör sparas i form av en kommentar.</para>
+
+			<para><emphasis role="bold">Skicka buggar vidare uppströms</emphasis></para>
+
+			<para>Du kan skicka buggar till skaparna av programmet (uppströms, upstream), om</para>
+
+			<itemizedlist>
+				
+				<listitem>
+						<para>du är säker på att buggen inte beror på Ubunturelaterade ändringar</para> </listitem>
+				
+				
+				<listitem>
+						<para>ändringen är så svår att varken du eller någon annan i gruppen kan lösa problemet</para> </listitem>
+			</itemizedlist>
+				
+			<para>Om du gör det här, se till att inkludera all nödvändig information, som</para>
+			
+			<itemizedlist> 
+				
+				<listitem> <para>hur man reproducerar buggen</para> </listitem>
+
+				<listitem> <para>vilken version som används (vilken version av de bibliotek som används, om buggen pekar på problem där)</para> </listitem>
+
+				<listitem><para>vem som rapporterade det</para> </listitem> 
+
+				<listitem> <para>var hela konversationen kan hittas</para>
+				</listitem>
+
+			</itemizedlist>
+			
+			<para>Se också till att du skapar en "bug watch" i Malone för den här buggen.</para>
+
+		</sect2>
+
+		<sect2>
+			<title>Hur du hanterar önskemål om nya funktioner</title>
+			
+			<para>If you feel that the bug reported is a feature request disguised as a
+				bug report, please introduce the reporter gently to the <emphasis>specification
+				process</emphasis> we have. Be sure to mention the following specification resources:
+				FeatureSpecifications, SpecSpec, SpecTemplate, and <ulink url="http://launchpad.net/specs">http://launchpad.net/specs</ulink>
+			</para>
+		</sect2>
+
+		<sect2>
+			<title>Hur du hanterar önskemål om support</title>
+
+			<para>Om du känner att buggrapporten är ett önskemål om support förklätt som en buggrapport, introducera den som rapporterade buggen vänligt för den support-hanteraren vi har. Nämn även <ulink url="http://launchpad.net/support">http://launchpad.net/support</ulink>.</para>
+		</sect2>
+
+		<sect2>
+			<title>Hur du hanterar förslag om att ändra standardvärden</title>
+
+			<para>Om du känner att buggrapporten är ett förslag om att ändra standardvärden förklädd som en buggrapport, vidarebefodra vänligt diskussionen till lämlig e-postlista eller diskussionsforum. Om den här ändringen redan har diskuterats och avvisats, förklara orsakerna för användaren och skicka honom eller henne till rellevant diskussionsforum för vidare förslag/kommentarer.</para>
+		</sect2>
+		
+		<sect2>
+			<title>Leta kopior</title>
+
+			<para>Att leta buggrapporter som rapporterar samma bugg är ett väldigt värdefullt bidrag bland buggruppen. Användarna vet inte alltid hur man kontrollerar om buggen redan har skickats in, och ibland bryr de sig inte. Genom att gallra bland enkla "JAG OCKSÅ"-meddelanden och samla information är oerhört viktigt för att kunna fixa en bugg.</para>
+
+			<para>Det finns ett gäng åtgärder du kan vidta för att hjälpa till med det här. En är att söka efter buggar som har registrerats mot samma komponent. Försök även att formulera om din sökning, och koncentrera dig på händelser och ord som beskriver det som krävs för att reproducera buggen.</para>
+
+			<para><emphasis role="bold">Exempel:</emphasis></para>
+
+			<itemizedlist>
+				<listitem><para>Enkla: <ulink url="https://launchpad.net/malone/bugs/24932">DAAP support</ulink> är en kopia av <ulink url="https://launchpad.net/malone/bugs/24860">please enable daap</ulink>.</para></listitem>
+				<listitem><para>Svårare: <ulink url="https://launchpad.net/malone/bugs/24011">plug:spdif on emu10k1 gone after breezy upgrade</ulink> är en kopia av <ulink url="https://launchpad.net/malone/bugs/21804"> Muted sound after dist-upgrade from Hoary to Breezy</ulink>.</para></listitem>
+			</itemizedlist>
+
+			<para>Om du inte hittar något i listan över öppna buggar kan du försöka leta i listan över stängda. Känn dig inte nedslagen om du inte hittar några kopior särskillt snabbt i början. Efter ett tag lär du dig att känna igen de vanligaste och kan identifiera dem enklare.</para>
+
+			<note><para>Om du stöter på en bugg som har en hemsk/korkad titel, formulera om den så att folk hittar den snabbare.</para></note>
+
+		</sect2>
+
+		<sect2>
+			<title>Påminnelse om Sammarbetsavtalet</title>
+			
+			<para>Tänk på att sammarbetsavtalet även gäller konversationer i buggrapporter. Om du får syn på människor som är nedlåtande, skicka dem till <ulink url="http://www.ubuntu.com/community/conduct">Ubuntus sammarbetsavtal</ulink>.</para>
+
+		</sect2>
+
+		<sect2>
+			<title>Hantera status</title>
+
+			<para>As a bug triager or developer bug status an important tool to categorize bugs and have a
+				good overview of the state of packages and software.</para>
+
+			<para>Här är en kort lista med förklaringar till de olika statusarna:</para>
+
+			<itemizedlist>
+				
+				<listitem><para><emphasis role="bold">Unconfirmed:</emphasis> Alla buggar startar med den här statusen. Buggar märkta med "Unconfirmed" saknar ibland information, är inte redo, eller är inte bekräftade än. De flesta av dem har inte blivit sorterade.</para></listitem>
+				
+				<listitem><para><emphasis role="bold">Needs Info:</emphasis> Om du måste ställa frågor till den som rapporterade buggen, sätt status på buggen till "Needs Info". En vanlig uppgift för "Needs Info"-buggar är att ställa frågor. Om du inte får några svar efter en tid, stäng buggen med kommentaren "Om du har mer information om den här buggen, öppna den igen."</para></listitem>
+
+				<listitem><para><emphasis role="bold">Rejected:</emphasis> Buggar märkta med "Rejected" är stängda. Se till att trippelkolla en bugg innan du märker den med det.</para></listitem>
+
+				<listitem><para><emphasis role="bold">Confirmed:</emphasis> Buggar som är bekräftade märks med "Confirmed". För att bekräfta en bugg måste någon annan göra det. Bekräfta inte dina egna buggar.</para></listitem>
+
+				<listitem><para><emphasis role="bold">In Progress:</emphasis> Om du börjar jobba med en bugg, sätt statusen till "In Progress" så att folk får reda på att någon jobbar med buggen.</para></listitem>
+				  
+				<listitem><para><emphasis role="bold">Fix Committed:</emphasis> För projekt uppströms betyder det här att fixen finns i CVS/SVN/bzr eller tillagd någon annan stans. För paketunderhållare innebär det att ändringarna väntar på att laddas upp (det betyder samma sak som PENDINGUPLOAD i Bugzilla)</para></listitem>
+    
+				<listitem><para><emphasis role="bold">Fix Released:</emphasis> För uppströmsprojekt betyder det här att en utgåvo-tarboll har släppts och är tillgänglig för allmänheten. För paketunderhållare betyder det här att en fix har blivit uppladdad. Tveka inte att lägga till en förändringslogg som en kommentar, så att alla vet vilka ändringar som påverkar deras bugg(ar).</para></listitem>
+
+			</itemizedlist>
+		</sect2>
+
+		<sect2>
+			<title>Managing Importance</title>
+
+			<para>Launchpad uses the following guidelines for assigning importance:</para>
+
+			<itemizedlist>
+				<listitem><para><emphasis role="bold">Untriaged:</emphasis> the bug report has not be triaged yet. This is the default importance for new bugs.</para></listitem>
+
+				<listitem><para><emphasis role="bold">Wishlist:</emphasis> en förfrågan om att lägga till en ny funktion till något av programmen i Ubuntu. Använd det här för buggar som egentligen inte är buggar utan idéer för nya funktioner som inte finns än.</para></listitem>
+
+				<listitem><para><emphasis role="bold">Low:</emphasis> bugs that affect
+						functionality, but to a lesser extent than most
+						bugs</para></listitem>
+ 
+				<listitem><para><emphasis role="bold">Mediam:</emphasis> a functionality
+						bug of the standard variety. Most bugs are of "Medium"
+						severity.</para></listitem>
+
+				<listitem><para><emphasis role="bold">High:</emphasis> a bug that has a
+						severe impact on a small portion of Ubuntu users (estimated) or
+						has a moderate impact on a large portion of Ubuntu users
+						(estimated)</para></listitem>
+	  
+				<listitem><para><emphasis role="bold">Critical:</emphasis> en bugg som har alvarlig påverkan på en stor del av Ubuntuanvändarna</para></listitem>
+
+			</itemizedlist>
+				
+		</sect2>
+		
+	</sect1>
+			
+</chapter>
+

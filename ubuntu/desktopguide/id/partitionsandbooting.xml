@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-id SYSTEM "../../../ubuntu/libs/gnome-menus-id.ent">
+%gnome-menus-id;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="partitions-booting" status="complete">
+	<title>Partisi dan Booting</title>
+		<para>Bagian ini memuat informasi bagaimana mengubah cara komputer Anda bertindak sesaat Anda menyalakannya untuk pertama kali, dan bagaimana mengakses sistem operasi dan partisi lain dari Ubuntu.</para>
+			<sect1 status="complete">
+				<title>Editor Grafik Untuk Partisi</title>
+					<para><application>Gparted</application> adalah perkakas berbasis grafik untuk menyunting partisi cakram keras.</para> 
+					<procedure>
+						<step>
+							<para>Instal paket <application>gparted</application> (lihat <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>	
+							<para>Anda dapat menjalankan aplikasi dengan &gparted;.</para>
+						</step>
+					</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Membuat partisi Windows dapat terbaca dari Ubuntu</title>
+				<para>Partisi Windows seharusnya sudah terbaca secara otomatis dari sistem Ubuntu. Jika ternyata belum, Anda dapat membuatnya agar bisa terbaca dengan menggunakan <application>Disks Manager</application>.</para>
+				<procedure>
+					<step>
+						<para>Buka &disks;.</para>
+					</step>
+					<step>
+						<para>Pilih hard disk yang sesuai, dan klik <guilabel>Partitions</guilabel>.</para>
+					</step>
+					<step>
+						<para>Pilih partisi yang sesuai, dan klik <guilabel>Enable</guilabel>.</para>
+					</step>
+					<step>
+						<para>Untuk meng-unmount partisi, klik <guilabel>Disable</guilabel>.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Membuat partisi Windows terbaca secara otomatis</title>
+				<para>Partisi Windows seharusnya sudah terbaca secara otomatis dari Ubuntu. Jika ternyata belum, prosedur berikut akan membuat partisi menjadi terbaca secara otomatis:</para>
+				<procedure>
+					<step>
+						<para>Baca <xref linkend="listpartitiontables"/></para>
+					</step>
+					<step>
+						<para>Pertama buat direktori dimana partisi tersebut akan dibaca ("mounted"):</para>
+							<screen>
+sudo mkdir /media/windows
+							</screen>
+					</step>
+					<step>
+						<para>Sekarang, backup berkas konfigurasi cakram padat Anda dan buka berkas di dalam editor teks dengan hak akses administratif:</para>
+						<screen>
+sudo cp /etc/fstab /etc/fstab_backup
+sudo gedit /etc/fstab
+						</screen>
+					</step>
+					<step>
+						<para>Tambahkan baris berikut di bagian akhir berkas: <programlisting>/dev/hda1 /media/windows ntfs umask=0222 0 0</programlisting></para>
+						<note>
+							<para>Ganti <emphasis role="bold">/dev/hda1</emphasis> dengan nama peranti yang sesuai untuk partisi Anda.</para>
+							<para>Jika partisi Windows Anda menggunakan sistem berkas FAT32, ganti <emphasis role="bold">ntfs</emphasis> dengan <emphasis role="bold">vfat</emphasis> dalam perintah di atas.</para>
+							<para>Jika Anda mempunyai sistem berkas FAT32, sangat aman untuk mengizinkan akses baca-tulis. Untuk melakukan hal ini ubah nilai <emphasis role="bold">umask</emphasis> menjadi 0000.</para>
+						</note>
+					</step>
+					<step>
+						<para>Simpan berkas (<ulink url="sample/fstab_automountntfs">contoh</ulink>).</para>
+					</step>
+					<step>
+						<para>Perubahan akan berpengaruh sesudah komputer di-restart.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Menjalankan perintah sistem secara otomatis saat startup</title>
+				<para>Terkadang sangat berguna untuk menjalan perintah custom kapan saja saat komputer Anda starts up. Untuk melakukan ini:</para>
+				<procedure>
+					<step>
+						<para>Sunting <application>crontab</application> dengan hak akses administratif (lihat <xref linkend="root-and-sudo"/>):</para>
+							<screen>sudo crontab -e</screen>
+					</step>
+					<step>
+						<para>Masukkan baris berikut:</para>
+							<screen>@reboot /home/user/command</screen>
+					<note>
+						<para>Ganti <filename>/home/user/command</filename> dengan alamat lengkap ke perintah Anda.</para>
+					</note>
+					</step>
+					<step>
+						<para>Simpan berkas dan keluar.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Mengubah sistem operasi baku saat boot</title>
+				<para>Untuk mengubah sistem operasi mana yang digunakan secara default saat komputer starts up, sunting berkas konfigurasi <application>grub</application>.</para>
+				<procedure>
+					<step>
+						<para>Buat backup dari berkas konfigurasi, dan kemudian buka dalam editor teks:</para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+sudo gedit /boot/grub/menu.lst</screen>
+					</step>
+					<step>
+						<para>Cari baris ini:</para>
+						<programlisting>...
+default 0
+...</programlisting>
+					</step>
+					<step>
+						<para>Ganti dengan baris berikut:</para>
+						<programlisting>default X</programlisting>
+						<note><para>Anda harus mengganti X dengan angka, sesuai dengan urutan sistem operasi mana yang ada dalam berkas konfigurasi. Perhitungan dimulai dari 0. Sebagai contoh, jika Anda ingin default sistem operasi adalah yang ada dari baris pertama, ganti X dengan 0. Jika ingin default sistem operasi adalah yang berada di baris kedua, ganti X dengan 1, dan seterusnya.</para></note> 
+					</step>
+					<step>
+						<para>Simpan berkas (<ulink url="sample/menu.list_changedefaultosgrub">contoh</ulink>)</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Mengkonfigurasi startup services</title>
+				<para>Tugas ini membutuhkan hak akses administratif (see <xref linkend="root-and-sudo"/>).</para>
+				<procedure>
+					<step>
+						<para>Jalankan <application>Services Settings</application>: <menuchoice><guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Services</guimenuitem></menuchoice>.</para>
+					</step>
+					<step>
+						<para>Masukkan kata sandi Anda.</para>
+					</step>
+					<step>
+						<para>Pilih service yang ingin dijalankan, kemudian klik <guibutton>OK</guibutton> bila selesai.</para>
+					</step>
+					<step>
+						<para>Untuk kendali yang lebih besar pada boot-up services, instal <application>bum</application> dari repositori<quote>Universe</quote> (lihat <xref linkend="add-applications"/>), dan untuk menjalankannya: <menuchoice><guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Boot-up Manager</guimenuitem></menuchoice>.</para>
+					</step>
+				</procedure>
+			</sect1>
+	<sect1 id="other-hardware" status="complete">
+	    <title>Tip Lainnya</title>
+	    <sect2 id="listpartitiontables" status="complete">
+                <title>Memeriksa penggunaan kapasitas cakram dan menilik tabel partisi</title>
+                    <procedure>
+                        <step>
+                            <para>Buka &disks;.</para>
+                        </step>
+                        <step>
+                            <para>Pilih <guibutton>Harddrive</guibutton>, kemudian tab <guibutton>Partitions</guibutton></para>
+                        </step>
+                        <step>
+                            <para>Setiap partisi terlihat dalam <guilabel>Partition List</guilabel>, dengan kapasitas cakram dan lokasi mount.</para>
+                        </step>
+                    </procedure>
+            </sect2>
+            <sect2 status="complete">
+                <title>Daftar peranti</title>
+                            <para>Untuk melihat daftar peranti yang di-mount, dalam terminal ketik:</para>
+                               <screen>mount</screen>
+			    <para>Daftar ini menampilkan peranti (seperti partisi hard disk), lokasi mount (dimana Anda mengakses berkas), jenis sistem berkas dan opsi untuk mount.</para>
+                            <para>Contoh ini menampilkan partisi hard disk hda2 yang di-mount sebagai '/', dengan jenis sistem berkas ext3. Partisi di-mount dengan dua opsi, satu untuk mengizinkan peranti untuk dibaca dari dan ditulis ke dan opsi yang lain akan me-remount peranti untuk hanya dapat dibaca saja apabila terjadi kesalahan.</para>
+                            <screen><computeroutput>/dev/hda2 on / type ext3 (rw,errors=remount-ro)</computeroutput></screen>				
+                            <para>Untuk melihat daftar peranti PCI:</para>
+                                <screen>lspci</screen>
+                            <para>Untuk melihat daftar peranti USB:</para>
+                                <screen>lsusb</screen>
+            </sect2>
+ 
+            <sect2 status="complete">
+                <title>Mount/unmount CD/DVD-ROMs secara manual, dan menampilkan seluruh berkas/folder tersembunyi dan yang berhubungan dengannya</title>
+                            <para>Diasumsikan bahwa <filename class="devicefile">/media/cdrom0/</filename> adalah lokasi dari CD/DVD-ROM</para>
+                            <para>Untuk me-mount CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo mount /media/cdrom0/ -o unhide</screen>
+                            </para>
+                            <para>Untuk meng-unmount CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo umount /media/cdrom0/</screen>
+                            </para>
+            </sect2>
+	</sect1>
+</chapter>
+

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-fr SYSTEM "../../../ubuntu/libs/gnome-menus-fr.ent">
+%gnome-menus-fr;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="desktop-tips" status="complete">
+			<title>Configuration avancée du bureau</title>
+			  <para>Cette partie donne quelques trucs pour utiliser et personnaliser l'environnement de bureau d'Ubuntu (appelé <application>Gnome</application>) ainsi que le gestionnaire de fichiers (appelé <application>Nautilus</application>).</para>
+
+		<sect1 status="complete">
+				<title>Connexion automatique a démarrage</title>
+				<para>Pour se connecter automatiquement au démarrage :</para>
+				<procedure>
+					<step>
+						<para>Choisissez &login-screen-setup;.</para>
+					</step>
+					<step>
+						<para>Sélectionnez <guibutton>Sécurité</guibutton>, et activez <guilabel>Connexion automatique</guilabel>.</para>
+					</step>
+					<step>
+						<para>Choisissez le compte sur lequel vous connecter.</para>
+					</step>
+				</procedure>
+			<para>Ce n'est pas recommandé pour la plupart des ordinateurs car cela n'est pas sécurisé et peut rendre vos données accessibles aux autres.</para>
+		</sect1>	
+
+		<sect1 status="complete">
+			<title>Ouvrir des fichiers avec les droits d'administrateur depuis le gestionnaire de fichiers</title>
+			<para>Pour ouvrir des fichiers avec les droits de l'administrateur depuis le gestionnaire de fichier, vous devez ajouter un script à <application>Nautilus</application>.</para>
+			<warning><para>Ouvrir des fichiers avec les droits de l'administrateur présente un risque de sécurité. Assurez vous toujours d'être familiarisé avec les fichiers que vous ouvrez.</para></warning>
+			<procedure>
+				<step><para>Créez un nouveau fichier et éditez-le dans le dossier approprié : <screen>gedit $HOME/.gnome2/nautilus-scripts/Ouvrir\ en\ tant\ qu\'administrateur</screen></para>
+				</step>
+				<step>
+						<para>Entrez ces lignes dans le nouveau fichier :</para>
+						<programlisting>for uri in $NAUTILUS_SCRIPT_SELECTED_URIS; do
+gksudo "gnome-open $uri" &amp;
+done</programlisting>
+				</step>
+				<step>
+						<para>Enregistrez le fichier modifié (<ulink url="sample/nautilus_open_as_administrator">un exemple</ulink>)</para>
+				</step>
+				<step>
+						<para>Rendez le fichier modifié exécutable : <screen>chmod +x $HOME/.gnome2/nautilus-scripts/Ouvrir\ en\ tant\ qu\'administrateur</screen></para>
+				</step>
+			</procedure>
+						<para>Vous pouvez maintenant ouvrir un fichier en tant qu'administrateur en faisant un clic droit dessus et en choisissant <menuchoice><guimenuitem>Scripts</guimenuitem>
+									<guimenuitem>Ouvrir en tant qu'administrateur</guimenuitem></menuchoice>.</para>
+		</sect1>
+     <sect1 id="fonts" status="complete">
+		<title>Installer des polices de caractères supplémentaires</title>
+				<para>Cette section décrit l'installation de polices supplémentaires depuis les archives Ubuntu.</para>
+							<para>Pour les <emphasis role="bold">polices internationales</emphasis>, installez ces paquets depuis le dépôt <quote>Universe</quote> (voir <xref linkend="add-applications"/>) :</para>
+			<itemizedlist>
+				<listitem><para>xfonts-intl-arabic</para></listitem>
+				<listitem><para>xfonts-intl-asian</para></listitem>
+				<listitem><para>xfonts-intl-chinese</para></listitem>
+				<listitem><para>xfonts-intl-chinese-big</para></listitem>
+				<listitem><para>xfonts-intl-european</para></listitem>
+				<listitem><para>xfonts-intl-japanese</para></listitem>
+				<listitem><para>xfonts-intl-japanese-big</para></listitem>
+				<listitem><para>xfonts-intl-phonetic</para></listitem>
+			</itemizedlist>
+							<para>Pour les <emphasis role="bold">polices Microsoft TrueType</emphasis>, installez le paquet <application>msttcorefonts</application> depuis le dépôt <quote>Multiverse</quote> (Voyez <xref linkend="add-applications"/>).</para>
+							<para>Pour les <emphasis role="bold">polices de caractères Ghostscript</emphasis>, installez le paquet <application>gsfonts-x11</application> (voir <xref linkend="add-applications"/>).</para>
+							<para>Après avoir installé de nouvelles polices, reconstruisez les informations sur les polices en saisissant dans un terminal :</para>
+							<screen>sudo fc-cache -f -v</screen>
+			<para>Si vous préférez télécharger des polices individuelles à la main, vous pouvez les installer simplement et facilement en ouvrant un gestionnaire de fichier, et en entrant <application>fonts:///</application> dans la barre d'adresse (voir <ulink type="help" url="ghelp:user-guide#nautilus-location-bar">manuel d'utilisation du gestionnaire de fichier</ulink> pour savoir comment utiliser la barre d'adresse). Vous pouvez alors simplement glisser-déposer la police téléchargée dans le groupe des polices existantes.</para>
+		</sect1>
+		<sect1 status="complete">
+				<title>Archiveur RAR</title>
+					<procedure>
+						<step>
+							<para>Installez le paquet rar depuis le dépôt <quote>Multiverse</quote> (voir <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>
+							<para>Lancez : <screen>
+sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen></para>
+						</step>
+						<step>
+							<para>Pour ouvrir un fichier rar, double-cliquez dessus.</para>
+						</step>
+					</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Petites applications (applets) pour une utilisation avancée du bureau</title>
+				<para><application>gDesklets</application> est un outil qui permet d'afficher sur le bureau des mini-programmes (desklets), comme les prévisions météo, les dernières nouvelles, des informations système ou encore une interface pour contrôler la musique, en associant utilité et beauté visuelle.</para>
+				<procedure>
+					<step>
+							<para>Installez les paquets <application>gdesklets</application> et <application>gdesklets-data</application> depuis le dépôt <quote>Universe</quote> (Voyez <xref linkend="add-applications"/>).</para>
+					</step>
+					<step>
+							<para>Choisissez : menuchoice&gt;<guimenu>Applications</guimenu>
+									<guisubmenu>Accessoires</guisubmenu>
+									<guimenuitem>gDesklets</guimenuitem></para>
+					</step>
+					<step><para>Pour plus d'informations, visitez le <ulink url="http://www.gdesklets.org/">site Internet de gDesklets</ulink></para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Masquer les documents récents dans le menu Raccourcis</title>
+				<para>Pour masquer les <guilabel>Documents récents</guilabel> dans le menu <guilabel>Raccourcis</guilabel>, ouvrez un terminal et saisissez la commande :</para><screen>chmod 400 ~/.recently-used</screen>
+				<para>Pour réafficher le menu, lancez la commande :</para><screen>chmod 600 ~/.recently-used</screen>
+		</sect1>
+		<sect1 status="complete">
+			<title>Faire apparaître les icônes « Poste de travail », « Dossier personnel » et « Corbeille » sur le bureau de Gnome</title>
+				<procedure>
+					<step>
+						<para>Ouvrez l'<application>édtieur de configuration</application>, en lançant le programme <filename>gconf-editor</filename> (voir <ulink type="help" url="ghelp:user-guide#tools-run-app">manuel d'utilisation du lanceur d'applications</ulink> pour obtenir de l'aide sur la façon de lancer une application sans passer par le menu).</para>
+					</step>
+					<step>
+						<para>Choisissez <menuchoice><guimenu>apps</guimenu>
+									<guisubmenu>nautilus</guisubmenu>
+									<guimenuitem>desktop</guimenuitem></menuchoice>.</para>
+					</step>
+					<step>
+						<para>Cochez les cases <guilabel>computer_icon_visible</guilabel>, <guilabel>home_icon_visible</guilabel>, et <guilabel>trash_icon_visible</guilabel>. Les changements prennent effet immédiatement.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 id="restartgnomewithoutreboot" status="complete">
+			<title>Redémarrer Gnome sans avoir à redémarrer l'ordinateur</title>
+			<procedure>
+				<step>
+						<para>Enregistrez et fermez toutes les applications en cours.</para>
+			          </step>
+			          <step>
+            				<para>Utilisez le raccourci clavier <keycombo><keycap>Ctrl</keycap>
+						<keycap>Alt</keycap>
+						<keycap>Retour arrière</keycap></keycombo> pour redémarrer GNOME.</para>
+           			</step>
+           			<step>
+            				<para>Si <keycombo><keycap>Ctrl</keycap>
+                <keycap>Alt</keycap>
+                <keycap>Retour arrière</keycap></keycombo> est désactivé, tapez <screen>sudo /etc/init.d/gdm restart</screen></para>
+						<para>(voir <xref linkend="disableCtrlAltBackspace"/> pour désactiver <keycombo><keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>Retour arrière</keycap></keycombo>.)</para>
+				</step>
+			</procedure>
+		</sect1>
+		<sect1 id="disableCtrlAltBackspace" status="complete">
+			<title>Empêcher le raccourci clavier Ctrl-Alt-Retour arrière de redémarrer X</title>
+				<procedure>
+					<step>
+						<para>Faites une copie de sauvegarde de votre fichier <filename>/etc/X11/xorg.conf</filename> existant : <screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup</screen></para>
+					</step>
+					<step>
+					<para>Ouvrez <filename>/etc/X11/xorg.conf</filename> avec la commande : <screen>gksudo gedit /etc/X11/xorg.conf</screen></para>
+					</step>
+					<step>
+						<para>Ajoutez les lignes suivantes à la fin du fichier : <programlisting>Section	"ServerFlags"
+Option	"DontZap"	"yes"
+EndSection</programlisting></para>
+					</step>
+					<step>
+						<para>Enregistrez le fichier modifié (<ulink url="sample/xorg.conf_disablectrlaltbackspacegnome">un exemple</ulink>).</para>
+					</step>
+					<step>
+						<para>Les changements prendront effet lors de la prochaine connexion à Gnome. Si vous voulez qu'ils prennent effet immédiatement, redémarrez Gnome manuellement. (voir <xref linkend="restartgnomewithoutreboot"/>.)</para>
+					</step>
+				</procedure>
+		</sect1>
+
+	</chapter>
+

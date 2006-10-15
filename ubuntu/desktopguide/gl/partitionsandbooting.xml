@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="partitions-booting" status="complete">
+	<title>Particións e Arranque</title>
+		<para>Esta sección contén información acerca de como mudar a maneira en que se comporta o ordenador ao encendelo pola primeira vez e como acceder a outros sistemas operativos e particións desde Ubuntu.</para>
+			<sect1 status="complete">
+				<title>Editor Gráfico de Particións</title>
+					<para>O <application>Gparted</application> é unha ferramenta gráfica para editar as particións do disco.</para> 
+					<procedure>
+						<step>
+							<para>Instala o pacote <application>gparted</application> (consulta <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>	
+							<para>Podes executar a aplicación con &gparted;.</para>
+						</step>
+					</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Facer que as particións de Windows sexan accesíbeis desde Ubuntu</title>
+				<para>As particións de Windows deberían estar disponíbeis automaticamente desde calquer sistema Ubuntu. De non ser así, pódelas facer accesíbeis utilizando o <application>Xestor de Discos</application>.</para>
+				<procedure>
+					<step>
+						<para>Abrir &disks;.</para>
+					</step>
+					<step>
+						<para>Escolle o disco duro apropiado e clica en <guilabel>Particións</guilabel>.</para>
+					</step>
+					<step>
+						<para>Seleccione a partición relevante e clica <guilabel>Activar</guilabel>.</para>
+					</step>
+					<step>
+						<para>Para desmontar a partición, clica <guilabel>Desactivar</guilabel>.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Facer que as particións de Windows estean disponíbeis automaticamente</title>
+				<para>As particións de Windows deberían estar disponíbeis automaticamente desde calquer sistema Ubuntu. De non ser así, o procedemento seguinte deberíaas facer accesíbeis automaticamente:</para>
+				<procedure>
+					<step>
+						<para>Le <xref linkend="listpartitiontables"/></para>
+					</step>
+					<step>
+						<para>En primeiro lugar, crea un directorio no que a partición vai estar disponíbel ("montada":</para>
+							<screen>
+sudo mkdir /media/window
+							</screen>
+					</step>
+					<step>
+						<para>A continuación, fai unha copia de seguranza do ficheiro de configuración do teu disco e abre o ficheiro nun editor de texto con privilexios administrativos:</para>
+						<screen>
+sudo cp /etc/fstab /etc/fstab_backup
+sudo gedit /etc/fstab
+						</screen>
+					</step>
+					<step>
+						<para>Engada a liña seguinte ao final do ficheiro: <programlisting>/dev/hda1 /media/windows ntfs umask=0222 0 0</programlisting></para>
+						<note>
+							<para>Substitúe <emphasis role="bold">/dev/hda1</emphasis> polo nome de dispositivo correcto para a túa partición.</para>
+							<para>Se a túa partición Windows usa o sistema de ficheiros FAT32, substitúe <emphasis role="bold">ntfs</emphasis> por <emphasis role="bold">vfat</emphasis> no comando anterior.</para>
+							<para>Se tes un sistema de ficheiros FAT32, tamén é seguro permitir acceso de lectura-escrita. Para iso, modifica o valor de <emphasis role="bold">umask</emphasis> para 0000.</para>
+						</note>
+					</step>
+					<step>
+						<para>Garda o ficheiro editado (<ulink url="sample/fstab_automountntfs">un exemplo</ulink>).</para>
+					</step>
+					<step>
+						<para>As alteracións terán efecto así que se reinicie o computador.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Executar un comando de sistema automaticamente no arranque</title>
+				<para>Ás veces pode resultar útil executar un comando personalizado sempre que se inicie o computador. Para isto:</para>
+				<procedure>
+					<step>
+						<para>Edita <application>crontab</application> con priviléxios administrativos (consulta <xref linkend="root-and-sudo"/>):</para>
+							<screen>sudo crontab -e</screen>
+					</step>
+					<step>
+						<para>Insire a liña seguinte:</para>
+							<screen>@reboot /home/usuario/comando</screen>
+					<note>
+						<para>Substitúe <filename>/home/usuario/comando</filename> co enderezo completo para o teu comando.</para>
+					</note>
+					</step>
+					<step>
+						<para>Grava o ficheiro e sae.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Mudar de sistema operativo por omisión ao inicio</title>
+				<para>Para cambiar o sistema operativo co que o computador se inicia, modifica o ficheiro de configuración de <application>grub</application>.</para>
+				<procedure>
+					<step>
+						<para>Fai unha copia de seguranza do ficheiro de configuración e a continuación ábreo no editor de texto:</para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+sudo gedit /boot/grub/menu.lst</screen>
+					</step>
+					<step>
+						<para>Procura esta liña:</para>
+						<programlisting>...
+default 0
+...</programlisting>
+					</step>
+					<step>
+						<para>Substitúe pola liña seguinte:</para>
+						<programlisting>X por omisión</programlisting>
+						<note><para>Debes substituir X por un número, de acordo coa orde na que aparezan os teus sistemas operativos no ficheiro de configuración. Debes comezar a contar desde o 0. Por exemplo, se queres que o sistema operativo por omisión sexa o primeiro da lista, substitúe X por 0; se queres que o sistema operativo por omisión sexa o segundo da lista, substitúe X por 1, e así.</para></note> 
+					</step>
+					<step>
+						<para>Gardar o ficheiro modificado (<ulink url="sample/menu.list_changedefaultosgrub">un exemplo</ulink>)</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Configurar os servizos de inicio</title>
+				<para>Esta acción require privilexios administradivos (consulta <xref linkend="root-and-sudo"/>).</para>
+				<procedure>
+					<step>
+						<para>Executa <application>Configuración dos Servizos</application>: <menuchoice><guimenu>Sistema</guimenu>
+								<guisubmenu>Administración</guisubmenu>
+								<guimenuitem>Servizos</guimenuitem></menuchoice>.</para>
+					</step>
+					<step>
+						<para>Introduce o teu contrasinal</para>
+					</step>
+					<step>
+						<para>Escolle os servizos que queres executar e logo clica en <guibutton>De acordo</guibutton> cando remates.</para>
+					</step>
+					<step>
+						<para>Para teres un control maior sobre os servizos de arranque, instala <application>bum</application> desde o repositorio <quote>Universe</quote> (consulta <xref linkend="add-applications"/>), e execútao:
+<menuchoice><guimenu>Sistema</guimenu>
+								<guisubmenu>Administración</guisubmenu>
+								<guimenuitem>Xestor do Arranque</guimenuitem></menuchoice>.</para>
+					</step>
+				</procedure>
+			</sect1>
+	<sect1 id="other-hardware" status="complete">
+	    <title>Outras Suxestións</title>
+	    <sect2 id="listpartitiontables" status="complete">
+                <title>Verificar a utilizaicón de espazo en disco e ver a tabela de particións</title>
+                    <procedure>
+                        <step>
+                            <para>Abrir &disks;.</para>
+                        </step>
+                        <step>
+                            <para>Selecciona o <guibutton>Disco Ríxido</guibutton>, e depois a pestana <guibutton>Particións</guibutton></para>
+                        </step>
+                        <step>
+                            <para>Cada partición aparecerá listada baixo <guilabel>Lista de Particións</guilabel>, co espazo en disco e o punto de montaxe.</para>
+                        </step>
+                    </procedure>
+            </sect2>
+            <sect2 status="complete">
+                <title>Listar dispositivos</title>
+                            <para>Para veres unha lista dos dispositivos montados, introduce isto nun terminal:</para>
+                               <screen>mount</screen>
+			    <para>A listaxe mostra o dispositivo (tal como unha partición do disco ríxido), o punto de montaxe (onde accedes aos seus ficheiros), o tipo de sistema de ficheiros e as opcións de montaxe.</para>
+                            <para>Este exemplo mostra a partición de disco ríxido hda2 montada como "/", co tipo de sistema de ficheiros ext3. A partición está montada con dúas opcións, unha para permitir qu o dispositivo poida ser lido e escrito e a outra para voltar a montar o dispositivo como apenas de lectura se se produciren erros.</para>
+                            <screen><computeroutput>/dev/hda2 on / type ext3 (rw,errors=remount-ro)</computeroutput></screen>				
+                            <para>Para listar dispositivos PCI:</para>
+                                <screen>lspci</screen>
+                            <para>Para listar dispositivos USB:</para>
+                                <screen>lsusb</screen>
+            </sect2>
+ 
+            <sect2 status="complete">
+                <title>Montar/desmontar CD/DVD-ROMs manualmente, e mostrar todos os ficheiros/cartafois asociados e agochados.</title>
+                            <para>A asumir que <filename class="devicefile">/media/cdrom0/</filename> é a localización do CD/DVD-ROM</para>
+                            <para>Para montar un CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo mount /media/cdrom0/ -o unhide</screen>
+                            </para>
+                            <para>Para desmontar un CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo umount /media/cdrom0/</screen>
+                            </para>
+            </sect2>
+	</sect1>
+</chapter>
+

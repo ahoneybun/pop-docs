@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+        "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="ps-chap" status="writing">
+        <title>Patch Systems</title>
+        <para>Quite often it turns out that the upstream source needs to be patched, either to adjust the program to work with Ubuntu or to fix bugs in the source before they are fixed upstream. But how should we reperesent these changes? We could simply make the changes in the unpacked source package, in which case the patch would be expressed in the <filename>.diff.gz</filename> file. However, this is not ideal. If there is more than one patch you loose the ability to seperate the patches as you just see one big diff that also contains the packaging files (in <filename>debian/</filename>. This can make it more difficult when you want to send the patches upstream. It is also very convenient to seperate the author's source from the changes made for Ubuntu. The best place to put this information is in the <filename>debian/</filename> that is already used for the packaging files. For the rest of this chapter we will be looking at the various ways to set up patches in this way.</para>
+	
+	<sect1 id="ps-scratch" status="writing">
+		<title>Patching Without a Patch System</title>
+		<para>As was mentioned above, one can patch the original source by simply making the changes in the unpacked source directory. A real-life example of this is <application>cron</application>. If you grab <application>cron</application>'s source package and look at the <filename>.diff.gz</filename> you will see that several of the original source's files were changed.</para>
+
+		<screen>
+apt-get source cron
+zgrep +++ cron*.diff.gz
+</screen>
+
+		<para>But as we mentioned before this is not really the best way to represent patches. One better way is to create individual patch files, but them in <filename>debian/patches/</filename> and apply the patches (using <application>patch</application>) in <filename>debian/rules</filename>. This is what is done for <application>udev</application>:</para>
+		
+		<screen>
+apt-get source udev
+zgrep +++ udev*.diff.gz
+ls udev*/debian/patches/
+less udev*/debian/rules
+</screen>
+		
+		<para>The <filename>rules</filename> file has the following rules for applying and unapplying the patches:</para>
+		<screen>
+# Apply patches to the package
+patch: patch-stamp
+patch-stamp:
+        dh_testdir
+        @patches=debian/patches/*.patch; for patch in $$patches; do \
+                test -f $$patch || continue; \
+                echo "Applying $$patch"; \
+                patch -stuN -p1 &lt; $$patch || exit 1; \
+        done
+        touch $@
+
+# Remove patches from the package
+unpatch:
+        dh_testdir
+        @if test -f patch-stamp; then \
+                patches=debian/patches/*.patch; \
+                for patch in $$patches; do \
+                        reversepatches="$$patch $$reversepatches"; \
+                done; \
+                for patch in $$reversepatches; do \
+                        test -f $$patch || continue; \
+                        echo "Reversing $$patch"; \
+                        patch -suRf -p1 &lt; $$patch || exit 1; \
+                done; \
+                rm -f patch-stamp; \
+        fi
+</screen>
+	
+		<para>That is all very nice, but how do we create new patches for <application>udev</application> using this scheme? The general approach is:</para>
+		<orderedlist>
+			<listitem><para>copy the clean source tree to a temporary directory</para></listitem>
+			<listitem><para>apply all patches up to the one you want to edit; if you want to create a new patch, apply all existing ones (this is necessary since in general patches depend on previous patches)</para>
+			<para>if you want, you can use debian/rules for this: remove the patches that come *after* the one you want to edit, and call 'debian/rules patch'. The actual name for the patch target varies, I have seen the following ones so far: patch setup apply-patches unpack patch-stamp. You have to look in <filename>debian/rules</filename> how it is called.</para></listitem>
+			<listitem><para>copy the whole source tree again: 
+			<screen>cp -a /tmp/old /tmp/new</screen></para></listitem>
+			<listitem><para>go into /tmp/new, do your modifications</para></listitem>
+			<listitem><para>go back into your original source tree, generate the patch with:
+			<screen>diff -Nurp /tmp/old /tmp/new &gt; mypatchname.patch</screen></para></listitem>
+		</orderedlist>
+
+		
+		<sect2>
+			<title>Example 1.</title>
+			<para>Let us make a new patch for <application>udev</application> called <filename>90_penguins.patch</filename> which replaces <emphasis>Linux</emphasis> with <emphasis>Penguin</emphasis> in the <application>udev</application> <filename>README</filename> file:</para>
+			<screen>
+cd udev*/
+cp -a . /tmp/old
+pushd /tmp/old
+debian/rules patch
+cp -a . /tmp/new; cd ../new
+sed -i 's/Linux/Penguin/g' README
+cd ..
+diff -Nurp old new &gt; 90_penguins.patch
+popd
+mv /tmp/90_penguins.patch debian/patches
+rm -rf /tmp/old /tmp/new
+</screen>
+		</sect2>
+		
+		<sect2>
+			<title>Example 2.</title>
+			<para>What happens if we want to edit an existing patch? We can us a similar procedure as Example 1 but we will apply the patch to be edited first:
+			<screen>
+cp -a . /tmp/old
+pushd /tmp/old
+cp -a . /tmp/new; cd ../new
+patch -p1 &lt; debian/patches/10-selinux-include-udev-h.patch
+sed -i '1 s/$/***** HELLO WORLD ****/' udev_selinux.c
+cd ..
+diff -Nurp old new &gt; 10-selinux-include-udev-h.patch
+popd
+mv /tmp/10-selinux-include-udev-h.patch debian/patches
+rm -rf /tmp/old /tmp/new
+
+</screen>
+			</para>
+			<para>So this way of patching the source, while technically fine, can become very complicated and unmanageable. To make patching easier and more straightforward patch systems were developed. We will take a look at couple popular ones.</para>
+		</sect2>
+	</sect1>
+	<sect1>
+		<title>CDBS with Simple Patchsys</title>
+		<para>The CDBS build helper system (see <xref linkend="basic-cdbs"/> ) has a very simple patch system built in. You simply need to add an include for <emphasis>simple-patchsys.mk</emphasis> in <filename>debian/rules</filename>. An example is <application>pmount</application>. Its entire <filename>rules</filename> looks like:
+		<screen>
+#!/usr/bin/make -f
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/autotools.mk
+include /usr/share/cdbs/1/rules/simple-patchsys.mk
+
+common-post-build-arch::
+        # Generate a POT file
+        cd po; intltool-update -p --verbose
+</screen>
+		</para>
+		<para>Simple patchsys also has a patch editor built in called <application>cdbs-edit-patch</application>. You can give <application>cdbs-edit-patch</application> either the name of an existing patch to edit or a new patch to create. It will apply the existing patch, if it exists, and put you in a new shell. You can then make any changes you want added to the patch and finally type <emphasis>Ctrl-D</emphasis> to exit the shell and create the new patch. The patches are stored in <filename>debian/patches/</filename></para>
+	</sect1>
+		
+	<sect1>
+		<title>dpatch</title>
+		<para>A popular patch system is <application>dpatch</application>. It has a <application>dpatch-edit-patch</application> script like <application>cdbs</application> has but stores the patches a little differently. It uses a file named <filename>debian/patches/00list</filename> to find the name and order of patches to apply. This means you can order your patches in whichever way you want and can disable a patch without removing it altogether. However, it also mean you need to update <filename>00list</filename> if you add a patch. If <application>dpatch-edit-patch</application> is called with two arguments it will edit/create the the patch named by the first argument relative to the patch named by the second argument. In other words:
+		<screen>dpatch-edit-patch new.dpatch old.dpatch</screen>
+			will apply patches up to <filename>old.dpatch</filename> and then create <filename>new.dpatch</filename>. Note that <application>dpatch</application> patches usually have a .dpatch suffix. This is because <application>dpatch</application> stores the patches in a slightly different format then a normal patch that adds a special header.</para>
+		<para>A real-life example of dpatch usage is the <application>xterm</application> package.</para>
+	</sect1>
+
+	<sect1>
+		<title>Patching other people's packages</title>
+		<para>The most important thing to keep in mind when patching packages maintained by other people is to keep the patch system (or lack thereof) that the maintainer has set up. This will ensure consistency and make the package maintainer more likely to accept your patch.</para>
+			<para>It is also a good idea to separate patches logically rather than creating one giant patch. If the upstream authors apply one of your changes but not another it is much easier to just drop a patch then edit a monolithic patch to update it.</para>
+	</sect1>
+</chapter>
+

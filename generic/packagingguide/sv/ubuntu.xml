@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="ubuntu-chap" status="complete">
+	<title>Ubuntupaketering</title>
+
+	<sect1 id="ubuntu-upload" status="complete">
+		<title>Uppladdning och granskning</title>
+
+		<para>Once you have created a source package (either a completely new package or
+			just an update/bugfix), you will want to distribute your
+			package so that other people can enjoy your hard work. The most effective way
+			to do that for <phrase>Ubuntu</phrase> is to contribute your package to the Universe repository.
+			The community developers who are responsible for the Universe repository are
+			known as Masters of the Universe (<ulink url="https://wiki.ubuntu.com/MOTU">MOTU</ulink>). <ulink url="http://revu.tauware.de">REVU</ulink> is a web-based tool that gives
+			people a place to upload their source packages for other people to look at and
+			for MOTUs to review in a structured manner.</para>
+
+		<sect2 id="contribute-as-uploader">
+			<title>Bidrag som en uppladdare</title>
+		
+			<para>Först måste du lägga din <ulink url="https://wiki.ubuntu.com/GPGKey">GPG-nyckel</ulink> till REVU:s nyckelring. Det här steget ser till att dina paket verkligen kommer från dig och hjälper till med att hålla koll på uppladdningar.</para>
+	
+			<para>REVU uses your <ulink url="https://launchpad.net">Launchpad</ulink> account to look up your <application>gpg</application> key so make sure you have a Launchpad account and you have put your <application>gpg</application> key in your user profile there. Once this is one you can join the <ulink url="https://launchpad.net/people/ubuntu-universe-contributors">Universe Contributors</ulink> team and then email <ulink url="mailto:admin@tiber.tauware.de">admin@tiber.tauware.de</ulink> asking for your <application>gpg</application> key to be updated on REVU. When this is done you will be able to upload your packages. You don't	need a password to upload packages, only to log in to the website and to reply to comments.</para>
+
+			<note><para>Det är inte nödvändigt att din nyckel är signerad av andra för att du ska få ladda upp till REVU, men det är en bra idé att göra det någon gång.</para></note>
+			
+			
+			<sect3 id="upload-your-packages">
+				<title>Ladda upp dina paket</title>
+
+				<para>Uploading to REVU uses <application>dput</application>. The <phrase>Ubuntu</phrase>
+					version of <application>dput</application> already knows about REVU so
+					you do not need to change any configuration files. Only upload signed
+					packages, and unlike other repositories, you should always include the
+					original tarball, otherwise reviewers will not be able to look at your
+					extracted source package. In order to do so, use the options "-S -sa"
+					with <application>debuild</application> or
+					<application>dpkg-buildpackage</application> to build only the source
+					package and to include the original source in the upload.</para>
+				
+				<para>När källpaketet är byggt kan du använda <application>dput</application> med de ovastående konfigurationsfilsändringarna för att ladda upp det, genom att bara specificera filen <filename>_source.changes</filename> som skapades:</para>
+
+				<screen>dput revu *_source.changes</screen>
+
+				<note><para>Om du laddar upp ett paket igen (efter att ha blivit granskad) kan du få ett felmeddelande i stil med:</para>
+					
+				<screen>
+Upload package to host revu
+Already uploaded to tauware.de
+Doing nothing for myapp_source.changes</screen>
+			
+				<para>För att fixa det här, lägg till växeln -f för att tvinga dput att ladda upp, eller ta bort filen <filename>.upload</filename> som skapades av <application>dput</application>.</para></note>
+			
+				<para>Processing of uploads is done every five minutes, so if your upload does not show up,
+				please contact the REVU administrators by email, or join the Freenode IRC channel #ubuntu-motu.</para>
+		
+			</sect3>
+		
+			<sect3 id="howto-login">
+				<title>Hur du loggar in i REVU</title>
+			
+				<para>När du har gjort din första uppladdning registreras du automatiskt i databasen och tilldelas ett slumpat lösenord. På <ulink url="http://revu.tauware.de">REVU:s</ulink> webbsida använder du samma e-postadress du använde i ändringsfilen för din uppladdning som inloggningsnamn, och klickar på länken 'recover password'. Du kommer att tas till en sida som har ditt krypterade lösenord med instruktioner om hur du dekrypterar det.</para>
+				
+			</sect3>
+
+			<sect3 id="view-and-comment-uploads">
+				<title>Visa och kommentera uppladdningar</title>
+			
+				<para>Paket som laddas upp till REVU är offentliga. Du kan bläddra bland dem utan att logga in i systemet, men för att kommentera uppladdningar måste du vara en registrerad användare. Som en uppladdare kan du bara kommentera dina egna uppladdningar. Det här kan vara användbart för att ge granskare information om ändringarna du har gjort mellan två versioner av dina paket.</para>
+
+			</sect3>
+
+			<sect3 id="additional-rules">
+				<title>Extra regler</title>
+		
+				<itemizedlist>
+
+					<listitem><para>Du måste ha granskat programmet på jakt efter kända säkerhetshål och måste skicka med patchar för dem.</para></listitem>
+					
+					<listitem><para>Paketet kan stoppas på grund av kända säkerhetsproblem.</para></listitem>
+					
+					<listitem><para>Du måste ha inkluderat en copyright- och en license-fil, och de måste tillåta att paket tas med i Universe-komponenten och distribueras via Ubuntus speglar.</para></listitem>
+					
+					<listitem><para>The package must be known to build on top of the main component
+							of the current <phrase>Ubuntu</phrase> stable release. It is permissible to require other
+							packages already in Universe.</para></listitem>
+				</itemizedlist>
+			</sect3>
+
+			<sect3 id="getting-help">
+				<title>Få hjälp</title>
+				<para>If you need assistance on these steps, or if you have questions about REVU, you can
+					ask in #ubuntu-motu on the Freenode IRC network.</para>
+			</sect3>
+
+		</sect2>
+
+	</sect1>
+
+	<sect1 id="ubuntu-sync" status="complete">
+		<title>Merges och syncs</title>
+
+
+
+		<important><para><emphasis role="bold">Krav:</emphasis> build-essential, automake, gnupg, lintian, fakeroot, patchutils, debhelper och <xref linkend="gs-pbuilder"/>.</para></important>
+		
+		<para><phrase>Ubuntu</phrase> is based on the Debian Linux distribution and uses the same package
+			management system (APT). At the beginning of each <phrase>Ubuntu</phrase> development cycle, the
+			packages in <phrase>Ubuntu</phrase> are updated to those in the Debian unstable branch. However,
+			because <phrase>Ubuntu</phrase> is not the same as Debian, some of the packages need to
+			be modified to work in <phrase>Ubuntu</phrase>. There might also be bug fixes that <phrase>Ubuntu</phrase>
+			developers have introduced into the packages. You can determine whether this has
+			taken place by noting the package version. If the package version includes
+			ubuntu in it (an example would be gimp-2.2.9-3ubuntu2), then the <phrase>Ubuntu</phrase>
+			developers have made changes, and it is no longer the same as the Debian package.
+			There are more than 1000 such modified packages in the Universe repository.</para>
+		
+		<para>At the start of each Ubuntu development cycle, a decision is made regarding
+			these Ubuntu versioned packages. Of course if the Debian version hasn't
+			changed since the last <phrase>Ubuntu</phrase> release, then nothing needs to be changed.
+			However, if there is a newer version of the package in Debian, then one
+			of two things should happen. If all of the reasons for Ubuntu modifications
+			(bug fixes, dependencies, etc.) are fixed in the new Debian package,
+			then we can just take the Debian package directly. This decision is called a
+			<emphasis>sync</emphasis>. However, if the new Debian version has the same
+			issues that caused the Ubuntu version to be made, then those changes need
+			to be applied to the new Debian version, too. This decision is called <emphasis>merging</emphasis>.
+		</para>
+		<sect2 id="merge-tutorial">
+			<title>Guide i mergning</title>
+			<para>Mergningsprocessen går ut på att titta på ändringarna i källpaketen för både Debian och Ubuntu och avgöra vad som har ändrats och vilka ändringar som är Ubuntu-specifika. Vi kan titta på ett exempel, ett populärt CD-skapningsprogram som heter <application>xcdroast</application>.</para>
+			<para>För att börja, skapa en mapp för vårt projekt och gå dit:</para>
+			<screen>
+mkdir ~/xcdroast
+cd ~/xcdroast</screen>
+			<para>Ladda nu ner alla källpaket som är inblandade till den här katalogen:</para>
+			<itemizedlist>
+				<listitem><para>Källkodstarbollen av <application>xcdroast</application> som används av alla versioner:</para>
+					<itemizedlist>
+						<listitem>
+<para><ulink url="http://snapshot.debian.net/archive/2006/01/16/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15.orig.tar.gz">xcdroast_0.98+0alpha15.orig.tar.gz</ulink></para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>The <phrase>Ubuntu</phrase> Breezy source package files:</para>
+					<itemizedlist>
+						<listitem><para>
+<ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.dsc">xcdroast_0.98+0alpha15-1.1ubuntu1.dsc</ulink></para>
+						</listitem>
+						<listitem><para>
+<ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz">xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz</ulink></para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>Källpaketfilerna för det Debian-paket som Breezy-versionen är baserad på:</para>
+						<itemizedlist>
+							<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.diff.gz">xcdroast_0.98+0alpha15-1.1.diff.gz</ulink></para>
+							</listitem>
+							<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.dsc">xcdroast_0.98+0alpha15-1.1.dsc</ulink></para>
+							</listitem>
+						</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>Källpaketfilerna för det nya Debian-paketet som Dapper-paketet kommer att baseras på:</para>
+					<itemizedlist>
+						<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-3.dsc">xcdroast_0.98+0alpha15-3.dsc</ulink></para>
+						</listitem>
+						<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-3.diff.gz">xcdroast_0.98+0alpha15-3.diff.gz</ulink></para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+			</itemizedlist>
+			<note><para>Du kan genomföra de här stegen genom att söka efter Debianpaketen på <ulink url="packages.debian.org">packages.debian.org</ulink> och efter Ubuntupaketen på <ulink url="packages.ubuntu.com">packages.ubuntu.com</ulink>.</para></note>
+		<tip><para>Ett väldigt användbart paket att ha installerat när du mergar (eller utför någon form av paketering i Ubuntu) är <application>devscripts</application>. Om du inte har det installerat redan, se till installera det innan du fortsätter.</para></tip>
+			
+			<para>By looking at the <phrase>Ubuntu</phrase> changelog you should be able to see which differences
+				to expect between the Ubuntu package and the Debian package from which it was derived.
+				For xcdroast, the <phrase>Ubuntu</phrase> changelog can be found at
+	<ulink url="http://changelogs.ubuntu.com/changelogs/pool/universe/x/xcdroast/xcdroast_0.98+0alpha15-1.1ubuntu1/changelog">
+					changelogs.ubuntu.com</ulink>. It says that a .desktop file was fixed and properly
+				installed to close a bug reported in
+				<ulink url="https://launchpad.net/malone/bugs/2698">Malone</ulink>.
+			</para>
+			
+			<para>Inspektera nu de faktiska skillnaderna i källpakten:</para>
+			<screen>
+debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-1.1ubuntu1.dsc | \
+	ubuntu.debdiff | less ubuntu.debdiff</screen>
+			
+			<para>The lines that start with - have been removed from the Debian package, and those that start
+				with + have been added to the <phrase>Ubuntu</phrase> package.</para>
+			<para>Det här är vad vi ser:</para>
+			<itemizedlist>
+				<listitem>
+					<para>I debian/rules används install istället för cp för att installera xcdroast-ikonen. Det finns även en ny rad som installerar .desktop-filen.</para>
+				</listitem>
+				<listitem>
+					<para>I debian/changelog består ändringarna av den tillagda ändringsloggsposten.</para>
+				</listitem>
+				<listitem>
+					<para>I debian/dirs har usr/share/applications lagts till för att install-raderna ovan ska fungera som de ska.</para>
+				</listitem>
+				<listitem>
+					<para>xcdroast.desktop lägs till</para>
+				</listitem>
+			</itemizedlist>
+			
+			<para>Nu vet vi hur Ubuntu-källkoden ändrades. Nu behöver vi se vad som har ändrats i Debian-källkoden.</para>
+			<screen>
+debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-3.dsc &gt; debian.debdiff
+less debian.debdiff</screen>
+			<para>Vi får mycket mer text i den här debdiff:en än i den förra. Ett sätt att få bättre grepp om vad som har ändrats är att titta på vilka filer som har ändrats i debdiff:en:</para>
+			
+			<screen>grep diff debian.debdiff</screen>
+			
+			<para>Det här visar att debian/postinst, debian/rules, debian/changelog, debian/doc-base.manual, debian/control och debian/menu ändrades i den nya Debian-versionen.</para>
+			<para>Thus we can see that we need to check debian/rules to see if the <phrase>Ubuntu</phrase> changes were made.
+				We can also see that debian/dirs was not changed from the old Debian version. Let us
+				now look at the files. We can unpack the source package by using
+				<application>dpkg-source</application>:</para>
+			
+			<screen>dpkg-source -x xcdroast_0.98+0alpha15-3.dsc</screen>
+			
+			<para>Det här kommer att packa upp filen xcdroast_0.98+0alpha15.orig.tar.gz, skapa en katalog med namnet xcdroast-0.98+0alpha15, och applicera alla ändringar från xcdroast_0.98+0alpha15-3.diff.gz.</para>
+			<para>Gå nu till debian-katalogen:</para>
+			
+			<screen>cd xcdroast-0.98+0alpha15/debian</screen>
+			
+			<para>One can see in <filename>rules</filename> that changes made by <phrase>Ubuntu</phrase> were not applied to the new Debian version.
+				This means that:</para>
+			
+			<screen>cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps</screen>
+			
+			<para>...ska bytas ut mot:</para>
+			
+			<screen>
+#cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps
+
+#install desktop and icon
+install -D -m 644 $(CURDIR)/debian/xcdroast.desktop \
+	$(CURDIR)/debian/xcdroast/usr/share/applications/xcdroast.desktop
+install -D -m 644 $(CURDIR)/debian/xcdroast.xpm \
+	$(CURDIR)/debian/xcdroast/usr/share/pixmaps/xcdroast.xpm</screen>
+
+			<para>I <filename>dirs</filename> måste du nu lägga till följande rad för att .desktop-filen ska installeras:</para>
+			<screen>usr/share/applications</screen>
+			
+			<para>Nu behöver vi den riktiga .desktop-filen (sparad som <emphasis>debian/xcdroast.desktop</emphasis>). Från ubuntu.debdiff (eller Ubuntus källpaket) ser vi att den är:</para>
+			<screen>
+[Desktop Entry]
+Encoding=UTF-8
+Name=X-CD-Roast
+Comment=Create a CD
+Exec=xcdroast
+Icon=xcdroast.xpm
+Type=Application
+Categories=Application;AudioVideo;</screen>
+			
+			<para>The last change that needs to be made is in <filename>changelog</filename>. 
+				Not only do we need to add what we have just done (merge with Debian), but we 
+				should also add in the previous <phrase>Ubuntu</phrase> changelog entries. To do this, run 
+				<application>dch -i -D dapper</application> and put something to the effect of:</para>
+			<screen>
+xcdroast (0.98+0alpha15-3<emphasis>ubuntu1</emphasis>) dapper; urgency=low
+
+  * Resynchronise with Debian.</screen>
+
+			<para>Make sure to change the version number to the correct <phrase>Ubuntu</phrase> version.
+				Also add:</para>
+			<screen>
+xcdroast (0.98+0alpha15-1.1ubuntu1) breezy; urgency=low
+
+  * Fix and install existing .desktop file. (Closes Malone #2698)
+				
+  -- Captain Packager </screen>
+			<para>Mellan posterna för 0.98+0alpha15-1.1 och 0.98+0alpha15-2.</para>
+			
+			<para>Nu kan du bygga och testa det nya källpaketet. Det finns olika sätt att göra det här, men ett exempel är:</para>
+			<screen>
+cd ..
+debuild -S
+cd ..
+sudo pbuilder build xcdroast_0.98+0alpha15-3ubuntu1.dsc</screen>
+			
+			<para>This will recreate the source package, sign it with your default GPG key, and build the package in a pbuilder
+				environment to make sure it builds correctly. Make sure to always test your packages
+				before submitting patches. The last step is to make a debdiff that can be
+				attached to an existing bug report or given to the MOTUs in the #ubuntu-motu IRC channel. To do this,
+				we get the difference between the Debian unstable source package and the new <phrase>Ubuntu</phrase> version:
+			</para>
+			<screen>debdiff xcdroast_0.98+0alpha15-3.dsc xcdroast_0.98+0alpha15-3ubuntu1.dsc &gt; \
+	xcdroast_0.98+0alpha15-3ubuntu1.debdiff</screen>
+		</sect2>
+	</sect1>
+
+	<sect1 id="ubuntu-kubuntu" status="complete">
+		<title>Packetera för Kubuntu</title>
+		
+		<para>Som du kanske förstår har de paketproblem som är Kubuntuspecifika med KDE och Qt att göra.</para>
+		
+		<sect2 id="build-dependencies">
+			<title>Build Dependencies</title>
+	
+			<para>Kubuntuprogram är för det mesta KDE-program. De måste därför Build-Depend:a på <filename>kdelibs4-dev</filename>. Eftersom KDE fokuserar på att program ska hänga ihop kanske vissa program måste Build-Depend:a på andra delar av KDE, som till exempel <filename>kdepim-dev</filename>. Se till att få listan över nödvändiga beroenden för ditt program.</para>
+	
+		</sect2>
+
+		<sect2 id="desktop-files">
+			<title>Desktop-filer</title>
+		
+			<para>KDE har vissa speciella sökvägar. De flesta inställnigarna för KDE installeras i antingen <filename>/etc/kde3/</filename> eller <filename>/usr/share/apps/</filename>. Det är viktigt att tänka på att allmäna desktop-filer för KDE ska läggas i <filename>/usr/share/applications/kde/</filename>. Installationssökvägen för desktop-filer ska fixas om den inte använder det här (undantaget desktop-filer som tjänstmenyer).</para>
+			
+			<para>KDE:s skrivbordsfiler behöver också speciella rader för att läggas till K-menyn. En minimal desktop-fil för ett KDE-program skulle kunna vara något i stil med det här:</para>
+				
+			<screen>[Desktop Entry]
+Encoding=UTF-8
+Name=Kfoo
+Name[xx]=Kfoo
+GenericName=Bar description
+Exec=kfoo
+Icon=kfoo
+Terminal=false
+Categories=Qt;KDE;Utility;</screen>
+
+			<para>Notera att fältet Categories måste börja med Qt;KDE;. Det finns speciella desktop-filer för KDE-program och -moduler som tillåter att su gör dem till KCModules eller startar dem automatiskt vid inloggning.</para>
+	
+		</sect2>
+		
+		<sect2 id="generating-pot-files">
+			<title>Skapa .pot-filer</title>
+
+			<para>The Ubuntu translation website, <ulink url="https://launchpad.net/rosetta/">Rosetta</ulink>, now supports KDE,
+				which means KDE packages need to support Rosetta by generating .pot
+				template files for translators. If you use <application>cdbs</application>
+				in edgy, your package should now automatically build and check
+				for a .pot file in po/ directory.</para>
+
+			<para>Du kommer att se en <ulink url="../files/kubuntu_01_kdepot.diff">kdepot patch</ulink> (eller liknande, den kanske inte går att applicera ordentligt beroende på hur gamalt admin-katalogen är).</para>
+
+			<para>Om ditt paket använder <application>debhelper</application> eller <application>cdbs</application> och innehåller sin egen kde.mk-fil måste du lägga till reglerna själv.</para>
+
+			<para>För <application>cdbs</application>, lägg dessa rader till debian/rules:</para>
+
+			<screen>
+common-post-build-arch::
+	mkdir -p po
+        XGETTEXT=/usr/bin/kde-xgettext sh admin/cvs.sh extract-messages
+
+clean::
+        rm -rf po</screen>
+			<para>För <application>debhelper</application>, lägg till följande rader i slutet av regeln <emphasis>install</emphasis>:</para>
+			<screen>
+mkdir -p po
+XGETTEXT=/usr/bin/kde-xgettext sh admin/cvs.sh extract-messages</screen>
+			<para>För <application>debhelper</application>, lägg även till följande till regeln <emphasis>clean</emphasis>:</para>
+			<screen>
+rm -f po/*.pot</screen>
+		</sect2>
+		
+	</sect1>
+
+</chapter>
+

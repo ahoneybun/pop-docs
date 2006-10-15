@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+        "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="updating-chap" status="writing">
+ 		<title>Mise à jour des paquets</title>
+
+			<para>Si vous connaissez le monde des distributions Linux depuis un certain temps, vous avez remarqué qu'il y a parfois des bogues dans les programmes. Dans les distributions Debian et &ubuntu;, les bogues sont souvent corrigés par l'applications de correctifs de code source au travers de l'empaquetage. De temps en temps, des bogues dans l'empaquetage lui-même peuvent engendrer certaines difficultés.</para>
+
+			<para>Pour patcher le code source du programme vous pouvez simplement télécharger le paquet source &ubuntu; courant (avec <application>apt-get source</application>) et effectuer les modifications nécessaires. Vous pouvez alors ajouter une nouvelle entrée au fichier <filename>debian/changelog</filename> en utilisant <application>dch -i</application> ou <application>dch -v &lt;version&gt;-&lt;revision&gt;</application> pour spécifier une nouvelle révision. Lorsque vous exécutez <application>debuild -S</application> depuis le répertoire source vous obtenez un nouveau paquet source, avec un nouveau <filename>.diff.gz</filename> qui contient vos modifications, dans le répertoire parent. Le problème avec cette méthode est que la distinction entre la source et les patches n'est pas claire.</para>
+
+			<para>Une solution à ce problème est de séparer les modifications du code source en patches individuels stockés dans le répertoire <filename>debian</filename>. Un tel système de patch est appelé <application>dpatch</application>. Les patches sont stockés dans le répertoire <filename>debian/patches/</filename> et ont un format particulier.</para>
+
+			<para>Pour créer un <application>dpatch</application>, effectuer les opérations suivantes dans l'ordre.</para>
+
+			<para>Créez un espace de travail temporaire et deux copies du répertoire source courant :</para>
+			
+			<screen>
+mkdir tmp
+cd tmp
+cp -a ../&lt;package&gt;-&lt;version&gt; . 
+cp -a &lt;package&gt;-&lt;version&gt; &lt;package&gt;-&lt;version&gt;.orig 
+</screen>
+
+			<para>Effectuez vos modifications dans le répertoire <filename>&lt;package&gt;-&lt;version&gt;</filename></para>
+
+			<para>Créez un fichier patch en utilisant <application>diff</application> et placez le dans le répertoire <filename>debian/patches</filename> :</para>
+
+			<screen>
+diff -Nru &lt;package&gt;-&lt;version&gt;.orig &lt;package&gt;-&lt;version&gt; &gt; patch-file
+</screen>
+
+			<para>Créez le <application>dpatch</application> en utilisant <application>dpatch patch-template</application> et un fichier nommé <filename>00list</filename> qui liste les dpatches :</para>
+			<screen>
+dpatch patch-template -p "01_patchname" "patch-file description" \
+	&lt; patch-file &gt; 01_patchname.dpatch
+echo 01_patchname.dpatch &gt;00list</screen>
+
+			<para>Vous pouvez maintenant placer les fichiers <filename>01_patchname.dpatch</filename> et <filename>00list</filename> dans le répertoire <filename>debian/patches</filename> de votre paquet source :</para>
+
+			<screen>
+mkdir ../&lt;package&gt;-&lt;version&gt;/debian/patches
+cp 01_patchname.dpatch 00list ../&lt;package&gt;-&lt;version&gt;/debian/patches
+cd ..
+rm -rf tmp
+			</screen>
+
+			<note><para>Vous pouvez également modifier un patch pré-existant en utilisant <application>dpatch-edit-patch</application>.</para></note>
+			
+		<para>Une fois les modifications effectuées, une entrée est ajoutée au changelog, et <application>dpatch</application> est ajouté, si nécessaire, au fichier <filename>debian/control</filename>. Vous pouvez alors reconstruire le paquet source avec <application>debuild -S</application>.</para>
+
+		<para>Pour avoir votre paquet source corrigé téléversé sur les dépôts &ubuntu;, vous aurez besoin d'une personne garante de votre paquet source qui a les droits de téléversement. Voyez <xref linkend="ubuntu-upload"/> pour plus de détails. Parfois, plutôt que de fournir un paquet source complet (.diff.gz, .dsc, .orig.tar.gz), il est plus facile et plus efficace de fournir simplement la différence entre le paquet source qui est actuellement dans les dépôts et votre paquet source corrigé. Un outil appelé <application>debdiff</application> a été créé pour justement faire cela. L'utilisation de <application>debdiff</application> est similaire à celle de <application>diff</application> mais il est destiné spécifiquement à l'empaquetage. Vous pouvez appliquer <application>debdiff</application> au paquet source ainsi :</para>
+
+		<screen>
+debdiff &lt;oldpackage&gt;.dsc &lt;newpackage&gt;.dsc &gt; package.debdiff
+		</screen>
+
+		<para>ou le paquet binaire avec :</para>
+
+		<screen>
+debdiff &lt;oldpackage&gt;.deb &lt;newpackage&gt;.deb &gt; package.debdiff
+		</screen>
+	
+		<para>Les debdiffs sont très intéressants à joindre à un rapport de bogue et sont prêts à être télévérsés par une personne se portant garant.</para>
+		
+</chapter>
+

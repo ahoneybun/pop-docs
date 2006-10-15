@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % kde SYSTEM "../../libs/kde.ent">
+%kde;
+<!ENTITY % kde-general SYSTEM "/usr/share/apps/ksgmltools2/customization/obsolete/general.entities">
+%kde-general;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="add-applications" status="review">
+    <title>添加、删除和更新应用程序</title>
+    <para>
+        This chapter is a complete guide to adding, removing and updating
+        applications on a Kubuntu system.
+    </para>
+    <sect1 id="introduction-to-add-applications" status="writing">
+        <title>介绍</title>
+        <para>
+            There are several ways to manage your applications in Kubuntu. In
+            order to add or remove applications you need to use a
+            <emphasis>package manager</emphasis>. The following package
+            managers are described in this chapter:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para><application>添加/删除程序</application>-这是最简单的方法进行程序管理。</para>
+            </listitem>
+            <listitem>
+                <para><application>Adept</application>-此图形程序提供了高级的程序管理功能</para>
+            </listitem>
+            <listitem>
+                <para><application>APT</application> - 这是一个用来管理程序的强大的命令行程序。</para>
+            </listitem>
+        </itemizedlist>
+        <para>
+            You may also wish to increase the number of programs available to
+            install through your package managers. 
+            Not all the programs that exist for Kubuntu are available by
+            default. You may have to add extra repositories in order to make
+            them available: that is also described in this chapter.
+        </para>
+        <para>最后，介绍如何升级你的系统。</para>
+			<note>
+                <para>在同一时间内，你只能运行一个软件包管理程序。比如，如何你正在运行<application>Add/Remove Programs</application> ，而这时你又单击<application>Adept</application>，将失败。在运行另一个前，先关闭前一个。</para>
+			</note>
+
+    </sect1>
+	    <sect1 id="kde-app-install" status="review">
+		<title>添加/删除程序</title>
+			<para><application>Add/Remove Programs</application> is a simple
+                graphical way of installing and removing applications in
+                Kubuntu. To launch <application>Add/Remove
+                    Programs</application>, choose 
+				<menuchoice>
+					<guimenu>K Menu</guimenu>
+					<guimenuitem>Add/Remove Programs</guimenuitem>
+				</menuchoice> from the desktop menu system.
+			</para>
+			<note>
+			<para>运行<application>添加/删除程序</application>需要管理员的权限。</para>
+			</note>
+			<para>To install new applications select the category on the left,
+                then check the box of the applications you want to install.
+                Click <guimenu>Apply</guimenu> and your chosen
+                programs will be downloaded and installed automatically, as
+                well as installing any additional applications that are
+                required. The default selection is restricted to the KDE
+                suite, but GNOME applications can be installed by selecting
+                them from the dropdown menu at the top. 
+            </para>
+
+            <para>或者，如果您知道您想要的程序名称，可以使用顶部的 <guibutton>搜索</guibutton> 工具。</para>
+            <para>
+            Software from additional repositories may be installed by
+            enabling the Show: <emphasis>unsupported</emphasis> and Show:
+            <emphasis>proprietary software</emphasis> checkboxes <emphasis role="bold"> if
+                they are enabled</emphasis> in your repository list. For more
+            information, see see <xref linkend="extra-repositories"/>
+            </para>
+		</sect1>
+    <sect1 id="adept" status="complete">
+        <title>Adept Package Manager</title>
+        <para>
+            &appshort; is a graphical frontend to the
+            <application>APT</application> package management system for the K
+            Desktop Environment (KDE).  &appshort; provides an easy-to-use
+            interface with which users can perform software management
+            operations.</para>
+        <para>&appshort; can be started from the K menu system or the command line. In order to
+            start &appshort;, you will be required to provide your password.</para>
+        <para>To start &appshort; from the menu system select <menuchoice>
+                <guimenu>K Menu</guimenu>
+                <guisubmenu>System</guisubmenu>
+                <guimenuitem>Adept (Package Manager)</guimenuitem>
+            </menuchoice>. </para>
+        <para>To start &appshort; from the command line:</para>
+        <programlisting>kdesu adept </programlisting>
+        <para>Both methods require that you enter your password. This will run &appshort; with
+            root privileges which will be required in order to perform the requested operations. It
+            is therefore advised that you use &appshort; with caution since improper usage could
+            lead to the removal, deletion, or corruption of software packages that are required to
+            preserve system integrity.</para>
+        <para>
+            For more help with using &appshort;, please refer to the <ulink url="help:/adept/index.html">Adept Handbook</ulink>.
+        </para>
+    </sect1>
+    <sect1 id="apt-get" status="complete">
+        <title>APT</title>
+        <para><application>APT</application>高级包管理工具 (Advanced Packaging Tool) 是一个强大的安装包管理系统，图形界面的<application>Add/Remove Programs</application> and <application>Adept</application>工具都基于他来执行。<application>APT</application> 自动处理包的依赖性和其他操作来完成目标软件的安装。</para>
+        <note>
+            <para>运行 <application>APT</application> 要求管理权限 (参见 <xref linkend="root-and-sudo"/>)。</para>
+        </note>
+
+        <para>可以被 <application>APT</application> 使用的一些常用命令：</para>
+        <itemizedlist>
+            <listitem>
+                <para>安装软件包：<screen>sudo apt-get install <emphasis>packagename</emphasis></screen></para>
+            </listitem>
+            <listitem>
+                <para>删除软件包：<screen>sudo apt-get remove <emphasis>packagename</emphasis></screen></para>
+            </listitem>
+            <listitem>
+                <para>查找软件包：<screen>apt-cache search <emphasis>关键字</emphasis></screen></para>
+            </listitem>
+            <listitem>
+                <para>获得新的可用软件包列表：<screen>sudo apt-get update</screen></para>
+            </listitem>
+            <listitem>
+                <para>用可用的软件包更新系统：<screen>sudo apt-get dist-upgrade</screen></para>
+            </listitem>
+            <listitem>
+                <para>列出更多命令和选项：<screen>apt-get help</screen></para>
+            </listitem>
+        </itemizedlist>
+        <tip>
+            <para>For further information about the use of <application>APT</application>, you can read the comprehensive <ulink url="&debian-apt;">Debian APT User Manual</ulink>.
+            </para>
+        </tip>
+    </sect1>
+	<sect1 id="manual-install" status="complete">
+        <title>手动安装</title>
+        <para>尽管首选的安装方式是通过软件包管理软件来安装，见<xref linkend="add-applications"/>，你依然可以下载并安装单独的软件包。Linux下有各种不同的软件包文件，大多数都与特定的Linux发行版本相关联。</para>
+
+        <para>如果你发现了想安装的软件包，建议你先通过软件包管理系统检查是否有适合Kubuntu本地的安装包，并安装替代版本。这样可以保证该软件完全与系统兼容。如果当时没有合适的软件包，你可以手动进行安装。安装过程与安装包的类型相关。</para>
+        <sect2 id="install-deb" status="complete">
+            <title>安装/卸载 .deb 文件</title>
+            <para>适用于Kubuntu系统的安装文件后缀名为 <emphasis>.deb</emphasis>，因为Kubuntu与 Debian GNU/Linux 关系密切。你可以单独的下载和安装 <emphasis>.deb</emphasis> 文件。你可能需要系统权限来完成上述动作 (参见 <xref linkend="root-and-sudo"/>).</para>
+            <procedure>
+                <step>
+                    <para>
+                        To install a .deb file, simply <mousebutton>Right</mousebutton> click on the .deb file, and choose 
+                        <menuchoice>
+                            <guimenu>Kubuntu Package Menu</guimenu>
+                            <guimenuitem>Install Package</guimenuitem>
+                        </menuchoice>.
+                    </para>
+                </step>
+                <step>
+                    <para>或者，你可以在终端下输入如下内容来安装.deb文件</para>
+                    <screen>sudo dpkg -i 软件包名.deb</screen>
+                </step>
+                <step>
+                    <para>卸载.deb文件，可以使用<application>Adept</application>，或输入：</para>
+                    <screen>sudo apt-get remove 软件包名称</screen>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="alien" status="complete">
+            <title>转换 .rpm 文件为 .deb 文件</title>
+            <para>另一种安装包类型是Red Hat Package 包管理文件，以<emphasis>.rpm</emphasis>为后缀。不建议安装其到Kubuntu系统上。在大多数的情况下，都有适用于Kubuntu系统的<emphasis>.deb</emphasis> 安装包可用。然而，实在有必要的情况下，可以通过程序<application>alien</application>将<emphasis>.rpm</emphasis> 文件转换为<emphasis>.deb</emphasis> 文件。</para>
+            <procedure>
+                <step>
+                    <para>安装 <application>alien</application> 程序 (<xref linkend="add-applications"/>)。</para>
+                </step>
+                <step>
+                    <para>在终端使用管理权限运行以下命令：</para>
+                    <screen>sudo alien package_file.rpm</screen>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="tarballs" status="complete">
+            <title>基于源代码安装</title>
+            <para>后缀为<emphasis>.tar.gz</emphasis> 或 <emphasis>.tar.bz2</emphasis> 的文件是以<emphasis>tarballs</emphasis> 或 <emphasis>source</emphasis> 形式发行的安装包文件，这种方式在Linux下被广泛采用。如果在Kubuntu仓库下没有合适的软件包，你可以尝试用源文件编译。关于编译软件的消息，请参阅Ubuntu Wiki上的 <ulink url="https://wiki.ubuntu.com/CompilingSoftware">编译软件</ulink> 页面。</para>
+        </sect2>
+	</sect1>
+    <sect1 id="extra-repositories" status="complete">
+        <title>管理软件仓库</title>
+        <sect2 status="complete"><title>什么是软件仓库</title>
+            <para>可以免费安装在Kubuntu上的软件有成千上万个。这些软件都存放在软件仓库(<emphasis>repositories</emphasis>)中以便通过网络安装。这样使得在Linux下安装新软件非常容易，而且也非常安全，因为在安装前，每个程序都专门为Kubuntu编译和检查过。为了便于管理这些软件，Kubuntu软件仓库被分为4个部分：<emphasis>Main</emphasis>，<emphasis>Restricted</emphasis>，<emphasis>Universe</emphasis>和<emphasis>Multiverse</emphasis>。</para> 
+            <para>软件分类原则基于以下两个因素</para>
+            <itemizedlist>
+                <listitem>
+                    <para>The level of support software development teams provide for a program</para>
+                </listitem>
+                <listitem>
+                    <para>The level of compliance the program has to the <ulink url="&ubuntu-philosophy;">Free Software Philosophy</ulink></para>
+                </listitem>
+            </itemizedlist>
+            <para>
+                You can find more information about the Repositories available
+                on the <ulink url="http://www.ubuntu.com/ubuntu/components">
+                    Ubuntu website</ulink>.
+            </para>
+            <para>
+                The standard Kubuntu Install CD contains some software from
+                the <emphasis>Main</emphasis> and
+                <emphasis>Restricted</emphasis> categories. Once your system
+                is made aware of the Internet-based locations for these
+                repositories, many more programs are made available
+                for installation. Using the software package management tools
+                already installed on your system, you can search for, install
+                and update any piece of software directly over the Internet,
+                without the need for the CD.
+            </para>
+        </sect2>
+        <sect2 status="complete"><title>移除CD-ROM仓库</title>
+            <para>The Kubuntu Install CD-ROM is included in the repositories after installation. This can cause &appshort; to ask for the CD-ROM when installing packages. It is possible to disable this repository so that &appshort; relies solely on the internet repositories.</para> 
+            <para>禁用CD-ROM仓库：</para>
+            <procedure>
+                <step>
+                    <para>Start &appshort; by choosing 
+                        <menuchoice>
+                            <guimenu>K Menu</guimenu>
+                            <guisubmenu>System</guisubmenu>
+                            <guimenuitem>Adept (Package Manager)</guimenuitem>
+                        </menuchoice> 
+                        from the Desktop menu system.
+                    </para>
+                </step>
+                <step>
+                    <para> Select 
+                        <menuchoice>
+                            <guimenu>View</guimenu>
+                            <guimenuitem>Manage Repositories</guimenuitem>
+                        </menuchoice>
+                        in the <application>Adept</application> package manager window.
+                    </para>
+                </step>
+                <step>
+                    <para>Find the repository line that starts with "cdrom:", <mousebutton>right</mousebutton> click the line, and select <guimenuitem>Disable</guimenuitem>. 
+                    </para>
+                </step>
+                <step>
+                    <para>Click <guibutton>Apply</guibutton> to save your changes, and then exit using <guibutton>Close</guibutton>.
+                    </para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 status="complete">
+            <title>添加额外的软件仓库</title>
+            <para>启用额外的软件仓库</para>
+            <procedure>
+                <step>
+                    <para>Start &appshort; by choosing 
+                        <menuchoice>
+                            <guimenu>K Menu</guimenu>
+                            <guisubmenu>System</guisubmenu>
+                            <guimenuitem>Adept (Package Manager)</guimenuitem>
+                        </menuchoice> 
+                        from the Desktop menu system.
+                    </para>
+                </step>
+                <step>
+                    <para> Select 
+                        <menuchoice>
+                            <guimenu>View</guimenu>
+                            <guimenuitem>Manage Repositories</guimenuitem>
+                        </menuchoice>
+                        in the <application>Adept</application> package manager window.
+                    </para>
+                </step>
+                <step>
+                    <para>To enable the <emphasis>Universe</emphasis> repository, find the repository line with the Universe Component, and <mousebutton>right</mousebutton> click the line and select <guimenuitem>Enable</guimenuitem>. 
+                    </para>
+                    <note>
+                        <para>Adding this repository will mean that the majority of the Free Software universe will be available to install on your system. This software is supported by a carefully selected group of volunteers within the Kubuntu Community, but is not supported by the core Kubuntu development team and may not include security updates.</para>
+                    </note>
+                </step>
+                <step>
+                    <para>To enable the <emphasis>Multiverse</emphasis> repository, find the repository lines (two of them) with the Universe Component, and click the word "universe". Edit the entry so that it reads "universe multiverse". <mousebutton>Right</mousebutton> click the line and select <guimenuitem>Enable</guimenuitem> to enable it if it is not already enabled. 
+                    </para>
+                    <warning>
+                        <para>增加<emphasis>non-free</emphasis>软件仓库以为着你将能够安装<emphasis>non-free</emphasis>类的软件。但此类软件可能会有法律许可方面的问题。你应该核实你所在地的法律允许你使用这些软件。强调一下，这些软件不会有安全更新！</para>
+                    </warning>
+                </step>
+                <step><para>Click <guibutton>Apply</guibutton> to save your changes, and then exit using <guibutton>Close</guibutton>.</para>
+                </step>
+            </procedure>
+        </sect2>
+    </sect1>
+    <sect1 id="updates" status="complete">
+        <title>更新</title>
+        <para>Sometimes the Kubuntu developers release feature and security updates for applications and packages within the Kubuntu system.
+        </para>
+        <para>当有可用更新时,Kubuntu将在系统托盘用红色图标提醒你。如果你打算更新系统，单击红色图标，输入你的密码，再单击<guibutton>Fetch List of Updates</guibutton>获取更新列表。</para>
+        <para>更新程序将列出有效的更新：想要下载和安装这些更新，单击<guibutton>Apply Updates</guibutton>. 按钮。kubuntu将从Interneth下载和安装这些更新。</para>
+        <para>更新完成后，单击对话框中的<guibutton>Quit</guibutton>按钮。</para>
+        <note>
+            <para>在安装完一些重要的升级后，有必要重启你的电脑。如果是这样，Kubuntu会用一个弹出窗口通知你，并在系统托盘显示一个图标。</para>
+        </note>
+    </sect1>
+</chapter>
+

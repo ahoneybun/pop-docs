@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % kde SYSTEM "../../libs/kde.ent">
+%kde;
+<!ENTITY % kde-general SYSTEM "/usr/share/apps/ksgmltools2/customization/obsolete/general.entities">
+%kde-general;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="add-applications" status="review">
+    <title>Dodawanie, usuwanie i uaktualnianie programów</title>
+    <para>Ten rozdział zawiera kompletny opis dodawania, usuwania i uaktualniania programów w systemie Kubuntu.</para>
+    <sect1 id="introduction-to-add-applications" status="writing">
+        <title>Wprowadzenie</title>
+        <para>Jest kilka sposobów zarządzania programami w Kubuntu. Żeby dodawać i usuwać programy, musisz użyć <emphasis>menedżera pakietów</emphasis>. W tym rozdziale opisane są następujące menedżery pakietów:</para>
+        <itemizedlist>
+            <listitem>
+                <para><application>Dodaj/usuń programy</application> - to jest najprostszy sposób zarządzania programami.</para>
+            </listitem>
+            <listitem>
+                <para><application>Adept</application> - graficzny program umożliwiający zaawansowane zarządzanie programami.</para>
+            </listitem>
+            <listitem>
+                <para><application>APT</application> - to potężny program do obsługi programów z linii poleceń.</para>
+            </listitem>
+        </itemizedlist>
+        <para>Możesz również chcieć zwiększyć liczbę programów dostępnych do instalacji za pomocą menedżerów pakietów. Nie wszystkie programy możliwe do zainstalowania w Kubuntu są domyślnie dostępne. Musisz dodać dodatkowe repozytoria, żeby stały się dostępne: jest to również opisane w tym rozdziale.</para>
+        <para>Na koniec, ten rozdział wyjaśnia także jak uaktualnić Twój system.</para>
+			<note>
+                <para>Możesz uruchomić tylko jeden program do zarządzania pakietami naraz. Na przykład, jeśli uruchomiony jest <application>Dodaj/usuń programy</application> i spróbujesz uruchomić <application>Adepta</application>, zakończy się to niepowodzeniem. Musisz zamknąć działający program zanim spróbujesz uruchomić kolejny.</para>
+			</note>
+
+    </sect1>
+	    <sect1 id="kde-app-install" status="review">
+		<title>Dodaj/usuń programy</title>
+			<para><application>Add/Remove Programs</application> is a simple
+                graphical way of installing and removing applications in
+                Kubuntu. To launch <application>Add/Remove
+                    Programs</application>, choose 
+				<menuchoice>
+					<guimenu>K Menu</guimenu>
+					<guimenuitem>Add/Remove Programs</guimenuitem>
+				</menuchoice> from the desktop menu system.
+			</para>
+			<note>
+			<para>Uruchomienie <application>Dodaj/usuń programy</application> wymaga uprawnień administratora (patrz <xref linkend="root-and-sudo"/>).</para>
+			</note>
+			<para>Aby zainstalować nowe programy, wybierz kategorię po lewej, a następnie zaznacz opcję przy programach, które chcesz zainstalować. Kliknij <guimenu>Zatwierdź zmiany</guimenu> i wybrane programy zostaną pobrane i zainstalowane automatycznie wraz ze wszystkimi dodatkowymi programami, których potrzebują. Domyślny wybór programów jest ograniczony do programów środowiska KDE, ale można również zainstalować programy z GNOME wybierając GNOME z listy rozwijanej na szczycie.</para>
+
+            <para>Jeśli znasz nazwę danego program, możesz użyć narzędzia <guibutton>Znajdź</guibutton> na górze okna.</para>
+            <para>Programy z dodatkowych repozytoriów mogą zostać pokazane poprzez włączenie opcji Pokaż: <emphasis>niewspierane</emphasis> oraz Pokaż: <emphasis>oprogramowanie komercyjne</emphasis> <emphasis role="bold">o ile są one włączone na liście repozytoriów</emphasis>. Więcej informacji znajdziesz w sekcji <xref linkend="extra-repositories"/></para>
+		</sect1>
+    <sect1 id="adept" status="complete">
+        <title>Menedżer pakietów Adept</title>
+        <para>
+            &appshort; is a graphical frontend to the
+            <application>APT</application> package management system for the K
+            Desktop Environment (KDE).  &appshort; provides an easy-to-use
+            interface with which users can perform software management
+            operations.</para>
+        <para>&appshort; can be started from the K menu system or the command line. In order to
+            start &appshort;, you will be required to provide your password.</para>
+        <para>To start &appshort; from the menu system select <menuchoice>
+                <guimenu>K Menu</guimenu>
+                <guisubmenu>System</guisubmenu>
+                <guimenuitem>Adept (Package Manager)</guimenuitem>
+            </menuchoice>. </para>
+        <para>To start &appshort; from the command line:</para>
+        <programlisting>kdesu adept </programlisting>
+        <para>Both methods require that you enter your password. This will run &appshort; with
+            root privileges which will be required in order to perform the requested operations. It
+            is therefore advised that you use &appshort; with caution since improper usage could
+            lead to the removal, deletion, or corruption of software packages that are required to
+            preserve system integrity.</para>
+        <para>
+            For more help with using &appshort;, please refer to the <ulink url="help:/adept/index.html">Adept Handbook</ulink>.
+        </para>
+    </sect1>
+    <sect1 id="apt-get" status="complete">
+        <title>APT</title>
+        <para><application>APT</application> (Advanced Packaging Tool - zaawansowane narzędzie do pakietów) to potężny system zarządzania pakietami, który jest podstawą działania graficznych programów <application>Dodaj/usuń programy</application> i <application>Adept</application>. <application>APT</application> automatycznie obsługuje zależności i przeprowadza wszystkie operacje na pakietach systemowych, aby umożliwić instalację pożądanych pakietów.</para>
+        <note>
+            <para>Uruchomienie <application>APT</application> wymaga uprawnień administratora (patrz <xref linkend="root-and-sudo"/>).</para>
+        </note>
+
+        <para>Niektóre popularne polecenia używane w <application>APT</application>:</para>
+        <itemizedlist>
+            <listitem>
+                <para>Instalacja pakietu: <screen>sudo apt-get install <emphasis>nazwapakietu</emphasis></screen></para>
+            </listitem>
+            <listitem>
+                <para>Usunięcie pakietu: <screen>sudo apt-get remove <emphasis>nazwapakietu</emphasis></screen></para>
+            </listitem>
+            <listitem>
+                <para>Wyszukanie pakietów: <screen>apt-cache search <emphasis>słowokluczowe</emphasis></screen></para>
+            </listitem>
+            <listitem>
+                <para>Pobranie nowych list dostępnych pakietów: <screen>sudo apt-get update</screen></para>
+            </listitem>
+            <listitem>
+                <para>Uaktualnienie systemu za pomocą dostępnych poprawek: <screen>sudo apt-get dist-upgrade</screen></para>
+            </listitem>
+            <listitem>
+                <para>Wyświetlenie innych poleceń i opcji: <screen>apt-get help</screen></para>
+            </listitem>
+        </itemizedlist>
+        <tip>
+            <para>For further information about the use of <application>APT</application>, you can read the comprehensive <ulink url="&debian-apt;">Debian APT User Manual</ulink>.
+            </para>
+        </tip>
+    </sect1>
+	<sect1 id="manual-install" status="complete">
+        <title>Ręczna instalacja</title>
+        <para>Chociaż preferowaną metodą instalowania programów jest użycie menedżerów pakietów opisanych w sekcji <xref linkend="add-applications"/>, możesz również pobrać i zainstalować pojedyncze pakiety z oprogramowaniem. Są różne rodzaje pakietów w Linuksie. Większość jest związanych z menedżerami pakietów poszczególnych dystrybucji Linuksa.</para>
+
+        <para>Jeśli znajdziesz pakiet z programem, który chcesz zainstalować, zalecane jest sprawdzenie wpierw w menedżerze pakietów, czy jest dostępny pakiet Kubuntu dla tego programu, i jeśli tak, to zainstalowanie go w menedżerze. Gwarantuje to, że program będzie w pełni zgodny z Twoim systemem. Jeśli w menedżerze pakietów nie ma tego programu, możesz zainstalować go ręcznie. Sposób instalacji zależy od rodzaju pakietu.</para>
+        <sect2 id="install-deb" status="complete">
+            <title>Instalacja/usuwanie pakietów .deb</title>
+            <para>Pliki pakietów w Kubuntu posiadają przyrostek <emphasis>.deb</emphasis>, ponieważ Kubuntu jest blisko związane z dystrybucją Debian GNU/Linux. Możesz pobrać i zainstalować pojedyncze pliki <emphasis>.deb</emphasis>. Do zainstalowania ich potrzebne będą uprawnienia administratora (patrz <xref linkend="root-and-sudo"/>).</para>
+            <procedure>
+                <step>
+                    <para>
+                        To install a .deb file, simply <mousebutton>Right</mousebutton> click on the .deb file, and choose 
+                        <menuchoice>
+                            <guimenu>Kubuntu Package Menu</guimenu>
+                            <guimenuitem>Install Package</guimenuitem>
+                        </menuchoice>.
+                    </para>
+                </step>
+                <step>
+                    <para>Alternatywnie, możesz zainstalować plik .deb otwierając terminal i wpisując:</para>
+                    <screen>sudo dpkg -i plik_pakietu.deb</screen>
+                </step>
+                <step>
+                    <para>Aby usunąć plik .deb, usuń go za pomocą <application>Adepta</application>, lub wpisz:</para>
+                    <screen>sudo apt-get remove nazwa_pakietu</screen>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="alien" status="complete">
+            <title>Konwertowanie pakietów .rpm do .deb</title>
+            <para>Innym typem pakietów są pakiety RPM, które posiadają przyrostek <emphasis>.rpm</emphasis>. Nie jest zalecane instalowanie ich w systemie Kubuntu. W prawie każdym przypadku dostępny jest odpowiadający pakiet <emphasis>.deb</emphasis> dla Kubuntu. Jednakże, jeśli to absolutnie konieczne, możesz przekonwertować plik <emphasis>.rpm</emphasis> na pakiet <emphasis>.deb</emphasis> za pomocą programu<application>alien</application>.</para>
+            <procedure>
+                <step>
+                    <para>Zainstaluj program <application>alien</application> (<xref linkend="add-applications"/>).</para>
+                </step>
+                <step>
+                    <para>Uruchom następujące polecenie w terminalu, z uprawnieniami administratora:</para>
+                    <screen>sudo alien nazwa_pakietu.rpm</screen>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="tarballs" status="complete">
+            <title>Instalowanie ze źródeł</title>
+            <para>Pliki z rozszerzeniami <emphasis>.tar.gz</emphasis> i <emphasis>.tar.bz2</emphasis> to pliki pakietów zwane <emphasis>archiwami tar</emphasis> lub pakietami <emphasis>źródłowymi</emphasis> i są powszechnie używane w Linuksie. Jeśli nie ma dostępnego pakietu Kubuntu w żadnym repozytorium Kubuntu, możesz spróbować skompilować pakiet ze źródeł. Porady na temat kompilowania programów znajdziesz na stronie <ulink url="https://wiki.ubuntu.com/CompilingSoftware">kompilowania oprogramowania</ulink> (w języku angielskim) na wiki Ubuntu.</para>
+        </sect2>
+	</sect1>
+    <sect1 id="extra-repositories" status="complete">
+        <title>Zarządzanie repozytoriami</title>
+        <sect2 status="complete"><title>Czym są repozytoria?</title>
+            <para>Dostępne są za darmo tysiące programów do zainstalowania w Kubuntu. Te programy są przechowywane w archiwach oprogramowania (<emphasis>repozytoriach</emphasis>) i są udostępniane do instalacji przez Internet. Sprawia to, że bardzo łatwo instalować nowe programy w Linuksie, jest to również bardzo bezpieczne, ponieważ instalowany program jest zbudowany specjalnie dla Kubuntu i jest sprawdzany przed zainstalowaniem. Aby ułatwić organizację, repozytoria Kubuntu są podzielone na cztery grupy: <emphasis>Main</emphasis>, <emphasis>Restricted</emphasis>, <emphasis>Universe</emphasis> oraz <emphasis>Multiverse</emphasis>.</para> 
+            <para>Taki podział jest uwarunkowany dwoma czynnikami:</para>
+            <itemizedlist>
+                <listitem>
+                    <para>Poziomem wsparcia udzielanym dla programu przez autorów oprogramowania</para>
+                </listitem>
+                <listitem>
+                    <para>The level of compliance the program has to the <ulink url="&ubuntu-philosophy;">Free Software Philosophy</ulink></para>
+                </listitem>
+            </itemizedlist>
+            <para>Możesz uzyskać więcej informacji o dostępnych repozytoriach na <ulink url="http://www.ubuntu.com/ubuntu/components">stronie Ubuntu</ulink> (strona w języku angielskim).</para>
+            <para>Standardowa płyta instalacyjna Kubuntu zawiera oprogramowanie z grupy <emphasis>Main</emphasis> oraz <emphasis>Restricted</emphasis>. Kiedy dodasz w swoim systemie lokalizację sieciowych repozytoriów, uzyskasz możliwość zainstalowania dużo większej liczby programów. Za pomocą narzędzi do zarządzania pakietami znajdujących się w Twoim systemie, możesz przeszukiwać, instalować i uaktualniać każdy program bezpośrednio przez Internet, bez potrzeby używania płyty CD.</para>
+        </sect2>
+        <sect2 status="complete"><title>Usuwanie repozytorium na CD-ROM</title>
+            <para>The Kubuntu Install CD-ROM is included in the repositories after installation. This can cause &appshort; to ask for the CD-ROM when installing packages. It is possible to disable this repository so that &appshort; relies solely on the internet repositories.</para> 
+            <para>Aby wyłączyć repozytorium na CD-ROMie:</para>
+            <procedure>
+                <step>
+                    <para>Start &appshort; by choosing 
+                        <menuchoice>
+                            <guimenu>K Menu</guimenu>
+                            <guisubmenu>System</guisubmenu>
+                            <guimenuitem>Adept (Package Manager)</guimenuitem>
+                        </menuchoice> 
+                        from the Desktop menu system.
+                    </para>
+                </step>
+                <step>
+                    <para> Select 
+                        <menuchoice>
+                            <guimenu>View</guimenu>
+                            <guimenuitem>Manage Repositories</guimenuitem>
+                        </menuchoice>
+                        in the <application>Adept</application> package manager window.
+                    </para>
+                </step>
+                <step>
+                    <para>Znajdź wiersz z repozytorium, zaczynający się od "cdrom:", kliknij <mousebutton>prawym przyciskiem myszy</mousebutton> na tym wierszu i wybierz <guimenuitem>Wyłącz</guimenuitem>.</para>
+                </step>
+                <step>
+                    <para>Kliknij <guibutton>Zastosuj</guibutton>, aby zapisać zmiany, a następnie wyjdź z programu za pomocą przycisku <guibutton>Zamknij</guibutton>.</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 status="complete">
+            <title>Dodawanie dodatkowych repozytoriów</title>
+            <para>Aby włączyć dodatkowe repozytoria:</para>
+            <procedure>
+                <step>
+                    <para>Start &appshort; by choosing 
+                        <menuchoice>
+                            <guimenu>K Menu</guimenu>
+                            <guisubmenu>System</guisubmenu>
+                            <guimenuitem>Adept (Package Manager)</guimenuitem>
+                        </menuchoice> 
+                        from the Desktop menu system.
+                    </para>
+                </step>
+                <step>
+                    <para> Select 
+                        <menuchoice>
+                            <guimenu>View</guimenu>
+                            <guimenuitem>Manage Repositories</guimenuitem>
+                        </menuchoice>
+                        in the <application>Adept</application> package manager window.
+                    </para>
+                </step>
+                <step>
+                    <para>Aby włączyć repozytorium <emphasis>Universe</emphasis>, znajdź wiersz z repozytorium zawierający składnik <emphasis>universe</emphasis>, kliknij <mousebutton>prawym</mousebutton> przyciskiem myszy i wybierz <guimenuitem>Włącz</guimenuitem>.</para>
+                    <note>
+                        <para>Dodanie tego repozytorium oznacza, że będziesz mieć dostęp do instalacji większości Wolnego Oprogramowania. To oprogramowanie jest obsługiwane przez starannie dobraną grupę ochotników ze społeczności Kubuntu, ale nie jest bezpośrednio wspierane przez główny zespół Kubuntu i może nie zawierać poprawek bezpieczeństwa.</para>
+                    </note>
+                </step>
+                <step>
+                    <para>Aby włączyć repozytorium <emphasis>Multiverse</emphasis>, znajdź wiersze repozytorium (są dwa) ze składnikiem <emphasis>universe</emphasis> i kliknij na słowie "universe". Zmień wpis tak, by zawierał "universe multiverse". Kliknij <mousebutton>prawym przyciskiem myszy</mousebutton> na tym wierszu i wybierz <guimenuitem>Włącz</guimenuitem>, aby go włączyć, o ile nie zostało to zrobione.</para>
+                    <warning>
+                        <para>Dodanie tego repozytorium oznacza, że oprogramowanie sklasyfikowane jako <emphasis>nie-wolnodostępne</emphasis> będzie dostępne do instalacji w Twoim systemie. Te oprogramowanie może nie być dozwolone w pewnych jurysdykcjach. Za każdym razem, gdy będziesz instalował oprogramowanie z tego repozytorium powinieneś się upewnić, że prawo Twojego państwa na to zezwala. W tym repozytorium także może nie być uaktualnień bezpieczeństwa.</para>
+                    </warning>
+                </step>
+                <step><para>Kliknij <guibutton>Zastosuj</guibutton>, aby zapisać zmiany, a następnie wyjdź z programu za pomocą przycisku <guibutton>Zamknij</guibutton>.</para>
+                </step>
+            </procedure>
+        </sect2>
+    </sect1>
+    <sect1 id="updates" status="complete">
+        <title>Uaktualnienia</title>
+        <para>Czasem programiści Kubuntu wydają poprawki funkcjonalności i bezpieczeństwa dla programów znajdujących się w systemie Kubuntu.</para>
+        <para>Kiedy poprawki są dostępne, Kubuntu poinformuje cię o tym wyświetlając ikonę z wykrzyknikiem w tacce systemowej. Aby uaktualnić system, kliknij na niej, podaj swoje hasło i kliknij <guibutton>Pobierz listę uaktualnień</guibutton>.</para>
+        <para>Program <application>Aktualizator Adept</application> pokaże listę wszystkich dostępnych poprawek: aby je pobrać i zainstalować kliknij <guibutton>Zainstaluj poprawki</guibutton>. Kubuntu pobierze wówczas z Internetu i zainstaluje dostępne poprawki.</para>
+        <para>Kiedy <application>Aktualizator Adept</application> skończy uaktualnianie Twojego systemu, zamknij okno klikając przycisk <guibutton>Zakończ</guibutton>.</para>
+        <note>
+            <para>Po zainstalowaniu niektórych ważnych poprawek, może być konieczne ponowne uruchomienie komputera. W takim wypadku , Kubuntu poinformuje Cię o tym za pomocą wyskakującego okienka i ikony w tacce systemowej.</para>
+        </note>
+    </sect1>
+</chapter>
+

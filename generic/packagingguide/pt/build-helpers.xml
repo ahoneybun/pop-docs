@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="bh-chap" status="writing">
+	<title>Ajudantes de Construção</title>
+	<para>Good stuff about debhelper and CDBS goes here</para>
+
+	<sect1 id="basic-debhelper" status="complete">
+		<title>Empacotando com o Debhelper</title>
+		
+		<important><para><emphasis role="bold">Requirementos:</emphasis> Os requerimentos a partir do <xref linkend="basic-scratch"/> mais o debhelper e dh-make</para> </important>
+
+		<para>Como empacotador, raramente criará pacotes a partir do nada como fizemos na secção prévia. Como pode imaginar, muitas das tarefas e informação no ficheiro <filename>rules</filename>, por exemplo, são comuns aos pacotes. Para tornar o empacotamento mais fácil e eficiente, pode usar o <application>debhelper</application> para ajudar com estas tarefas. Debhelper é um conjunto de scripts Perl (com prefixo <emphasis>dh_</emphasis>) que automatiza o processo de construção de pacotes. Com estes scripts, construir um pacote Debian torna-se bastante simples.</para>
+
+		<para>Neste exemplo, iremos novamente construir o pacote GNU Hello, mas desta vez iremos comparar o nosso trabalho para o pacote Ubuntu <application>hello-debhelper</application>. Novamente, crie uma directoria onde irá trabalhar:</para>
+
+		<screen>mkdir ~/hello-debhelper
+cd ~/hello-debhelper
+wget http://ftp.gnu.org/gnu/hello/hello-2.1.1.tar.gz
+mkdir ubuntu
+cd ubuntu</screen>
+		
+
+		<para>A seguir, obtenha o pacote fonte Ubuntu:</para>
+
+		<screen>apt-get source hello-debhelper
+cd ..</screen>
+
+		<para>Como no exemplo anterior, a primeira coisa que precisamos é descompactar o ficheiro original(enviado).</para>
+
+		<screen>tar -xzvf hello-2.1.1.tar.gz</screen>
+
+		<para>Instead of copying the upstream tarball to
+			<filename>hello_2.1.1.orig.tar.gz</filename> as we did in the
+			previous example, we will let <application>dh_make</application>
+			do the work for us. The only thing you have to do is rename the
+			source folder so it is in the form of
+			<emphasis>&lt;packagename&gt;-&lt;version&gt;</emphasis> where
+			packagename is lowercase. In this case, just untarring the
+			tarball produces a correctly named source directory so we can move
+			into it:</para>
+
+		<screen>cd hello-2.1.1</screen>
+
+		<para>Para criar a "debianização" inicial da fonte iremos usar o <application>dh_make</application>.</para>
+
+		<screen>
+dh_make -e your.maintainer@address -f ../hello-2.1.1.tar.gz
+		</screen>
+
+		<para>dh_make perguntar-lhe-á uma série de questões:</para>
+
+		<screen>
+Type of package: single binary, multiple binary, library, kernel module or cdbs?
+[s/m/l/k/b] <emphasis role="bold">s</emphasis></screen>
+
+		<screen>
+Maintainer name : Captain Packager
+Email-Address : packager@coolness.com
+Date : Thu, 6 Apr 2006 10:07:19 -0700
+Package Name : hello
+Version : 2.1.1
+License : blank
+Type of Package : Single
+Hit &lt;enter&gt; to confirm: <emphasis role="bold">Enter</emphasis></screen>
+
+		<caution><para>Corra apenas <application>dh_make -e</application> uma vez. Se o correr outra vez após a primeira vez, não irá funcionar correctamente. Se o quiser mudar ou fez um erro, remova a directoria fonte e descomprima o ficheiro enviado de novo. A seguir pode migrar para a directoria fonte e tentar outra vez.</para></caution>
+		
+		<para>Executando <application>dh_make -e</application> faz duas coisas:</para>
+
+		<orderedlist> 
+			
+			<listitem><para>Cria o ficheiro <filename>hello_2.1.1.orig.tar.gz</filename> na directoria anterior,</para></listitem>
+
+			<listitem><para>Cria os ficheiros básicos necessários em <filename>debian/</filename> e muitos ficheiros modelo (.ex) que podem ser necessários.</para></listitem>
+			
+		</orderedlist>
+
+		<para>O programa <application>Hello</application> não é muito complicado, e como vimos em <xref linkend="basic-scratch"/>, criar pacotes não requere muito mais do que os ficheiros básicos. Logo, vamos remover os ficheiros <filename>.ex</filename>:</para>
+
+		<screen>cd debian
+rm *.ex *.EX</screen>
+
+		<para>Para o <application>hello</application>, também não irá precisar dos <filename>README.Debian</filename> (ficheiro README para situações especifica Debian, não é o README do programa), <filename>dirs</filename> (usado por <application>dh_installdirs</application> para criar as directorias necessárias), <filename>docs</filename> (usado por <application>dh_installdocs</application> para instalar a documentação do programa), ou <filename>info</filename> (usado por <application>dh_installinfo</application> para instalar o ficheiro info) ficheiros na directoria <filename>debian</filename>. Para mais informação sobre estes ficheiros, veja <xref linkend="appendix-examples"/>.</para>
+
+		<para>Neste ponto, deve ter apenas os ficheiros <filename>changelog</filename>, <filename>compat</filename>, <filename>control</filename>, <filename>copyright</filename>, e <filename>rules</filename> na directoria <filename>debian</filename>. A partir de <xref linkend="basic-scratch"/>, o único ficheiro que é novo é o <filename>compat</filename>, que é um ficheiro que contém a versão do <application>debhelper</application> (neste caso 4) que é usada.</para>
+
+		<para>Precisará de ajustar o <filename>changelog</filename> ligeiramente neste caso para mostrar que este pacote é chamado <application>hello-debhelper</application> em vez de apenas <application>hello-debhelper</application>:</para>
+
+		<screen>
+hello-debhelper (2.1.1-1) dapper; urgency=low
+
+  * Initial release
+
+  -- Captain Packager &lt;packager@coolness.com&gt; Thu, 6 Apr 2006 10:07:19 -0700</screen>
+		
+		<para>Ao usar <application>debhelper</application>, a única coisa que precisamos mudar no <filename>control</filename> são o nome (substituindo <application>hello</application> por <application>hello-debhelper</application>) e adicionando <application>debhelper (&gt;= 4.0.0)</application> ao campo <emphasis>Build-Depends</emphasis> para o pacote fonte. O pacote fonte Ubuntu para <application>hello-debhelper</application> parece-se com isto:</para>
+
+		<screen>
+Source: hello-debhelper
+Section: devel
+Priority: extra
+Maintainer: Capitan Packager &lt;packager@coolness.com&gt;
+Standards-Version: 3.6.1
+Build-Depends: debhelper (&gt;= 4)
+
+Package: hello-debhelper
+Architecture: any
+Depends: ${shlibs:Depends}
+Conflicts: hello
+Provides: hello
+Replaces: hello
+Description: The classic greeting, and a good example
+ The GNU hello program produces a familiar, friendly greeting.  It
+ allows non-programmers to use a classic computer science tool which
+ would otherwise be unavailable to them.
+ .
+ Seriously, though: this is an example of how to do a Debian package.
+ It is the Debian version of the GNU Project's `hello world' program
+ (which is itself an example for the GNU Project).
+ .
+ This is the same as the hello package, except it uses debhelper to
+ make the deb.  Please see debhelper as to what it is.
+		</screen>
+
+		<para>Podemos copiar o ficheiro <filename>copyright</filename> e o <filename>postinst</filename> e os scripts <filename>prerm</filename> do pacote Ubuntu <application>hello-debhelper</application>, devido a não terem mudado desde <xref linkend="basic-scratch"/>. Iremos também copiar o ficheiro <filename>rules</filename> de forma a podermos analisá-lo.</para>
+
+		<screen>
+cp ../../ubuntu/hello-debhelper-2.1.1/debian/copyright .
+cp ../../ubuntu/hello-debhelper-2.1.1/debian/postinst .
+cp ../../ubuntu/hello-debhelper-2.1.1/debian/prerm .
+cp ../../ubuntu/hello-debhelper-2.1.1/debian/rules .</screen>
+
+		<para>The last file we need to look at is <filename>rules</filename>,
+			where the power of
+			<application>debhelper</application> scripts can be seen. The
+			<application>debhelper</application> version of
+			<filename>rules</filename> is somewhat smaller (54 lines as
+			opposed to 72 lines in the version from <xref linkend="basic-scratch-rules"/>).</para>
+
+		<para>A versão do <application>debhelper</application> parece-se com isto:</para>
+
+		<screen> #!/usr/bin/make -f
+
+package = hello-debhelper
+
+CC = gcc
+CFLAGS = -g -Wall
+
+ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+  CFLAGS += -O2
+endif
+
+#export DH_VERBOSE=1
+
+clean:
+       dh_testdir
+       dh_clean
+       rm -f build
+       -$(MAKE) -i distclean
+
+install: build
+       dh_clean
+       dh_installdirs
+       $(MAKE) prefix=$(CURDIR)/debian/$(package)/usr \
+              mandir=$(CURDIR)/debian/$(package)/usr/share/man \
+              infodir=$(CURDIR)/debian/$(package)/usr/share/info \
+              install
+
+build:
+       ./configure --prefix=/usr
+       $(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)"
+       touch build
+
+binary-indep: install
+# There are no architecture-independent files to be uploaded
+# generated by this package. If there were any they would be
+# made here.
+
+binary-arch: install
+       dh_testdir -a
+       dh_testroot -a
+       dh_testroot -a
+       dh_installdocs -a NEWS
+       dh_installchangelogs -a ChangeLog
+       dh_strip -a
+       dh_compress -a
+       dh_fixperms -a
+       dh_installdeb -a
+       dh_shlibdeps -a
+       dh_gencontrol -a
+       dh_md5sums -a
+       dh_builddeb -a
+
+binary: binary-indep binary-arch
+
+.PHONY: binary binary-arch binary-indep clean checkroot
+			</screen>
+
+		<para>Notice that tasks like testing if you are in the right directory
+			(<application>dh_testdir</application>), making sure you are
+			building the package with root privileges
+			(<application>dh_testroot</application>), installing documentation
+			(<application>dh_installdocs</application> and
+			<application>dh_installchangelogs</application>), and cleaning up
+			after the build (<application>dh_clean</application>) are handled
+			automatically. Many packages much more complicated than
+			<application>hello</application> have <filename>rules</filename>
+			files no bigger because the <application>debhelper</application>
+			scripts handle most of the tasks. For a complete list of
+			<application>debhelper</application> scripts, please see <xref linkend="appendix-debhelper"/>. They are also well documented
+			in their respective <application>man</application> pages. It is a
+			useful exercise to read the man page (they are well written and
+			not lengthy) for each helper script used in the above
+			<filename>rules</filename> file.</para>
+
+			<sect2>
+			<title>Building the Source Package</title>
+			
+			<para>Agora que percorremos os ficheiros na directoria <filename>debian</filename> devido ao <application>hello-debhelper</application>, podemos construir os pacotes fonte (e binários). Primeiro, vamos mover-nos para a directoria fonte:</para>
+			
+			<para><screen>cd ..</screen></para>
+			
+			<para>Now we build the source package using
+				<application>debuild</application>, a wrapper script
+				for <application>dpkg-buildpackage</application>:</para>
+			
+			<para><screen>debuild -S</screen></para>
+			
+			<para>o pacote binário, usando o <application>pbuilder</application>:</para>
+			
+			<para><screen>sudo pbuilder build ../*.dsc</screen></para>
+
+			<para>e finalmente verifique o pacote fonte à procura de erros comuns usando <application>lintian</application>:</para>
+			
+			<screen>cd ..
+lintian -i *.dsc</screen>
+			
+		</sect2>
+	
+	</sect1>
+
+	<sect1 id="basic-cdbs" status="complete">
+		<title>Criando Pacotes Com o CDBS</title>
+
+		<para>O CDBS é uma ferramenta que usa o debhelper para tornar mais fácil construir e manter pacotes Debian. Tem muitas vantagens:</para>
+
+			<itemizedlist>
+				<listitem><para>Ele produz um <filename>debian/rules</filename> pequeno, legível e eficiente</para></listitem>
+				
+				<listitem><para>Automatiza o debhelper e as autotools para si, de forma a não ter que se preocupar com tarefas repetitivas</para></listitem>
+				
+				<listitem><para>Ajuda-o a focar-se em problemas mais importantes da criação de pacotes, porque ajuda-o sem limitar a personalização</para></listitem>
+				
+				<listitem><para>Todas as suas classes forem bem testadas, de forma a evitar correcções erradas para resolver problemas comuns</para></listitem>
+				
+				<listitem><para>Mudar para o CDBS é fácil</para></listitem>
+				
+				<listitem><para>É extensível</para></listitem>
+			</itemizedlist>
+		
+		<sect2>
+			<title>Usando pacotes CDBS</title>
+		
+			<para>Using CDBS for Ubuntu packages is very easy. After adding 
+				<application>cdbs</application> to the Build-Depends in 
+				<filename>debian/control</filename>, a basic
+				<filename>debian/rules</filename> file using CDBS can fit in 2 lines. 
+				For a simple C/C++ application with no extra rules, such as
+				<application>hello</application>, <filename>debian/rules</filename> can
+				look like this :</para>
+
+			<screen>#!/usr/bin/make -f
+				
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/autotools.mk</screen>
+
+			<para>É tudo o que precisa para construir o programa! O CDBS trata da instalação e limpeza. Pode a seguir usar os ficheiros <filename>.install</filename> e <filename>.info</filename> para afinar o seu pacote com as habituais funções do debhelper nas várias secções do <filename>debian/rules</filename>.</para>
+
+			<warning><para>Não use DEB_AUTO_UPDATE_DEBIAN_CONTROL:=yes para mudar automáticamente o <filename>debian/control</filename>. Pode causar vários problemas, e o Debian considera isto como uma razão para rejeitar a entrada de um pacote nos arquivos. Veja <ulink url="http://ftp-master.debian.org/REJECT-FAQ.html"> http://ftp-master.debian.org/REJECT-FAQ.html</ulink> para mais informação.</para></warning>
+			
+			<para>As you can see, CDBS mostly works by including <filename>.mk</filename>
+				Makefiles in <filename>debian/rules</filename>. The
+				<application>cdbs</application> package provides such files in
+				<filename>/usr/share/cdbs/1/</filename> that allow you to do quite a lot
+				of packaging tasks. Other packages, such as <application>quilt</application>, add
+				modules to CDBS and can be used as Build-Depends. Note that you can
+				also use your own CDBS rules and include them in the package. The most
+				useful modules included with the <application>cdbs</application> package
+				are:</para>
+
+			<itemizedlist>
+				
+				<listitem><para><filename>rules/debhelper.mk</filename>: Chama o debhelper em todas as secções necessárias</para></listitem>
+			
+				<listitem><para><filename>rules/dpatch.mk</filename>: Permite-lhe usar o dpatch para corrigir fácilmente a fonte</para></listitem>
+				
+				<listitem><para><filename>rules/simple-patchsys.mk</filename>: Fornece uma maneira muito fácil de corrigir a fonte</para></listitem>
+				
+				<listitem><para><filename>rules/tarball.mk</filename>: Permite-lhe construir pacotes usando o ficheiro comprimido no pacote</para></listitem>
+				
+				<listitem><para><filename>class/autotools.mk</filename>: Chama o autotools em todas as secções requeridas</para></listitem>
+				
+				<listitem><para><filename>class/gnome.mk</filename>: Constrói programas GNOME (requere as Build-Depends correctas em <filename>debian/control</filename>)</para></listitem>
+				
+				<listitem><para><filename>class/kde.mk</filename>: Constrói programas KDE (requere as Build-Depends correctas em <filename>debian/control</filename>)</para></listitem>
+				
+				<listitem><para><filename>class/python-distutils.mk</filename>: Facilita a criação de pacotes de programas Python</para></listitem>
+			
+			</itemizedlist>
+		</sect2>
+		
+		<sect2>
+			<title>Mais informação sobre o CDBS</title>
+		
+			<para>Para mais informação sobre o CDBS, veja o guia de Marc Dequènes em <ulink url="https://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml">https://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml</ulink>.</para>
+		
+		</sect2>
+	</sect1>
+
+
+</chapter>
+

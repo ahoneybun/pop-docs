@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+        "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="updating-chap" status="writing">
+ 		<title>패키지 업데이트 하기</title>
+
+			<para>If you have been around Linux distributions for any amount
+				of time, you have realized that there are sometimes bugs in
+				programs. In the Debian and <phrase>Ubuntu</phrase> distributions, bugs are
+				often fixed through the packaging by patching the source code.
+				Sometimes there are bugs in the packaging itself that can
+				cause difficulties.</para>
+
+			<para>To patch the program's source code, you could simply download
+				the current <phrase>Ubuntu</phrase> source package (with
+				<application>apt-get source</application>) and make the needed
+				changes. You can then add a new entry to the
+				<filename>debian/changelog</filename> using
+				<application>dch -i</application> or
+				<application>dch -v
+					&lt;version&gt;-&lt;revision&gt;</application> to specify
+				the new revision. When you run <application>debuild
+					-S</application> from the source directory you will have a
+				new source package with a new <filename>.diff.gz</filename> in the
+				parent directory that
+				contains your changes. A problem with this approach is that
+				the distinction between source and patches is unclear.</para>
+
+			<para>이 문제의 해결책은 소스 코드의 변경을 각각의 <filename>debian</filename> 디렉토리로 저장할 패치들로 나누는 것 입니다. 하나의 이러한 패치 시스템은 <application>dpatch</application> 로 불려집니다. 패치들은 <filename>debian/patches/</filename> 디렉토리에 저장되고 특별한 형식을 가지고 있습니다.</para>
+
+			<para><application>dpatch</application> 를 만들기 위해, 다음의 단계를 순서적으로 수행 합니다.</para>
+
+			<para>임시 작업 장소를 만들고 현재 소스 디렉토리의 두 복사본을 만듭니다:</para>
+			
+			<screen>
+mkdir tmp
+cd tmp
+cp -a ../&lt;package&gt;-&lt;version&gt; . 
+cp -a &lt;package&gt;-&lt;version&gt; &lt;package&gt;-&lt;version&gt;.orig 
+</screen>
+
+			<para><filename>&lt;package&gt;-&lt;version&gt;</filename> 디렉토리에서 변경을 합니다.</para>
+
+			<para><application>diff</application> 를 사용하여 패치를 만들고 <filename>debian/patches</filename> 디렉토리에 그것을 가져다 놓습니다:</para>
+
+			<screen>
+diff -Nru &lt;package&gt;-&lt;version&gt;.orig &lt;package&gt;-&lt;version&gt; &gt; patch-file
+</screen>
+
+			<para><application>dpatch patch-template</application> 을 사용하여 <application>dpatch</application> 와 dpatch 들을 나열하는 <filename>00list</filename> 로 이름한 파일을 만듭니다.</para>
+			<screen>
+ddpatch patch-template -p "01_patchname" "patch-file description" \
+	&lt; patch-file &gt; 01_patchname.dpatch
+echo 01_patchname.dpatch &gt;00list</screen>
+
+			<para>여러분은 이제 소스 패키지의 <filename>debian/patches</filename> 디렉토리에 <filename>01_patchname.dpatch</filename> 와 <filename>00list</filename> 를 위치 시킬 수 있습니다:</para>
+
+			<screen>
+mkdir ../&lt;package&gt;-&lt;version&gt;/debian/patches
+cp 01_patchname.dpatch 00list ../&lt;package&gt;-&lt;version&gt;/debian/patches
+cd ..
+rm -rf tmp
+			</screen>
+
+			<note><para>여러분은 또한 <application>dpatch-edit-patch</application> 를 사용하여 이미 존재하는 패치를 편집할 수 있습니다.</para></note>
+			
+		<para>모든 변경이 만들어지고, changelog 항목도 추가되고, (필요한 경우) <application>dpatch</application> 도 <filename>debian/control</filename> 파일에 더해진 후, 여러분은 <application>debuild -S</application> 를 가지고 소스 패키지를 다시 만들 수 있습니다.</para>
+
+		<para>To get your fixed source package uploaded to the <phrase>Ubuntu</phrase>
+			repositories, you will need to get your source package sponsored by
+			a person who has upload rights. See <xref linkend="ubuntu-upload"/> for more details. Sometimes, rather
+			than giving the entire source package (.diff.gz, .dsc, and
+			.orig.tar.gz), it is easier and more efficient to just give the
+			difference between the source package that is currently in the
+			repositories and your fixed source package. A tool has been
+			created to do just that called
+			<application>debdiff</application>. Using
+			<application>debdiff</application> is similar to using
+			<application>diff</application> but is made specifically for
+			packaging. You can <application>debdiff</application> the
+			source package by:</para>
+
+		<screen>
+debdiff &lt;oldpackage&gt;.dsc &lt;newpackage&gt;.dsc &gt; package.debdiff
+		</screen>
+
+		<para>또는 다음에 의해 바이너리 패키지:</para>
+
+		<screen>
+debdiff &lt;oldpackage&gt;.deb &lt;newpackage&gt;.deb &gt; package.debdiff
+		</screen>
+	
+		<para>Debdiff 들을 버그 리포트에 첨부하는 것은 아주 좋고 스폰서가 업로드를 하도록 준비 합니다.</para>
+		
+</chapter>
+

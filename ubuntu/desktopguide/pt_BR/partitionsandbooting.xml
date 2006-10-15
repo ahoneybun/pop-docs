@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-pt_BR SYSTEM "../../../ubuntu/libs/gnome-menus-pt_BR.ent">
+%gnome-menus-pt_BR;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="partitions-booting" status="complete">
+	<title>Partições e Boot</title>
+		<para>Esta seção contém informações sobre como alterar a maneira que seu computador se comporta quando você o liga, como acessar outros sistemas operacionais e partições a partir do Ubuntu.</para>
+			<sect1 status="complete">
+				<title>Editor Gráfico de Partições</title>
+					<para><application>Gparted</application> é uma ferramenta gráfica para editar partições de disco.</para> 
+					<procedure>
+						<step>
+							<para>Instalar o pacote <application>gparted</application> (veja <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>	
+							<para>Você pode executar a aplicação com o &gparted;.</para>
+						</step>
+					</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Tornar as partições Windows disponíveis a partir do Ubuntu</title>
+				<para>As partições Windows devem estar automaticamente disponíveis em qualquer sistema Ubuntu. Se elas não estiverem, você pode torná-las disponíveis usando o <application>Gerenciador de Discos</application>.</para>
+				<procedure>
+					<step>
+						<para>Abrir &disks;.</para>
+					</step>
+					<step>
+						<para>Selecione o disco rígido correto, e clique em <guilabel>Partições</guilabel>.</para>
+					</step>
+					<step>
+						<para>Selecione a partição mais relevante, e clique em <guilabel>Habilitar</guilabel>.</para>
+					</step>
+					<step>
+						<para>Para desmontar uma partição, clique em <guilabel>Desabilitar</guilabel>.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Tornar as partições Windows disponíveis automaticamente</title>
+				<para>As partições Windows devem estar automaticamente disponíveis no Ubuntu. Se elas não estiverem, o seguinte procedimento fará com que sejam automaticamente disponíveis:</para>
+				<procedure>
+					<step>
+						<para>Leia <xref linkend="listpartitiontables"/></para>
+					</step>
+					<step>
+						<para>Primeiro crie um diretório onde sua partição será disponível ("montada")</para>
+							<screen>
+sudo mkdir /media/windows
+							</screen>
+					</step>
+					<step>
+						<para>A seguir, crie uma cópia de backup do seu arquivo de configuração do disco e abra o arquivo num editor de textos com privilégios de administrador:</para>
+						<screen>
+sudo cp /etc/fstab /etc/fstab_backup
+sudo gedit /etc/fstab
+						</screen>
+					</step>
+					<step>
+						<para>Adicione a seguinte linha no final do arquivo: <programlisting>/dev/hda1 /media/windows ntfs umask=0222 0 0</programlisting></para>
+						<note>
+							<para>Substitua <emphasis role="bold">/dev/hda1</emphasis> pelo nome correto do dispositivo para sua partição.</para>
+							<para>Se sua partição Windows usa FAT32, substitua <emphasis role="bold">ntfs</emphasis> por <emphasis role="bold">vfat</emphasis> no comando acima.</para>
+							<para>Se você tem um sistema de arquivos FAT32, também é seguro permitir acesso de leitura e escrita. Para fazer isso, mude o valor de <emphasis role="bold">umask</emphasis> para 0000.</para>
+						</note>
+					</step>
+					<step>
+						<para>Salve o arquivo editado (<ulink url="sample/fstab_automountntfs">um exemplo</ulink>).</para>
+					</step>
+					<step>
+						<para>As alterações terão efeito quando o computador for reiniciado.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Execute um comando de sistema automaticamente ao iniciar</title>
+				<para>Às vezes pode ser útil executar um comando personalizado assim que o computador é ligado. Para fazer isso:</para>
+				<procedure>
+					<step>
+						<para>Edite o <application>crontab</application> com privilégios administrativos (veja <xref linkend="root-and-sudo"/>):</para>
+							<screen>sudo crontab -e</screen>
+					</step>
+					<step>
+						<para>Adicione a seguinte linha:</para>
+							<screen>@reboot /home/user/command</screen>
+					<note>
+						<para>Substitua <filename>/home/user/command</filename> pelo endereço completo para seu comando.</para>
+					</note>
+					</step>
+					<step>
+						<para>Salve o arquivo e saia.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Mudar o sistema operacional padrão no boot</title>
+				<para>Para mudar o sistema operacional que inicia por padrão quando o computador é ligado, edite o arquivo de configuração do <application>grub</application>.</para>
+				<procedure>
+					<step>
+						<para>Faça um backup do arquivo de configuração e abra-o em um editor de texto:</para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+sudo gedit /boot/grub/menu.lst</screen>
+					</step>
+					<step>
+						<para>Procure esta linha:</para>
+						<programlisting>...
+default 0
+...</programlisting>
+					</step>
+					<step>
+						<para>Substituia pela seguinte linha:</para>
+						<programlisting>default X</programlisting>
+						<note><para>Você deve substituir X por um número, de acordo com a ordem na qual seus sistemas operacionais aparecem no arquivo de configuração. Você deve começar a contar do 0. Por exemplo, se você quiser que o seu sistema operacional padrão seja o primeiro da lista, substitua X por 0; se você quiser que o seu sistema operacional padrão seja o segundo da lista, substitua X por 1 e assim sucessivamente.</para></note> 
+					</step>
+					<step>
+						<para>Salve o arquivo editado (<ulink url="sample/menu.list_changedefaultosgrub">um exemplo</ulink>)</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Configure os serviços de inicialização</title>
+				<para>Isto requer privilégios administrativos (veja <xref linkend="root-and-sudo"/>).</para>
+				<procedure>
+					<step>
+						<para>Execute <application>Configuração de Serviços</application>:
+<menuchoice><guimenu>Sistema</guimenu>
+								<guisubmenu>Administração</guisubmenu>
+								<guimenuitem>Serviços</guimenuitem></menuchoice>.</para>
+					</step>
+					<step>
+						<para>Digite sua senha.</para>
+					</step>
+					<step>
+						<para>Marque os serviços que deseja executar, então clique em <guibutton>OK</guibutton> quando pronto.</para>
+					</step>
+					<step>
+						<para>Para um melhor controle sobre os serviços de inicialização, instale <application>bum</application> do repositório <quote>Universe</quote> (veja <xref linkend="add-applications"/>), e execute-o: <menuchoice><guimenu>Sistema</guimenu>
+								<guisubmenu>Administração</guisubmenu>
+								<guimenuitem>Gerenciador de inicialização</guimenuitem></menuchoice>.</para>
+					</step>
+				</procedure>
+			</sect1>
+	<sect1 id="other-hardware" status="complete">
+	    <title>Outras Dicas</title>
+	    <sect2 id="listpartitiontables" status="complete">
+                <title>Verifique o espaço de disco usado e veja a tabela de partição</title>
+                    <procedure>
+                        <step>
+                            <para>Abrir &disks;.</para>
+                        </step>
+                        <step>
+                            <para>Selecione o <guibutton>Disco Rígido</guibutton>, depois a aba <guibutton>Partições</guibutton></para>
+                        </step>
+                        <step>
+                            <para>Cada partição será listada em <guilabel>Lista de Partições</guilabel>, com o espaço em disco e o ponto de montagem.</para>
+                        </step>
+                    </procedure>
+            </sect2>
+            <sect2 status="complete">
+                <title>Listar dispositivos</title>
+                            <para>Para listar os dispositivos montados, digite em um terminal:</para>
+                               <screen>mount</screen>
+			    <para>A listagem mostra o dispositivo (tal como uma partição do disco rígido), o ponto de montagem (onde você acessa os arquivos), o tipo de sistema de arquivos e as opções de montagem.</para>
+                            <para>Este exemplo mostra a partição do disco rigido hda2 montada como '/', com o sistema de arquivo tipo ext3. A partição é montada com duas opções, uma para permitir que o dispositivo seja de leitura e gravação e a outra para remontar o dispositivo como somente leitura no evento de alguns erros.</para>
+                            <screen><computeroutput>/dev/hda2 on / type ext3 (rw,errors=remount-ro)</computeroutput></screen>				
+                            <para>Para listar os dispositivos PCI:</para>
+                                <screen>lspci</screen>
+                            <para>Para listar os dispositivos USB:</para>
+                                <screen>lsusb</screen>
+            </sect2>
+ 
+            <sect2 status="complete">
+                <title>Montar/desmontar CD/DVD-ROMs manualmente, e mostrar todos os arquivos/pastas associados e ocultos.</title>
+                            <para>Assumindo que <filename class="devicefile">/media/cdrom0/</filename> é a localização do CD/DVD-ROM</para>
+                            <para>Para montar um CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo mount /media/cdrom0/ -o unhide</screen>
+                            </para>
+                            <para>Para desmontar um CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo umount /media/cdrom0/</screen>
+                            </para>
+            </sect2>
+	</sect1>
+</chapter>
+

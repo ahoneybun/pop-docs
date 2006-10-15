@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-pl SYSTEM "../../../ubuntu/libs/gnome-menus-pl.ent">
+%gnome-menus-pl;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="linux-basics" status="review">
+	<title>Podstawy Linuksa</title>
+				<para>Linux został zainspirowany systemem operacyjnym Unix, który pojawił się w roku 1969, od tamtej pory jest w ciągłym użyciu i jest nadal rozwijany. Wiele rozwiązań stojących za Uniksem istnieje także w Linuksie i są zasadnicze dla zrozumienia podstaw systemu.</para>
+				<para>Unix był głównie nakierowany na interfejs linii poleceń i te dziedzictwo zostało przeniesione do Linuksa. Graficzny interfejs użytkownika ze swoimi oknami, ikonami i menu jest zbudowany na bazie interfejsu linii poleceń. Idąc dalej oznacza to także, iż system plików Linuksa jest zbudowany tak, że jest łatwo dostępny i można nim łatwo zarządzać z linii poleceń.</para>
+		<sect1 id="directories-file-systems" status="complete">
+			<title>Katalogi i Systemy Plików</title>
+				<para>Systemy plików Linuksa i Uniksa są zorganizowane hierarchiczną strukturę podobną do drzewa. Najwyższy poziom systemu plików to <filename>/</filename> lub <emphasis>katalog główny (root)</emphasis>. Filozofia projektancka Uniksa i Linuksa traktuje wszystko jako plik, wliczając w to dyski twarde, partycje i dyski wymienne. To oznacza, iż wszystkie inne pliki i katalogi (wliczając w to inne dyski i partycje) są zawarte w katalogu głównym.</para>
+				<para>Dla przykładu, <filename>/home/sylwester/przetarg.odt</filename> pokazuje pełną ścieżkę do pliku <filename>przetarg.odt</filename> istniejącego w katalogu <filename>sylwester</filename>, który znajduje się w katalogu <filename>home</filename> (domowym), który to z kolei znajduje się w katalogu głównym (<filename>/</filename>).</para>
+				<para>W głównym katalogu (<filename>/</filename>) znajduje się kilka ważnych katalogów systemowych, które są wspólne dla większości używanych dystrybucji Linuksa. Poniżej znajduje się lista katalogów, które znajdują się bezpośrednio w katalogu głównym (<filename>/</filename>):</para>
+					<itemizedlist>
+						<listitem>
+							<para><filename>/bin</filename> - ważne aplikacje <emphasis>bin</emphasis>arne</para>
+						</listitem>
+						<listitem>
+							<para><filename>/boot</filename> - pliki wymagane do <emphasis>uruchomienia</emphasis> komputera</para>
+						</listitem>
+						<listitem>
+							<para><filename>/dev</filename> - pliki urządzeń</para>
+						</listitem>
+						<listitem>
+							<para><filename>/etc</filename> - pliki konfiguracyjne, skrypty startowe, itp.</para>
+						</listitem>
+						<listitem>
+							<para><filename>/home</filename> - domowe katalogi użytkowników lokalnych</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lib</filename> - biblioteki systemowe</para>
+						</listitem>
+						<listitem>
+							<para><filename>/lost+found</filename> - dostarcza system zgubione+znalezione dla plików znajdujących się w katalogu głównym (<filename>/</filename>)</para>
+						</listitem>
+						<listitem>
+							<para><filename>/media</filename> - zamontowane (załadowane) nośniki wymienne, takie jak płyty CD, aparaty cyfrowe, itp.</para>
+						</listitem>
+						<listitem>
+							<para><filename>/mnt</filename> - za<emphasis>m</emphasis>o<emphasis>nt</emphasis>owane systemy plików</para>
+						</listitem>
+						<listitem>
+							<para><filename>/opt</filename> - dostarcza lokalizację do instalacji <emphasis>op</emphasis>cjonalnych aplikacji</para>
+						</listitem>
+						<listitem>
+							<para><filename>/proc</filename> - specjalny katalog dynamiczny utrzymujący informacje o stanie systemu, wliczając w to bieżące <emphasis>proc</emphasis>esy</para>
+						</listitem>
+						<listitem>
+							<para><filename>/root</filename> - katalog domowy użytkownika <emphasis>root</emphasis>, wymawia się "slasz-rut".</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sbin</filename> - ważne <emphasis>s</emphasis>ystemowe <emphasis>bin</emphasis>aria</para>
+						</listitem>
+						<listitem>
+							<para><filename>/sys</filename> - zawiera informacje o <emphasis>sys</emphasis>temie</para>
+						</listitem>
+						<listitem>
+							<para><filename>/tmp</filename> - pliki <emphasis>t</emphasis>y<emphasis>m</emphasis>czasowe</para>
+						</listitem>
+						<listitem>
+							<para><filename>/usr</filename> - aplikacje i pliki zazwyczaj dostępne dla wszystkich <emphasis>u</emphasis>żytkowników</para>
+						</listitem>
+						<listitem>
+							<para><filename>/var</filename> - zmienne pliki, takie jak dzienniki czy bazy danych</para>
+						</listitem> 
+					</itemizedlist>
+		</sect1>
+
+		<sect1 id="permissions" status="review">
+			<title>Uprawnienia</title>
+                       <para>Wszystkie pliki w systemie Linuksowym mają uprawnienia, które zezwalają lub zabraniają innym na ich wyświetlanie, modyfikację lub wykonanie. Super użytkownik "root" ma dostęp do wszystkich plików w systemie. Każdy plik ma ograniczenia dostępu, ograniczenia użytkowników i ma powiązanie właściciel/grupa.</para>
+                       <para>Każdy plik jest zabezpieczony następującym zestawem uprawnień, kolejność ułożona pod względem ważności:</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>użytkownik</emphasis></para>
+                           <para>dotyczą użytkownika, który jest właścicielem pliku</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>grupa</emphasis></para>
+                           <para>dotyczy grupy związanej z tym plikiem</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>inni</emphasis></para>
+                           <para>dotyczy wszystkich innych użytkowników</para>
+                         </listitem>
+                       </itemizedlist>
+                       <para>W każdym z trzech zestawów uprawnień znajdują się faktyczne uprawnienia. Te uprawnienia, łącznie z ich różnym zastosowaniem na plikach i katalogach, zostały wyszczególnione poniżej:</para>
+                       <itemizedlist>
+                         <listitem>
+                           <para><emphasis>odczyt</emphasis></para>
+                           <para>pliki mogą zostać wyświetlone/otwarte</para>
+                           <para>zawartość katalogów może zostać wyświetlona</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>zapis</emphasis></para>
+                           <para>pliki mogą być edytowane lub usuwane</para>
+                           <para>zawartość katalogów może być modyfikowana</para>
+                         </listitem>
+                         <listitem>
+                           <para><emphasis>wykonanie</emphasis></para>
+                           <para>pliki wykonywalne mogą być uruchomione jako program</para>
+                           <para>można wejść do katalogów</para>
+                         </listitem>
+                       </itemizedlist>
+				<para>Aby zobaczyć lub zmienić uprawnienia do plików i katalogów, otwórz <phrase>&home-folder;</phrase> i kliknij prawym przyciskiem na pliku lub katalogu. Następnie wybierz <guimenu>Właściwości</guimenu>. Uprawnienia są wyświetlane na karcie <guilabel>uprawnienia</guilabel>, która pozwala róznież na ich edycję, jeśli jesteś właścicielem danego pliku.</para>
+				<para>Więcej o uprawnieniach do plików w Linuksie dowiesz się czytając stronę<ulink url="&wiki-filepermissions;">file permissions page</ulink> w Ubuntu Wiki.</para>
+		</sect1>
+
+
+		<sect1 id="terminals" status="review">
+		<title>Terminale</title>
+            <para>Praca w wierszu poleceń nie jest taka trudno jakby się to mogło wydawać. Nie potrzeba żadnej specjalnej wiedzy wymaganej do używania wiersza poleceń, to program jak każdy inny. Większość rzeczy w Linuksie może zostać wykonane z wiersza poleceń, mimo iż istnieją narzędzia graficzne do większości programów, czasami są po prostu nie wystarczające.</para>
+    	      <para>Terminal jest często nazywany wierszem poleceń lub powłoką. W dawnych czasach była to jedyna metoda interakcji z komputerem, jednakże użytkownicy Linuksa uznali, że użycie powłoki może być szybsze niż metoda graficzna i nadal ma to swoje podstawy. Nauczysz się teraz korzystać z terminala.</para>
+				<para>Pierwszym zastosowaniem terminala była przeglądarka plików i faktycznie nadal jest używany jako przeglądarka plików w przypadku, kiedy środowisko graficzne szwankuje. Można korzystać z terminala jako przeglądarki plików, aby się do nich dostać i cofać zmiany, które miały miejsce.</para>
+		<sect2 id="starting-a-terminal" status="review">
+			<title>Uruchamianie Terminala</title>
+				<para>W celu uruchomienia programu <application>Terminal</application> choose &terminal;.</para>
+		</sect2>
+		<sect2 id="common-commands" status="review">
+			<title>Przydatne Polecenia</title>
+				<variablelist>
+					<varlistentry>
+						<term>wyświetlanie zawartość katalogu - ls</term>
+							<listitem><para>Polecenie <application>ls</application> wyświetla pliki w różnych kolorach w pełni sformatowanym tekście</para></listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Tworzenie katalogu -  mkdir (nazwa katalogu)</term>
+							<listitem><para>Polecenie <application>mkdir</application> tworzy katalog.</para></listitem>
+					</varlistentry>
+					<varlistentry>
+		    			<term>Przejście do innego katalogu - cd (/położenie/katalogu)</term>
+		    				<listitem><para>Polecenie <application>cd</application> zmieni katalog z bieżącego na jakikolwiek podany.</para>
+		    				</listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Kopiowanie plików lub katalogów - cp (nazwa pliku lub katalogu) (nazwa docelowego pliku lub katalogu)</term>
+		    				<listitem><para>Polecenie <application>cp</application> skopiuje podane pliki. Polecenie <application>cp -r</application> skopiuje podane katalogi.</para>
+		    				</listitem>
+		    		</varlistentry>
+		    		<varlistentry>
+		    			<term>Usuwanie plików lub katalogów - rm (nazwa pliku lub katalogu)</term>
+	            		<listitem><para>Polecenie <application>rm</application> usuwa podany plik. Polecenie <application>rm -rf</application> usuwa podany katalog.</para></listitem>
+					</varlistentry>
+		    		<varlistentry>
+		    			<term>Rename Files/Directories - mv (file or directory name)</term>
+							<listitem><para>Polecenie <application>mv</application> zmieni nazwę lub przeniesie dany plik lub katalog.</para>
+		    				</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Find Files/Directories - locate (file or directory name)</term>
+							<listitem><para>Polecenie <application>locate</application> przeskanuje komputer w poszukiwaniu podanej nazwy pliku. Używa indeksu plików w systemie aby działać szybciej: aby go zaktualizować należy uruchomić polecenie <application>updatedb</application>. Te polecenie jest uruchamiane automatycznie codzienie, jeśli komputer jest pozostawiany włączony. Musi być uruchomione z uprawnieniami administratora (patrz <xref linkend="root-and-sudo"/>).</para>
+							</listitem>
+					</varlistentry>
+					</variablelist>
+			<para>Można także używać znaków zastępczych aby dopasować nazwę jednego lub więcej plików, takich jak "*" (wszystkie pliki) lub "?" (do jednego znaku).</para>
+			<para>For a more thorough introduction to the Linux command line, please read the <ulink url="&wiki-BasicCommands;">command line introduction</ulink> on the Ubuntu wiki.
+			</para>
+		</sect2>
+		<sect2 status="complete">
+			<title>Przełączenie się w tryb konsoli</title>
+				<para>Zazwyczaj dostęp do wiersza poleceń uzyskujemy uruchamiając terminal (patrz <xref linkend="starting-a-terminal"/> wyżej), aczkolwiek czasami przydatny jest dostęp do prawdziwej konsoli:</para>
+				<procedure>
+					<step>
+						<para>Use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo>
+							shortcut keys to switch to the first console.
+						</para>
+					</step>
+					<step>
+						<para>To switch back to Desktop mode, use the <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F7</keycap>
+							</keycombo> shortcut keys.
+						</para>
+					</step>
+				</procedure>
+					<note>
+						<para>There are six consoles available. Each one is accessible with the
+							shortcut keys <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F1</keycap>
+							</keycombo> to <keycombo>
+								<keycap>Ctrl</keycap>
+								<keycap>Alt</keycap>
+								<keycap>F6</keycap>
+							</keycombo>.
+						</para>
+					</note>
+		</sect2>
+		<sect2 status="review">
+			<title>Wyłączanie dźwięku w trybie Terminala</title>
+				<procedure>
+					<step>
+						<para>
+						Start a <application>Terminal</application>
+						session,
+						select: <phrase>&terminal;</phrase>
+						from the desktop menu system. 
+						</para>
+					</step>
+					<step>
+						<para>
+							<menuchoice>
+								<guimenu>Edit</guimenu>
+								<guimenuitem>Current Profile...</guimenuitem>
+							</menuchoice>
+							. Select the
+							<guibutton>General</guibutton> tab. Uncheck the
+							<guilabel>Terminal bell</guilabel>
+							checkbox.
+						</para>
+					</step>
+				</procedure>
+		</sect2>
+	</sect1>
+
+	<sect1 id="text-editing" status="review">
+  			<title>Edycja Tekstu</title>
+ 			<para>All of the configurations and settings in Linux are saved in text files. Even though you most often can edit configurations through the graphical interface, you may occasionally have to edit them by hand. <application>Gedit</application> is the default Ubuntu text editor, which you can launch by clicking &text-editor; on the desktop menu system.
+ 			</para>
+ 			<para>Miejscami w tym poradniku będziemy uruchamiać <application>Gedit</application> z wiersza poleceń używając <application>gksudo</application>, który uruchomi <application>Gedit</application> z uprawnieniami administratora, aby zmodyfikować pliki konfiguracji.</para>
+			<para>Jeśli musisz użyć edytora tekstu w wierszu poleceń, możesz skorzystać z <application>nano</application>, który jest edytorem łatwym w użyciu. Podczas uruchamiania go z wiersza poleceń zawsze korzystaj z następującego polecenia, które zapewnia wyświetlanie złamań linii: <screen>nano -w</screen></para>
+			<para>For more information about how to use <application>nano</application>, refer to the <ulink url="&wiki-Nano;">guide on the wiki</ulink>.
+			</para>
+			<para>Istnieje także sporo innych edytorów terminalowych w Ubuntu, jedne z bardziej popularnych to <application>VIM</application> i <application>Emacs</application> (których wady i zalety są powodem wielu przyjaznych debat wśród społeczności Linuksa). Są one bardziej skomplikowane w użytkowaniu niż <application>nano</application>, ale oferują więcej możliwości.</para>
+	</sect1>
+
+		<sect1 id="users-and-groups" status="review">
+			<title>Użytkownicy i Grupy</title>
+			<para>Do dodawania użytkowników lub grup w systemie można użyć aplikacji <application>Użytkownicy i grupy</application> położonej w &users-groups;.</para>
+			<note>
+				<para>Pamiętaj, aby wylogować się i zalogować ponownie, żeby zmiany odniosły skutek.</para>
+			</note>
+			<para>Aby dodać nowego użytkownika kliknij na <guilabel>Dodaj użytkownika</guilabel>, wypełnij dane i kliknij <guilabel>OK</guilabel>. Aby modyfikować właściwości pojedynczych użytkowników, kliknij na przycisk <guilabel>Właściwości</guilabel> znajdujący się w głównym oknie <guilabel>Użytkownicy</guilabel>.</para>
+			<para>Aby dodać nową grupę, wybierz panel <guilabel>Grupy</guilabel> i kliknij na <guilabel>Dodaj grupę</guilabel>. Wybierz nazwę dla nowej grupy i, jeśli chcesz, zmień domyślną wartość <guilabel>ID grupy</guilabel>. Jeśli spróbujesz alokować <guilabel>ID grupy</guilabel> już w użyciu zostaniesz o tym ostrzeżony.</para>
+			<para>Możesz dodać użytkowników do nowo utworzonych grup wybierając użytkownika z menu po lewej stronie i klikając na przycisk <guilabel>Dodaj</guilabel>. Usuwanie jest tak samo proste jak dodawanie: wybierz użytkownika z menu po prawej stronie i kliknij na <guilabel>Usuń</guilabel>. Kiedy już będziesz gotowy, kliknij na <guilabel>OK</guilabel>, a zostanie utworzona nowa grupa ze swoimi użytkownikami.</para>
+			<para>Aby zmodyfikować właściwości grupy z głównego okna <guilabel>Grupy</guilabel>, wybierz nazwę grupy i kliknij na przycisk <guilabel>Właściwości</guilabel>.</para>
+			<para>Aby usunąć użytkownika lub grupę z systemu, wybierz użytkownika lub grupę do usunięcia i kliknij na przycisk <guilabel>Usuń</guilabel>.</para>
+		</sect1>
+
+</chapter>
+

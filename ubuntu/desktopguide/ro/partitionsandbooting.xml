@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="partitions-booting" status="complete">
+	<title>Partiţii şi iniţializarea sistemului</title>
+		<para>This section contains information about how to change the way that your computer behaves when you first turn it on, and how to access other operating systems and partitions from Ubuntu.</para>
+			<sect1 status="complete">
+				<title>Editorul grafic de partiţii</title>
+					<para><application>Gparted</application> este un instrument grafic pentru editarea partiţiilor unui disk.</para> 
+					<procedure>
+						<step>
+							<para>Instalaţi pachetul <application>gparted</application> (vezi <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>	
+							<para>You can run the application with &gparted;.
+							</para>
+						</step>
+					</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Make Windows partitions available from Ubuntu</title>
+				<para>Windows partitions should be automatically available from any Ubuntu system. If they are not, you can make them available using the <application>Disks Manager</application>.</para>
+				<procedure>
+					<step>
+						<para>Open &disks;.</para>
+					</step>
+					<step>
+						<para>Select the correct hard disk, and click <guilabel>Partitions</guilabel>.</para>
+					</step>
+					<step>
+						<para>Selectaţi partiţia relevantă şi click <guilabel>Activează</guilabel>.</para>
+					</step>
+					<step>
+						<para>Pentru a demonta partiţia, click <guilabel>Dezactivează</guilabel>.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Make Windows partitions automatically available</title>
+				<para>Windows partitions should be automatically available from Ubuntu. If they are not, the following procedure will make them automatically available:</para>
+				<procedure>
+					<step>
+						<para>Citiţi <xref linkend="listpartitiontables"/></para>
+					</step>
+					<step>
+						<para>În primul rând, creaţi un director unde partiţiile să devină disponibile (să fie "montate")</para>
+							<screen>
+↵
+sudo mkdir /media/windows↵
+							</screen>
+					</step>
+					<step>
+						<para>Next, back up your disk configuration file and open the file in a text editor with administrative privileges:
+						</para>
+						<screen>
+sudo cp /etc/fstab /etc/fstab_backup
+sudo gedit /etc/fstab
+						</screen>
+					</step>
+					<step>
+						<para>Adăugaţi următoarea linie de cod la sfârşitul fişierului: <programlisting>/dev/hda1 /media/windows ntfs umask=0222 0 0</programlisting></para>
+						<note>
+							<para>Înlocuiţi <emphasis role="bold">/dev/hda1</emphasis> cu numele corect al dispozitivului corespunzător partiţiei dumneavoastră.</para>
+							<para>Dacă partiţia Windows foloseşte sistemul de fişiere FAT32, înlocuiţi emphasis role="bold"&gt;ntfs</para>
+							<para>Dacă aveţi un sistem de fişiere FAT32 este de asemenea sigur să permiteţi accesul read-write (citire şi scriere). Pentru aceasta, schimbaţi valoarea <emphasis role="bold">umask</emphasis> ca fiind 0000.</para>
+						</note>
+					</step>
+					<step>
+						<para>Save the edited file (<ulink url="sample/fstab_automountntfs">an example</ulink>).</para>
+					</step>
+					<step>
+						<para>Schimbările vor avea efect după restartarea calculatorului.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Lansarea automată a unei comenzi sistem la pornirea calculatorului</title>
+				<para>Sometimes it can be useful to run a custom command whenever your computer starts up. To do this:</para>
+				<procedure>
+					<step>
+						<para>Editaţi <application>crontab</application> cu privilegii administrative (vezi <xref linkend="root-and-sudo"/>):</para>
+							<screen>sudo crontab -e</screen>
+					</step>
+					<step>
+						<para>Inseraţi următoarea linie de cod:</para>
+							<screen>@reboot /home/user/command</screen>
+					<note>
+						<para>Înlocuiţi <filename>/home/user/command</filename> cu adresa completă către comanda ce doriţi să o executaţi.</para>
+					</note>
+					</step>
+					<step>
+						<para>Salvaţi fişierul şi ieşiţi.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Change default operating system at boot</title>
+				<para>To change which operating system starts by default when the computer starts up, edit the <application>grub</application> configuration file.</para>
+				<procedure>
+					<step>
+						<para>Make a backup of the configuration file, and open it in a text editor:</para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+sudo gedit /boot/grub/menu.lst</screen>
+					</step>
+					<step>
+						<para>Căutaţi următoarea linie de cod:</para>
+						<programlisting>...↵
+default 0↵
+...</programlisting>
+					</step>
+					<step>
+						<para>Înlocuiţi-o cu următoara linie:</para>
+						<programlisting>default X</programlisting>
+						<note><para>You should replace X with a number, according to the order which your operating systems appear in the configuration file. You should start counting from 0. For example, if you wish the default operating system to be the first in the list, replace X with 0, if you wish the default operating system to be the second in the list, replace X with 1, and so on.</para></note> 
+					</step>
+					<step>
+						<para>
+							Save the edited file (<ulink url="sample/menu.list_changedefaultosgrub">an example</ulink>)
+						</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Configure startup services</title>
+				<para>Aceast lucru cere privilegii administrative (vezi <xref linkend="root-and-sudo"/>).</para>
+				<procedure>
+					<step>
+						<para>Run <application>Services Settings</application>:
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Services</guimenuitem>
+							</menuchoice>.
+						</para>
+					</step>
+					<step>
+						<para>Introduceţi parola dumneavoastră.</para>
+					</step>
+					<step>
+						<para>Select the services you want running, then click <guibutton>OK</guibutton> when done.</para>
+					</step>
+					<step>
+						<para>For greater control over the boot-up services, install the <application>bum</application> from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>), and run it:
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Boot-up Manager</guimenuitem>
+							</menuchoice>.
+						</para>
+					</step>
+				</procedure>
+			</sect1>
+	<sect1 id="other-hardware" status="complete">
+	    <title>Alte trucuri</title>
+	    <sect2 id="listpartitiontables" status="complete">
+                <title>Verifică utilizarea spaţiului pe disc şi vizualizare tabelă de partiţii</title>
+                    <procedure>
+                        <step>
+                            <para>Open &disks;.</para>
+                        </step>
+                        <step>
+                            <para>Select the <guibutton>Harddrive</guibutton>, then the <guibutton>Partitions</guibutton> tab</para>
+                        </step>
+                        <step>
+                            <para>Each partition will be listed under <guilabel>Partition List</guilabel>, with disk space and mount point.</para>
+                        </step>
+                    </procedure>
+            </sect2>
+            <sect2 status="complete">
+                <title>Afişarea dispozitivelor</title>
+                            <para>To list mounted devices, in a terminal enter:</para>
+                               <screen>mount</screen>
+			    <para>Listarea va afişa dispozitivul (cum ar fi o partiţie a harddisk-ului), punctul de montare (de unde puteţi accesa fişierele), tipul sistemului de fişiere şi opţiunile de montare.</para>
+                            <para>Acest exemplu arată partiţia harddisk-ului hda2 montată ca '/', cu tipul sistemului de fişiere ext3. Partiţia este montată cu două opţiuni, una pentru a permite dispozitivului să fie citit şi scris şi o alta de remontare a dispozitivului în modul read only (numai opţiunea de citire) în eventualitatea unor erori.</para>
+                            <screen><computeroutput>/dev/hda2 on / type ext3 (rw,errors=remount-ro)</computeroutput></screen>				
+                            <para>Pentru a lista dispozitivele PCI:</para>
+                                <screen>lspci</screen>
+                            <para>Pentru a lista dispozitivele USB:</para>
+                                <screen>lsusb</screen>
+            </sect2>
+ 
+            <sect2 status="complete">
+                <title>Montează/demontează dispozitivele CD/DVD-ROM manual şi afişează toate fişierele/directoarele ascunse şi asociate</title>
+                            <para>Asumând că <filename class="devicefile">/media/cdrom0/</filename> este locaţia CD/DVD-ROM-ului</para>
+                            <para>To mount a CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo mount /media/cdrom0/ -o unhide</screen>
+                            </para>
+                            <para>To unmount a CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo umount /media/cdrom0/</screen>
+                            </para>
+            </sect2>
+	</sect1>
+</chapter>
+

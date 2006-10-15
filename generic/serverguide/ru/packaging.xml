@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "&EnglishAmerican;">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="package-management" status="complete">
+	<title>Управление пакетами</title>
+        <para>Ubuntu содержит комплексную систему управления пакетами, используемую для установки, обновления, настройки, а также удаления программного обеспечения. Эта система обеспечивает доступ к систематизированной базе из более чем 17 тысяч программных пакетов для вашей системы Ubuntu, более того, средства манипулирования пакетами имеют возможности для разрешения зависимостей между пакетами и проверки наличия обновлений программ.</para>
+        <para>Есть несколько программ для работы с системой управления пакетами Ubuntu, начиная с простых консольных утилит, использование которых может быть легко автоматизировано администраторами системы, до простых в использовании программ с графическим интерфейсом, более подходящих для новичков в Ubuntu.</para>
+  <sect1 id="package-management-introduction" status="complete">
+	<title>Введение</title>
+        <para>Система управления пакетами создана на основе подобной системы, используемой в дистрибутиве Debian GNU/Linux. Файлы пакетов содержат все необходимые файлы, метаданные и инструкции, чтобы обеспечить использование специфических функций или программного приложения на вашем компьютере под управлением Ubuntu.</para>
+        <para>Файлы пакетов Debian обычно имеют расширение ".deb" и хранятся в <emphasis role="italics">информационных архивах</emphasis>, которые являются наборами пакетов, доступных через различные источники, такие как диски CD-ROM, или компьютерные сети. Обычно пакеты предварительно скомпилированы в бинарной форме, таким образом установка проходит быстро и не требует компиляции программ из исходных кодов.</para>
+        <para>Многие сложные пакеты используют концепцию <emphasis role="italics">зависимостей</emphasis>. Зависимости - это описание дополнительных пакетов, необходимых для корректной работы основного пакета. Например, пакет программы для синтеза речи <application>Festival</application> зависит от пакета <application>festvox-kalpc16k</application>, который предоставляет один из голосов, используемых данным приложением. Для того, чтобы приложение <application>Festival</application> работало, вместе с основным пакетом Festival должны быть установлены все связанные с ним пакеты. Инструменты Ubuntu для управления программным обеспечением выполнят это автоматически.</para>
+  </sect1>
+  <sect1 id="apt-get" status="complete">
+	<title>Apt-Get</title>
+        <para>Команда <application>apt-get</application> - это мощная консольная утилита, используемая в Ubuntu для работы с <emphasis>Advanced Packaging Tool</emphasis> (APT), которая обеспечивает такие функции как установка новых программных пакетов, обновление существующих пакетов, обновление списков доступных пакетов и, более того, даже обновление всей системы Ubuntu целиком.</para>
+        <para>Несмотря на то, что <application>apt-get</application> это лишь консольная утилита, она имеет множество преимуществ по сравнению с другими средствами управления пакетами, доступными в Ubuntu администраторам серверов. Эти преимущества включают, например, простоту использования через терминальное соединение (SSH) и возможность применения в скриптах администрирования системы, запуск которых, в свою очередь, может быть автоматизирован с помощью утилиты выполнения заданий по расписанию <application>cron</application>.</para>
+        <para>Несколько примеров использования <application>apt-get</application>: <itemizedlist>
+               <listitem>
+                <para><emphasis role="bold">Установка пакета</emphasis>: Устанавливать пакеты используя <application>apt-get</application> довольно просто. Например, для установки сетевого сканера <emphasis role="italics">nmap</emphasis>, введите следующую комманду: <screen>
+<command>sudo apt-get install nmap</command>
+</screen></para>
+                </listitem>
+                <listitem>
+                <para><emphasis role="bold">Удаление пакета</emphasis>: Удаление пакета или нескольких такой же прямолинейный и простой процесс. Чтобы удалить пакет nmap, установленый в предыдущем примере, наберите следующее:<screen>
+<command>sudo apt-get remove nmap</command>
+</screen></para>
+                <tip>
+                <para><emphasis role="bold">Несколько пакетов</emphasis>: Вы можете указать сразу несколько пакетов для установки или удаления, разделив их названия пробелами.</para>
+                </tip>
+                </listitem>
+                <listitem>
+                <para><emphasis role="bold">Обновление индекса пакетов</emphasis>: Индекс пакетов APT это важная база данных доступных пакетов от источников, указаных в файле <filename>/etc/apt/sources.list</filename>Чтобы обновить локальный индекс пакетов наберите следующее:<screen>
+<command>sudo apt-get update</command>
+</screen></para>
+                </listitem>
+                <listitem>
+                <para><emphasis role="bold">Обновление пакетов</emphasis>: Периодически, становятся доступными обновлённые версии пакетов, установленых в вашей системе (например обновления безопасности). Чтобы обновить систему, сначала обновите индекс пакетов, как было показано выше, а потом наберите:<screen>
+<command>sudo apt-get upgrade</command>
+</screen></para>
+                <para>Если во время обновления пакета возникнет необходимость добавить или удалить новые зависимости, такой пакет не будет обновлен при использовании комманды <emphasis>upgrade</emphasis>. Для обновления пакетов в подобной ситуации необходимо использовать комманду <emphasis role="italics">dist-upgrade</emphasis>.</para>
+                <para>
+                Also, you may upgrade your entire Ubuntu system from one revision to another with dist-upgrade.  For example, to upgrade from Ubuntu version 5.10 to version &distro-rev;, you would first ensure the version &distro-rev; repositories replace the existing 5.10 repositories in your computer's <filename>/etc/apt/sources.list</filename>, then simply issue the <application>apt-get update</application> command as detailed above, and finally, perform the actual upgrade by typing:
+<screen>
+<command>sudo apt-get dist-upgrade</command>
+</screen>               
+                </para>
+                <para>По прошествии довольно значительного промежутка времени, ваша система будет обновлена до более новой версии. Обычно, после обновления системы нужно будет выполнить некоторые шаги, следуя инструкции по обновлению, предоставленной в более новой версии системы.</para>
+                <para>Действия команды <application>apt-get</application>, такие как установка и удаление пакетов, сохраняются в файл /var/log/dpkg.log</para>
+                </listitem>
+        </itemizedlist></para>
+		<para>Для дополнительной информации об использовании <application>APT</application>, читайте исчерпывающее <ulink url="&debian-apt;">руководство пользователя Debian APT</ulink> или наберите в командной строке:
+<screen>apt-get help</screen></para>
+  </sect1>
+
+  <sect1 id="aptitude" status="complete">
+	<title>Aptitude</title>
+        <para>Приложение <application>Aptitude</application>  предоставляет текстовый интерфейс, управляемый с помощью меню, к функциям системы <emphasis>Advanced Packaging Tool</emphasis> (APT). Многие основные функции управления пакетами, такие как установка, удаление и обновление, выполняются в <application>Aptitude</application> с помощью односимвольных комманд, которые обычно представлены прописными буквами.</para>
+        <para>Наилучший способ использования <application>Aptitude</application> - работа с ним в неграфической терминальной среде для обеспечения правильной работы коммандных клавиш. Вы можете запустить <application>Aptitude</application> как обычный пользователь в коммандной строке терминала с помощью: <screen>
+<command>sudo aptitude</command>
+</screen></para>
+        <para>После запуска <application>Aptitude</application>, вы увидите строку меню вверху экрана и две панели под ней. Верхняя панель содержит группы пакетов, такие как <emphasis role="italics">Новые пакеты</emphasis> и <emphasis role="italics">Неустановленные пакеты</emphasis>. В нижней панели отображается информация, связанная с пакетами и категориями пакетов.</para>
+        <para>Использование <application>Aptitude</application> для управления пакетами относительно просто, а пользовательский интерфейс облегчает выполнение повседневных задач. Далее следуют примеры, как выполнять основные функции управления пакетами в <application>Aptitude</application>:</para>
+        <itemizedlist>
+               <listitem>
+                <para><emphasis role="bold">Установка пакетов</emphasis>: Чтобы установить пакет, найдите нужный пакет через группу "Неустановленные пакеты", используя, например, курсорные клавиши и клавишу <keycap>ENTER</keycap>, затем выделите пакет, который вы хотите установить. После выделения нужного пакета, нажмите клавишу <keycap>+</keycap>, и строка с описанием пакета должна стать <emphasis role="italics">зеленой</emphasis>, показывая, что пакет отмечен для установки. Теперь нажмите клавишу <keycap>g</keycap>, вы получите описание опреаций, которые будут произведены над пакетами. Нажмите еще раз клавишу <keycap>g</keycap>, и программа попросит вас стать администратором для завершения процесса установки. Нажмите <keycap>ENTER</keycap>, это приведет к появлению строки для ввода пароля. Введите ваш пароль, чтобы стать администратором. В конце концов, нажмите еще раз <keycap>g</keycap>, вы получите запрос на скачивание пакета. Нажав <keycap>ENTER</keycap> на элементе <emphasis role="italics">Продолжить</emphasis>, вы запустите процесс скачивания и установки пакета.</para>
+               </listitem>
+               <listitem>
+                <para><emphasis role="bold">Удаление пакетов</emphasis>: Чтобы удалить пакет, найдите нужный пакет через группу "Установленные пакеты", используя, например, курсорные клавиши и клавишу <keycap>ENTER</keycap>, затем выделите пакет, который вы хотите удалитьить. После выделения нужного пакета, нажмите клавишу <keycap>+</keycap>, и строка с описанием пакета должна стать <emphasis role="italics">розовой</emphasis>, показывая, что пакет отмечен для удаления. Теперь нажмите клавишу <keycap>g</keycap>, вы получите описание опреаций, которые будут произведены над пакетами. Нажмите еще раз клавишу <keycap>g</keycap>, и программа попросит вас стать администратором для завершения процесса установки. Нажмите <keycap>ENTER</keycap>, это приведет к появлению строки для ввода пароля. Введите ваш пароль, чтобы стать администратором. В конце концов, нажмите еще раз <keycap>g</keycap>, вы получите запрос на ужаление пакета. Нажав <keycap>ENTER</keycap> на элементе <emphasis role="italics">Продолжить</emphasis>, вы запустите процесс удаления пакета.</para>
+               </listitem>
+               <listitem>
+                <para><emphasis role="bold">Обновление каталога пакетов</emphasis>: Чтобы обновить каталог пакетов, просто нажмите клавишу <keycap>u</keycap>, и программа попросит вас стать администратором для завершения процесса установки. Нажмите <keycap>ENTER</keycap>, это приведет к появлению строки для ввода пароля. Введите ваш пароль, чтобы стать администратором. Начнется процесс обновления каталога пакетов.</para>
+               </listitem>
+               <listitem>
+                <para><emphasis role="bold">Обновление пакетов</emphasis>: Чтобы обновить пакеты, выполните обновление каталога пакетов, как описано выше, затем нажмите клавишу <keycap>U</keycap> чтобы выбрать все пакеты, для которых имеются обновления. Теперь нажмите клавишу <keycap>g</keycap>, вы получите описание опреаций, которые будут произведены над пакетами. Нажмите еще раз клавишу <keycap>g</keycap>, и программа попросит вас стать администратором для завершения процесса установки. Нажмите <keycap>ENTER</keycap>, это приведет к появлению строки для ввода пароля. Введите ваш пароль, чтобы стать администратором. В конце концов, нажмите еще раз <keycap>g</keycap>, вы получите запрос на скачивание пакетов. Нажав <keycap>ENTER</keycap> на элементе <emphasis role="italics">Продолжить</emphasis>, вы запустите процесс обновления пакетов.</para>
+               </listitem>
+        </itemizedlist>
+        <para>Первая колонка, отображаемая в списке пакетов в верхней панели, при непосредственном просмотре пакетов, отображает текущее состояние пакета и использует следующие символы для индикации этого состояния: <itemizedlist>
+        <listitem>
+        <para><emphasis role="bold">i</emphasis>: Пакет установлен</para>
+        </listitem>
+        <listitem>
+        <para><emphasis role="bold">c</emphasis>: Пакет не установлен, но настройки пакета остались в системе</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">p</emphasis>: Удален из ситемы</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">v</emphasis>:  Виртуальный пакет</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">B</emphasis>: Испорченный пакет</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">u</emphasis>: Файлы распакованы, однако настройка пакета не закончена</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">C</emphasis>: Полу-настроен - Настройки пакета закончилась неудачей, необходимо исправление проблемы</para>
+        </listitem><listitem>
+        <para><emphasis role="bold">H</emphasis>: Полу-настроен - Удаление пакета закончилась неудачей, необходимо исправление проблемы</para>
+        </listitem>
+        </itemizedlist></para>
+        <para>Чтобы выйти из Aptitude просто нажмите клавишу <keycap>q</keycap> и подтвердите свой выход. Многие другие функции доступны из меню Aptitude, которое доступно по нажатию клавиши <keycap>F10</keycap>.</para>
+  </sect1>
+	<sect1 id="configuration" status="complete">
+		<title>Конфигурация</title>
+          <para>Описания репозиториев системы <emphasis>Advanced Packaging Tool</emphasis> (APT) хранятся в файле /etc/apt/sources.list. Далее рассмотрен пример подобного файла и дана информация о добавлении в этот файл и удалении из него ссылок на репозитории.</para>
+          <para><ulink url="../sample/sources.list">Здесь</ulink> вы можете найти простой пример типичного файла <filename>/etc/apt/sources.list</filename>.</para>
+          <para>Вы можете изменять файл для подключения и отключения репозиториев. Например, для отключения требования вставить диск Ubuntu во время выполнения операций с пакетами просто закомментируйте строки с соответствующим диском, который находится в начале файла:</para>
+          <para>
+<screen>
+# не надо просить диск Ubuntu
+# deb cdrom:[Ubuntu 6.06 _Dapper Drake_ - Release i386 (20060329.1)]/ dapper main restricted
+</screen>
+          </para>
+          
+    </sect1>
+	<sect1 id="extra-repositories" status="complete">
+		<title>Дополнительные репозитории</title>
+          <para>В дополнение к поддерживаемым официально репозиториям доступным в Ubuntu, существуют дополнительные репозитории, поддерживаемые сообществом. В них содержатся тысячи дополнительных пакетов для установки. Два наиболее популярных (из дополнительных) репозитория называются <emphasis>Universe</emphasis> и <emphasis>Multiverse</emphasis>. Эти репозитории не имеют официальной поддержки Ubuntu, поэтому по умолчанию они отключены. В общем же, использование пакетов их этих репозиториев на вашей Ubuntu системе довольно безопасно.</para>
+		  <note><para>Пакеты из репозитория Multiverse часто имеют ограничения лицензионного характера, что не позволяет включать данные пакеты в и распространять их вместе со свободной операционной системой, более того использование этих пакетов может быть незаконным в вашей стране.</para></note>
+          <warning>
+          <para>Обращаем ваше внимание, что указанные репозитории, <emphasis>Universe</emphasis> и <emphasis>Multiverse</emphasis>, не содержат официально поддерживаемых пакетов. В частности, может не существовать необходимых обновлений безопасности для этих пакетов.</para>
+          </warning>
+          <para>Доступно большое количество других источников пакетов, иногда предоставляющих доступ лишь к одному пакету (например, в случае пакета с исходными кодами, предоставляемого разработчиком отдельного приложения). Вы должны быть очень осторожны и внимательны при использовании нестандартных источников пакетов. Внимательно изучите как источник, так и пакет перед установкой, так как некоторые источники, и пакеты, предоставляемые ими, могут вызвать нестабильную работу вашей системы или даже полную ее неработоспособность.</para>
+          <para>Чтобы подключить репозитории <emphasis>Universe</emphasis> и <emphasis>Multiverse</emphasis>, раскомментируйте соответствующие строки в файле <filename>/etc/apt/sources.list</filename>:</para>
+          <para>
+<screen>
+# Мы очень-очень хотим использовать репозитории Multiverse и Universe! Ну пожалуйста
+
+deb http://archive.ubuntu.com/ubuntu dapper universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu dapper universe multiverse
+</screen>
+          </para>
+          <sect2 id="extra-repositories-references" status="complete">
+                <title>Ссылки</title>
+                <para>
+                <ulink url="https://wiki.ubuntu.com/AddingRepositoriesHowto">HOWTO: Добавление репозиториев (Ubuntu Wiki)</ulink>
+                </para>
+          </sect2>
+    </sect1>
+	</chapter>
+

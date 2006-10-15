@@ -22,30 +22,22 @@
 tar -xzvf rosetta-desktopguide.tar.gz
 rm rosetta-desktopguide/desktopguide.pot
 mv rosetta-desktopguide po
+rm rosetta-desktopguide.tar.gz
 
 for x in po/*; do
 	y=$(basename ${x} .po)
 	echo ${y}
 	mkdir -p ${y}
-	xml2po -k -p ${x} C/add-applications.xml >${y}/add-applications.xml
-	xml2po -k -p ${x} C/administration.xml >${y}/administration.xml
-	xml2po -k -p ${x} C/bookinfo.xml >${y}/bookinfo.xml
-	xml2po -k -p ${x} C/config-desktop.xml >${y}/config-desktop.xml
-	xml2po -k -p ${x} C/desktopguide-C.omf >${y}/desktopguide-${y}.omf
-	xml2po -k -p ${x} C/desktopguide.xml >${y}/desktopguide.xml
-	xml2po -k -p ${x} C/games.xml >${y}/games.xml
-	xml2po -k -p ${x} C/graphics.xml >${y}/graphics.xml
-	xml2po -k -p ${x} C/internet.xml >${y}/internet.xml
-	xml2po -k -p ${x} C/linux-basics.xml >${y}/linux-basics.xml
-	xml2po -k -p ${x} C/musicandvideo.xml >${y}/musicandvideo.xml
-	xml2po -k -p ${x} C/office.xml >${y}/office.xml
-	xml2po -k -p ${x} C/partitionsandbooting.xml >${y}/partitionsandbooting.xml
-	xml2po -k -p ${x} C/preface.xml >${y}/preface.xml
-	xml2po -k -p ${x} C/printing.xml >${y}/printing.xml
-	xml2po -k -p ${x} C/programming.xml >${y}/programming.xml
+	for i in C/*; do
+		j=$(basename ${i} C/)
+		echo ${j}
+		xml2po -k -p ${x} C/${j} | replace-doctype-with.py C/${j} >${y}/${j}
+	done
 	if [ ! -e ${y}/desktopguide-${y}.omf ]; then
 		sed -e "s#\"C\"#\"${y}\"#;  s#/C/#/${y}/#" C/desktopguide-C.omf >${y}/desktopguide-${y}.omf
 	fi
 	../../validate.sh ${y}/desktopguide.xml
 
 done
+
+rm .xml2po.mo

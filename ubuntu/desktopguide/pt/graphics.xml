@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-pt SYSTEM "../../../ubuntu/libs/gnome-menus-pt.ent">
+%gnome-menus-pt;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="graphics" status="complete">
+		<title>Gráficos &amp; Fotografias</title>
+			<para>Esta secção descreve as aplicações de gestão de fotos e desenho gráfico disponíveis para usar com o Ubuntu, e descreve como configurar dispositivos gráficos 3d.</para>
+		<sect1 id="digital-cameras" status="complete">
+			<title>Câmaras Digitais</title>
+				<para>Ubuntu detects most USB digital cameras automatically. Plug in and switch on the camera, and Ubuntu will then ask you if you would like to import the photos it contains. Click on <guibutton>Import</guibutton>, and Ubuntu will show you a preview of the photos. Choose a location to save your photos to, then click on <guibutton>Import</guibutton>, and Ubuntu will save your photos to your hard drive.</para>
+				<para>Se o Ubuntu não lhe perguntar se pode importar as fotografias:</para>
+				<procedure>
+					<step><para>Abrir &gthumb;.</para></step>
+					<step>
+						<para>Choose
+					<menuchoice>
+						<guimenu>File</guimenu>
+						<guimenuitem>Import Photos</guimenuitem>
+					</menuchoice>.</para>
+					</step>
+				</procedure>
+				<para>Veja <xref linkend="gthumb"/> para mais informações sobre o <application>gThumb</application>.</para>
+		</sect1>
+
+		<sect1 id="graphics-cards" status="complete">
+			<title>Placas Gráficas 3D</title>
+				<sect2 id="video-acceleration-introduction">
+					<title>Introdução à Aceleração Gráfica 3D</title>
+					<para>A maioria do hardware gráfico deverá funcionar automaticamente no Ubuntu. Nalguns tipos de hardware gráfico, a aceleração 3D (que é necessária por alguns jogos) não é suportada automaticamente mas é possível que possa resolver o problema por sí próprio.</para>
+					<para>Para descobrir se a aceleração 3D está ou não a funcionar escreva o seguinte num terminal:</para>
+					<screen>glxinfo | grep rendering</screen>
+					<para>If 3D acceleration is working, the result will be:
+					<screen>direct rendering: Yes</screen>
+					If not, follow these instructions to activate 3D acceleration.</para>
+				</sect2>
+        	       	 <sect2 id="nvidia" status="complete">
+        		        <title>3D Nvidia Video Card Driver</title>
+					<para>Nenhuma placa gráfica Nvidia tem a aceleração 3D activada automaticamente no Ubuntu, porque o fabricante não lança controladores de código fonte aberto. Contudo, é possível activar a aceleração 3D. Este processo depende do tipo de placa gráfica que tem.</para>
+					<itemizedlist>
+						<listitem>
+							<para>Se tem uma placa mais antiga TNT, TNT2, TNT Ultra, GeForce1 ou GeForce2 instale os pacotes <application> nvidia-glx-legacye nvidia-settings do repositRestricted (veja ).</application></para>
+						</listitem>
+						<listitem>
+				<para>Se tem uma placa mais recente,  instale o pacote <application>nvidia-glx</application> do repositório <quote>Restricted</quote> (veja <xref linkend="add-applications"/>).</para>
+						</listitem>
+					</itemizedlist>
+				<para>Para activar o novo controlador escreva num terminal:</para>
+                                <screen>
+sudo nvidia-glx-config enable </screen>
+				<para>Pode ajustar as configurações dos novos controladores executando o <application>nvidia-settings</application> (ver <ulink type="help" url="ghelp:user-guide#tools-run-app">o manual de execução de aplicações</ulink> para saber como executar uma aplicação sem usar o menu). Se desejar, adicione uma entrada para este programa no menu (ver <ulink type="help" url="ghelp:user-guide#menu-editor">o manual do editor do menu</ulink> para saber como adicionar entradas ao menu).</para>
+            </sect2>
+            <sect2 id="installatidriver" status="complete">
+                <title>3D ATI Video Card Driver</title>
+				<para>Muitas placas de video funcionam bem automaticamente no Ubuntu. Para verificar se a aceleração 3D está a funcionar na sua placa, veja <xref linkend="video-acceleration-introduction"/>.</para>
+				<para>If it doesn’t work:</para>
+				<procedure>
+					<step><para>Instale o pacote <application>xorg-driver-fglrx</application> a partir do repositório <quote>Restricted</quote> (veja xref linkend="add-applications"/&gt;).</para></step> 
+					<step>
+					<para>Para activar o novo controlador escreva num terminal:</para>
+				<screen>sudo dpkg-reconfigure xserver-xorg</screen>
+				<para>Aceite a detecção automática da sua placa gráfica e escolha o controlador <guibutton>fglrx</guibutton> quando pedido.</para>
+					</step>
+				</procedure>
+				<para>Reinicie o computador para que as alterações produzam efeito.</para>
+	    </sect2>
+	    </sect1>
+
+		<sect1 id="gthumb" status="complete">
+			<title>Visualizador de Imagens gThumb</title>
+				<para>O <application>gThumb</application> é um visualizador e navegador avançado de imagens. Tem muitas funcionalidades úteis, tais como navegação pelo sistema de ficheiros, apresentação em slides, catálogos de imagens, criação de álbuns web, importação de imagens de uma câmara, gravação de imagens em CD, operações em modo batch, e funcionalidades de edição rápida de imagens como transformações e manipulação de cor.</para>
+				<para>O <application>gThumb</application> é incluido no Ubuntu por omissão. Para o iniciar seleccione &gthumb;.</para>
+				<para>Para obter ajuda sobre o <application>gThumb</application>, utilize os itens presentes do menu de <guimenu>Ajuda</guimenu> deste.</para>
+				<para>Para edição mais avançada de fotos &amp; imagens, veja <application>The GIMP</application>.</para>
+		</sect1>
+		<sect1 id="gimp" status="complete">
+			<title>O GIMP (Gnu Image Manipulation Program)</title>
+			<para><application>The GIMP</application> lets you draw, paint, edit images, and much more. GIMP
+includes the functionality and plug-ins of other famous image editing and processing programs.
+				</para>
+				<para>O <application>GIMP</application> é incluido no Ubuntu por omissão. Para o iniciar seleccione &gimp;.</para>
+			<itemizedlist>
+				<listitem><para><ulink url="http://gimp.org/">Sítio Web do GIMP</ulink></para></listitem>
+			</itemizedlist>
+		</sect1>
+		<sect1 id="inkscape" status="complete">
+			<title>Editor de Gráficos Vectorias Inkscape</title>
+				<para>O <application>Inkscape</application> é um editor poderoso para trabalhar com o formato SVG (Scalable Vector Graphics).</para>
+				<procedure>
+					<step>
+						<para>Instale o pacote <application>inkscape</application> (veja <xref linkend="add-applications"/>).</para>
+					</step>
+					<step>
+						<para>Para iniciar o <application>Inkscape</application> seleccione &inkscape;.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 id="blender" status="complete">
+			<title>Blender 3d Modeller</title>
+				<para>O <application>Blender</application> é um conjunto integrado de aplicações 3D para modelação, animação, renderização, pós-produção, criação interactiva e reprodução.</para>
+				<procedure>
+					<step>
+						<para>Instale o pacote <application>blender</application> (veja <xref linkend="add-applications"/>).</para>
+					</step>
+					<step>
+						<para>Para iniciar o <application>Blender</application> seleccione &blender3d;.</para>
+					</step>
+				</procedure>
+		</sect1>
+	</chapter>
+

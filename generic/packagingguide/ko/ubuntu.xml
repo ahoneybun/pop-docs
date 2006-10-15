@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="ubuntu-chap" status="complete">
+	<title>우분투 패키징</title>
+
+	<sect1 id="ubuntu-upload" status="complete">
+		<title>업로드와 검토</title>
+
+		<para>Once you have created a source package (either a completely new package or
+			just an update/bugfix), you will want to distribute your
+			package so that other people can enjoy your hard work. The most effective way
+			to do that for <phrase>Ubuntu</phrase> is to contribute your package to the Universe repository.
+			The community developers who are responsible for the Universe repository are
+			known as Masters of the Universe (<ulink url="https://wiki.ubuntu.com/MOTU">MOTU</ulink>). <ulink url="http://revu.tauware.de">REVU</ulink> is a web-based tool that gives
+			people a place to upload their source packages for other people to look at and
+			for MOTUs to review in a structured manner.</para>
+
+		<sect2 id="contribute-as-uploader">
+			<title>업로더로써 기여하기</title>
+		
+			<para>첫번째로, 여러분의 <ulink url="https://wiki.ubuntu.com/GPGKey">GPG Key</ulink> 를 REVU keyring (키 서버)에 등록을 하는 것이 필요 합니다. 이 단계는 여러분의 패키지가 정말로 여러분에게서 온 것임을 확신하고 업로드의 추적을 도와 줍니다.</para>
+	
+			<para>REVU uses your <ulink url="https://launchpad.net">Launchpad</ulink> account to look up your <application>gpg</application> key so make sure you have a Launchpad account and you have put your <application>gpg</application> key in your user profile there. Once this is one you can join the <ulink url="https://launchpad.net/people/ubuntu-universe-contributors">Universe Contributors</ulink> team and then email <ulink url="mailto:admin@tiber.tauware.de">admin@tiber.tauware.de</ulink> asking for your <application>gpg</application> key to be updated on REVU. When this is done you will be able to upload your packages. You don't	need a password to upload packages, only to log in to the website and to reply to comments.</para>
+
+			<note><para>다른 사람에 의해 사인된 키를 REVU에 업로드하여 갖는 것이 꼭 필요하지는 않지만, 어떤 때에는 그렇게 하는 것을 마치는 것이 좋은 생각 입니다.</para></note>
+			
+			
+			<sect3 id="upload-your-packages">
+				<title>패키지 업로드 하기</title>
+
+				<para>Uploading to REVU uses <application>dput</application>. The <phrase>Ubuntu</phrase>
+					version of <application>dput</application> already knows about REVU so
+					you do not need to change any configuration files. Only upload signed
+					packages, and unlike other repositories, you should always include the
+					original tarball, otherwise reviewers will not be able to look at your
+					extracted source package. In order to do so, use the options "-S -sa"
+					with <application>debuild</application> or
+					<application>dpkg-buildpackage</application> to build only the source
+					package and to include the original source in the upload.</para>
+				
+				<para>소스 패키지를 만든 후에, 그것을 업로드 하려면 위의 설정 파일 변경과 함께 <application>dput</application> 에 단지 만들어진 <filename>_source.changes</filename>  파일을 지정하는 것으로 사용할 수 있습니다.</para>
+
+				<screen>dput revu *_source.changes</screen>
+
+				<note><para>만약 변경된 패키지를 재 업로드 한다면 (검토를 받은 후에), 이와 같은 에러를 갖게 될 겁니다:</para>
+					
+				<screen>
+Upload package to host revu
+Already uploaded to tauware.de
+Doing nothing for myapp_source.changes</screen>
+			
+				<para>고치려면, -f 옵션을 dput에 추가하여 업로드를 강제 하거나 <application>dput</application> 에 의해 만들어진 <filename>.upload</filename> 파일을 삭제 합니다.</para></note>
+			
+				<para>Processing of uploads is done every five minutes, so if your upload does not show up,
+				please contact the REVU administrators by email, or join the Freenode IRC channel #ubuntu-motu.</para>
+		
+			</sect3>
+		
+			<sect3 id="howto-login">
+				<title>REVU로 로그인 하는 방법</title>
+			
+				<para>여러분의 첫번째 업로드 후에, 여러분은 데이타베이스에 자동으로 등록이 되고 불규칙한 암호를 지정 받습니다. <ulink url="http://revu.tauware.de">REVU</ulink> 웹사이트에서, 로그인 할 때 여러분의 업로드 내의 changelog 파일에 사용한 이메일 주소를 사용하고 'recover password' 링크를 클릭 합니다. 여러분은 암호화 된 패스워드를 푸는 지시가 있는 웹 페이지를 볼 수 있게 됩니다.</para>
+				
+			</sect3>
+
+			<sect3 id="view-and-comment-uploads">
+				<title>업로드를 보고 덧글 달기</title>
+			
+				<para>REVU로 업로드 된 패키지는 공개 입니다. 그 시스템에 로그인 하지 않아도 열람할 수 있습니다. 그러나, 업로드에 덧글을 다는 것은 등록된 사용자만이 할 수 있습니다. 업로더로써, 여러분은 여러분 소유의 업로드만에 덧글을 할 수 있습니다. 이것은 여러분이 검토자에게 여러분의 두 패키지 사이에 무엇을 변경하였는지 정보를 주기 위해 유용 합니다.</para>
+
+			</sect3>
+
+			<sect3 id="additional-rules">
+				<title>추가적인 규칙</title>
+		
+				<itemizedlist>
+
+					<listitem><para>여러분은 알려진 보안 취약점에 대처하는 패키지 검토를 반드시 해야만 하고 취약점의 패치를 반드시 제공하여야 합니다.</para></listitem>
+					
+					<listitem><para>패키지는 알려진 보안 문제에 근거하여 거절될 수도 있습니다.</para></listitem>
+					
+					<listitem><para>여러분은 반드시 저작권과 라이센스 파일을 포함 시켜야 하고, 저작권과 라이센스는 패키지가 Universe 의 요소로 포함되고 우분투 미러를 통해 재배포 되는 것을 반드시 허용하여야 합니다.</para></listitem>
+					
+					<listitem><para>The package must be known to build on top of the main component
+							of the current <phrase>Ubuntu</phrase> stable release. It is permissible to require other
+							packages already in Universe.</para></listitem>
+				</itemizedlist>
+			</sect3>
+
+			<sect3 id="getting-help">
+				<title>도움 받기</title>
+				<para>If you need assistance on these steps, or if you have questions about REVU, you can
+					ask in #ubuntu-motu on the Freenode IRC network.</para>
+			</sect3>
+
+		</sect2>
+
+	</sect1>
+
+	<sect1 id="ubuntu-sync" status="complete">
+		<title>병합과 동기화</title>
+
+
+
+		<important><para><emphasis role="bold">요구 패키지:</emphasis> build-essential, automake, gnupg, lintian, fakeroot, patchutils, debhelper 그리고 <xref linkend="gs-pbuilder"/>.</para></important>
+		
+		<para><phrase>Ubuntu</phrase> is based on the Debian Linux distribution and uses the same package
+			management system (APT). At the beginning of each <phrase>Ubuntu</phrase> development cycle, the
+			packages in <phrase>Ubuntu</phrase> are updated to those in the Debian unstable branch. However,
+			because <phrase>Ubuntu</phrase> is not the same as Debian, some of the packages need to
+			be modified to work in <phrase>Ubuntu</phrase>. There might also be bug fixes that <phrase>Ubuntu</phrase>
+			developers have introduced into the packages. You can determine whether this has
+			taken place by noting the package version. If the package version includes
+			ubuntu in it (an example would be gimp-2.2.9-3ubuntu2), then the <phrase>Ubuntu</phrase>
+			developers have made changes, and it is no longer the same as the Debian package.
+			There are more than 1000 such modified packages in the Universe repository.</para>
+		
+		<para>At the start of each Ubuntu development cycle, a decision is made regarding
+			these Ubuntu versioned packages. Of course if the Debian version hasn't
+			changed since the last <phrase>Ubuntu</phrase> release, then nothing needs to be changed.
+			However, if there is a newer version of the package in Debian, then one
+			of two things should happen. If all of the reasons for Ubuntu modifications
+			(bug fixes, dependencies, etc.) are fixed in the new Debian package,
+			then we can just take the Debian package directly. This decision is called a
+			<emphasis>sync</emphasis>. However, if the new Debian version has the same
+			issues that caused the Ubuntu version to be made, then those changes need
+			to be applied to the new Debian version, too. This decision is called <emphasis>merging</emphasis>.
+		</para>
+		<sect2 id="merge-tutorial">
+			<title>병합 지도서</title>
+			<para>병합 절차는 데비안과 우분투 소스 패키지 양쪽의 변경 사항을 보는 것과 무엇을 변경하였고 무슨 변경이 우분투 특정 사항인지를 결정하는 것을 필요로 합니다. 예를 살펴 보겠습니다, <application>xcdroast</application> 라 불리는 인기있는 CD 작성 프로그램 입니다.</para>
+			<para>시작하려면, 프로젝트를 가질 폴더를 만들고, 그 디렉토리로 이동 합니다:</para>
+			<screen>
+mkdir ~/xcdroast
+cd ~/xcdroast</screen>
+			<para>이제 필요로 하는 소스 패키지의 모든 것을 이 디렉토리로 내려 받습니다:</para>
+			<itemizedlist>
+				<listitem><para>모든 버전에서 사용이 되는 <application>xcdroast</application> 소스 tarball:</para>
+					<itemizedlist>
+						<listitem>
+<para><ulink url="http://snapshot.debian.net/archive/2006/01/16/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15.orig.tar.gz">xcdroast_0.98+0alpha15.orig.tar.gz</ulink></para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>The <phrase>Ubuntu</phrase> Breezy source package files:</para>
+					<itemizedlist>
+						<listitem><para>
+<ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.dsc">xcdroast_0.98+0alpha15-1.1ubuntu1.dsc</ulink></para>
+						</listitem>
+						<listitem><para>
+<ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz">xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz</ulink></para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>브리지 패키지가 파생한 데비안 소스 패키지 파일:</para>
+						<itemizedlist>
+							<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.diff.gz">xcdroast_0.98+0alpha15-1.1.diff.gz</ulink></para>
+							</listitem>
+							<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.dsc">xcdroast_0.98+0alpha15-1.1.dsc</ulink></para>
+							</listitem>
+						</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>대퍼 패키지가 파생할 새 데비안 소스 패키지 파일:</para>
+					<itemizedlist>
+						<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-3.dsc">xcdroast_0.98+0alpha15-3.dsc</ulink></para>
+						</listitem>
+						<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-3.diff.gz">xcdroast_0.98+0alpha15-3.diff.gz</ulink></para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+			</itemizedlist>
+			<note><para>이 절차들은 <ulink url="packages.debian.org">packages.debian.org</ulink> 에서 데비안 패키지를 그리고 <ulink url="packages.ubuntu.com">packages.ubuntu.com</ulink> 에서 우분투 패키지를 검색하는 것으로 또한 마쳐질 수 있습니다.</para></note>
+		<tip><para>병합을 할 때 (또는 어떠한 우분투 패키징에도) 설치하여 가지고 있으면 매우 유용한 패키지는 <application>devscripts</application> 입니다. 만약 이미 설치하지 않았다면, 진행 전에 그것을 설치 하십시오.</para></tip>
+			
+			<para>By looking at the <phrase>Ubuntu</phrase> changelog you should be able to see which differences
+				to expect between the Ubuntu package and the Debian package from which it was derived.
+				For xcdroast, the <phrase>Ubuntu</phrase> changelog can be found at
+	<ulink url="http://changelogs.ubuntu.com/changelogs/pool/universe/x/xcdroast/xcdroast_0.98+0alpha15-1.1ubuntu1/changelog">
+					changelogs.ubuntu.com</ulink>. It says that a .desktop file was fixed and properly
+				installed to close a bug reported in
+				<ulink url="https://launchpad.net/malone/bugs/2698">Malone</ulink>.
+			</para>
+			
+			<para>이제 그 소스 패키지에 실제 변경 사항을 검사해 봅니다:</para>
+			<screen>
+debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-1.1ubuntu1.dsc | \
+	ubuntu.debdiff | less ubuntu.debdiff</screen>
+			
+			<para>The lines that start with - have been removed from the Debian package, and those that start
+				with + have been added to the <phrase>Ubuntu</phrase> package.</para>
+			<para>우리는 다음을 볼 수 있습니다:</para>
+			<itemizedlist>
+				<listitem>
+					<para>xcdroast icon 을 설치하기 위해 cp 대신에 install이 debian/rules 에 사용되어 졌습니다. 또한, .desktop 파일을 설치하는 새 줄이 있습니다.</para>
+				</listitem>
+				<listitem>
+					<para>debian/changelog 에 변경기록 사항으로 그 변경 사항이 추가 되었습니다.</para>
+				</listitem>
+				<listitem>
+					<para>debian/dirs 에 usr/share/applications 이 위의 설치 줄이 적절하게 동작을 하도록 추가 되었습니다.</para>
+				</listitem>
+				<listitem>
+					<para>xcdroast.desktop 추가됨</para>
+				</listitem>
+			</itemizedlist>
+			
+			<para>이제 우리는 우분투 소스가 어떻게 변경 되었는지를 알았습니다. 이제 데비안 소스에는 무엇이 변경 되었는지를 볼 필요가 있습니다.</para>
+			<screen>
+debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-3.dsc &gt; debian.debdiff
+less debian.debdiff</screen>
+			<para>우분투 것에서 본 것보다 훨씬 많은 것이 debdiff 에 있습니다. 무엇이 변경 되었지를 좀 더 잘 알 수 있는 한 가지 방법은 debdiff 안에 변경된 파일을 보는 것 입니다.</para>
+			
+			<screen>grep diff debian.debdiff</screen>
+			
+			<para>새 데비안 버전에는 debian/postinst, debian/rules, debian/changelog, debian/doc-base.manual, debian/control, 그리고 debian/menu 파일들이 변경 되었음을 알립니다.</para>
+			<para>Thus we can see that we need to check debian/rules to see if the <phrase>Ubuntu</phrase> changes were made.
+				We can also see that debian/dirs was not changed from the old Debian version. Let us
+				now look at the files. We can unpack the source package by using
+				<application>dpkg-source</application>:</para>
+			
+			<screen>dpkg-source -x xcdroast_0.98+0alpha15-3.dsc</screen>
+			
+			<para>이것은 xcdroast_0.98+0alpha15.orig.tar.gz 파일을 압축 풀고, xcdroast-0.98+0alpha15 디렉토리를 만들고 xcdroast_0.98+0alpha15-3.diff.gz 내의 변경 사항을 적용 합니다.</para>
+			<para>이제 debian 디렉토리로 이동 합니다:</para>
+			
+			<screen>cd xcdroast-0.98+0alpha15/debian</screen>
+			
+			<para>One can see in <filename>rules</filename> that changes made by <phrase>Ubuntu</phrase> were not applied to the new Debian version.
+				This means that:</para>
+			
+			<screen>cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps</screen>
+			
+			<para>... 는 다음처럼 변경 되어야만 합니다:</para>
+			
+			<screen>
+#cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps
+
+#install desktop and icon
+install -D -m 644 $(CURDIR)/debian/xcdroast.desktop \
+	$(CURDIR)/debian/xcdroast/usr/share/applications/xcdroast.desktop
+install -D -m 644 $(CURDIR)/debian/xcdroast.xpm \
+	$(CURDIR)/debian/xcdroast/usr/share/pixmaps/xcdroast.xpm</screen>
+
+			<para>이제 dirs 에, 설치될 .desktop 파일을 위해 다음의 줄을 추가 합니다:</para>
+			<screen>usr/share/applications</screen>
+			
+			<para>이제 우리는 실제 .desktop ( <emphasis>debian/xcdroast.desktop</emphasis> 로 저장되는 ) 파일이 필요 합니다. ubuntu.debdiff (또는 우분투 소스 패키지에서), 우리는 그것을 봅니다:</para>
+			<screen>
+[Desktop Entry]
+Encoding=UTF-8
+Name=X-CD-Roast
+Comment=Create a CD
+Exec=xcdroast
+Icon=xcdroast.xpm
+Type=Application
+Categories=Application;AudioVideo;</screen>
+			
+			<para>The last change that needs to be made is in <filename>changelog</filename>. 
+				Not only do we need to add what we have just done (merge with Debian), but we 
+				should also add in the previous <phrase>Ubuntu</phrase> changelog entries. To do this, run 
+				<application>dch -i -D dapper</application> and put something to the effect of:</para>
+			<screen>
+xcdroast (0.98+0alpha15-3<emphasis>ubuntu1</emphasis>) dapper; urgency=low
+
+  * Resynchronise with Debian.</screen>
+
+			<para>Make sure to change the version number to the correct <phrase>Ubuntu</phrase> version.
+				Also add:</para>
+			<screen>
+xcdroast (0.98+0alpha15-1.1ubuntu1) breezy; urgency=low
+
+  * Fix and install existing .desktop file. (Closes Malone #2698)
+				
+  -- Captain Packager </screen>
+			<para>0.98+0alpha15-1.1 과 0.98+0alpha15-2 사이의 기록 사항.</para>
+			
+			<para>이제 새 소스 패키지를 만들고 테스트 합니다. 이것을 하는 여러가지 방법이 있지만, 다음이 한 예입니다:</para>
+			<screen>
+cd ..
+debuild -S
+cd ..
+sudo pbuilder build xcdroast_0.98+0alpha15-3ubuntu1.dsc</screen>
+			
+			<para>This will recreate the source package, sign it with your default GPG key, and build the package in a pbuilder
+				environment to make sure it builds correctly. Make sure to always test your packages
+				before submitting patches. The last step is to make a debdiff that can be
+				attached to an existing bug report or given to the MOTUs in the #ubuntu-motu IRC channel. To do this,
+				we get the difference between the Debian unstable source package and the new <phrase>Ubuntu</phrase> version:
+			</para>
+			<screen>debdiff xcdroast_0.98+0alpha15-3.dsc xcdroast_0.98+0alpha15-3ubuntu1.dsc &gt; \
+	xcdroast_0.98+0alpha15-3ubuntu1.debdiff</screen>
+		</sect2>
+	</sect1>
+
+	<sect1 id="ubuntu-kubuntu" status="complete">
+		<title>쿠분투를 위한 패키징</title>
+		
+		<para>우리가 상상할 수 있는 것처럼, 쿠분투 특정의 주요 패키징 이슈는 KDE와 Qt에 있습니다.</para>
+		
+		<sect2 id="build-dependencies">
+			<title>의존성 만들기</title>
+	
+			<para>쿠분투 프로그램들은 거의가 KDE 프로그램 입니다. 그러므로, 그 프로그램들은 <filename>kdelibs4-dev</filename> 위에 Build-Depend 하는 것이 필요 합니다. KDE가 중점하는 것은 프로그램 간의 상호 작용을 갖는 것이므로, 몇몇의 프로그램들은 <filename>kdepim-dev</filename> 와 같은 KDE의 다른 부분에 Build-Depend 하는 것 또한 필요 합니다. 여러분의 프로그램을 위한 필요한 의존성의 목록을 가지는 것을 확인 하십시오.</para>
+	
+		</sect2>
+
+		<sect2 id="desktop-files">
+			<title>데스크탑 파일</title>
+		
+			<para>KDE는 몇 개의 특정 경로를 가지고 있습니다. 대부분의 KDE의 설정은 <filename>/etc/kde3/</filename> 또는 <filename>/usr/share/apps/</filename> 중 하나 내에 설치가 됩니다. KDE를 위한 일반적인 desktop 파일은 <filename>/usr/share/applications/kde/</filename> 로 가야 함을 주의하는 것도 중요 합니다. 만약 desktop 파일이 이 경로를 사용하지 않는다면 그 설치 경로는 반드시 고쳐져야 합니다. (서비스 메뉴와 같은 desktop 파일은 예외 입니다.)</para>
+			
+			<para>KDE desktop 파일은 또한 KMenu 내에 맞는 특정 항목이 필요 합니다. KDE 프로그램을 위한 최소한의 desktop 파일은 이것과 같을 수 있습니다:</para>
+				
+			<screen>[Desktop Entry]
+Encoding=UTF-8
+Name=Kfoo
+Name[xx]=Kfoo
+GenericName=Bar description
+Exec=kfoo
+Icon=kfoo
+Terminal=false
+Categories=Qt;KDE;Utility;</screen>
+
+			<para>Categories 필드는 Qt;KDE; 로 반드시 시작해야 함을 주의 하십시오. KDE 프로그램과 주어진 프로그램을 KCModules로 선언하기 위해 su를 허용하는 또는 로그인을 할 때 자동 실행하는 모듈을 위한 특정 desktop 파일 항목들이 있습니다.</para>
+	
+		</sect2>
+		
+		<sect2 id="generating-pot-files">
+			<title>.pot 파일 생성 하기</title>
+
+			<para>The Ubuntu translation website, <ulink url="https://launchpad.net/rosetta/">Rosetta</ulink>, now supports KDE,
+				which means KDE packages need to support Rosetta by generating .pot
+				template files for translators. If you use <application>cdbs</application>
+				in edgy, your package should now automatically build and check
+				for a .pot file in po/ directory.</para>
+
+			<para><ulink url="../files/kubuntu_01_kdepot.diff">kdepot patch</ulink> (또는 비슷한; 이것은 아마 admin 디렉토리가 얼마나 오래되었나에 따라 깔끔하게 적용하지 못할 수도 있습니다.) 가 필요할 것 입니다.</para>
+
+			<para>만약 여러분의 패키지가 <application>debhelper</application> 또는 <application>cdbs</application> 를 사용하고 자체의 kde.mk 파일을 포함하고 있다면, rules 파일에 손수 추가하는 것이 필요 합니다.</para>
+
+			<para><application>cdbs</application> 를 위해서는, debian/rules 파일에 다음의 줄들을 추가 합니다:</para>
+
+			<screen>
+common-post-build-arch::
+	mkdir -p po
+        XGETTEXT=/usr/bin/kde-xgettext sh admin/cvs.sh extract-messages
+
+clean::
+        rm -rf po</screen>
+			<para><application>debhelper</application> 를 위해서는, <emphasis>install</emphasis> rule 마지막에 다음을 추가 합니다:</para>
+			<screen>
+mkdir -p po
+XGETTEXT=/usr/bin/kde-xgettext sh admin/cvs.sh extract-messages</screen>
+			<para>또한 <application>debhelper</application> 를 위해, <emphasis>clean</emphasis> rule 에 다음을 추가 합니다:</para>
+			<screen>
+rm -f po/*.pot</screen>
+		</sect2>
+		
+	</sect1>
+
+</chapter>
+

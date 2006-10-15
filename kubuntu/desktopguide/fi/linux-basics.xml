@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % kde SYSTEM "../../libs/kde.ent">
+%kde;
+<!ENTITY % kde-general SYSTEM "/usr/share/apps/ksgmltools2/customization/obsolete/general.entities">
+%kde-general;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="linux-basics" status="complete">
+        <title>Linuxin perusteet</title>
+        <para>Tässä kappaleessa käydään läpi järjestelmän perusrakenne mikä auttaa sinut alkuun Kubuntu-järjestelmäsi kanssa.</para>
+        <sect1 id="directories-file-systems" status="complete">
+            <title>Hakemistot ja tiedostojärjestelmät</title>
+            <para>Linuxissa ja Unixissa tiedosto-sanalla viitataan myös kansioihin ja laitteisiin. Laitteista käytetään yleensä kuitenkin termiä solmu (node), vaikka ne siis tiedostoja ovatkin.</para>
+            <para>Linuxin ja Unixin tiedostojärjestelmät muodostavat hierarkisen puurakenteen. Puun korkein taso on juurihakemisto eli <filename>/</filename>, jonka alla kaikki muut hakemistot (kansiot) ja tiedostot sijaitsevat. Esimerkiksi polku <filename>/home/jaakko/juustot.odt</filename> kertoo, että tiedosto <filename>juustot.odt</filename> sijaitsee hakemistossa <filename>jaakko</filename>, joka puolestaan sijaitsee hakemistossa <filename>home</filename> juurihakemiston (<filename>/</filename>) alla.</para>
+            <para>Tärkeimmät hakemistot sijaitsevat juurihakemistossa (<filename>/</filename>). Tässä listaus tavallisimmista kansioista:</para>
+            <itemizedlist>
+                <listitem>
+                    <para><filename>/bin</filename> - tärkeät komennot, jotka aiemmin ovat olleet konekielisiä (<emphasis>bin</emphasis>äärisiä), mutta voivat myös olla komentosarjoja.</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/boot</filename> - asetustiedostot, käyttöjärjestelmän ytimet ja muut käynnistyksen (<emphasis>boot</emphasis>) aikana tarvittavat tiedostot.</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/dev</filename> - laitetiedostot</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/etc</filename> - asetustiedostot ja käynnistyksen yhteydessä ajettavat komentosarjat</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/home</filename> - käyttäjien kotihakemistot</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/initrd</filename> - käytetään kun luodaan mukautettu <emphasis>initrd</emphasis> (Initial RAM Disk) -tiedosto jota käytetään järjestelmän käynnistyksessä.</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/lib</filename> - järjestelmäkirjastot  (<emphasis>libraries</emphasis>)</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/lost+found</filename> - juurihakemiston (<filename>/</filename>) "löytötavaratoimisto"</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/media</filename> - automaattisesti liitettävät irroitettavat laitteet kuten CD:t, digikamerat ja vastaavat</para>
+                </listitem>
+                <listitem>
+                  <para><filename>/mnt</filename> - käsin liitetyt (<emphasis>m</emphasis>ou<emphasis>nt</emphasis>) tiedostojärjestelmät</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/opt</filename> - hakemisto kolmannen osapuolen ohjelmia varten, jotka ovat usein staattisesti linkitettyjä ja joita voidaan siten käyttää myös eri Linux-jakeluissa</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/proc</filename> - alati päivittyvä hakemisto järjestelmän tilasta ja käynnissä olevista prosesseista</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/root</filename> - pääkäyttäjä kotihakemisto</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/sbin</filename> - järjestelmän toiminnan kannalta tärkeitä ohjelmia, jotka ovat yleensä tarkoitettuja pääkäyttäjälle</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/srv</filename> - sisältää tiedostoja, jotka palvelevat muita järjestelmiä</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/sys</filename> - similar to the /proc filesystem, but contains <emphasis>sys</emphasis>tem information not related to running processes</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/tmp</filename> - väliaikaiset tiedostot</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/usr</filename> - applications and read-only files that are mostly available for all <emphasis>us</emphasis>e<emphasis>r</emphasis>s to access</para>
+                </listitem>
+                <listitem>
+                    <para><filename>/var</filename> - muuttuvia tiedostoja, kuten lokeja ja tietokantoja</para>
+                </listitem> 
+            </itemizedlist>
+        </sect1>
+        <sect1 id="permissions" status="complete">
+            <title>Oikeudet</title>
+            <para>Kaikkiin Linux-tiedostoihin liittyy käyttöoikeus, joka määrittelee, kuka saa lukea, muokata tai käyttää tiedostoa. Pääkäyttäjällä (root) on käyttöoikeus kaikkiin tiedostoihin. Jokaiselle yksittäiselle tiedostolle on määritelty, miten ja kuka tiedostoa saa käyttää ja mihin ryhmään se kuuluu</para>
+            <para>Jokaista tiedostoa suojaavat seuraavat kolme lupatasoa lueteltuina tärkeysjärjestyksessä:</para>
+            <itemizedlist>
+                <listitem>
+                    <para>käyttäjä</para>
+                    <para>tiedoston omistaja</para>
+                </listitem>
+                <listitem>
+                    <para>ryhmä</para>
+                    <para>tiedostoon liitetty käyttäjäryhmä</para>
+                </listitem>
+                <listitem>
+                    <para>muu</para>
+                    <para>kaikki muut käyttäjät</para>
+                </listitem>
+            </itemizedlist>
+            <para>Jokainen yksittäinen lupataso, joita siis on kolme, määrittää varsinaiset tiedostonkäyttöluvat. Seuraavassa on luettelo luvista ja siitä, miten luvat vaikuttavat tiedostojen ja hakemistojen käyttöön:</para>
+            <itemizedlist>
+                <listitem>
+                    <para>luku</para>
+                    <para>tiedostoja voidaan näyttää ja avata</para>
+                    <para>kansion sisältö voidaan näyttää</para>
+                </listitem>
+                <listitem>
+                    <para>kirjoitus</para>
+                    <para>tiedostoja voidaan muokata tai poistaa</para>
+                    <para>kansion sisältöä voidaan muuttaa</para>
+                </listitem>
+                <listitem>
+                    <para>suoritus</para>
+                    <para>suorituskelpoiset tiedostot voidaan ajaa</para>
+                    <para>kansioihin voidaan siirtyä</para>
+                </listitem>
+            </itemizedlist>
+            <para>
+                To view and edit the permissions on files and directories, open
+                the 
+                <menuchoice>
+                    <guimenu>System Menu</guimenu>
+                    <guimenuitem>Home Folder</guimenuitem>
+                </menuchoice>,
+                right-click on a file or directory, then
+                select <guimenu>Properties</guimenu>.  The permissions are found under the
+                <guilabel>Permissions</guilabel> tab and allow for the editing of all
+                permission levels, if you are the owner of the file.  Advanced permission
+                settings (such as in the <guilabel>Advanced Permissions</guilabel> tab) 
+		are outside of the scope of this guide.
+            </para>
+        </sect1>
+        <sect1 id="root-and-sudo" status="complete">
+
+            <title>Pääkäyttäjä ja sudo</title>
+
+            <para>Pääkäyttäjän (root) käyttäjätunnusta käytetään Linuxissa järjestelmän hallintaan. Tavallisilla käyttäjillä ei ole tätä oikeutta turvallisuussyistä. Kuitenkaan Kubuntussa ei ole käytössä pääkäyttäjän tunnusta. Sen sijaan ylläpito-oikeudet kuuluvat yksittäiselle käyttäjälle, jolla on oikeus käyttää "sudo"-ohjelmaa ylläpitäjän oikeuksia vaativien ohjelmien suorittamiseen. Asennuksessa luodulla ensimmäisellä käyttäjällä on oletuksena nämä oikeudet. Voit hallita listaa käyttäjistä, joilla on oikeus käyttää sudoa ohjelmalla <application>Käyttäjät ja ryhmät</application>. Lisäitietoja: <xref linkend="users-and-groups"/>.</para>
+
+            <para>Kun ajat ohjelman, joka vaatii pääkäyttäjän oikeudet, sudo pyytää sinua antamaan oman käyttäjätunnuksesi salasanan. Tällä varmistetaan, että vahingolliset ohjelmat eivät eivät pääse vahingoittamaan järjestelmääsi ja jotta muistaisit, että olet antamassa ohjelmalle pääkäyttäjän oikeuksia joiden suhteen sinun tulee olla tarkkana!</para>
+
+            <para>Käyttääksesi sudoa komentoriviltä kirjoita yksinkertaisesti "sudo" komennon alkuun. Tämän jälkeen sudo kysyy salasanaasi.</para>
+
+            <para>Sudo muistaa salasanasi tietyn ajan (oletuksena 15 minuuttia). Tämä ominaisuus mahdollistaa useampien pääkäyttäjän oikeuksia ajavien ohjelmien ajamisen kerralla siten, että salasanaa ei tarvitse kirjoittaa joka välissä.</para>
+
+            <warning>
+                <para>Ole varovainen tehdessäsi pääkäyttäjän oikeuksia vaativia tehtäviä, ne saattavat vaurioittaa järjestelmääsi!</para>
+            </warning>
+            <para>Muita vinkkejä sudon käyttöön:</para>
+            <itemizedlist>
+                <listitem>
+                    <para>Saakasesi pääkäyttäjän komentokehotteen, aja komento "sudo -i"</para>
+                </listitem>
+                <listitem>
+                    <para>Monet Kubuntun graafiset ylläpitotyökalut käyttävät sudoa, joten sinulta kysytään tarvittaessa salasanaasi käyttäen ohjelmaa <application>kdesu</application>, joka on graafinen käyttöliittymä <application>sudo</application>lle.</para>
+                </listitem>
+                <listitem>
+                    <para>Lisätietoja <application>sudo</application>sta ja pääkäyttäjän tunnuksen puutteesta saat Ubuntu-wikin <ulink url="&wiki-RootSudo;">sudo-sivulta</ulink>.</para>
+                </listitem>
+            </itemizedlist>
+            <sect2 id="run-application-root" status="complete">
+                <title>Ohjelmien käynnistäminen käsin pääkäyttäjän oikeuksilla</title>
+                <para>Joskus ohjelman suorittamiseen vaaditaan pääkäyttäjän oikeuksia. Tämä on helppo tehdä <application>Aja ohjelma</application> -valintaikkunan avulla.</para>
+                <warning>
+                    <para>Ole varuillasi ajaessasi ohjelmia pääkäyttäjän oikeuksin, se saattaa vaurioittaa järjestelmääsi. Lisätietoja: <xref linkend="root-and-sudo"/></para>
+                </warning>
+                <procedure>
+                    <step>
+                        <para>Avaa <application>Aja ohjelma</application> -ikkuna painamalla 
+				<keycombo>
+					<keycap>Alt</keycap>
+					<keycap>F2</keycap>
+				</keycombo>
+			</para>
+                    </step>
+                    <step>
+                        <para>
+                            Enter the name of the program you wish to run,
+                            <emphasis>prefixed</emphasis> with
+                            <application>kdesu</application> and press
+                            <keycap>Enter</keycap>. For example, to launch the
+                            file manager <application>Konqueror</application>
+                            with root privileges, type <screen>kdesu konqueror</screen> 
+                        </para>
+                    </step>
+                </procedure>
+            </sect2>
+        </sect1>
+        <sect1 id="terminals" status="complete">
+            <title>Pääte</title>
+            <para>Working at the command line is not as daunting a task
+                as you would think. There is no special knowledge needed to
+                use the command line as it is a program like everything
+                else. Most things in Linux can be done using the command line.
+                Although there are graphical tools for most programs, sometimes
+                they are just not enough. This is where the command line comes
+                in handy.
+            </para>
+            <para>
+                The terminal is often called the command prompt
+                or the shell.  In days gone by, this was the way the
+                user interacted with the computer; however, Linux users have
+                found that the use of the shell can be quicker than a
+                graphical method and still holds some merit today. Here you
+                will learn how to use the terminal.
+            </para>
+            <para>
+                The original use of the terminal was as a file browser, and
+                indeed it is still used as a file browser. You can use the 
+                terminal as a file browser to navigate your files and undo the
+                changes that have been made.
+            </para>
+            <sect2 id="starting-konsole" status="complete">
+                <title>Starting the Terminal</title>
+                <para>
+                The <application>Konsole</application> can be started by
+                choosing 
+                <menuchoice>
+                    <guimenu>K-menu</guimenu>
+                    <guimenuitem>System</guimenuitem>
+                    <guimenuitem>Konsole (Terminal Program)</guimenuitem>
+                </menuchoice> 
+                from the Desktop menu system.
+                </para>
+            </sect2>
+            <sect2 id="common-commands" status="complete">
+                <title>Tavallisimmat komennot</title>
+                <variablelist>
+                    <varlistentry>
+                        <term>Listaa hakemiston sisältö: -ls</term>
+                        <listitem><para><application>ls</application> listaa tiedostot eri väreillä niiden tyypin mukaan</para></listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Luo hakemisto: - mkdir (hakemiston nimi)</term>
+                        <listitem><para><application>mkdir</application> luo hakemiston.</para></listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Valitse hakemisto: -cd (/hakemisto/sijainti)</term>
+                        <listitem><para><application>cd</application> vaihtaa hakemistoa</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Kopioi tiedostoja ja hakemistoja: - cp (tiedosto) (mihin)</term>
+                        <listitem><para><application>cp</application> kopioi tiedostoja, jos haluat kopioida hakemistoja käytä valitsinta -r: <application>cp -r</application>.</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Poista tiedostoja ja hakemistoja: - rm (tiedosto tai hakemisto)</term>
+                        <listitem><para><application>rm</application> poistaa annetun tiedoston. <application>rm -r</application> poistaa hakemiston ja sen sisällön.</para></listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Siirrä/uudelleennimeä tiedostoja ja hakemistoja: - mv (tiedosto)</term>
+                        <listitem><para><application>mv</application> siirtää/uudelleennimeää annetun tiedston tai hakemiston.</para>
+                        </listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>Tiedostojen ja hakemistojen etsiminen: - locate (tiedosto)</term>
+                        <listitem><para><application>locate</application> etsii tiedostoa antamallasi nimellä. Se käyttää tietokantaa, jotta haut onnistuisivat nopeasti. Voit päivittää tietokannan komennolla <application>sudo updatedb</application>. Tämä komento suoritetaan automaattisesti joka päivä, mikäli tietokoneesi on päällä. <application>updatedb</application> tarvitsee pääkäyttäjän oikeudet, katso <xref linkend="root-and-sudo"/>.</para>
+                        </listitem>
+                    </varlistentry>
+                </variablelist>
+                <para>Voit myös käyttää korvausmerkkiä viitataksesi useampiin tiedostoihin, kuten "*" viitataksesi kaikkiin tiedostoihin tai "?" korvataksesi tietyn merkin.</para>
+            </sect2>
+            <sect2 status="complete">
+                <title>Switch to Console mode</title>
+                <para>The usual method of command-line access in Kubuntu is to
+                    start a terminal (see <xref linkend="starting-konsole"/> above) 
+                    , however sometimes it is useful to switch to the real console:</para>
+                <procedure>
+                    <step>
+                        <para>Use the <keycombo>
+                                <keycap>Ctrl</keycap>
+                                <keycap>Alt</keycap>
+                                <keycap>F1</keycap>
+                            </keycombo>
+                            shortcut keys to switch to the first console.
+                        </para>
+                    </step>
+                    <step>
+                        <para>To switch back to Desktop mode, use the <keycombo>
+                                <keycap>Ctrl</keycap>
+                                <keycap>Alt</keycap>
+                                <keycap>F7</keycap>
+                            </keycombo> shortcut keys.
+                        </para>
+                    </step>
+                </procedure>
+                <note>
+                    <para>There are six consoles available. Each one is accessible with the
+                        shortcut keys <keycombo>
+                            <keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>F1</keycap>
+                            </keycombo> to <keycombo>
+                            <keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>F6</keycap>
+                        </keycombo>.
+                    </para>
+                </note>
+            </sect2>
+            <sect2 status="complete">
+                <title>Disable the beep sound in Terminal mode</title>
+                <procedure>
+                    <step>
+                        <para>
+                            Start a <application>Konsole</application>
+                            session, select: 
+                            <menuchoice>
+                                <guimenu>K-menu</guimenu>
+                                <guisubmenu>System</guisubmenu>
+                                <guimenuitem>Konsole (Terminal Program)</guimenuitem>
+                            </menuchoice>
+                            from the desktop menu system. 
+                        </para>
+                    </step>
+                    <step>
+                        <para>
+                            <menuchoice>
+                                <guimenu>Settings</guimenu>
+                                <guisubmenu>Bell</guisubmenu>
+                                <guimenuitem>None</guimenuitem>
+                            </menuchoice>
+                        </para>
+                    </step>
+                </procedure>
+            </sect2>
+        </sect1>
+        <sect1 id="text-editing" status="complete">
+            <title>Text Editing</title>
+            <para>
+                All of the configurations and settings in Linux are saved in
+                text files. Even though you most often can edit configurations
+                through the graphical interface, you may occasionally have to
+                edit them by hand. 
+                <application>Kate</application> is the default Kubuntu text
+                editor, which can be launched by clicking  
+                <menuchoice>
+                    <guimenu>K-menu</guimenu>
+                    <guisubmenu>Utilities</guisubmenu>
+                    <guimenuitem>Kate (Advanced Text Editor)</guimenuitem>
+                </menuchoice> 
+                    from the desktop menu system.
+            </para>
+            <para>
+                At times in this guide, <application>Kate</application> is run
+                from the command line using <application>kdesu</application>, as most
+                configuration files require root privileges to alter them. It is recommended
+                that you also run <application>kdesu</application> from the
+                command line when shown in this guide.
+            </para>
+
+            <para>If you need to use a text editor from the command line, you can use <application>nano</application>, which is a simple to use text editor. When running it from the command line, always use the following command, which ensures that the editor will not introduce line breaks:<screen>nano -w</screen>
+            </para>
+            <para>For more information about how to use <application>nano</application>, refer to the <ulink url="&wiki-Nano;">guide on the wiki</ulink>.
+            </para>
+            <para>There are also quite a few other terminal-based editors available in Kubuntu, popular ones include <application>VIM</application> and <application>Emacs</application> (the pros and cons of each are cause for much friendly debate within the Linux community). These are often more complex to use than <application>nano</application>, but are also more powerful.
+            </para>
+        </sect1>
+                <sect1 id="users-and-groups" status="complete">
+                    <title>Users and Groups</title>
+                    <para>To add users or groups to your system, you can use the <application>Users And Groups</application> application located in 
+                        <menuchoice>
+                            <guimenu>K-menu</guimenu>
+                            <guimenuitem>System Settings</guimenuitem>
+                            <guimenuitem>Users and Groups</guimenuitem>
+                        </menuchoice> 
+                        .</para>
+                    <note>
+                        <para>
+                            You will need to change into the "Administrator Mode" to make changes to Users and Groups.</para>
+                    </note>
+
+                    <para>
+                        To add a new user, click on <guilabel>New...</guilabel>, fill in the data fields then click <guilabel>OK</guilabel>.  To edit the properties of each user, click the <guilabel>Modify...</guilabel> button located in the main <guilabel>Users</guilabel> window.
+                    </para>
+
+                    <para>
+                        To add a new group, select the <guilabel>Groups</guilabel> tab and click <guilabel>New...</guilabel>. Choose a name for the new group and, if you want, change the default value for the <guilabel>Group ID</guilabel>. If you try to allocate a <guilabel>Group ID</guilabel> that is in use, the system will warn you.</para>
+
+                    <para>You can add users to the newly created group by selecting a user from the left menu and clicking on the <guilabel>Add</guilabel> button.  Removing a user from a group is as simple as adding one: select the user from the right menu then click <guilabel>Remove</guilabel>.  When you are ready, click <guilabel>OK</guilabel> and the new group with its users, if inserted, will be created.</para>
+
+                    <para>To edit the properties of a group, from within the <guilabel>Groups</guilabel> main window, choose a group name and click on the <guilabel>Modify...</guilabel> button.</para>
+
+                    <para>To remove a user or a group from the system, select the user or group you want to delete and click <guilabel>Delete...</guilabel>.</para>
+
+                </sect1>
+            </chapter>
+

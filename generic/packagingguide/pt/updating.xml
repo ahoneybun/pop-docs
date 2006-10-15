@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+        "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="updating-chap" status="writing">
+ 		<title>Actualizando Pacotes</title>
+
+			<para>If you have been around Linux distributions for any amount
+				of time, you have realized that there are sometimes bugs in
+				programs. In the Debian and <phrase>Ubuntu</phrase> distributions, bugs are
+				often fixed through the packaging by patching the source code.
+				Sometimes there are bugs in the packaging itself that can
+				cause difficulties.</para>
+
+			<para>To patch the program's source code, you could simply download
+				the current <phrase>Ubuntu</phrase> source package (with
+				<application>apt-get source</application>) and make the needed
+				changes. You can then add a new entry to the
+				<filename>debian/changelog</filename> using
+				<application>dch -i</application> or
+				<application>dch -v
+					&lt;version&gt;-&lt;revision&gt;</application> to specify
+				the new revision. When you run <application>debuild
+					-S</application> from the source directory you will have a
+				new source package with a new <filename>.diff.gz</filename> in the
+				parent directory that
+				contains your changes. A problem with this approach is that
+				the distinction between source and patches is unclear.</para>
+
+			<para>Uma solução para este problema é separar as mudanças ao código fonte em correcções individuais armazenadas no directório <filename>debian</filename>. Este sistema de correcção é chamado <application>dpatch</application>. As correcções são armazenadas no directório <filename>debian/patches/</filename> e têm um formato especial.</para>
+
+			<para>Para criar uma <application>dpatch</application>, execute os passos seguintes sequencialmente.</para>
+
+			<para>Crie um espaço de trabalho temporário e duas cópias da directória fonte actual:</para>
+			
+			<screen>
+mkdir tmp
+cd tmp
+cp -a ../&lt;package&gt;-&lt;version&gt; . 
+cp -a &lt;package&gt;-&lt;version&gt; &lt;package&gt;-&lt;version&gt;.orig 
+</screen>
+
+			<para>Efectue as alterações no directório <filename>&lt;package&gt;-&lt;version&gt;</filename>.</para>
+
+			<para>Crie um ficheiro de correcção usando o <application>diff</application> e colocando-o na directoria do <filename>debian/patches</filename>.</para>
+
+			<screen>
+diff -Nru &lt;package&gt;-&lt;version&gt;.orig &lt;package&gt;-&lt;version&gt; &gt; patch-file
+</screen>
+
+			<para>Crie o <application>dpatch</application> usando <application>dpatch patch-template</application> e um ficheiro chamado <filename>00list</filename> que lista os dpatches:</para>
+			<screen>
+dpatch patch-template -p "01_patchname" "patch-file description" \
+	&lt; patch-file &gt; 01_patchname.dpatch
+echo 01_patchname.dpatch &gt;00list</screen>
+
+			<para>Agora pode colocar o <filename>01_patchname.dpatch</filename> e <filename>00list</filename> na directória <filename>debian/patches</filename> do seu pacote fonte.</para>
+
+			<screen>
+mkdir ../&lt;package&gt;-&lt;version&gt;/debian/patches
+cp 01_patchname.dpatch 00list ../&lt;package&gt;-&lt;version&gt;/debian/patches
+cd ..
+rm -rf tmp
+			</screen>
+
+			<note><para>Pode também editar uma correcção já existente usando o <application>dpatch-edit-patch</application>.</para></note>
+			
+		<para>Assim que todas as mudanças estiverem efectuadas, uma entrada adicionada no changelog, e o <application>dpatch</application> adicionado ao ficheiro <filename>debian/control</filename> (se necessário), então pode reconstruir o pacote fonte com <application>debuild -S</application>.</para>
+
+		<para>To get your fixed source package uploaded to the <phrase>Ubuntu</phrase>
+			repositories, you will need to get your source package sponsored by
+			a person who has upload rights. See <xref linkend="ubuntu-upload"/> for more details. Sometimes, rather
+			than giving the entire source package (.diff.gz, .dsc, and
+			.orig.tar.gz), it is easier and more efficient to just give the
+			difference between the source package that is currently in the
+			repositories and your fixed source package. A tool has been
+			created to do just that called
+			<application>debdiff</application>. Using
+			<application>debdiff</application> is similar to using
+			<application>diff</application> but is made specifically for
+			packaging. You can <application>debdiff</application> the
+			source package by:</para>
+
+		<screen>
+debdiff &lt;oldpackage&gt;.dsc &lt;newpackage&gt;.dsc &gt; package.debdiff
+		</screen>
+
+		<para>ou o pacote bunário por:</para>
+
+		<screen>
+debdiff &lt;oldpackage&gt;.deb &lt;newpackage&gt;.deb &gt; package.debdiff
+		</screen>
+	
+		<para>Debdiffs are great to attach to bug reports and have ready for a
+			sponsor to upload.</para>
+		
+</chapter>
+

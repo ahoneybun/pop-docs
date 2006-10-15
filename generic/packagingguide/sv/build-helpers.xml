@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="bh-chap" status="writing">
+	<title>Build Helpers</title>
+	<para>Good stuff about debhelper and CDBS goes here</para>
+
+	<sect1 id="basic-debhelper" status="complete">
+		<title>Paketera med Debhelper</title>
+		
+		<important><para><emphasis role="bold">Krav:</emphasis> Kraven från <xref linkend="basic-scratch"/> samt debhelper och dh-make</para> </important>
+
+		<para>Som en paketerare kommer du sällan att skapa paket från scratch som vi gjorde i förra avdelningen. Som du kanske förstår är mycket av uppgifterna och informationen i till exempel <filename>rules</filename>-filen gemensamt mellan paket. För att göra paketering lättare och mer effektivt kan du använda <application>debhelper</application> för att få hjälp med de här uppgifterna. Debhelper är en uppsättning Perl-skript (alla har ett namn som börjar med <emphasis>dh_</emphasis>) som automatiserar paket-byggandet. Med de här skripten blir det ganska enkelt att bygga Debianpaket.</para>
+
+		<para>In this example, we will again build the GNU Hello package, but this
+			time we will be comparing our work to the Ubuntu
+			<application>hello-debhelper</application> package. Again,
+			create a directory where you will be working: </para>
+
+		<screen>mkdir ~/hello-debhelper
+cd ~/hello-debhelper
+wget http://ftp.gnu.org/gnu/hello/hello-2.1.1.tar.gz
+mkdir ubuntu
+cd ubuntu</screen>
+		
+
+		<para>Then, get the Ubuntu source package:</para>
+
+		<screen>apt-get source hello-debhelper
+cd ..</screen>
+
+		<para>Precis som i senaste exemplet är det första vi behöver göra att packa upp den ursprungliga (uppströms) tarbollen.</para>
+
+		<screen>tar -xzvf hello-2.1.1.tar.gz</screen>
+
+		<para>Istället för att kopiera uppströmstarbollen till <filename>hello_2.1.1.orig.tar.gz</filename> som vi gjorde i förra exemplet låter vi <application>dh_make</application> göra jobbet åt oss. Det enda du behöver göra är att döpa om källmappen så att namnet blir i formen <emphasis>&lt;paketnamn&gt;-&lt;version&gt;</emphasis> där paketnamn är skrivet med gemener. I det här exemplet får vi automatiskt en källkatalog med rätt namn när vi untarar tarbollen, så vi behöver bara gå in i den.</para>
+
+		<screen>cd hello-2.1.1</screen>
+
+		<para>För att göra den ursprungliga "debianisationen" av källkoden kommer vi att använda <application>dh_make</application>.</para>
+
+		<screen>
+dh_make -e din.e-post@adress -f ../hello-2.1.1.tar.gz
+		</screen>
+
+		<para>dh_make kommer sedan ställa en rad frågor till dig:</para>
+
+		<screen>
+Type of package: single binary, multiple binary, library, kernel module or cdbs?
+[s/m/l/k/b] <emphasis role="bold">s</emphasis></screen>
+
+		<screen>
+Maintainer name : Captain Packager
+Email-Address : packager@coolness.com
+Date : Thu, 6 Apr 2006 10:07:19 -0700
+Package Name : hello
+Version : 2.1.1
+License : blank
+Type of Package : Single
+Hit &lt;enter&gt; to confirm: <emphasis role="bold">Enter</emphasis></screen>
+
+		<caution><para>Kör bara <application>dh_make -e</application> en gång. Om du kör det igen efter att ha kört det en första gång kommer det inte att fungera. Om du vill ändra på det eller om du gjorde ett misstag, ta bort källkatalogen och untara uppströmstarbollen igen. Gå sedan in i källkatalogen och försök igen.</para></caution>
+		
+		<para>När du kör <application>dh_make -e</application> händer två saker:</para>
+
+		<orderedlist> 
+			
+			<listitem><para>Filen <filename>hello_2.1.1.orig.tar.gz</filename> skapas i katalogen ovanför den du är i.</para></listitem>
+
+			<listitem><para>De grundläggande filerna som behövs i <filename>debian/</filename> och många mallfiler (.ex) som kanske behövs skapas.</para></listitem>
+			
+		</orderedlist>
+
+		<para>Programmet <application>Hello</application> är inte särskillt komplicerat, och som vi såg i <xref linkend="basic-scratch"/> krävs det inte mycket mer än de grundläggande filerna för att paketera det. Vi tar därför bort alla <filename>.ex</filename>-filer:</para>
+
+		<screen>cd debian
+rm *.ex *.EX</screen>
+
+		<para>För <application>hello</application> behöver du inte heller <filename>README.Debian</filename> (en README som är Debian-specifik, inte programmets README), <filename>dirs</filename> (används av <application>dh_installdirs</application> för att skapa de kataloger som behövs), <filename>docs</filename> (används av <application>dh_installdocs</application> för at installera programmets dokumentation), eller <filename>info</filename> (används av <application>dh_installinfo</application> för att installera info-filen) i katalogen <filename>debian</filename>. För mer information om dessa filer, läs <xref linkend="appendix-examples"/>.</para>
+
+		<para>Vid det här laget bör du bara ha filerna <filename>changelog</filename>, <filename>compat</filename>, <filename>control</filename>, <filename>copyright</filename> och <filename>rules</filename> i katalogen <filename>debian</filename>. Jämfört med <xref linkend="basic-scratch"/> är den enda nyheten <filename>compat</filename>, som är en fil som innehåller versionen på <application>debhelper</application> (i det här fallet 4).</para>
+
+		<para>You will need to adjust the
+			<filename>changelog</filename> slightly in this case to reflect
+			that this package is named
+			<application>hello-debhelper</application> rather than just
+			<application>hello</application>:</para>
+
+		<screen>
+hello-debhelper (2.1.1-1) dapper; urgency=low
+
+  * Initial release
+
+  -- Captain Packager &lt;packager@coolness.com&gt; Thu, 6 Apr 2006 10:07:19 -0700</screen>
+		
+		<para>By using <application>debhelper</application>, the only
+			things we need to change in <filename>control</filename> are the
+			name (substituting <application>hello</application> for
+			<application>hello-debhelper</application>) and adding
+			<application>debhelper (&gt;= 4.0.0)</application> to the
+			<emphasis>Build-Depends</emphasis> field for the source
+			package. The Ubuntu package for
+			<application>hello-debhelper</application> looks like:</para>
+
+		<screen>
+Source: hello-debhelper
+Section: devel
+Priority: extra
+Maintainer: Capitan Packager &lt;packager@coolness.com&gt;
+Standards-Version: 3.6.1
+Build-Depends: debhelper (&gt;= 4)
+
+Package: hello-debhelper
+Architecture: any
+Depends: ${shlibs:Depends}
+Conflicts: hello
+Provides: hello
+Replaces: hello
+Description: The classic greeting, and a good example
+ The GNU hello program produces a familiar, friendly greeting. It
+ allows non-programmers to use a classic computer science tool which
+ would otherwise be unavailable to them.
+ .
+ Seriously, though: this is an example of how to do a Debian package.
+ It is the Debian version of the GNU Project's `hello world' program
+ (which is itself an example for the GNU Project).
+ .
+ This is the same as the hello package, except it uses debhelper to
+ make the deb. Please see debhelper as to what it is.
+		</screen>
+
+		<para>We can copy the <filename>copyright</filename> file and the
+			<filename>postinst</filename> and <filename>prerm</filename>
+			scripts from the Ubuntu
+			<application>hello-debhelper</application> package, as they have
+			not changed since <xref linkend="basic-scratch"/>. We will also
+			copy the <filename>rules</filename> file so we can inspect
+			it.</para>
+
+		<screen>
+cp ../../ubuntu/hello-debhelper-2.1.1/debian/copyright .
+cp ../../ubuntu/hello-debhelper-2.1.1/debian/postinst .
+cp ../../ubuntu/hello-debhelper-2.1.1/debian/prerm .
+cp ../../ubuntu/hello-debhelper-2.1.1/debian/rules .</screen>
+
+		<para>Den sista filen vi behöver titta på är <filename>rules</filename>, där kraften i <application>debhelper</application>-skripten visas. <application>debhelpers</application> version av <filename>rules</filename> är något kortare (54 rader jämfört med 72 i versionen från <xref linkend="basic-scratch-rules"/>).</para>
+
+		<para>Versionen från <application>debhelper</application> ser ut såhär:</para>
+
+		<screen> #!/usr/bin/make -f
+
+package = hello-debhelper
+
+CC = gcc
+CFLAGS = -g -Wall
+
+ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+  CFLAGS += -O2
+endif
+
+#export DH_VERBOSE=1
+
+clean:
+        dh_testdir
+        dh_clean
+        rm -f build
+        -$(MAKE) -i distclean
+
+install: build
+        dh_clean
+        dh_installdirs
+        $(MAKE) prefix=$(CURDIR)/debian/$(package)/usr \
+                mandir=$(CURDIR)/debian/$(package)/usr/share/man \
+                infodir=$(CURDIR)/debian/$(package)/usr/share/info \
+                install
+
+build:
+        ./configure --prefix=/usr
+        $(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)"
+        touch build
+
+binary-indep: install
+# There are no architecture-independent files to be uploaded
+# generated by this package. If there were any they would be
+# made here.
+
+binary-arch: install
+        dh_testdir -a
+        dh_testroot -a
+        dh_installdocs -a NEWS
+        dh_installchangelogs -a ChangeLog
+        dh_strip -a
+        dh_compress -a
+        dh_fixperms -a
+        dh_installdeb -a
+        dh_shlibdeps -a
+        dh_gencontrol -a
+        dh_md5sums -a
+        dh_builddeb -a
+
+binary: binary-indep binary-arch
+
+.PHONY: binary binary-arch binary-indep clean checkroot
+			</screen>
+
+		<para>Notera att uppgifter som att testa om du är i rätt katalog (<application>dh_testdir</application>), kontrollera att du bygger paketet med root-rättigheter (<application>dh_testroot</application>), installera dokumentation <application>dh_installdocs</application> och <application>dh_installchangelogs</application>) och städa undan när paketet är byggt (<application>dh_clean</application>) hanteras automatiskt. Många paket som är mycket mer komplicerade än <application>hello</application> har lika små <filename>rules</filename>-filer eftersom <application>debhelper</application>-skripten hanterar de flesta uppgifterna. För en komplett lista över <application>debhelper</application>-skript, läs <xref linkend="appendix-debhelper"/>. De är också väl dokumenterade i sina respektive <application>man</application>-sidor. Det är en användbar övning att läsa man-sidor (de är välskrivna och inte särskillt långa) för vart och ett av hjälpskripten som används i ovastående <filename>rules</filename>-fil.</para>
+
+			<sect2>
+			<title>Bygga och ta bort källpaketet</title>
+			
+			<para>Nu när vi har gått igenom filerna i katalogen <filename>debian</filename> för <application>hello-debhelper</application> kan vi bygga käll- och binärpaketen. Vi går först tillbaka till källkatalogen:</para>
+			
+			<para><screen>cd ..</screen></para>
+			
+			<para>Nu kan vi bygga källpaketet med <application>debuild</application>, ett skript som kör <application>dpkg-buildpackage</application>:</para>
+			
+			<para><screen>debuild -S</screen></para>
+			
+			<para>det binära paketet, med <application>pbuilder</application>:</para>
+			
+			<para><screen>sudo pbuilder build ../*.dsc</screen></para>
+
+			<para>och till slut leta i källpaketet med <application>lintian</application>:</para>
+			
+			<screen>cd ..
+lintian -i *.dsc</screen>
+			
+		</sect2>
+	
+	</sect1>
+
+	<sect1 id="basic-cdbs" status="complete">
+		<title>Paketera med CDBS</title>
+
+		<para>CDBS är ett verktyg som använder debhelper för att göra det ännu enklare att bygga och underhålla Debianpaket. Det har många fördelar:</para>
+
+			<itemizedlist>
+				<listitem><para>Det producerar en kort, läsvänlig och effektiv <filename>debian/rules</filename></para></listitem>
+				
+				<listitem><para>Det automatiserar debhelper och autotools åt dig, så att du slipper bry dig om återkommande uppgifter.</para></listitem>
+				
+				<listitem><para>Det hjälper dig att fokusera på viktigare paketproblem, eftersom det hjäper till utan att begränsa anpassning</para></listitem>
+				
+				<listitem><para>Det har vältestade klasser, så att du slipper använda olika fulhack för att lösa vanliga problem</para></listitem>
+				
+				<listitem><para>Det är enkelt att byta till CDBS</para></listitem>
+				
+				<listitem><para>Det är utbyggbart</para></listitem>
+			</itemizedlist>
+		
+		<sect2>
+			<title>Använda CDBS i paket</title>
+		
+			<para>Using CDBS for Ubuntu packages is very easy. After adding 
+				<application>cdbs</application> to the Build-Depends in 
+				<filename>debian/control</filename>, a basic
+				<filename>debian/rules</filename> file using CDBS can fit in 2 lines. 
+				For a simple C/C++ application with no extra rules, such as
+				<application>hello</application>, <filename>debian/rules</filename> can
+				look like this :</para>
+
+			<screen>#!/usr/bin/make -f
+				
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/autotools.mk</screen>
+
+			<para>Det här är allt du behöver för att bygga programmet! CDBS hanterar installation och upprensning. Du kan sedan använda filerna <filename>.install</filename> och <filename>.info</filename> för att anpassa ditt program med de vanliga debhelper-funktionerna i olika delar av <filename>debian/rules</filename>.</para>
+
+			<warning><para>Använd inte DEB_AUTO_UPDATE_DEBIAN_CONTROL:=yes för att automatiskt ändra <filename>debian/control</filename>. Det kan orsaka dåliga saker, och Debian anser att det är ett skäl till att neka ett paket från att komma in i arkiven. Läs <ulink url="http://ftp-master.debian.org/REJECT-FAQ.html"> http://ftp-master.debian.org/REJECT-FAQ.html</ulink> för mer information.</para></warning>
+			
+			<para>Som du kan se fungerar CDBS i princip genom att inkludera <filename>.mk</filename> Makefiles i <filename>debian/rules</filename>. Paketet <application>cdbs</application> ger dig sådana filer i <filename>/usr/share/cdbs/1/</filename> som låter dig göra utföra paketeringsuppgifter. Andra paket, som till exempel <application>quilt</application>, lägger till moduler till CDBS och kan användas som Build-Depends. Notera att du också kan använda dina egna CDBS-regler och inkludera dessa i paketet. De mest användbara modulerna som ingår i <application>cdbs</application> är:</para>
+
+			<itemizedlist>
+				
+				<listitem><para><filename>rules/debhelper.mk</filename>: Anropar debhelper på alla platser det behövs</para></listitem>
+			
+				<listitem><para><filename>rules/dpatch.mk</filename>: Låter dig använda dpatch för att förenkla att patcha källkoden</para></listitem>
+				
+				<listitem><para><filename>rules/simple-patchsys.mk</filename>: Erbjuder ett väldigt enkelt sätt att patcha källkoden</para></listitem>
+				
+				<listitem><para><filename>rules/tarball.mk</filename>: Låter dig bygga paket med komprimerade tarbollar i paketet</para></listitem>
+				
+				<listitem><para><filename>class/autotools.mk</filename>: Anropar autotools på alla platser det behövs</para></listitem>
+				
+				<listitem><para><filename>class/gnome.mk</filename>: Bygger GNOME-program (kräver motsvarande Build-Depends i <filename>debian/control</filename>)</para></listitem>
+				
+				<listitem><para><filename>class/kde.mk</filename>: Bygger KDE-program (kräver motsvarande Build-Depends i <filename>debian/control</filename>)</para></listitem>
+				
+				<listitem><para><filename>class/python-distutils.mk</filename>: Bygger Python-program</para></listitem>
+			
+			</itemizedlist>
+		</sect2>
+		
+		<sect2>
+			<title>Mer information om CDBS</title>
+		
+			<para>För mer information om CDBS, se Marc Dequènes guide på <ulink url="https://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml">https://perso.duckcorp.org/duck/cdbs-doc/cdbs-doc.xhtml</ulink>.</para>
+		
+		</sect2>
+	</sect1>
+
+
+</chapter>
+

@@ -1,0 +1,2145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % genericent SYSTEM "../../libs/generic.ent">
+%genericent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "&EnglishAmerican;">
+]>
+<chapter id="networking" status="complete">
+	<title>Rede</title>
+  <para>As redes consistem em dois ou mais dispositivos, tal como sistemas de computador, impressoras e equipamentos relacionados que são ligados por qualquer meio físico, como equipamentos de rede via sinal de rádio (wireless), com o propósito de compartilhar informações e ou distribuir informações entre os dispositivos conectados.</para>
+  <para>Esta seção do Guia para Servidores Ubuntu fornece informação gerais e específicas sobre redes, incluindo uma vista geral de conceitos de rede e detalhes sobre protocolos populares de rede e aplicações de servidor.</para>
+	<sect1 id="network-configuration" status="complete">
+		<title>Configuração de Rede</title>
+          <para>O Ubuntu distribui um número de utilidades gráficas para configurar seus equipamentos de rede. Este documento tem como foco administradores de servidores e focalizará em como administrar sua rede usando a linha de comando.</para>
+      <sect2 id="ethernet" status="complete">
+        <title>Ethernet</title> 
+          <para>A maior parte da configuração de rede está centralizada em um único arquivo, <filename>/etc/network/interfaces</filename>. Se você não possui dispositívos de rede, somente a interface loopback aparecerá neste arquivo, e será parecido com isto: <screen># This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+address 127.0.0.1
+netmask 255.0.0.0</screen> Se você tiver apenas um dispositivo de rede, eth0, e este estiver obtendo a configuração via servidor DHCP, ele pode ser carregado automaticamente durante o boot, para isso, bastam apenas duas linhas adicionais:
+<screen>auto eth0
+iface eth0 inet dhcp</screen> A primeira linha especifica que o dispositivo eth0 deve ser habilitado automaticamente durante o boot. A segunda linha diz que a interface (<quote>iface</quote>) eth0 deve ter um espaço IPv4 (subistitua <quote>inet</quote> por <quote>inet6</quote> para dispositivos IPv6) e isto deverá obter automaticamente a configuração via DHCP. Assumindo que sua rede e servido DHCP já esteja devidamente configurado, esta máquina não precisará de nenhuma configuração adicional para funcionar corretamente. O servidor DHCP irá prover o gateway padrão (implementado através do comando <application>route</application>), os endereços de IP (implementados com o comando <application>ifconfig</application>), e os servidores DNS usados na rede (implementados no arquivo <filename>/etc/resolv.conf</filename>.)</para>
+		<para>Para configurar sua interface de rede ethernet com um IP estático e uma configuração personalizada, será necessário algumas informações. Suponhamos que você queira definir o IP 192.168.0.2 para a interface eth1, com a máscara de rede típica 255.255.255.0. Seu gateway (rota de saída)  padrão é 192.168.0.1. Vocé deverá inserir algo como isto no arquivo <filename>/etc/network/interfaces</filename>: <screen>iface eth1 inet static
+	address 192.168.0.2
+	netmask 255.255.255.0
+	gateway 192.168.0.1</screen> Neste caso, voê precisará especificar o endereço dos servidores de DNS manualmente no arquivo <filename>/etc/resolv.conf</filename>, que deverá parecer com algo do tipo: <screen>search mydomain.com
+nameserver 192.168.0.1
+nameserver 4.2.2.2</screen> A diretiva <emphasis role="italics">search</emphasis> vai anexar mydomain.com para a procura de hostnames, tentando resolver nomes para sua rede. Por exemplo, se o domínio de sua rede é meudominio.com e você tentar fazer um ping no host <quote>meucomputador</quote>, a procura pelo DNS será modificada para <quote>meucomputador.meudominio.com</quote>. A diretiva <emphasis role="italics">nameserver</emphasis> especifica os servidores DNS a serem usados para resolver os hostnames para o IP. Se você usa um nameserver (servidor DNS) próprio, insira-o aqui. Senão, pergunte ao seu provedor de internet os servidores DNS primário e secundário, e depois insira-os em <filename>/etc/resolv.conf</filename>, como mostrado abaixo.</para>
+		<para>Diversas outras configurações são possíveis, incluindo interfaces PPP, rede em IPv6, interfaces VPN, entre outras. Execute o comando <application>man 5 interfaces</application> para mais informações e para as opções suportadas. Lembre-se que <filename>/etc/network/interfaces</filename> é utilizado pelos scripts  <application>ifup</application>/<application>ifdown</application>  como um esquema de configuração de mais alto nível, que pode ser utilizado por outras distribuições, e que os utilitários de baixo nível, como <application>ifconfig</application>, <application>route</application> e <application>dhclient</application> continuam disponíveis para configurações ad hoc.</para>
+      </sect2>
+      <sect2 id="managing-dns-entries" status="complete">
+          <title>Administrando entradas DNS</title>
+            <para>Esta seção explica como configurar o servidor de nomes (DNS) para gerar endereços IP a hostnames e vice versa. Não explica como configurar o sistema como um servidor de nome.</para>
+            <para>Para gerenciar entradas de DNS, você pode adicionar, alterar ou remover nomes de DNS do arquivo <filename>/etc/resolv.conf</filename>. Um <ulink url="../sample/resolv.conf">arquivo de exemplo</ulink> pode ser visto abaixo:</para>
+<programlisting>
+search com
+nameserver 204.11.126.131
+nameserver 64.125.134.133
+nameserver 64.125.134.132
+nameserver 208.185.179.218
+</programlisting>
+            
+            <para>A chave <application>search</application> especifica a string que deverá aparecer para um hostname imcompleto. Aqui, nos a temos mencionada como <application>com</application>. Então, quando nos executamos: <command>ping ubuntu</command> ela interpretará como <command>ping ubuntu.com</command>.</para> 
+
+            <para>A chave <application>nameserver</application> especifica o endereço IP do servidor de nomes. Ele será usado para resolver os endereços IP ou hostnames. Este arquivo pode possuir multiplas entradas de DNS. Os DNS's serão usados pela rede de mesma classe.</para>
+
+            <warning>
+            <para>Se o DNS estiver obtendo dinâmicamente por DHCP ou PPPoE (obtido do seu provedor), não adicione entrada neste arquivo. Isto será atualizado automaticamente.</para>
+            </warning>
+
+            <warning>
+            <para>
+            The changes you do in <filename>/etc/resolv.conf</filename>
+            will be erased when you reboot your machine. If you want to
+            make this change permanent, you should install
+            <application>resolvconf</application> package and update the
+            DNS information in
+            <filename>/etc/resolvconf/resolv.conf.d/base</filename>
+            file provided by that package.
+           </para>
+            </warning>
+        </sect2>
+        <sect2 id="managing-hosts" status="complete">
+          <title>Gerenciando Hosts</title>
+            <para>Para gerenciar hosts, você pode adicionar, alterar ou remover hosts do arquivo <filename>/etc/hosts</filename>. O arquivo contêm endereços IP e seus nomes de host correspondentes. Quando seu sistema tenta resolver um nome de host para um endereço IP ou determinar um nome de host para um endereço IP, ele procura para o arquivo <filename>/etc/hosts</filename> antes de usar os servidores de nome. Se o endereço IP está listado no arquivo <filename>/etc/hosts</filename>, os servidores de nome não serão utilizados. Este comportamento pode ser alterado, bastando para isso editar o arquivo <filename> /etc/nsswitch.conf</filename> como quiser.</para>
+
+            <para>Se sua rede possui computadores cujos endereços IP não estão listadas no DNS, é recomendado que você os adicione ao arquivo <filename>/etc/hosts</filename>.</para>
+        </sect2>
+    </sect1>
+	<sect1 id="tcpip" status="complete">
+		<title>TCP/IP</title>
+          <para>O Transmission Control Protocol e o Internet Protocol (TCP/IP) são um conjunto podrão de protocolos desenvolvidos no final dos anos 1970 pela Defense Advanced Research Projects Agency (DARPA) como uma forma de comunicação entre diferente tipos de computadores e redes de computadores. TCP/IP é a força motora da Internet, e é portanto o mais popular conjunto de protocolos da Terra.</para>
+      <sect2 id="tcpip-introduction" status="complete">
+        <title>Introdução ao TCP/IP</title> 
+          <para>Os dois protocolos componentes do TCP/IP lidam com diferentes aspectos da computação em rede. <emphasis>Internet Protocol</emphasis>, o "IP" do TCP/IP é um protocolo de sem conexão que lida somente com o roteamento de pacotes da rede utilizando o <emphasis role="italics">datagrama de IPs</emphasis> como unidade básica das informações de rede. O datagrama do IP consiste de um cabeçaho seguido de uma mensagem. O <emphasis>TCP (Transmission Control Protocol - Protocolo de Controle de Transmissão) </emphasis></para>
+          </sect2>
+        <sect2 id="tcpip-configuration" status="complete">
+          <title>Configurando TCP/IP</title>
+            <para>A configuração do protocolo TCP/IP consiste em diversos elementos, que podem ser editados nos arquivos de configuração apropriados, ou optando-se por soluções como o servidor de DHCP (Protocolo de Configuração Dinâmica de Hosts), que por sua vez pode ser configurado para prover as configurações TCP/IP necessárias para cada cliente de rede automaticamente. Esses valores da configuração precisam ser definidos corretamente, de maneira que que facilite o funcionamento em rede do seu sistema Ubuntu.</para>
+            <para>Os elementos básicos de configuração do TCP/IP e seus objetivos são os seguintes: <itemizedlist>
+               <listitem>
+                  <para><emphasis role="bold">Endereço IP</emphasis> O Endereço de IP é uma string de identificação única, expressa em quatro números decimais, que vão de zero (0) à duzentos e cinquenta e cinco (255), separada por pontos, com cada um dos quatros números representado oito (8) bits do endereço, para um tamanho total de trinta e dois (32) bits para todo o endereço. Este formato é chamado de <emphasis>notação decimal com pontos</emphasis>.</para>
+               </listitem>
+               <listitem>
+                  <para><emphasis role="bold">Netmask</emphasis> A Máscara de Subrede (ou simplesmente <emphasis>netmask</emphasis>) é uma máscara de bits locais, ou alguns marcadores que separam porções de endereços IPs relacionados à uma rede de uma <emphasis>subrede</emphasis>. Por exemplo, na Classe C, a máscara padrão é 255.255.255.0, que mascara os primeiros três bytes do endereço IP e permite somente o último byte do endereços disponível para a alocação e especificação de hosts ou subredes.</para>
+               </listitem>
+               <listitem>
+                  <para><emphasis role="bold">Endereço de Rede</emphasis> O Endereço de rede representa os bytes compreendidos na porção de rede referente a um IP. Por exemplo, o host 12.128.1.2 da rede de Classe A, pode usar 12.0.0.0 como o Endereço de Rede, que usa o doze (12) para representar o primeiro byte de um endereço IP, (a parte de rede) e zeros (0s) em todos os outros três bytes restantes para representar os valores para hosts em potencial. Redes de hosts usando endereços IPs comuns como os privados e não distribuídos, como 192.168.1.100 pode então usar um endereço de rede como 192.168.1.0, que especifica os três primeiros bytes para a Classe C de rede 192.168.1 e zero (0) para todos os outros possíveis hosts da rede.</para>
+               </listitem>
+               <listitem>
+                  <para><emphasis role="bold">Endereço de Transmissão</emphasis> O Endereço de Transmissão é um endereço IP que possibilita dados de rede serem enviados simultaneamente para todos os hosts numa subrede, preferivelmente do que especificar um host particular da rede. O padrão genérico de endereço de transmissão para redes IP é 255.255.255.255, mas este endereço de transmissão não pode ser usado para enviar uma mensagem a cada host na Internet porque roteadores bloqueiam-no. Por exemplo, em um popular IP privado Classe C de rede, 192.168.1.0, o endereço de transmissão precisa ser configurado como 192.168.1.255. Transmissão de mensagens são tipicamente fruto de rede de protocolos tais como <emphasis>Address Resolution Protocol (ARP)</emphasis> e <emphasis>Routing Information Protocol (RIP)</emphasis>.</para>
+               </listitem>
+               <listitem>
+                  <para><emphasis role="bold">Gateway Address</emphasis>Um Gateway Address é o endereço IP direto de uma rede particular, ou host em uma rede, podendo se estender. Se uma rede de host não define-se ao comunicar com outra rede de host, e aquele host não é localizado em uma mesma rede, então um <emphasis>gateway</emphasis> deve ser usado. Em muitos casos, o Gateway Anddress será de um roteador na mesma rede, que vai habilitar o trafico de passagem em outras redes ou hosts, tais como Internet hosts. O valor definido a um Gateway Address deve ser correto, ou seu sistema não será capaz de alcançar nenhum host ligado na mesma rede.</para>
+               </listitem>
+               <listitem>
+                  <para><emphasis role="bold">Endereço do Servidor de Nomes</emphasis> Endereços de servidores de nome representam o endereço IP do sistema de Serviço de Nomes de Domínio (Domain Name Service - DNS), que resolve nomes de hosts de rede para endereços IP. Há três níveis de endereços de servidor de nomes, que podem ser especificados em ordem de precedência: O servidor de nomes <emphasis>Primário</emphasis>, o servidor de nomes <emphasis>Secundário</emphasis> e o servidor de nomes <emphasis>Terciário</emphasis>. Para que seu sistema possa resolver nome de hosts da rede para seus endereços IP correspondentes, você deve especificar um endereço de servidor de nomes válido o qual você esteja autorizado a utilizar na configuração de TCP/IP do seu sistema. Em muitos casos esses endereços podem e devem ser fornecidos pelo seu provedor de serviços de rede, mas há muitos servidores de nomes gratuitos e acessíveis publicamente, como os servidores Level3 (Verizon) com endereços de IP de 4.2.2.1 a 4.2.2.6.</para>
+                     <tip>
+                        <para>O Endereço de IP, a Máscara de rede (netmask), o Endereço de rede, Endereço de broadcast, e o Endereço de Gateway são, em geral, especificados com as diretivas apropriadas no arquivo <filename>/etc/network/interfaces</filename>. O endereço do Servidor de Nomes (DNS) é em geral especificado pela diretiva <emphasis>nameserver</emphasis> no arquivo <filename>/etc/resolv.conf</filename>. Para maiores informações, veja a página de manual para <filename>interfaces</filename> ou <filename>resolv.conf</filename> respectivamente, com os seguintes comandos a serem digitados no terminal:</para>
+                     </tip>
+                    <para>Acesse o sistema de páginas de manual para <filename>interfaces</filename> com o seguinte comando:</para>
+                    <para>
+<screen>
+<command>man interfaces</command>
+</screen>
+                    </para>
+                    <para>Acesse o sistema de páginas de manual para <filename>resolv.conf</filename> com o seguinte comando:</para>
+                    <para>
+<screen><command>man resolv.conf</command></screen>
+                    </para>
+               </listitem>
+            </itemizedlist></para>
+        </sect2>
+        <sect2 id="ip-routing" status="complete">
+          <title>Roteamento IP</title>
+            <para>O roteamento IP é uma forma de especificar e descobrir caminhos em uma rede TCP/IP na qual as informações da rede serão enviadas.O roteamento usa um conjunto de <emphasis>tabelas de roteamento</emphasis> para direcionar o encaminhamento de pacotes de dados de rede da fonte para o destino, geralmente por meio de diversos nós de rede intermediários, conhecidos como <emphasis>roteadores</emphasis>. O Roteamento IP é o principal modo de descoberta de caminhos na Internet. Há duas formas primárias de roteamento, <emphasis>Estático</emphasis> e <emphasis>Dinâmico</emphasis>.</para>
+            <para>
+            Static routing involves manually adding IP routes to the system's routing table, and this is usually
+            done by manipulating the routing table with the <application>route</application> command. Static routing enjoys
+            many advantages over dynamic routing, such as simplicity of implementation on smaller networks, 
+            predictability (the routing table is always computed in advance, and thus the route is precisely the 
+            same each time it is used), and low overhead on other routers and network links due to the lack of a
+            dynamic routing protocol.  However, static routing does present some disadvantages as well.  For example,
+            static routing is limited to small networks and does not scale well.  Static routing also fails completely
+            to adapt to network outages and failures along the route due to the fixed nature of the route. 
+            </para>
+            <para>Roteamento Dinâmico depende de grandes redes com múltiplas possibilidade de rotas IP de uma fonte a um destino e faz uso de protocolos especiais de roteamento, tal como o Router Information Protocol (RIP), que manipula o ajuste automático para os protocolos da tabela de roteamento, e assim, fazer o roteamento dinâmico possível. Roteamento dinâmico tem sérias vantagens sobre roteamento estático, como escalabilidade superior e a capacidade de adaptação a falhas ou ocilações ao longo das rotas na rede. Adicionalmente, essa posição é inferior a configuração manual para a tabela de roteamento, desde que os roteadores aprendam sobre outro roteador, sua existencia e rotas possíveis. Esta peculiaridade também elimina a possibilidade de introduzir um erro em tabelas de roteamento por erro humano. Roteamento dinâmico não é perfeito, de qualquer modo, ele apresente desvantagens como alta complexidade e despesas gerais adicionais para a rede, que não beneficiam imediatamente os usuários finais, e ainda consome banda da rede.</para>
+        </sect2>
+        <sect2 id="tcp-and-udp" status="complete">
+          <title>TCP e UDP</title>
+            <para>TCP é um protocolo de conexão, oferecendo correção de erro e entrega garantida de dados via o que é conecido como <emphasis>controle de fluxo</emphasis>. O controle de fluxo determina quando o fluxo de certos dados devem ser parados, e previamente quais pacotes de dados devem ser re-enviados devido a problemas como <emphasis>colisões</emphasis>, por exemplo, deste modo assegurando a entrega exata e completa dos dados. TCP é tipicamente usado em trocas de informações importantes tal como transações de banco de dados.</para>
+            <para>O User Datagram Protocol (UDP), por outro lado, é um protocolo de <emphasis>conectividade</emphasis> que raramente lida com a transmissão de dados importantes porque falta controle de fluxo ou qualquer outro método para assegurar a entrega confiável dos dados. UDP comumente é usado em aplicações como áudio e vídeo, onde é consideravelmente mais rápido que TCP devido à falta de correção de erro e controle de fluxo, e onde a perda de alguns pacotes não é catastrófico, geralmente.</para>
+        </sect2>
+        <sect2 id="icmp" status="complete">
+          <title>ICMP</title>
+            <para>O Internet Control Messaging Protocol (ICMP) é uma extensão do Internet Protocol (IP) como definido na Petição Para Comentários (RFC) #792 e apoia pacotes de rede contendo controle, erro, e mensagens de informação. ICMP é usado por aplicações de rede como a utilidade de <application>ping</application>, que pode determinar a disponibilidade de um host de rede ou dispositivo. Exemplos de mensagens de erro retornadas por ICMP que são útil a ambos hosts de rede e para dispositivos tal como roteadores, incluem <emphasis>Destino Inacessível</emphasis> e <emphasis>Tempo de Esperera Excedido</emphasis>.</para>
+        </sect2>
+        <sect2 id="daemons" status="complete">
+          <title>Serviços</title>
+            <para>Daemons (serviços) são aplicações especiais do sistema que tipicamente executam continuamente em segundo plano e esperam requisições para as funções que eles fornecem a outras aplicações. Muitos daemons são rede-cêntrico; isso é, um grande número de daemons executando em segundo plano em um sistema Ubuntu podem fornecer funcionalidades a redes relacionadas. Alguns exemplos de daemons de rede incluem o <emphasis>Hyper Text Transport Protocol Daemon</emphasis> (httpd), que fornece funcionalidade de servidor de Internet; o <emphasis>Secure SHell Daemon</emphasis> (sshd), que fornece identificação (login) remota segura e capacidade de transferência de arquivo; e o <emphasis>Internet Message Access Protocol Daemon</emphasis> (imapd), que fornece serviços de correio eletrônico (e-Mail).</para>
+        </sect2>
+    </sect1>
+	<sect1 id="firewall-configuration" status="review">
+		<title>Configuração do Firewall</title>
+          <para>O kernel Linux inclui o subsistema <emphasis>Netfilter</emphasis>, o qual é usado para manipular ou decidir o destino do tráfego de rede dirigido para ou através de seu servidor. Todas as soluções de firewall Linux modernas utilizam esse sistema para filtragem de pacotes.</para>
+        <sect2 id="firewall-introduction" status="review">
+          <title>Instrodução ao Firewall</title>
+            <para>O sistema de filtragem de pacotes do kernel tem pouca utilidade para os administradores sem uma interface para gerenciá-la. Este é o propósito do iptables. Quando um pacote chega ao servidor, ele será encaminhado ao subsistema Netfilter para aceitação, manipulação ou rejeição, baseado numa das regras supridas pela interface via iptables. Então, o iptables é tudo que você precisa para gerenciar o seu firewall, caso você tenha familiaridade com ele, mas existem diversos front ends (interfaces de frente) para simplificar a tarefa.</para>
+        </sect2>
+        <sect2 id="ip-masquerading" status="review">
+          <title>Mascaramento de IP</title>
+            <para>O propósito da Máscara de IP é permitir máquinas com IP privado, endereço não-roteável em sua rede para acessar a Internet por meio da máquina "mascarada". O tráfico destinado de sua rede privada para a Internet deve ser manipulado para obter respostas da máquina que fez a petição, como em uma rota invertida. Para fazer isto, o kernel deve modificar o endereço IP da <emphasis>fonte</emphasis> de cada pacote e retornar respostas a ele, antes que o endereço privado IP faço o pedido de resposta, que é impossível através da Internet. O Linux usa <emphasis>Connection Tracking</emphasis> (conntrack) para acompanhar que conexões pertence a que máquinas e desviar cada pacote de retorno correspondente. O tráfico originado em sua rede privada é assim "mascarado" como tendo originado de seu gateway Ubuntu. Este processo possui refência na documentação da Microsoft como Conexão de Internet Compartilha.</para>
+			<para>Isto pode ser realizado com uma única regra no iptables, que pode diferir levemente baseado em sua configuração de rede:<screen>sudo iptables -t nat -A POSTROUTING -s 192.168.0.0/16 -o ppp0 -j MASQUERADE</screen> O comando acima supõe que seu endereço privado está no intervalo 192.168.0.0/16 e sua interface de Internet, ou dispositivo, é ppp0. A sintaxe é errada como se segue: <itemizedlist>
+				  <listitem><para>-t nat -- a regra é para ir na tabela nat</para></listitem>
+				  <listitem><para>-A POSTROUTING -- a regra é para ser adicionada (-A) à corrente POSTROUTING</para></listitem>
+				  <listitem><para>-s 192.168.0.0/16 -- a regra é aplicada a trafego originando do endereço especificado</para></listitem>
+				  <listitem><para>-o ppp0 -- a regra é aplicada a trafego agendado para ser roteado pelo dispositivo de rede especificado</para></listitem>
+				  <listitem><para>-j MASQUERADE -- trafego combinando com esta regra "pulará" (-j) para o alvo MASQUERADE para ser manipulado como descrito acima</para></listitem>
+			  </itemizedlist></para>
+			<para>Cada série na tabela de filtro (a tabela padrão, onde a maioria ou todos os processos e filtragem de pacotes ocorre) tem uma <emphasis>diretriz</emphasis> padrão para ACEITAR, mas se você estiver criando um firewall adicional para o dispositivo de gateway, você terá que definir políticas de DESCARTE ou REJEIÇÂO, em que caso seu tráfico "mascarado" necessitará de permição pra ENVIAR para a série de regras de trabalho acima:<screen>sudo iptables -A FORWARD -s 192.168.0.0/16 -o ppp0 -j ACCEPT
+sudo iptables -A FORWARD -d 192.168.0.0/16 -m state --state ESTABLISHED,RELATED -i ppp0 -j ACCEPT</screen> Os comandos acima permitem todas conexões de sua rede local à Internet e todo trânsito relacionado a essas conexões retornar à máquina que os iniciou.</para>
+        </sect2>
+        <sect2 id="firewall-tools" status="review">
+          <title>Ferramentas</title>
+            <para>Há muitas ferramentas disponíveis para ajudá-lo a construir um firewall completo sem conhecimento íntimo da ferramenta iptables. Para os que preferem GUI (interfaces gráficas), sugere-se o <application>Firestarter</application> é bem popular e de fácil utilização, e o <application>fwbuilder</application>, uma aplicação poderosa com visual familiar para administradores que usam ferramentas comerciais de firewall, como o Checkpoint FireWall-1. Se você preferir uma ferramenta em linha de comando para configurar arquivos em "texto puro", o <application>Shorewall</application> é uma solução poderosa que o ajudará em configurações avançadas de firewall em sua rede. Se sua rede for relativamente simples ou você não possuir uma rede o <application>ipkungfu</application> deve proporcionar-lhe um firewall útil com configuração inicial zero, e o permitirá facilmente armar um firewall mais avançado editando arquivos de configuração simples e bem documentados. Outra ferramenta interessante é o <application>fireflier</application>, que é orientado para desktop. É composto de um servidor (fireflier-server) e sua escolha de clientes GUI (GTK ou QT), e comporta-se como muitas aplicações interativas populares de firewall para Windows.</para>
+        </sect2>
+        <sect2 id="firewall-logs" status="review">
+          <title>Logs</title>
+            <para>O registro (log) das ações do firewall é essencial para reconhecer ataques, investigar e reparar erros em suas regras do firewall e notar atividades inesperadas na rede. Você deve incluir regras de registro em seu firewall para que registros sejam gerado, aliás, e regras de registro devem vir antes de qualquer regra aplicável (uma regra com um alvo que decida o destino do pacote, tal como ACEPT, DISCARD ou REJECT). Por exemplo: <screen>sudo iptables -A INPUT -m state --state NEW -p tcp --dport 80 -j LOG --log-prefix "NEW_HTTP_CONN: "</screen> As requisições pela porta 80 para a máquina local, então, geraria um registro dmesg parecido com este:</para>
+			<para>
+			  <programlisting>[4304885.870000] NEW_HTTP_CONN: IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=58288 DF PROTO=TCP SPT=53981 DPT=80 WINDOW=32767 RES=0x00 SYN URGP=0</programlisting>
+			</para>
+			<para>O registro acima é publicado em <filename>/var/log/messages</filename>, <filename>/var/log/syslog</filename>, e <filename>/var/log/kern.log</filename>. Estes procedimentos podem ser alterado modificando o <filename>/etc/syslog.conf</filename> ou instalando e configurando o <application>ulogd</application> e, assim, usar o ULOG como alvo ao invés do LOG (registro). O daemon <application>ulogd</application> é um servidor userspace que observa o sistema para registrar instruções específicas do kernel para firewalls e registrar qualquer arquivo que você queira, igual aos bancos de dados <application>PostgreSQL</application> e <application>MySQL</application>. O registro das ações do firewall pode ser simplificada usando uma ferramenta para análise de registros, como o <application>fwanalog</application>, <application> fwlogwatch</application>, ou <application>lire</application>.</para>
+        </sect2>
+    </sect1>
+	<sect1 id="openssh-server" status="complete">
+		<title>Servidor OpenSSH</title>
+      <sect2 id="openssh-introduction">
+        <title>Introdução</title> 
+           <para>
+            This section of the Ubuntu &sg-title; introduces a powerful collection of tools
+            for the remote control of networked computers and transfer of data between networked 
+            computers, called <emphasis>OpenSSH</emphasis>. You will also learn
+            about some of the configuration settings possible with the OpenSSH server application and
+            how to change them on your Ubuntu system. 
+          </para>
+          <para>OpenSSH é uma versão disponível livremente da família de ferramentas do protocolo Secure Shell (SSH) para controlar um computador remotamente ou transferir arquivos entre computadores. Ferramentas tradicionais utilizadas para cumprir essas funções, como <application>telnet</application> ou <application>rcp</application> são inseguras e transmitem a senha de um usuário em texto puro quando utilizadas. O OpenSSH provê um servidor daemon e ferramentas de cliente para facilitar controle remoto e operações de transmissão de arquivo com segurança e criptografia, efetivamente substituindo ferramentas de legado.</para>
+          <para>O componete de servidor OpenSSH, <application>sshd</application>, observa constantemente conexões de clientes para qualquer das ferramentas do cliente. Quando uma requisição de conexão ocorre, <application>sshd</application> inicia a conexão correta dependendo do tipo de ferramenta de conexão do cliente. Por exemplo, se um computador remoto conecta-se por um cliente <application>ssh</application>, o servidor OpenSSH iniciará o controle remoto da sessão após autenticar. OpenSSH utiliza vários métodos de autentificação, incluindo senha simples, chave pública e tiquetes <application>Kerberos</application>.</para>
+          </sect2>
+        <sect2 id="openssh-installation">
+        <title>Instalação</title>
+        <para>A instalação do servidor e cliente OpenSSH é simples, Para instalar o OpenSSH cliente no seu Ubuntu, use este comando no terminal:</para>
+           <para>
+<screen>
+<command>sudo apt-get install openssh-client</command>
+</screen>
+           </para>
+        <para>Para instalar o OpenSSH servidor no seu Ubuntu, use este comando no terminal:</para>
+           <para>
+<screen>
+<command>sudo apt-get install openssh-server</command>
+</screen>
+           </para>
+        </sect2>
+        <sect2 id="openssh-configuration">
+          <title>Configuração</title>
+            <para>Você pode configurar o comportamento padrão do servidor OpenSSH, <application>sshd</application>, editando o arquivo <filename>/etc/ssh/sshd_config</filename>. Para mais informação sobre as diretrizes de configuração usadas neste arquivo, você pode ver o manual apropriado com o seguinte comando, executado pela linha de comando:</para>
+               <para>
+<screen>
+<command>man sshd_config</command>
+</screen>
+               </para>
+            <para>Existem muitas diretrizes no arquivo de configuração do <application>sshd</application> que controlam coisas como configurações de comunicação e modos de autenticação. Os seguintes são exemplos de diretrizes de configuração que podem ser modificados editando o arquivo <filename>/etc/ssh/ssh_config</filename>.</para>
+            <tip>
+               <para>Antes de editar o arquivo de configuração, você deve fazer uma cópia do arquivo original e protegê-lo de escrita, para que você assim tenha os ajustes originais como uma referência e para reusar como necessário.</para>
+               <para>Copie o arquivo <filename>/etc/ssh/sshd_config</filename> e proteja-o contra sobrescrição com com seguinte comando, executado na linha de comando:</para>
+	    </tip>
+               <para>
+<screen>
+<command>sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.original</command>
+<command>sudo chmod a-w /etc/ssh/sshd_config.original</command>
+</screen>
+               </para> 
+            <para>Os seguintes são exemplos de diretrizes de configuração que você pode modificar:</para>
+           <itemizedlist>
+               <listitem>
+               <para>Para ajustar seu OpenSSH para escutar na porta de TCP 2222 invés da porta de TCP padrão 22, modifique a diretriz Port da seguinte forma:</para>
+               <para>Porta 2222</para>
+               </listitem>
+	<listitem>
+            <para>Para fazer o <application>sshd</application> aceitar acesso público à base de chaves credenciais, simplesmente adicione ou modifique a linha:</para>
+               <para>PubkeyAuthentication yes</para>
+            <para>no arquivo <filename>/etc/ssh/sshd_config</filename>, ou se já estiver presente, certifique-se que a linha não está comentada.</para>
+            </listitem>
+            <listitem>
+             <para>Para fazer o seu servidor OpenSSH exibir o conteúdo do arquivo <filename>/etc/issue.net</filename> como um aviso antes de conectar, simplesmente adicione ou modifique a linha:</para>
+               <para>Banner /etc/issue.net</para>
+               <para>no arquivo <filename>/etc/ssh/sshd_config</filename>.</para>
+             </listitem>
+             </itemizedlist>
+	    <para>Após realizar as auterações no arquivo <filename>/etc/ssh/sshd_config</filename>, salve o arquivo e reinicie o servidor de aplicações <application>sshd</application> para que as auterações tenham efeito. Para isto utilize o seguinte comando em um terminal:</para>
+               <para>
+<screen>
+<command>sudo /etc/init.d/ssh restart</command>
+</screen>
+               </para>
+		<warning>
+                           <para>Várias configurações adicionais de diretrizes do <application>sshd</application> estão disponíveis para auterar o comportamento do servidor de acordo com suas necessidades. Esteja ciente, no entanto, que se seu único método de acesso a um servidor é <application>ssh</application> e você comete um erro ao configurar o <application>sshd</application> via arquivo de configuração <filename>/etc/ssh/sshd_config</filename>, você pode torna-lo indisponível após reiniciar o servidor, ou esse servidor <application>sshd</application> pode recusar iniciar, devido a uma diretriz incorreta na configuração, então seja extremamente cuidadoso quando editar este arquivo num servidor remoto.</para>
+                        </warning>
+        </sect2>
+   <sect2 id="openssh-references" status="complete">
+      <title>Referências</title>
+      <para>
+      <ulink url="http://www.openssh.org/">Web site OpenSSH</ulink>
+      </para>
+      <para>
+      <ulink url="https://wiki.ubuntu.com/AdvancedOpenSSH">Página Wiki OpenSSH Avançado</ulink>
+      </para>
+   </sect2>
+     </sect1>
+	<sect1 id="ftp-server" status="complete">
+        <title>Servidor FTP</title> 
+            <para>File Transfer Protocol (FTP) is a TCP protocol for uploading and downloading
+                files between computers. FTP works on a client/server model. The server component is
+                called an <emphasis>FTP daemon</emphasis>. It continuously listens for FTP requests
+                from remote clients. When a request is received, it manages the login and sets up
+                the connection. For the duration of the session it executes any of commands sent by
+                the FTP client.</para>
+            <para>Acesso à um servidor FTP pode ser controlado em 2 maneiras:</para>
+            <itemizedlist spacing="compact">
+                <listitem>
+                    <para>Anônimo</para>
+                </listitem>
+                <listitem>
+                    <para>Autenticado</para>
+                </listitem>
+            </itemizedlist>
+            <para>No modo Anônimo, clientes remotos podem acessar o servidor FTP usando a conta de usuário padrão chamada 'anonymous' ou 'ftp' e informando um endereço de e-mail como senha. No modo Autenticado um usuário precisa ter uma conta e uma senha. O acesso do usuário aos diretórios e arquivos do servidor de FTP depende das permissões definidas para a conta usada no login. Como uma regra geral, o serviço de FTP irá esconder o diretório root do servidor de FTP e alterá-lo para o diretório Home do FTP. Isso ocultará o restante do sistema de arquivos nas sessões remotas.</para>
+            <sect2 id="vsftpd-ftp-server-installation" status="complete">
+                <title>vsftpd - Instalação de Servidor FTP</title>
+                    <para>O vsftpd é um daemon FTP disponível no Ubuntu. Ele é fácil de instalar, configurar e manter. Para instalar o <application>vsftpd</application> você pode rodar o seguinte comando: <screen> <command>sudo apt-get install vsftpd</command> </screen></para>
+
+                </sect2>
+            <sect2 id="vsftpd-ftp-server-configuration" status="complete">
+                <title>vsftpd - Configuração Servidor FTP</title>
+                <para>Você pode editar o arquivo de configuração do vsftpd, <filename>/etc/vsftpd.conf</filename>, para modificar as configurações padrões. Por padrão apenas FTP anônimo é permitido. Se você deseja desabilitar essa opção, você deve modificar a seguinte linha: <programlisting>
+anonymous_enable=YES
+</programlisting> para <programlisting>
+anonymous_enable=NO
+</programlisting> Por padrão, os usuários locais do sistema não tem permissão para fazer login no servidor FTP. Para modificar essa configuração, você deve descomentar a seguinte linha: <programlisting>
+#local_enable=YES
+</programlisting> Por padrão, usuários tem permissão para descarregar arquivos do servidor FTP. Eles não tem permissão para enviar arquivos para o servidor FTP. Para modificar essa configuração, você deve descomentar a seguinte linha: <programlisting>
+#write_enable=YES
+</programlisting> Similarmente, por padrão, os usuários anônimos não tem permissão para enviar arquivos para o servidor FTP. Para modificar essa configuração, você deve descomentar a seguinte linha: <programlisting>
+#anon_upload_enable=YES
+</programlisting> O arquivo de configuração é formado por vários parâmetros de configuração. As informações sobre cada parâmetro estão disponíveis no arquivo de configuração. Alternativamente, você pode consultar a página do manual, <command>man 5 vsftpd.conf</command> para um melhor detalhamento de cada parâmetro.</para>
+                <para>Uma vez configurado o <application>vsftpd</application> você pode iniciar o serviço usando o seguinte comando: <screen> <command>sudo /etc/init.d/vsftpd start</command> </screen></para>
+				<note><para>Note que os valores padronizados no arquivo de configuração estão ajustados da forma que estão por motivos de segurança. Cada uma das modificações feitas acima deixa o sistema cada vez menos seguro, portanto use-as somente se forem realmente necessárias.</para></note>
+                </sect2>
+    </sect1>
+	<sect1 id="network-file-system" status="complete">
+		<title>Network File System (NFS)</title>
+          <para>NFS permite um sistema a compartilhar diretórios e arquivos com outros sistemas em uma rede. Ao usar NFS, usuários e programas podem acessar arquivos em sistemas remotos quase que como se os mesmos fossem arquivos locais.</para>
+
+          <para>Alguns dos mais notáveis benefícios que NFS oferece são:</para>
+
+          <itemizedlist>
+          <listitem>
+      <para>Máquinas de trabalho locais usam menos espaço de disco porque dados comumente usados podem ser armazenados em uma única máquina e ainda assim permanecer acessível à outros na rede.</para>
+          </listitem>
+          <listitem>
+      <para>Não é necessário criar diretórios pessoais de usuários separados em cada máquina na rede. Diretórios pessoais podem ser criados em um servidor NFS de forma acessível por toda a rede.</para>
+          </listitem>
+          <listitem>
+
+      <para>Dispositivos de armazenamento como disquetes, CD-ROM, e chaveiros USB podem ser usados por outras máquinas na rede. Isto pode reduzir o número de dispositivos de mídia removíveis por toda a rede.</para>
+          </listitem>
+          </itemizedlist>
+
+      <sect2 id="nfs-installation" status="complete">
+        <title>Instalação</title>
+      
+          <para>Em um prompt de terminal entre o seguinte comando para instalar o servidor NFS:</para>
+          <para>
+<screen>
+<command>sudo apt-get install nfs-kernel-server</command>
+</screen>
+          </para>
+      </sect2>
+      <sect2 id="nfs-configuration" status="complete">
+        <title>Configuração</title>
+          <para>Você pode configurar os diretórios a serem exportados adicionando-os ao arquivo <filename>/etc/exports</filename>. Por exemplo:</para>
+          <para>
+<screen>
+/ubuntu *(ro,sync,no_root_squash)
+/home *(rw,sync,no_root_squash)
+</screen>
+          </para>
+
+          <para>Você pode substituir o * com um dos formatos de nome de host. Faça a declaração de nome de host o mais específica possível para que sistemas indesejados não acessem a montagem NFS.</para>
+
+          <para>Para inicar o servidor NFS, você pode executar o seguinte comando em um terminal:</para>
+          <para>
+<screen>
+<command>sudo /etc/init.d/nfs-kernel-server start</command>
+</screen>
+          </para>
+      </sect2>
+      <sect2 id="nfs-client-configuration" status="complete">
+        <title>Configuração do Cliente NFS</title>
+          <para>Use o comando <application>mount</application> para montar um diretório compartilhado NFS de outra máquina, digitando num prompt de terminal um comando similar ao seguinte:</para>
+          <para>
+<screen>
+<command>sudo mount exemplo.nomedamáquina.com:/ubuntu /local/ubuntu</command>
+</screen>
+</para>
+      <warning>
+      <para>O diretório ponto de montagem <filename>/local/ubuntu</filename> deve existir. Não devem existir arquivos ou subdiretórios dentro do diretório <filename>/local/ubuntu</filename>.</para>
+      </warning>
+
+      <para>Uma forma alternativa para montar uma partição compartilhada NFS remota é adicionar uma linha ao arquivo <filename>/etc/fstab</filename>.  A linha deve conter o nome do servidor NFS host, o diretório no servidor sendo exportado, e o diretório local onde a partição NFS deve ser montado.</para>
+
+      <para>A sintaxe normal para a linha no arquivo <filename>/etc/fstab</filename> é a seguinte:</para>
+      
+      <para>
+<programlisting>
+exemplo.nomedohost.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,intr
+</programlisting>
+      </para>
+      </sect2>
+      <sect2 id="nfs-references" status="complete">
+        <title>Referências</title>
+				<para><ulink url="http://nfs.sourceforge.net/">Linux NFS faq</ulink></para>
+      </sect2>
+    </sect1>
+	<sect1 id="dhcp" status="complete">
+		<title>Dynamic Host Configuration Protocol (DHCP)</title>
+            <para>O Protocolo de Configuração Dinâmica de Hosts (DHCP) é um serviço de rede que permite que os computadores sejam configurados automáticamente apartir de configurações feitas em um servidor ao invés de serem configurados individualmente de forma manual. Computadores configurados para serem clientes de DHCP não tem controle sobre as configurações que eles recebem do servidor DHCP, e a configuração é transparente para o usuário do computador.</para>
+            <para>As configurações mais comuns providenciadas por um servidor DHCP para um cliente DHCP são:</para>
+            <itemizedlist spacing="compact">
+                <listitem>
+                    <para>Endereço IP e Netmask</para>
+                </listitem>
+                <listitem>
+                    <para>DNS</para>
+                </listitem>
+                <listitem>
+                    <para>WINS</para>
+                </listitem>
+            </itemizedlist>
+            <para>Entretanto, um servidor DHCP pode também providenciar propriedades de configuração como:</para>
+            <itemizedlist spacing="compact">
+                <listitem>
+                    <para>Noma da Máquina</para>
+                </listitem>
+                <listitem>
+                    <para>Nome do Domínio</para>
+                </listitem>
+                <listitem>
+                    <para>Gateway Padrão</para>
+                </listitem>
+                <listitem>
+                    <para>Servidor de Tempo</para>
+                </listitem>
+                <listitem>
+                    <para>Servidor de Impressão</para>
+                </listitem>
+            </itemizedlist>
+            <para>A vantagem de usar DHCP é que as alterações em uma rede, por exemplo a alteração do endereço de um servidor DNS, precisam apenas ser modificadas no servidor DHCP, e todos os equipamentos da rede irão ser reconfigurados da próxima vez que seu cliente de DHCP consultar o servidor. Como vantagem adicional, ele também torna mais fácil a integração de novos computadores à rede, já que não é necessário confirmar a disponibilidade de um endereço IP. Conflitos na alocação de endereços IP também são reduzidos.</para>
+            <para>Um servidor DHCP pode fornecer parâmetros de configuração usando dois métodos:</para>
+            <variablelist>
+                <varlistentry>
+                    <term>Endereço MAC</term>
+                    <listitem>
+                        <para>Esse método consiste na utilização do DHCP por meio da identificação do endereço de hardware único de cada placa de rede conectada à rede e então fornecendo uma configuração constante cada vez que o cliente de DHCP faz uma requisição para o servidor DHCP usando o mesmo dispositivo de rede.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Pool de Endereços</term>
+                    <listitem>
+                        <para>Esse método consiste na definição de um pool (algumas vezes chamado de faixa ou escopo) de endereços IP apartir do qual os clientes DHCP terão suas propriedades e configurações supridas dinâmicamente baseado num método de "o primeiro que chega é o primeiro que leva". Quando um cliente DHCP não mais está em rede por período de tempo especificado, a configuração expira e é disponibilizada novamente no pool de endereços para uso por outros clientes DHCP.</para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+            <para>O Ubuntu é fornecido com ambos, o cliente e o servidor DHCP. O servidor é o <application>dhcpd</application> (dynamic host configuration protocol daemon). O cliente fornecido com o Ubuntu é o <application>dhclient</application> e deverá ser instalado em todos os computadores que pretendem ser automáticamente configurados. Ambos os programas são fáceis de instalar e configurar e serão automáticamente iniciados durante a inicialização do sistema.</para>
+      <sect2 id="dhcp-installation" status="complete">
+        <title>Instalação</title>
+          <para>Em um terminal, digite o seguinte comando para instalar <application>dhcpd</application>:</para>
+          <para>
+<screen>
+<command>sudo apt-get install dhcpd</command>
+</screen>
+          </para>
+          <para>Você verá a seguinte saída, a qual explica o que fazer em seguinda:</para>
+          <screen>
+Por favor note que se você estiver instalando o servidor DHCP pela primeira
+vez você irá precisar configurá-lo. Por favor pare (/etc/init.d/dhcp
+stop) o serviço do servidor DHCP, edite o /etc/dhcpd.conf para
+ajustá-lo às suas necessidades
+e configurações particulares, e reinicie o serviço do servidor DHCP
+(/etc/init.d/dhcp start).
+
+Você também precisará editar o /etc/default/dhcp para especificar as interfaces que o dhcpd
+deverá ouvir. Por padrão ele ouve na eth0.
+
+NOTA: as mensagens do dhcpd são enviadas para o syslog. Procure lá por
+mensagens de diagnóstico.
+
+Iniciando o servidor DHCP: o dhcpd falhou ao iniciar - verifique o syslog para diagnosticar o problema.  </screen>
+      </sect2>
+      <sect2 id="dhcp-configuration" status="complete">
+        <title>Configuração</title>
+            <para>A mensagem de erro encontrada no final da instalação pode ser um pouco confusa, mas os seguintes passos vão te ajudar a configurar o servidor:</para>
+            <para>Geralmente, o que você quer fazer é associar um endereço IP de forma aleatoria.  Isto pode ser feito com as seguintes configurações:</para>
+            <screen>
+# Exemplo /etc/dhcpd.conf
+# (adicione seus comentários aqui) 
+default-lease-time 600;
+max-lease-time 7200;
+option subnet-mask 255.255.255.0;
+option broadcast-address 192.168.1.255;
+option routers 192.168.1.254;
+option domain-name-servers 192.168.1.1, 192.168.1.2;
+option domain-name "mydomain.org";
+
+subnet 192.168.1.0 netmask 255.255.255.0 {
+range 192.168.1.10 192.168.1.100;
+range 192.168.1.150 192.168.1.200;
+} </screen>
+            <para>Isso irá fazer com que o servidor DHCP atribua ao cliente um endereço IP a partir da faixa 192.168.1.10-192.168.1.100 ou 192.168.1.150-192.168.1.200. Ele irá emprestar um endereço por 600 segundos se o cliente não perguntar por um determinado período de tempo. O servidor também irá "avisar" o cliente que ele deve usar 255.255.255.0 como sua máscara de sub-rede, 192.168.1.255 como seu endereço de broadcast, 192.168.1.254 como roteador/gateway e 192.168.1.1 e 192.168.1.2 como seus servidores DNS.</para>
+            <para>Se for preciso especificar um servidor WINS para os seus clientes de Windows, você deverá incluir a opção netbios-nome-servidor.</para>
+            <screen>
+option netbios-name-servers 192.168.1.1; </screen>
+            <para>Configurações do dhcpd foram adiquiridas do mini-HOWTO do DHCP, que pode ser encontrado <ulink url="http://www.tldp.org/HOWTO/DHCP/index.html">aqui</ulink>.</para>
+      </sect2>
+      <sect2 id="dhcp-references" status="complete">
+        <title>Referências</title>
+          <para>
+            <ulink url="http://www.dhcp-handbook.com/dhcp_faq.html">DHCP FAQ</ulink>
+          </para>
+      </sect2>
+    </sect1>
+	<sect1 id="dns" status="complete">
+		<title>Domain Name Service (DNS)</title>
+            <para>Serviço de Nome de Domínio ( Domain Name Service - DNS) é um serviço de internet que mapeia endereços IP para nomes de domínio completamente qualificados (FQDN) e vice-versa. Dessa forma, o DNS faz com que não seja necessário decorar endereços IP. Os computadores que rodam o DNS são chamados de <emphasis>servidores de nomes</emphasis>. O Ubuntu vem com o <application>BIND</application> Berkley Internet Naming Daemon), o programa mais utilizado para manter um servidor de nomes no Linux.</para>
+            <!-- things to do: IPv6-->
+      <sect2 id="dns-installation" status="complete">
+        <title>Instalação</title>
+          <para>Em um terminal, digite o seguinte comando para instalar <application>dns</application>:</para>
+          <para>
+<screen>
+<command>sudo apt-get install bind</command>
+</screen>
+          </para>
+      </sect2>
+      <sect2 id="dns-configuration" status="complete">
+        <title>Configuração</title>
+          <para>Os arquivos de configuração do DNS são armazenados no diretório <filename>/etc/bind</filename>. O arquivo de configuração principal é o <filename>/etc/bind/named.conf</filename>. O conteúdo da configuração padrão está disposto abaixo:</para>
+
+          <para>
+<programlisting>
+// Este é o arquivo de configuração primária para o servidor de DNS BIND named.
+//
+// Por favor, leia /usr/share/doc/bind/README.Debian para informações sobre a
+// estrutura dos arquivos de configuração do BIND no Debian para versão 8.2.1 do BIND
+// ou superior, *ANTES* de você customizar este arquivo de configuração.
+//
+
+include "/etc/bind/named.conf.options";
+
+// reduz a saída de log em erros fora do nosso controle
+logging {
+ category lame-servers { null; };
+ category cname { null; };
+};
+
+// servidor primário, que conhece os servidores raiz
+zone "." {
+        type hint;
+        file "/etc/bind/db.root";
+};
+
+// seja a autoridade para repasses locais, zonas reversas e para a
+// zona de broadcast, como definido no RFC 1912
+
+zone "localhost" {
+        type master;
+        file "/etc/bind/db.local";
+};
+
+zone "127.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.127";
+};
+
+zone "0.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.0";
+};
+
+zone "255.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.255";
+};
+
+// adicione definições locais aqui
+include "/etc/bind/named.conf.local";
+</programlisting>
+          </para>
+
+          <para>A linha <application>include</application> especifica o nome do arquivo que contém as opções do DNS. A linha <application>directory</application> no arquivo de opções diz ao DNS onde procupar por arquivos. Todos os arquivos utilizados pelo BIND estão contidos nesse diretório.</para>
+
+          <para>
+          The file named <filename>/etc/bind/db.root</filename> 
+          describes the root name servers in the world. The servers
+          change over time, so the
+          <filename>/etc/bind/db.root</filename> file must be maintained
+          now and then.
+          </para>
+
+          <para>A seção <application>zone</application> define um servidor mestre, e ela é armazenado em um arquivo mencionado através da tag file. Cada zona contém 3 registros de recursos (RRs): um RR SOA, um RR NS, e um RR PTR. SOA é a abreviatura para Start of Authority, ou seja, Início da Autoridade. A "@" é uma notação especial que denota a origem. NS é a RR para Servidor de Nomes. PTR é Ponteiro para Servidor de Nomes. Para iniciar o servidor DNS, rode o seguinte comando apartir do prompt de um terminal:</para>
+           <para>
+<screen>
+<command>sudo /etc/init.d/bind start</command>
+</screen>
+           </para>
+          <para>Você pode se referir à documentação mencionada na seção de referências para detalhes.</para>
+      </sect2>
+      <sect2 id="dns-references" status="complete">
+        <title>Referências</title>
+          <para>
+            <ulink url="http://www.tldp.org/HOWTO/DNS-HOWTO.html">TUTORIAL DNS</ulink>
+          </para>
+      </sect2>
+    </sect1>
+	<sect1 id="cups" status="complete">
+		<title>CUPS - Servidor de Impressora</title>
+          <para>
+            The primary mechanism for Ubuntu printing and print services is the 
+			<emphasis role="bold">Common UNIX Printing System</emphasis> (CUPS). 
+			This printing system is a freely available, portable printing layer 
+			which has become the new standard for printing in most Linux 
+			distributions.
+          </para>
+          <para>O CUPS gerencia serviços de impressão e filas, além de fornecer impressão em rede usando o Protocolo padrão de Impressão da Internet (IPP), além de oferecer suporte a uma grande variedade de impressoras, de matriciais a lasers dentre muitas outras. O CUPS também suporta Descrições de Impressoras PostScript (PPD) e auto-detecção de impressoras de rede, e aprensenta também uma ferramenta de administração simples baseada na web.</para>
+      <sect2 id="cups-installation" status="complete">
+        <title>Instalação</title>
+          <para>
+            To install CUPS on your Ubuntu computer, simply use <application>sudo</application> with the <application>apt-get</application> command and give the packages to install as the first parameter. A complete CUPS install has many package dependencies, but they may all be specified on the same command line.  Enter the following at a terminal prompt to install CUPS:
+          </para>
+          <para>
+<screen>
+<command>sudo apt-get install cupsys cupsys-client</command>
+</screen>
+          </para>
+          <para>Uma vez autenticado com a senha do seu usuário, deverá ocorrer o download e instalação dos pacotes sem erros. Após a instalação, o servidor CUPS será inicializado automaticamente. Para resolução de problemas, você pode acessar os erros do servidor CUPS através do arquivo de log de erros em: <filename>/var/log/cups/error_log</filename>. Se os logs de erros não mostrar informações necessárias para resolução dos seus problemas que você encontrar, a qualidade de saída de log do CUPS pode ser incrementada, alterando a diretiva <emphasis role="bold">LogLevel</emphasis> no arquivo de configuração (discutido logo abaixo) para "debug" ou ainda "debug2", o que causará o registro em log de tudo, do padrão ao "info". Se você fizer esta mudança, lembre-se de desfazê-la assim que você resolver seu problema, para prevenir que o arquivo fique muito grande.</para>
+      </sect2>
+      <sect2 id="cups-configuration" status="complete">
+        <title>Configuração</title>
+          <para>O comportamento do servidor CUPS (The Common UNIX Printing System) é configurado através das diretivas contidas no arquivo <filename>/etc/cups/cupsd.conf</filename>. O arquivo de configuração do CUPS segue a mesma sintaxe que o arquivo de configuração primário para o servidor de HTTP Apache, portanto os usuários familiares com a edição do arquivo de configuração do Apache deverão ter uma maior facilidade ao editar a configuração do CUPS. Alguns exemplos de configuração que você queira inicialmente alterar serão apresentados aqui.</para>
+          <tip>
+               <para>Antes de editar o arquivo de configuração, você deve fazer uma cópia do arquivo original e protegê-lo contra sobrescrição, porque assim você terá os ajustes originais como uma referência, e para reusar como necessário.</para>
+               <para>Copiar o arquivo <filename>/etc/cups/cupsd.conf</filename> e protegê-lo contra sobrescrição com o seguinte comando, executado na linha de comando:</para>
+               </tip>
+               <para>
+<screen>
+<command>sudo cp /etc/cups/cupsd.conf /etc/cups/cupsd.conf.original</command>
+<command>sudo chmod a-w /etc/cups/cupsd.conf.original</command>
+</screen>
+               </para>
+          <itemizedlist>
+                <listitem>
+                <para><emphasis role="bold">ServerAdmin</emphasis>: Para configurar o endereço de email designado para o administrador do servidor CUPS, simplesmente edite o arquivo de configuração <filename>/etc/cups/cupsd.conf</filename> com seu editor de textos predileto, e altere a diretiva <emphasis role="italics">ServerAdmin</emphasis> de acordo. Por exemplo, se você é o administrador do servidor CUPS, e seu email é bjoy@somebigco.com, Então você deverá alterar a diretiva ServerAdmin para ficar como:</para>
+                <para>
+<screen>
+ServerAdmin bjoy@somebigco.com
+</screen>
+                </para>
+                </listitem>
+          </itemizedlist>
+                <para>Para mais exemplos de diretivas de configuração no arquivo de configuração do servidor CUPS, veja a página de manual do sistema relacionada através da utilização do seguinte comando no prompt de um terminal:</para>
+               <para>
+<screen>
+<command>man cupsd.conf</command>
+</screen>
+               </para>
+                               <note>
+                <para>Cada vez que você fizer alterações no arquivo de configuração <filename>/etc/cups/cupsd.conf</filename>, você precisará re-iniciar o servidor CUPS digitando o seguinte comando no prompt de um temrinal:</para>
+                </note>
+                <para>
+<screen>
+<command>sudo /etc/init.d/cupsys restart</command>
+</screen>
+                </para>
+	<para>Algumas das outras configurações do servidor CUPS são feitas no arquivo <filename>/etc/cups/cups.d/ports.conf</filename>:</para>
+          <itemizedlist>
+                <listitem>
+                <para><emphasis role="bold">Listen</emphasis>: Por padrão no Ubuntu, o servidor CUPS escuta somente na interface de loopback no endereço de IP <emphasis>127.0.0.1</emphasis>. Para instruir o CUPS a escutar num endereço IP de uma rede, você deve especificar um hostname, um endereço de IP, ou opcionalmente, um endereço/porta de acordo com as diretivas Listen. Por exemplo, se seu servidor CUPS fica numa rede local com o endereço de IP <emphasis role="italics">192.168.10.250</emphasis> e você gostaria de torná-lo acessível para outros sistemas em sua sub-rede, você deverá editar o arquivo <filename>/etc/cups/cups.d/ports.conf</filename> e adicionar uma diretiva Listen, como:</para>
+                <para>
+<screen>
+Listen 127.0.0.1:631 # Loopback existente
+Listen /var/run/cups/cups.sock # Escuta de socket existente
+Listen 192.168.10.250:631 # Escutando na interface LAN, porta 631 (IPP)
+</screen>
+                </para>
+                <para>No exemplo acima, você deve comentar ou remover a referência ao endereço Loopback (127.0.0.1) se você não desejar que o <application>cupsd </application> escute naquela interface, mas sim preferir que ele escute somente na interface Ethernet da sua Rede Local (LAN). Para habilitar a escuta para todas as interfaces de rede em que um hostname esteja ligado, incluíndo a loopback, você pode criar uma entrada de Listen para o hostname <emphasis>socrates</emphasis> como:</para>
+                <para>
+<screen>
+Listen socrates:631 # Escute em todas as interfaces pelo hostname 'socrates'
+</screen>
+                </para> 
+				<para>ou omitindo a diretriz Listen e usando <emphasis>Port</emphasis> invés, como:</para>
+<para>
+<screen>
+Port 631 # Escute na porta 631 em todas as interfaces
+</screen>
+</para>
+                </listitem>
+	</itemizedlist>
+
+      </sect2>
+      <sect2 id="cups-references" status="complete">
+        <title>Referências</title>
+        <para>
+        <ulink url="http://www.cups.org/">Website do CUPS</ulink>
+        </para>
+        </sect2>
+    </sect1>
+	<sect1 id="httpd" status="complete">
+		<title>HTTPD - Servidor Web Apache2</title>
+      <para>Apache is the most commonly used Web Server on Linux systems. Web Servers are used
+          to serve Web Pages requested by client computers. Clients typically request and view
+          Web Pages using Web Browser applications such as <application>Firefox</application>,
+              <application>Opera</application>, or <application>Mozilla</application>.</para>
+      <para>Users enter a Uniform Resource Locator (URL) to point to a Web server by means of
+          its Fully Qualified Domain Name (FQDN) and a path to the required resource. For example, to view the home page of
+          the <ulink url="&ubuntu-web;">Ubuntu Web site</ulink> a user will enter only the FQDN. To request specific information about 
+              <ulink url="&ubuntu-paidsupport;">paid
+              support</ulink>, a user will enter the FQDN followed by a path.</para>
+      <para>O protoloco mais comum usado para transferir páginas de internet é o Hyper Text Transfer Protocol (HTTP - Protocolo de transferência de hipertexto). Protocolos como Hyper Text Transfer Protocol over Secure Sockets Layer (HTTPS - Protocolo seguro de transferência de hipertexto) e File Transfer Protocol (FTP - Protocolo de transferência de arquivo), um protocolo para enviar e receber arquivos, são também suportados.</para>
+      <para>Servidores Web Apache são geralmente utilizados em conjunto com o motor de banco de dados <application>MySQL</application>, a linguagem de de construção de scripts pré-processadora de hiper-texto (<application>PHP</application>), e outras linguagens de construção de scripts populares como o <application>Python</application> e o <application>Perl</application>. Essa configuração é denominada LAMP (Linux, Apache, MySQL e Perl/Python/PHP) e dá forma a uma poderosa e robusta plataforma de desenvolvimento e hospedagem de aplicações basedas na web.</para>
+<sect2 id="http-installation" status="complete">
+  <title>Instalação</title>
+                  <para>O servidor web Apache2 está disponível no Ubuntu Linux. Para instalar o Apache2:</para>
+          <procedure><step>
+                	  <para>No prompt de um terminal informe o seguinte comando: <screen>↵
+<command>sudo apt-get install apache2</command>↵
+</screen></para>
+			</step>
+	    </procedure>
+      </sect2>
+      <sect2 id="http-configuration" status="complete">
+        <title>Configuração</title>
+          <para>O Apache é configurado colocando-se <emphasis>diretivas</emphasis> em arquivos de configuração de texto puro. O arquivo de configuração principal é chamado <filename>apache2.conf</filename>. Além disso, outros arquivos de configuração podem ser adicionados utilizando-se a diretiva <emphasis>Include</emphasis>, e caracteres coringa (wildcards) podem ser utilizados para incluir vários arquivos de configuração. Qualquer diretiva pode ser colocada em qualquer desses arquivos de configuração. Mudanças no arquivo de configuração apenas são reconhecidas pelo Apache2 quando este for iniciado ou reiniciado.</para>
+
+          <para>O servidor também irá ler um arquivo contendo os tipos mime de documentos; o nome do arquivo é definido pela diretiva <emphasis>TypesConfig</emphasis>, e é <filename>mime.types</filename> por padrão.</para>
+
+          <para>O arquivo de configuração padrão do Apache2 é o
+<filename>/etc/apache2/apache2.conf</filename>. Você pode editar esse arquivo para configurar o servidor Apache2. Você pode configurar o número da porta, raiz dos documentos, módulos, arquivos de log, hosts virtuais, etc.</para>
+        <sect3 id="http-basic-settings" status="complete">
+          <title>Configurações Básicas</title>
+            <para>Essa seção explica os parâmetros de configuração essenciais do servidor Apache2. Procure pela <ulink url="http://httpd.apache.org/docs/2.0/">Documentação do Apache2</ulink> para mais detalhes.</para>
+
+             <itemizedlist>
+
+             <listitem><para>O Apache2 vem com uma configuração padrão amigável para hosts virtuais. Isto é, ele é configurado com um host virtual único padrão (utilizando a diretiva <emphasis>VirtualHost</emphasis>) o qual pode ser modificado ou utilizado como está se você tiver apenas um site, ou ainda usado como modelo para hosts virtuais adicionais caso você tenha múltiplos sites. Se não for alterado, o host virtual padrão servirá como seu site padrão, ou o site que os usuários utilizarão caso a URL que eles especifiquem não bata com a diretiva <emphasis>ServerName</emphasis> de nenhum de seus sites customizados. Para modificar o virtual host padrão, edite o arquivo <filename>/etc/apache2/sites-available/default</filename>. Caso você deseje configurar um novo host virtual ou site, copie esse arquivo para o mesmo diretório com um nome de sua escolha. Por exemplo, <command>sudo cp /etc/apache2/sites-available/default /etc/apache2/sites-available/meunovosite</command>. Edite o novo arquivo para configurar o novo site utilizando algumas das diretivas descritas abaixo.</para></listitem>
+
+             <listitem><para>A diretiva <emphasis>ServerAdmin</emphasis> especifica o endereço de email a ser anunciado como do administrador do servidor. O valor padrão é webmaster@localhost. Ele deve ser alterado para um endereço de email que seja entregue para você (caso você seja o administrador do servidor). Se seu website possuir um problema, o Apache2 mostrará uma mensagem de erro contendo este endereço de email para qual o problema poderá ser relatado. Encontre esta diretiva no arquivo de configuração do site site em /etc/apache2/sites-available.</para></listitem>
+
+             <listitem><para>A diretiva <emphasis>Listen</emphasis> especifica a porta, e opcionalmente o endereço IP, na qual o Apache2 irá escutar. Se o endereço IP não for especificado, o Apache2 irá escutar em todos os endereços IP designados para a máquina no qual ele esteja rodando. O valor padrão para a diretiva Listen é 80. Altere isso para 127.0.0.1:80 para fazer com que o Apache apenas escute apenas na sua interface de loopback, de forma que ele esteja disponível para a Internet, para (por exemplo) 81 para mudar a porta no qual ele escuta, ou deixe o valor como está para operação normal. Esta diretiva pode ser encontrada e alterada em seu próprio arquivo, <filename>/etc/apache2/ports.conf</filename></para></listitem>
+
+			 <listitem><para>A diretiva <emphasis>ServerName</emphasis> é opcional e especifica qual a FQDN seu site deverá responder. O host virtual padrão não possui diretiva ServerName especificada, portanto ele irá responder a todas as requisições que não combinem com uma diretiva ServerName em outro host virtual. Se você acabou de adquirir o nome de domínio ubunturocks.com e gostaria de hospedá-lo no seu servidor Ubuntu, o valor da diretiva ServerName no arquivo de configuração do seu host virtual deverá ser ubunturocks.com. Adicione esta diretiva ao novo arquivo de site virtual que você criou antes (<filename>/etc/apache2/sites-available/meunovosite). VocServerAlias para isso. VocServerAlias *.ubunturocks.com ir</filename></para></listitem>
+
+			 <listitem><para>A diretiva <emphasis>DocumentRoot</emphasis> especifica onde o Apache deve procurar pelos arquivos que formam o site. O valor padrão é /var/www. Nenhum site está configurado lá, mas você pode descomentar a diretiva <emphasis>RedirectMatch</emphasis> em <filename>/etc/apache2/apache2.conf</filename> as requisições serão redirecionadas para /var/www/apache2-default onde o site padrão do Apache2 aguarda. Altere este valor no arquivo de host virtual do seu site e lembre-se de criar aquele diretório se necessário!</para></listitem>
+            </itemizedlist>
+
+			<tip><para>O diretório /etc/apache2/sites-available <emphasis>não</emphasis> é decodificado pelo Apache2. Links simbólicos em /etc/apache2/sites-enabled apontam para sites "disponíveis" (available). Utilize o utilitário a2ensite (Apache2 Enable Site) para criar esses links simbólicos, como neste exemplo: <command>sudo a2ensite meunovosite</command> onde o arquivo de configuração do seu site é <filename> /etc/apache2/sites-available/meunovosite</filename>. Semelhantemente, o utilitário a2dissite deve ser usado para desabilitar sites.</para></tip>
+
+        </sect3>
+        <sect3 id="default-settings" status="complete">
+          <title>Configuração Padrão</title>
+            <para>Esta seção explica a configuração das definições padrão do servidor Apache2. Por exemplo, se você adicionar um host virtual, as definições que você configurar para o host virtual têm precedência para aquele host virtual. Para uma diretiva não definida dentro da definição de host virtual, o valor padrão é utilizado.</para>
+
+            <itemizedlist>
+            <listitem>
+            <para>O <emphasis>DirectoryIndex</emphasis> é a página padrão servida pelo servidor quando o usuário requisita um índice de um diretório especificando uma barra (/) no final do nome do diretório.</para>
+
+             <para>Por exemplo, quando um usuário solicita a página http://www.examplo.com/este_diretório/, ele ou ela vai ver: o DirectoryIndex (DiretórioÍndice) se ele existir; uma lista do diretório gerado pelo servidor caso não exista e as opções de índices estiverem especificadas; ou uma página de Permissão Negada se nenhuma das duas opções forem verdadeiras. O servidor irá tentar encontrar um dos arquivos listados no DirectoryIndex e irá retornar o primeiro que for encontrado. Se ele não encontrar nenhum destes arquivos e se as Opções de Índices estiver ajustadas para aquele diretório, o servidor irá gerar e retornar uma lista, no formato HTML, dos subdiretórios e arquivos no diretório. O valor padão, encontrado em <filename>/etc/apache2/apache2.conf</filename> é "index.html index.cgi index.pl index.php index.xhtml". Portanto, se o Apache2 encontras um arquivo no diretório solicitado que bate com um destes nomes, o primeiro será mostrado.</para>
+            </listitem>
+
+            <listitem>
+            <para>A diretiva <emphasis>ErrorDocument</emphasis> permite que você especifique um arquivo para o Apache usar para um evento específico de erro. Por exemplo, se um usuário solicitar um recurso que não existe, um erro 404 ocorrerá, e por padrão de configuração do Apache2, o arquivo <filename>/usr/share/apache2/error/HTTP_NOT_FOUND.html.var </filename> será mostrado. Este arquivo não está na Raiz de Documentos do servidor, mais existe uma diretiva de apelido no <filename>/etc/apache2/apache2.conf</filename> que redireciona as requisições do diretório /error para /usr/share/apache2/error/. Para ver a listagem de directivas padrão de Documentos de Erro, use o comando: <command>grep ErrorDocument /etc/apache2/apache2.conf</command></para>
+            </listitem>
+
+
+            <listitem>
+            <para>Por padrão, o servidor registra o arquivo de transferências no arquivo /var/log/apache2/access.log. Você pode mudar isto site por site em seu arquivo de configuração de host virtual atravéz da diretriz <emphasis>CustomLog</emphasis>, ou omiti-la para aceitar o padrão, especificado no arquivo <filename> /etc/apache2/apache2.conf</filename>. Você pode também especificar o arquivo onde os erros serão registrados, através da diretriz <emphasis>ErrorLog</emphasis>, que por padrão é <filename>/var/log/apache2/error.log</filename>. Estes são mantidos separados do log de transferência para permitir eliminação de problemas com seu servidor Apache2. Você pode também especificar o <emphasis>LogLevel</emphasis> (o valor padrão é "alertar") e o <emphasis>LogFormat</emphasis> (veja o <filename>/etc/apache2/apache2.conf</filename> para o valor padrão).</para>
+            </listitem>
+
+            <listitem>
+            <para>Algumas opções são especificadas num esquema por diretórios ao invéz de um esquema por servidor. A diretiva Option é uma dessas diretivas. Uma instância de Directory é encapsulada entre tags semelhantes ao XML, como em:<screen><command>&lt;Directory /var/www/mynewsite&gt;
+    ...
+   &lt;/Directory&gt;</command></screen> A diretiva Options com um instância de Directory aceita um ou mais dos seguintes valores (entre outros), separados por espaços:</para>
+            <itemizedlist spacing="compact">
+                <listitem>
+                    <para><emphasis role="bold">ExecCGI</emphasis> - Permite execução de scripts CGI. Scripts CGI não são executados se esta opção não estiver abilitada. <tip><para>A maioria dos arquivos não devem ser executados como scripts CGI. Isto pode ser muito perigoso. Scripts CGI devem ser mantidos em diretórios separados fora do DocumentRoot, e somente este diretório deve ter a opção ExecCGI habilitada. Isto é o padrão, e o local padrão para os scripts CGI é /usr/lib/cgi-bin.</para></tip></para>
+                </listitem>
+                <listitem>
+                    <para><emphasis role="bold">Includes</emphasis> - Permite inclusões no lado do servidor. Inclusões no lado do servidor permitem que um arquivo HTML <emphasis>inclua</emphasis> outros arquivos. Essa não é uma opção comum. Veja <ulink url="http://httpd.apache.org/docs/2.0/howto/ssi.html">o Apache2 SSI Howto</ulink> para maiores informações.</para>
+                </listitem>
+                <listitem>
+                    <para><emphasis role="bold">IncludesNOEXEC</emphasis> - Permite server-side includes, mais desabilita uso dos comandos #exec e #include nos scripts CGI</para>
+                </listitem>
+                <listitem>
+                    <para><emphasis role="bold">Indexes</emphasis> - Mostra uma lista formatada dos conteúdos dos diretórios, caso não exista um DirectoryIndex (tal como index.html) no diretório requisitado . <caution><para>Por motivos de segurança, isto geralmente não deveria estar hablilitado, e certamente não deveria estar habilitado no seu diretório DocumentRoot. Habilite esta opção com cuidado, diretório por diretório somente se você tem certeza de que quer que os usuários vejam o conteúdo inteiro do diretório.</para></caution></para>
+                </listitem>
+                <listitem>
+                    <para><emphasis role="bold">Multiview</emphasis> - Suporta multi-visões negociadas pelo conteúdo; esta opção está desabilitada por padrão por motivos de segurança. Veja a <ulink url="http://httpd.apache.org/docs/2.0/mod/mod_negotiation.html#multiviews">Documentação do Apache2 para esta opção</ulink>.</para>
+                </listitem>
+                <listitem>
+                    <para><emphasis role="bold">SymLinksIfOwnerMatch</emphasis> - Somente segue os links simbólicos caso o arquivo alvo ou diretório seja do mesmo dono que o link.</para>
+                </listitem>
+            </itemizedlist>
+
+            </listitem>
+            </itemizedlist>
+        </sect3>
+        <sect3 id="virtual-hosts-settings" status="complete">
+
+          <title>Configurações de Hosts Virtuais</title>
+            <para>Hosts virtuais permitem que você rode diferentes servidores para diferentes endereços IP, diferentes nomes, ou diferentes portas da mesma máquina. Por exemplo, você pode rodar o website por http://www.exemplo.com.br e http://www.outroexemplo.com.br no mesmo servidor Web usando hosts virtuais. Esta opção corresponde à diretiva &lt;VirtualHost&gt; para o virtual host padrão e virtual hosts baseados em IP. E corresponde à diretiva &lt;NameVirtualHost&gt; para um virtual host baseado em nomes.</para>
+
+			<para>As diretivas para um host virtual somente são aplicadas para um host virtual em particular. Se a diretiva é setada para escopo de servidor e não definida dentro das configurações de um virtual host, as configurações padrão serão usadas. Por exempĺo, você pode definir o email do Webmaster e não definir um email individual para cada virtual host.</para>
+ 
+ 			<para>Ajuste a diretiva DocumentRoot para o diretório que contém o documento raíz (como o index.html) para o host virtual. O DocumentRoot padrão é <filename>/var/www</filename>.</para>
+
+			<para>
+			The ServerAdmin directive within the VirtualHost stanza is the email address used in the 
+			footer of error pages if you choose to show a footer with an email address on the error pages.
+			</para>
+
+        </sect3>
+        <sect3 id="server-settings" status="complete">
+          <title>Configurações do Servidor</title>
+            <para>Esta seção explica como configurar as opções básicas de um servidor.</para>
+                    <para><emphasis role="bold">LockFile</emphasis> - A diretiva LockFile define o caminho do arquivo de trava usado quando o servidor é compilado tanto com USE_FCNTL_SERIALIZED_ACCEPT quanto com USE_FLOCK_SERIALIZED_ACCEPT. É obrigatório armazená-lo no disco local. Deixe o valor padrão a menos que o diretório de logs esteja localizando em um compartilhamento NFS. Se este for o caso, o valor padrão deverá ser alterado para um caminho no disco local e para um diretório no qual apenas o root tem permissões de leitura.</para>
+
+					<para><emphasis role="bold">PidFile</emphasis> - A diretiva PidFile define o arquivo em que o servidor gravará o seu ID de processo (pid). Este arquivo deve ser permissões de leitura somente para o root. Na maioria dos casos, o valor padrão deve ser deixado.</para>
+
+<para><emphasis role="bold">User</emphasis> - A diretiva User seta o UserID usado pelo servidor para responder as solicitações. Esta opção determina o acesso ao servidor. Qualquer arquivo inacessível a este usuário será também inacessível aos visitantes do seu website. O valor padrão para o User é www-data</para>
+            <warning>
+            <para>A não ser que você saiba exatamente o que está fazendo, não defina a diretiva User para root. Usando o root como User (usuário) você irá criar largas brechas de sergurança para seu ser servidor Web.</para>
+            </warning>
+ <para>A diretiva Group é similar a diretiva User. Group define o grupo que o servidor irá responder as solicitações. O grupo padrão é www-data.</para>
+
+        </sect3>
+        <sect3 id="apache-modules" status="complete">
+          <title>Módulos do Apache</title>
+              <para>O Apache é um servidor modular. Isso significa que somente as funcionalidades básicas são inclusas no núcleo do servidor. A extensão das funcionalidades são disponibilizadas através de módulos, que podem ser carregados no Apache. Por padrão, alguns módulos básicos já estão inclusos na hora da compilação. Se o servidor for compilado para usar o carregamento dinâmico de módulos, então os módulos podem ser compilados separadamente, e adicionados à qualquer hora usando a diretiva LoadModule. Caso contrário, o Apache2 precisa ser recompilado para adicionar ou remover módulos. O Ubuntu compila o Apache2 de maneira que permita o carregamento dinâmico de módulos. As diretivas de configuração podem ser incluídas condicionalmente, com a presença de um módulo em particular incluído num bloco &lt;IfModule&gt;. Você pode instalar módulos adicionais do Apache2 e usá-los com o seu servidor WEB. Você pode instalar módulos do Apache2 usando o comando <application>apt-get</application>. Por exemplo, para instalar o módulo do Apache2 para autenticação por MYSQL, você pode executar o seguinte comando de um prompt de terminal (linha de comando)</para>
+                
+                <para>
+<screen>
+<command>sudo apt-get install libapache2-mod-auth-mysql</command>
+</screen>
+                </para>
+                <para>Quando você instala um módulo, ele estará disponível no diretório <filename>/etc/apache2/mods-available</filename>. Você pode usar o comando <application>a2enmod</application> para habilitar um módulo. Você pode usar o comando <application>a2dismod</application> para desabilitar um módulo. Quando você desabilita um módulo, ele estará disponível no diretório <filename>/etc/apache2/mods-enabled</filename>.</para>
+        </sect3>
+      </sect2>
+      <sect2 id="https-configuration" status="complete">
+        <title>Configurações HTTPS</title>
+          <para>O módulo <application>mod_ssl</application> adiciona uma funcionalidade importante no servidor Apache2 - a habilidade de encriptar comunicações. Portanto, quando o seu navegador se comunica utilizando encriptação SSL, o prefixo https:// é usado no começo do Localizador de Recurso Uniforme (URL) na barra de navegação do navegador.</para>
+
+          <para>O módulo <application>mod_ssl</application> está disponível no pacote <application>apache2-common</application>. Se você possuir este pacote instalado, você pode executar o comando a seguir de um prompt de terminal para ativar o módulo <application>mod_ssl</application>:</para>
+
+          <para>
+<screen>
+<command>sudo a2enmod ssl</command>
+</screen>
+          </para>
+        <sect3 id="certificates-and-security" status="complete">
+          <title>Certificados e Segurança</title>
+            <para>Para configurar um servidor seguro, use a criptografia de chave pública para criar um par de chaves pública e privada. Na maioria dos casos, você manda o seu pedido de certificação (incluindo a sua chave pública), uma prova da identidade da sua companhia e o pagamento para uma Autoridade de Certificados (CA). A CA verifica o pedido de certificação e sua identidade, e depois manda de volta um certificado para o seu servidor seguro.</para>
+             <para>Alternativamente, você pode criar o seu certificado auto-assinado. Note que, entretando, o certificado auto-assinado não deve ser usando na maioria dos ambientes de produção. Certificados auto-assinados não são automaticamente aceitos pelo navegador dos usuários. Os usuários são questionados pelo navegador para aceitar o certificado e criar uma conexão segura.</para>
+
+             <para>Assim que você tiver um certificado auto-assinado ou um certificado assinado por um CA de sua escolha, você precisa instalá-lo no seu servidor seguro.</para>
+        </sect3>
+        <sect3 id="types-of-certificates" status="complete">
+          <title>Tipos de Certificados</title>
+            <para>Você precisa de uma chave e um certificado para operar o seu servidor seguro, o que significa que você tanto pode gerar uma certificado auto-assinado como comprar um certificado assinado por um CA. Um certificado assinado por um CA provê duas capacidades importantes para o seu servidor:</para>
+
+            <itemizedlist>
+            <listitem>
+            <para>Navegadores (em geral) automaticamente reconhecem o certificado e permitem uma conexão segura sem questionamentos ao usuário.</para>
+            </listitem>
+            <listitem>
+            <para>Quando um CA emite um certificado assinado, está garantindo a identidade da organização que está provendo as páginas da web para o navegador.</para>
+            </listitem>
+            </itemizedlist>
+
+            <para>A maioria dos navegadores que suportam SSL possuem uma lista dos CAs cujo certificados são automaticamente aceitos. Se o navegador encontrar um certificado cujo CA autorizador não esteja na lista, o navegador irá perguntar para o usuário se ele deve aceitar ou rejeitar a conexão.</para>
+            <para>Você pode gerar um certificado auto-assinado para o seu servidor seguro, mas fique atento para o fato de que certificados auto-assinados não fornecem a mesma funcionalidade que certificados assinados por um CA. Um certificado auto-assinado não é automaticamente reconhecido pela maioria dos navegadores, e um certificado auto-assinado também não fornece nenhuma garantia quanto à identidade da organização que está disponibilizando o website. Um certificado assinado por um CA fornece essas duas importantes capacidades para um servidor seguro. O processo de receber um certificado assinado por um CA é bastante fácil. Segue um resumo rápido:</para>
+
+            <orderedlist>
+            <listitem>
+               <para>Cria um par de chaves criptográficas privada e pública.</para>
+            </listitem>
+            <listitem>
+                 <para>Cria uma requisição de certificado baseada na chave pública. A requisição de certificado contém informação a respeito do seu servidor e da empresa que o hospeda.</para>
+            </listitem>
+            <listitem>
+                 <para>Envie o pedido de certificado, juntamente com documentos provando sua identidade, para o CA. Não podemos lhe dizer qual Autoridade em Certificados (CA) escolher. Sua decisão deve ser baseada nas suas experiências anteriores, na experiência de amigos ou colegas, ou puramente por fatores financeiros.</para>
+
+                    <para>Uma vez decido qual CA usar, você precisa seguir as instruções que eles disponibilizam em como obter um certificado deles.</para>
+            </listitem>
+            <listitem>
+               <para>Quando o CA está satisfeito de que você é de fato quem diz ser, eles lhe enviam um certificado digital.</para>
+            </listitem>
+            <listitem>
+               <para>Instale este certificado em seu servidor seguro, e comece a realizar transações seguras.</para>
+            </listitem>
+            </orderedlist>
+
+            <para>Não importa se está recebendo um certificado de um CA ou gerando o seu certificado auto-assinado, o primeiro passo é criar uma chave.</para>
+        </sect3>
+        <sect3 id="generating-a-csr" status="complete">
+          <title>Gerando uma Assinatura de Requisição de Certificado (CSR)</title>
+            <para>Para gerar o Pedido de Assinatura de Certificado (CSR - Certificate Signing Request) você deve criar sua própria chave. Você pode rodar o seguinte comando no prompt do terminal (linha de comando) para criar a chave:</para>
+
+            <para>
+<screen>
+<command>openssl genrsa -des3 -out server.key 1024</command>
+</screen>
+            </para>
+<programlisting>
+Gerando chave privada RSA, 1024 bit módulos longos
+.....................++++++
+.................++++++
+impossível escrever 'estado aletaório'
+e é 65537 (0x10001)
+Informe a chave senha para o server.key:
+</programlisting>
+
+        <para>Agora, você pode inserir a sua senha. Para uma segurança melhor, ela deve conter no mínimo oito caracteres. O tamanho mínimo quando -des3 é especificado é de quatro caracteres. É bom incluir números e/ou pontuação e não ser uma palavra de dicionário. Também, lembre-se que a sua senha é sensível à caixa alta e/ ou baixa.</para>
+
+        <para>Redigite a sua senha para verificação. Uma vez redigitado corretamente, a chave do servidor é gerada e armazenada no arquivo <filename>server.key</filename>.</para>
+
+        <warning>
+        <para>Você pode rodar um servidor seguro sem uma senha. Isso é conveniente porque você não precisa entrar com a senha todas as vezes que incializa o seu servidor seguro, mas é muito inseguro e uma compromissão da chave significará a compromissão do servidor também.</para>
+        </warning>
+
+        <para>Em qualquer caso, você pode escoher em rodar o seu servidor sem a frase, deixar de lado a alteração -des3 na geração da frase ou lançando um novo comando no prompt do terminal (linha de comando):</para>
+
+        <para>
+<screen>
+<command>openssl rsa -in server.key -out server.key.insecure</command>
+</screen>
+        </para>
+        <para>Uma vez executado o comando abaixo, a chave insegura será armazenada no arquivo <filename>server.key.insecure</filename>. Você pode usar esse arquivo para gerar o CSR sem senha.</para>
+
+        <para>Para criar um CSR, execute o seguinte comando no prompt do terminal:</para>
+
+        <para>
+<screen>
+<command>openssl req -new -key server.key -out server.csr</command>
+</screen>
+        </para>
+
+        <para>Ele irá solicitar que você informe a senha. Se você informar a senha correta ele irá pedir para que você informe o Nome da Empresa, Nome do Site, Email, etc. Assim que você informar todos esses detalhes, seu CSR será criado e armazenado no arquivo <filename>server.csr</filename>. Você pode enviar esse arquivo CSR para uma CA para processamento. A CAN irá usar esse arquivo CSR para emitir o certificado. Por outro lado, você pode criar certificados auto-assinados usando esse CSR.</para>
+
+        </sect3>
+        <sect3 id="creating-a-self-signed-certificate" status="complete">
+          <title>Criando um certificado Auto-Assinado</title>
+            <para>Para criar um certificado auto-assinado, execute o seguinte comando no prompt de terminal:</para>
+
+            <para>
+<screen>
+<command>openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt</command>
+</screen>
+            </para>
+
+            <para>O comando abaixo irá lhe pedir uma senha. Assim que você informar a senha correta, seu certificado será criado e ele será armazenado no arquivo <filename>server.crt</filename>.</para>
+        <warning>
+        <para>Se o seu servidor seguro deve ser utilizado em um ambiente de produção, você provavelmente precisa de um certificado assinado por uma CA. Não é recomentado usar certificados auto-assinados.</para>
+        </warning>
+        </sect3>
+        <sect3 id="installing-the-certificate" status="complete">
+          <title>Instalando o Certificado</title>
+
+            <para>Você pode instalar o arquivo chave <filename>server.key</filename>, o arquivo de certificado <filename>server.crt</filename> ou o arquivo de certificado fornecido pela sua CA rodando os seguintes comandos num prompt de terminal:</para>
+            <para>
+<screen>
+<command>sudo cp server.crt /etc/ssl/certs</command>
+<command>sudo cp server.key /etc/ssl/private</command>
+</screen>
+            </para>
+            <para>Você deve adicionar as quatro linhas abaixo no arquivo <filename>/etc/apache2/sites-available/default</filename> ou no arquivo de configuração do seu host virtual seguro. Você deve colocá-las na seção <emphasis>VirtualHost</emphasis>. Elas devem ser colocadas abaixo da linha <emphasis>DocumentRoot</emphasis>:</para>
+<programlisting>
+SSLEngine on
+
+SSLOptions +FakeBasicAuth +ExportCertData +CompatEnvVars +StrictRequire
+
+SSLCertificateFile /etc/ssl/certs/server.crt
+SSLCertificateKeyFile /etc/ssl/private/server.key
+</programlisting>
+          
+            <para>O HTTPS deve escutar na porta número 443. Você deve adicionar a seguinte linha ao arquivo <filename>/etc/apache2/ports.conf</filename>.</para>
+<programlisting>
+Listen 443
+</programlisting>
+
+        </sect3>
+        <sect3 id="accessing-the-server" status="complete">
+          <title>Acessando o Servidor</title>
+            <para>Assim que seu certificado estiver instalado, você deve re-iniciar seu servidor web. Você pode executar o seguinte comando em um prompt de terminal para re-iniciar seu servidor web:</para>
+            <para>
+<screen><command>sudo /etc/init.d/apache2 restart</command> </screen>
+            </para>
+        <note><para>Você deve lembrar e informar a senha toda vez que iniciar o seu servidor web seguro.</para></note>
+
+            <para>Você será perguntado sobre sua senha. Assim que você informar a senha correta, o servidor web seguro irá ser iniciado. Você pode acessar páginas seguras no servidor digitando https://seu_hostname/url/ na barra de endereços do seu navegador.</para>
+
+        </sect3>
+      </sect2>
+      <sect2 id="http-references" status="complete">
+        <title>Referências</title>
+          <para>
+          <ulink url="http://httpd.apache.org/docs/2.0/">Documentação do Apache2</ulink>
+          </para>
+          <para>
+          <ulink url="http://www.modssl.org/docs/">Documentação do Mod SSL</ulink>
+          </para>
+      </sect2>
+    </sect1>
+
+	<sect1 id="php5" status="complete">
+		<title>PHP5 - Linguagem de Scripts</title>
+      <para>PHP é uma linguagem de scripts de propósito geral adequada para desenvolvimento Web. Os scripts PHP podem ser embutidos em HTML. Esta seção explica como instalar e configurar PHP5 num Sistema Ubuntu com Apache2 e MySQL.</para>
+      <para>Esta seção assume que você já instalou e configurou o Servidor Web Apache 2 e o Servidor de Banco de Dados MySQL. Você pode consultar a seção do Apache 2 e as seções do MySQL neste documento para instalar e configurar o Apache 2 e o MySQL, respectivamente.</para>
+
+<sect2 id="php5-installation" status="complete">
+  <title>Instalação</title>
+      <para>O PHP5 está disponível no Ubuntu Linux.</para>
+      
+      <procedure><step><para>Para instalar o PHP5 você pode pode digitar o seguinte comando em um terminal: <screen>
+<command>sudo apt-get install php5-common php5 libapache2-mod-php5</command>
+</screen></para>
+
+      <para>Você pode executar os scripts do PHP5 a partir da linha de comando. Para executar os scripts do PHP5 a partir da linha de comando você deve instalar o pacote <application>php5-cgi</application>. Para instalar o pacote <application>php5-cgi</application>, digite o seguinte comando em um terminal: <screen>
+<command>sudo apt-get install php5-cgi</command>
+</screen></para>
+      <para>Para usar o <application>MySQL</application> com o PHP5, você deve instalar o pacote <application>php5-mysql</application>. Para instalar o pacote <application>php5-mysql</application>, digite o seguinte comando em um terminal: <screen>
+<command>sudo apt-get install php5-mysql</command>
+</screen></para>
+      <para>Da mesma maneira para usar o <application>PostgreSQL</application> com o PHP5, você deve instalar o pacote <application>php5-pgsql</application>. Para instalar o pacote application&gt;php5-pgsql</para>
+			</step>
+	    </procedure>
+      </sect2>
+      <sect2 id="php5-configuration" status="complete">
+        <title>Configuração</title>
+          <para>Uma vez instalado o PHP5, você pode executar os scripts do PHP5 a partir do seu navegador. Se você instalou o pacote <application>php5-cgi</application>, você pode executar os scripts do PHP5 a partir da linha de comando.</para>
+
+          <para>
+          By default, the Apache 2 Web server is configured to run PHP5
+          scripts. In other words, the PHP5 module is enabled in Apache2
+          Web server automatically when you install the module. Please
+          verify if the files
+          <filename>/etc/apache2/mods-enabled/php5.conf</filename> and
+          <filename>/etc/apache2/mods-enabled/php5.load</filename>
+          exist. If they do not exists, you can enable the module using
+          <command>a2enmod</command> command.
+          </para>
+
+          <para>Once you install PHP5 related packages and enabled PHP5
+          Apache 2 module, you should restart Apache2 Web server to run
+          PHP5 scripts. You can run the following command at a terminal
+          prompt to restart your web server:
+<screen><command>sudo /etc/init.d/apache2 restart</command> </screen>
+          </para>
+      </sect2>
+      <sect2 id="php5-testing" status="complete">
+        <title>Testando</title>
+          <para>Para verificar a sua instalação, você pode executar o seguinte script phpinfo do PHP5:</para>
+<programlisting>
+&lt;?php
+print_r (phpinfo());
+?&gt;
+</programlisting>
+          <para>
+          You can save the content in a file
+          <filename>phpinfo.php</filename> and place it
+          under <command>DocumentRoot</command> directory of Apache2 Web
+          server. When point your browser to
+          <filename>http://hostname/phpinfo.php</filename>, it would
+          display values of various PHP5 configuration parameters.
+      </para>
+      </sect2>
+    </sect1>
+	
+	<sect1 id="squid" status="complete">
+		<title>Squid - Sevidor Proxy</title>
+          <para>Squid é um servidor proxy  cache completo que fornece servi</para>
+          <para>O servidor proxy cache Squid é uma excelente solução para uma vasta gama de necessidades de servidores de cache e proxy, ele atende desde pequenos escritórios até redes de grandes empresas fornecendo mecanismos de controle de acesso granulares e monitoramento de parâmetros críticos via Protocolo Simples de Gerenciamento de Redes (SNMP). Quando escolher um computador para uso dedicado à função de servidor proxy Squid, ou servidores de cache, certifique-se de que seu sistema estará configurado com uma grande quantidade de memória física, já que o Squid mantém um cache em memória para melhor performance.</para>
+      <sect2 id="squid-installation" status="complete">
+        <title>Instalação</title>
+          <para>No prompt de terminal, digite os seguintes comandos para instalar o servidor Squid:</para>
+          <para>
+<screen>
+<command>sudo apt-get install squid squid-common</command>
+</screen>
+          </para>
+      </sect2>
+      <sect2 id="squid-configuration" status="complete">
+        <title>Configuração</title>
+          <para>O Squid é configurado através da edição de diretivas presentes no arquivo de configuração <filename>/etc/squid/squid.conf</filename>. Os exemplos a seguir ilustram algumas das diretivas que podem ser modificadas para afetar o coportamente do servidor Squid. Para uma configuração mais especializada do Squid, veja a seção de referências.</para>
+             <tip>
+               <para>Antes de editar o arquivo de configuração você deve fazer uma cópia do arquivo original e protegê-lo contra gravação, assim você terá as configurações originais para referência e re-utilização quando necessário.</para>
+               <para>Copie o arquivo <filename>/etc/squid/squid.conf</filename> e proteja-o contra gravação informando os seguintes comandos no prompt de comando de um terminal:</para>
+	     </tip>
+               <para>
+<screen>
+<command>sudo cp /etc/squid/squid.conf /etc/squid/squid.conf.original</command>
+<command>sudo chmod a-w /etc/squid/squid.conf.original</command>
+</screen>
+               </para> 
+	        <para>
+           <itemizedlist>
+               <listitem>
+                  <para>Para configurar o servidor Squid para ouvir na porta TCP 8888 ao invés da porta padrão TCP 3128, modifique a diretiva http_port da seguinte maneira:</para>
+                  <para>http_port 8888</para>
+               </listitem>
+	            <listitem>
+                  <para>Modifique a diretiva visible_hostname de forma a dar ao servidor Squid um nome de host específico. Esse nome de host não precisa ser necessáriamente o nome de host do computador. Nesse exemplo ele é configurado como sendo <emphasis>weezie</emphasis></para>
+                  <para>visible_hostname weezie</para>
+               </listitem>
+               <listitem>
+                  <para>Novamente, Usando o controle de acesso do Squid, você pode configurar o uso de serviços de Internet filtrados pelo squid para estar disponível somente para usuários de certos endereços de IP. Por exemplo, iremos ilustrar o acesso somente de usuários da sub-rede  192.168.42.0/24:</para>
+                  <para>Adicione as seguintes informações no <emphasis role="bold">final</emphasis> da seção ACL do seu arquivo <filename>/etc/squid/squid.conf</filename>:</para>
+                  <para>acl fortytwo_network src 192.168.42.0/24</para>
+                  <para>Então, adicione as seguintes informações no <emphasis role="bold">topo</emphasis> da seção http_access do seu arquivo <filename>/etc/squid/squid.conf</filename>:</para>
+                  <para>http_access allow fortytwo_network</para>
+               </listitem>
+               <listitem>
+                  <para>Usando os excelentes recursos de controle de acesso do Squid, você pode configurar o uso de serviços da Internet através de proxy para estarem disponíveis apenas durante o horário normal de trabalho. Por exemplo, nós iremos ilustrar o acesso de empregados de uma empresa que opera entre as 9:00AM e 5:00PM, de Segunda à Sexta e que usa a sub-rede 10.1.42.0/24:</para>
+                  <para>Adicione as seguintes informações no <emphasis role="bold">final</emphasis> da seção ACL do seu arquivo <filename>/etc/squid/squid.conf</filename>:</para>
+                  <para>acl biz_network src 10.1.42.0/24 acl biz_hours time M T W T F 9:00-17:00</para>
+                  <para>Então, adicione as seguintes informações no <emphasis role="bold">topo</emphasis> da seção http_access do seu arquivo <filename>/etc/squid/squid.conf</filename>:</para>
+                  <para>http_access allow biz_network biz_hours</para>
+               </listitem>
+          </itemizedlist>
+          </para>
+          <note>
+	  <para>Depois de fazer alterações no arquivo <filename>/etc/squid/squid.conf</filename>, salve-o e reinicie o servidor <application>squid</application> para que as alterações tenham efeito usando o seguinte comando em um prompt de terminal:</para>
+          </note>
+          <para>
+<screen>
+<command>sudo /etc/init.d/squid restart</command>
+</screen>
+          </para>
+      </sect2>
+      <sect2 id="squid-references" status="complete">
+      <title>Referências</title>
+      <para>
+      <ulink url="http://www.squid-cache.org/">Squid Website</ulink>
+      </para>
+      </sect2>
+    </sect1>
+	<sect1 id="version-control-system" status="complete">
+		<title>Version Control System</title>
+          <para>O controle de versões é a arte de gerenciar mudanças na informação. Ele tem sido há muito tempo uma ferramenta crucial para programadores, que tipicamente passam seu tempo fazendo pequenas mudanças em um software e então desfazendo essas mudanças no outro dia. Mas a utilidade de softwares de controle de versões vão muito além do mundo dos desenvolvedores de software. Em qualquer lugar que você possa encontrar pessoas usando computadores para gerenciar informações que mudam constantemente, existe espaço para o controle de versões.</para>
+<para>
+          </para>
+      <sect2 id="subversion" status="complete">
+        <title>Subversion</title>
+          <para>O Subversion é um sistema de controle de versões de código aberto. Ele gerencia arquivos e diretórios através do tempo. Uma árvore de arquivos é colocada em um repositório central. Esse repositório é muito parecido com um servidor de arquivos comum, exceto pelo fato de que ele se lembra de todas as alterações feitas nos arquivos e diretórios.</para>
+        <sect3 id="subversion-installation" status="complete">
+          <title>Instalação</title>
+            <para>Para acessar o repositório Subversion usando o protocolo HTTP você precisa instalar e configurar um servidor web. O Apache2 é recomendado para trabalhar com o Subversion. Por favor consulte a sub-seção HTTP na seção do Apache2 para instalar e configurar o Apache2. Para acessar o repositório Subversion usando o protocolo HTTPS você precisa instalar e configurar um certificado digital no seu servidor web Apache2. Por favor consulte a sub-seção HTTPS na seção do Apache2 para instalar e configurar um certificado digital.</para>
+						<para>Para instalar o Subversion, execute o seguinte comando no prompt de terminal:</para>
+	    <para>
+<screen>
+<command>sudo apt-get install subversion libapache2-svn</command>
+</screen>
+	    </para>
+
+        </sect3>
+        <sect3 id="subversion-configuration" status="complete">
+          <title>Configuração do Servidor</title>
+            <para>Este passo assume que você possui instalado os pacotes acima mencionados em seu sistema. Esta sessão explica como criar um repositório Subversion e acessar o projeto.</para>
+			<sect4 id="create-svn-repos" status="complete">
+				<title>Cria um Repositório Subversion</title>
+<para>O repositório Subversion pode ser criado usando o seguinte comando de um prompt de terminal:</para>
+
+        <para>
+<screen>
+<command>svnadmin create /path/to/repos/project</command>
+</screen>
+        </para>
+			</sect4>
+
+        </sect3>
+        <sect3 id="access-methods" status="complete">
+          <title>Métodos de Acesso</title>
+<para>Os repositórios do Subversion podem ser acessados (retirados) através de diversos métodos -- no disco local, através de vários protocolos de rede. Uma localização de repositório, entretanto, é sempre uma URL. A tabela descreve como diferentes esquemas de URL apontam para os métodos de acesso disponíveis.</para>
+				<table><title>Métodos de Acesso</title>
+
+					<tgroup cols="2">
+						<colspec colname="1"/>
+						<colspec colname="2"/>
+						<thead>
+							<row>
+								<entry><para>Esquema</para></entry>
+								<entry><para>Método de Acesso</para></entry>
+							</row>
+						</thead>
+						<tbody>
+							<row>
+								<entry><para>file://</para></entry>
+								<entry><para>acesso direto ao repositório (no disco local)</para></entry>
+							</row>
+							<row>
+								<entry><para>http://</para></entry>
+								<entry><para>Acesso via protocolo WebDAV aos servidores web Apache2 dotados de Subversion</para></entry>
+							</row>
+							<row>
+								<entry><para>https://</para></entry>
+								<entry><para>O mesmo que http://, mais com criptografia SSL</para></entry>
+							</row>
+							<row>
+								<entry><para>svn://</para></entry>
+								<entry><para>Acesso via protocolo customizado para um servidor svnserve</para></entry>
+							</row>
+							<row>
+								<entry><para>svn+ssh://</para></entry>
+								<entry><para>Mesmo que svn://, mais através de um túnel SSH</para></entry>
+							</row>
+						</tbody>
+					</tgroup>
+				</table>
+
+				<para>Nessa seção, nós iremos ver como configurar o Subversion para todos esses métodos de acesso. Aqui, nós iremos cobrir o básico. Para detalhes avançados de utilização consulte o <ulink url="http://svnbook.red-bean.com/">livro do svn</ulink>.</para>
+			<sect4 id="direct-repos-access" status="complete">
+				<title>Acesso direto ao repositório (file://)</title>
+<para>Esse é o mais simples de todos os métodos de acesso. Ele não requer que nenhum processo do servidor Subversion esteja rodando. Esse método de acesso é usado para acessar o Subversion a partir da mesma máquina. A sintaxe do comando, informado no prompt de um terminal, é a seguinte:</para>
+
+        <para>
+<screen>
+<command>svn co file:///path/to/repos/project</command>
+</screen>
+        </para>
+  <para>ou</para>
+	<para>
+<screen>
+<command>svn co file://localhost/caminho/para/o/repositorio/do/projeto</command>
+</screen>
+        </para>
+	<note>
+		<para>Se você não especificar o nome do host, haverão três barras (///) -- duas para o protocolo (arquivo, nesse caso) mais a barra inicial do caminho. Se você especificar o nome do host, você deverá usar duas barras (//).</para>
+	</note>
+		<para>As permissões do repositório dependem das permissões do sistema de arquivos. Se o usuário tem permissão de leitura/gravação, ele pode fazer checkout e fazer commit para o repositório.</para>
+			</sect4>
+			<sect4 id="access-via-webdav" status="complete">
+				<title>Acesso via protocolo WebDAV (http://)</title>
+<para>Para acessar o repositório através do protocolo WebDAV, você precisa configurar seu servidor web Apache 2. Você precisa adicionar o seguinte trecho ao seu arquivo <filename>/etc/apache2/apache2.conf</filename>:</para>
+
+	<programlisting> &lt;Location /svn&gt;
+  DAV svn
+  SVNPath /caminho/para/o/repositorio
+  AuthType Basic
+  AuthName "Nome do seu repositorio"
+  AuthUserFile /etc/subversion/passwd
+  &lt;LimitExcept GET PROPFIND OPTIONS REPORT&gt;
+  Require valid-user
+  &lt;/LimitExcept&gt;
+  &lt;/Location </programlisting>
+  <para>Em seguida, você precisa criar o arquivo <filename>/etc/subversion/passwd</filename>. Esse arquivo contém detalhes de autenticação de usuários. Para adicionar uma entrada, ex.: para adicionar um usuário, você pode rodar o seguinte comando a partir do prompt de um terminal:</para>
+	<para>
+<screen>
+<command>htpasswd2 /etc/subversion/passwd user_name</command>
+</screen>
+        </para>
+	<para>Esse comando irá lhe solicitar a entrada de uma senha. Assim que você informar a senha, o usuário será adicionado. Agora, para acessar o repositório você precisa rodar o seguinte comando:</para>
+        <screen><command>svn co http://servername/svn</command></screen>
+	<warning>
+		<para>As senhas são transmitidas em texto simples. Se você estiver preocupado com roubo de senhas, você está convidado a usar criptografia SSL. Para detalhes, por favor consulte a próxima seção.</para>
+	</warning>
+			</sect4>
+			<sect4 id="access-via-webdav-with-ssl" status="complete">
+				<title>Acesso via protocolo WebDAV com criptografia SSL (https://)</title>
+					<para>Acessar o repositório Subversion via protocolo WebDAV com criptografia SSL (https://) é semelhante a acessar via http:// exceto pelo fato de que você precisa instalar e configurar um certificado digital no seu servidor web Apache2.</para>
+
+					<para>Você pode instalar um certificado digital fornecido por uma autoridade de certificação como a Verisign. Alternativamente, você pode instalar seus próprios certificados auto-assinados.</para>
+					<para>Esse passo assume que você tenha instalado e configurado um certificado digital no seu servidor web Apache 2. Agora, para acessar o repositório do Subversion, por favor consulte a seção acima! Os métodos de acesso são exatamente os mesmos, exceto pelo protocolo. Você precisa usar https:// para acessar o repositório do Subversion.</para>
+
+			</sect4>
+			<sect4 id="access-via-custom-protocol" status="complete">
+				<title>Acessar via protocolo específico (svn://)</title>
+					<para>Assim que o repositório do Subversion é criado, você pode configurar o protocolo de acesso. Você pode editar o arquivo <filename> /path/to/repos/project/conf/svnserve.conf</filename> para configurar o controle de acesso. Por exemplo, para configurar a autenticação você pode descomentar as seguintes linhas no arquivo de configuração:</para>
+					<programlisting># [comum]
+# password-db = passwd</programlisting>
+
+					<para>Depois de descomentar as linhas acima você pode manter a lista de usuários no arquivo passwd. Então, edite o arquivo <filename>passwd </filename> no mesmo diretório e adicione o novo usuário. A sintaxe é a seguinte:</para>
+					<programlisting>nomedousuário = senha</programlisting>
+					<para>Para mais detalhes, por favor referir ao arquivo.</para>
+
+					<para>Agora, para acessar o Subversion via protocolo específico svn://, estando na mesma maquina ou não, você pode rodar o svnserver usando o comando svnserve. A sintaxe é a seguinte:</para>
+					<programlisting>$ svnserve -d --foreground -r /caminho/para/o/repositorio
+# -d -- modo daemon
+# --foreground -- roda em primeiro plano (útil para detecção de erros)
+# -r -- raiz do diretório a ser servido
+
+Para maiores detalhes de utilização, por favor consulte:
+$ svnserve --help</programlisting>
+
+					<para>Assim que você rodar esse comando, o Subversion iniciará ouvindo na porta padrão (3690). Para acessar o repositório do projeto, você precisa rodar o seguinte comando a partir de um prompt de terminal:</para>
+					<para>
+<screen>
+<command>svn co svn://hostname/project project --username nome_do_usuário</command>
+</screen>
+                                        </para>
+					<para>Baseado na configuração do servidor, ele perguntará por uma senha. Assim que você estiver autenticado, ele irá fazer a retirada do código do repositório do Subversion. Para sincronizar o repositório do projeto com a cópia local, você pode rodar o sub-comando <command>update</command>. A sintaxe do comando, informado em um prompt de terminal, é a seguinte:</para>
+					<para>
+<screen>
+<command>cd diretorio_do_projeto ; svn update</command>
+</screen>
+                                        </para>
+					<para>Para maiores detalhes sobre a utilização de cada sub-comando do Subversion, você pode consultar o manual. Por exemplo, para aprender mais sobre o comando co (checkout), por favor rode o seguinte comando em um prompt de terminal:</para>
+                    <para><screen><command>svn co help</command></screen></para>
+
+			</sect4>
+			<sect4 id="access-via-custom-protocol-with-ssl" status="complete">
+				<title>Acessar via protocolo específico com criptografia SSL (svn+ssh://)</title>
+					<para>A configuração e o processo do servidor é o mesmo do método svn://. Para detalhes, por favor consulte a seção acima. Esse passo assume que você tenha seguido o passo acima e iniciado o servidor Subversion usando o comando <application>svnserve</application>.</para>
+
+					<para>Também assume-se que o servidor ssh esteja rodando na maquina e que ele permita conexões entrantes. Para confirmar, por favor tente fazer login na maquina usando ssh. Se você puder fazer login, tudo está perfeito. Se você não puder fazer login, por favor resolva isso antes de continuar.</para>
+
+					<para>O protoclo svn+ssh:// é usado para acessar o repositório do Subversion usando criptografia SSL. Os dados transferidos são criptografados usando esse método. Para acessar o repositório do projeto (por exemplo com um checkout), você precisa usar a seguinte sintaxe de comando:</para>
+                                        <para>
+<screen>
+<command>svn co svn+ssh://hostname/var/svn/repos/project</command>
+</screen>
+                                        </para>
+
+					<note><para>Você precisa usar o caminho completo (/caminho/para/o/repositorio/do/projeto) para acessar o repositório do Subversion usando esse método de acesso.</para></note>
+					<para>Baseado na configuração do servidor ele perguntará por uma senha. Você precisa informar a senha que você usa para fazer login via ssh. Uma vez que esteja autenticado, ele retirará o código do repositório do Subversion.</para>
+			</sect4>
+			</sect3>
+
+      </sect2>
+      <sect2 id="cvs-server" status="complete">
+        <title>Servidor CVS</title> 
+          <para>O CVS é um sistema de controle de versões. Você pode usá-lo para gravar o histórico de arquivos fonte.</para>
+        <sect3 id="cvs-installation" status="complete">
+          <title>Instalação</title>
+            <para>Em um prompt de terminal, informe o seguinte comando para instalar o <application>cvs</application>: <screen>
+<command>sudo apt-get install cvs</command>
+</screen>Depois que você instalar o <application>cvs</application>, você deverá instalar o <application>xinetd</application> para iniciar/parar o servidor cvs. No prompt, informe o seguinte comando para instalar o <application>xinetd</application>:<screen>
+<command>sudo apt-get install xinetd</command>
+</screen></para>
+        </sect3>
+        <sect3 id="cvs-configuration" status="complete">
+          <title>Configuração</title>
+            <para>
+            Once you install cvs, the repository will be automatically
+            initialized. By default, the repository resides under the
+            <application>/var/lib/cvs</application> directory. You can
+            change this path by running following command:
+
+<screen>
+<command>cvs -d /your/new/cvs/repo init</command>
+</screen>
+
+Once the initial repository is set up, you can configure
+<application>xinetd</application> to start the CVS server. 
+You can copy the following lines to the <filename>
+/etc/xinetd/cvspserver</filename> file.
+
+<programlisting>
+service cvspserver
+{
+     port = 2401
+     socket_type = stream
+     protocol = tcp
+     user = root
+     wait = no
+     type = UNLISTED
+     server = /usr/bin/cvs
+     server_args = -f --allow-root /var/lib/cvs pserver
+     disable = no
+}
+</programlisting>
+
+<note>
+<para>Certifique-se de ter editado o repositório se você modificar o repositório padrão localizado em (<application>/var/lib/cvs</application>).</para>
+</note>
+
+Once you have configured <application>xinetd</application> you 
+can start the cvs server by running following command:
+
+<screen>
+<command>sudo /etc/init.d/xinetd start</command>
+</screen>
+            </para>
+            <para>Você pode confirmar que o servidor CVS está executando digitando o seguinte comando:</para>
+
+            <para>
+<screen>
+<command>sudo netstat -tap | grep cvs</command>
+</screen>
+            </para>
+
+            <para>Quando você executa esse comando, você deve visualizar a seguinte linha ou algo similar:</para>
+
+<programlisting>
+tcp 0 0 *:cvspserver *:* LISTEN 
+</programlisting>
+
+        <para>Daqui em diante, você pode continuar a adicionar usuários, criar novos projetos e administrar o servidor CVS.</para>
+        <warning>
+<para>O CVS permite que o usuário adicione usuários independentemente da instalação do SO hospedeiro. Provavelmente a maneira mais fácil é usar os Usuários do Linux para o CVS, entretanto isso oferece problemas potenciais de segurança. Por favor consulte o manual para mais detalhes.</para>
+        </warning>
+
+        </sect3>
+        <sect3 id="cvs-add-projects" status="complete">
+          <title>Adicionar Projetos</title>
+            <para>
+            This section explains how to add new project to the CVS 
+			repository. Create the directory and add necessary document 
+			and source files to the directory. Now, run the following 
+			command to add this project to CVS repository:
+<screen>
+<command>cd your/project</command>
+<command>cvs import -d :pserver:username@hostname.com:/var/lib/cvs -m "Importing my project to CVS repository" . new_project start</command>
+</screen>
+
+<tip>
+<para>Você pode usar a variável ambiental CVSROOT para armazenar o diretório raiz do CVS. Uma vez que tenha exportado a variável ambiental CVSROOT, você pode evitá-la usando a opção -d em conjunto com o comando cvs acima.</para>
+</tip>
+The string <emphasis>new_project</emphasis> is a vendor
+tag, and <emphasis>start</emphasis> is a release tag.
+They serve no purpose in this context, but since CVS requires them, they
+must be present.
+
+<warning>
+<para>Quando você adicionar um novo projeto, o usuário CVS tem permisssão de escrita no repositório CVS (<application>/var/lib/cvs</application>). Por padrão, o grupo <application>src</application> tem permissão de escrita no repositório CVS. Então, você pode adicionar um usuário neste grupo, e ele poderá então adicionar e gerenciar projetos no respositório CVS.</para>
+</warning>
+            </para>
+        </sect3>
+      </sect2>
+      <sect2 id="version-control-ref" status="complete">
+        <title>Referências</title> 
+				<para><ulink url="http://subversion.tigris.org/">Página do Subversion</ulink></para>
+				<para><ulink url="http://svnbook.red-bean.com/">Livro do Subversion</ulink></para>
+				<para><ulink url="http://ximbiot.com/cvs/manual/cvs-1.11.21/cvs_toc.html">Manual do CVS</ulink></para>
+      </sect2>
+    </sect1>
+	<sect1 id="databases" status="complete">
+		<title>Bancos de Dados</title>
+          <para>O Ubuntu provê dois servidores de banco de dados. São eles: <itemizedlist spacing="compact">
+                <listitem>
+                    <para><application><trademark>MySQL</trademark></application></para>
+                </listitem>
+                <listitem>
+                    <para><application>PostgreSQL</application></para>
+                </listitem>
+            </itemizedlist> . Eles estão disponíveis no repositório principal. Esta seção explica como instalar e configurar esses servidores de bancos de dados.</para>
+      <sect2 id="mysql" status="complete">
+        <title>MySQL</title>
+          <para>MySQL é um servidor de dados SQL rápido, multi-thread, multi-usuário e robusto. Ele é adequado para missões críticas, sistema de alto carregamento assim como para embutir em software instalado em massa.</para>
+
+        <sect3 id="mysql-installation" status="complete">
+          <title>Instalação</title>
+            <para>Para instalar MySQL, execute o seguinte comando a partir do prompt de terminal:</para>
+
+            <para>
+<screen>
+<command>sudo apt-get install mysql-server mysql-client</command>
+</screen>
+            </para>
+
+            <para>Quando a instalação estiver completa, o servidor MySQL deverá ser iniciado automaticamente. Você poderá executar o seguinte comando em um terminal para checar se o servidor MySQL está rodando.</para>
+
+            <para>
+<screen>
+<command>sudo netstat -tap | grep mysql</command>
+</screen>
+            </para>
+
+            <para>Quando você executa esse comando, você deve visualizar a seguinte linha ou algo similar:</para>
+
+<programlisting>
+tcp 0 0 localhost.localdomain:mysql *:* LISTEN -
+</programlisting>
+	<para>Se o servidor não está executando corretamente, você pode digitar o seguinte comando para inicializá-lo.</para>
+            <para>
+<screen>
+<command>sudo /etc/init.d/mysql restart</command>
+</screen>
+        </para>
+
+        </sect3>
+        <sect3 id="mysql-configuration" status="complete">
+          <title>Configuração</title>
+            <para>Por padrão, a senha de administrador não vem definida. Assim que instalar o MySQL, a primeira coisa que precisa fazer é configurar a senha de administrador do MySQL. Para fazer isso, execute os seguintes comandos:</para>
+            <para>
+<screen>
+<command>sudo mysqladmin -u root senha novasenhadoroot</command>
+</screen>
+            </para>
+            <para>
+<screen>
+<command>sudo mysqladmin -p -u root -h localhost senha novasenhaderootsql</command>
+</screen>
+            </para>
+
+            <para>Você pode editar o arquivo <filename>/etc/mysql/my.cnf</filename> para configurar as opções básicas -- arquivo de log, número da porta, etc. Veja o arquivo <filename>/etc/mysql/my.cnf</filename> para maiores detalhes.</para>
+        </sect3>
+      </sect2>
+      <sect2 id="postgresql" status="complete">
+        <title>PostgreSQL</title> 
+          <para>O PostgreSQL é um sistema de banco de dados objeto-relacional que possui os recursos de sistemas de banco de dados comerciais tradicionais com melhorias que serão encontradas na próxima geração de sistemas DBMS.</para>
+        <sect3 id="postgresql-installation" status="complete">
+          <title>Instalação</title>
+            <para>Para instalar PostgreSQL, execute o comando seguinte a partir do prompt de comando:</para>
+
+            <para>
+<screen>
+<command>sudo apt-get install postgresql</command>
+</screen>
+            </para>
+
+            <para>Assim que a instalação estiver completa, você deve configurar o servidor PostgreSQL de acordo com suas necessidades, ainda que  a configuração padrão seja viável.</para>
+            
+        </sect3>
+        <sect3 id="postgresql-configuration" status="complete">
+          <title>Configuração</title>
+            <para>Por padrão, a conexão via TCP/IP está desabilitada. O PostgreSQL suporta múltiplos métodos de autenticação. Por padrão, o método de autenticação IDENT é usado. Por favor consulte <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html"> O Guia de Administrador do PostgreSQL</ulink>.</para>
+            
+            <para>A seguinte discussão assume que você deseja habilitar conexões TCP/IP e usar o metódo MD5 para autenticações de clientes. Os arquivos de configuração do PostgreSQL estão armazenados no diretório <filename>/etc/postgresql/&lt;version&gt;/main</filename>. Por exemplo, se você instalar o PostgreSQL 7.4, os arquivos de configuração estão armazenados no diretório <filename>/etc/postgresql/7.4/main</filename>.</para>
+            
+            <tip>
+            <para>Para configurar a autenticação <application>ident</application>, adicione as entradas no arquivo <filename>/etc/postgresql/7.4/main/pg_ident.conf</filename>.</para>
+            </tip>
+
+            <para>Para habilitar conexões TCP/IP, edite o arquivo <filename>/etc/postgresql/7.4/main/postgresql.conf</filename></para>
+
+            <para>Localize a linha <emphasis>#tcpip_socket = false</emphasis> e altere-a para <emphasis>tcpip_socket = true</emphasis>. Você poderá editar outros parâmetros, se você souber o que está fazendo! Para detalhes, consulte o arquivo de configuração ou a documentação do PostgreSQL.</para>
+
+            <para>Por padrão, as credenciais de usuário não são definidas para autenticação de cliente por <emphasis>MD5</emphasis>. Então, primeiro é necessário configurar o servidor PostgreSQL para usar a autenticação de clientes por <emphasis>confiança</emphasis>, conecte a base de dados, configure a senha e reverta a configuração para a autenticação de clientes por <emphasis>MD5</emphasis> usar. Para habilitar a autenticação de clientes por <emphasis>confiança</emphasis>, edite o arquivo <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename></para>
+
+            <para>Comente todas as linhas existentes que usem a autenticação de clientes por <emphasis>ident</emphasis> e <emphasis>MD5</emphasis> e adicione a seguinte linha:</para>
+<programlisting>
+local all postgres trust sameuser
+</programlisting>
+
+            <para>Então, executa o seguinte comando para inicializar o servidor PostgreSQL:</para>
+            <para>
+<screen>
+<command>sudo /etc/init.d/postgresql start</command>
+</screen>
+            </para>
+            <para>Assim que o servidor PostgreSQL for iniciado com sucesso, rode o seguinte comando em um prompt de terminal para se conectar ao banco de dados padrão de exemplo do PostgreSQL</para>
+
+            <para>
+<screen>
+<command>psql -U postgres -d template1</command>
+</screen>
+            </para>
+            <para>O comando acima conecta ao banco de dados <emphasis>template1</emphasis> do PostgreSQL como usuário <emphasis>postgres</emphasis>. Assim que você se conectar ao servidor PostgreSQL, você estará no prompt SQL. Você pode rodar os seguintes comandos SQL no prompt do <application>psql</application> para configurar a senha para o usuário <emphasis role="italics">postgres</emphasis>.</para>
+
+            <para>
+<screen>
+<command>template1=# ALTERA USUÁRIO postgres com senha criptografada 'sua_senha';</command>
+</screen>
+            </para>
+            <para>Depois de configurar a senha, edite o arquivo <filename>/etc/postgresql/7.4/main/pg_hba.conf</filename> para usar a autenticação <emphasis>MD5</emphasis>:</para>
+            <para>Comente a linha <emphasis role="italics">confiança</emphasis> adicionada recentemente  e adicione a seguinte linha:</para>
+
+<programlisting>
+local all postgres md5 sameuser
+</programlisting>
+            <warning>
+            <para>A configuração abaixo não está de nenhuma forma completa. Por favor consulte <ulink url="http://www.postgresql.org/docs/8.1/static/admin.html"> o Guia do Administrador do PostgreSQL</ulink> para configurar mais parâmetros.</para>
+            </warning>
+        </sect3>
+      </sect2>
+    </sect1>
+	<sect1 id="email-services" status="complete">
+		<title>Serviços de Email</title>
+          <para>O processo de entrega de um e-mail de um pessoa para outra através da rede ou da Internet demanda o trabalho conjunto de muitos sistemas. Cada um desses sistemas precisa estar corretamente configurado para que o processo funcione. O remetente usa um <emphasis>Agente Usuário de Correio</emphasis> (MUA) ou cliente de e-mail, para enviar a mensagem através de um ou mais <emphasis>Agentes de Transferência de Correio</emphasis> (MTA), o qual irá entregá-la para um <emphasis>Agente de Entrega de Correio</emphasis> (MDA) para entregá-la na caixa postal do destinatário, apartir da qual será retirada pelo cliente de e-mail do destinatário, normalmente através de um servidor POP3 ou IMAP.</para>
+      <sect2 id="postfix" status="complete">
+        <title>Postfix</title>
+          <para><application>Postfix</application> é o Mail Transfer Agent (MTA) padrão do Ubuntu. Ele tenta ser rápido, fácil de administrar e seguro. É compatível com o MTA <application>sendmail</application>. Esta seção explica como instalar e configurar o <application>postfix</application>. Também explica como configurá-lo como um servidor SMTP usando uma conexão segura (para enviar emails de forma segura).</para>
+        <sect3 id="postfix-installation" status="complete">
+          <title>Instalação</title>
+            <para>Para instalar o <application>postfix</application> com SMTP-AUTH e Transport Layer Security (TLS), execute o seguinte comando: <screen>
+<command>sudo apt-get install postfix</command>
+</screen> Simplesmente pressione enter para a perguntas durante o processo de instalação, a configuração será feita em detalhes no próximo passo.</para>
+        </sect3>
+        <sect3 id="postfix-configuration" status="complete">
+          <title>Configuração Básica</title>
+            <para>Para configurar o <application>postfix</application>, execute o seguinte comando: <screen>
+<command>sudo dpkg-reconfigure postfix</command>
+</screen> A interface do usuário será mostrada. Em cada tela, selecione os seguintes valores: <itemizedlist spacing="compact">
+            <listitem><para>Ok</para></listitem>
+            <listitem><para>Site de Internet</para></listitem>
+            <listitem><para>NENHUM</para></listitem>
+            <listitem><para>email.exemplo.com</para></listitem>
+            <listitem><para>email.exemplo.com, localhost,localdomain, localhost</para></listitem>
+            <listitem><para>Não</para></listitem>
+            <listitem><para>127.0.0.0/8</para></listitem>
+            <listitem><para>Sim</para></listitem>
+            <listitem><para>0</para></listitem>
+            <listitem><para>+</para></listitem>
+            <listitem><para>all</para></listitem>
+            </itemizedlist></para>
+            <note>
+            <para>Substitua mail.example.com pelo nome do seu servidor de email.</para>
+            </note>
+	 </sect3>
+        <sect3 id="postfix-smtp-authentication" status="complete">
+          <title>Autenticação SMTP</title>
+            <para>Os próximos passos são configurar o <application>postfix</application> para usar SASL para SMTP AUTH. Ao invés de editar o arquivo de configuração diretamente, você pode usar o comando <command>postconf</command> para configurar todos os parâmetros do <application>postfix</application>. Os parâmetros de configuração serão armanzenados no arquivo <filename>/etc/postfix/main.cf</filename>. Depois se você desejar reconfigurar um parâmetro em particular, você pode executar o comando ou mudá-lo manualmente no arquivo.</para>
+	<procedure>
+		<step><para>Configure Postfix to do SMTP AUTH using SASL (saslauthd):
+<screen>
+postconf -e 'smtpd_sasl_local_domain ='
+postconf -e 'smtpd_sasl_auth_enable = yes'
+postconf -e 'smtpd_sasl_security_options = noanonymous'
+postconf -e 'broken_sasl_auth_clients = yes'
+postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination'
+postconf -e 'inet_interfaces = all'
+</screen>
+Open the <filename>/etc/postfix/sasl/smtpd.conf</filename> file and add
+the following lines to end of the file:
+<screen>
+pwcheck_method: saslauthd
+mech_list: plain login
+</screen>
+		</para>
+		</step>
+		<step><para>Next, configure the digital certificate 
+            for TLS. When asked questions, follow the instructions and answer appropriately.
+<screen>
+openssl genrsa -des3 -rand /etc/hosts -out smtpd.key 1024
+chmod 600 smtpd.key
+openssl req -new -key smtpd.key -out smtpd.csr
+openssl x509 -req -days 3650 -in smtpd.csr -signkey smtpd.key -out smtpd.crt
+openssl rsa -in smtpd.key -out smtpd.key.unencrypted
+mv -f smtpd.key.unencrypted smtpd.key
+openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650
+sudo mv smtpd.key /etc/ssl/private/
+sudo mv smtpd.crt /etc/ssl/certs/
+sudo mv cakey.pem /etc/ssl/private/
+sudo mv cacert.pem /etc/ssl/certs/
+</screen>
+		</para>
+		<note><para>Você pode adquirir o certificado digital de uma autoridade certificadora. Alternativamente , você pode criar o certificado você mesmo. Consulte o <xref linkend="creating-a-self-signed-certificate"/> para mais detalhes.</para></note>
+		</step>
+		<step><para>Configure o Postfix para fazer encriptação TLS para entrada e saida de email: <screen>
+postconf -e 'smtpd_tls_auth_only = no'
+postconf -e 'smtp_use_tls = yes'
+postconf -e 'smtpd_use_tls = yes'
+postconf -e 'smtp_tls_note_starttls_offer = yes'
+postconf -e 'smtpd_tls_key_file = /etc/ssl/private/smtpd.key'
+postconf -e 'smtpd_tls_cert_file = /etc/ssl/certs/smtpd.crt'
+postconf -e 'smtpd_tls_CAfile = /etc/ssl/certs/cacert.pem'
+postconf -e 'smtpd_tls_loglevel = 1'
+postconf -e 'smtpd_tls_received_header = yes'
+postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
+postconf -e 'tls_random_source = dev:/dev/urandom'
+postconf -e 'myhostname = mail.example.com'
+</screen></para>
+		</step>
+		</procedure>
+            <note>
+            <para>Depois que você executar todos os comandos, o SMTP AUTH é configurado com o <application>postfix</application>. O cerficado auto-assinado é criado para o TLS  e é configurado com o <application>postfix</application>.</para>
+            </note>
+            <para>Agora, o arquivo <filename>/etc/postfix/main.cf</filename> parecerá com <ulink url="../sample/postfix_configuration">este</ulink>.</para>
+		<para>A configuração inicial do postfix está completa. Execute o seguinte comando para iniciar o daemon do postfix: <screen><command>sudo /etc/init.d/postfix start</command></screen> Agora o <application>postfix</application> daemon está instalado, configurado e executando com sucesso. O <application>Postfix</application> suporta o SMTP AUTH como definido na <ulink url="ftp://ftp.isi.edu/in-notes/rfc2554.txt">RFC2554</ulink>. É baseado no <ulink url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>. Entretanto é necessário configurar a autenticação SASL antes de usar o SMTP.</para>
+	</sect3>
+	<sect3 id="sasl">
+	  <title>Configurando SASL</title>
+            <para>
+            The
+            <application>libsasl2</application>,
+            <application>sasl2-bin</application> and
+            <application>libsasl2-modules</application> are necessary to
+            enable SMTP AUTH using SASL. You can install these applications if
+            you have not installed them already.
+<screen>
+<command>sudo apt-get install libsasl2 sasl2-bin</command>
+</screen>
+	    </para>
+	    <para>Algumas modificações são necessárias para fazê-lo funcionar corretamente. Devido ao <application>Postfix</application> rodar sob chroot em <filename>/var/spool/postfix</filename>, a <application>SASL</application> precisa ser configurada para rodar na falsa raíz (<filename>/var/run/saslauthd</filename> se torna <filename>/var/spool/postfix/var/run/saslauthd</filename>): <screen>
+<command>mkdir -p /var/spool/postfix/var/run/saslauthd</command>
+<command>rm -rf /var/run/saslauthd</command>
+</screen></para>
+	    <para>Para ativar o <application>saslauthd</application>, edite o arquivo <filename>/etc/default/saslauthd</filename> e modifique ou adicione a variável START. Para configurar o <application>saslauthd</application> para rodar na raíz falsa, adicione as variáveis PWDIR, PIDFILE e PARAMS. Finalmente, configure a variável MECHANISMS à sua maneira. O arquivo deve se parecer com isso: <programlisting>
+# Isso deve ser descomentado antes que o saslauthd rode
+# automaticamente
+# automatically
+START=yes
+
+PWDIR="/var/spool/postfix/var/run/saslauthd"
+PARAMS="-m ${PWDIR}"
+PIDFILE="${PWDIR}/saslauthd.pid"
+
+# Você deve especificar os mecanismos de autenticação que você
+# deseja usar. O valor padrão é "pam" para suporte PAM, mas você
+# pode também incluir "shadow" ou "sasldb", assim:
+# MECHANISMS="pam shadow"
+
+MECHANISMS="pam"
+</programlisting></para>
+<note>
+<para>Se preferir, você pode utilizar <emphasis role="strong">shadow</emphasis> ao invés de <emphasis role="strong">pam</emphasis>. Ele irá usar transferência encriptada de senha MD5 e isso é perfeitamente seguro. O nome do usuário e a senha necessários para a autenticação serão aqueles  mesmos dos usuários do sistema que você está usando no servidor.</para>
+</note>
+        <para>Em seguida, atualize o "estado" do dpkg do <filename>/var/spool/portfix/var/run/saslauthd</filename>. Os scripts de inicialização do saslauthd usam essa configuração para criar o diretório que falta com as permissões e posses necessárias: <screen>
+<command>dpkg-statoverride --force --update --add root sasl 755 /var/spool/postfix/var/run/saslauthd</command>
+</screen></para>
+        </sect3>
+        <sect3 id="postfix-testing" status="complete">
+          <title>Testando</title>
+            <para>A configuração da Autenticação do SMTP está completa. Agora é hora de iniciar e testar a configuração. Você pode rodar o seguinte comando para iniciar o daemon SASL: <screen><command>sudo /etc/init.d/saslauthd start</command></screen> Para ver se o SMTP-AUTH e o TLS estão funcionando normalmente, rode o seguinte comando: <screen><command>telnet mail.example.com 25</command></screen> Depois que tiver estabelecido uma conexão com o servidor de e-mail postfix, digite: <screen>ehlo mail.example.com</screen> Se você vir as seguintes linhas entre outras, então tudo estará funcionando perfeitamente. Digite <command>quit</command> para sair. <programlisting>
+250-STARTTLS
+250-AUTH LOGIN PLAIN
+250-AUTH=LOGIN PLAIN
+250 8BITMIME
+</programlisting></para>
+        </sect3>
+      </sect2>
+      <sect2 id="exim4" status="complete">
+        <title>Exim4</title>
+          <para>O <application>Exim4</application> é outro Agente de Transferência de Mensagens (MTA) desenvolvido na Universidade de Cambridge para uso em sistemas Unix conectados à Internet. O Exim pode ser instalado no lugar do <application>sendmail</application>, entretanto a configuração do <application>exim</application> é bem diferente daquela feita para o <application>sendmail</application>.</para>
+        <sect3 id="exim4-installation" status="complete">
+          <title>Instalação</title>
+            <para>Para instalar o <application>exim4</application>, rode o seguinte comando: <screen>
+<command>sudo apt-get install exim4 exim4-base exim4-config</command>
+</screen></para>
+        </sect3>
+        <sect3 id="exim4-configuration" status="complete">
+          <title>Configuração</title>
+            <para>Para configurar o <application>exim4</application>, rode o seguinte comando:
+<screen>
+<command>sudo dpkg-reconfigure exim4-config</command>
+</screen> A interface de usuário será mostrada. A interface de usuário permite a você configurar vários parâmetros. Por exemplo, no <application>exim4</application> os arquivos de configuração estão divididos em múltiplos arquivos. Se você quiser tê-los em um único arquivo você pode configurar isso através da interface de usuário.</para>
+
+            <para>
+            All the parameters you configure in the user interface are
+            stored in
+            <filename>/etc/exim4/update-exim4.conf.conf</filename> file.
+            If you wish to re-configure, either you re-run the
+            configuration wizard or manually edit this file
+            using your favourite editor. Once you configure, you can run
+            the following command to generate the master configuration
+            file:
+<screen>
+<command>sudo update-exim4.conf</command>
+</screen>
+            The master configuration file, is generated and
+            it is stored in
+            <filename>/var/lib/exim4/config.autogenerated</filename>. 
+            
+            <warning>
+            <para>Em nenhum momento você deve editar o arquivo de configuração principal <filename>/var/lib/exim4/config.autogenerated</filename> manualmente. Ele é atualizado automaticamente toda vez que você roda o <command>update-exim4.conf</command></para>
+            </warning>
+            You can run
+            the following command to start
+            <application>exim4</application> daemon.
+<screen>
+<command>sudo /etc/init.d/exim4 start</command>
+</screen>
+            <emphasis role="strong">TODO:</emphasis> This section should
+            cover configuring SMTP AUTH with exim4. 
+            </para>
+        </sect3>
+      </sect2>
+      <sect2 id="dovecot-server" status="complete">
+        <title>Servidor Dovecot</title> 
+          <para>O <application>Dovecot</application> é um Agente de Entrega de Correio, escrito tendo em mente a segurança em primeiro lugar. Ele suporta os principais formatos de caixas postais: mbox ou Maildir. Essa seção explica como configurá-lo como um servidor imap ou pop3.</para>
+        <sect3 id="dovecot-installation" status="complete">
+          <title>Instalação</title>
+            <para>Para instalar o <application>dovecot</application>, rode o seguinte comando em um prompt de comando: <screen>
+<command>sudo apt-get install dovecot-common dovecot-imapd dovecot-pop3d</command>
+</screen></para>
+        </sect3>
+        <sect3 id="dovecot-configuration" status="complete">
+          <title>Configuração</title>
+            <para>Para configurar o <application>dovecot</application>, você pode editar o arquivo <filename>/etc/dovecot/dovecot.conf</filename>. Você pode escolher o protocolo que você usa. Ele pode ser pop3, pop3s (pop3 seguro), imap e imaps (imap seguro). Uma descrição desses protocolos está além do escopo desse guia. Para maiores informações, consulte os artigos da wikipedia em <ulink url="http://pt.wikipedia.org/wiki/POP3">POP3</ulink> e <ulink url="http://pt.wikipedia.org/wiki/Internet_Message_Access_Protocol">IMAP</ulink>.</para>
+
+            <para>
+            IMAPS and POP3S are more secure that the simple IMAP and
+            POP3 because they use SSL encryption to connect. Once you
+            have chosen the protocol, amend the following line in the file
+            <filename>/etc/dovecot/dovecot.conf</filename>:
+<programlisting>
+protocols = pop3 pop3s imap imaps
+</programlisting>
+
+            It enables the protocols when <application>dovecot</application> is started. Next, add the following line in the pop3 section of the file <filename>/etc/dovecot/dovecot.conf</filename>:
+<programlisting>
+pop3_uidl_format = %08Xu%08Xv
+</programlisting>
+
+            Next, choose the mailbox you use. <application>Dovecot</application> supports
+            <emphasis role="strong">maildir</emphasis> and <emphasis role="strong">mbox</emphasis> formats. These are the most
+            commonly used mailbox formats. They both have their own
+            benefits and they are discussed on <ulink url="http://dovecot.org/doc/configuration.txt">the dovecot website</ulink>.
+            </para>
+            <para>Após escolhido o seu tipo de caixa de e-mail, edite o arquivo <filename>/etc/dovecot/dovecot.conf</filename> e modifique a seguinte linha: <programlisting>
+default_mail_env = maildir:~/Maildir # (para maildir)
+ou
+default_mail_env = mbox:~/mail:INBOX=/var/spool/mail/%u # (para mbox)
+</programlisting></para>
+<note>
+<para>
+You should configure your Mail Transport Agent (MTA) to transfer the
+incoming mail to this type of mailbox if it is different from the one
+you have configured.
+</para>
+</note>
+          <para>
+          Once you have configured dovecot, start the <application>dovecot</application> daemon
+          in order to test your setup:
+
+          <screen><command>sudo /etc/init.d/dovecot start</command></screen>
+
+          If you have enabled imap, or pop3, you can also try to log in
+          with the commands <command>telnet localhost pop3</command> or
+          <command>telnet localhost imap2</command>. If you see
+          something like the following, the installation has been
+          successful:
+<programlisting>
+bhuvan@rainbow:~$ telnet localhost pop3
+Trying 127.0.0.1...
+Connected to localhost.localdomain.
+Escape character is '^]'.
++OK Dovecot ready.
+</programlisting>
+          </para>
+        </sect3>
+        <sect3 id="dovecot-ssl" status="complete">
+          <title>Configuração de SSL do Dovecot</title>
+            <para>Para configurar o <application>dovecot</application> para que utilize SSL, você pode editar o arquivo <filename>/etc/dovecot/dovecot.conf</filename> e adicionar as seguintes linhas: <programlisting>
+ssl_cert_file = /etc/ssl/certs/dovecot.pem
+ssl_key_file = /etc/ssl/private/dovecot.pem
+ssl_disable = no
+disable_plaintext_auth = no
+</programlisting> Os arquivos <emphasis role="strong">cert</emphasis> e <emphasis role="strong">key</emphasis> são criados automaticamente pelo <application>dovecot</application> quando você o instala. Por favor note que essas chaves não são assinadas e darão erros de "assinatura ruim" (bad signature) quando se conectar de um cliente. Para evitar isso, você pode utilizar certificados comerciais, ou ainda melhor, você pode utilizar seus próprios certificados SSL.</para>
+	</sect3>
+	<sect3>
+	  <title>Configuração de Firewall para um Servidor de Email</title>
+          <para>Para acessar seu servidor de e-mail através de outro computador, você deve configurar seu firewall para permitir conexões ao servidor nas portas necessárias. <itemizedlist>
+            <listitem><para>IMAP - 143</para></listitem>
+            <listitem><para>IMAPS - 993</para></listitem>
+            <listitem><para>POP3 - 110</para></listitem>
+            <listitem><para>POP3S - 995</para></listitem>
+            </itemizedlist></para>
+        </sect3>
+      </sect2>
+      <sect2 id="mailman" status="complete">
+        <title>Mailman</title> 
+          <para>O Mailman é um programa open source para administração de discussões por listas de e-mail e newsletter. Muitas das listas de e-mail open source (incluindo todas as <ulink url="http://lists.ubuntu.com">listas de e-mail Ubuntu</ulink>) utilizam o Mailman. Ele é poderoso e fácil de instalar e manter.</para>
+        <sect3 id="mailman-installation" status="complete">
+          <title>Instalação</title>
+            <para>O Mailman provê uma interface web para administradores e usuários. Logo, ele requer apache com suporte mod_perl. O Mailman utiliza um servidor de e-mail externo para enviar e receber mensagens. Ele funciona perfeitamente com os seguintes servidores:</para>
+            <para>
+            <itemizedlist spacing="compact">
+                <listitem>
+                    <para><application>Postfix</application></para>
+                </listitem>
+                <listitem>
+                    <para><application>Exim</application></para>
+                </listitem>
+                <listitem>
+                    <para><application>Sendmail</application></para>
+                </listitem>
+                <listitem>
+                    <para><application>Qmail</application></para>
+                </listitem>
+            </itemizedlist>
+            </para>
+
+            <para>Nós veremos como instalar o mailman, o servidor web apache e o servidor de e-mail Exim. Caso você queira instalar o mailman com um servidor de e-mail diferente, favor consultar a seção de referências.</para>
+          <sect4 id="mailman-apache2">
+            <title>Apache2</title>
+              <para>Para instalar o apache2 você deve consultar <xref linkend="http-installation"/>.</para>
+          </sect4>
+          <sect4 id="mailman-exim4">
+            <title>Exim4</title>
+              <para>
+              To install Exim4 you run the following commands at a terminal prompt:
+<screen>
+<command>sudo apt-get install exim4</command>
+<command>sudo apt-get install exim4-base</command>
+<command>sudo apt-get install exim4-config</command>
+</screen>
+
+Once exim4 is installed, the configuration files are stored in
+the <filename>/etc/exim4</filename> directory. In Ubuntu, by default, the exim4 configuration files are
+split across different files. You can change this behavior by changing
+the following variable in the <filename>/etc/exim4/update-exim4.conf</filename> file:
+
+              <itemizedlist spacing="compact">
+              <listitem>
+                <para><application>dc_use_split_config='true'</application></para>
+              </listitem>
+              </itemizedlist>
+              </para>
+          </sect4>
+          <sect4 id="mailman-mailman">
+            <title>Mailman</title>
+              <para>Para instalar o <application>Mailman</application>, execute o seguinte comando em um prompt de terminal: <screen>
+<command>sudo apt-get install mailman</command> 
+</screen> Ele copia os arquivos de instalação para o diretório <application>/var/lib/mailman</application>, instala os scripts CGI no diretório <application>/usr/lib/cgi-bin/mailman</application>. cria o usuário de linux <emphasis>list</emphasis>, cria o grupo de linux <emphasis>list</emphasis>. O processo mailman será controlado por este usuário.</para>
+          </sect4>
+        </sect3>
+        <sect3 id="mailman-configuration" status="complete">
+          <title>Configuração</title>
+            <para>Esta seção assume que você já tenha instalado com sucesso o <application>mailman</application>, o <application>apache2</application>, e o <application>exim4</application>. Agora você só precisa configurá-los.</para>
+          <sect4 id="mailman-conf-apache2">
+            <title>Apache2</title>
+              <para>Uma vez que o apache2 esteja instalado, você pode adicionar as seguintes linhas no arquivo <filename>/etc/apache2/apache2.conf</filename>: <programlisting>
+Alias /images/mailman/ "/usr/share/images/mailman/"
+Alias /pipermail/ "/var/lib/mailman/archives/public/"
+</programlisting> O Mailman utiliza o apache2 para renderizar seus scripts CGI. Os scripts CGI do mailman são instalados no diretório <application>/usr/lib/cgi-bin/mailman</application>. Logo, a URL do mailman será http://hostname/cgi-bin/mailman/. Você pode fazer alterações no arquivo <filename>/etc/apache2/apache2.conf</filename> caso queira alterar este comportamento.</para>
+          </sect4>
+
+          <sect4 id="mailman-conf-exim4">
+            <title>Exim4</title>
+              <para>Uma vez que o Exim4 esteja instalado, você pode inicializar o servidor Exim utilizando o seguinte comando a partir de um prompt de terminal: <screen>
+<command>sudo apt-get /etc/init.d/exim4 start</command>
+</screen> Com o sentido de fazer o mailman trabalhar com o exim4, você deve configurar o exim4. Como mencionado anteriormente, por padrão, exim4 utiliza múltiplos arquivos de configuração de diferentes tipos. Para maiores detalhes, acesse, por favor, o seguinte website <ulink url="http://www.exim.org">Exim</ulink>. Para executar o mailman, você deveria adicionar um novo arquivo de configuração aos seguintes tipos de configuração: <itemizedlist spacing="compact">
+              <listitem>
+                <para>Principal</para>
+              </listitem>
+              <listitem>
+                <para>Transporte</para>
+              </listitem>
+              <listitem>
+                <para>Roteador</para>
+              </listitem>
+              </itemizedlist> O Exim cria um arquivo mestre de configuração classificando todos estes pequenos arquivos de configuração. Logo, a ordem de tais arquivos de configuração é muito importante.</para>
+          </sect4>
+          <sect4 id="mailman-conf-main">
+            <title>Principal</title>
+              <para>Todos os arquivos que pertençam ao tipo principal são armazenados no diretório <filename>/etc/exim4/conf.d/main/</filename>. Você pode adicionar o seguinte conteúdo a um novo arquivo, chamado <filename>04_exim4-config_mailman</filename>: <programlisting>
+# início
+# Diretório inicial para sua instalação do mailman -- tambem conhecido
+# como diretório prefixo do Mailman directory.
+# No Ubuntu isso deve ser "/var/lib/mailman"
+# É geralmente o mesmo que ~mailman
+MM_HOME=/var/lib/mailman
+#
+# Usuário e grupo para o Mailman, deve equivaler ao seu parâmetro 
+# --with-mail-gid ao script "configura" do Mailman. O valor é normalmente
+# "mailman"
+MM_UID=list
+MM_GID=list
+#
+# Domínios onde estão suas listas - lista separada por vírgulas
+# você pode querer adicioná-los também ao local_domains
+domainlist mm_domains=hostname.com
+#
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=↵
+#
+# Estes valores são derivados daqueles acima and você não deverá 
+# precisar editá-los a não ser que você tenha bagunçado a sua instalação
+# do mailman
+#
+# O caminho do script wrapper de email do Mailman
+MM_WRAP=MM_HOME/mail/mailman
+#
+# O arquivo do arquivo de configuração da lista (usado como um arquivo
+# requerido quando se verifica endereços de listas)
+MM_LISTCHK=MM_HOME/lists/${lc::$local_part}/config.pck
+# fim
+</programlisting></para>
+          </sect4>
+          <sect4 id="mailman-conf-transport">
+            <title>Transporte</title>
+              <para>Todos os arquivos que pertençam ao tipo de transporte são armazenados no diretório <filename>/etc/exim4/conf.d/transport/</filename>. Você pode adicionar o seguinte conteúdo a um novo arquivo chamado <filename> 40_exim4-config_mailman</filename>: <programlisting>
+  mailman_transport:
+   driver = pipe
+   command = MM_WRAP \
+               '${if def:local_part_suffix \
+                     {${sg{$local_part_suffix}{-(\\w+)(\\+.*)?}{\$1}}} \
+                     {post}}' \
+               $local_part
+    current_directory = MM_HOME
+    home_directory = MM_HOME
+    user = MM_UID
+    group = MM_GID
+</programlisting></para>
+          </sect4>
+          <sect4 id="mailman-conf-router">
+            <title>Roteador</title>
+              <para>Todos os arquivos de configuração pertencentes ao tipo de roteamento são armazenados no diretório <filename>/etc/exim4/conf.d/router/</filename>. Você pode adicionar o seguinte contéudo em um novo arquivo chamado <filename>101_exim4-config_mailman</filename>: <programlisting>
+  mailman_router:
+   driver = accept
+   require_files = MM_HOME/lists/$local_part/config.pck
+   local_part_suffix_optional
+   local_part_suffix = -bounces : -bounces+* : \
+                       -confirm+* : -join : -leave : \
+                       -owner : -request : -admin
+   transport = mailman_transport
+</programlisting></para>
+<warning>
+<para>A ordem dos arquivos de configuração principais e de transporte podem estar em qualquer ordem. Mas, a ordem dos arquivos de configuração de roteamento deve a mesma. Este arquivo particular deve aparecer antes do arquivo <application>200_exim4-config_primary</application>. Estes dois arquivos de configuração contêm o mesmo tipo de informação. O primeiro arquivo toma a precedência. Para mais detalhes, consulte, por favor, a seção das referências.</para>
+</warning>
+          </sect4>
+          <sect4 id="mailman-conf-mailman">
+            <title>Mailman</title>
+              <para>
+Once mailman is installed, you can run it using the following command:
+<screen>
+<command>sudo /etc/init.d/mailman start</command>
+</screen>
+
+Once mailman is installed, you should create the default mailing list.
+Run the following command to create the mailing list:
+
+
+<screen>
+<command>sudo /usr/sbin/newlist mailman</command>
+</screen>
+
+<programlisting>
+  Informe o endereço de e-mail da pessoa que administra a lista: bhuvan at ubuntu.com
+  Senha inicial do mailman:
+  Para finalizar a criação de sua lista de e-mail, você deve editar o arquivo <filename>/etc/aliases</filename> (ou
+  equivalente) adicionando as seguintes linhas, e possivelmente executando o
+  programa `newaliases':
+
+  ## lista de e-mail mailman
+  mailman: "|/var/lib/mailman/mail/mailman post mailman"
+  mailman-admin: "|/var/lib/mailman/mail/mailman admin mailman"
+  mailman-bounces: "|/var/lib/mailman/mail/mailman bounces mailman"
+  mailman-confirm: "|/var/lib/mailman/mail/mailman confirm mailman"
+  mailman-join: "|/var/lib/mailman/mail/mailman join mailman"
+  mailman-leave: "|/var/lib/mailman/mail/mailman leave mailman"
+  mailman-owner: "|/var/lib/mailman/mail/mailman owner mailman"
+  mailman-request: "|/var/lib/mailman/mail/mailman request mailman"
+  mailman-subscribe: "|/var/lib/mailman/mail/mailman subscribe mailman"
+  mailman-unsubscribe: "|/var/lib/mailman/mail/mailman unsubscribe mailman"
+
+  Aperte enter para notificar o proprietário mailman...
+
+  # 
+</programlisting>
+
+We have configured exim to recognize all emails from mailman. So, it is
+not mandatory to make any new entries in
+<filename>/etc/aliases</filename>.  If you have made any changes
+to the configuration files, please ensure that you restart those
+services before continuing to next section.
+</para>
+          </sect4>
+        </sect3>
+        <sect3 id="mailman-admin" status="complete">
+          <title>Administração</title>
+<para>
+We assume you have a default installation. The
+mailman cgi scripts are still in the
+<application>/usr/lib/cgi-bin/mailman/</application> directory.  Mailman
+provides a web based administration facility. To access this page, point
+your browser to the following url: 
+
+</para>
+<para>http://hostname/cgi-bin/mailman/admin</para>
+
+<para>
+The default mailing list, <emphasis>mailman</emphasis>,
+will appear in this screen. If you click the mailing list name, it
+will ask for your authentication password.  If you enter the correct
+password, you will be able to change administrative settings of this
+mailing list.
+
+You can create a new mailing list using the command line utility
+(<command>/usr/sbin/newlist</command>).
+Alternatively, you can create a new mailing list using the web interface. 
+</para>
+        </sect3>
+        <sect3 id="mailman-users" status="complete">
+          <title>Usuários</title>
+<para>O Mailman fornece uma interface web aos usuários. Para acessar essa página, aponte seu browser para a seguinte URL:</para>
+
+<para>http://hostname/cgi-bin/mailman/listinfo</para>
+
+<para>A lista de e-mail padrão, <emphasis>mailman</emphasis>, aparecerá nesta tela. Se você clicar no nome da lista, será apresentado o formulário para inscrição. Você pode informar se endereço de e-mail, nome (opcional), e senha para se inscrever. Um convite será enviado a você por e-mail. Você pode seguir as instruções no email para se inscrever.</para>
+        </sect3>
+        <sect3 id="mailman-references" status="complete">
+          <title>Referências</title>
+<para>
+<ulink url="http://www.list.org/mailman-install/index.html">GNU Mailman - Manual de Instalação</ulink>
+</para>
+<para>
+<ulink url="http://www.exim.org/howto/mailman21.html">HOWTO - Usando o Exim 4 e oMailman 2.1 juntos</ulink>
+</para>
+        </sect3>
+      </sect2>
+     </sect1>
+
+	<sect1 id="NTP" status="complete">
+		<title>Sincronização de Horário com NTP</title>
+	<para>
+This page describes methods for keeping your computer's time accurate. This is useful for servers, but is not necessary (or desirable) for desktop machines. 
+</para>
+	<para>NTP é um protocolo TCP/IP para sincronização de horário sobre a rede. Basicamente um cliente solicita o horário atual ao servidor, e o utiliza para ajustar seu próprio relógio.</para>
+	<para>
+Behind this simple description, there is a lot of complexity - there are tiers of NTP servers, with the tier one NTP servers connected to atomic clocks (often via GPS), and tier two and three servers spreading the load of actually handling requests across the internet. Also the client software is a lot more complex than you might think - it has to factor out communication delays, and adjust the time in a way that does not upset all the other processes that run on the server. But luckily all that complexity is hidden from you! 
+</para>
+	<para>
+Ubuntu has two ways of automatically setting your time: ntpdate and ntpd. 
+</para>
+
+<sect2 id="ntpdate" status="complete">
+<title>ntpdate</title>
+	<para>
+Ubuntu comes with ntpdate as standard, and will run it once at boot time to set up your time according to Ubuntu's NTP server. However, a server's clock  is likely to drift considerably between reboots, so it makes sense to correct the time ocassionally. The easiest way to do this is to get cron to run it every day. With your favourite editor, create a file 
+<code>/etc/cron.daily/ntpdate</code>
+ containing: 
+</para>
+<screen>ntpdate ntp.ubuntu.com
+</screen>
+<para/>
+</sect2>
+      <sect2 id="ntpd" status="complete">
+<title>ntpd</title>
+	<para>
+ntpdate is a bit of a blunt instrument - it can only adjust the time once a day, in one big correction. The ntp daemon ntpd is far more subtle. It calculates the drift of your system clock and continuously adjusts it, so there are no large corrections that could lead to inconsistent logs for instance. The cost is a little processing power and memory, but for a modern server this is negligible. 
+</para>
+<para>To set up ntpd: </para>
+<screen>sudo apt-get install ntp-simple
+</screen>
+<para/>
+</sect2>
+<sect2 id="timeservers" status="complete">
+<title>Changing Time Servers</title>
+	<para>
+In both cases above, your system will use Ubuntu's NTP server at 
+<code>ntp.ubuntu.com</code>
+ by default. This is OK, but you might want to use several servers to increase accuracy and resilience, and you may want to use time servers that are geographically closer to you. to do this for ntpdate, change the contents of 
+<code>/etc/cron.daily/ntpdate</code>
+ to: 
+</para>
+<screen>ntpdate ntp.ubuntu.com pool.ntp.org 
+</screen>
+	<para>
+And for ntpd edit 
+<code>/etc/ntp.conf</code>
+ to include additional server lines: 
+</para>
+<screen>ntp.ubuntu.com
+server pool.ntp.org
+</screen>
+	<para>
+You may notice 
+<code>pool.ntp.org</code>
+ in the examples above. This is a really good idea which uses round-robin DNS to return an NTP server from a pool, spreading the load between several different servers. Even better, they have pools for different regions - for instance, if you are in New Zealand, so you could use  
+<code>nz.pool.ntp.org</code>
+ instead of 
+<code>pool.ntp.org</code>
+. Look at 
+<ulink url="http://www.pool.ntp.org/">http://www.pool.ntp.org/</ulink>
+ for more details. 
+</para>
+	<para>
+You can also Google for NTP servers in your region, and add these to your configuration. To test that a server works, just type 
+<code>sudo ntpdate ntp.server.name</code>
+ and see what happens. 
+</para>
+<para/>
+</sect2>
+	<sect2 id="relatedpages" status="complete">
+<title>Páginas Relacionadas</title>
+	<itemizedlist>
+	<listitem>
+	<para>
+<ulink url="http://ntp.isc.org/bin/view/Support/WebHome">Suporte do NTP</ulink>
+</para>
+</listitem>
+	<listitem>
+	<para>
+<ulink url="http://www.ntp.org/ntpfaq/NTP-a-faq.htm">O FAQ e TUTORIAL do NTP</ulink>
+</para>
+</listitem>
+</itemizedlist>
+<para/>
+</sect2>
+    </sect1>
+	</chapter>
+

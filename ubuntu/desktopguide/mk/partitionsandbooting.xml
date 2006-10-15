@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="partitions-booting" status="complete">
+	<title>Партиционирање и бутирање</title>
+		<para>Оваа секција содржи информации за тоа како можете да го промените начинот на кој се однесува вашиот копјутер при првото вкучување, и како можете да пристапите до други оперативни системи и партиции од Ubuntu.</para>
+			<sect1 status="complete">
+				<title>Уредувач на партиции за Гном</title>
+					<para><application>Gparted</application> е графичка алатка за едитирање на диск партициите.</para> 
+					<procedure>
+						<step>
+							<para>Инсталирајте го <application>gparted</application> пакетот (видете <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>	
+							<para>Можете да ја покренете апликацијата со &gparted;.</para>
+						</step>
+					</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Направете Windows партициите да се видливи од Ubuntu</title>
+				<para>Windows партициите треба да бидат автоматски достапни од секој Ubuntu систем. Ако не се, тогаш можете да ги направите достапни со помош на <application>Disks Manager</application>.</para>
+				<procedure>
+					<step>
+						<para>Отвори &disks;.</para>
+					</step>
+					<step>
+						<para>Oдберете го точниот хард диск, и кликнете на <guilabel>Партиции</guilabel>.</para>
+					</step>
+					<step>
+						<para>Одберете ја релевантната партиција, и кликнете <guilabel>Вклучи</guilabel>.</para>
+					</step>
+					<step>
+						<para>За демонтирање на партиција, кликнете <guilabel>Оневозможи</guilabel>.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Направете ги Windows партициите автоматски достапни</title>
+				<para>Windows партициите треба да бидат автоматски достапни во Ubunutu. Ако не се, тоагаш треба да се направи следната процедура која ќе ги направи автоматски достапни:</para>
+				<procedure>
+					<step>
+						<para>Прочитај <xref linkend="listpartitiontables"/></para>
+					</step>
+					<step>
+						<para>Најпрвин направете директориум во кој ќе можат да се овозможат партициите (монтираат):</para>
+							<screen>
+sudo mkdir /media/windows
+							</screen>
+					</step>
+					<step>
+						<para>Потоа, направете резервна копија до конфигурационата датотека за дискот во текст едитор, користејќи притоа административни привилегии:</para>
+						<screen>
+sudo cp /etc/fstab /etc/fstab_backup
+sudo gedit /etc/fstab
+						</screen>
+					</step>
+					<step>
+						<para>Додадете ја следната линија на крајот од датотеката: <programlisting>/dev/hda1 /media/windows ntfs umask=0222 0 0</programlisting></para>
+						<note>
+							<para>Променете го <emphasis role="bold">/dev/hda1</emphasis> со соодветното име на уред за вашата партиција.</para>
+							<para>Ако вашата Windows партиција користи FAT32 датотечен систем, променете го <emphasis role="bold">ntfs</emphasis> со <emphasis role="bold">vfat</emphasis> во горната команда.</para>
+							<para>Ако имате FAT32 датотечен систем, тогаш е безбедно да дозволите пристап за читање и пишување. За да го направите ова, променете ја вредноста на <emphasis role="bold">umask</emphasis> во 0000.</para>
+						</note>
+					</step>
+					<step>
+						<para>Запамтете ја едитираната датотека (<ulink url="sample/fstab_automountntfs">пример</ulink>).</para>
+					</step>
+					<step>
+						<para>Оваа промена ќе има ефект кога ќе го ресетирате компјутерот.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Извршете системска комада автоматски при стартување</title>
+				<para>Некогаш може да биде корисно да извршите обична команда при стартување на компјутерот. За да го направите ова:</para>
+				<procedure>
+					<step>
+						<para>Едитирајте го <application>crontab</application> со административни привилегии (видете <xref linkend="root-and-sudo"/>):</para>
+							<screen>sudo crontab -e</screen>
+					</step>
+					<step>
+						<para>Внесете ја следната командна линија:</para>
+							<screen>@reboot /home/user/command</screen>
+					<note>
+						<para>Променете го <filename>/home/user/command</filename> со целосна адреса до вашата команда.</para>
+					</note>
+					</step>
+					<step>
+						<para>Запамтете ја датотеката и излезете.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Променете го подразбирливот оперативен систем бри стартување</title>
+				<para>За да го промените оперативниот систем кој ќе се стартува подразбирливо при стартување на компјутерот, едитирате ја <application>grub </application></para>
+				<procedure>
+					<step>
+						<para>Направете резервна копија од конфигурациската датотека, и отворете во едитор на текст:</para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+sudo gedit /boot/grub/menu.lst</screen>
+					</step>
+					<step>
+						<para>Пронајдете ја линијата:</para>
+						<programlisting>...
+default 0
+...</programlisting>
+					</step>
+					<step>
+						<para>И променете ја со наредната линија:</para>
+						<programlisting>default X</programlisting>
+						<note><para>Треба да го промените X со број, во зависност од позицијата на која се наоѓа вашиот оперативен систем во конфигурациската датотека. Треба да започнете со броење од 0. На пример, ако сакате подразбираниот оперативен систем да биде првиот во листата, ќе го промените X во 0, ако сакате подразбираниот оперативен систем да биде вториот во листата, ќе го промените X во 1, итн.</para></note> 
+					</step>
+					<step>
+						<para>Запамтете ја едитираната датотека (<ulink url="sample/menu.list_changedefaultosgrub">пример</ulink>)</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Configure startup services</title>
+				<para>Ова побарува административни привилегии (видете <xref linkend="root-and-sudo"/>).</para>
+				<procedure>
+					<step>
+						<para>Извршете <application>Подесувања на сервиси</application>: <menuchoice><guimenu>Систем</guimenu>
+								<guisubmenu>Администрација</guisubmenu>
+								<guimenuitem>Сервиси</guimenuitem></menuchoice>.</para>
+					</step>
+					<step>
+						<para>Внесете ја лозинката.</para>
+					</step>
+					<step>
+						<para>Изберете ги сервисите кои сакате да се извршуваат и кликнете на <guibutton>OK</guibutton> кога ќе завршите.</para>
+					</step>
+					<step>
+						<para>За подобра контрола на сервисите кои ќе се пуштаат при стартување,  инсталирајте го <application>bum</application> од <quote>Universe</quote> репозиториумот (видете <xref linkend="add-applications"/>), и извршете: <menuchoice><guimenu>Систем</guimenu>
+								<guisubmenu>Администрацијат</guisubmenu>
+								<guimenuitem>Boot-up Manager</guimenuitem></menuchoice>.</para>
+					</step>
+				</procedure>
+			</sect1>
+	<sect1 id="other-hardware" status="complete">
+	    <title>Други совети</title>
+	    <sect2 id="listpartitiontables" status="complete">
+                <title>Провери ја искористеноста на дискот и прикажи ја табелата на партиции</title>
+                    <procedure>
+                        <step>
+                            <para>Отвори &disks;.</para>
+                        </step>
+                        <step>
+                            <para>Изберете <guibutton>Хард диск</guibutton>, а потоа табот <guibutton>Партиции</guibutton></para>
+                        </step>
+                        <step>
+                            <para>Секоја партиција ќе биде прикажана во <guilabel>Листата на партиции</guilabel>, со просторот кој го поседува и местото на монтирање.</para>
+                        </step>
+                    </procedure>
+            </sect2>
+            <sect2 status="complete">
+                <title>Прикажи уреди</title>
+                            <para>За да ги прикажете монтираните уреди, во терминал внесете:</para>
+                               <screen>mount</screen>
+			    <para>Приказот ги содржи уредите (како што се хард диск партициите), местото на монтирање (од каде им се пристапува на датотеките), типот на датотечниот систем и опции за монтирање.</para>
+                            <para>Овој пример покажува дека hd2 хард диск партицијата монтирана како '/', е со датотечен систем од типот ext3. Партицијата е монтирана со две опции, едната е дека уредот може да се чита и да се пишува, а другата дека при грешка уредот ќе биде повторно монтиран само за читање.</para>
+                            <screen><computeroutput>/dev/hda2 on / type ext3 (rw,errors=remount-ro)</computeroutput></screen>				
+                            <para>За приказ на PCI уреди:</para>
+                                <screen>lspci</screen>
+                            <para>За приказ на USB уреди:</para>
+                                <screen>lsusb</screen>
+            </sect2>
+ 
+            <sect2 status="complete">
+                <title>Монтирај/демонтирај CD/DVD-ROM-ови мануелно, и прикажи ги сите скриени и поврзани датотеки/директориуми</title>
+                            <para>Под претпоставка дека <filename class="devicefile">/media/cdrom0/</filename> е локацијата на CD/DVD-ROM-от</para>
+                            <para>За монтирање на CD/DVD-ROM-от:</para>
+                            <para>
+                                <screen>
+sudo mount /media/cdrom0/ -o unhide</screen>
+                            </para>
+                            <para>За демонтирање CD/DVD-ROM-от:</para>
+                            <para>
+                                <screen>
+sudo umount /media/cdrom0/</screen>
+                            </para>
+            </sect2>
+	</sect1>
+</chapter>
+

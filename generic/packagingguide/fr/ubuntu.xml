@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="ubuntu-chap" status="complete">
+	<title>Création de paquets Ubuntu</title>
+
+	<sect1 id="ubuntu-upload" status="complete">
+		<title>Téléverser et vérifier</title>
+
+		<para>Une fois que vous aurez créé votre paquet source (soit entièrement soit juste une mise à jour/correction de bogue), vous voudrez distribuer votre paquet pour que les autres profitent de votre dur labeur. La manière la plus efficace de faire ceci pour &ubuntu; est de verser votre contribution au dépôt Universe. Les développeurs de la communauté responsables du dépôt Universe sont connus en tant que Masters of the Universe (<ulink url="https://wiki.ubuntu.com/MOTU">MOTU</ulink>). <ulink url="http://revu.tauware.de">REVU</ulink> est un outil en ligne qui fournit un espace où des personnes peuvent téléverser leurs paquets source pour que d'autres les regardent et pour que les MOTUS les passeront en revue de manière structurée.</para>
+
+		<sect2 id="contribute-as-uploader">
+			<title>Contribuer comme téléverseur</title>
+		
+			<para>En premier lieu, vous aurez besoin de faire ajouter votre <ulink url="https://wiki.ubuntu.com/GPGKey">clé GPG</ulink> au groupe de clés de REVU. Cette étape permet de s'assurer que vous êtes bien l'auteur des paquets que vous téléversez, et de garder trace de vos téléversements.</para>
+	
+			<para>REVU utilise votre compte <ulink url="https://launchpad.net">Launchpad</ulink> pour vérifier votre clé <application>gpg</application>. Assurez-vous donc de disposer d'un compte Launchpad et d'y déposer votre clé <application>gpg</application>. Une fois ceci effectué, vous pouvez joindre l'équipe des <ulink url="https://launchpad.net/people/ubuntu-universe-contributors">Universe Contributors</ulink> et envoyer ensuite un courriel à <ulink url="mailto:admin@tiber.tauware.de">admin@tiber.tauware.de</ulink> en demandant que votre clef <application>gpg</application> soit mise à jour sur REVU. Quand ceci sera fait, vous pourrez téléverser vos paquets. Vous n'avez pas besoin d'un mot de passe pour téléverser des paquets, seulement pour vous connecter sur le site Web et répondre aux commentaires.</para>
+
+			<note><para>Il n'est pas nécessaire de faire signer votre clé par d'autres personnes pour téléverser sur REVU, mais il est souhaitable de le faire tôt ou tard.</para></note>
+			
+			
+			<sect3 id="upload-your-packages">
+				<title>Téléverser vos paquets</title>
+
+				<para>Le téléversement sur REVU utilise <application>dput</application>. La version &ubuntu; de <application>dput</application>. connaît déjà REVU, ainsi vous n'avez aucun fichier de configuration à modifier. Ne téléversez que des paquets signés, contrairement à d'autres dépôts, vous devez toujours inclure l'archive originale, autrement les responsables de révision seront incapables de voir votre paquet source extrait. Pour faire ainsi, utilisez les arguments «-S -sa» avec <application>debuild</application> ou <application>dpkg-buildpackage</application> pour construire uniquement le paquet source et inclure l'archive originale dans le téléversement.</para>
+				
+				<para>Après que le paquet source ait été construit, vous pouvez utiliser <application>dput</application> avec les modifications du fichier de configuration ci-dessus pour le téléverser en spécifiant uniquement le fichier <filename>_source.changes</filename> qui a été créé.</para>
+
+				<screen>dput revu *_source.changes</screen>
+
+				<note><para>Si vous téléversez à nouveau un paquet modifié (après que le paquet ait été revu), il est possible que vous ayez une erreur comme celle-ci :</para>
+					
+				<screen>
+Upload package to host revu
+Already uploaded to tauware.de
+Doing nothing for myapp_source.changes</screen>
+			
+				<para>Pour corriger cela, ajoutez l'option -f à <application>dput</application> pour le forcer à téléverser ou supprimez le fichier <filename>.upload</filename> précédemment créé par <application>dput</application>.</para></note>
+			
+				<para>Le traitement des téléchargements est effectué toutes les cinq minutes. Si votre téléchargement n'apparaît pas, veuillez contacter les administrateurs de REVU par courriel, ou joindre le canal IRC #ubuntu-motu sur le réseau &irc-network;.</para>
+		
+			</sect3>
+		
+			<sect3 id="howto-login">
+				<title>S'identifier sur REVU</title>
+			
+				<para>Après votre premier téléversement, votre compte est automatiquement créé dans la base de données avec un mot de passe aléatoire. Sur le site de <ulink url="http://revu.tauware.de">REVU</ulink>, entrez le courriel que vous avez utilisé dans le fichier de changelog de votre téléchargement comme identifiant et cliquez sur le lien "recover password". Une page va s'afficher avec votre mot de passe encrypté pour votre clé et les instructions pour le décrypter.</para>
+				
+			</sect3>
+
+			<sect3 id="view-and-comment-uploads">
+				<title>Voir et commenter les téléversements</title>
+			
+				<para>Les paquets téléversés sur REVU sont rendus publics. Vous pouvez les inspecter sans vous identifier dans le système. Cependant, vous devez être identifié pour commenter des téléversements. En tant que téléverseur, vous pouvez uniquement commenter vos propres téléversements. Il peut être utile de fournir aux réviseurs des informations sur les changements que vous avez effectué entre deux téléversements de vos paquets.</para>
+
+			</sect3>
+
+			<sect3 id="additional-rules">
+				<title>Règles supplémentaires</title>
+		
+				<itemizedlist>
+
+					<listitem><para>Vous devez avoir vérifié qu'il n'existe pas de failles de sécurité connues dans le paquet et fournir des patches adaptés le cas échéant.</para></listitem>
+					
+					<listitem><para>Le paquet peut être refusé sur la base de failles de sécurité connues.</para></listitem>
+					
+					<listitem><para>Vous devez inclure des fichiers de droit d'auteur (copyright) et de licence, qui doivent autoriser l'inclusion du paquet dans le composant Universe et sa redistribution sur les miroirs d'Ubuntu.</para></listitem>
+					
+					<listitem><para>La paquet doit pouvoir se construire directement avec les composants du dépôt main de la dernière version stable  Il est admissible de requ</para></listitem>
+				</itemizedlist>
+			</sect3>
+
+			<sect3 id="getting-help">
+				<title>Obtenir de l'aide</title>
+				<para>Si vous avez besoin d'aide sur ces étapes, ou si vous avez des questions au sujet de REVU, vous pouvez le faire sur le canal IRC #ubuntu-motu du réseau &irc-network;.</para>
+			</sect3>
+
+		</sect2>
+
+	</sect1>
+
+	<sect1 id="ubuntu-sync" status="complete">
+		<title>Fusions et synchronisations de paquets</title>
+
+
+
+		<important><para><emphasis role="bold">Requis :</emphasis> build-essential, automake, gnupg, lintian, fakeroot, patchutils, debhelper et <xref linkend="gs-pbuilder"/>.</para></important>
+		
+		<para> est bas, les paquets dans  sont mis   Il pourrait  Vous pouvez d ont effectu</para>
+		
+		<para>A chaque démarrage d'un cycle de développement Ubuntu, une décision est prise concernant ces paquets en version Ubuntu. Bien sûr si la version Debian n'a pas changé depuis le dernière publication , il n'y a rien a modifier. Cependant s'il y a une nouvelle version du paquet dans Debian, alors deux situations peuvent se prsync (synchronisation). Si le nouveau paquet Debian pr, alors ces modifications devront aussi merging (fusion).</para>
+		<sect2 id="merge-tutorial">
+			<title>Tutoriel pour la fusion de paquets</title>
+			<para>Le processus de fusion de paquets implique l'inspection des modifications apportées aux paquets sources de Debian et d'Ubuntu, et de déterminer ce qui a été modifié ainsi que les modifications spécifiques à Ubuntu. Prenons un exemple, avec le programme populaire de création de CDs <application>xcdroast</application>.</para>
+			<para>Pour commencer, créez un dossier pour héberger le projet, et entrez-y :</para>
+			<screen>
+mkdir ~/xcdroast
+cd ~/xcdroast</screen>
+			<para>Téléchargez maintenant tous les paquets source concernés dans ce répertoire :</para>
+			<itemizedlist>
+				<listitem><para>L'archive tar source de <application>xcdroast</application> utilisée par toutes les versions :</para>
+					<itemizedlist>
+						<listitem>
+<para><ulink url="http://snapshot.debian.net/archive/2006/01/16/debian/pool/main/x/xcdroast/xcdroast_0.98+0alpha15.orig.tar.gz">xcdroast_0.98+0alpha15.orig.tar.gz</ulink></para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>Les paquets source &ubuntu; Breezy :</para>
+					<itemizedlist>
+						<listitem><para>
+<ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.dsc">xcdroast_0.98+0alpha15-1.1ubuntu1.dsc</ulink></para>
+						</listitem>
+						<listitem><para>
+<ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz">xcdroast_0.98+0alpha15-1.1ubuntu1.diff.gz</ulink></para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>Les fichiers du paquet source de Debian sur lesquels le paquet de Breezy est construit :</para>
+						<itemizedlist>
+							<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.diff.gz">xcdroast_0.98+0alpha15-1.1.diff.gz</ulink></para>
+							</listitem>
+							<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-1.1.dsc">xcdroast_0.98+0alpha15-1.1.dsc</ulink></para>
+							</listitem>
+						</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>Les fichiers des sources du nouveau paquet Debian sur lequel le paquet Dapper sera construit :</para>
+					<itemizedlist>
+						<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-3.dsc">xcdroast_0.98+0alpha15-3.dsc</ulink></para>
+						</listitem>
+						<listitem>
+<para><ulink url="http://doc.ubuntu.com/files/packagingguide/xcdroast_0.98+0alpha15-3.diff.gz">xcdroast_0.98+0alpha15-3.diff.gz</ulink></para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+			</itemizedlist>
+			<note><para>Ces étapes peuvent également être effectuées en recherchant les paquets Debian sur <ulink url="packages.debian.org">packages.debian.org</ulink> et les paquets Ubuntu sur <ulink url="packages.ubuntu.com">packages.ubuntu.com</ulink>.</para></note>
+		<tip><para>Lorsque vous fusionnez des paquets (ou que vous créez des paquets pour Ubuntu), <application>devscripts</application> est un paquet qui peut grandement faciliter votre travail. Si vous ne l'avez pas encore installé, vous pouvez le faire avant de commencer.</para></tip>
+			
+			<para>En examinant le changelog  vous devriez changelogs.ubuntu.com. Il y est dit qu'un fichier .desktop a Malone.</para>
+			
+			<para>Inspectez maintenant les modifications dans les paquets source :</para>
+			<screen>
+debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-1.1ubuntu1.dsc | \
+	ubuntu.debdiff | less ubuntu.debdiff</screen>
+			
+			<para>Les lignes qui commencent par - ont été enlevées du paquet Debian, et celles qui commencent par + ont été ajoutées au paquet &ubuntu;.</para>
+			<para>Voici ce qu'on peut lire :</para>
+			<itemizedlist>
+				<listitem>
+					<para>Dans debian/rules, install est utilisé à la place de cp pour installer l'icône de xcdroast. Il y a également une nouvelle ligne pour installer le fichier .desktop.</para>
+				</listitem>
+				<listitem>
+					<para>Les changements effectuées donnent lieu à une nouvelle entrée dans debian/changelog.</para>
+				</listitem>
+				<listitem>
+					<para>On a ajouté /usr/share/applications dans debian/dirs afin que les lignes d'installation fonctionnent correctement.</para>
+				</listitem>
+				<listitem>
+					<para>le fichier xcdroast.desktop a été ajouté</para>
+				</listitem>
+			</itemizedlist>
+			
+			<para>Maintenant que nous savons comment les sources d'Ubuntu ont été modifiées, il nous faut déterminer ce qui a été modifié dans les sources de Debian.</para>
+			<screen>
+debdiff xcdroast_0.98+0alpha15-1.1.dsc xcdroast_0.98+0alpha15-3.dsc &gt; debian.debdiff
+less debian.debdiff</screen>
+			<para>Il y a beaucoup plus de modifications dans ce debdiff que dans le précédent. Un moyen d'avoir une idée plus claire de ce qui a été modifié est de regarder les fichiers modifiés dans le debdiff :</para>
+			
+			<screen>grep diff debian.debdiff</screen>
+			
+			<para>Cela nous indique que debian/postinst, debian/rules, debian/changelog, debian/doc-base.manual, debian/control et debian/menu ont été modifiés dans la nouvelle version de Debian.</para>
+			<para>Ainsi nous voyons qu'il faut vérifier le fichier debian/rules pour voir si les modifications &ubuntu; ont été appliquées. Nous pouvons également voir que debian/dirs n'a pas été changé depuis la dernière version. Examinons maintenant ces fichiers. Nous pouvons dépaqueter le paquet source en utilisant <application>dpkg-source</application> :</para>
+			
+			<screen>dpkg-source -x xcdroast_0.98+0alpha15-3.dsc</screen>
+			
+			<para>Cela va décompresser le fichier xcdroast_0.98+0alpha15.orig.tar.gz file, créer le répertoire xcdroast-0.98+0alpha15 et y appliquer les modifications trouvées dans xcdroast_0.98+0alpha15-3.diff.gz.</para>
+			<para>Déplaçons-nous maintenant dans le répertoire debian :</para>
+			
+			<screen>cd xcdroast-0.98+0alpha15/debian</screen>
+			
+			<para>On peut voir dans <filename>rules</filename> que les modifications effectuées par &ubuntu; n'ont pas été appliquées à la version Debian. Ceci signifie que :</para>
+			
+			<screen>cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps</screen>
+			
+			<para>... devrait être changé en :</para>
+			
+			<screen>
+#cp debian/xcdroast.xpm `pwd`/debian/$(PACKAGE)/usr/share/pixmaps
+
+#install desktop and icon
+install -D -m 644 $(CURDIR)/debian/xcdroast.desktop \
+	$(CURDIR)/debian/xcdroast/usr/share/applications/xcdroast.desktop
+install -D -m 644 $(CURDIR)/debian/xcdroast.xpm \
+	$(CURDIR)/debian/xcdroast/usr/share/pixmaps/xcdroast.xpm</screen>
+
+			<para>Il faut maintenant ajouter les lignes suivantes dans le fichier <filename>dirs</filename> afin que le fichier <filename>.desktop</filename> soit installé :</para>
+			<screen>usr/share/applications</screen>
+			
+			<para>Maintenant il faut récupérer le fichier <filename>.desktop</filename> en question (enregistré dans <emphasis>debian/xcdroast.desktop</emphasis>). En regardant dans <filename>ubuntu.debdiff</filename> (ou dans le paquet source <phrase>Ubuntu</phrase>), on voit qu'il s'agit de :</para>
+			<screen>
+[Desktop Entry]
+Encoding=UTF-8
+Name=X-CD-Roast
+Comment=Create a CD
+Exec=xcdroast
+Icon=xcdroast.xpm
+Type=Application
+Categories=Application;AudioVideo;</screen>
+			
+			<para>Le dernier changement qui doit être fait est dans <filename>changelog</filename>. Nous ne devons pas uniquement ajouter ce que nous venons de faire ‒ fusion (merge) avec Debian ‒, mais nous devons également ajouter les précédentes entrées du changelog &ubuntu;. Pour faire cela, exécutez <application>dch -i -D dapper</application> et mettez quelque chose du type de :</para>
+			<screen>
+xcdroast (0.98+0alpha15-3<emphasis>ubuntu1</emphasis>) dapper; urgency=low
+  * Resynchronise with Debian.</screen>
+
+			<para>Assurez-vous de changer le numéro de version pour un numéro correct de version  ; ajoutez aussi :</para>
+			<screen>
+xcdroast (0.98+0alpha15-1.1ubuntu1) breezy; urgency=low
+
+  * Fix and install existing .desktop file. (Closes Malone #2698)
+				
+  -- Captain Packager </screen>
+			<para>entre les entrées 0.98+0alpha15-1.1 et 0.98+0alpha15-2.</para>
+			
+			<para>Vous pouvez maintenant construire et tester le nouveau paquet source. Il y a différentes manière de le faire, par exemple :</para>
+			<screen>
+cd ..
+debuild -S
+cd ..
+sudo pbuilder build xcdroast_0.98+0alpha15-3ubuntu1.dsc</screen>
+			
+			<para>Ceci va recréer le paquet source, signer avec votre clé GPG par défaut, et construire le paquet dans un environnement pbuilder afin d'être sur qu'il se construit correctement. Assurez vous de toujours tester vos paquets avant de soumettre vos patches. La dernière étape consiste à faire un debdiff qui pourra être attaché à un rapport de bogue existant ou transmis aux MOTUs sur le canal IRC #ubuntu-motu. Pour cela nous obtenons la différence entre le paquet source Debian et la nouvelle version &ubuntu; :</para>
+			<screen>debdiff xcdroast_0.98+0alpha15-3.dsc xcdroast_0.98+0alpha15-3ubuntu1.dsc &gt; \
+	xcdroast_0.98+0alpha15-3ubuntu1.debdiff</screen>
+		</sect2>
+	</sect1>
+
+	<sect1 id="ubuntu-kubuntu" status="complete">
+		<title>Construire des paquets pour Kubuntu</title>
+		
+		<para>Comme on peut l'imaginer, les principales spécificités de la création de paquets pour Kubuntu sont liées à KDE et Qt.</para>
+		
+		<sect2 id="build-dependencies">
+			<title>Dépendances de construction</title>
+	
+			<para>Les programmes de Kubuntu sont principalement des programmes de KDE. Leur dépendance de construction (Build-Depends) doit donc inclure <filename>kdelibs4-dev</filename>. Puisque KDE insiste sur le caractère d'interaction entre les programmes, certains programmes peuvent également avoir des dépendances de constructions sur d'autres parties de KDE, comme <filename>kdepim-dev</filename>. Assurez-vous de bien lister toutes les dépendances nécessaires pour votre programme.</para>
+	
+		</sect2>
+
+		<sect2 id="desktop-files">
+			<title>Fichiers desktop</title>
+		
+			<para>KDE utilise des chemins spécifiques. La plupart des réglages de KDE sont localisés soit dans <filename>/etc/kde3</filename>, soit dans <filename>/usr/share/apps/</filename>. Il est important de noter que la plupart des fichiers desktop de KDE vont dans <filename>/usr/share/applications/kde/</filename>. Le chemin d'installation des fichiers desktop doit être corrigé si il ne correspond pas à celui-ci (à l'exception des fichiers desktop comme les menus de services).</para>
+			
+			<para>Les fichiers desktop de KDE nécessitent aussi des entrées spécifiques pour être insérés dans le menu K. Un fichier desktop minimal pour un programme KDE pourrait ressembler à :</para>
+				
+			<screen>[Desktop Entry]
+Encoding=UTF-8
+Name=Kfoo
+Name[xx]=Kfoo
+GenericName=Bar description
+Exec=kfoo
+Icon=kfoo
+Terminal=false
+Categories=Qt;KDE;Utility;</screen>
+
+			<para>Notez que le champ Categories doit commencer par Qt;KDE;. Il existe des entrées spécifiques pour le fichier desktop des programmes et modules de KDE qui permettent de déclarer les programmes comme des KCModules ou de les démarrer automatiquement à l'ouverture de session.</para>
+	
+		</sect2>
+		
+		<sect2 id="generating-pot-files">
+			<title>Générer des fichiers .pot</title>
+
+			<para>Le site Web de traduction de Ubuntu, <ulink url="https://launchpad.net/rosetta/">Rosetta</ulink>, prend maintenant aussi en charge KDE. Cela signifie que les paquets KDE doivent produire des fichiers modèles .pot pour les traducteurs. Si vous utilisez <application>cdbs</application> dans edgy, votre paquet devrait être généré automatiquement et il devrait vérifier la présence d'un fichier .pot dans le répertoire po/.</para>
+
+			<para>Vous aurez besoin du <ulink url="../files/kubuntu_01_kdepot.diff">patch de kdepot</ulink> (ou similaire; il est possible que ce patch ne s'applique pas correctement suivant l'ancienneté du répertoire admin).</para>
+
+			<para>Si votre paquet utilise <application>debhelper</application> ou <application>cdbs</application> et inclut son propre fichier <filename>kde.mk</filename>, vous devez ajouter les règles vous-même.</para>
+
+			<para>Pour <application>cdbs</application>, ajoutez ces lignes à debian/rules :</para>
+
+			<screen>
+common-post-build-arch::
+	mkdir -p po
+        XGETTEXT=/usr/bin/kde-xgettext sh admin/cvs.sh extract-messages
+
+clean::
+        rm -rf po</screen>
+			<para>Dans le cas de <application>debhelper</application>, ajoutez ceci à la fin de la règle <emphasis>install</emphasis> :</para>
+			<screen>
+mkdir -p po
+XGETTEXT=/usr/bin/kde-xgettext sh admin/cvs.sh extract-messages</screen>
+			<para>Également pour <application>debhelper</application>, ajoutez ceci à la règle <emphasis>clean</emphasis> :</para>
+			<screen>
+rm -f po/*.pot</screen>
+		</sect2>
+		
+	</sect1>
+
+</chapter>
+

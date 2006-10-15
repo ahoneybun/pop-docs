@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-de SYSTEM "../../../ubuntu/libs/gnome-menus-de.ent">
+%gnome-menus-de;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="partitions-booting" status="complete">
+	<title>Partitionen und Booten</title>
+		<para>This section contains information about how to change the way that your computer behaves when you first turn it on, and how to access other operating systems and partitions from Ubuntu.</para>
+			<sect1 status="complete">
+				<title>Grafischer Paritionseditor</title>
+					<para>Mit <application>Gparted</application> können Sie in einer grafischen Umgebung die Partitionierung Ihrer Festplatte zu ändern.</para> 
+					<procedure>
+						<step>
+							<para>Installieren Sie das Paket <application>gparted</application> (siehe <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>	
+							<para>You can run the application with &gparted;.
+							</para>
+						</step>
+					</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Make Windows partitions available from Ubuntu</title>
+				<para>Windows partitions should be automatically available from any Ubuntu system. If they are not, you can make them available using the <application>Disks Manager</application>.</para>
+				<procedure>
+					<step>
+						<para>Open &disks;.</para>
+					</step>
+					<step>
+						<para>Select the correct hard disk, and click <guilabel>Partitions</guilabel>.</para>
+					</step>
+					<step>
+						<para>Wählen Sie die entsprechende Partition, die Sie einbinden wollen, aus und klicken Sie auf <guilabel>Aktivieren</guilabel>.</para>
+					</step>
+					<step>
+						<para>Um die Partition wieder auszuhängen, klicken Sie auf <guilabel>Deaktivieren</guilabel>.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Make Windows partitions automatically available</title>
+				<para>Windows partitions should be automatically available from Ubuntu. If they are not, the following procedure will make them automatically available:</para>
+				<procedure>
+					<step>
+						<para>Lesen Sie <xref linkend="listpartitiontables"/></para>
+					</step>
+					<step>
+						<para>Zuerst erstellen Sie ein Verzeichnis, über das Sie auf die Partition zugreifen wollen - wo die Partition eingebunden wird:</para>
+							<screen>
+sudo mkdir /media/windows
+							</screen>
+					</step>
+					<step>
+						<para>Next, back up your disk configuration file and open the file in a text editor with administrative privileges:
+						</para>
+						<screen>
+sudo cp /etc/fstab /etc/fstab_backup
+sudo gedit /etc/fstab
+						</screen>
+					</step>
+					<step>
+						<para>Fügen Sie die folgende Zeile am Ende der Datei an: <programlisting>/dev/hda1 /media/windows ntfs umask=0222 0 0</programlisting></para>
+						<note>
+							<para>Ersetzen Sie hierbei <emphasis role="bold">/dev/hda1</emphasis> durch den richtigen Gerätenamen Ihrer Partition.</para>
+							<para>Falls Ihre Windows-Partition das FAT32-Dateisystem verwendet, ersetzen Sie <emphasis role="bold">ntfs</emphasis> durch <emphasis role="bold">vfat</emphasis>.</para>
+							<para>Für FAT32-Dateisystem stellt es keine Risiko dar den vollen Schreib-Lese-Zugriff zu erlauben. Ändern Sie hierfür den Wert von <emphasis>umask</emphasis> auf 0000.</para>
+						</note>
+					</step>
+					<step>
+						<para>Save the edited file (<ulink url="sample/fstab_automountntfs">an example</ulink>).</para>
+					</step>
+					<step>
+						<para>Die Änderungen werden erst nach einem Neustart des Rechners wirksam.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>System-Befehle beim Starten automatisch ausführen</title>
+				<para>Sometimes it can be useful to run a custom command whenever your computer starts up. To do this:</para>
+				<procedure>
+					<step>
+						<para>Bearbeiten Sie die <application>crontab</application> mit Systemverwaltungsrechten (siehe <xref linkend="root-and-sudo"/>):</para>
+							<screen>sudo crontab -e</screen>
+					</step>
+					<step>
+						<para>Fügen Sie die folgende Zeile ein:</para>
+							<screen>@reboot /home/benutzer/befehl</screen>
+					<note>
+						<para>Ersetzen Sie <filename>/home/benutzer/befehl</filename> durch den absoluten Pfad des Befehls.</para>
+					</note>
+					</step>
+					<step>
+						<para>Speichern Sie die Datei und beenden Sie den Editor.</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Change default operating system at boot</title>
+				<para>To change which operating system starts by default when the computer starts up, edit the <application>grub</application> configuration file.</para>
+				<procedure>
+					<step>
+						<para>Make a backup of the configuration file, and open it in a text editor:</para>
+							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
+sudo gedit /boot/grub/menu.lst</screen>
+					</step>
+					<step>
+						<para>Suchen Sie folgende Zeile:</para>
+						<programlisting>...
+default 0
+...</programlisting>
+					</step>
+					<step>
+						<para>Replace with the following line:</para>
+						<programlisting>default X</programlisting>
+						<note><para>You should replace X with a number, according to the order which your operating systems appear in the configuration file. You should start counting from 0. For example, if you wish the default operating system to be the first in the list, replace X with 0, if you wish the default operating system to be the second in the list, replace X with 1, and so on.</para></note> 
+					</step>
+					<step>
+						<para>
+							Save the edited file (<ulink url="sample/menu.list_changedefaultosgrub">an example</ulink>)
+						</para>
+					</step>
+				</procedure>
+		</sect1>
+		<sect1 status="complete">
+			<title>Configure startup services</title>
+				<para>Sie benötigen hierfür Systemverwaltungsrechte (siehe <xref linkend="root-and-sudo"/>).</para>
+				<procedure>
+					<step>
+						<para>Run <application>Services Settings</application>:
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Services</guimenuitem>
+							</menuchoice>.
+						</para>
+					</step>
+					<step>
+						<para>Eventuell werden Sie nach Ihrem Passwort gefragt.</para>
+					</step>
+					<step>
+						<para>Select the services you want running, then click <guibutton>OK</guibutton> when done.</para>
+					</step>
+					<step>
+						<para>For greater control over the boot-up services, install the <application>bum</application> from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>), and run it:
+							<menuchoice>
+								<guimenu>System</guimenu>
+								<guisubmenu>Administration</guisubmenu>
+								<guimenuitem>Boot-up Manager</guimenuitem>
+							</menuchoice>.
+						</para>
+					</step>
+				</procedure>
+			</sect1>
+	<sect1 id="other-hardware" status="complete">
+	    <title>Weitere Tipps</title>
+	    <sect2 id="listpartitiontables" status="complete">
+                <title>Speicherplatzbelegung und Partitionstabellen anzeigen</title>
+                    <procedure>
+                        <step>
+                            <para>Open &disks;.</para>
+                        </step>
+                        <step>
+                            <para>Wählen Sie die entsprechende <guilabel>Festplatte</guilabel> und klicken Sie auf den Reiter <guibutton>Partitionen</guibutton>.</para>
+                        </step>
+                        <step>
+                            <para>Jede Partition ist in der <guilabel>Partitionsliste</guilabel> mit Speicherplatzbelegung und Zugriffspunkt aufgeführt.</para>
+                        </step>
+                    </procedure>
+            </sect2>
+            <sect2 status="complete">
+                <title>Geräte anzeigen</title>
+                            <para>To list mounted devices, in a terminal enter:</para>
+                               <screen>mount</screen>
+			    <para>Die Liste zeigt alle Geräte, wie z.B. Festplattenpartitionen, ihren Zugriffspunkt, über den Sie auf die Dateien zugreifen können, den Typ des verwendeten Dateisystems und die Optionen, mit denen sie eingehängt wurden, an.</para>
+                            <para>Im folgenden Beispiel wurde die Festplatttenpartition hda2 mit dem ext3-Dateisystem als <filename>/</filename> eingehängt. Die Partition wurde mit zwei Optionen eingehängt: Erstere erlaubt Lese- und Schreibzugriff und die andere veranlasst ein Zurückfallen in den reinen Lesezugriff beim Auftreten von Fehlern.</para>
+                            <screen><computeroutput>/dev/hda2 auf / type ext3 (rw,errors=remount-ro)</computeroutput></screen>				
+                            <para>Anzeigen der Geräte an der PCI-Schnittstelle und Steckplätzen:</para>
+                                <screen>lspci</screen>
+                            <para>Anzeigen über USB angeschlossener Geräte:</para>
+                                <screen>lsusb</screen>
+            </sect2>
+ 
+            <sect2 status="complete">
+                <title>Mount/unmount CD/DVD-ROMs manually, and show all
+                        hidden and associated files/folders</title>
+                            <para>Davon ausgehend, dass <filename class="devicefile">/media/cdrom0</filename> der Zugriffspunkt für die CD oder DVD ist.</para>
+                            <para>To mount a CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo mount /media/cdrom0/ -o unhide</screen>
+                            </para>
+                            <para>To unmount a CD/DVD-ROM:</para>
+                            <para>
+                                <screen>
+sudo umount /media/cdrom0/</screen>
+                            </para>
+            </sect2>
+	</sect1>
+</chapter>
+

@@ -1,0 +1,829 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % kde SYSTEM "../../libs/kde.ent">
+%kde;
+<!ENTITY % kde-general SYSTEM "/usr/share/apps/ksgmltools2/customization/obsolete/general.entities">
+%kde-general;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<chapter id="configuring-your-system-chap" status="help">
+    <title id="configuring-your-system">Configurer votre système</title>
+    <para>Ce chapitre vous explique comment configurer votre système.</para>
+    <sect1 id="desktop-tips" status="complete">
+        <title>Astuces pour le bureau</title>
+        <para>Cette section donne des astuces d'utilisation et de personnalisation du bureau. Elles s'appliquent principalement à l'environnement de bureau (appelé <application>KDE</application>) et au gestionnaire de fichiers (appelé <application>Konqueror</application>).</para> 
+        <sect2 id="kde-startup" status="complete">
+            <title>Lancer des programmes automatiquement au démarrage de KDE</title>
+            <procedure>
+                <step>
+                    <para>La manière la plus simple pour lancer des programmes automatiquement au démarrage de KDE est d'utiliser le <emphasis>Gestionnaire de session</emphasis> de KDE. Vous pouvez configurer exactement comme vous le désirez la manière dont KDE démarre a chaque fois que vous ouvrez une session.</para>
+                </step>
+                <step>
+                    <para>Choisisssez <menuchoice><guimenu>Menu K</guimenu>
+                            <guisubmenu>Paramètres du système</guisubmenu>
+                            <guimenuitem>Gestionnaire de session</guimenuitem></menuchoice> depuis le bouton Avancé en haut, et sous la rubrique <emphasis>Paramètres utilisateur avancés</emphasis>. Cliquez sur <guibutton>Gestionnaire de session</guibutton>, puis asurez-vous que l'option <guibutton>Restaurer manuellement la session enregistrée</guibutton> est bien cochée.</para>
+                </step>
+                <step>
+                    <para>Lancez toutes les applications que vous voulez voir s'exécuter <emphasis>à chaque ouverture de session</emphasis>. Lorsque tout est réglé à votre convenance, choisissez <menuchoice><guimenu>Menu K</guimenu>
+                            <guisubmenu>Enregistrer la session</guisubmenu></menuchoice>. À chaque démarrage de KDE vous retrouverez cette configuration.</para>
+                </step>
+                <step>
+                    <para>Une autre méthode pour faire ceci est de copier le fichier xxx.desktop de l'application à démarrer automatiquement depuis <filename>/usr/share/applications</filename> vers le répertoire <filename>~/.kde/Autostart</filename>.</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="login-kde-automatic" status="complete">
+            <title>Se connecter automatiquement sur KDE au démarrage de l'ordinateur</title>
+            <para>Il est possible de connecter un utilisateur automatiquement lorsque l'ordinateur démarre. Ce n'est pas recommandé pour la plupart des ordinateurs, ce n'est pas sécurisé, et cela peut permettre a d'autres utilisateurs d'accéder a vos données.</para>
+            <procedure>
+                <step>
+                    <para>
+                        <menuchoice>
+                            <guimenu>Menu K</guimenu>
+                            <guisubmenu>Paramètres du système</guisubmenu>
+			    <guisubmenu>Avancé</guisubmenu>
+                            <guimenuitem>Gestionnaire de connexion</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+                <step>
+                    <para>Cliquez <guibutton>Mode administrateur...</guibutton> et entrez  votre mot de passe pour obtenir les privilèges administrateur.</para></step>
+                <step>
+                    <para>Sélectionnez l'onglet <guibutton>Commodités</guibutton>. Cochez <guilabel>Activer la connexion automatique et s</guilabel></para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="restartkdewithoutreboot" status="complete">
+            <title>Relancer KDE sans redémarrer l'ordinateur</title>
+            <procedure>
+                <step>
+                    <para>Enregistrez et fermez toutes les applications en cours.</para>
+                </step>
+                <step>
+                    <para>Utiliser le raccourci clavier <keycombo><keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>Ret. Arr.</keycap></keycombo> pour redémarrer KDE.</para>
+                </step>
+                <step>
+                    <para>Si <keycombo><keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>Ret. Arr.</keycap></keycombo> est désactivé, saisir <screen>sudo /etc/init.d/kdm restart</screen></para>
+                    <para>(Voir <xref linkend="disableCtrlAltBackspace"/> pour désactiver <keycombo><keycap>Ctrl</keycap>
+                            <keycap>Alt</keycap>
+                            <keycap>Backspace</keycap></keycombo>.)</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="disableCtrlAltBackspace" status="complete">
+            <title>Empêcher le raccourci clavier Ctrl-Alt-RetourArrière de redémarrer X</title>
+            <procedure>
+                <step>
+                    <para>Effectuez une copie de sauvegarde de votre fichier <filename>/etc/X11/xorg.conf</filename> existant. <screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup</screen></para>
+                </step>
+                <step>
+                    <para>Ouvrez le fichier <filename>/etc/X11/xorg.conf</filename> pour l'éditer. <screen>kdesu kate /etc/X11/xorg.conf</screen></para>
+                </step>
+                <step>
+                    <para>Ajoutez les lignes suivantes à la fin du fichier : <programlisting>
+Section	"ServerFlags"
+	Option	"DontZap"	"yes"
+EndSection
+</programlisting></para>
+                </step>
+                <step>
+                    <para>Enregistrez le fichier édité. (<ulink url="../sample/xorg.conf_disablectrlaltbackspacegnome">un exemple</ulink>)</para>
+                </step>
+                <step>
+                    <para>Le changement s'appliquera lors de votre prochaine session KDE. Si vous souhaitez appliquer le changement immédiatement, redémarrez manuellement KDE. (Voir <xref linkend="restartkdewithoutreboot"/>.)</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="run-application" status="complete">
+            <title>Lancer un programme manuellement</title>
+            <para>Il est parfois utile de lancer un programme manuellement, par exemple, lorsque ce dernier ne possède aucune entrée correspondante dans le menu. Pour ce faire, utilisez la boîte de dialogue <application>Exécuter une commande</application>.</para>
+            <procedure>
+                <step>
+                    <para>Ouvrir la boîte de dialogue <application>Exécuter une commande</application> en appuyant sur : <keycombo><keycap>Alt</keycap>
+                            <keycap>F2</keycap></keycombo></para>
+                </step>
+                <step>
+                    <para>Entrez le nom du programme désiré et appuyez sur <keycap>Entrée</keycap></para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="numlock-on-startup" status="complete">
+            <title>Activer automatiquement <keycap>Verr. Num</keycap>(vérouillage du pavé numérique) lorsque KDE démarre</title>
+            <procedure>
+                <step>
+                    <para>
+                        <menuchoice>
+                            <guimenu>Menu K</guimenu>
+                            <guisubmenu>Paramètres du système</guisubmenu>
+                            <guimenuitem>Clavier</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+                <step>
+                    <para>Sous <guilabel>Verrouillage numérique au démarrage de KDE</guilabel>, cochez <guibutton>Activé</guibutton>. Cliquez <guibutton>Appliquer</guibutton> pour enregistrer vos préférences.</para>
+                </step>
+            </procedure>
+            <para>Le changement s'appliquera lors de votre prochaine session KDE. Si vous souhaitez appliquer ce changement immédiatement, désactivez le verrouillage numérique et redémarrez KDE (Voir <xref linkend="restartkdewithoutreboot"/>).</para>
+        </sect2>
+        <sect2 id="firefox-help-handler" status="complete">
+            <title>Voir les liens help:// dans <application><phrase>Firefox</phrase></application></title>
+            <para>Vous voudriez peut-être avoir la possibilité d'utiliser le protocole <application>help://</application> depuis <application>Firefox</application> (quelle idée saugrenue !).</para>
+            <procedure>
+                <step>
+                    <para>Lancez <application>Firefox</application> en allant dans <menuchoice><guimenu>Menu K</guimenu>
+                            <guisubmenu>Internet</guisubmenu>
+                            <guimenuitem>Firefox</guimenuitem></menuchoice></para>
+                </step>
+                <step>
+                    <para>Saisissez <emphasis>about:config</emphasis> dans la barre d'adresses.</para>
+                </step>
+                <step>
+                    <para>Faites un clic <mousebutton>droit</mousebutton> dans la liste, sélectionnez <menuchoice><guimenu>Nouvelle</guimenu>
+                            <guisubmenu>Valeur booléenne</guisubmenu></menuchoice>. Saisissez <emphasis role="bold">network.protocol-handler.external.help</emphasis> comme <emphasis>nom de l'option</emphasis> et <emphasis role="bold">true</emphasis> comme <emphasis>valeur</emphasis></para>
+                </step>
+                <step>
+                    <para>Faites un clic <mousebutton>droit</mousebutton> dans la liste, sélectionnez <menuchoice><guimenu>Nouvelle</guimenu>
+                            <guisubmenu>Chaîne de caractères</guisubmenu></menuchoice>. Saisissez <emphasis role="bold">network.protocol-handler.app.help</emphasis> comme <emphasis>nom de l'option</emphasis> et <emphasis role="bold">khelpcenter</emphasis> comme <emphasis>valeur</emphasis></para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="menu-editing" status="complete">
+            <title>Modifier le <application>Menu K</application></title>
+            <para>Kubuntu possède l'<application>Éditeur du Menu KDE</application>, pour vous permettre de personnaliser les menus et d'ajouter des entrées pour les programmes qui ne figurent pas dans le menu après leur installation.</para>
+            <para>Pour ajouter une nouvelle entrée aux menus :</para>
+            <procedure>
+                <step>
+                    <para>Ouvrir l'<application>Éditeur du Menu KDE</application> en cliquant à l'aide du bouton droit sur le menu K et en sélectionnant <guimenuitem>Éditeur de Menu</guimenuitem>.</para>
+                </step>
+                <step>
+                  <para>Dans  la partie gauche de l'<application>Éditeur du menu KDE</application>, choisissez le sous-menu dans lequel la nouvelle entrée devrait apparaître.</para>
+                </step>
+                <step>
+                    <para>Choississez <menuchoice><guimenu>Fichier</guimenu>
+                            <guimenuitem>Nouvel élément</guimenuitem></menuchoice>. Dans la fenêtre <guilabel>Nouvel élément</guilabel>, choisissez le <guilabel>Nom</guilabel>. Puis ajoutez la <guilabel>Description</guilabel>, le <guilabel>Commentaire</guilabel>, et la <guilabel>Commande</guilabel>. Sélectionnez l'icône en cliquant sur l'<guilabel>Icône</guilabel>. La <guilabel>Commande</guilabel> sera généralement le nom du paquet, le<guilabel>Nom</guilabel> est ce qui apparaîtra dans le menu, et le <guilabel>Commentaire</guilabel> apparaîtra dans l'info bulle qui s'affiche près de l'entrée du menu. Les <guilabel>Icônes</guilabel> sont choisies depuis le répertoire <filename>/usr/share/pixmaps</filename> par défaut, ou peuvent être choisies depuis n'importe où sur votre système.</para>
+                </step>
+            </procedure>
+            <para>Pour changer l'ordre des entrées de menu, cliquez et glissez l'entrée dans la fenêtre de l'<application>Éditeur du Menu KDE</application>.</para>
+        </sect2>
+        <sect2 id="desktop-applets" status="complete">
+            <title>Applets pour une utilisation avancée du bureau</title>
+            <para><application>Superkaramba</application> est un système pour amener des mini-programmes (appliquettes), tels que les prévision météo, un collecteur de nouvelles, des afficheurs d'informations système ou les contrôle du lecteur de musique sur votre bureau, où ils vont rester dans une relation symbiotique entre le beau et l'utile.</para>
+            <procedure>
+                <step>
+                    <para>Installez le paquet <application>superkaramba</application> depuis le dépôt <emphasis>Universe</emphasis> (voir <xref linkend="extra-repositories"/>).</para>
+                </step>
+                <step>
+                    <para>Choisir : <menuchoice><guimenu>Menu K</guimenu>
+                            <guisubmenu>Utilitaires</guisubmenu>
+                            <guimenuitem>Superkaramba</guimenuitem></menuchoice></para>
+                </step>
+                <step><para>Consulter le <ulink url="http://www.kde-look.org/index.php?xcontentmode=38">site internet kde-look.org pour télécharger des applets.</ulink></para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="fonts" status="complete">
+            <title>Installer des polices de caractères supplémentaires</title>
+            <para>Cette section décrit comment installer d'autres polices de caractères depuis les archives Kubuntu</para>
+            <procedure>
+                <step>
+                    <para>Pour les <emphasis role="bold">polices de caractères internationales</emphasis>, installez les paquets suivants depuis le dépôt <emphasis>Universe</emphasis> (voir <xref linkend="add-applications"/>) :</para>
+                    <para>
+                        <literallayout>
+xfonts-intl-arabic
+xfonts-intl-asian
+xfonts-intl-chinese
+xfonts-intl-chinese-big
+xfonts-intl-european
+xfonts-intl-japanese 
+xfonts-intl-japanese-big
+xfonts-intl-phonetic
+                        </literallayout>
+                    </para>
+                </step>
+                <step>
+                    <para>Pour les <emphasis role="bold">polices de caractères Microsoft TrueType</emphasis>, installez le paquet <application>msttcorefonts</application> depuis le dépôt <emphasis>Multiverse</emphasis> (voir <xref linkend="add-applications"/>).</para>
+                </step>
+                <step>
+                    <para>Pour les <emphasis role="bold">polices de caractères Ghostscript</emphasis>, installez le paquet <application>gsfonts-x11</application> (voir <xref linkend="add-applications"/>).</para>
+                    </step>						<step>
+                    <para>Après l'installation de n'importe qu'elle nouvelle police de caractères, régénérez le fichier d'information des polices de caractères en saisissant la commande suivante dans un terminal :</para>
+                    <screen>sudo fc-cache -f -v</screen>
+                </step>
+            </procedure>
+            <para>Si vous préférez télécharger les polices de caractères à la main, vous pouvez les installer facilement en lancant <application>Konqueror</application> et en tapant <application>fonts:///</application> dans la barre d'adresse. Vous pouvez ensuite installer la police, au niveau du système ou pour un usage personnel en glissant-déposant vers les dossiers respectifs.</para>
+        </sect2>
+    </sect1>
+    <sect1 id="file-managing" status="complete">
+        <title>Fichiers</title>
+        <sect2 id="konqueror-hidden-file" status="complete">
+            <title>Afficher les fichiers et dossiers cachés dans <application><phrase>Konqueror</phrase></application></title>
+            <procedure>
+                <step>
+                    <para>Dans <application>Konqueror</application>, utilisez <menuchoice><guimenu>Affichage</guimenu>
+                            <guimenuitem>Afficher les fichiers cachés</guimenuitem></menuchoice> pour afficher/masquer les fichiers et dossier cachés.</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="default-open-with" status="complete">
+            <title>Programme « Ouvrir avec » pour changer le type de fichier par défaut</title>
+            <procedure>
+                <step>
+                    <para>Dans <application>Konqueror</application>, faites un clic <mousebutton>droit</mousebutton> sur le fichier et choisissez <menuchoice><guimenu>Ouvrir avec</guimenu>
+                            <guimenuitem>Autre...</guimenuitem></menuchoice> dans le menu qui apparaît. Une liste d'applications doit s'afficher.</para>
+                </step>
+                <step>
+                    <para>Choississez l'application par défaut que vous désirez assigner à ce type de fichier. Si l'application n'est pas présente dans la liste, utilisez le bouton <guibutton>Ajouter</guibutton> pour ajouter une application à la liste.</para>
+                </step>
+                <step>
+                    <para>Cochez <guilabel>Mémoriser l'associaton entre l'application et ce type de fichier</guilabel>. Cliquez sur <guibutton>Ok</guibutton> pour appliquer les changements.</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="krename" status="complete">
+            <title>Renommer tous les fichiers d'un repertoire en même temps</title>
+            <para>À l'aide du programme <application>Krename</application>, il est possible de renommer de multiples fichiers selon un schéma d'appellation à définir.</para>
+            <procedure>
+                <step>
+                    <para>Installez le paquet <application>Krename</application> depuis le dépôt <emphasis>Universe</emphasis> (voir <xref linkend="extra-repositories"/>).</para>
+                </step>
+                <step>
+                    <para>Lancez <application>Krename</application> en choisissant <menuchoice><guimenu>Menu K</guimenu>
+                            <guisubmenu>Utilitaires</guisubmenu>
+                            <guimenuitem>KRename</guimenuitem></menuchoice></para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="rar-files" status="complete">
+            <title>Ouvrir les fichiers <application>RAR</application></title>
+            <procedure>
+                <step>
+                    <para>Pour ouvrir les fichiers <application>rar</application>, installez le paquet <application>unrar</application> depuis le dépôt <emphasis>Multiverse</emphasis> (voir <xref linkend="extra-repositories"/>).</para>
+                </step>
+                <step>
+                    <para>Pour ouvrir un fichier rar, double-cliquez dessus.</para>
+                </step>
+            </procedure>
+        </sect2>
+    </sect1>
+    <sect1 id="partitions-booting" status="writing">
+        <title>Partitions et démarrage</title>
+        <sect2 id="partition-editor" status="complete">
+            <title>Éditeur graphique de partitions</title>
+            <procedure>
+                <step>
+                    <para>Installez le paquet <application>qtparted</application> (voir <xref linkend="extra-repositories"/>).</para>
+                </step>
+                <step>
+                    <para>Vous pouvez lancer l'application avec : <menuchoice><guimenu>Menu K</guimenu>
+                            <guisubmenu>Système</guisubmenu>
+                            <guimenuitem>QtParted</guimenuitem></menuchoice></para>
+                </step>
+            </procedure>
+        </sect2>
+            <sect2 id="listpartitiontables" status="complete">
+                <title>Vérifier l'utilisation de l'espace disque et voir la table des partitions</title>
+                <procedure>
+                    <step>
+                        <para>Lancez <menuchoice><guimenu>Menu K</guimenu>
+                            <guimenuitem>Paramètres du système</guimenuitem></menuchoice>
+				<guisubmenu>Avancé</guisubmenu>
+                            <guimenuitem>Disques et systèmes de fichiers</guimenuitem></para>
+                    </step>
+                    <step>
+                        <para>Chaque partition, ainsi que les détails la concernant, sera listée dans <guilabel>Disques et systèmes de fichiers disponibles</guilabel>.</para>
+                    </step>
+                </procedure>
+            </sect2>
+            <sect2 id="listmounteddevices" status="complete">
+                <title>Lister les périphériques montés dans un terminal</title>
+                <para>Pour lister les périphériques montés dans un terminal , lancez la commande suivante :</para>
+                <screen>mount</screen>
+                <para>La liste affiche le périphérique (une partition du disque dur par exemple), le point de montage (là où les fichiers sont accessibles), le système de fichiers et les options de montage.</para>
+                <para>Cet exemple montre la partition hda2 montée dans « / » , utilisant le système de fichiers ext3. La partition est montée avec deux options, la première autorise la lecture et l'écriture sur la partition, la seconde indique qu'en cas d'erreurs, la partition sera remontée en lecture seule.</para>
+                <screen><computeroutput>/dev/hda2 on / type ext3 (rw,errors=remount-ro)</computeroutput></screen>				
+        </sect2>
+        <sect2 id="mount-unmount-windows-partitions" status="complete">
+            <title>Monter et démonter des partitions Windows</title>
+            <procedure>
+                <step>
+                    <para>Lire <xref linkend="listpartitiontables"/></para>
+                </step>
+                <step>
+                    <para>Tout d'abord, créez un répertoire où la partition pourra être montée :</para>
+                    <screen>sudo mkdir /mnt/windows</screen>
+                </step>
+                <step>
+                    <para>Ensuite, lancez la commande suivante pour monter une partition NTFS Windows et autoriser l'accès en lecture seule :</para>
+                    <screen>sudo mount /dev/hdaX /mnt/windows/ -t ntfs -o ro,umask=0222</screen>
+                    <para>Si votre partition Windows utilise le système de fichiers FAT32, l'accès en lecture et écriture pour la partition peut être autorisé en toute sécurité. Lancez la commande <screen>sudo mount /dev/hdaX /mnt/windows/ -t vfat -o umask=0000</screen> au lieu de celle ci-dessus.</para>
+                    <note>
+                        <para>Remplacez <emphasis role="bold">/dev/hdaX</emphasis> par le nom de périphérique de votre partition.</para>
+                    </note>
+                </step>
+                <step>
+                    <para>Pour démonter la partition, lancez la commande suivante :</para>
+		<screen>sudo umount /mnt/windows/</screen>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="mount-unmount-at-bootup" status="writing">
+            <title>Monter les partitions Windows au démarrage</title>
+            <procedure>
+                <step>
+                    <para>Lire <xref linkend="listpartitiontables"/></para>
+                </step>
+                <step>
+                    <para>Tout d'abord, créez un répertoire où la partition pourra être montée :</para>
+		<screen>sudo mkdir /mnt/windows</screen>
+                </step>
+                <step>
+                    <para>Ensuite, faites une copie de sauvegarde du fichier de configuration pour les montages de périphériques et ouvrez le fichier dans un éditeur de texte avec les privilèges administratifs.</para>
+		<screen>sudo cp /etc/fstab /etc/fstab_copie
+kdesu kate /etc/fstab</screen>
+                </step>
+                <step>
+                  <para>Si votre partition WIndows utilise le système de fichiers NTFS, ajoutez la ligne suivante à la fin du fichier <programlisting>/dev/hdaX /mnt/windows ntfs ro,umask=0222 0 0</programlisting></para>
+                    <para>Si votre partition Windows utilise le système de fichiers FAT32, l'accès en lecture-écriture à la partition peut être autorisé sans ridsques. Ajoutez la ligne suivante à la fin du fichier <programlisting>/dev/hdaX /mnt/windows vfat umask=0000 0 0</programlisting> au lieu de celle ci-dessus.</para>
+                        <note>
+                            <para>Remplacez <emphasis role="bold">/dev/hdaX</emphasis> par le nom de périphérique de votre partition.</para>
+                        </note>
+                </step>
+                <step>
+                    <para>Enregistrez le fichier édité (<ulink url="../sample/fstab_automountntfs">un exemple</ulink>).</para>
+                </step>
+                <step>
+                    <para>Lire <xref linkend="remountfstabwithoutreboot"/>.</para>
+                </step>
+            </procedure>
+        </sect2>
+            <sect2 id="remountfstabwithoutreboot" status="complete">
+                <title>Remonter /etc/fstab sans redémarrer</title>
+                <procedure>
+                    <step>
+                        <para>
+                            <screen>sudo mount -a</screen>
+                        </para>
+                    </step>
+                </procedure>
+            </sect2>
+		<sect2 id="run-on-bootup" status="complete">
+			<title>Lancer une commande système automatiquement au démarrage</title>
+				<para>Parfois, il peut être utile d'ajouter une commande personnalisée au processus de démarrage, de sorte que votre ordinateur l'exécute à chaque fois. Pour ce faire :</para>
+				<procedure>
+					<step>
+						<para>Éditez le fichier <application>crontab</application> avec les droits d'administrateur (voir <xref linkend="root-and-sudo"/>) :</para>
+							<screen>sudo crontab -e</screen>
+					</step>
+					<step>
+						<para>Insérez la ligne suivante :</para>
+							<screen>@reboot /home/user/command</screen>
+					<note>
+						<para>Remplacez <filename>/home/user/command</filename> par le chemin complet vers votre commande.</para>
+					</note>
+					</step>
+					<step>
+						<para>Sauvegardez le fichier et quittez.</para>
+					</step>
+				</procedure>
+		</sect2>
+        <sect2 id="change-default-os" status="complete">
+		<title>Changer le système d'exploitation par défaut au démarrage</title>
+            <procedure>
+                <step>
+                    <para>Faites une sauvegarde de votre fichier de configuration et ouvrez-le dans un éditeur de texte :</para>
+                    <screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_copie
+kdesu kate /boot/grub/menu.lst</screen>
+                </step>
+                <step>
+                    <para>Trouvez cette ligne :</para>
+                    <programlisting>
+...
+default 0
+...
+                    </programlisting>
+                </step>
+                <step>
+                    <para>Remplacez-la par la ligne suivante :</para>
+                    <programlisting>default Xème_entrée</programlisting>
+                </step>
+                <step>
+                    <para>Enregistrez le fichier édité (<ulink url="../sample/menu.list_changedefaultosgrub">un exemple</ulink>).</para>
+	    </step>
+            </procedure>
+        </sect2>
+        <sect2 id="boot-menu-visible" status="complete">
+            <title>Rendre le menu de démarrage visible</title>
+            <para>Par défaut, le menu de démarrage est caché et vous devrez tapez <keycap>Esc</keycap> pour le voir au démarrage. En suivant les étapes suivantes, il sera visible par défaut.</para>
+            <procedure>
+                <step>
+                    <para>Faites une sauvegarde de votre fichier de configuration et ouvrez-le dans un éditeur de texte :</para>
+                    <screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_copie
+kdesu kate /boot/grub/menu.lst</screen>
+                </step>
+                <step>
+                    <para>Trouvez cette ligne <screen># hiddenmenu</screen> et décommentez-là en enlevant le <emphasis>#</emphasis> au début de la ligne afin qu'elle ressemble à : <screen>hiddenmenu</screen>. Enregistrez le fichier édité (<ulink url="../sample/menu.list_unhidemenu">un exemple</ulink>)</para>
+            </step>
+        </procedure>
+    </sect2>
+        <sect2 id="change-timeout" status="complete">
+            <title>Changer le temps limite du menu de démarrage</title>
+            <procedure>
+                <step>
+                    <para>
+                        <screen>
+sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_copie
+kdesu kate /boot/grub/menu.lst</screen>
+                    </para>
+                </step>
+                <step>
+                    <para>Trouvez cette ligne</para>
+                    <programlisting>
+...
+timeout 3
+...
+                    </programlisting>
+                </step>
+                <step>
+                    <para>Remplacez-la par la ligne suivante</para>
+                    <programlisting>timeout X_secondes</programlisting>
+                </step>
+                <step>
+                    <para>Enregistrez le fichier édité (<ulink url="../sample/menu.list_increasedecreasetimeoutgrub">par exemple</ulink>)</para>
+                </step>
+            </procedure>
+        </sect2>
+    </sect1>
+    <sect1 id="hardware" status="help">
+        <title>Matériel</title>
+        <sect2 id="digital-cameras" status="complete">
+            <title>Appareils photo numériques</title>
+            <para>La plupart des appareils photo numériques USB seront détectés automatiquement par Kubuntu. Connectez simplement l'appareil  USB et allumez-le, Kubuntu vous demandera si vous voulez importer les photos depuis votre appareil. Cliquez sur <guibutton>Importer</guibutton>, Kubuntu vous montrera ensuite une prévisualisation de vos photos. Choisissez un emplacement où enregistrer vos photos, cliquez sur <guibutton>Importer</guibutton>. Kubuntu enregistrera ensuite vos photos sur votre disque dur.</para>
+            <para>Si la fenêtre d'importation ne s'affiche pas automatiquement avec votre appareil photo numérique, il pourrait être utile d'installer <application>digiKam</application> depuis le dépôt <emphasis>Universe</emphasis> (voir <xref linkend="extra-repositories"/>). près son installation, lancez <application>digiKam</application> en choisissant <menuchoice><guimenu>Menu K</guimenu>
+                            <guimenuitem>Graphisme</guimenuitem>
+                            <guimenuitem>digiKam (Gestionnaire de photos)</guimenuitem></menuchoice> depuis le tableau de bord.</para> 
+        </sect2>
+        <sect2 id="graphics-cards" status="complete">
+            <title>Cartes graphiques 3D</title>
+            <sect3 id="installnvidiadriver" status="complete">
+                <title>Pilote 3D pour les cartes graphiques Nvidia</title>
+                <procedure>
+                    <step>
+                        <para>Installez le paquet <application>nvidia-glx</application> depuis le dépôt <emphasis>Restricted</emphasis> (voir <xref linkend="add-applications"/>).</para> 
+                    </step>
+                    <step>
+                        <para>
+                            <screen>
+sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_copie
+sudo nvidia-glx-config enable </screen>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Vous pouvez adapter les réglages du nouveau pilote en lançant l'application <application>nvidia-settings</application>. Si vous le désirez, ajoutez une entrée de menu pour ce programme (voir <xref linkend="menu-editing"/>).</para>
+                    </step>
+                    <step>
+                        <para>Lisez <xref linkend="restartkdewithoutreboot"/></para>
+                    </step>
+                </procedure>
+            </sect3>
+            <sect3 status="complete">
+                <!-- Mostly copied from UDG, need to keep updated with it. If someone can go over this section, it might be better -->
+                <title>Désactiver le logo Nvidia au démarrage</title>
+                <procedure>
+                    <step>
+                        <para>Lire <xref linkend="installnvidiadriver"/></para>
+                    </step>
+                    <step>
+                        <para>
+                            <screen>
+sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_copie 
+kdesu kate /etc/X11/xorg.conf</screen>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Trouvez cette section</para>
+                        <para>
+                            <programlisting>
+...
+Section "Device"
+Identifier	"NVIDIA Corporation NV11 [GeForce2 MX/MX 400]"
+Driver		"nvidia"
+BusID		"PCI:1:0:0"</programlisting>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Ajoutez la ligne suivante à sa suite</para>
+                        <para>
+                            <programlisting>
+Option "NoLogo"</programlisting>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Enregistrez le fichier modifié (<ulink url="../sample/xorg.conf_disablenvidialogo">un exemple</ulink>)</para>
+                    </step>
+                    <step>
+                        <para>Lisez <xref linkend="restartkdewithoutreboot"/></para>
+                    </step>
+                </procedure>
+            </sect3>
+            <!-- unconfirmed ATI drivers, someone who owns an ATI card please confirm that this works -->
+            <sect3 id="installatidriver" status="complete">
+                <title>Pilote 3D pour les cartes graphiques ATI</title>
+                <procedure>
+                    <step>
+                        <para>Installez le paquet <application>xorg-driver-fglrx</application> depuis le dépôt <emphasis>Restricted</emphasis>  (voir <xref linkend="add-applications"/>).</para> 
+                    </step>
+                    <step>
+                        <para><screen>
+echo fglrx | sudo tee -a /etc/modules
+sudo depmod -a ; sudo modprobe fglrx
+sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_copie 
+sudo sed -i -e 's/"ati"/"fglrx"/' /etc/X11/xorg.conf</screen></para>
+                    </step>
+                    <step>
+                        <para>Si vous utilisez une carte mère à base de NForce-2, vous devrez également faire :</para>
+                        <para><screen>kdesu kate /etc/X11/xorg.conf</screen></para>
+                        <para>Modifiez la <quote>Section "Device"</quote> en y ajoutant la ligne suivante :</para>
+                        <para><screen>Option "UseInternalAGPGART" "no"</screen></para>
+                    </step>
+                    <step>
+                        <para>Redémarrez votre machine pour que les modifications prennent effet.</para>
+                    </step>
+                </procedure>
+            </sect3>
+        </sect2>
+        <sect2 id="wireless-cards" status="complete">
+            <title>Cartes réseaux sans-fil</title>
+            <para>Un bon nombre de cartes réseaux sans fil sont automatiquement détectées par Kubuntu durant l'installation. Une liste complète des cartes qui fonctionnent avec Kubuntu peut être trouvée sur le <ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsWirelessNetworkCards">Wiki Ubuntu</ulink> (en anglais). Veuillez ajouter votre carte si elle fonctionne avec Kubuntu.</para> 
+            <para>Certaines cartes ne fonctionnent pas directement avec Kubuntu. Si c'est le cas, veuillez suivre le <ulink url="https://wiki.ubuntu.com/WirelessTroubleshootingGuide">Guide de résolutions de problèmes liés au sans-fil</ulink> (en anglais) sur le Wiki Ubuntu, qui est une excellente ressource pour résoudre les problèmes liés aux cartes sans fil.
+Vous pouvez aussi consulter <ulink url="http://wiki.ubuntu-fr.org/materiel/wifi">ces pages du Wiki francophone</ulink></para>
+            <para>Toute l'information concernant les réseaux sans fils sur Kubuntu est rassemblée sur la <ulink url="https://wiki.ubuntu.com/WifiDocs">Centrale du Réseau sans fil</ulink> sur le Wiki Ubuntu.</para>
+            <sect3 status="complete">
+                <title>Afficher la liste des périphériques sans fil</title>
+                <procedure>
+                    <step>
+                        <para>Pour afficher la liste des périphériques PCI :</para>
+                        <screen>lspci -v</screen>
+                    </step>
+                    <step>
+                        <para>Pour afficher la liste des périphériques USB :</para>
+                        <screen>lsusb -v</screen>
+                    </step>
+                </procedure>
+            </sect3>
+        </sect2> 
+        <sect2 id="config-keyboard" status="complete">
+            <title>Configurer le clavier</title>
+        <sect3 id="keyboard-shortcuts" status="complete">
+            <title>Modifier les raccourcis clavier</title>
+            <para>Vous pourriez vouloir modifier les raccourcis clavier par défaut dans Kubuntu. Pour ce faire, choisissez <menuchoice><guimenu>Menu K</guimenu>
+                            <guimenuitem>Paramètres du système</guimenuitem>
+                            <guimenuitem>Région &amp; Langage</guimenuitem></menuchoice> depuis le tableau de bord. Sélectionnez <guibutton>raccourcis clavier</guibutton> pour modifier vos raccourcis clavier.</para>
+        </sect3>
+        <sect3 id="multiple-keyboard-layouts" status="complete">
+          <title>Dispositions de clavier</title>
+          <para>Vous voudriez peut-être avoir accès à plus d'une disposition clavier. Ceci est utile si vous écrivez dans plusieurs langues</para>
+          <para>Pour ajouter de nouvelles dispositions de clavier</para>
+          <procedure>
+            <step>
+               <para>Choississez: <menuchoice><guimenu>Menu-K</guimenu>
+                    <guisubmenu>Paramètres Système</guisubmenu>
+                    <guisubmenu>&amp; Langue</guisubmenu>
+                    <guimenuitem>Disposition du clavier</guimenuitem></menuchoice></para>
+            </step>
+            <step>
+              <para>Dans l'onglet <guilabel>Disposition</guilabel>, cochez <guilabel>Activer les dispositions de clavier</guilabel>.</para>
+            </step>
+            <step>
+              <para>Choisissez le pays dans lequel le clavier que vous voulez est utilisé et cliquez  sur <guibutton>Ajouter</guibutton>. Le pays devrait apparaître dans la liste des <guilabel>Dispositions actives</guilabel>.</para>
+            </step>
+            <step>
+              <para>Cliquez le pays dans la liste des <guilabel>Dispositions actives</guilabel> et choisissez la <guilabel>Variante de la disposition</guilabel> pour le pays sélectionné. Ceci est important pour les pays dans lesquels plusieurs langues sont utilisées    .</para>
+            </step>
+            <step>
+              <para>Cliquez <guibutton>Appliquer</guibutton> pour enregistrer vos préférences.</para>
+            </step>
+            <step>
+              <para>Un <emphasis>icône de drapeau</emphasis> devrait maintenant apparaître dans la barre système montrant la disposition clavier actuellement utilisée. Cliquez l'<emphasis>icône de drapeau</emphasis> pour changer vers l'autre disposition de clavier.</para>
+            </step>
+          </procedure>
+        </sect3>
+        <sect3 id="skim" status="complete">
+            <title>Insérer des caractères non-latins</title>
+            <para><application>Skim</application> est un système graphique KDE pour insérer les caractères non-latins. Pour utiliser <application>Skim</application> pour l'insertion dans votre langue native :</para>
+            <procedure>
+                <step>
+                    <para>Assurez-vous que votre paquet <application>language-support</application> est installé. Si vous avez sélectionné votre langue native durant l'installation, ce paquet a déjà été installé.</para>
+                </step>
+                <step>
+                    <para>Maintenez enfoncé <keycombo><keycap>Ctrl</keycap>
+                            <keycap>Espace</keycap></keycombo> pour l'activer et entrer des caractères.</para>
+                </step>
+                <step>
+                    <para>Configurez <application>Skim</application> en cliquant à l'aide du bouton <mousebutton>droite</mousebutton> de la souris sur l'icône de la boîte à miniatures, et choisissez <menuchoice><guimenu>Configurer</guimenu></menuchoice></para>
+                </step>
+            </procedure>
+        </sect3>
+    </sect2>
+
+        <sect2 id="modems" status="complete">
+            <title>Modems</title>
+            <sect3 id="winmodems" status="complete">		
+                <title>Winmodems</title>
+                <para>La majorité des winmodems ne sont pas gérés par Kubuntu par défaut, mais il est parfois possible de trouver des pilotes qui permettent d'utiliser de tels modems. Vous devez d'abord identifier quelle est la puce utilisée par votre winmodem :</para>
+                <para>
+                    <screen>
+wget -c <ulink url="&scanmodem-url;">&scanmodem-url;</ulink> 
+gunzip -c &scanmodem-gz; &gt; scanModem 
+chmod +x scanModem
+sudo ./scanModem 
+kate Modem/ModemData.txt</screen>
+                </para>
+                <para>Vérifiez la sortie dans Kate, elle devrait afficher le type de la puce de votre modem. Une fois que vous avez pris connaissance du type de votre puce, rendez-vous sur <ulink url="https://wiki.ubuntu.com/SettingUpModems">SettingUpModems</ulink> (Configurer les modems, en anglais) et suivez les instructions pour votre modem.
+Vous pouvez également trouver des informations sur <ulink url="http://doc.ubuntu-fr.org/materiel#modem">cette page du Wiki francophone</ulink>.</para>
+            </sect3>
+            <sect3 id="adsl" status="complete">
+                <title>Modems ADSL</title>
+                <para>Tous les modems PPOE et ADSL qui utilisent une connexion ethernet (et certains de ceux qui se connectent par USB) sont gétés par Kubuntu. Pour les modems ADSL de type routeur, connectez-le simplement, configurez le modem en suivant les instructions de votre Fournisseur de Service Internet (ISP) et configurez le réseau dans Kubuntu. Pour plus d'information sur les modems PPOE, voyez <ulink url="https://wiki.ubuntu.com/ADSLPPPoE">ADSLPPoE</ulink> sur le Wiki Ubuntu.</para>
+            </sect3>
+        </sect2>
+        <sect2 id="printers" status="help">
+                <sect2info>
+                    <authorblurb> 
+                        <para>Cette section a aussi besoin d'amour. Je ne sais rien au sujet des imprimantes. (NdT : Nous déclinons toute responsabilité pour cette traduction.)</para> 
+                    </authorblurb>
+                </sect2info>
+            <title>Imprimantes</title>
+            <para>Certaines imprimantes seront automatiquement détectées par Kubuntu ; pour celles qui ne le sont pas, choisissez <menuchoice><guimenu>Menu K</guimenu>
+                    <guisubmenu>Paramètres du système</guisubmenu>
+                    <guimenuitem>Imprimantes</guimenuitem></menuchoice> puis choississez <menuchoice><guimenu>Ajouter</guimenu>
+                    <guimenuitem>Ajouter une imprimante/une classe</guimenuitem></menuchoice> ce qui lancera l'assistant d'ajout d'imprimante.</para>
+            <para>Certaines imprimantes nécessitent un réglage supplémentaire. Faites une recherche dans la base de données de <ulink url="http://www.linuxprinting.org/">LinuxPrinting.org</ulink> ou vérifiez le <ulink url="https://wiki.ubuntu.com/HardwareSupportComponentsPrinters">Ubuntu Wiki's Printer page</ulink> pour d'éventuels compléments d'information pour votre imprimante.
+Vous pouvez également consulter <ulink url="http://doc.ubuntu-fr.org/materiel#imprimante_et_scanner"> cette page du Wiki francophone</ulink>.</para>
+        </sect2>
+        <sect2 id="cdroms" status="complete">
+            <title>Cd-roms</title>
+            <sect3 status="complete">
+                <title>Accélérer l'accès au CD/DVD-Rom (activer l'accès direct à la mémoire - DMA)</title>
+                <procedure>
+                    <step>
+                        <para>Nous admettons que <filename class="devicefile">/dev/cdrom</filename> est l'emplacement du CD/DVD-Rom</para>
+                    </step>
+                    <step>
+                        <para>
+                            <screen>
+sudo hdparm -d1 /dev/cdrom
+sudo cp /etc/hdparm.conf /etc/hdparm.conf_copie
+kdesu kate /etc/hdparm.conf</screen>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Ajoutez les lignes suivantes à la fin du fichier</para>
+                        <para>
+                            <programlisting>
+/dev/cdrom {
+dma = on
+}</programlisting>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Enregistrez le fichier modifié(<ulink url="../sample/hdparm.conf_speedupcddvdrom">un exemple</ulink></para>
+                    </step>
+                </procedure>
+            </sect3>
+            <sect3 status="complete">
+                <title>Monter les CD/DVD-Roms et montrer tous les fichiers cachés et associés</title>
+                <procedure>
+                    <step>
+                        <para>En supposant que <filename class="devicefile">/media/cdrom0/</filename> est l'emplacement du lecteur CD/DVD-Rom</para>
+                    </step>
+                    <step>
+                        <para>Pour monter le CD/DVD-Rom</para>
+                        <para>
+                            <screen>sudo mount /media/cdrom0/ -o unhide</screen>
+                        </para>
+                    </step>
+                    <step>
+                        <para>Pour démonter le CD/DVD-Rom</para>
+                        <para>
+                            <screen>sudo umount /media/cdrom0/</screen>
+                        </para>
+                    </step>
+                </procedure>
+            </sect3>
+            <sect3 status="complete">
+                <title>Pour forcer manuellement l'ejection du CD/DVD-Rom</title>
+                <procedure>
+                    <step>
+                        <para>
+                            <screen>sudo eject</screen>
+                        </para>
+                    </step>
+                </procedure>
+            </sect3>
+        </sect2>
+    </sect1>
+    <sect1 id="networking" status="complete">
+        <title>Réseau</title>
+        <sect2 status="complete">
+            <title>Changer le nom de l'ordinateur</title>
+            <procedure>
+                <step>
+                    <para>
+                        <menuchoice>
+                            <guimenu>Menu K</guimenu>
+                            <guisubmenu>Paramètres du système</guisubmenu>
+                            <guimenuitem>Paramètres réseau</guimenuitem>
+                        </menuchoice>
+                    </para>
+                </step>
+                <step>
+                    <para>Cliquez <guibutton>Mode administrateur...</guibutton> et entrez  votre mot de passe pour obtenir les privilèges administrateur.</para></step>
+                <step>
+                    <para>Sélectionnez l'onglet <guibutton>Système de noms de domaines</guibutton>. Entrez le nom de l'ordinateur dans le champ <guilabel>Nom de machine :</guilabel></para>
+                </step>
+                <step>
+                    <para>Cliquez <guibutton>Appliquer</guibutton>, fermez toutes les applications et redémarrez.</para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 status="complete">
+            <title>Parcourir les serveurs SSH, FTP et SFTP en utilisant <application>Konqueror</application></title>
+            <procedure>
+                <step>
+                    <para>Dans la <guilabel>Barre d'adresse</guilabel>, entrez ce qui suit :</para>
+                    <para>Pour SSH, utilisez : <screen><phrase>fish</phrase>://utilisateur@ssh.serveur.com</screen></para>
+                    <para>Pour FTP, utilisez : <screen><phrase>ftp</phrase>://utilisateur@ftp.serveur.com</screen></para>
+                    <para>Pour SFTP, utilisez : <screen><phrase>sftp</phrase>://utilisateur@sftp.serveur.com</screen></para>
+                    <para>Remplacez utilisateur par votre nom d'utilisateur et remplacez tout ce qui suit le symbole @ par l'adresse du serveur. Konqueror vous demandera un mot de passe, si nécessaire. S'il n'y a pas de nom d'utilisateur (accès anonyme - anonymous), omettez le nom d'utilisateur et le symbole @.</para>
+                    <para>Une autre méthode, pour préciser votre mot de passe manuellement, consiste à modifier l'une des adresses comme la suivante : <screen>ftp://nomutilisateur:motdepasse@ftp.serveur.com</screen></para>
+                </step>
+            </procedure>
+        </sect2>
+        <sect2 id="networking-utils" status="complete">
+            <title>Utilitaires réseau</title>
+            <sect3 id="firewall" status="complete">
+                <!-- No KDE equivalent -->
+                <title>Pare-feu Guarddog</title>
+                <para>Un pare-feu protège un système informatique des accès non-autorisés. Il n'est normalement pas nécessaire d'installer un pare-feu sur un système Kubuntu, parce que par défaut, l'accès au système est fermé. Cependant, si vous lancez des services (comme, par exemple, le serveur web Apache) qui permettent à d'autres ordinateurs d'accéder au vôtre, il est conseillé d'installer un pare-feu. <application>Guarddog</application> est un programme qui permet de contrôler le pare-feu de Linux depuis une interface graphique.</para>
+                <procedure>
+                    <step>
+                        <para>Installez le paquet <application>Guarddog</application> depuis le dépôt <emphasis>Universe</emphasis> (voir <xref linkend="extra-repositories"/>).</para>
+                    </step>
+                    <step>
+                        <para>Après son installation, lancez <application>Guarddog</application> en sélectionnant <menuchoice><guimenu>Menu K</guimenu>
+                                <guisubmenu>Système</guisubmenu>
+                                <guimenuitem>Guarddog</guimenuitem></menuchoice></para>
+                    </step>
+                    <step>
+                        <para>Entrez <emphasis>votre</emphasis> mot de passe dans la boîte de dialogue <application>Exécuter en tant que « root » -KDE su</application> qui est apparue.</para>
+                    </step>
+                    <step>
+                        <para>Cliquez <guibutton>Aide</guibutton> dans la fenêtre <application>Firewall Configuration</application> pour plus de détails sur l'utilisation de<application>Guarddog</application>.</para>
+                    </step>
+                </procedure>
+            </sect3>
+            <sect3 status="complete">
+                <!-- No KDE equivalent -->
+                <title>Moniteur graphique de réseau</title>
+                <para>Etherape montre l'activité du réseau entre différents hôtes en utilisant des cercles de tailles variables</para>
+                <procedure>
+                    <step>
+                        <para>Installez le paquet <application>etherape</application> depuis le dépôt <emphasis>Universe</emphasis> (voir <xref linkend="extra-repositories"/>).</para>
+                    </step>
+                    <step>
+                        <para>Choisir : <menuchoice><guimenu>K-Menu</guimenu>
+                                <guisubmenu>Internet</guisubmenu>
+                                <guimenuitem>Etherape</guimenuitem></menuchoice></para>
+                    </step>
+                </procedure>
+            </sect3>
+            <sect3 status="complete">
+                <!-- No KDE equivalent -->
+                <title>Analyseur de trafic réseau</title>
+                <para>Ethereal est un analyseur/renifleur de trafic réseau qui capture des paquets depuis le réseau en temps réel et affiche leurs contenus.</para>
+                <procedure>
+                    <step>
+                        <para>Installez le paquet <application>ethereal</application> depuis le dépôt <emphasis>Universe</emphasis> (voir <xref linkend="extra-repositories"/>).</para>
+                    </step>
+                    <step>
+                        <para>Choisir : <menuchoice><guimenu>K-Menu</guimenu>
+                                <guisubmenu>Internet</guisubmenu>
+                                <guimenuitem>Ethereal</guimenuitem></menuchoice></para>
+                    </step>
+                </procedure>
+            </sect3>
+        </sect2>
+    </sect1>
+</chapter>
+

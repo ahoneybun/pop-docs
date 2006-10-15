@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-fr SYSTEM "../../../ubuntu/libs/gnome-menus-fr.ent">
+%gnome-menus-fr;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+	<chapter id="internet" status="complete">
+		<title>Internet</title>
+			<para>This section describes a number of tasks related to the internet, including how to connect to the internet, configuring and using an internet browser, and using other types of internet programs.</para>
+		<sect1 id="connect-to-internet" status="complete">
+			<title>Connecting to the Internet</title>
+			<sect2 id="internet-basic-procedure" status="review">
+				<title>Basic Procedure</title>
+			<para>This section describes the basic procedure for connecting to the internet.</para>
+                        <note><para>If you have a wireless connection, or connect to the internet through a modem (including an ADSL modem), and this section does not work, you should read <xref linkend="wireless"/> or <xref linkend="modems"/>.</para></note>
+   	                 <para>To connect to the internet:</para>
+					<procedure>
+					<step>
+                            <para>Open 
+                                <menuchoice>
+                                    <guimenu>System</guimenu>
+                                    <guisubmenu>Administration</guisubmenu>
+                                    <guimenuitem>Networking</guimenuitem>
+                                </menuchoice>.
+                            </para>
+                        </step>
+
+				<step>
+					<para>Select the connection you wish to use, then click <guilabel>Properties</guilabel>.</para>
+				</step>
+				<step>
+					<para>Ensure <guilabel>Enable this connection</guilabel> is turned on.</para>
+				</step>
+				<step>
+					<para>If your ISP or network administrator has given you an IP address, set <guilabel>Configuration</guilabel> to <guilabel>Static IP address</guilabel>, then enter the address in the <guilabel>IP address</guilabel> field and click <guibutton>OK</guibutton>. Otherwise, set <guilabel>Configuration</guilabel> to <guilabel>DHCP</guilabel> and click <guibutton>OK</guibutton>.</para>
+				</step>
+				<step>
+					<para>To activate or deactivate network connections, select your connection, then click <option>Activate/Deactivate</option>.
+                            </para>
+                        </step>
+                    </procedure>
+		</sect2>
+        <sect2 id="wireless" status="complete">
+            <title>Wireless Cards</title>
+            <para>Many wireless cards are automatically detected by Ubuntu during installation. To see if your card is supported, open
+								<menuchoice>
+                                    <guimenu>System</guimenu>
+                                    <guisubmenu>Administration</guisubmenu>
+                                    <guimenuitem>Networking</guimenuitem>
+                                </menuchoice>. If your wireless card is listed, you can follow <xref linkend="internet-basic-procedure"/> to connect to the internet. A complete listing of wireless cards which work with Ubuntu can be found online at the <ulink url="https://help.ubuntu.com/community/WifiDocs/WirelessCardsSupported">Ubuntu Wiki</ulink>. Please add your wireless card to the list if it works with Ubuntu.</para> 
+            <para>Some cards may not work automatically with Ubuntu. If this is the case, please look at the <ulink url="https://wiki.ubuntu.com/WirelessTroubleshootingGuide">Wireless Troubleshooting Guide</ulink> on the Ubuntu Wiki which is an excellent resource for troubleshooting wireless cards.
+            </para>
+            <para>If your wireless card does not work with Ubuntu, you may have to do some research in order to activate it. A good way of getting a wireless card to work is to use the <application>ndiswrapper</application> tool which allows Ubuntu to use the Microsoft Windows driver for the wireless card. To do this, follow the instructions below in <xref linkend="ndiswrapper"/>.
+			</para>
+			<para>All other information regarding wireless networking on Ubuntu is collected at <ulink url="https://help.ubuntu.com/community/WifiDocs">Wireless Networking Central</ulink> on the Ubuntu Wiki.
+            </para>
+				<sect3 id="ndiswrapper">
+					<title>Windows Wireless Drivers</title>
+						<para>Even if your wireless network card does not have a native Linux driver, you may still be able to get it working with <application>ndiswrapper</application>. <application>Ndiswrapper</application> is a Linux module which allows Ubuntu to use the Windows driver for wireless cards (in most cases).</para>
+						<note><para>These instructions apply only to the x86 and AMD64 versions of Ubuntu, and not to Ubuntu for Power PC (PPC).</para></note>
+						<tip><para>If you have access to the internet, you can see if your wireless cards is in the list of cards supported by <application>ndiswrapper</application> <ulink url="http://ndiswrapper.sourceforge.net/mediawiki/index.php/List">on the ndiswrapper website</ulink>.</para></tip>
+						<para>To install ndiswrapper, install the package <application>ndiswrapper-utils</application> (see <xref linkend="add-applications"/>). This package is provided on the Ubuntu CD. If you have access to the internet, you can also optionally install a graphical tool, <application>ndisgtk</application> from the <emphasis>Universe</emphasis> repository (see <ulink type="help" url="ghelp:add-applications#extra-repositories"/>).</para>
+						<para>In order to set up <application>ndiswrapper</application>, it is necessary to obtain the Windows driver for your wireless card. Generally, the best way to do this is from the CD supplied with your wireless card. You should copy two files to the same place on your computer, one ending in .SYS and one ending in .INF. If you find any files which end in .BIN, also copy those. If you are not able to find the right files, and have alternative access to the internet, you may be able to obtain help from the <ulink url="http://ndiswrapper.sourceforge.net/mediawiki/index.php/list">ndiswrapper website</ulink>.</para>
+						<para>If you have installed the graphical tool <application>ndisgtk</application>, to set up ndiswrapper, simply select 								<menuchoice>
+                                    <guimenu>System</guimenu>
+                                    <guisubmenu>Administration</guisubmenu>
+                                    <guimenuitem> Windows Wireless Drivers</guimenuitem>
+                                </menuchoice> from the menu, and follow the instructions given.</para>
+						<para>If you have not installed the graphical tool, use this procedure:</para>
+							<procedure>
+								<step><para>Open &terminal; and type: <screen>sudo ndiswrapper -i ~/Desktop/drivername.inf</screen></para>
+									<note><para>The above command assumes that your .INF file is named <filename>drivername.inf</filename> and was copied to your Desktop. Replace these values if necessary.</para></note> 
+								</step>
+								<step><para>To check if it is working correctly, type: <screen>ndiswrapper -l</screen>If it is working correctly, you should see:<screen>
+Installed ndis drivers:
+{name of driver}  driver present, hardware present</screen>
+								</para></step>
+								<step><para>For ndiswrapper to function, you need to load a module. To do this, type:<screen>
+sudo depmod -a
+sudo modprobe ndiswrapper</screen>
+								</para></step>
+								<step><para>To ensure that the module is loaded each time you boot the computer, type:<screen>sudo ndiswrapper -m</screen>
+								</para></step>
+							</procedure>
+					<para>You should now be able to connect to the internet by following the instructions at <xref linkend="internet-basic-procedure"/>.</para>
+				</sect3>
+        </sect2> 
+	    <sect2 id="modems" status="complete">
+		<title>ADSL Connections</title>
+			<para>All PPPOE and router-style ADSL modems that use an Ethernet connection are supported by Ubuntu, and some USB ADSL modems are supported too.</para>
+			<para>For a router-style ADSL modem, simply follow <xref linkend="internet-basic-procedure"/></para>
+			<para>For information on setting up a PPPOE ADSL modem see <xref linkend="adsl-pppoe"/>.</para>
+			<para>For information on setting up a USB ADSL modem see <xref linkend="adsl-usb"/>.</para>
+
+			<sect3 id="adsl-pppoe" status="writing">
+				<title>PPPoE Modems</title>
+				<para>This section is about setting up an ADSL Internet connection using an ethernet PPPoE modem.</para>
+				<para>You will need to have subscribed to an <emphasis>Internet Service Provider</emphasis>, and your Internet connection must be installed and functional. A "DSL" light on your modem usually shows that the line is synchronized.</para>
+				<para>You will need your username and password for the account. You must also have an ethernet card connected to your PPPoE modem with the correct type of cable.</para>
+				<para>Finally, you need the PPPoE package to be installed in order for the following command to work. This package is installed by default, but can be missing if the configuration has been changed. If the following command does not work, you will need to install this package, which can be found on the Ubuntu CD.</para>
+				<para>To set up the modem:</para>
+					<procedure>
+						<step><para>Open &terminal;</para></step>
+						<step><para>In the terminal type:<screen>sudo pppoeconf</screen></para></step>
+						<step><para>A text-based menu program will guide you through the next steps, which are:
+							<orderedlist numeration='arabic'>
+								<listitem><para>Confirm that your Ethernet card is detected. </para></listitem>
+								<listitem><para>Enter your username. </para></listitem>
+								<listitem><para>Enter your password. </para></listitem>
+								<listitem><para>If you already have a PPPoE Connection configured, you will be asked if it may be modified. </para></listitem>
+								<listitem><para>Popular options: you are asked if you want the 'noauth' and 'defaultroute' options and to remove 'nodetach' - choose "Yes". </para></listitem>
+								<listitem><para>Use peer DNS - choose "Yes". </para></listitem>
+								<listitem><para>Limited MSS problem - choose "Yes". </para></listitem>
+								<listitem><para>When you are asked if you want to connect at start up, you will probably want to say yes. </para></listitem>
+								<listitem><para>Finally you are asked if you want to establish the connection immediately. </para></listitem>
+							</orderedlist></para></step>
+						<step><para>Once you have finished these steps, your connection should be working. </para></step>
+					</procedure>
+<para>To start your ADSL connection on demand, in a terminal type: </para><screen><![CDATA[sudo pon dsl-provider]]></screen>
+<para>To stop your ADSL connection, in a terminal type: </para><screen><![CDATA[sudo poff dsl-provider]]></screen>
+</sect3>
+
+<sect3 id="adsl-usb" status="complete">
+<title>Modems ADSL USB</title>
+						
+<para>Il arrive fréquemment que les pilotes des modems ADSL USB soient propriétaires, non libres et dotés d'une licence restrictive. Ubuntu ne peut donc pas fournir le pilote tel quel. Pour faire fonctionner ce genre de modems, vous devez télécharger les pilotes à partir d'un ordinateur disposant d'une connexion Internet fonctionnelle, puis transférer ces fichiers sur le système nécessitant cette installation.</para>
+
+<warning><para>L'USB est loin d'être le maillon idéal pour l'accès au réseau. Si vous disposez d'un modem pouvant se connecter aussi bien par USB que par Ethernet à un routeur, vous devriez favoriser la connexion Ethernet au détriment de l'USB.</para></warning>
+
+<para>Étant donné que toute installation d'un modem USB exige un accès Internet pour télécharger les pilotes propriétaires nécessaires, et que de plus cela demande une configuration pointue qui dépasse la portée de ce guide, nous ne pouvons qu'énumérer les modèles de modems USB qui sont connus pour fonctionner avec Ubuntu. Vous trouvez également des liens vers les instructions d'installation correspondantes sur le site d'aide de la communauté Ubuntu.</para>
+
+<para>La procédure d'installation des modems USB varie selon le fabriquant et le modèle du modem. Pour identifier le modèle exact, inscrivez le nom et le numéro qui apparaît sur l'appareil. Il est parfois nécessaire d'aller chercher cette information sur une étiquette. Consultez la liste ci-dessous pour connaître le pilote nécessaire au fonctionnement de votre modem, et prenez note du lien.</para>
+
+<para>Lorsque vous vous trouvez sur un système connecté pour télécharger les pilotes nécessaires, vous pouvez accéder aux liens de téléchargement à partir de la page contenant les instructions d'installation correspondantes au modèle de modem USB.</para>
+
+<orderedlist numeration="arabic">
+<listitem><para>Modems Speedtouch :</para>
+<para><ulink url="https://help.ubuntu.com/community/UsbAdslModem/SpeedTouch">https://help.ubuntu.com/community/UsbAdslModem/SpeedTouch</ulink></para></listitem>
+<listitem><para>Modems utilisant le chipset Analog Devices Inc. eagle-usb I, II ou III (tels que Sagem Fast 800, Comtrend ct 350, etc.) :</para>
+<para><ulink url="https://help.ubuntu.com/community/UsbAdslModem/ueagle-atm">https://help.ubuntu.com/community/UsbAdslModem/ueagle-atm</ulink></para>
+<para><ulink url="https://help.ubuntu.com/community/UsbAdslModem/EagleUsb">https://help.ubuntu.com/community/UsbAdslModem/EagleUsb</ulink></para></listitem>
+<listitem><para>Modems basés sur Connexant AccessRunner :</para>
+<para><ulink url="https://help.ubuntu.com/community/UsbAdslModem/EciAdsl">https://help.ubuntu.com/community/UsbAdslModem/EciAdsl</ulink></para>
+<para><ulink url="https://help.ubuntu.com/community/UsbAdslModem/AccessRunner">https://help.ubuntu.com/community/UsbAdslModem/AccessRunner</ulink></para>
+<para><ulink url="https://help.ubuntu.com/community/UsbAdslModem/e-techV2">https://help.ubuntu.com/community/UsbAdslModem/e-techV2</ulink></para></listitem>
+</orderedlist>
+</sect3>
+</sect2>
+		<sect2 id="dialup" status="complete">		
+			<title>Modems téléphoniques (RTC)</title>
+				<para>La plupart des modems téléphoniques ne sont pas supportés par Ubuntu, mais les pilotes peuvent être trouvés afin de pouvoir utiliser de tels modems. Vous devez tout d'abord identifier la puce électronique qui équipe votre modem téléphonique :</para>
+				<para>
+<screen>
+wget -c <ulink url="&scanmodem-url;">&scanmodem-url;</ulink> 
+gunzip -c &scanmodem-gz; &gt; scanModem 
+chmod +x scanModem
+sudo ./scanModem 
+gedit Modem/ModemData.txt</screen>
+				</para>
+				<para>Lisez ce fichier, il doit lister la puce électronique qui équipe votre modem. Une fois que vous connaissez le type de puce de votre modem, regardez <ulink url="&linmodem;">&linmodem;</ulink> et suivez les instructions pour votre modem. Plus d'informations peuvent être trouvées sur la page <ulink url="https://wiki.ubuntu.com/SettingUpModems">Paramétrer des modems</ulink> du wiki d'Ubuntu.</para>
+	  </sect2>
+	</sect1>
+
+		<sect1 id="web-browsing" status="complete">
+			<title>Naviguer sur le Web</title>
+			<para>Le navigateur web évolué et sécurisé <application>Mozilla Firefox</application> est inclus dans Ubuntu. <application>Firefox</application> inclut la navigation par onglets, le bloquage de popups, la recherche intégrée et les marque-pages dynamiques pour les flux RSS. Des plugins populaires tels que Java, Macromedia Flash et RealPlayer sont aussi gérés. <application>Firefox</application> peut être lancé en cliquant sur &firefox;.</para>
+			<sect2 id="firefox-multimedia" status="complete">
+				<title>Voir de contenus audio et vidéo en ligne avec Firefox</title>
+				<para>Pour voir des flux audio et vidéo en ligne  dans <application>Firefox</application>, vous devrez peut être installer des plugins. Le plugin que vous choisirez d'installer dépendra du lecteur multimédia que vous préférez (voir <xref linkend="video"/>).</para>
+				<procedure>
+					<step><para>Pour le plugin <application>Totem Gstreamer</application> (le lecteur multimédia par défaut d'Ubuntu), installez le paquet <application>totem-gstreamer-firefox-plugin</application> depuis le dépôt <quote>Universe</quote> (voir <xref linkend="add-applications"/>).</para></step>
+					<step><para>Pour le plugin <application>Totem Xine</application>, installez le paquet <application>totem-xine-firefox-plugin</application> depuis le dépôt <quote>Universe</quote> (voir <xref linkend="add-applications"/>).</para></step>
+					<step><para>Pour le plugin <application>Mplayer</application>, installez le paquet <application>mozilla-mplayer</application> depuis le dépôt <quote>Multiverse</quote> (voir <xref linkend="add-applications"/>).</para></step>
+					<step><para>Les changements prendront effet lorsque vous aurez fermé puis relancé <application>Firefox</application>.</para></step>
+				</procedure>
+					<note><para>Les étapes qui suivent permettront d'installer les plugins pour <application>Firefox</application>. Cependant, pour lire certains formats, vous pourrez avoir besoin d'ajouter certains codecs supplémentaires (voir <xref linkend="codecs"/>).</para></note>
+			</sect2>
+			<sect2 status="complete">
+				<title>Macromedia Flash pour Firefox</title>
+					<para>Pour afficher des animations « flash » avec le navigateur Internet Mozilla Firefox :</para>
+					<procedure>
+						<step>
+							<para>Installez le paquet <application>flashplugin-nonfree</application> depuis le dépôt <quote>Multiverse</quote> (see <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>
+							<para>Le plugin sera actif la prochaine fois que vous lancerez <application>Firefox</application>.</para>
+						</step>
+					</procedure>
+							<note><para>Installer le paquet comme décrit ci dessus téléchargera et installera le plugin. Vous avez besoin d'une connexion Internet pour cela. Si, après avoir installé l'application, vous avez besoin de télécharger et installer le plugin plus tard, saisissez la commande suivante dans un terminal : <screen>sudo update-flashplugin</screen></para></note>
+
+			</sect2>
+			<sect2 status="complete">
+				<title>Plugin Java pour Mozilla Firefox</title>
+					<para>Certains sites web nécessitent le plugin Java de Mozilla Firefox. Le plus simple pour pouvoir afficher des applets Java est d'installer le paquet <application>j2re1.4-mozilla-plugin</application> depuis le dépôt <quote>Multiverse</quote>.</para>
+					<para>Pour une installation de Java plus complète, voir <xref linkend="java"/>.</para>
+			</sect2>
+
+		<sect2 status="complete">
+			<title>Logiciel d'édition de pages web NVU</title>
+				<para><application>NVU</application> est une application graphique de création de pages web <emphasis>WYSIWYG</emphasis> (What You See Is What You Get) similaire à Dreamweaver.</para>
+				<procedure>
+					<step>
+						<para>Installez le paquet <application>nvu</application> depuis le dépôt <quote>Universe</quote> (see <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>
+							<para>Pour démarrer <application>Nvu</application>, choisissez &nvu;.</para>
+						</step>
+					</procedure>
+			</sect2>
+			<sect2 status="complete">
+				<title>Studio de développement web Bluefish</title>
+					<para><application>Bluefish</application> est un puissant éditeur destiné aux créateurs de pages web ainsi qu'au programmeurs. Bluefish supporte de nombreux langages de balisage et de programmation, il inclut par ailleurs de nombreux utilitaires.</para>
+					<procedure>
+						<step>
+							<para>Installez le paquet <application>bluefish</application> depuis le dépôt <quote>Universe</quote> (voir <xref linkend="add-applications"/>).</para>
+						</step>
+						<step><para>Pour démarrer <application>Bluefish</application>, choisissez <menuchoice><guimenu>Applications</guimenu>
+								<guisubmenu>PDéveloppement</guisubmenu>
+								<guimenuitem>Editeur Bluefish</guimenuitem></menuchoice></para>
+						</step>
+					</procedure>
+			</sect2>
+		</sect1>
+
+		<sect1 id="email" status="complete">
+			<title>Courriel</title>
+				<sect2 id="email-evolution" status="review">
+				<title>Messagerie Evolution</title>
+				<para>Le logiciel de travail collaboratif <application>Evolution</application> peut prendre en charge tous vos besoins en terme de courriels, listes de contacts, tâches et calendrier. Il peut aussi lire les nouvelles de Usenet et s'intègre parfaitement avec l'horloge du tableau de bord de Gnome, vous donnant, en un seul clic, accès à votre liste de vos tâches.</para>
+				<para><application>Evolution</application> peut être lancé en cliquant sur <menuchoice><guimenu>Applications</guimenu>
+								<guisubmenu>Internet</guisubmenu>
+								<guimenuitem>Lecteur de courrier Evolution</guimenuitem></menuchoice> depuis le menu.</para>
+				<para>Si <application>Evolution</application> est installé, vous pourrez trouver un guide d'utilisation dans <ulink url="x-yelp-toc:#ApplicationsInternet">la section internet</ulink> de cette aide.</para>
+			</sect2>
+			<sect2 id="email-alternative" status="review">
+			<title>Clients de courrier électronique alternatifs</title>
+			<para>Vous pouvez aussi utiliser <application>Mozilla Thunderbird</application> pour lire vos courriels. Pour l'installer, installez le paquet <application>mozilla-thunderbird</application> (voir <xref linkend="add-applications"/>).</para>
+			<para>Pour démarrer <application>Thunderbird</application>, choisissez <menuchoice><guimenu>Applications</guimenu>
+								<guisubmenu>Internet</guisubmenu>
+								<guimenuitem>Client mail Thunderbird</guimenuitem></menuchoice>.</para>
+				<para>Pour faire de <application>Mozilla Thunderbird</application> votre client de courrier électronique par défaut :</para>
+			<procedure>
+				<step>
+						<para>Choisissez &preferred-applications;</para>
+				</step>
+				<step>
+						<para>Cliquez sur la liste déroulante <guibutton>Lecteur de courrier</guibutton> et sélectionnez l'option <guilabel>Personnalisé</guilabel>.</para>
+				</step>
+				<step>
+						<para>Dans la zone de texte <guilabel>Commande</guilabel> saisissez <userinput>
+								<command>mozilla-thunderbird %s</command></userinput>, puis fermez la boîte de dialogue.</para>
+				</step>
+			</procedure>
+			</sect2>
+		</sect1>
+
+		<sect1 id="instant-messaging" status="complete">
+			<title>Messagerie instantanée</title>
+			<sect2 status="complete">
+				<title>Gaim</title>
+				<para>Gaim est le client de messagerie instantanée par défaut d'Ubuntu. Gaim vous permet de discuter avec des gens utilisant AIM/ICQ, Gadu-Gadu, GroupWise, IRC, Jabber, MSN, Napster et Yahoo, et liste tous vos correspondants dans une seule fenêtre.</para>
+				<para>Pour démarrer <application>Gaim</application>, choisissez &gaim;.</para>
+			</sect2>
+			<sect2 status="complete">
+				<title>XChat-GNOME</title>
+               			<para>XChat-GNOME est un client IRC (Internet Relay Chat) graphique multi-plateforme avancé. Il propose entre autre un support de programmation avancé (scripts perl et python) et une interface sobre et simple à utiliser.</para>
+				<procedure>
+					<step>
+						<para>Installez le paquet <application>xchat-gnome</application> depuis le dépôt <emphasis>main</emphasis> (voir <xref linkend="add-applications"/>).</para>
+					</step>
+					<step>
+						<para>Pour démarrer <application>XChat-GNOME</application>, choisissez &xchat-gnome;.</para>
+					</step>
+				</procedure>
+					<sect3 status="complete">
+						<title>Rejoindre #ubuntu-fr avec <application>XChat-Gnome</application></title>
+							<para>Une excellente manière d'obtenir de l'aide avec Ubuntu ou de vous initier à l'IRC est de vous joindre au canal officiel du support Ubuntu à &irc-network;.</para>
+								<procedure>
+									<step>
+										<para>Lancez <application>XChat-Gnome</application> comme indiqué ci-dessus.</para>
+									</step>
+									<step>
+										<para>Lorsque vous lancez <application>XChat-Gnome</application> pour la première fois, il vous demandera de saisir un surnom IRC ainsi que votre vrai nom. Mettez ce que vous voulez pour le surnom (l'initiale de votre prénom et votre nom peuvent convenir ou bien quelque chose de plus imaginatif), mettez votre vrai nom ou une partie de celui-ci, et cliquez sur <guibutton>Valider</guibutton>.</para>
+									</step>
+									<step>
+										<para>Dans la fenêtre des serveurs qui vient de s'ouvrir, sélectionnez <emphasis>Ubuntu Servers</emphasis> et cliquez sur <guibutton>Connecter</guibutton>.</para>
+									</step>
+								</procedure>
+					</sect3>
+			</sect2>
+		</sect1>
+		<sect1 id="P2P" status="complete">
+			<title>Peer To Peer (P2P)</title>
+			<sect2 status="complete">
+					<title>BitTorrent</title>
+					<para>Le support de BitTorrent est inclus par défaut dans Ubuntu. Il vous suffit de trouver en ligne un fichier BitTorrent (extension .torrent), de cliquer dessus dans Firefox, et le client BitTorrent de Gnome démarrera automatiquement.</para>
+					<para>Pour relancer un téléchargement depuis un fichier <filename>.torrent</filename> déjà présent sur votre ordinateur, double-cliquez dessus.</para>
+				</sect2>
+				<sect2 status="complete">
+					<title>Client de partage de fichiers aMule</title>
+					<procedure>
+						<step>
+							<para>Installez le paquet <application>amule</application> depuis le dépôt <quote>Universe</quote> (voir <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>
+							<para>Pour démarrer <application>aMule</application>, choisissez &amule;.</para>
+						</step>
+					</procedure>
+			</sect2>
+		</sect1>
+		<sect1 id="news-readers" status="complete">
+			<title>Lecteurs de nouvelles</title>
+			<sect2 status="complete">
+					<title>Lecteur de nouvelles Pan</title>
+					<procedure>
+						<step>
+							<para>Installez le paquet <application>pan</application> (voir <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>
+							<para>Pour démarrer <application>Lecteur de nouvelles Pan</application>, choisissez <menuchoice><guimenu>Applications</guimenu>
+									<guisubmenu>Internet</guisubmenu>
+									<guimenuitem>Lecteur de nouvelles Pan</guimenuitem></menuchoice>.</para>
+						</step>
+					</procedure>
+			</sect2>
+			<sect2 status="complete">
+					<title>Lecteur de nouvelles Liferea</title>
+					<procedure>
+						<step>
+							<para>Installez le paquet <application>liferea</application> depuis le dépôt <quote>Universe</quote> (voir <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>
+							<para>Pour ouvrir le <application>Lecteur de nouvelles Liferea</application>, allez dans <menuchoice><guimenu>Applications</guimenu>
+									<guisubmenu>Internet</guisubmenu>
+									<guimenuitem>Lecteur de nouvelles Liferea</guimenuitem></menuchoice>.</para>
+						</step>
+					</procedure>
+			</sect2>
+		</sect1>	
+      <sect1 id="networking" status="complete">
+		<title>Réseau</title>
+            <sect2 status="complete">
+                <title>Changer le nom de l'ordinateur</title>
+                    <procedure>
+                        <step>
+                            <para>Ouvrir &networking;.</para>
+                        </step>
+                        <step>
+                            <para>Cliquez sur l'onglet <guilabel>Général</guilabel>, et entrez le nom de l'ordinateur dans le champ <guilabel>Hôte</guilabel>.</para>
+                        </step>
+                    </procedure>
+                    <para>Redémarrez l'ordinateur pour que les modifications soient prises en compte.</para>
+            </sect2>
+	<sect2 id="networking-utils" status="complete">
+		<title>Utilitaires réseau</title>
+			<sect3 id="firestarter" status="complete">
+				<title>Pare-feu Firestarter</title>
+						<para>Un pare-feu protège un ordinateur d'accès non autorisés. Il n'est normalement pas nécessaire d'installer un pare-feu sur un système Ubuntu, car par défaut l'accès au système est bloqué. Cependant, si vous lancez n'importe quel service qui autorise d'autres ordinateurs à accéder au votre (par exemple le serveur web Apache), il est conseillé d'installer un pare-feu. <application>Firestarter</application> est un programme qui vous permet, par le biais d'une interface graphique, de configurer un pare-feu.</para>
+					<procedure>
+						<step>
+							<para>Installez le paquet <application>Firestarter</application> depuis le dépôt <quote>Universe</quote> (voir <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>
+							<para>Après l'installation, lancez &firestarter-firewall-tool; pour configurer votre pare-feu. Le pare-feu sera maintenant actif dès le démarrage de votre ordinateur.</para>
+						</step>
+					</procedure>
+				</sect3>
+			<sect3 status="complete">
+				<title>Moniteur graphique de réseau</title>
+					<para>EtherApe affiche l'activité du réseau entre différents ordinateurs en utilisant des cercles de différentes tailles.</para>
+					<procedure>
+						<step>
+							<para>Installez le paquet <application>etherape</application> depuis le dépôt <quote>Universe</quote> (voir <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>
+							<para>Choisissez : <menuchoice><guimenu>Applications</guimenu>
+									<guisubmenu>Internet</guisubmenu>
+									<guimenuitem>Etherape</guimenuitem></menuchoice></para>
+						</step>
+					</procedure>
+			</sect3>	 
+			<sect3 status="complete">
+				<title>Analyseur de trafic réseau</title>
+					<para>Ethereal est un analyseur/renifleur de trafic réseau qui capture des paquets depuis le réseau en temps réel et affiche leurs contenus.</para>
+					<procedure>
+						<step>
+							<para>Installez le paquet <application>ethereal</application> depuis le dépôt <quote>Universe</quote> (voir <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>
+							<para>Choisissez : <menuchoice><guimenu>Applications</guimenu>
+									<guisubmenu>Internet</guisubmenu>
+									<guimenuitem>Ethereal</guimenuitem></menuchoice></para>
+						</step>
+					</procedure>
+			</sect3>
+		</sect2>
+		<sect2 status="complete">
+                <title>Parcourir le voisinage réseau</title>
+                            <para>Pour voir les ordinateurs présents sur le réseau, ouvrez <menuchoice><guimenu>Places</guimenu>
+                                    <guimenuitem>Serveurs réseaux</guimenuitem></menuchoice>.</para>
+				<para>Vous devrez peut être saisir votre nom d'utilisateur, votre mot de passe et votre nom de domaine. Vous devriez pouvoir les obtenir auprès de votre administrateur.</para>
+		</sect2>
+</sect1>
+	</chapter>
+

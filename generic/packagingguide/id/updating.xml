@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+        "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % pg-common SYSTEM "../pg-common.ent">
+%pg-common;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+<chapter id="updating-chap" status="writing">
+ 		<title>Mengupdate Paket</title>
+
+			<para>If you have been around Linux distributions for any amount
+				of time, you have realized that there are sometimes bugs in
+				programs. In the Debian and <phrase>Ubuntu</phrase> distributions, bugs are
+				often fixed through the packaging by patching the source code.
+				Sometimes there are bugs in the packaging itself that can
+				cause difficulties.</para>
+
+			<para>To patch the program's source code, you could simply download
+				the current <phrase>Ubuntu</phrase> source package (with
+				<application>apt-get source</application>) and make the needed
+				changes. You can then add a new entry to the
+				<filename>debian/changelog</filename> using
+				<application>dch -i</application> or
+				<application>dch -v
+					&lt;version&gt;-&lt;revision&gt;</application> to specify
+				the new revision. When you run <application>debuild
+					-S</application> from the source directory you will have a
+				new source package with a new <filename>.diff.gz</filename> in the
+				parent directory that
+				contains your changes. A problem with this approach is that
+				the distinction between source and patches is unclear.</para>
+
+			<para>Solusi untuk masalah ini adalah memisahkan perubahan pada source code dalam patch-patch individual yang disimpan dalam direktori <filename>debian</filename>. Satu patch sistem yang seperti itu disebut <application>dpatch</application>. Patch-patch disimpan dalam direktori <filename>debian/patches</filename> dan memiliki format spesial.</para>
+
+			<para>Untuk membuat <application>dpatch</application>, lakukan serangkaian langkah-langkah berikut.</para>
+
+			<para>Buat sebuah work space temporari dan dua salinan dari direktori source yang sekarang.</para>
+			
+			<screen>
+mkdir tmp
+cd tmp
+cp -a ../&lt;package&gt;-&lt;version&gt; . 
+cp -a &lt;package&gt;-&lt;version&gt; &lt;package&gt;-&lt;version&gt;.orig 
+</screen>
+
+			<para>Buat perubahan dalam direktori <filename>&lt;package&gt;-&lt;version&gt;</filename></para>
+
+			<para>Buat file patch menggunakan  <application>diff</application> dan letakkan dalam direktori <filename>debian/patches</filename></para>
+
+			<screen>
+diff -Nru  &lt;package&gt;-&lt;version&gt;.orig &lt;package&gt;-&lt;version&gt; &gt; patch-file
+</screen>
+
+			<para>Buat <application>dpatch</application> menggunakan <application>dpatch patch-template</application> dan sebuah file yang bernama <filename>00list</filename> yang melist dpatches :</para>
+			<screen>
+dpatch patch-template -p "01_patchname" "patch-file description" \
+	&lt; patch-file &gt; 01_patchname.dpatch
+echo 01_patchname.dpatch &gt;00list</screen>
+
+			<para>Anda sekarang bisa meletakkan <filename>01_patchname.dpatch</filename> dan <filename>00list</filename> dalam direktori <filename>debian/patches</filename> dari paket source anda :</para>
+
+			<screen>
+mkdir ../&lt;package&gt;-&lt;version&gt;/debian/patches
+cp 01_patchname.dpatch 00list ../&lt;package&gt;-&lt;version&gt;/debian/patches
+cd ..
+rm -rf tmp
+			</screen>
+
+			<note><para>Anda juga bisa mengedit sebuah pre-existing patch menggunakan <application>dpatch-edit-patch</application>.</para></note>
+			
+		<para>Sekali semua perubahan telah dibuat, suatu entri changelog ditambahkan, dan <application>dpatch</application> ditambahkan pada file <filename>debian/control</filename> (jika dibutuhkan), kemudian anda bisa membangun ulang paket source dengan <application>debuild -S</application>.</para>
+
+		<para>To get your fixed source package uploaded to the <phrase>Ubuntu</phrase>
+			repositories, you will need to get your source package sponsored by
+			a person who has upload rights. See <xref linkend="ubuntu-upload"/> for more details. Sometimes, rather
+			than giving the entire source package (.diff.gz, .dsc, and
+			.orig.tar.gz), it is easier and more efficient to just give the
+			difference between the source package that is currently in the
+			repositories and your fixed source package. A tool has been
+			created to do just that called
+			<application>debdiff</application>. Using
+			<application>debdiff</application> is similar to using
+			<application>diff</application> but is made specifically for
+			packaging. You can <application>debdiff</application> the
+			source package by:</para>
+
+		<screen>
+debdiff &lt;oldpackage&gt;.dsc &lt;newpackage&gt;.dsc &gt; package.debdiff
+		</screen>
+
+		<para>atau paket biner dengan:</para>
+
+		<screen>
+debdiff &lt;oldpackage&gt;.deb &lt;newpackage&gt;.deb &gt; package.debdiff
+		</screen>
+	
+		<para>Debdiffs sangat baik untuk melampirkan laporan-laporan bug dan telah siap bagi sponsor untuk mengupload.</para>
+		
+</chapter>
+
