@@ -25,3 +25,21 @@ common-binary-post-install-indep::
 		debian/ubuntu-docs \
 		/usr/share/ubuntu-artwork/home/locales-ubuntu \
 		../index.html
+
+
+	for dir in aboutubuntu desktopguide getting-help; do \
+		mkdir -p debian/ubuntu-docs/usr/share/omf/$$dir/; \
+		for file in `find ubuntu/$$dir/ -type f -iname '*.omf'`; do \
+			cp $$file debian/ubuntu-docs/usr/share/omf/$$dir/; \
+		done; \
+	done
+	for dir in serverguide packagingguide contribute; do \
+		mkdir -p debian/ubuntu-docs/usr/share/omf/$$dir/; \
+		for file in `find generic/$$dir/ -type f -iname '*.omf'`; do \
+			cp $$file debian/ubuntu-docs/usr/share/omf/$$dir/; \
+		done; \
+	done
+
+	mv debian/ubuntu-docs/usr/share/omf/aboutubuntu/ debian/ubuntu-docs/usr/share/omf/about-ubuntu
+
+	dh_scrollkeeper 

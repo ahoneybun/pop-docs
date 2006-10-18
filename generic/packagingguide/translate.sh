@@ -33,9 +33,7 @@ for x in po/*; do
 		echo ${j}
 		xml2po -k -p ${x} C/${j} | replace-doctype-with.py C/${j} >${y}/${j}
 	done
-	if [ ! -e ${y}/packagingguide-${y}.omf ]; then
-		sed -e "s#\"C\"#\"${y}\"#;  s#/C/#/${y}/#" C/packagingguide-C.omf >${y}/packagingguide-${y}.omf
-	fi
+	sed -i -e s@\"C\"@\"${y}\"@g -e s@C/@${y}/@g ${y}/packagingguide-${y}.omf
 	../../validate.sh ${y}/packagingguide.xml
 
 done
