@@ -32,13 +32,8 @@ for x in po/*; do
 		j=$(basename ${i} C/)
 		echo ${j}
 		xml2po -k -p ${x} C/${j} | replace-doctype-with.py C/${j} >${y}/${j}
-	done
-	if [ ! -e ${y}/serverguide-${y}.omf ]; then
-		sed -e "s#\"C\"#\"${y}\"#;  s#/C/#/${y}/#" /serverguide-C.omf >${y}/serverguide-${y}.omf
-	fi
-
+	sed -i -e s@\"C\"@\"${y}\"@g -e s@C/@${y}/@g ${y}/serverguide-${y}.omf
 	../../validate.sh ${y}/serverguide.xml
-
 done
 
 rm .xml2po.mo
