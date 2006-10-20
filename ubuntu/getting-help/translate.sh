@@ -28,11 +28,13 @@ for x in po/*; do
 	y=$(basename ${x} .po)
 	echo ${y}
 	mkdir -p ${y}
-
-	xml2po -k -p ${x} C/getting-help.xml | replace-doctype-with.py C/getting-help.xml >${y}/getting-help.xml
-	if [ ! -e ${y}/getting-help-${y}.omf ]; then
-		sed -e "s#\"C\"#\"${y}\"#;  s#/C/#/${y}/#" C/getting-help-C.omf >${y}/getting-help-${y}.omf
-	fi
+	for i in C/*xml; do
+		j=$(basename ${i} C/)
+		echo ${j}
+		xml2po -k -p ${x} C/${j} | replace-doctype-with.py C/${j} >${y}/${j}
+	done
+	xml2po -k -p ${x} C/getting-help-C.omf >${y}/getting-help-${y}.omf
+	sed -i -e s@\"C\"@\"${y}\"@g -e s@C/@${y}/@g ${y}/getting-help-${y}.omf
 	../../validate.sh ${y}/getting-help.xml
 
 done

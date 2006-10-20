@@ -13,63 +13,53 @@
 <!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
 ]>
 <chapter id="desktop-tips" status="complete">
-			<title>Advanced Desktop Configuration</title>
+			<title>Avancerad skrivbordskonfiguration</title>
 			  <para>Den här avdelningen innehåller några tips kring hur du använder och anpassar Ubuntus skrivbordsmiljö (som heter <application>GNOME</application>), och filhanteraren (som heter <application>Nautilus</application>).</para>
 
 		<sect1 status="complete">
-				<title>Log in automatically when the computer starts</title>
-				<para>To log in automatically when the computer starts:</para>
+				<title>Automatisk inloggning vid start</title>
+				<para>Gör så här för att logga in automatiskt när datorn startar:</para>
 				<procedure>
 					<step>
-						<para>
-							Choose &login-screen-setup;.
-						</para>
+						<para>Välj &login-screen-setup;.</para>
 					</step>
 					<step>
-						<para>Select <guibutton>Security</guibutton>, and turn on <guilabel>Enable Automatic Login</guilabel>.
-						</para>
+						<para>Välj <guibutton>Säkerhet</guibutton> och bocka för <guilabel>Aktivera automatisk inloggning</guilabel>.</para>
 					</step>
 					<step>
-						<para>Choose the account you want to log in as.
-						</para>
+						<para>Välj det konto du vill logga in med.</para>
 					</step>
 				</procedure>
-			<para>This is not recommended for most computers, as it is not secure and may give other people access to your information.</para>
+			<para>Detta rekommenderas inte för de flesta datorer, eftersom det inte är säkert och kan ge obehöriga åtkomst till din information.</para>
 		</sect1>	
 
 		<sect1 status="complete">
-			<title>Öppna filer med administrativa rättigheter från filhanteraren</title>
-			<para>To open files with administrative privileges from the file manager, you need to add a script to <application>Nautilus</application>.
-			</para>
-			<warning><para>Opening files with administrative privileges is a security risk. Always ensure that you are familiar with the file that you are opening.</para></warning>
+			<title>Öppna filer med administrativ behörighet från Filbläddraren</title>
+			<para>För att öppna filer med administrativ behörighet från Filbläddraren <application>Nautilus</application> måste du skapa ett speciellt skript.</para>
+			<warning><para>Att öppna filer med administrativ behörighet medför en säkerhetsrisk. Arbeta bara med filer som du vet hur de ska hanteras.</para></warning>
 			<procedure>
-				<step><para>Öppna en ny fil för redigering i den aktuella katalogen: <screen>gedit $HOME/.gnome2/nautilus-scripts/Öppna\ som\ administratör</screen></para>
+				<step><para>Öppna en ny fil för redigering i den relevanta katalogen: <screen>gedit $HOME/.gnome2/nautilus-scripts/Öppna\ som\ administratör</screen></para>
 				</step>
 				<step>
-						<para>Enter these lines in the new file:</para>
+						<para>Skriv in följande rader i filen:</para>
 						<programlisting>for uri in $NAUTILUS_SCRIPT_SELECTED_URIS; do
 gksudo "gnome-open $uri" &amp;
 done</programlisting>
 				</step>
 				<step>
-						<para>Save the edited file (<ulink url="sample/nautilus_open_as_administrator">an example</ulink>)
-						</para>
+						<para>Spara filen du just skapade (<ulink url="sample/nautilus_open_as_administrator">exempel på filen</ulink>)</para>
 				</step>
 				<step>
 						<para>Gör den ändrade filen körbar: <screen>chmod +x $HOME/.gnome2/nautilus-scripts/Öppna\ som\ administratör</screen></para>
 				</step>
 			</procedure>
-						<para>You can now open a file as an administrator by right-clicking on it and choosing <menuchoice>
-								<guimenuitem>Scripts</guimenuitem>
-								<guimenuitem>Open as Administrator</guimenuitem>
-							</menuchoice>.
-						</para>
+						<para>Nu kan du öppna filer med administrativa rättigheter genom att högerklicka på dem och välja <menuchoice><guimenuitem>Skript</guimenuitem>
+								<guimenuitem>Öppna som administratör</guimenuitem></menuchoice>.</para>
 		</sect1>
      <sect1 id="fonts" status="complete">
 		<title>Installera extra typsnitt</title>
-				<para>Den här avdelningen beskriver hur du installerar extra typsnitt från Ubuntus arkiv.</para>
-							<para>For <emphasis role="bold">international fonts</emphasis>, install these packages from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>):
-							</para>
+				<para>Den här delen beskriver hur du installerar extra typsnitt från Ubuntus arkiv.</para>
+							<para>För <emphasis role="bold">internationella typsnitt</emphasis>, installera dessa paket från <quote>Universe</quote>-förrådet (se <xref linkend="add-applications"/>):</para>
 			<itemizedlist>
 				<listitem><para>xfonts-intl-arabic</para></listitem>
 				<listitem><para>xfonts-intl-asian</para></listitem>
@@ -80,19 +70,17 @@ done</programlisting>
 				<listitem><para>xfonts-intl-japanese-big</para></listitem>
 				<listitem><para>xfonts-intl-phonetic</para></listitem>
 			</itemizedlist>
-							<para>For <emphasis role="bold">Microsoft TrueType core fonts</emphasis>, install the <application>msttcorefonts</application> package from the <quote>Multiverse</quote> repository (see <xref linkend="add-applications"/>).
-							</para>
+							<para>För <emphasis role="bold">Microsoft TrueType core fonts</emphasis>, installera <application>msttcorefonts</application>-paktet från <quote>Multiverse</quote> -förrådet (se <xref linkend="add-applications"/>).</para>
 							<para>För att få <emphasis role="bold">Ghostscript-typsnitt</emphasis>, installera paketet <application>gsfonts-x11</application> (se <xref linkend="add-applications"/>).</para>
-							<para>After installing any new font, rebuild the font information files by entering in a Terminal:
-							</para>
+							<para>Efter att du har installerat nya typsnitt måste du omskapa typsnittsinformationen genom att skriva in följande i en terminal:</para>
 							<screen>sudo fc-cache -f -v</screen>
-			<para>If you prefer to download individual fonts by hand, you can install them simply and easily by opening a file manager, and typing <application>fonts:///</application> into the location bar (see <ulink type="help" url="ghelp:user-guide#nautilus-location-bar">the file manager manual</ulink> for how to use the location bar). Then you can simply drag the font you downloaded into the group of existing fonts.</para>
+			<para>Om du vill installera enstaka typsnitt manuellt, kan du göra detta genom att öppna en filhanterare och skriva in <application>fonts:///</application> i Plats-fältet (se <ulink type="help" url="ghelp:user-guide#nautilus-location-bar">manualen för filhanteraren</ulink> för information om hur Plats-fältet används). Sedan drar du helt enkelt typsnitten till fönstret med musen.</para>
 		</sect1>
 		<sect1 status="complete">
 				<title>RAR-arkiverare</title>
 					<procedure>
 						<step>
-							<para>Install the rar package from the <quote>Multiverse</quote> repository (see <xref linkend="add-applications"/>).</para>
+							<para>Installera paketet rar från <quote>Multiverse</quote>-förrådet (see <xref linkend="add-applications"/>).</para>
 						</step>
 						<step>
 							<para>Kör: <screen>
@@ -108,46 +96,35 @@ sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen></para>
 				<para><application>gDesklets</application> är ett system för lägga miniprogram (desklets), som väderprognoser, nyhetsläsare, systeminformationsrutor eller musikspelarkontroller, på ditt skrivbord i ett symbiotiskt förhållande mellan ögongodis och användbarhet.</para>
 				<procedure>
 					<step>
-							<para>Install the <application>gdesklets</application> and <application>gdesklets-data</application> packages from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>).
-							</para>
+							<para>Installera paketen <application>gdesklets</application> och <application>gdesklets-data</application> från <quote>Universe</quote>-förrådet (se <xref linkend="add-applications"/>).</para>
 					</step>
 					<step>
-							<para>Choose: 
-								<menuchoice>
-									<guimenu>Applications</guimenu>
-									<guisubmenu>Accessories</guisubmenu>
-									<guimenuitem>gDesklets</guimenuitem>
-								</menuchoice>
-							</para>
+							<para>Välj: <menuchoice><guimenu>Program</guimenu>
+									<guisubmenu>Tillbehör</guisubmenu>
+									<guimenuitem>gDesklets</guimenuitem></menuchoice></para>
 					</step>
 					<step><para>För mer information, besök <ulink url="http://www.gdesklets.org/">gDesklets hemsida</ulink></para>
 					</step>
 				</procedure>
 		</sect1>
 		<sect1 status="complete">
-			<title>Dölj Senaste dokumenten från Platser-menyn</title>
+			<title>Dölj "Senaste dokument" från Platser-menyn</title>
 				<para>För att dölja <guilabel>Senaste dokumenten</guilabel> från menyn <guilabel>Platser</guilabel>, öppna en terminal och kör följande kommando:</para><screen>chmod 400 ~/.recently-used</screen>
-				<para>To show the menu again, run the command:</para><screen>chmod 600 ~/.recently-used</screen>
+				<para>För att visa menyn igen, kör kommandot:</para><screen>chmod 600 ~/.recently-used</screen>
 		</sect1>
 		<sect1 status="complete">
 			<title>Visa Dator-, Hem- och Papperskorgsikoner i GNOME</title>
 				<procedure>
 					<step>
-						<para>Open the <application>Configuration Editor</application>, by running the program <filename>gconf-editor</filename> (see <ulink type="help" url="ghelp:user-guide#tools-run-app">the run application manual</ulink> for help on how to run an application without using the menu).
-						</para>
+						<para>Öppna <application>Configuration Editor</application>, genom att köra programmet<filename>gconf-editor</filename> (se <ulink type="help" url="ghelp:user-guide#tools-run-app">körprogrammets manual</ulink> för hjälp hur man kör programmet utan att använda menyn.</para>
 					</step>
 					<step>
-						<para>Choose
-							<menuchoice>
-								<guimenu>apps</guimenu>
+						<para>Välj <menuchoice><guimenu>apps</guimenu>
 								<guisubmenu>nautilus</guisubmenu>
-								<guimenuitem>desktop</guimenuitem>
-							</menuchoice>.
-						</para>
+								<guimenuitem>desktop</guimenuitem></menuchoice>.</para>
 					</step>
 					<step>
-						<para>Turn on <guilabel>computer_icon_visible</guilabel>, <guilabel>home_icon_visible</guilabel>, and <guilabel>trash_icon_visible</guilabel>. The changes take effect immediately.
-						</para>
+						<para>Aktivera <guilabel>computer_icon_visible</guilabel>, <guilabel>home_icon_visible</guilabel>, och <guilabel>trash_icon_visible</guilabel>. Ändringarna börjar gälla direkt.</para>
 					</step>
 				</procedure>
 		</sect1>
@@ -158,29 +135,17 @@ sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen></para>
 						<para>Spara och stäng alla öppna program.</para>
 			          </step>
 			          <step>
-            				<para>Use the <keycombo>
-						<keycap>Ctrl</keycap>
+            				<para>Använd kortkommandot <keycombo><keycap>Ctrl</keycap>
 						<keycap>Alt</keycap>
-						<keycap>Backspace</keycap>
-						</keycombo>
-							 shortcut keys to restart GNOME.
-					</para>
+						<keycap>Backsteg</keycap></keycombo> för att starta om GNOME.</para>
            			</step>
            			<step>
-            				<para>If <keycombo>
-                <keycap>Ctrl</keycap>
+            				<para>Om <keycombo><keycap>Ctrl</keycap>
                 <keycap>Alt</keycap>
-                <keycap>Backspace</keycap>
-							</keycombo>
-              is disabled, type
-						<screen>sudo /etc/init.d/gdm restart</screen>
-            </para>
-						<para>(See <xref linkend="disableCtrlAltBackspace"/> to disable <keycombo>
-								<keycap>Ctrl</keycap>
+                <keycap>Backsteg</keycap></keycombo> har inaktiverats skriv <screen>sudo /etc/init.d/gdm restart</screen></para>
+						<para>(Se <xref linkend="disableCtrlAltBackspace"/> för information om hur man inaktiverar kortkommandot <keycombo><keycap>Ctrl</keycap>
 								<keycap>Alt</keycap>
-								<keycap>Backspace</keycap>
-							</keycombo>.)
-						</para>
+								<keycap>Backsteg</keycap></keycombo>.)</para>
 				</step>
 			</procedure>
 		</sect1>
@@ -191,9 +156,7 @@ sudo ln -fs /usr/bin/rar /usr/bin/unrar</screen></para>
 						<para>Gör en kopia av din existerande <filename>/etc/X11/xorg.conf</filename>: <screen>sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup</screen></para>
 					</step>
 					<step>
-					<para>Open <filename>/etc/X11/xorg.conf</filename> for editing:
-						<screen>sudo gedit /etc/X11/xorg.conf</screen>
-					</para>
+					<para>Öppna <filename>/etc/X11/xorg.conf</filename> för redigering: <screen>sudo gedit /etc/X11/xorg.conf</screen></para>
 					</step>
 					<step>
 						<para>Lägg till följande rader till slutet av filen: <programlisting>Section	"ServerFlags"
@@ -201,7 +164,7 @@ Option	"DontZap"	"yes"
 EndSection</programlisting></para>
 					</step>
 					<step>
-						<para>Save the edited file (<ulink url="sample/xorg.conf_disablectrlaltbackspacegnome">an example</ulink>).</para>
+						<para>Spara den ändrade filen (<ulink url="sample/xorg.conf_disablectrlaltbackspacegnome">exempel</ulink>).</para>
 					</step>
 					<step>
 						<para>Ändringarna verkställs nästa gång du loggar in i GNOME. Om du vill att ändringarna ska verkställas omedelbart, starta om GNOME manuellt (se <xref linkend="restartgnomewithoutreboot"/>).</para>

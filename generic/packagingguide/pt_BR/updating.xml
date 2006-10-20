@@ -15,15 +15,10 @@
 <chapter id="updating-chap" status="writing">
  		<title>Atualizando Pacotes</title>
 
-			<para>If you have been around Linux distributions for any amount
-				of time, you have realized that there are sometimes bugs in
-				programs. In the Debian and <phrase>Ubuntu</phrase> distributions, bugs are
-				often fixed through the packaging by patching the source code.
-				Sometimes there are bugs in the packaging itself that can
-				cause difficulties.</para>
+			<para>Se você está acostumado com distribuições Linux por algum tempo, você deve ter percebido que as vezes os programas tem problemas. Nas distribuições Debian e , problemas s</para>
 
 			<para>To patch the program's source code, you could simply download
-				the current <phrase>Ubuntu</phrase> source package (with
+				the current &ubuntu; source package (with
 				<application>apt-get source</application>) and make the needed
 				changes. You can then add a new entry to the
 				<filename>debian/changelog</filename> using
@@ -72,15 +67,17 @@ echo 01_patchname.dpatch &gt;00list</screen>
 			<para>Você pode agora colocar <filename>01_patchname.dpatch</filename> e <filename>00list</filename> no <filename>debian/patches</filename> diretório de seu pacote fonte.</para>
 
 			<screen>
-dpatch patch-template -p "01_patchname" "patch-file description" \
-	&lt; patch-file &gt; 01_patchname.dpatch
-echo 01_patchname.dpatch &gt;00list</screen>
+mkdir ../<package>-<version>/debian/patches↵
+cp 01_patchname.dpatch 00list ../<package>-<version>/debian/patches↵
+cd ..
+rm -rf tmp
+			</version></package></version></package></screen>
 
 			<note><para>Você poderá editar o caminho existente usando <application>dpatch-editar-patch</application>.</para></note>
 			
 		<para>Quando todas as alterações foram feitas, uma alteração no registro foi adicionada, e <application>dpatch</application> adcionou ao arquivo <filename>controle/debian</filename> (se necessário), você então poderá reconstruir a fonte do pacote com <application>debuild -S</application>.</para>
 
-		<para>To get your fixed source package uploaded to the <phrase>Ubuntu</phrase>
+		<para>To get your fixed source package uploaded to the &ubuntu;
 			repositories, you will need to get your source package sponsored by
 			a person who has upload rights. See <xref linkend="ubuntu-upload"/> for more details. Sometimes, rather
 			than giving the entire source package (.diff.gz, .dsc, and
@@ -95,8 +92,8 @@ echo 01_patchname.dpatch &gt;00list</screen>
 			source package by:</para>
 
 		<screen>
-debdiff &lt;oldpackage&gt;.dsc &lt;newpackage&gt;.dsc > package.debdiff
-		</screen>
+debdiff <oldpackage>.dsc <newpackage>.dsc &gt; package.debdiff
+		</newpackage></oldpackage></screen>
 
 		<para>or the binary package by:</para>
 

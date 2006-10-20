@@ -14,29 +14,28 @@
 ]>
 <chapter id="partitions-booting" status="complete">
 	<title>Partitionering och uppstart</title>
-		<para>This section contains information about how to change the way that your computer behaves when you first turn it on, and how to access other operating systems and partitions from Ubuntu.</para>
+		<para>Den här sektionen innehåller information om hur du kan ändra hur din dator uppträder när du först startar den, och hur du kan komma åt andra operativsystem och partitioner från Ubuntu.</para>
 			<sect1 status="complete">
 				<title>Grafisk partitionsredigerare</title>
-					<para><application>Gparted</application> är ett grafiskt verktyg för att ändra hårddiskpartitioner.</para> 
+					<para><application>Gparted</application> är ett grafiskt verktyg för att redigera hårddiskpartitioner.</para> 
 					<procedure>
 						<step>
 							<para>Installera paketet <application>gparted</application> (se <xref linkend="add-applications"/>).</para>
 						</step>
 						<step>	
-							<para>You can run the application with &gparted;.
-							</para>
+							<para>Du kan köra programvaran med &gparted;.</para>
 						</step>
 					</procedure>
 		</sect1>
 		<sect1 status="complete">
-			<title>Make Windows partitions available from Ubuntu</title>
-				<para>Windows partitions should be automatically available from any Ubuntu system. If they are not, you can make them available using the <application>Disks Manager</application>.</para>
+			<title>Gör Windowspartitioner tillgängliga från Ubuntu</title>
+				<para>Windows partitioner borde bli automatiskt tillgängliga från alla Ubuntu system. Om de inte är det, kan du göra dem tillgängliga genom att använda <application>Flyttbara enheter och media</application> under System/Inställningar.</para>
 				<procedure>
 					<step>
-						<para>Open &disks;.</para>
+						<para>Öppna &disks;.</para>
 					</step>
 					<step>
-						<para>Select the correct hard disk, and click <guilabel>Partitions</guilabel>.</para>
+						<para>Välj rätt hårddisk och klicka på <guilabel>Partitioner</guilabel>.</para>
 					</step>
 					<step>
 						<para>Välj partitionen du är intresserad av, och klicka på <guilabel>Aktivera</guilabel></para>
@@ -47,8 +46,8 @@
 				</procedure>
 		</sect1>
 		<sect1 status="complete">
-			<title>Make Windows partitions automatically available</title>
-				<para>Windows partitions should be automatically available from Ubuntu. If they are not, the following procedure will make them automatically available:</para>
+			<title>Gör Windows partitioner automatiskt tillgängliga</title>
+				<para>Windows partitioner bör automatiskt bli tillgängliga från Ubuntu. Om inte, kan du göra de automatiskt tillgängliga genom följande procedur:</para>
 				<procedure>
 					<step>
 						<para>Läs <xref linkend="listpartitiontables"/></para>
@@ -60,8 +59,7 @@ sudo mkdir /media/windows
 							</screen>
 					</step>
 					<step>
-						<para>Next, back up your disk configuration file and open the file in a text editor with administrative privileges:
-						</para>
+						<para>Säkerhetskopiera nu din disks konfigurationsfil och öppna filen i en texteditor med administrativ behörighet:</para>
 						<screen>
 sudo cp /etc/fstab /etc/fstab_backup
 sudo gedit /etc/fstab
@@ -76,7 +74,7 @@ sudo gedit /etc/fstab
 						</note>
 					</step>
 					<step>
-						<para>Save the edited file (<ulink url="sample/fstab_automountntfs">an example</ulink>).</para>
+						<para>Spara den redigerade filen (<ulink url="sample/fstab_automountntfs">ett exempel</ulink>).</para>
 					</step>
 					<step>
 						<para>Ändringarna börjar gälla när du har startat om datorn.</para>
@@ -85,10 +83,10 @@ sudo gedit /etc/fstab
 		</sect1>
 		<sect1 status="complete">
 			<title>Kör ett systemkommando automatiskt vid uppstart</title>
-				<para>Sometimes it can be useful to run a custom command whenever your computer starts up. To do this:</para>
+				<para>Det är ibland användbart att använda ett anpassat kommando när din dator startar. Gör så här:</para>
 				<procedure>
 					<step>
-						<para>Ändra på <application>crontab</application> med administrativa rättigheter (se <xref linkend="root-and-sudo"/>):</para>
+						<para>Ändra på <application>crontab</application> med administrativ behörighet (se <xref linkend="root-and-sudo"/>):</para>
 							<screen>sudo crontab -e</screen>
 					</step>
 					<step>
@@ -104,11 +102,11 @@ sudo gedit /etc/fstab
 				</procedure>
 		</sect1>
 		<sect1 status="complete">
-			<title>Change default operating system at boot</title>
-				<para>To change which operating system starts by default when the computer starts up, edit the <application>grub</application> configuration file.</para>
+			<title>Ändra standart-operativsystem vi uppstart.</title>
+				<para>För att ändra vilket operativsystem som körs som standard när datorn startar, redigera <application>grub</application>s konfigurations fil.</para>
 				<procedure>
 					<step>
-						<para>Make a backup of the configuration file, and open it in a text editor:</para>
+						<para>Gör en säkerhetskopia på konfigurationsfilen, och öppna den i ett textredigeringsprogram:</para>
 							<screen>sudo cp /boot/grub/menu.lst /boot/grub/menu.lst_backup
 sudo gedit /boot/grub/menu.lst</screen>
 					</step>
@@ -121,52 +119,42 @@ default 0
 					<step>
 						<para>Ersätt den med följande rad:</para>
 						<programlisting>default X</programlisting>
-						<note><para>You should replace X with a number, according to the order which your operating systems appear in the configuration file. You should start counting from 0. For example, if you wish the default operating system to be the first in the list, replace X with 0, if you wish the default operating system to be the second in the list, replace X with 1, and so on.</para></note> 
+						<note><para>Du bör ersätta X med ett nummer, enligt vilken ordning dina operativsystem står i konfigurationsfilen. Du behöver börja räkningen från 0. Till exempel, om du vill att standardoperativsystemet ska vara det första på listan, ersätt X med 0, om du vill att standardoperativsystemet ska vara det andra på listan, ersätt X med 1, och så vidare.</para></note> 
 					</step>
 					<step>
-						<para>
-							Save the edited file (<ulink url="sample/menu.list_changedefaultosgrub">an example</ulink>)
-						</para>
+						<para>Spara den ändrade filen (<ulink url="sample/menu.list_changedefaultosgrub">ett exampel</ulink>)</para>
 					</step>
 				</procedure>
 		</sect1>
 		<sect1 status="complete">
-			<title>Configure startup services</title>
-				<para>Det här kräver administrativa rättigheter (se <xref linkend="root-and-sudo"/>).</para>
+			<title>Konfiguera tjänster vid uppstart</title>
+				<para>Det här kräver administrativ behörighet (se <xref linkend="root-and-sudo"/>).</para>
 				<procedure>
 					<step>
-						<para>Run <application>Services Settings</application>:
-							<menuchoice>
-								<guimenu>System</guimenu>
+						<para>Kör <application>Services Settings</application>: <menuchoice><guimenu>System</guimenu>
 								<guisubmenu>Administration</guisubmenu>
-								<guimenuitem>Services</guimenuitem>
-							</menuchoice>.
-						</para>
+								<guimenuitem>Tjänster</guimenuitem></menuchoice>.</para>
 					</step>
 					<step>
-						<para>Skriv in ditt lösenord.</para>
+						<para>Ange ditt lösenord.</para>
 					</step>
 					<step>
-						<para>Select the services you want running, then click <guibutton>OK</guibutton> when done.</para>
+						<para>Markera de tjänster du vill ska köras, klicka sedan på <guibutton>Stäng</guibutton> när du är klar.</para>
 					</step>
 					<step>
-						<para>For greater control over the boot-up services, install the <application>bum</application> from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>), and run it:
-							<menuchoice>
-								<guimenu>System</guimenu>
+						<para>För att få större kontroll över tjänster vid uppstart, installera <application>bum</application> från <quote>Universe</quote>förrådet (se <xref linkend="add-applications"/>), och kör det: <menuchoice><guimenu>System</guimenu>
 								<guisubmenu>Administration</guisubmenu>
-								<guimenuitem>Boot-up Manager</guimenuitem>
-							</menuchoice>.
-						</para>
+								<guimenuitem>Boot-up Manager</guimenuitem></menuchoice>.</para>
 					</step>
 				</procedure>
 			</sect1>
 	<sect1 id="other-hardware" status="complete">
 	    <title>Andra tips</title>
 	    <sect2 id="listpartitiontables" status="complete">
-                <title>Kontrollera hårddiskanvändning och visa partitionstabellen</title>
+                <title>Kontrollera diskutrymme och visa partitionstabellen</title>
                     <procedure>
                         <step>
-                            <para>Open &disks;.</para>
+                            <para>Öppna &disks;.</para>
                         </step>
                         <step>
                             <para>Välj <guibutton>Hårddisk</guibutton>, och sedan fliken <guibutton>Partitioner</guibutton></para>
@@ -178,7 +166,7 @@ default 0
             </sect2>
             <sect2 status="complete">
                 <title>Lista enheter</title>
-                            <para>To list mounted devices, in a terminal enter:</para>
+                            <para>För att lista monterade enheter, skriv detta i en terminal:</para>
                                <screen>mount</screen>
 			    <para>Listan visar enheten (så som en hårddiskpartition), monteringspunkten (var du kommer åt filerna), filsystemstypen och monteringsalternativ.</para>
                             <para>Detta exempel visar hårddiskspartitionen hda2 monterad som '/', med filsystemstypen ext3. Partitionen är monterad med två alternativ, det ena för att tillåta läsning från och skrivning till enheten och det andra för att återmontera enheten med enbart läs-rättigheter om något fel uppstår.</para>
@@ -192,12 +180,12 @@ default 0
             <sect2 status="complete">
                 <title>Montera/avmontera CD/DVD-ROM-skivor manuellt, och visa alla dolda och tillhörande filer/mappar</title>
                             <para>Om vi antar att <filename class="devicefile">/media/cdrom0/</filename> är platsen för din CD/DVD-ROM</para>
-                            <para>To mount a CD/DVD-ROM:</para>
+                            <para>För att montera en CD/DVD-ROM:</para>
                             <para>
                                 <screen>
 sudo mount /media/cdrom0/ -o unhide</screen>
                             </para>
-                            <para>To unmount a CD/DVD-ROM:</para>
+                            <para>För att avmontera en CD/DVD-ROM:</para>
                             <para>
                                 <screen>
 sudo umount /media/cdrom0/</screen>

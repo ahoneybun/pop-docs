@@ -68,10 +68,6 @@ style:
 	mkdir -p $(BASE)ubuntu/common/img/
 	cp ubuntu/libs/img/*png $(BASE)ubuntu/common/img/
 
-index-all: style $(BASE)C $(BASE)af $(BASE)ar $(BASE)be $(BASE)bg $(BASE)bn $(BASE)bo $(BASE)ca $(BASE)cs $(BASE)csb $(BASE)da $(BASE)de $(BASE)de_DE $(BASE)el $(BASE)en_AU $(BASE)en_CA $(BASE)en_GB $(BASE)es $(BASE)es_ES $(BASE)es_PR $(BASE)et $(BASE)eu $(BASE)fa $(BASE)fi $(BASE)fr $(BASE)gl $(BASE)he $(BASE)hr $(BASE)hu $(BASE)id $(BASE)is $(BASE)it $(BASE)ja $(BASE)ka $(BASE)kn $(BASE)ko $(BASE)ku $(BASE)lb $(BASE)lt $(BASE)lv $(BASE)ms $(BASE)nb $(BASE)nl $(BASE)nn $(BASE)oc $(BASE)pl $(BASE)pt $(BASE)pt_BR $(BASE)ro $(BASE)ru $(BASE)sk $(BASE)sl $(BASE)sr $(BASE)sv $(BASE)th $(BASE)tl $(BASE)tr $(BASE)uk $(BASE)zh_CN $(BASE)zh_TW
+index-all: style
 
-	cd build; for i in `ls index.*.html` ; do mv $i index.html.`echo $i | sed -e 's/index.\(.*\).html/\1/'` ; done ; cd ../
-
-$(BASE)%: website-index/%/website-index.xml
-	xsltproc --xinclude --stringparam root.filename "index" -o $@ $(INDEXCHUNKXSL) $<
-
+	for x in ubuntu/desktopguide/*; do y=$$(basename $${x} website-index/); echo $${y}; xsltproc --stringparam root.filename "index.$${y}" -o $(BASE) $(INDEXCHUNKXSL) website-index/$${y}/website-index.xml;	done
