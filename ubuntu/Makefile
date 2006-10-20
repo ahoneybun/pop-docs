@@ -207,7 +207,7 @@ $(PACKAGEBASE)%: ../generic/packagingguide/%/packagingguide.xml
 
 install:
 
-	cd ../generic/installation-guide/build && mkdir -p ../../../build/ubuntu/installation-guide && destination='../../../build/ubuntu/installation-guide/'  formats='html txt' architectures='amd64 hppa i386 ia64 powerpc sparc' ./buildweb.sh && cd ../../../ubuntu/
+	cd ../generic/installation-guide/build && mkdir -p ../../../build/ubuntu/installation-guide && destination='../../../build/ubuntu/installation-guide/'  formats='html txt' manual_release=etch architectures='amd64 hppa i386 ia64 powerpc sparc' ./buildweb.sh && cd ../../../ubuntu/
 
 #######################################
 #
@@ -416,12 +416,6 @@ dg-pdf-tr:
 	xsltproc --xinclude -o $(PDFBASE)tr/desktopguide.fo $(PDFSTYLE) desktopguide/tr/desktopguide.xml
 	fop -fo $(PDFBASE)tr/desktopguide.fo -pdf $(PDFBASE)tr/desktopguide.pdf
 	rm $(PDFBASE)tr/desktopguide.fo
-
-dg-pdf-urd:
-
-	xsltproc --xinclude -o $(PDFBASE)urd/desktopguide.fo $(PDFSTYLE) desktopguide/urd/desktopguide.xml
-	fop -fo $(PDFBASE)urd/desktopguide.fo -pdf $(PDFBASE)urd/desktopguide.pdf
-	rm $(PDFBASE)urd/desktopguide.fo
 
 dg-pdf-zh_CN:
 
@@ -650,11 +644,11 @@ package-pdf-tr:
 	fop -fo $(PDFBASE)tr/packagingguide.fo -pdf $(PDFBASE)tr/packagingguide.pdf
 	rm $(PDFBASE)tr/packagingguide.fo
 
-package-pdf-urd:
+package-pdf-ur:
 
-	xsltproc --xinclude -o $(PDFBASE)urd/packagingguide.fo $(PDFSTYLE) ../generic/packagingguide/urd/packagingguide.xml
-	fop -fo $(PDFBASE)urd/packagingguide.fo -pdf $(PDFBASE)urd/packagingguide.pdf
-	rm $(PDFBASE)urd/packagingguide.fo
+	xsltproc --xinclude -o $(PDFBASE)ur/packagingguide.fo $(PDFSTYLE) ../generic/packagingguide/ur/packagingguide.xml
+	fop -fo $(PDFBASE)ur/packagingguide.fo -pdf $(PDFBASE)ur/packagingguide.pdf
+	rm $(PDFBASE)ur/packagingguide.fo
 
 package-pdf-zh_CN:
 
@@ -830,11 +824,11 @@ server-pdf-tr:
 	fop -fo $(PDFBASE)tr/serverguide.fo -pdf $(PDFBASE)tr/serverguide.pdf
 	rm $(PDFBASE)tr/serverguide.fo
 
-server-pdf-urd:
+server-pdf-ur:
 
-	xsltproc --xinclude -o $(PDFBASE)urd/serverguide.fo $(PDFSTYLE) ../generic/serverguide/urd/serverguide.xml
-	fop -fo $(PDFBASE)urd/serverguide.fo -pdf $(PDFBASE)urd/serverguide.pdf
-	rm $(PDFBASE)urd/serverguide.fo
+	xsltproc --xinclude -o $(PDFBASE)ur/serverguide.fo $(PDFSTYLE) ../generic/serverguide/ur/serverguide.xml
+	fop -fo $(PDFBASE)ur/serverguide.fo -pdf $(PDFBASE)ur/serverguide.pdf
+	rm $(PDFBASE)ur/serverguide.fo
 
 server-pdf-zh_CN:
 

@@ -15,27 +15,9 @@
 <chapter id="updating-chap" status="writing">
  		<title>Mengupdate Paket</title>
 
-			<para>If you have been around Linux distributions for any amount
-				of time, you have realized that there are sometimes bugs in
-				programs. In the Debian and <phrase>Ubuntu</phrase> distributions, bugs are
-				often fixed through the packaging by patching the source code.
-				Sometimes there are bugs in the packaging itself that can
-				cause difficulties.</para>
+			<para>Jika anda telah lama mencoba banyak distro Linuxanda pasti akan menemukan beberapa bug dalam program. Dalam distro Debian dan&ubuntu;, bug seringkali dibetulkan pada paketdengan mempatching source code.</para>
 
-			<para>To patch the program's source code, you could simply download
-				the current <phrase>Ubuntu</phrase> source package (with
-				<application>apt-get source</application>) and make the needed
-				changes. You can then add a new entry to the
-				<filename>debian/changelog</filename> using
-				<application>dch -i</application> or
-				<application>dch -v
-					&lt;version&gt;-&lt;revision&gt;</application> to specify
-				the new revision. When you run <application>debuild
-					-S</application> from the source directory you will have a
-				new source package with a new <filename>.diff.gz</filename> in the
-				parent directory that
-				contains your changes. A problem with this approach is that
-				the distinction between source and patches is unclear.</para>
+			<para>Untuk mempatch source code program, anda bisa dengan sederhana mendownload paket source &ubuntu; (dengan <application>apt-get source</application> dan membuat perubahan yang dibutuhkan. Anda juga bisa menambahkan entri baru ke <filename>debian/changelog</filename> menggunakan <application>dch -i</application> atau  <application>dch -v &lt;version&gt;-&lt;revision&gt;</application> untuk menetapkan versi baru. Bila anda menjalankan <application>debuild -S</application> dari direktori sumber anda akan memiliki paket sumber baru dengan <filename>.diff.gz</filename> dalam direktori parent yang mengandung perubahan anda. Masalah dengan pendekatan ini adalah perbedaan antara source dan patch adalah belum jelas.</para>
 
 			<para>Solusi untuk masalah ini adalah memisahkan perubahan pada source code dalam patch-patch individual yang disimpan dalam direktori <filename>debian</filename>. Satu patch sistem yang seperti itu disebut <application>dpatch</application>. Patch-patch disimpan dalam direktori <filename>debian/patches</filename> dan memiliki format spesial.</para>
 
@@ -77,19 +59,7 @@ rm -rf tmp
 			
 		<para>Sekali semua perubahan telah dibuat, suatu entri changelog ditambahkan, dan <application>dpatch</application> ditambahkan pada file <filename>debian/control</filename> (jika dibutuhkan), kemudian anda bisa membangun ulang paket source dengan <application>debuild -S</application>.</para>
 
-		<para>To get your fixed source package uploaded to the <phrase>Ubuntu</phrase>
-			repositories, you will need to get your source package sponsored by
-			a person who has upload rights. See <xref linkend="ubuntu-upload"/> for more details. Sometimes, rather
-			than giving the entire source package (.diff.gz, .dsc, and
-			.orig.tar.gz), it is easier and more efficient to just give the
-			difference between the source package that is currently in the
-			repositories and your fixed source package. A tool has been
-			created to do just that called
-			<application>debdiff</application>. Using
-			<application>debdiff</application> is similar to using
-			<application>diff</application> but is made specifically for
-			packaging. You can <application>debdiff</application> the
-			source package by:</para>
+		<para>Untuk mendapatkan paket source anda yang sudah diperbaiki diupload ke repositori &ubuntu;, anda akan butuh untuk mendapatkan paket source anda didukung oleh seseorang yang memiliki hak-hak upload. Lihat  <xref linkend="ubuntu-upload"/> untuk lebih detail. Kadang-kadang, daripada memberikan semua paket source (.diff.gz, .dsc, and .orig.tar.gz), lebih mudah dan lebih efisien untuk hanya memberikan perbedaan antara paket source yang sekarang ada pada repositori dan paket source yang sudah diperbaiki. Sebuah tool telah dibuat untuk melakukannya yang disebut <application>debdiff</application>. Menggunakan <application>debdiff</application> adalah sama dengan menggunakan <application>diff</application> tapi lebih spesifik untuk mempaketkan. Anda bisa men<application>debdiff</application> paket source dengan :</para>
 
 		<screen>
 debdiff &lt;oldpackage&gt;.dsc &lt;newpackage&gt;.dsc &gt; package.debdiff

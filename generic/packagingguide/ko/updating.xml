@@ -15,27 +15,9 @@
 <chapter id="updating-chap" status="writing">
  		<title>패키지 업데이트 하기</title>
 
-			<para>If you have been around Linux distributions for any amount
-				of time, you have realized that there are sometimes bugs in
-				programs. In the Debian and <phrase>Ubuntu</phrase> distributions, bugs are
-				often fixed through the packaging by patching the source code.
-				Sometimes there are bugs in the packaging itself that can
-				cause difficulties.</para>
+			<para>만약 여러분이 리눅스 배포판을 어느 기간 동안이라도 사용해 보았다면, 때때로 프로그램들에 버그들이 있음을 알았을 겁니다. 데비안과 &ubuntu; 배포판에서는, 종종 소스 코드를 패치하여 패키징을 하는 것으로 버그들이 고쳐집니다. 때로는 패키징 자체에 있는 버그들이 장애를 일으킬 수도 있습니다.</para>
 
-			<para>To patch the program's source code, you could simply download
-				the current <phrase>Ubuntu</phrase> source package (with
-				<application>apt-get source</application>) and make the needed
-				changes. You can then add a new entry to the
-				<filename>debian/changelog</filename> using
-				<application>dch -i</application> or
-				<application>dch -v
-					&lt;version&gt;-&lt;revision&gt;</application> to specify
-				the new revision. When you run <application>debuild
-					-S</application> from the source directory you will have a
-				new source package with a new <filename>.diff.gz</filename> in the
-				parent directory that
-				contains your changes. A problem with this approach is that
-				the distinction between source and patches is unclear.</para>
+			<para>프로그램 소스 코드를 패치하기 위하여, 여러분은 간단히 현재의 &ubuntu; 소스 패키지를 (<application>apt-get source</application>로) 내려받을 수 있고 필요한 변경을 만들 수 있습니다. 그런 후에 새 리비전을 명시하기 위하여 <application>dch -i</application> 또는 <application>dch -v &lt;version&gt;-&lt;revision&gt;</application>을 사용하여 <filename>debian/changelog</filename>에 새 항목을 추가할 수 있습니다. 소스 디렉토리에서 <application>debuild -S</application>를 실행할 때 여러분의 변경을 포함하는 새로운 소스 패키지를 <filename>.diff.gz</filename>과 함께 상위 디렉토리에 가지게 됩니다. 이 방법의 한 가지 문제는 소스와 패치 간의 구분이 불분명하다는 것입니다.</para>
 
 			<para>이 문제의 해결책은 소스 코드의 변경을 각각의 <filename>debian</filename> 디렉토리로 저장할 패치들로 나누는 것 입니다. 하나의 이러한 패치 시스템은 <application>dpatch</application> 로 불려집니다. 패치들은 <filename>debian/patches/</filename> 디렉토리에 저장되고 특별한 형식을 가지고 있습니다.</para>
 
@@ -77,19 +59,7 @@ rm -rf tmp
 			
 		<para>모든 변경이 만들어지고, changelog 항목도 추가되고, (필요한 경우) <application>dpatch</application> 도 <filename>debian/control</filename> 파일에 더해진 후, 여러분은 <application>debuild -S</application> 를 가지고 소스 패키지를 다시 만들 수 있습니다.</para>
 
-		<para>To get your fixed source package uploaded to the <phrase>Ubuntu</phrase>
-			repositories, you will need to get your source package sponsored by
-			a person who has upload rights. See <xref linkend="ubuntu-upload"/> for more details. Sometimes, rather
-			than giving the entire source package (.diff.gz, .dsc, and
-			.orig.tar.gz), it is easier and more efficient to just give the
-			difference between the source package that is currently in the
-			repositories and your fixed source package. A tool has been
-			created to do just that called
-			<application>debdiff</application>. Using
-			<application>debdiff</application> is similar to using
-			<application>diff</application> but is made specifically for
-			packaging. You can <application>debdiff</application> the
-			source package by:</para>
+		<para>&ubuntu; 저장소로 고쳐진 소스 패키지를 업로드 위하여, 여러분은 업로드 권한을 가진 사람에게 여러분의 소스 패키지를 후원받는 것이 필요합니다. 좀 더 자세한 것은 <xref linkend="ubuntu-upload"/>를 보십시오. 때로는, 전체 소스 패키지(.diff.gz, .dsc, and .orig.tar.gz)를 주는 것보다, 현재 저장소에 있는 소스 패키지와 여러분이 고친 소스 패키지 간의 차이만을 주는 것이 보다 쉽고 효과적일 수 있습니다. <application>debdiff</application>를 사용하는 것은 <application>diff</application>를 사용하는 것과 비슷하지만 패키징을 위하여 특별히 만들어진 것입니다. 다음과 같이 소스 패키지를 <application>debdiff</application> 할 수 있습니다:</para>
 
 		<screen>
 debdiff &lt;oldpackage&gt;.dsc &lt;newpackage&gt;.dsc &gt; package.debdiff

@@ -28,10 +28,12 @@ for x in po/*; do
 	y=$(basename ${x} .po)
 	echo ${y}
 	mkdir -p ${y}
-	for i in C/*; do
+	for i in C/*xml; do
 		j=$(basename ${i} C/)
 		echo ${j}
 		xml2po -k -p ${x} C/${j} | replace-doctype-with.py C/${j} >${y}/${j}
+	done
+	xml2po -k -p ${x} C/serverguide-C.omf >${y}/serverguide-${y}.omf
 	sed -i -e s@\"C\"@\"${y}\"@g -e s@C/@${y}/@g ${y}/serverguide-${y}.omf
 	../../validate.sh ${y}/serverguide.xml
 done
