@@ -111,8 +111,7 @@ sudo debootstrap --variant=buildd edgy /var/chroot/ http://archive.ubuntu.com/ub
 				minimal &ubuntu; installation.</para></note>
 		
 		<screen>sudo cp /etc/resolv.conf /var/chroot/etc/resolv.conf
-sudo cp /etc/apt/sources.list /var/chroot/etc/apt/
-sudo chroot /var/chroot/</screen>
+sudo chroot /var/chroot/ /bin/bash</screen>
 
 		<para>In order to be able to use apt in the chroot, add Ubuntu sources to the chroot's
 			apt sources. For the moment, ignore any warnings about package
@@ -125,14 +124,12 @@ echo "deb-src http://archive.ubuntu.com/ubuntu edgy main restricted \
 	universe multiverse" >> /etc/apt/sources.list
 apt-get update
 apt-get install build-essential dh-make automake pbuilder gnupg lintian \
-	wget debconf devscripts gnupg sudo
-apt-get update
-exit</screen>
+	wget debconf devscripts gnupg sudo</screen>
 
 		<para>Run the following command to configure locales:</para>
 		
 		<screen>
-sudo chroot /var/chroot/
+apt-get update
 apt-get install dialog language-pack-en
 exit</screen>
 
@@ -345,189 +342,175 @@ exit</screen>
 
 <itemizedlist>
 
-<listitem>
-		<para>dh_builddeb</para>
-</listitem>
-
-<listitem>
-		<para>dh_clean</para>
-</listitem>
-
-<listitem>
-		<para>dh_compress</para>
-</listitem>
-
-<listitem>
-		<para>dh_desktop</para>
-</listitem>
-
-<listitem>
-		<para>dh_fixperms</para>
-</listitem>
-
-<listitem>
-		<para>dh_gconf</para>
-</listitem>
-
-<listitem>
-		<para>dh_gencontrol</para>
-</listitem>
-
-<listitem>
-		<para>dh_iconcache</para>
-</listitem>
-
-<listitem>
-		<para>dh_install</para>
-</listitem>
-
-<listitem>
-		<para>dh_installcatalogs</para>
-</listitem>
-
-<listitem>
-		<para>dh_installchangelogs</para>
-</listitem>
-
-<listitem>
-		<para>dh_installcron</para>
-</listitem>
-
-<listitem>
-		<para>dh_installdeb</para>
-</listitem>
-
-<listitem>
-		<para>dh_installdebconf</para>
-</listitem>
-
-<listitem>
-		<para>dh_installdefoma</para>
-</listitem>
-
-<listitem>
-		<para>dh_installdirs</para>
-</listitem>
-
-<listitem>
-		<para>dh_installdocs</para>
-</listitem>
-
-<listitem>
-		<para>dh_installemacsen</para>
-</listitem>
-
-<listitem>
-		<para>dh_installexamples</para>
-</listitem>
-
-<listitem>
-		<para>dh_installinfo</para>
-</listitem>
-
-<listitem>
-		<para>dh_installinit</para>
-</listitem>
-
-<listitem>
-		<para>dh_installlogcheck</para>
-</listitem>
-
-<listitem>
-		<para>dh_installlogrotate</para>
-</listitem>
-
-<listitem>
-		<para>dh_installman</para>
-</listitem>
-
-<listitem>
-		<para>dh_installmenu</para>
-</listitem>
-
-<listitem>
-		<para>dh_installmime</para>
-</listitem>
-
-<listitem>
-		<para>dh_installmodules</para>
-</listitem>
-
-<listitem>
-		<para>dh_installpam</para>
-</listitem>
-
-<listitem>
-		<para>dh_installppp</para>
-</listitem>
-
-<listitem>
-		<para>dh_installtexfonts</para>
-</listitem>
-
-<listitem>
-		<para>dh_installwm</para>
-</listitem>
-
-<listitem>
-		<para>dh_installxfonts</para>
-</listitem>
-
-<listitem>
-		<para>dh_installxmlcatalogs</para>
-</listitem>
-
-<listitem>
-		<para>dh_link</para>
-</listitem>
-
-<listitem>
-		<para>dh_listpackages</para>
-</listitem>
-
-<listitem>
-		<para>dh_makeshlibs</para>
-</listitem>
-
-<listitem>
-		<para>dh_md5sums</para>
-</listitem>
-
-<listitem>
-		<para>dh_perl</para>
-</listitem>
-
-<listitem>
-		<para>dh_python</para>
-</listitem>
-
-<listitem>
-		<para>dh_scrollkeeper</para>
-</listitem>
-
-<listitem>
-		<para>dh_shlibdeps</para>
-</listitem>
-
-<listitem>
-		<para>dh_strip</para>
-</listitem>
-
-<listitem>
-		<para>dh_testdir</para>
-</listitem>
-
-<listitem>
-		<para>dh_testroot</para>
-</listitem>
-
-<listitem>
-		<para>dh_usrlocal</para>
-</listitem>
+  <listitem>
+    <para><application>dh_builddeb</application> - build debian packages</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_clean</application> - clean up package build directories</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_clideps</application> - calculates CLI (.NET) dependencies</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_compress</application> - compress files and fix symlinks in package build directories</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_desktop</application> - Register .desktop files</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_fixperms</application> - fix permissions of files in package build directories</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_gconf</application> - generate GConf schema registration scripts</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_gencontrol</application> - generate and install control file</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_install</application> - install files into package build directories</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installcatalogs</application> - install and register SGML Catalogs</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installchangelogs</application> - install changelogs into package build directories</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installcligac</application> - register assemblies to be late installed into a GAC</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installcron</application> - install cron scripts into etc/cron.*</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installdeb</application> - install files into the DEBIAN directory</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installdebconf</application> - install files used by debconf in package build directories</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installdefoma</application> - install a defoma related scripts</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installdirs</application> - create subdirectories in package build directories</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installdocs</application> - install documentation into package build directories</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installemacsen</application> - register an emacs add on package</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installexamples</application> - install example files into package build directories</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installinfo</application> - install and register info files</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installinit</application> - install init scripts into package build directories</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installlogcheck</application> - install logcheck rulefiles into etc/logcheck/</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installlogrotate</application> - install logrotate config files</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installman</application> - install man pages into package build directories</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installmanpages</application> - old-style man page installer</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installmenu</application> - install debian menu files into package build directories</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installmime</application> - install mime files into package build directories</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installmodules</application> - register modules with modutils</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installpam</application> - install pam support files</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installppp</application> - install ppp ip-up and ip-down files</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installtex</application> - register Type 1 fonts, languages, or formats with TeX</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installudev</application> - install udev rules files</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installwm</application> - register a window manager</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installxfonts</application> - register X fonts</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_installxmlcatalogs</application> - install and register XML catalog files</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_link</application> - create symlinks in package build directories</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_listpackages</application> - list binary packages debhelper will act on</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_make</application> - Debianize a regular source archive</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_makeclilibs</application> - automatically create clilibs file</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_makeshlibs</application> - automatically create shlibs file</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_md5sums</application> - generate DEBIAN/md5sums file</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_movefiles</application> - move files out of debian/tmp into subpackages</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_perl</application> - calculates perl dependencies</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_pycentral</application> - use the python-central framework to handle Python modules and extensions</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_pysupport</application> - use the python-support framework to handle Python modules</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_python</application> - calculates python dependencies and adds postinst and prerm python scripts</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_scrollkeeper</application> - generate ScrollKeeper registration scripts</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_shlibdeps</application> - calculate shared library dependencies</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_strip</application> - strip executables, shared libraries, and some static libraries</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_suidregister</application> - obsolete suid registration program</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_testdir</application> - test directory before building debian package</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_testroot</application> - ensure that a package is built as root</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_testversion</application> - ensure that the correct version of debhelper is installed</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_undocumented</application> - obsolete undocumented.7 symlink program</para>
+  </listitem>
+  <listitem>
+    <para><application>dh_usrlocal</application> - migrate usr/local directories to maintainer scripts</para>
+  </listitem>
 
 </itemizedlist>
-
-
-	</sect1>
-
+</sect1>
 </appendix>

@@ -26,20 +26,41 @@ common-binary-post-install-indep::
 		/usr/share/ubuntu-artwork/home/locales-ubuntu \
 		../index.html
 
+# Omf files
 
-	for dir in aboutubuntu desktopguide getting-help; do \
-		mkdir -p debian/ubuntu-docs/usr/share/omf/$$dir/; \
-		for file in `find ubuntu/$$dir/ -type f -iname '*.omf'`; do \
-			cp $$file debian/ubuntu-docs/usr/share/omf/$$dir/; \
+		for doc in about-ubuntu add-applications games getting-help internet musicvideophotos newtoubuntu office printing programming server contribute; do \
+			mkdir -p debian/ubuntu-docs/usr/share/omf/$$doc/; \
+			cp ubuntu/omf/$$doc* debian/ubuntu-docs/usr/share/omf/$$doc/; \
 		done; \
-	done
-	for dir in serverguide packagingguide contribute; do \
-		mkdir -p debian/ubuntu-docs/usr/share/omf/$$dir/; \
-		for file in `find generic/$$dir/ -type f -iname '*.omf'`; do \
-			cp $$file debian/ubuntu-docs/usr/share/omf/$$dir/; \
-		done; \
-	done
 
-	mv debian/ubuntu-docs/usr/share/omf/aboutubuntu/ debian/ubuntu-docs/usr/share/omf/about-ubuntu
+# Ubuntu documents
+
+		for doc in add-applications games getting-help internet musicvideophotos newtoubuntu office printing programming; do \
+			mkdir -p debian/ubuntu-docs/usr/share/ubuntu-docs/xml/C/$$doc; \
+			cp ubuntu/C/$$doc/*xml debian/ubuntu-docs/usr/share/ubuntu-docs/xml/C/$$doc/; \
+		done; \
+
+# Except about-ubuntu gets special treatment, needed for the menu entry to work
+
+	mkdir -p debian/ubuntu-docs/usr/share/gnome/help/about-ubuntu/C
+	cp ubuntu/C/about-ubuntu/about-ubuntu.xml debian/ubuntu-docs/usr/share/gnome/help/about-ubuntu/C/
+
+# Generic documents
+
+		for doc in serverguide contribute; do \
+			mkdir -p debian/ubuntu-docs/usr/share/ubuntu-docs/xml/C/$$doc; \
+			cp generic/$$doc/C/*xml debian/ubuntu-docs/usr/share/ubuntu-docs/xml/C/$$doc; \
+		done; \
+
+# Preface documents
+
+	cp -r common debian/ubuntu-docs/usr/share/ubuntu-docs/ 
+
+# Common documents
+
+	mkdir -p debian/ubuntu-docs/usr/share/ubuntu-docs/ubuntu/menus/C
+	cp ubuntu/menus/C/*.xml debian/ubuntu-docs/usr/share/ubuntu-docs/ubuntu/menus/C/
+
+# Scrollkeeper loving
 
 	dh_scrollkeeper 
