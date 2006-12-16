@@ -6,23 +6,7 @@
     <xsl:variable name="up" select="parent::*"/>
       <div id="mastwrap">
       <div id="masthead">
-      <div id="sisternav">
-        <ul>
-          <li id="plain">
-            <a href="/5.10">5.10</a>
-          </li>
-          <li id="plain">
-            <a href="/6.06">6.06 LTS</a>
-       	  </li>
-          <li id="current">
-            <a href="/6.10">6.10</a>
-       	  </li>
-          <li id="plain">
-            <a href="/community">Community Docs</a>
-          </li>
-	  </ul>
-	</div>
-    </div>
+        </div>
 	</div>
 
 

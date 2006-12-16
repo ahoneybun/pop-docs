@@ -44,30 +44,24 @@ INDEXCHUNKXSL=libs/index-html-chunk-cust.xsl
 # Base gnome directories for output from processor
 BASE=build/
 
-website: index-all ubuntu-book
+website: index
 	@echo "Building the Ubuntu Docs . . ."
 
-	make -C ubuntu -f Makefile website pdf
+	make -C ubuntu -f Makefile all pdf
 
 	@echo "Building the Kubuntu Docs . . ."
 
-	make -C kubuntu -f Makefile website pdf
+	make -C kubuntu -f Makefile all pdf
 
-	@echo "Building the Xubuntu Docs . . ."
+	@echo "Building the Index Page . . ."
 
-	make -C xubuntu -f Makefile web pdf
+index:
 
-ubuntu-book:
-
-	mkdir -p $(BASE)book/
-	cp -r book/* $(BASE)book/
-
-style:
-
+	xsltproc --stringparam root.filename "index" -o $(BASE) $(INDEXCHUNKXSL) website-index/C/website-index.xml
 	cp libs/index.css $(BASE)
-	mkdir -p $(BASE)ubuntu/common/img/
-	cp ubuntu/libs/img/*png $(BASE)ubuntu/common/img/
 
-index-all: style
+# This is an example target for translations, where "cc" is the country-code for the translation language.
+index-cc:
 
-	for x in ubuntu/desktopguide/*; do y=$$(basename $${x} website-index/); echo $${y}; xsltproc --stringparam root.filename "index.$${y}" -o $(BASE) $(INDEXCHUNKXSL) website-index/$${y}/website-index.xml;	done
+	xsltproc --stringparam root.filename "index.cc" -o $(BASE) $(INDEXCHUNKXSL) website-index/cc/website-index.xml
+	cp libs/index.css $(BASE)

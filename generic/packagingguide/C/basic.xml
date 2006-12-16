@@ -161,7 +161,7 @@ package (version) distribution; urgency=urgency
     more change details
   * even more change details
 
--- maintainer name &lt;email address&gt;[two spaces]  date</screen>
+ -- maintainer name &lt;email address&gt;[two spaces]  date</screen>
 
 			<para>The format (especially of the date) is important. The date
 				should be in RFC822 format, which can be obtained from the
@@ -175,7 +175,7 @@ hello (2.1.1-1) edgy; urgency=low
 
    * New upstream release with lots of bug fixes.
 
--- Captain Packager &lt;packager@coolness.com&gt;  Wed,  5 Apr 2006 22:38:49 -0700</screen>
+ -- Captain Packager &lt;packager@coolness.com&gt;  Wed,  5 Apr 2006 22:38:49 -0700</screen>
 
 			<para>Notice that the version has a -1 appended to it, or
 				what is called the Debian revision, which is used so that the
@@ -694,7 +694,7 @@ lintian -i *.dsc</screen>
 				requirements from <xref linkend="basic-scratch"/> plus
 				debhelper and dh-make</para> </important>
 
-		<para> As a packager, you will rarely create packages from scratch as
+		<para>As a packager, you will rarely create packages from scratch as
 			we have done in the previous section. As you can imagine, many of
 			the tasks and information in the <filename>rules</filename> file,
 			for instance, are common to packages. To make packaging
@@ -711,15 +711,15 @@ lintian -i *.dsc</screen>
 			create a directory where you will be working: </para>
 
 		<screen>mkdir ~/hello-debhelper
-cd ~/hello-debhelper
-wget http://ftp.gnu.org/gnu/hello/hello-2.1.1.tar.gz
-mkdir ubuntu
-cd ubuntu</screen>
+cd ~/hello-debhelper</screen>
 		
+		<para>Now, get the source code of GNU Hello from GNU Project's website:</para>
+		<screen>wget http://ftp.gnu.org/gnu/hello/hello-2.1.1.tar.gz</screen>
 
 		<para>Then, get the Ubuntu source package:</para>
-
-		<screen>apt-get source hello-debhelper
+		<screen>mkdir ubuntu
+cd ubuntu
+apt-get source hello-debhelper
 cd ..</screen>
 
 		<para>Like the previous example, the first thing we need to do is
@@ -728,25 +728,27 @@ cd ..</screen>
 		<screen>tar -xzvf hello-2.1.1.tar.gz</screen>
 
 		<para>Instead of copying the upstream tarball to
-			<filename>hello_2.1.1.orig.tar.gz</filename> as we did in the
+			<filename>hello_2.1.1.orig.tar.gz</filename>, as we did in the
 			previous example, we will let <application>dh_make</application>
-			do the work for us. The only thing you have to do is rename the
-			source folder so it is in the form of
+			do the work for us. It will also create a template of the debian/
+			directory.</para>
+
+		<para>The only thing you have to do is rename the
+			source folder, so it is in the form of
 			<emphasis>&lt;packagename&gt;-&lt;version&gt;</emphasis> where
-			packagename is lowercase. In this case, just untarring the
-			tarball produces a correctly named source directory so we can move
-			into it:</para>
+			packagename is lowercase. In this case, we want to name the package
+			<application>hello-debhelper</application>. So, we rename the directory:</para>
 
-		<screen>cd hello-2.1.1</screen>
+			<screen>mv hello-2.1.1 hello-debhelper-2.1.1<screen>
 
-		<para>To create the initial "debianization" of the source we will use
-			<application>dh_make</application>.</para>
-
-		<screen>
+		<para>Now, from the package's directory, run
+			<application>dh_make</application>:</para>
+		<screen>cd hello-debhelper-2.1.1
 dh_make -e your.maintainer@address -f ../hello-2.1.1.tar.gz
 		</screen>
 
-		<para>dh_make will then ask you a series of questions:</para>
+		<para><application>dh_make</application> will then ask you a
+			series of questions about your package:</para>
 
 		<screen>
 Type of package: single binary, multiple binary, library, kernel module or cdbs?
@@ -793,16 +795,30 @@ Hit &lt;enter&gt; to confirm: <emphasis role="bold">Enter</emphasis></screen>
 rm *.ex *.EX</screen>
 
 		<para>For <application>hello</application>, you will also not need
-			<filename>README.Debian</filename> (README file for specific
-			Debian issues, not the program's README), <filename>dirs</filename>
-			(used by <application>dh_installdirs</application> to create
-			needed directories), <filename>docs</filename> (used by
-			<application>dh_installdocs</application> to install program
-			documentation), or <filename>info</filename> (used by
-			<application>dh_installinfo</application> to install the info
-			file) files into the <filename>debian</filename> directory. For more
-			information on these files, see <xref
-				linkend="appendix-examples"/>.</para>
+			some of the files into the <filename>debian</filename> directory:</para>
+
+		<itemizedlist>
+
+			<listitem><para>
+					<filename>README.Debian</filename>: the README file for
+					specific Debian issues, not the program's README.</para></listitem>
+
+			<listitem><para>			
+					<filename>dirs</filename>: Used by <application>dh_installdirs</application>
+					to create needed directories.</para></listitem>
+
+			<listitem><para>
+					<filename>docs</filename>: Used by <application>dh_installdocs</application>
+					to install program documentation.</para></listitem>
+
+			<listitem><para>
+					<filename>info</filename>: Used by <application>dh_installinfo</application>
+					to install the info	file.</para></listitem>
+
+		</itemizedlist>
+
+		<para>Keep in mind that for most packages, these files are required.
+			For more information on them, see <xref linkend="appendix-examples"/>.</para>
 
 		<para>At this point, you should have only
 			<filename>changelog</filename>, <filename>compat</filename>,
