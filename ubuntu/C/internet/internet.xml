@@ -12,6 +12,8 @@
 <!ENTITY language "en">
 <!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
 ]>
+<?db.chunk.max_depth 2?>
+<?yelp:chunk-depth 2?>
 	<article id="internet" status="complete">
 	<articleinfo>
 		<title>Internet</title>
@@ -58,13 +60,17 @@
                                     <guimenu>System</guimenu>
                                     <guisubmenu>Administration</guisubmenu>
                                     <guimenuitem>Networking</guimenuitem>
-                                </menuchoice>. If your wireless card is listed, you can follow <xref linkend="internet-basic-procedure"/> to connect to the internet. A complete listing of wireless cards which work with Ubuntu can be found online at the <ulink url="https://help.ubuntu.com/community/WifiDocs/WirelessCardsSupported">Ubuntu Wiki</ulink>. Please add your wireless card to the list if it works with Ubuntu.</para> 
+                                </menuchoice>. If your wireless card is listed, you can follow <xref linkend="internet-basic-procedure"/> to connect to the internet. A complete listing of wireless cards which work with Ubuntu can be found online at the <ulink url="https://help.ubuntu.com/community/WifiDocs/WirelessCardsSupported">Ubuntu Wiki</ulink>. Please add your wireless card to the list if it works with Ubuntu.</para>
+				<note><para>If your wireless network is protected by WEP encryption, ensure that you specify your network password when configuring your connection. Ubuntu does not automatically support WPA encryption, if you require this, there is <ulink url="https://help.ubuntu.com/community/WifiDocs/WPAHowTo">a WPA guide</ulink> on the Ubuntu documentation wiki.</para></note>
+			<sect3>
+				<title>Unsupported Wireless Cards</title>
             <para>Some cards may not work automatically with Ubuntu. If this is the case, please look at the <ulink url="https://wiki.ubuntu.com/WirelessTroubleshootingGuide">Wireless Troubleshooting Guide</ulink> on the Ubuntu Wiki which is an excellent resource for troubleshooting wireless cards.
             </para>
-            <para>If your wireless card does not work with Ubuntu, you may have to do some research in order to activate it. A good way of getting a wireless card to work is to use the <application>ndiswrapper</application> tool which allows Ubuntu to use the Microsoft Windows driver for the wireless card. To do this, follow the instructions below in <xref linkend="ndiswrapper"/>.
+            <para>If your wireless card does not work with Ubuntu, you may have to do some research in order to activate it. A relatively reliable way of getting a wireless card to work is to use the <application>ndiswrapper</application> tool which allows Ubuntu to use the Microsoft Windows driver for the wireless card. To do this, follow the instructions below in <xref linkend="ndiswrapper"/>.
 			</para>
 			<para>All other information regarding wireless networking on Ubuntu is collected at <ulink url="https://help.ubuntu.com/community/WifiDocs">Wireless Networking Central</ulink> on the Ubuntu Wiki.
             </para>
+			</sect3>
 				<sect3 id="ndiswrapper">
 					<title>Windows Wireless Drivers</title>
 						<para>Even if your wireless network card does not have a native Linux driver, you may still be able to get it working with <application>ndiswrapper</application>. <application>Ndiswrapper</application> is a Linux module which allows Ubuntu to use the Windows driver for wireless cards (in most cases).</para>
@@ -94,13 +100,13 @@ sudo modprobe ndiswrapper</screen>
 								</para></step>
 							</procedure>
 					<para>You should now be able to connect to the internet by following the instructions at <xref linkend="internet-basic-procedure"/>.</para>
-				</sect3>
+				</sect3> 
         </sect2> 
 	    <sect2 id="modems" status="complete">
 		<title>ADSL Connections</title>
-			<para>All PPPOE and router-style ADSL modems that use an Ethernet connection are supported by Ubuntu, and some USB ADSL modems are supported too.</para>
+			<para>All PPPoE and router-style ADSL modems that use an Ethernet connection are supported by Ubuntu, and some USB ADSL modems are supported too.</para>
 			<para>For a router-style ADSL modem, simply follow <xref linkend="internet-basic-procedure"/></para>
-			<para>For information on setting up a PPPOE ADSL modem see <xref linkend="adsl-pppoe"/>.</para>
+			<para>For information on setting up a PPPoE ADSL modem see <xref linkend="adsl-pppoe"/>.</para>
 			<para>For information on setting up a USB ADSL modem see <xref linkend="adsl-usb"/>.</para>
 
 			<sect3 id="adsl-pppoe" status="writing">
@@ -172,7 +178,90 @@ gedit Modem/ModemData.txt</screen>
 				<para>Read this file, it should list what modem chipset you have. Once you are aware of the chipset you have, see <ulink url="&linmodem;">&linmodem;</ulink> and follow the directions for your modem. More infomation can be found at <ulink url="https://wiki.ubuntu.com/SettingUpModems">SettingUpModems</ulink> on the Ubuntu Wiki.</para>
 	  </sect2>
 	</sect1>
-
+      <sect1 id="networking" status="complete">
+		<title>Configuring a Network</title>
+            <sect2 status="complete">
+                <title>Change the Computer Name</title>
+                    <procedure>
+                        <step>
+                            <para>
+                                Open &networking;.
+                            </para>
+                        </step>
+                        <step>
+                            <para>Click <guilabel>General</guilabel>, and enter the name of the computer in the
+                                    <guilabel>Hostname</guilabel> field.</para>
+                        </step>
+                    </procedure>
+                    <para>Restart the computer for the change to take effect.</para>
+            </sect2>
+	<sect2 id="networking-utils" status="complete">
+		<title>Networking Utilities</title>
+			<sect3 id="firestarter" status="complete">
+				<title>Firestarter Firewall</title>
+						<para>A firewall protects a computer system from unauthorized access. It is not normally necessary to install a firewall on an Ubuntu system, because access to the system is closed by default. However, if you run any services that let other computers access yours (for example, the Apache web server), it is advisable to install a firewall. <application>Firestarter</application> is a program that lets you control a firewall through a graphical interface.
+						</para>
+					<procedure>
+						<step>
+							<para>Install the <application>Firestarter</application> package from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>).
+							</para>
+						</step>
+						<step>
+							<para>After it is installed, run &firestarter-firewall-tool; to configure your firewall. The firewall will now start in the background when your computer starts.
+							</para>
+						</step>
+					</procedure>
+				</sect3>
+			<sect3 status="complete">
+				<title>Graphical Network Monitor</title>
+					<para>Etherape displays network activity among different hosts using circles of
+						varying size.</para>
+					<procedure>
+						<step>
+							<para>Install the <application>etherape</application> package from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>
+							<para>Choose:
+								<menuchoice>
+									<guimenu>Applications</guimenu>
+									<guisubmenu>Internet</guisubmenu>
+									<guimenuitem>Etherape</guimenuitem>
+								</menuchoice>.
+							</para>
+						</step>
+					</procedure>
+			</sect3>	 
+			<sect3 status="complete">
+				<title>Network Traffic Analyzer</title>
+					<para>Ethereal is a network traffic analyzer/sniffer that captures packets
+						off the network in real time and displays their contents.</para>
+					<procedure>
+						<step>
+							<para>Install the <application>ethereal</application> package from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>).</para>
+						</step>
+						<step>
+							<para>Choose:
+								<menuchoice>
+									<guimenu>Applications</guimenu>
+									<guisubmenu>Internet</guisubmenu>
+									<guimenuitem>Ethereal</guimenuitem>
+								</menuchoice>.
+							</para>
+						</step>
+					</procedure>
+			</sect3>
+		</sect2>
+		<sect2 status="complete">
+                <title>Browse Network Computers</title>
+                            <para>To view computers on the network, open
+                                <menuchoice>
+                                    <guimenu>Places</guimenu>
+                                    <guimenuitem>Network Servers</guimenuitem>
+                                </menuchoice>.
+                            </para>
+				<para>You may need to enter a username, password, and domain. You should obtain these from your network administrator.</para>
+		</sect2>
+</sect1>
 		<sect1 id="web-browsing" status="complete">
 			<title>Web browsing</title>
 			<para>The powerful and secure <application>Mozilla Firefox</application> web browser is included in Ubuntu. <application>Firefox</application> features tabbed browsing, pop-up blocking, built-in search, and live
@@ -185,7 +274,7 @@ gedit Modem/ModemData.txt</screen>
 					<step><para>For the <application>Totem Gstreamer</application> plugin (the default Ubuntu media player), install the <application>totem-gstreamer-firefox-plugin</application> package from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>).</para></step>
 					<step><para>For the <application>Totem Xine</application> plugin, install the <application>totem-xine-firefox-plugin</application> package from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>).</para></step>
 					<step><para>For the <application>Mplayer</application> plugin, install the <application>mozilla-mplayer</application> package from the <quote>Multiverse</quote> repository (see <xref linkend="add-applications"/>).</para></step>
-					<step><para>The changes will take effect when you close and open <application>Firefox</application>.</para></step>
+					<step><para>The plug-in will be available after you restart <application>Firefox</application>.</para></step>
 				</procedure>
 					<note><para>These steps will install the plugin for <application>Firefox</application>. However, to play some formats, you may need to add some extra codecs (see <xref linkend="codecs"/>).</para></note>
 			</sect2>
@@ -198,15 +287,15 @@ gedit Modem/ModemData.txt</screen>
 							</para>
 						</step>
 						<step>
-							<para>The plug-in will be available the next time you start <application>Firefox</application>.</para>
+							<para>The plug-in will be available after you restart <application>Firefox</application>.</para>
 						</step>
 					</procedure>
-							<note><para>Installing the package as described above will download and install the plugin. You need an internet connection for this to work. If, after installing the application, you need to download and install the plugin at a later time, enter the following command in a terminal:<screen>sudo update-flashplugin</screen></para></note>
+							<note><para>Installing the package as described above will download and install the plugin. You need an internet connection for this to work. If, after installing the application, you need to download and install the plugin at a later time, enter the following command in a terminal:<screen>sudo dpkg-reconfigure flashplugin-nonfree</screen>.</para></note>
 
 			</sect2>
 			<sect2 status="complete">
 				<title>Java plugin for Mozilla Firefox</title>
-					<para>Some websites require the Java plugin for Mozilla Firefox. The easiest way to view Java applets is to install the <application>j2re1.4-mozilla-plugin</application> package from the <quote>Multiverse</quote> repository.</para>
+					<para>Some websites require the Java plugin for Mozilla Firefox. The easiest way to view Java applets is to install the <application>j2re1.4-mozilla-plugin</application> package from the <quote>Multiverse</quote> repository (see <xref linkend="add-applications"/>).</para>
 					<para>For a more complete Java installation, see <xref linkend="java"/>.</para>
 			</sect2>
 
@@ -272,7 +361,7 @@ gedit Modem/ModemData.txt</screen>
 						</para>
 				</step>
 				<step>
-						<para>Click on the <guibutton>Mail Reader</guibutton> tab, and select the <guilabel>Custom</guilabel> option.</para>
+						<para>Click on the <guibutton>Mail Reader</guibutton> drop down menu, and select the <guilabel>Custom</guilabel> option.</para>
 				</step>
 				<step>
 						<para>In the <guilabel>Command</guilabel> text box, type
@@ -296,7 +385,7 @@ gedit Modem/ModemData.txt</screen>
                			<para>XChat-GNOME is an advanced, graphical, multi-platform Internet Relay Chat (IRC) client. Its features include advanced scripting support (perl and python) and a clean, easy to use interface. </para>
 				<procedure>
 					<step>
-						<para>Install the <application>xchat-gnome</application> package from the <emphasis>main</emphasis> repository (see <xref linkend="add-applications"/>).</para>
+						<para>Install the <application>xchat-gnome</application> package (see <xref linkend="add-applications"/>).</para>
 					</step>
 					<step>
 						<para>To start <application>XChat-GNOME</application>, choose &xchat-gnome;.</para>
@@ -364,7 +453,7 @@ gedit Modem/ModemData.txt</screen>
 					</procedure>
 			</sect2>
 			<sect2 status="complete">
-					<title>Liferea News Reader</title>
+					<title>Liferea Feed Reader</title>
 					<procedure>
 						<step>
 							<para>Install the <application>liferea</application> package from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>).</para>
@@ -381,88 +470,4 @@ gedit Modem/ModemData.txt</screen>
 					</procedure>
 			</sect2>
 		</sect1>	
-      <sect1 id="networking" status="complete">
-		<title>Networking</title>
-            <sect2 status="complete">
-                <title>Change the Computer Name</title>
-                    <procedure>
-                        <step>
-                            <para>
-                                Open &networking;.
-                            </para>
-                        </step>
-                        <step>
-                            <para>Click <guilabel>General</guilabel>, and enter the name of the computer in the
-                                    <guilabel>Hostname</guilabel> field.</para>
-                        </step>
-                    </procedure>
-                    <para>Restart the computer for the change to take effect.</para>
-            </sect2>
-	<sect2 id="networking-utils" status="complete">
-		<title>Networking Utilities</title>
-			<sect3 id="firestarter" status="complete">
-				<title>Firestarter Firewall</title>
-						<para>A firewall protects a computer system from unauthorized access. It is not normally necessary to install a firewall on an Ubuntu system, because access to the system is closed by default. However, if you run any services that let other computers access yours (for example, the Apache web server), it is advisable to install a firewall. <application>Firestarter</application> is a program that lets you control a firewall through a graphical interface.
-						</para>
-					<procedure>
-						<step>
-							<para>Install the <application>Firestarter</application> package from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>).
-							</para>
-						</step>
-						<step>
-							<para>After it is installed, run &firestarter-firewall-tool; to configure your firewall. The firewall will now start in the background when your computer starts.
-							</para>
-						</step>
-					</procedure>
-				</sect3>
-			<sect3 status="complete">
-				<title>Graphical Network Monitor</title>
-					<para>Etherape displays network activity among different hosts using circles of
-						varying size.</para>
-					<procedure>
-						<step>
-							<para>Install the <application>etherape</application> package from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>).</para>
-						</step>
-						<step>
-							<para>Choose:
-								<menuchoice>
-									<guimenu>Applications</guimenu>
-									<guisubmenu>Internet</guisubmenu>
-									<guimenuitem>Etherape</guimenuitem>
-								</menuchoice>
-							</para>
-						</step>
-					</procedure>
-			</sect3>	 
-			<sect3 status="complete">
-				<title>Network Traffic Analyzer</title>
-					<para>Ethereal is a network traffic analyzer/sniffer that captures packets
-						off the network in real time and displays their contents.</para>
-					<procedure>
-						<step>
-							<para>Install the <application>ethereal</application> package from the <quote>Universe</quote> repository (see <xref linkend="add-applications"/>).</para>
-						</step>
-						<step>
-							<para>Choose:
-								<menuchoice>
-									<guimenu>Applications</guimenu>
-									<guisubmenu>Internet</guisubmenu>
-									<guimenuitem>Ethereal</guimenuitem>
-								</menuchoice>
-							</para>
-						</step>
-					</procedure>
-			</sect3>
-		</sect2>
-		<sect2 status="complete">
-                <title>Browse Network Computers</title>
-                            <para>To view computers on the network, open
-                                <menuchoice>
-                                    <guimenu>Places</guimenu>
-                                    <guimenuitem>Network Servers</guimenuitem>
-                                </menuchoice>.
-                            </para>
-				<para>You may need to enter a username, password, and domain. You should obtain these from your network administrator.</para>
-		</sect2>
-</sect1>
 	</article>
