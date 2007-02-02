@@ -56,43 +56,29 @@ PDFSTYLE2=../libs/pdf/ubuntu-pdf2.xsl
 # Base gnome directories for output from processor
 BASE=../build/ubuntu/
 
-PDFBASE=../build/pdf/ubuntu/
-
-LULUBASE=../build/lulu/ubuntu/
-
-RNBASE=../build/ubuntu/release-notes/
-
-ABASE=../build/ubuntu/about-ubuntu/
-
-DGBASE=../build/ubuntu/desktopguide/
-
-PACKAGEBASE= ../build/ubuntu/packagingguide/
-
 IMAGES=../build/ubuntu/images/
-
-SERVERBASE=../build/ubuntu/serverguide/
-
-SGBASE=../build/ubuntu/styleguide/
 
 .PHONY: website
 
 gdeb: 
 
-all: clean au rn dg server package
+all: clean style server index serverguide switching status package
+
+	for doc in about-ubuntu add-applications advanced-topics config-desktop games getting-help internet keeping-safe musicvideophotos newtoubuntu office printing programming switching; do xsltproc --xinclude -o $(BASE)$$doc/C/index.html $(UBUNTUCHUNKXSL) $$doc/C/$$doc.xml; done
+
+server:
+
+	xsltproc --xinclude -o $(BASE)server/C/index.html $(UBUNTUCHUNKXSL) ../generic/server/C/server.xml
+
+index:
+
+	xsltproc --stringparam html.stylesheet "../common/ubuntu-book.css" -o $(BASE)index.html $(UBUNTUCHUNKXSL) index.xml
 
 clean:
 	rm -rf $(BASE)*
 
-#######################################
-#
-# Here begin the HTML build targets
-# 
-#######################################
+style:
 
-# About Ubuntu Document
-au: $(ABASE)C
-
-	@echo "--- Building About Ubuntu Document"
 	# copy style sheet and common images to build directory
 	mkdir -p ../build/ubuntu/common/img
 	cp libs/*css ../build/ubuntu/common/
@@ -104,86 +90,21 @@ au: $(ABASE)C
 	mkdir -p $(IMAGES)navig
 	cp -r ../common/navig/*.* $(IMAGES)navig
 
-$(ABASE)%: aboutubuntu/%/about-ubuntu.xml
-	xsltproc --xinclude -o $@/index.html $(UBUNTUCHUNKXSL) $<
-		
-#Status: AVAILABLE
-# Release Notes
-rn:
-	@echo "--- Building the Ubuntu Release Notes . . ."
-	# copy style sheet and common images to build directory
-	mkdir -p ../build/ubuntu/common/img
-	cp libs/*css ../build/ubuntu/common/
-	cp libs/img/*png ../build/ubuntu/common/img/
-	mkdir -p $(IMAGES)admon
-	cp -r ../common/admon/*.* $(IMAGES)admon	
-	mkdir -p $(IMAGES)callouts
-	cp -r ../common/callouts/*.* $(IMAGES)callouts
-	mkdir -p $(IMAGES)navig
-	cp -r ../common/navig/*.* $(IMAGES)navig
+## Targets for building standalone documents
 
-rn-C:	
-	xsltproc --xinclude -o $(RNBASE)C/release-notes.html $(UBUNTUCHUNKXSL) releasenotes/C/release-notes.xml
-	
-# Desktop Guide
+switching: style
 
-dg: $(DGBASE)C
+	xsltproc --xinclude -o $(BASE)switching/C/index.html $(UBUNTUCHUNKXSL) switching/C/switching.xml
 
-	@echo "--- Building the Ubuntu Desktop Guide . . ."
-	# copy style sheet and common images to build directory
-	mkdir -p ../build/ubuntu/common/img
-	cp libs/*css ../build/ubuntu/common/
-	cp libs/img/*png ../build/ubuntu/common/img/
-	mkdir -p $(IMAGES)admon
-	cp -r ../common/admon/*.* $(IMAGES)admon	
-	mkdir -p $(IMAGES)callouts
-	cp -r ../common/callouts/*.* $(IMAGES)callouts
-	mkdir -p $(IMAGES)navig
-	cp -r ../common/navig/*.* $(IMAGES)navig
+serverguide: style
 
-$(DGBASE)%: desktopguide/%/desktopguide.xml
-	xsltproc --xinclude -o $@/index.html $(UBUNTUCHUNKXSL) $<
+	xsltproc --xinclude -o $(BASE)serverguide/C/index.html $(UBUNTUCHUNKXSL) ../generic/serverguide/C/serverguide.xml
 
-# Server Guide
+package: style
 
-server: $(SERVERBASE)C
+	xsltproc --xinclude -o $(BASE)packagingguide/C/index.html $(UBUNTUCHUNKXSL) ../generic/packagingguide/C/packagingguide.xml
 
-	@echo "Building the Server Guide . . ."
-	# copy style sheet and common images to build directory
-	mkdir -p ../build/ubuntu/common/img
-	cp libs/*css ../build/ubuntu/common/
-	cp libs/img/*png ../build/ubuntu/common/img/
-	mkdir -p $(IMAGES)admon
-	cp -r ../common/admon/*.* $(IMAGES)admon	
-	mkdir -p $(IMAGES)callouts
-	cp -r ../common/callouts/*.* $(IMAGES)callouts
-	mkdir -p $(IMAGES)navig
-	cp -r ../common/navig/*.* $(IMAGES)navig
-	mkdir -p $(SERVERBASE)sample
-	cp -r ../generic/serverguide/sample/* $(SERVERBASE)sample/
+status: style
 
-$(SERVERBASE)%: ../generic/serverguide/%/serverguide.xml
-	xsltproc --xinclude -o $@/index.html $(UBUNTUCHUNKXSL) $<
-
-## Packaging Guide
-
-package: $(PACKAGEBASE)C
-
-	@echo "Building the Packaging Guide . . ."
-	mkdir -p $(PACKAGEBASE)images/C
-	cp -r ../generic/packagingguide/images/C/*.* $(PACKAGEBASE)images/C/
-	mkdir -p $(PACKAGEBASE)files
-	cp -r ../generic/packagingguide/files/*.* $(PACKAGEBASE)files
-	mkdir -p $(IMAGES)admon
-	cp -r ../common/admon/*.* $(IMAGES)admon
-	mkdir -p $(IMAGES)callouts
-	cp -r ../common/callouts/*.* $(IMAGES)callouts
-	mkdir -p $(IMAGES)navig
-	cp -r ../common/navig/*.* $(IMAGES)navig
-	# copy style sheet and common images to build directory
-	mkdir -p ../build/ubuntu/common/img
-	cp libs/*css ../build/ubuntu/common/
-	cp libs/img/*png ../build/ubuntu/common/img/
-
-$(PACKAGEBASE)%: ../generic/packagingguide/%/packagingguide.xml
-	xsltproc --xinclude -o $@/index.html $(UBUNTUCHUNKXSL) $<
+	xsltproc --xinclude -o $(BASE)status/sg-report.xml $(wOS) ../generic/serverguide/C/serverguide.xml
+	xsltproc --xinclude -o $(BASE)status/sg-report.html $(NWDBXSL) $(BASE)status/sg-report.xml

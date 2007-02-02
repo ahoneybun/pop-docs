@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % genericent SYSTEM "../../libs/generic.ent">
+%genericent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "&EnglishAmerican;">
+]>
+<chapter id="network-authentication" status="help">
+	<title>Network Authentication</title>
+
+         <para>
+         This section explains various Network Authentication protocols.
+         </para>
+	<sect1 id="openldap-server" status="review">
+		<title>OpenLDAP Server</title>
+         <para>
+	 LDAP means Lightweight Directory Access Protocol, it is a simplified
+         version of X500 protocol. The directory setup in this section will 
+	 be used for authentication. Nevertheless, a LDAP directory can be
+         used in numerous way: authentication, shared directory (for mail
+         clients), in all sort of applications. LDAP is a largely used standard.
+         </para>
+
+         <para>
+         To describe quickly a LDAP, all informations are stored in a tree. You have
+         to determine by yourself the directory arborescence (the Directory 
+         Information Tree: the DIT). We will begin with a basic tree with two
+         nodes above the root :
+         </para>
+
+	 <itemizedlist>
+           <listitem>
+               <para>"People" node where your users will be stored</para>
+           </listitem>
+           <listitem>
+               <para>"Groups" node where your groups will be stored</para>
+           </listitem>
+         </itemizedlist>
+
+	 <para>
+         You have to first determine what the root of your LDAP will be. By 
+         default, your tree will be determined by your internet domain. If 
+         your domain is example.com (we will use it in the above example), 
+         your root will be dc=example,dc=com. 
+        </para>
+
+	<sect2 id="openldap-server-installation" status="help">
+		<title>Installation</title>
+
+   	<para>
+	First of all, install the ldap server daemon (slapd) on the server ; 
+        install the following packages: <filename>slapd</filename> and 
+        <filename>ldap-utils</filename>.
+	</para>
+	
+	<para>
+	Enter your domain as asked and the password that you want for the 
+ 	directory administrator.
+	</para>
+
+	<para>
+	Only few changes will be operated on the default configuration. 
+	First set the root password in the configuration file (instead of 
+	in the directory) by editing the file 
+        <filename>/etc/ldap/slapd.conf</filename>.
+	</para>
+
+	<para>
+	Don't use a cleartext password however. To generate an encrypted 
+	password first use slappasswd yourpasswd 
+	</para>
+
+<programlisting>
+$ slappasswd
+New password:
+Re-enter password:
+{SSHA}d2BamRTgBuhC6SxC0vFGWol31ki8iq5m
+</programlisting>
+
+	<para>	
+	This example shows what happens when using the string "secret" as
+        the password. (By nature of the SSHA encryption scheme, your result
+        will vary.)
+	</para>
+
+	<para>
+	Now edit <filename>/etc/ldap/slapd.conf</filename> and copy paste 
+        the generated string.
+	</para>
+
+<programlisting>
+# Make sure you edit or add these directives after the first 'database' directive.
+
+suffix          "dc=example,dc=com"
+directory       "/var/lib/ldap"
+rootdn          "cn=admin,dc=example,dc=com"
+rootpw          {SSHA}d2BamRTgBuhC6SxC0vFGWol31ki8iq5m
+</programlisting>
+
+	</sect2>
+
+	<sect2 id="openldap-server-populate" status="help">
+		<title>Populating LDAP</title>
+
+	<para>
+	The directory has been created at the installation, now it is time 
+	to populate. It will be populated with a "classical" entry that will
+	be compatible with directory (for example for a shared directory), 
+	with classical accounts (for a web application) and with Unix 
+	accounts (posix).
+	</para>
+
+	<para>
+	LDAP directory can be fed with a ldif file (ldif means ldap directory
+	interchange format). Generate this example text file init.ldif 
+	somewhere on your system:
+	</para>
+
+<programlisting>
+dn: dc=example,dc=com
+objectClass: dcObject
+objectClass: organizationalUnit
+dc: example
+ou: Example Dot Com
+
+dn: ou=people,dc=example,dc=com
+objectClass: organizationalUnit
+ou: people
+
+dn: ou=groups,dc=example,dc=com
+objectClass: organizationalUnit
+ou: groups
+
+dn: uid=john,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: john
+sn: Doe
+givenName: John
+cn: John Doe
+displayName: John Doe
+uidNumber: 1000
+gidNumber: 10000
+userPassword: password
+gecos: John Doe
+loginShell: /bin/bash
+homeDirectory: /home/john
+shadowExpire: -1
+shadowFlag: 0
+shadowWarning: 7
+shadowMin: 8
+shadowMax: 999999
+shadowLastChange: 10877
+mail: john.doe@example.com
+postalCode: 31000
+l: Toulouse
+o: Example
+mobile: +33 (0)6 xx xx xx xx
+homePhone: +33 (0)5 xx xx xx xx
+title: System Administrator
+postalAddress: 
+initials: JD
+
+dn: cn=example,ou=groups,dc=example,dc=com
+objectClass: posixGroup
+cn: example
+gidNumber: 10000
+</programlisting>
+
+	<para>
+	In the example above, the directory structure, a user and 
+	group have been setup. In other example you might see the 
+	objectClass: top added in every entry, but that is default 
+	behaviour so you don't have to add it explicitely.
+	</para>
+
+	<para>
+	Now, add your entries to the LDAP :
+	</para>
+
+	<itemizedlist>
+	    <listitem>
+	       <para>stop LDAP daemon: <command>sudo /etc/init.d/slapd stop</command></para>
+            </listitem>
+            <listitem>
+    	       <para>delete the content that was automaticaly added at
+	             installation: <command>sudo rm -rf /var/lib/ldap/*</command></para>
+             </listitem>
+             <listitem>
+    	       <para>add the content <command>sudo slapadd -l init.ldif</command></para>
+             </listitem>
+             <listitem>
+    	       <para>start LDAP daemon: <command>sudo /etc/init.d/slapd start</command></para>
+             </listitem>
+	</itemizedlist>
+
+	<para>
+	We can check that the content has been correctly added with the
+	tools from the <filename>ldap-utils</filename> package. In order to
+  execute a search in the LDAP directory :
+	</para>
+
+<programlisting>
+ldapsearch -xLLL -b "dc=example,dc=com" uid=john sn givenName cn
+dn: uid=john,ou=people,dc=example,dc=com
+cn: John Doe
+sn: Doe
+givenName: John
+</programlisting>
+
+	<para>
+	Just a quick explanation :
+	</para>
+
+	<itemizedlist>
+	    <listitem>
+                <para>-x is because we do not use SASL authentication method (by default)</para>
+            </listitem>
+            <listitem>
+                <para>-LLL disable printing LDIF informations</para>
+            </listitem>
+        </itemizedlist>
+	
+	</sect2>
+
+	<sect2 id="openldap-server-acl" status="help">
+              <title>Setting up ACL</title>
+
+	<para>
+	Authentication requires access to password field, that should be not
+	accessible by default. Annother issue is that during password change
+	using passwd shadowLastChange needs to be accessible as well. 
+	Following code shows example ACL setting that permits access to 
+	shadowLastChange:
+	</para>
+
+<programlisting>
+access to attr=shadowLastChange
+        by dn="cn=manager,dc=example,dc=com" write
+        by self write
+        by * read
+</programlisting>
+
+	</sect2>
+
+	<sect2 id="openldap-server-replication" status="help">
+		<title>LDAP replication</title>
+
+	<para>
+	LDAP service often quickly becomes a highly critical service in an
+	information system: all is depending of LDAP: autentication, 
+	authorization, mail system, etc. It is a good idea to setup a 
+	redundant system. It is easy to setup, and here is a quick howto.
+	</para>
+
+	<para>
+	Replication will be based here on a master-slave relation.  Before
+  implementing LDAP replication consider the following steps:
+	</para>
+
+	<orderedlist>
+	    <listitem>
+                <para>Stop the master server's slapd daemon.</para>
+            </listitem>
+            <listitem>
+	        <para>Reconfigure the master server's slapd.conf to 
+                enable replication to the new slave server.</para>
+            </listitem>
+            <listitem>
+	        <para>Export the database of the master server.</para>
+            </listitem>
+            <listitem>
+	        <para>Configure the replica server's
+          <filename>slapd.conf</filename>.</para>
+            </listitem>
+            <listitem>
+	        <para>Import the database of the master server to the 
+                slaver server.</para>
+            </listitem>
+            <listitem>
+	        <para>Re/Start the replica server's slapd process</para>
+            </listitem>
+            <listitem>
+	        <para>Re/Start the master server's slapd process.</para>
+            </listitem>
+        </orderedlist>
+
+	<para>
+	You will have to remember that modifications should ALWAYS be done 
+	on the master. If you modify the slave, they will get lost.
+	</para>
+	
+	<sect3 id="openldap-server-replication-master" status="help">
+		<title>LDAP Master</title>
+
+	<para>
+	On the master, you have to modify the database section of the 
+	<filename>/etc/ldap/slapd.conf</filename> to add a replica instruction.
+        The following example shows a replica on ldap-2.example.com with the 
+        Manager user with secret as password. The replication logfile is the place 
+	modifications are stored before they are send to the LDAP slave.
+	</para>
+
+<programlisting>
+replica uri=ldap://ldap-2.example.com:389 binddn="cn=Manager,dc=example,dc=com" bindmethod=simple credentials=secret
+
+replogfile      /var/lib/ldap/replog
+</programlisting>
+
+	<para>
+	Export the database of the master using slapcat. Then copy 
+	master.ldif to the slave using scp or other tools.
+	</para>
+
+<programlisting>
+user@master:~$ sudo slapcat -l master.ldif
+</programlisting>
+
+	</sect3>
+
+	<sect3 id="openldap-server-replication-slave" status="help">
+		<title>LDAP Slave</title>
+
+	<para>
+	On the slave, you have to authorize your master to update LDAP 
+	database. Add the following lines to your <filename>/etc/ldap/slapd.conf</filename>
+        file in the database section:
+	</para>
+
+<programlisting>
+updatedn        cn=Manager,dc=example,dc=com
+updateref       ldap://ldap-1.example.com
+</programlisting>
+
+	<para>
+	Import the <filename>master.ldif</filename> using slapadd.
+	</para>
+
+<programlisting>
+user@slave:~$ sudo slapadd -c -l master.ldif
+</programlisting>
+
+	<para>
+	Restart the master server.
+	</para>
+
+<programlisting>
+user@master:~$ sudo /etc/init.d/slapd start
+</programlisting>
+
+	<para>
+	Restart the slave server.
+	</para>
+
+<programlisting>
+user@slave:~$ sudo /etc/init.d/slapd start
+</programlisting>
+
+	</sect3>
+
+	</sect2>
+
+  </sect1>
+	<sect1 id="ldap-client-authentication" status="help">
+		<title>LDAP Client Authentication</title>
+          <para>
+          To write.
+          </para>
+  </sect1>
+	<sect1 id="setup-nis" status="help">
+		<title>Howto Setup NIS</title>
+          <para>
+          To write.
+          </para>
+  </sect1>
+</chapter>

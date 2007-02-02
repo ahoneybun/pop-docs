@@ -28,34 +28,28 @@ common-binary-post-install-indep::
 
 # Omf files
 
-		for doc in about-ubuntu add-applications config-desktop internet keeping-safe musicvideophotos newtoubuntu printing server; do \
+		for doc in about-ubuntu add-applications advanced-topics config-desktop internet keeping-safe musicvideophotos newtoubuntu printing; do \
 			mkdir -p debian/ubuntu-docs/usr/share/omf/$$doc/; \
-			cp ubuntu/omf/$$doc* debian/ubuntu-docs/usr/share/omf/$$doc/; \
+			cp ubuntu/$$doc/C/*omf debian/ubuntu-docs/usr/share/omf/$$doc/; \
 		done; \
 
 # Ubuntu documents
 
-		for doc in add-applications config-desktop games getting-help internet keeping-safe musicvideophotos newtoubuntu office printing programming switching; do \
-			mkdir -p debian/ubuntu-docs/usr/share/ubuntu-docs/xml/C/$$doc; \
-			cp ubuntu/C/$$doc/*xml debian/ubuntu-docs/usr/share/ubuntu-docs/xml/C/$$doc/; \
+		for doc in about-ubuntu add-applications advanced-topics config-desktop games getting-help internet keeping-safe musicvideophotos newtoubuntu office printing programming switching; do \
+			mkdir -p debian/ubuntu-docs/usr/share/gnome/help/$$doc/C/; \
+			cp ubuntu/$$doc/C/*xml debian/ubuntu-docs/usr/share/gnome/help/$$doc/C/; \
 		done; \
-
-# Except about-ubuntu gets special treatment, needed for the menu entry to work
-
-	mkdir -p debian/ubuntu-docs/usr/share/gnome/help/about-ubuntu/C
-	cp ubuntu/C/about-ubuntu/about-ubuntu.xml debian/ubuntu-docs/usr/share/gnome/help/about-ubuntu/C/
 
 # Generic documents
 
 		for doc in server contribute; do \
-			mkdir -p debian/ubuntu-docs/usr/share/ubuntu-docs/xml/C/$$doc; \
-			cp generic/$$doc/C/*xml debian/ubuntu-docs/usr/share/ubuntu-docs/xml/C/$$doc; \
+			mkdir -p debian/ubuntu-docs/usr/share/gnome/help/$$doc/C; \
+			cp generic/$$doc/C/*xml debian/ubuntu-docs/usr/share/gnome/help/$$doc/C/; \
 		done; \
 
-# Preface documents
+# Common documents
 
 	cp -r common debian/ubuntu-docs/usr/share/ubuntu-docs/ 
-
 
 # Scrollkeeper loving
 
