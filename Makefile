@@ -47,11 +47,14 @@ BASE=build/
 website: index
 	@echo "Building the Ubuntu Docs . . ."
 
-	make -C ubuntu -f Makefile all pdf
+	make -C ubuntu -f Makefile all
 
 	@echo "Building the Kubuntu Docs . . ."
 
-	make -C kubuntu -f Makefile all pdf
+	make -C kubuntu -f Makefile all
+
+	@echo "Building the Edubuntu Docs . . ."
+	make -C edubuntu -f Makefile all
 
 	@echo "Building the Index Page . . ."
 

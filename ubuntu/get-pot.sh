@@ -23,19 +23,19 @@
 # the pot files
 
 # Group one - those with an omf file
-for x in about-ubuntu add-applications config-desktop internet keeping-safe musicvideophotos newtoubuntu printing; do
+for x in about-ubuntu add-applications advanced-topics config-desktop files-and-docs internet keeping-safe musicvideophotos newtoubuntu printing; do
 	echo ${x}
-	xml2po -e -o pots/${x}.pot C/${x}/*.xml omf/${x}-C.omf
+	xml2po -e -o ${x}/${x}.pot ${x}/C/*.xml ${x}/C/*-C.omf
 done
 
 # Group two - those without an omf file
-for y in games getting-help office programming switching; do
+for y in administrative games office programming switching windows; do
 	echo ${y}
-	xml2po -e -o pots/${y}.pot C/${y}/*.xml
+	xml2po -e -o ${y}/${y}.pot ${y}/C/*.xml
 done
 
 # Group three - those in the generic directory
 for z in server; do
 	echo ${z}
-	xml2po -e -o pots/${z}.pot ../generic/${z}/C/*xml omf/${z}-C.omf
+	xml2po -e -o ../generic/${z}/${z}.pot ../generic/${z}/C/*xml ../generic/${z}/C/*-C.omf
 done
