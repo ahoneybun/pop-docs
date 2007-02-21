@@ -54,3 +54,25 @@ common-binary-post-install-indep::
 # Scrollkeeper loving
 
 	dh_scrollkeeper 
+
+build/ubuntu-serverguide::
+	cd ubuntu; $(MAKE) serverguide
+
+install/ubuntu-serverguide::
+	mkdir -p debian/ubuntu-serverguide/usr/share/ubuntu-serverguide/html/C
+	cp -R build/ubuntu/common/ debian/ubuntu-serverguide/usr/share/ubuntu-serverguide/
+	cp -R build/ubuntu/images/ debian/ubuntu-serverguide/usr/share/ubuntu-serverguide/
+	cp -R generic/serverguide/sample/ debian/ubuntu-serverguide/usr/share/ubuntu-serverguide/
+	cp ubuntu/libs/ubuntu-book.css debian/ubuntu-serverguide/usr/share/ubuntu-serverguide/common/
+	cp -R build/ubuntu/serverguide/C/*.html debian/ubuntu-serverguide/usr/share/ubuntu-serverguide/html/C/
+
+build/packaging-guide::
+	cd ubuntu; $(MAKE) package
+
+install/packaging-guide::
+	mkdir -p debian/packaging-guide/usr/share/packaging-guide/html/C
+	cp -R build/ubuntu/common/ debian/packaging-guide/usr/share/packaging-guide/
+	cp -R build/ubuntu/images/ debian/packaging-guide/usr/share/packaging-guide/
+	cp -R generic/packagingguide/files/ debian/packaging-guide/usr/share/packaging-guide/
+	cp ubuntu/libs/ubuntu-book.css debian/packaging-guide/usr/share/packaging-guide/common/
+	cp -R build/ubuntu/packagingguide/C/*.html debian/packaging-guide/usr/share/packaging-guide/html/C/
