@@ -68,7 +68,15 @@
 <screen>
 <command>sudo apt-get install samba</command>
 </screen>
-           </para> 
+          </para> 
+	  <para>
+	  To mount Windows filesystems using SMB, you will also need smbfs.  Enter the command:
+	  </para>
+	  <para>
+<screen>
+<command>sudo apt-get install smbfs</command>
+</screen>
+	  </para>
     </sect1>
 	<sect1 id="configuring-samba" status="complete">
 		<title>Configuring SAMBA</title>
@@ -257,20 +265,19 @@
             files in a syntax similar to that used by non-graphical FTP clients.  For more information on the 
             <application>smbclient</application> utility, read the utility's manual page with the command:
 <screen>
-<command>
-man smbclient
-</command>
+<command>man smbclient</command>
 </screen>
             </para>
             <para>
-            Local mounting of remote network resources using the SMB protocol is also possible using the <application>mount</application> command.
-            For example, to mount a shared  folder named <emphasis role="italic">project-code</emphasis> on a Windows server named 
+            Local mounting of remote network resources using the SMB protocol is also possible using the <application>smbfs</application> program.
+	    </para>
+            <para>To mount a shared  folder named <emphasis role="italic">project-code</emphasis> on a Windows server named 
             <emphasis role="italic">development</emphasis> as the user <emphasis role="italic">dlightman</emphasis> to your Ubuntu system's /mnt/pcode 
-            mount-point, you would issue this command at the prompt:
+            mount-point (the mountpoint you choose should be an empty folder), you would issue this command at the prompt:
             </para>
                 <para>
 <screen>
-<command>mount -t smbfs -o username=dlightman //development/project-code /mnt/pcode</command>
+<command>sudo mount -t smbfs -o username=dlightman //development/project-code /mnt/pcode</command>
 </screen>
                 </para>
                 <para>You will then be prompted for the user password, and after successfully authenticating, the contents of the shared resource
@@ -280,7 +287,7 @@ man smbclient
                 </para>
                 <para>
 <screen>
-<command>umount /mnt/pcode</command>
+<command>sudo umount /mnt/pcode</command>
 </screen>
                 </para>
         <sect3 id="user-accounts" status="complete">
