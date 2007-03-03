@@ -24,9 +24,16 @@
 # This script is for generating XML documents from po files downloaded from Launchpad
 # Put your freshly downloaded po files into the po folder under each document, then run:
 #
-# $ translate.sh lang
+# $ translate.sh
 #
-# The "lang" is optional, if passed without it, the script will generate all languages.
+# Optional parameters:
+#	-d<documentname>
+#	-l<language>
+#
+
+DOCLIST="about-ubuntu advanced-topics basic-commands desktop-effects files-and-docs internet newtoubuntu programming \
+	 switching add-applications keeping-safe office administrative config-desktop \
+	 games musicvideophotos printing windows"
 
 translate () {
 	y=$(basename ${1} .po)
@@ -42,16 +49,35 @@ translate () {
 	../../validate.sh ${y}/$doc.xml
 }
 
-for doc in about-ubuntu advanced-topics files-and-docs internet newtoubuntu programming switching add-applications keeping-safe office administrative config-desktop games musicvideophotos printing windows; do
-	cd $doc
-	echo $doc
-	if [ ${1} ]; then
-		translate "po/${1}.po"
+choose_language () {
+	echo "Entering ${1}"
+	cd ${1}
+	if [ ${2} ]; then
+		translate "po/${2}.po"
 	else
 		for x in po/*; do
 			translate ${x}
 		done
 	fi
 	rm .xml2po.mo
+	cd ..
+}
+
+while getopts "d:l:" Option
+do
+	case ${Option} in
+		d) document=${OPTARG};;
+		l) lang=${OPTARG};;
+		*) echo "Please, specify an argument.";;
+	esac
 done
+
+if [ ${document} ]; then
+	choose_language ${document} ${lang}
+else
+	for doc in ${DOCLIST}
+	do
+		choose_language ${doc} ${lang}
+	done
+fi
 
