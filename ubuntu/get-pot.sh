@@ -34,8 +34,7 @@ for y in administrative basic-commands desktop-effects games office programming 
 	xml2po -e -o ${y}/${y}.pot ${y}/C/*.xml
 done
 
-# Group three - those in the generic directory
-for z in server; do
-	echo ${z}
-	xml2po -e -o ../generic/${z}/${z}.pot ../generic/${z}/C/*xml ../generic/${z}/C/*-C.omf
-done
+# Group three - server material
+	echo server
+	xml2po -e -o ../generic/serverguide/serverguide.pot ../generic/serverguide/C/*xml ../generic/server/C/*xml
+
