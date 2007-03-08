@@ -58,13 +58,13 @@ BASE=../build/ubuntu/
 
 IMAGES=../build/ubuntu/images/
 
-.PHONY: website
+.PHONY: website switching
 
 gdeb: 
 
 all: clean style server index serverguide switching status package
 
-	for doc in about-ubuntu add-applications advanced-topics config-desktop games getting-help internet keeping-safe musicvideophotos newtoubuntu office printing programming switching; do xsltproc --xinclude -o $(BASE)$$doc/C/index.html $(UBUNTUCHUNKXSL) $$doc/C/$$doc.xml; done
+	for doc in `cat libs/shipped-docs`; do xsltproc --xinclude -o $(BASE)$$doc/C/index.html $(UBUNTUCHUNKXSL) $$doc/C/$$doc.xml; done
 
 server:
 
@@ -92,9 +92,20 @@ style:
 
 ## Targets for building standalone documents
 
-switching: style
+switching:
 
-	xsltproc --xinclude -o $(BASE)switching/C/index.html $(UBUNTUCHUNKXSL) switching/C/switching.xml
+	xsltproc --stringparam html.stylesheet "common/ubuntu-book.css" --stringparam navig.graphics.path "images/navig/" --stringparam callout.graphics.path "images/callouts/" --stringparam admon.graphics.path "images/admin/" --xinclude -o $(BASE)switching/index.html $(UBUNTUCHUNKXSL) switching/C/switching.xml
+
+	# copy style sheet and common images to build directory
+	mkdir -p ../build/ubuntu/switching/common/img
+	cp libs/*css ../build/ubuntu/switching/common/
+	cp libs/img/*png ../build/ubuntu/switching/common/img/
+	mkdir -p ../build/ubuntu/switching/images/admon
+	cp -r ../common/admon/*.* ../build/ubuntu/switching/images/admon	
+	mkdir -p ../build/ubuntu/switching/images/callouts
+	cp -r ../common/callouts/*.* ../build/ubuntu/switching/images/callouts	
+	mkdir -p ../build/ubuntu/switching/images/navig
+	cp -r ../common/navig/*.* ../build/ubuntu/switching/images/navig	
 
 serverguide: style
 

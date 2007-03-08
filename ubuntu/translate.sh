@@ -31,10 +31,6 @@
 #	-l<language>
 #
 
-DOCLIST="about-ubuntu advanced-topics basic-commands desktop-effects files-and-docs internet newtoubuntu programming \
-	 switching add-applications keeping-safe office administrative config-desktop \
-	 games musicvideophotos printing windows"
-
 translate () {
 	y=$(basename ${1} .po)
 	echo ${y}
@@ -75,7 +71,7 @@ done
 if [ ${document} ]; then
 	choose_language ${document} ${lang}
 else
-	for doc in ${DOCLIST}
+	for doc in `cat libs/shipped-docs`
 	do
 		choose_language ${doc} ${lang}
 	done
