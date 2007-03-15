@@ -13,9 +13,12 @@
 %xinclude;
 <!ENTITY language "&EnglishAmerican;">
 ]>
-<chapter id="web-servers" status="writing">
+<chapter id="web-servers" status="complete">
 	<title>Web Servers</title>
-		<para>Introductory blurb</para>
+		<para>A Web server is a software responsible for accepting HTTP requests
+    from clients, which are known as Web browsers, and serving them HTTP
+    responses along with optional data contents, which usually are Web
+    pages such as HTML documents and linked objects (images, etc.).</para>
 	<sect1 id="httpd" status="complete">
 		<title>HTTPD - Apache2 Web Server</title>
       <para>Apache is the most commonly used Web Server on Linux systems. Web Servers are used
@@ -946,16 +949,104 @@ print_r (phpinfo());
       </sect2>
     </sect1>
 
-	<sect1 id="ruby-on-rails" status="help">
+	<sect1 id="ruby-on-rails" status="complete">
 		<title>Ruby on Rails</title>
-    <para>To write.</para>
-  </sect1>
-	<sect1 id="tomcat" status="help">
-		<title>Tomcat 5</title>
-    <para>To write.</para>
-  </sect1>
-	<sect1 id="jboss" status="help">
-		<title>JBOSS</title>
-    <para>To write.</para>
+    <para>Ruby on Rails is an open source web framework for developing
+    database backed web applications. It is optimized for sustainable
+    productivity of the programmer since it lets the programmer to write
+    code by favouring convention over configuration.</para>
+
+    <sect2 id="ruby-on-rails-installation" status="complete">
+      <title>Installation</title>
+      <para>
+      To run Ruby on Rails, you should install
+      <application>Ruby</application>, <application>Ruby
+      Gems</application>, <application>Ruby on
+      Rails</application>, <application>lighttpd</application>,
+      <application>MySQL</application> and
+      <application>PHP5</application>.
+      
+      To install Ruby base packages you can enter the following command in
+      the terminal prompt:
+      </para>
+
+<screen>
+<command>sudo apt-get install ruby ri rdoc libmysql-ruby</command>
+</screen>
+   <para>
+   To install Ruby Gems package, run the following set of commands:
+   </para>
+<programlisting>
+sudo wget http://rubyforge.org/frs/download.php/11289/rubygems-0.9.0.tgz
+tar -xvzf rubygems-0.9.0.tgz
+cd rubygems-0.9.0
+sudo ruby setup.rb
+</programlisting>
+
+    <para>To install some basic gems, please run the following
+    commands:</para>
+
+<programlisting>
+sudo gem install actionmailer
+sudo gem install activesupport
+sudo gem install actionpack
+sudo gem install actionwebservice
+</programlisting>
+
+    <para>To install <application>Ruby on Rails</application> package
+    run the following command:</para>
+<screen>
+<command>sudo gem install rails --include-dependencies</command>
+</screen>
+
+    <para>To install <application>lighttpd</application> package run the
+    following command:</para>
+<screen>
+<command>sudo apt-get install lighttpd libfcgi-dev libfcgi-ruby1.8</command>
+</screen>
+    <tip><para>The <application>lighttpd</application> is an Web Server.
+    You can install both <application>apache2</application> package and
+    <application>lighttpd</application> package on same machine, but you
+    can only run one at a time since both of them use the port number
+    80.</para></tip>
+    <para>
+    To install <application>MySQL</application> package, please refer to
+    the <ulink url="./databases.xml#mysql">MySQL</ulink> section.
+    </para>
+    <para>
+    To install <application>PHP5</application> package, please refer to
+    the <xref linkend="php5"/> section.
+    </para>
+    </sect2>
+    <sect2 id="ruby-on-rails-configuration" status="complete">
+    <title>Configuration</title>
+    <para>Modify <filename>/etc/lighttpd/lighttpd.conf</filename>
+    configuration file to setup your domains.</para>
+
+    <para>You should also enable couple of
+    <application>lighttpd</application> modules for using
+    <application>Ruby on Rails</application>.  You can run the following
+    commands to enable those modules:</para>
+<programlisting>
+sudo /usr/sbin/lighty-enable-mod fastcgi
+sudo /usr/sbin/lighty-enable-mod proxy
+</programlisting>
+
+    <para>
+    Let us now verify the modification we did in the
+    <filename>/etc/lighttpd/lighttpd.conf</filename> configuration file.
+    Run the following commands to stop and verify the modification:
+    </para>
+<programlisting>
+sudo /etc/init.d/lighttpd stop
+sudo lighttpd -f /etc/lighttpd/lighttpd.conf
+</programlisting>
+    <para>If you see any errors, please make sure to address
+    them. The error message you see in the output is the best source for
+    getting more help.</para> 
+    <para>Thats it! Now you have your Server ready for your
+    <application>Ruby on Rails</application> applications.
+    </para>
+    </sect2>
   </sect1>
 </chapter>
