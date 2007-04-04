@@ -26,25 +26,30 @@ common-binary-post-install-indep::
 		/usr/share/ubuntu-artwork/home/locales-ubuntu \
 		../index.html
 
-# Omf files
-
-		for doc in about-ubuntu add-applications advanced-topics config-desktop files-and-docs internet keeping-safe musicvideophotos newtoubuntu printing; do \
-			mkdir -p debian/ubuntu-docs/usr/share/omf/$$doc/; \
-			cp ubuntu/$$doc/C/*omf debian/ubuntu-docs/usr/share/omf/$$doc/; \
-		done; \
-
 # Install the documents
 
 		for doc in `cat ubuntu/libs/shipped-docs`; do \
-			mkdir -p debian/ubuntu-docs/usr/share/gnome/help/$$doc/C/; \
-			cp ubuntu/$$doc/C/*xml debian/ubuntu-docs/usr/share/gnome/help/$$doc/C/; \
+			for lang in `ls ubuntu/$$doc/`; do \
+				if [ -e ubuntu/$$doc/$$lang/$$doc.xml ]; then \
+					mkdir -p debian/ubuntu-docs/usr/share/gnome/help/$$doc/$$lang/; \
+					cp ubuntu/$$doc/$$lang/*xml debian/ubuntu-docs/usr/share/gnome/help/$$doc/$$lang/; \
+				fi; \
+				if [ -e ubuntu/$$doc/$$lang/*.omf ]; then \
+					mkdir -p debian/ubuntu-docs/usr/share/omf/$$doc; \
+					cp ubuntu/$$doc/$$lang/*omf debian/ubuntu-docs/usr/share/omf/$$doc/; \
+				fi; \
+			done; \
 		done; \
 
 # Server material is done slightly differently
 
 		for doc in server; do \
-			mkdir -p debian/ubuntu-docs/usr/share/gnome/help/$$doc/C; \
-			cp generic/$$doc/C/*xml debian/ubuntu-docs/usr/share/gnome/help/$$doc/C/; \
+			for lang in `ls generic/$$doc/`; do \
+				if [ -e generic/$$doc/$$lang/$$doc.xml ]; then \
+				mkdir -p debian/ubuntu-docs/usr/share/gnome/help/$$doc/$$lang; \
+				cp -r generic/$$doc/$$lang/*xml debian/ubuntu-docs/usr/share/gnome/help/$$doc/$$lang/; \
+				fi; \
+			done; \
 		done; \
 
 # Common documents
