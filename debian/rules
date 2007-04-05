@@ -4,6 +4,7 @@ include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/makefile.mk
 
 DEB_DH_INSTALL_ARGS = -X.svn
+DEB_DH_BUILDDEB_ARGS := -- -Z bzip2
 
 DEB_SRCDIR = ubuntu
 
@@ -81,3 +82,6 @@ install/packaging-guide::
 	cp -R generic/packagingguide/files/ debian/packaging-guide/usr/share/packaging-guide/
 	cp ubuntu/libs/ubuntu-book.css debian/packaging-guide/usr/share/packaging-guide/common/
 	cp -R build/ubuntu/packagingguide/C/*.html debian/packaging-guide/usr/share/packaging-guide/html/C/
+
+binary-fixup/ubuntu-docs::
+	(cd debian/ubuntu-docs; ../../symlink-dupes)
