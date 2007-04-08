@@ -27,10 +27,18 @@ common-binary-post-install-indep::
 		/usr/share/ubuntu-artwork/home/locales-ubuntu \
 		../index.html
 
-# Install the documents
+# Install the documents; skip documents which are less than 25% translated
 
 		for doc in `cat ubuntu/libs/shipped-docs`; do \
+			numstrings=`LANG=C msgfmt --statistics ubuntu/$$doc/po/*.pot 2>&1 | sed -r 's/^.* ([[:digit:]]+) untranslated.*$$/\1/'`; \
 			for lang in `ls ubuntu/$$doc/`; do \
+				if [ -e ubuntu/$$doc/po/$$lang.po ]; then \
+					translated=`LANG=C msgfmt --statistics ubuntu/$$doc/po/$$lang.po 2>&1| cut -f1 -d\ `; \
+					if [ "`echo "$$translated./$$numstrings > 0.25" | bc -l`" = "0" ]; then \
+						echo "$$doc $$lang is less than 25% translated, skipping"; \
+						continue; \
+					fi; \
+				fi; \
 				if [ -e ubuntu/$$doc/$$lang/$$doc.xml ]; then \
 					mkdir -p debian/ubuntu-docs/usr/share/gnome/help/$$doc/$$lang/; \
 					cp ubuntu/$$doc/$$lang/*xml debian/ubuntu-docs/usr/share/gnome/help/$$doc/$$lang/; \
@@ -70,7 +78,7 @@ install/ubuntu-serverguide::
 	cp -R build/ubuntu/images/ debian/ubuntu-serverguide/usr/share/ubuntu-serverguide/
 	cp -R generic/serverguide/sample/ debian/ubuntu-serverguide/usr/share/ubuntu-serverguide/
 	cp ubuntu/libs/ubuntu-book.css debian/ubuntu-serverguide/usr/share/ubuntu-serverguide/common/
-	cp -R build/ubuntu/serverguide/C/*.html debian/ubuntu-serverguide/usr/share/ubuntu-serverguide/html/C/
+	cp -R build/ubuntu/serverguide/* debian/ubuntu-serverguide/usr/share/ubuntu-serverguide/html/
 
 build/packaging-guide::
 	cd ubuntu; $(MAKE) package

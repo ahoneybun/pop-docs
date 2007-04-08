@@ -109,7 +109,7 @@ switching:
 
 serverguide: style
 
-	xsltproc --xinclude -o $(BASE)serverguide/C/index.html $(UBUNTUCHUNKXSL) ../generic/serverguide/C/serverguide.xml
+	for po in `ls ../generic/serverguide/po/`; do lang=$$(basename $$po .po); echo "Building html for $$lang"; xsltproc --xinclude -o $(BASE)serverguide/$$lang/index.html $(UBUNTUCHUNKXSL) ../generic/serverguide/$$lang/serverguide.xml; done
 
 package: style
 
