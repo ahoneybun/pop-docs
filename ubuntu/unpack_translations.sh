@@ -26,8 +26,8 @@ for doc in `cat libs/shipped-docs`; do
 		cd ${doc}
 		echo "Unpacking translations for ${doc}"
 		tar zxf rosetta-${doc}.tar.gz
-		mkdir -p po
 		mv rosetta-${doc}/* po/
-		svn add po
+		svn add po/*
+		rm -rf rosetta-*
 		cd ../
 done

@@ -19,22 +19,17 @@
 #    at /usr/share/common-licenses/GPL
 ####################################################################################
 
-# We have some different groups of documentation for the purposes of making
-# the pot files
-
-# Group one - those with an omf file
-for x in about-ubuntu add-applications advanced-topics config-desktop files-and-docs internet keeping-safe musicvideophotos newtoubuntu printing; do
-	echo ${x}
-	xml2po -e -o ${x}/${x}.pot ${x}/C/*.xml ${x}/C/*-C.omf
+for doc in `cat libs/shipped-docs`; do
+		echo "Generating pot template for ${doc}"
+		if [ -e ${doc}/C/${doc}-C.omf ]; then
+		xml2po -e -o ${doc}/${doc}.pot ${doc}/C/*.xml ${doc}/C/${doc}-C.omf
+		else
+		xml2po -e -o ${doc}/${doc}.pot ${doc}/C/*.xml	
+		fi
 done
 
-# Group two - those without an omf file
-for y in administrative basic-commands desktop-effects games office programming windows; do
-	echo ${y}
-	xml2po -e -o ${y}/${y}.pot ${y}/C/*.xml
-done
+# Server guide needs something special
 
-# Group three - server material
-	echo server
+	echo "Generating pot template for serverguide"
 	xml2po -e -o ../generic/serverguide/serverguide.pot ../generic/serverguide/C/*xml ../generic/server/C/*xml
 
