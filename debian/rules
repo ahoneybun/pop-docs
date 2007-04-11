@@ -27,15 +27,15 @@ common-binary-post-install-indep::
 		/usr/share/ubuntu-artwork/home/locales-ubuntu \
 		../index.html
 
-# Install the documents; skip documents which are less than 25% translated
+# Install the documents; skip documents which are less than 30% translated
 
 		for doc in `cat ubuntu/libs/shipped-docs`; do \
 			numstrings=`LANG=C msgfmt --statistics ubuntu/$$doc/po/*.pot 2>&1 | sed -r 's/^.* ([[:digit:]]+) untranslated.*$$/\1/'`; \
 			for lang in `ls ubuntu/$$doc/`; do \
 				if [ -e ubuntu/$$doc/po/$$lang.po ]; then \
-					translated=`LANG=C msgfmt --statistics ubuntu/$$doc/po/$$lang.po 2>&1| cut -f1 -d\ `; \
-					if [ "`echo "$$translated./$$numstrings > 0.25" | bc -l`" = "0" ]; then \
-						echo "$$doc $$lang is less than 25% translated, skipping"; \
+					translated=`LANG=C msgfmt -o /dev/null --statistics ubuntu/$$doc/po/$$lang.po 2>&1| cut -f1 -d\ `; \
+					if [ "`echo "$$translated./$$numstrings > 0.3" | bc -l`" = "0" ]; then \
+						echo "$$doc $$lang is less than 30% translated, skipping"; \
 						continue; \
 					fi; \
 				fi; \
@@ -53,7 +53,15 @@ common-binary-post-install-indep::
 # Server material is done slightly differently
 
 		for doc in server; do \
+			numstrings=`LANG=C msgfmt --statistics generic/serverguide/po/*.pot 2>&1 | sed -r 's/^.* ([[:digit:]]+) untranslated.*$$/\1/'`; \
 			for lang in `ls generic/$$doc/`; do \
+				if [ -e generic/serverguide/po/$$lang.po ]; then \
+					translated=`LANG=C msgfmt -o /dev/null --statistics generic/serverguide/po/$$lang.po 2>&1| cut -f1 -d\ `; \
+					if [ "`echo "$$translated./$$numstrings > 0.30" | bc -l`" = "0" ]; then \
+						echo "$$doc $$lang is less than 30% translated, skipping"; \
+						continue; \
+					fi; \
+				fi; \
 				if [ -e generic/$$doc/$$lang/$$doc.xml ]; then \
 				mkdir -p debian/ubuntu-docs/usr/share/gnome/help/$$doc/$$lang; \
 				cp -r generic/$$doc/$$lang/*xml debian/ubuntu-docs/usr/share/gnome/help/$$doc/$$lang/; \
