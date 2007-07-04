@@ -33,22 +33,16 @@
 
 translate () {
 	y=$(basename ${1} .po)
-	echo " ${y}"
+	echo ${y}
 	mkdir -p ${y}
 	for i in C/*xml; do
 		j=$(basename ${i} C/)
 		echo ${j}
-		k=$(basename ${j} .xml)
-		echo ${k}
-		xml2po -e -p po/${y}.po C/${j} >${y}/${j}
+		xml2po -e -p ${1} C/${j} C/${j} >${y}/${j}
 	done
-	if [ -e C/${document}-C.omf ]; then
-		echo "  Generating omf file for ${document}"
-	    xml2po -e -p ${1} C/${document}-C.omf >${y}/${document}-${y}.omf
-	    sed -i -e s@\"C\"@\"${y}\"@g -e s@C/@${y}/@g ${y}/${document}-${y}.omf
-	fi
-	../../validate.sh ${y}/${document}.xml
-	svn add ${y}
+	xml2po -e -p ${1} C/$doc-C.omf >${y}/$doc-${y}.omf
+	sed -i -e s@\"C\"@\"${y}\"@g -e s@C/@${y}/@g ${y}/$doc-${y}.omf
+	../../validate.sh ${y}/$doc.xml
 }
 
 choose_language () {
@@ -70,7 +64,7 @@ do
 	case ${Option} in
 		d) document=${OPTARG};;
 		l) lang=${OPTARG};;
-		*) echo "Please specify an argument.";;
+		*) echo "Please, specify an argument.";;
 	esac
 done
 
