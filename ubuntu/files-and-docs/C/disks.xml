@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+<!ENTITY gnome-partition-editor '<application>GNOME Partition Editor</application>'>
+]>
+<article id="disks" status="complete">
+  <articleinfo>
+    <title>Working with Disks and Drives</title>
+  </articleinfo>
+  <para>This section provides instructions on how to handle disks and drives, such as removable hard disks.</para>
+
+  <indexterm zone="partitioning-device">
+    <primary>partition</primary>
+    <secondary>partitions</secondary>
+  </indexterm>
+
+  <indexterm zone="partitioning-device">
+    <primary>partitioning</primary>
+  </indexterm>
+
+  <indexterm zone="partition-formatting">
+    <primary>format</primary>
+    <secondary>formatting</secondary>
+  </indexterm>
+
+  <indexterm zone="mount-and-umount">
+    <primary>mount</primary>
+  </indexterm>
+
+  <indexterm zone="mount-and-umount">
+    <primary>unmount</primary>
+    <secondary>umount</secondary>
+  </indexterm>
+
+  <indexterm zone="what-is-filesystem">
+    <primary>filesystem</primary>
+    <secondary>file system</secondary>
+  </indexterm>
+
+<sect1 id="checking-usage" status="complete">
+    <title>Checking Free and Used Space</title>
+    <para>
+      To check the amount of free and used space on your computer, on
+      your removable devices and on your file systems, do as follow:
+      <orderedlist>
+	<listitem>
+	  <para>Choose &computer;,</para>
+	</listitem>
+	<listitem>
+	  <para>Select the desired device and right click on
+	  it,</para>
+	</listitem>
+	<listitem>
+	  <para>Select <guimenuitem>Properties</guimenuitem>.
+	  </para>
+	</listitem>
+      </orderedlist>
+    </para>
+    <para>
+      You will be present with a two color <emphasis>pie
+      chart</emphasis> indicating the free and used space on that
+      particular device.
+    </para>
+    <para>
+      The blue color indicates the free space, the
+      yellow one indicates the used space. On the right of this chart
+      there's a small legend with the exactly free and used space.
+    </para>
+    <!-- note for dumnies, maybe we can delete it -->
+    <para>
+      <note>
+	<para>
+	  If you want to know the amount of free and used space of a removable
+	  device like a CD/DVD-ROM or a USB key, first mount that
+	  particular device.
+	</para>
+      </note>
+    </para>
+    
+    <sect2 id="advanced-disk-analysis" status="complete">
+      <title>Advanced Analysis</title>
+      <para>
+	For a more accurate analysis of your filesystem, you can use
+	<application>Disk Usage Analyzer</application>. To launch
+	<application>Disk Usage Analyzer</application>, choose
+	&baobab;, or from a terminal (&terminal;) type <command>baobab</command>
+	and hit <keycap>Return</keycap>.
+      </para>
+      <para>
+	For analysing the entire filesystem, press <guilabel>Scan
+	  Filesystem</guilabel> form the toolbar, or for analysing only
+	your home folder, press <guilabel>Scan Home</guilabel>.
+      </para>
+      <para>
+	For more information about, see <ulink url="ghelp:baobab" type="help"><application>Disk Usage
+	  Analyzer</application></ulink>.
+      </para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="partitioning-device" status="complete">
+    <title>Partitioning a Device</title>
+    <para>
+      To partition a disk in Ubuntu, either a hard disk or a removable
+      device, the program &gnome-partition-editor; is needed.
+    </para>
+    <para>
+      To install &gnome-partition-editor;, install the <application>gparted</application> package
+      (see <ulink type="help" url="ghelp:add-applications">Add
+	Applications</ulink>).
+    </para>
+    <para>
+      To launch &gnome-partition-editor; choose &gparted;, or from a
+      terminal (&terminal;) type <command>gksudo gparted</command>
+      and press <keycap>Enter</keycap>.
+    </para>
+
+    <sect2 id="freeing-space" status="complete">
+      <title>Freeing Space in a Partition</title>
+      <para>
+	To create a new partition inside an already partitioned
+	device, first you have to resize the partition. If you already
+	have free space, skip to <xref
+	linkend="creating-new-partition"/>.
+	<orderedlist>
+	  <listitem>
+	    <para>
+	      Launch &gnome-partition-editor;.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Select the device to partition from the drop-down list
+	      at the top-right of the main window.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      A list of partitions will appear. Select the desired partition
+	      and choose <menuchoice>
+		<guimenu>Partition</guimenu>
+		<guimenuitem>unmount</guimenuitem>
+	      </menuchoice>.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      To resize the partition choose
+	      <guilabel>Resize/Move</guilabel>. The dialog
+	      <guilabel>Resize/Move</guilabel> will be shown. You can
+	      use the <guilabel>Free Space Following (MiB)</guilabel>
+	      spin box to choose how much space to free after this
+	      partition, or <guilabel>Free Space Preceding
+	      (MiB)</guilabel> to free space before this partition. Alternatively
+	      you can use the slider to adjust the partition size..
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      To apply the changes, click
+	      <guibutton>Resize/Move</guibutton>.
+	    </para>
+	  </listitem>
+	</orderedlist>
+      </para>
+    </sect2>
+    <sect2 id="creating-new-partition" status="complete">
+      <title>Creating a New Partition</title>
+      <para>
+	To create a new partition:
+	<orderedlist>
+	  <listitem>
+	    <para>
+	      Select the device to partition from the drop-down list
+	      at the top-right of the main window.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      A list of partitions will appear. Select the one called
+	      <guilabel>unallocated</guilabel> and click
+	      <guibutton>New</guibutton>.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      From the <guilabel>Filesystem</guilabel> drop-down list
+	      choose the desired type of filesystem to use and click
+	      <guibutton>Add</guibutton>.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      To apply all the changes made, click
+	      <guibutton>Apply</guibutton>.
+	    </para>
+	  </listitem>
+	</orderedlist>
+      </para>
+    </sect2>
+
+    <sect2 id="related-topics-part" status="complete">
+      <title>Related Topics</title>
+      <para>
+	<itemizedlist>
+	  <listitem>
+	    <para>
+	      <xref linkend="partition-formatting"/>
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      <xref linkend="to-format-meaning" />
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      <xref linkend="partition-meaning" />
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      <xref linkend="what-is-filesystem" />
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      <xref linkend="mount-and-umount" />
+	    </para>
+	  </listitem>
+	</itemizedlist>
+      </para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="partition-formatting" status="complete">
+    <title>Formatting a Partition</title>
+    <para>
+      To format a partition in Ubuntu, the program
+      &gnome-partition-editor; is needed.
+    </para>
+    <para>
+      To install &gnome-partition-editor;, install the <application>gparted</application> package
+      (see <ulink type="help" url="ghelp:add-applications">Add
+	Applications</ulink>).
+    </para>
+    <para>
+      To launch &gnome-partition-editor; choose &gparted;, or from a
+      terminal (&terminal;) type <command>gksudo gparted</command> and
+      press <keycap>Enter</keycap>.
+    </para>
+    <para>
+      To format a partition, do as follows:
+      <orderedlist>
+	<listitem>
+	  <para>
+	    Launch &gnome-partition-editor;.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Select the device to partition from the drop-down list
+	    at the top-right of the main window.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    A list of partitions will appear. Select the desired partition
+	    and choose <menuchoice>
+	      <guimenu>Partition</guimenu>
+	      <guimenuitem>unmount</guimenuitem>
+	    </menuchoice>.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Select the partition you want to format and choose <menuchoice>
+	      <guimenu>Partition</guimenu>
+	      <guimenuitem>Format to</guimenuitem>
+	    </menuchoice> and select from the list the type of
+	      filesystem to format the partition to.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    To apply all the changes made, click
+	    <guibutton>Apply</guibutton>.
+	  </para>
+	</listitem>
+      </orderedlist>
+    </para>
+
+    <warning>
+      <para>
+	Pressing <guibutton>Apply</guibutton> will cause all of the
+	files on the partition to be permanently deleted.
+      </para>
+    </warning>
+
+    <sect2 id="related-topics-for" status="complete">
+      <title>Related Topics</title>
+      <para>
+	<itemizedlist>
+	  <listitem>
+	    <para>
+	      <xref linkend="partitioning-device"/>
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      <xref linkend="to-format-meaning" />
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      <xref linkend="partition-meaning" />
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      <xref linkend="what-is-filesystem" />
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      <xref linkend="mount-and-umount" />
+	    </para>
+	  </listitem>
+	</itemizedlist>
+      </para>
+    </sect2>
+  </sect1>
+  
+  <sect1 id="to-format-meaning" status="complete">
+    <title>What is Formatting?</title>
+    <para>
+      To format a hard disk, a device or a partition means to prepare
+      that particular device to be used for storing data.
+    </para>
+    <para>
+      The operation of formatting a hard disk or a partition, implies
+      the applying of a specific format to that device: this format is
+      the filesystem.
+    </para>
+    <para>
+      When you buy a disk usually it is not formatted, and you cannot
+      use it for archiving data. When you format the device, you will
+      notice that the free space in it is less than the original size. This
+      is due to the fact that some space has to be used to make the
+      device usable: this space is occupied by the filesystem.
+    </para>
+  </sect1>
+
+  <sect1 id="what-is-filesystem" status="review">
+    <title>What is a Filesystem?</title>
+    <para>
+      The filesystem is a mechanism with wich files are archived and
+      organised on a storing device such as a hard disk, and is an
+      important part of an operating system. Without a filesystem,
+      accessing and storing files would be impossible.
+    </para>
+    <para>
+      There are different types of filesystem. The most common are:
+      <itemizedlist>
+	<listitem>
+	  <para>
+	    Ext2/Ext3: these are usually found on GNU/Linux operating
+	    systems. Ubuntu uses <emphasis>ext3</emphasis> as its
+	    default filesystem.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    <acronym>FAT16</acronym>, <acronym>FAT32</acronym>: these are Microsoft Windows filesystems
+	    found on older computers. If you want to share data
+	    between two computers, you would probably choose the <emphasis><acronym>FAT32</acronym></emphasis>
+	    filesystem.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    <acronym>NTFS</acronym>: this is Microsoft Windows new
+	    filesystem being used as the default one in new Windows versions.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    <acronym>HFS</acronym>: this is Macintosh default filesystem.
+	  </para>
+	</listitem>
+      </itemizedlist>
+    </para>
+  </sect1>
+
+  <sect1 id="partition-meaning" status="complete">
+    <title>What is a Partition?</title>
+    <para>
+      A partition is a means of dividing a phisical device, such as a
+      hard disk, into many logical devices.
+    </para>
+    <para>
+      Each logical device is seen by the operating system as a
+      distinct device, and thus is treated as an independent disk.
+    </para>
+    <para>
+      Partitioning a hard disk can be done for several reasons:
+      <itemizedlist>
+	<listitem>
+	  <para>
+	    To retrieve free space;
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    To install different operating systems;
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    To better organize data on the hard disk.
+	  </para>
+	</listitem>
+      </itemizedlist>
+    </para>
+  </sect1>
+
+  <sect1 id="mount-and-umount" status="review">
+    <title>Mounting and Unmounting Devices</title>
+    <para>
+      For information about mounting and unmounting a device, see <ulink
+      type="help" url="ghelp:user-guide#gosnautilus-460">Using Removable Media</ulink>
+    </para>
+    <para>
+      Pay attention when removing a device: <emphasis
+      role="strong">always unmount</emphasis> it to avoid data loss. If you
+      attempt to remove a device without unmounting it, you will get a
+      message explaining how to properly unmount a device.
+
+<!-- Comment out to see the image, image needs to be in the same -->
+<!-- directory of the file, or change fileref and create a new -->
+<!-- directory. For now we leave it commented...
+      <figure id="unsafe-removal-warn">
+	<title>The Unsafe Removal Warning</title>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="unsafe-removal.png" format="PNG"></imagedata>
+	    </imageobject>
+	    <textobject>
+	      <phrase>
+		Show the unsafe removal warning.
+	      </phrase>
+	    </textobject>
+	  </mediaobject>
+	</screenshot>
+      </figure>
+-->  
+    </para>
+  </sect1>
+
+</article>

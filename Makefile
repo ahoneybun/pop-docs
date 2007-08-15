@@ -68,3 +68,4 @@ index-cc:
 
 	xsltproc --stringparam root.filename "index.cc" -o $(BASE) $(INDEXCHUNKXSL) website-index/cc/website-index.xml
 	cp libs/index.css $(BASE)
+
