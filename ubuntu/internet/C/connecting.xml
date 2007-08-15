@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome-menus-C SYSTEM "../../../ubuntu/libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+<!ENTITY ubuntu '<phrase>Ubuntu</phrase>'>
+]>
+
+<chapter id="connecting" status="review">
+	<title>Connecting to the Internet</title>
+	<para>This section provides instructions on how to get connected to the Internet.</para>
+
+	<sect1 id="internet-basic-procedure" status="review">
+		<title>Basic Procedure</title>
+		<para>This section describes the basic procedure for connecting to the Internet.</para>
+                <note>
+                	<para>If you have a wireless connection or connect to the Internet through a modem (including an ADSL modem), and this section does not work, you should read <xref linkend="wireless"/> or <xref linkend="modems"/>.</para>
+                </note>
+	                 <para>To connect to the Internet:</para>
+		<procedure>
+			<step>
+				<para>Open &networking;.</para>
+                        </step>
+			<step>
+				<para>Go to the <guilabel>Connections</guilabel> tab and click the connection you wish to use to select it.</para>
+			</step>
+			<step>
+				<para>Press <guibutton>Properties</guibutton> to change any settings.</para>
+			</step>
+			<step>
+				<para>If your ISP or network administrator has given you an <emphasis>IP address</emphasis>, set <guilabel>Configuration</guilabel> to <guilabel>Static IP address</guilabel>, then enter the address in the <guilabel>IP address</guilabel> field and click <guibutton>OK</guibutton>. Otherwise, set <guilabel>Configuration</guilabel> to <guilabel>Automatic configuration (DHCP)</guilabel> and click <guibutton>OK</guibutton>.</para>
+			</step>
+			<step>
+				<para>Tick the box next to your connection to enable it.</para>
+			</step>
+		</procedure>
+	</sect1>
+		
+<sect1 id="wireless" status="review">
+	<title>Wireless Cards</title>
+	<para>Many wireless cards are automatically detected by Ubuntu during installation. To see if your card is supported, open &networking;. If your wireless card is listed, you can follow <xref linkend="internet-basic-procedure"/> to connect to the Internet. A complete listing of wireless cards which work with Ubuntu can be found online at the <ulink url="https://help.ubuntu.com/community/WifiDocs/WirelessCardsSupported">Ubuntu Wiki</ulink>. Please add your wireless card to the list if it works with Ubuntu.</para>
+	<note>
+		<para>If your wireless network is protected by WEP encryption, ensure that you specify your network password when configuring your connection. Ubuntu does not automatically support WPA encryption, if you require this, there is <ulink url="https://help.ubuntu.com/community/WifiDocs/WPAHowTo">a WPA guide</ulink> on the Ubuntu documentation wiki.</para>
+	</note>
+	
+	<sect2 id="wireless-unsupported" status="review">
+		<title>Unsupported wireless cards</title>
+		<para>Some cards may not work automatically with Ubuntu. If this is the case, please look at the <ulink url="https://wiki.ubuntu.com/WirelessTroubleshootingGuide">Wireless Troubleshooting Guide</ulink> on the Ubuntu Wiki which is an excellent resource for troubleshooting wireless cards.</para>
+		<para>If your wireless card does not work with Ubuntu, you may have to do some research in order to activate it. A relatively reliable way of getting a wireless card to work is to use the <application>ndiswrapper</application> tool which allows Ubuntu to use the Microsoft Windows driver for the wireless card. To do this, follow the instructions below in <xref linkend="wireless-ndiswrapper"/>.
+		</para>
+		<para>All other information regarding wireless networking on Ubuntu is collected at <ulink url="https://help.ubuntu.com/community/WifiDocs">Wireless Networking Central</ulink> on the Ubuntu Wiki.</para>
+	</sect2>
+	
+	<sect2 id="wireless-ndiswrapper" status="review">
+		<title>Using Windows wireless drivers</title>
+		<para>Even if your wireless network card does not have a native Linux driver, you may still be able to get it working with <application>ndiswrapper</application>. <application>Ndiswrapper</application> is a Linux module which allows Ubuntu to use the Windows driver for wireless cards (in most cases).</para>
+		<note>
+			<para>These instructions apply only to the x86 and AMD64 versions of Ubuntu, and not to Ubuntu for Power PC (PPC).</para>
+		</note>
+		<tip>
+			<para>If you have access to the Internet, you can see if your wireless cards is in the list of cards supported by <application>ndiswrapper</application> <ulink url="http://ndiswrapper.sourceforge.net/mediawiki/index.php/List">on the ndiswrapper website</ulink>.</para>
+		</tip>
+		<para>To install ndiswrapper, install the package <application>ndiswrapper-utils</application> (see <ulink type="help" url="ghelp:add-applications">Add Applications</ulink>). This package is provided on the Ubuntu CD. If you have access to the Internet, you can also optionally install a graphical tool, <application>ndisgtk</application> from the <emphasis>Universe</emphasis> repository (see <ulink type="help" url="ghelp:add-applications#extra-repositories"/>).</para>
+		<para>In order to set up <application>ndiswrapper</application>, it is necessary to obtain the Windows driver for your wireless card. Generally, the best way to do this is from the CD supplied with your wireless card. You should copy two files to the same place on your computer, one ending in .SYS and one ending in .INF. If you find any files which end in .BIN, also copy those. If you are not able to find the right files, and have alternative access to the Internet, you may be able to obtain help from the <ulink url="http://ndiswrapper.sourceforge.net/mediawiki/index.php/list">ndiswrapper website</ulink>.</para>
+		<para>If you have installed the graphical tool <application>ndisgtk</application>, to set up ndiswrapper, simply select &ndisgtk; from the menu, and follow the instructions given.</para>
+		<para>If you have not installed the graphical tool, use this procedure:</para>
+		<procedure>
+			<step>
+				<para>Open &terminal; and type: <screen>sudo ndiswrapper -i ~/Desktop/drivername.inf</screen></para>
+				<note>
+					<para>The above command assumes that your .INF file is named <filename>drivername.inf</filename> and was copied to your Desktop. Replace these values if necessary.</para>
+				</note> 
+			</step>
+			<step>
+				<para>To check if it is working correctly, type: <screen>ndiswrapper -l</screen>If it is working correctly, you should see:
+				<screen>Installed ndis drivers:
+{name of driver}  driver present, hardware present</screen>
+	</para>
+			</step>
+			<step>
+				<para>For ndiswrapper to function, you need to load a module. To do this, type:<screen>sudo depmod -a
+sudo modprobe ndiswrapper</screen></para>
+			</step>
+			<step>
+				<para>To ensure that the module is loaded each time you boot the computer, type:<screen>sudo ndiswrapper -m</screen>
+	</para>
+			</step>
+		</procedure>
+		<para>You should now be able to connect to the Internet by following the instructions at <xref linkend="internet-basic-procedure"/>.</para>
+	</sect2> 
+	
+</sect1>
+
+<sect1 id="modems" status="complete">
+	<title>ADSL Connections</title>
+	<para>All PPPoE and router-style ADSL modems that use an Ethernet connection are supported by Ubuntu, and some USB ADSL modems are supported too.</para>
+	<para>For a router-style ADSL modem, simply follow <xref linkend="internet-basic-procedure"/></para>
+	<para>For information on setting up a PPPoE ADSL modem see <xref linkend="modems-adsl-pppoe"/>.</para>
+	<para>For information on setting up a USB ADSL modem see <xref linkend="modems-adsl-usb"/>.</para>
+
+	<sect2 id="modems-adsl-pppoe" status="review">
+		<title>PPPoE Modems</title>
+		<para>This section is about setting up an ADSL Internet connection using an ethernet PPPoE modem.</para>
+		<para>You will need to have subscribed to an <emphasis>Internet Service Provider</emphasis>, and your Internet connection must be installed and functional. A "DSL" light on your modem usually shows that the line is synchronized.</para>
+		<para>You will need your username and password for the account. You must also have an ethernet card connected to your PPPoE modem with the correct type of cable.</para>
+		<para>Finally, you need the PPPoE package to be installed in order for the following command to work. This package is installed by default, but can be missing if the configuration has been changed. If the following command does not work, you will need to install this package, which can be found on the Ubuntu CD.</para>
+		<para>To set up the modem:</para>
+		<procedure>
+			<step><para>Open &terminal;</para></step>
+			<step><para>In the terminal type:<screen>sudo pppoeconf</screen></para></step>
+			<step><para>A text-based menu program will guide you through the next steps, which are:
+				<orderedlist numeration='arabic'>
+					<listitem><para>Confirm that your Ethernet card is detected. </para></listitem>
+					<listitem><para>Enter your username. </para></listitem>
+					<listitem><para>Enter your password. </para></listitem>
+					<listitem><para>If you already have a PPPoE Connection configured, you will be asked if it may be modified. </para></listitem>
+					<listitem><para>Popular options: you are asked if you want the <quote>noauth</quote> and <quote>defaultroute</quote> options and to remove <quote>nodetach</quote> - choose <guibutton>Yes</guibutton>. </para></listitem>
+					<listitem><para>Use peer DNS - choose <guibutton>Yes</guibutton>. </para></listitem>
+					<listitem><para>Limited MSS problem - choose <guibutton>Yes</guibutton>. </para></listitem>
+					<listitem><para>When you are asked if you want to connect at start up, you will probably want to say yes. </para></listitem>
+					<listitem><para>Finally you are asked if you want to establish the connection immediately. </para></listitem>
+				</orderedlist></para>
+			</step>
+			<step><para>Once you have finished these steps, your connection should be working. </para></step>
+		</procedure>
+		<para>To start your ADSL connection on demand, in a terminal type:</para>
+			<screen>sudo pon dsl-provider</screen>
+		<para>To stop your ADSL connection, in a terminal type:</para>
+			<screen>sudo poff dsl-provider</screen>
+	</sect2>
+
+	<sect2 id="modems-adsl-usb" status="complete">
+		<title>USB ADSL Modems</title>				
+		<para>Often parts of ADSL USB modem drivers are proprietary, closed source software, with a restrictive licence, and so the whole driver cannot be supplied with Ubuntu. To get a modem to work with these drivers, you will need to download files from Internet with a computer having a working connection, then transfer the downloaded files to you Ubuntu installation.</para>
+		<warning>
+			<para> USB is far from the ideal medium for network access. If you have a modem that can connect both via USB and ethernet, or an ethernet router, you should use the ethernet connection instead of the USB modem.</para>
+		</warning>
+		<para>Since any USB modem installation will require Internet access to download the necessary proprietary drivers, as well as extensive configuration which is beyond the scope of this guide, all we can do here is to list the USB Modem models known to work with Ubuntu with links to the relevant installation instructions on the Ubuntu community help site.</para>
+		<para>The installation procedure of USB modems differs depending on the specific make and model of your modem. To identify model of your modem, Note the name and number on the front. Occasionaly you may have to look for a label to discover the exact model. Consult the list below to see which driver your modem requires and note the link.</para>
+		<para>When you go online to download the necessary drivers, you can access the relevant driver download links from the page with the installation instructions relevant to that model of USB modem.</para>
+
+		<orderedlist numeration='arabic'>
+			<listitem><para>Speedtouch modems:</para>
+			<para><ulink url="https://help.ubuntu.com/community/UsbAdslModem/SpeedTouch">https://help.ubuntu.com/community/UsbAdslModem/SpeedTouch</ulink></para></listitem>
+			<listitem>
+				<para>Modems using the Analog Devices Inc. eagle-usb I, II or III chipset (such as Sagem Fast 800, Comtrend ct 350 etc.):</para>
+				<para><ulink url="https://help.ubuntu.com/community/UsbAdslModem/ueagle-atm">https://help.ubuntu.com/community/UsbAdslModem/ueagle-atm</ulink></para>
+				<para><ulink url="https://help.ubuntu.com/community/UsbAdslModem/EagleUsb">https://help.ubuntu.com/community/UsbAdslModem/EagleUsb</ulink></para>
+			</listitem>
+			<listitem>
+				<para>Connexant AccessRunner based modems:</para>
+				<para><ulink url="https://help.ubuntu.com/community/UsbAdslModem/EciAdsl">https://help.ubuntu.com/community/UsbAdslModem/EciAdsl</ulink></para>
+				<para><ulink url="https://help.ubuntu.com/community/UsbAdslModem/AccessRunner">https://help.ubuntu.com/community/UsbAdslModem/AccessRunner</ulink></para>
+				<para><ulink url="https://help.ubuntu.com/community/UsbAdslModem/e-techV2">https://help.ubuntu.com/community/UsbAdslModem/e-techV2</ulink></para>
+			</listitem>
+		</orderedlist>
+	</sect2>
+	
+</sect1>
+
+<sect1 id="dialup" status="complete">		
+	<title>Dialup Modems</title>
+	<para>Most dialup modems are not supported by Ubuntu, but drivers can be found that will enable the use of such modems. First you need to identify what chipset your dialup modem is using:</para>
+	
+		<screen>
+wget -c <ulink url="&scanmodem-url;">&scanmodem-url;</ulink> 
+gunzip -c &scanmodem-gz; &gt; scanModem 
+chmod +x scanModem
+sudo ./scanModem 
+gedit Modem/ModemData.txt</screen>
+
+	<para>Read this file, it should list what modem chipset you have. Once you are aware of the chipset you have, see <ulink url="&linmodem;">&linmodem;</ulink> and follow the directions for your modem. More infomation can be found at <ulink url="https://wiki.ubuntu.com/SettingUpModems">SettingUpModems</ulink> on the Ubuntu Wiki.</para>
+</sect1>
+
+<sect1 id="network-troubleshooting" status="writing">
+	<title>Tools to help with network connection problems</title>
+	<para>If you have a network connection which is not working properly, you can use a few tools to help diagnose what the problem is.</para>
+	<para>Most of the tools in this section require use of the Terminal, which you can open by pressing &terminal;.</para>
+	
+	<sect2 id="network-troubleshooting-iwconfig" status="writing">
+		<title>Identify wireless connections</title>
+		<para><application>iwconfig</application> allows you to change certain settings of your wireless hardware. However, it is also very useful for identifying wireless connections.</para>
+		<para>To identify a wireless connection:</para>
+		<orderedlist>
+			<listitem><para>Press &terminal; to open a Terminal</para></listitem>
+			<listitem><para>Type <userinput>iwconfig</userinput> in the Terminal and press <keycap>Return</keycap></para></listitem>
+			<listitem>
+				<para>You should get output similar to the following:</para>
+				<screen>lo        no wireless extensions.
+
+eth0      no wireless extensions.
+
+eth1      IEEE 802.11g  ESSID:"WLAN Name"  
+Mode:Managed  Frequency:2.432 GHz  Access Point: 00:12:CF:02:6F:EC   
+Bit Rate:54 Mb/s   Tx-Power=20 dBm   Sensitivity=8/0  
+Retry limit:7   RTS thr:off   Fragment thr:off
+Power Management:off
+Link Quality=75/100  Signal level=-54 dBm  Noise level=-89 dBm
+Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+Tx excessive retries:0  Invalid misc:0   Missed beacon:1</screen>
+			</listitem>
+			<listitem><para>The column on the left gives the name of the connection, such as <quote>eth0</quote> or <quote>wlan0</quote></para></listitem>
+			<listitem><para>If the column on the right says <quote>no wireless extensions</quote>, that connection has not been recognized as a wireless connection and is probably a wired network connection</para></listitem>
+			<listitem><para>If the connection <emphasis>has</emphasis> been recognized as a wireless connection, details of the wireless connection will be shown in the column on the right</para>
+			<itemizedlist>
+				<listitem><para><emphasis>ESSID</emphasis> gives the name of the wireless network that you are connected to, if any</para></listitem>
+				<listitem><para><emphasis>Link Quality</emphasis> gives a measure of the strength of the wireless signal</para></listitem>
+			</itemizedlist>
+			</listitem>
+		</orderedlist>
+	</sect2>
+	
+	<sect2 id="network-troubleshooting-iwlist" status="writing">
+		<title>Find information about wireless connections</title>
+		<para><application>iwlist</application> is able to display information about your wireless connection.</para>
+		<orderedlist>
+			<listitem><para>Press &terminal; to open a Terminal</para></listitem>
+			<listitem>
+				<para>Type the following commands in the Terminal and press <keycap>Return</keycap> to run them. Make sure that you replace <emphasis>eth1</emphasis> with the name of your wireless interface, if it is different.</para>
+				<itemizedlist>
+					<listitem><para><userinput>iwlist eth1 accesspoints</userinput> - Show a list of available wireless access points</para></listitem>
+					<listitem><para><userinput>iwlist eth1 rate</userinput> - Show a list of all possible transmission rates for your wireless connection, including the current rate</para></listitem>
+					<listitem><para><userinput>iwlist eth1 key</userinput> - Show information about wireless encryption</para></listitem>
+				</itemizedlist>
+			</listitem>
+		</orderedlist>
+	</sect2>
+	
+	<sect2 id="network-troubleshooting-ifconfig" status="writing">
+		<title>Get information about the current connection</title>
+		<para><application>ifconfig</application> is intended to allow you to change the settings of your network connections, but can also be used to list information about the current connection.</para>
+		<orderedlist>
+			<listitem><para>Press &terminal; to open a Terminal</para></listitem>
+			<listitem>
+				<para>Type <userinput>ifconfig eth1</userinput> in the Terminal and press <keycap>Return</keycap>, replacing <emphasis>eth1</emphasis> with the name of your network interface if it is different.</para>
+				<itemizedlist>
+					<listitem><para><emphasis>inet addr</emphasis> gives the current <emphasis>IP address</emphasis> of the connection</para></listitem>
+					<listitem><para><emphasis>HWaddr</emphasis> gives the <emphasis>MAC address</emphasis> of your network device</para></listitem>
+				</itemizedlist>
+			</listitem>
+		</orderedlist>
+	</sect2>
+	
+	<sect2 id="network-troubleshooting-ping" status="writing">
+		<title>Check if a connection is working correctly</title>
+		<para>A good way of checking if a connection is working correctly is to <emphasis>ping</emphasis> another computer on the network or the Internet.</para>
+		<para>To check if you are connected to the Internet:</para>
+		<orderedlist>
+			<listitem><para>Press &network-tools;</para></listitem>
+			<listitem><para>Select the <guilabel>Ping</guilabel> tab</para></listitem>
+			<listitem><para>Type <userinput>ubuntu.com</userinput> into the <guilabel>Network address</guilabel> box and then press <guibutton>Ping</guibutton></para></listitem>
+			<listitem>
+				<para>After a while, a graph should appear. Look at the number for <guilabel>Successful packets</guilabel> under <guilabel>Transmission Statistics</guilabel></para>
+				<itemizedlist>
+					<listitem><para><emphasis>100% successful packets</emphasis> - Your computer should have a good connection to the Internet</para></listitem>
+					<listitem><para><emphasis>Less than 100% successful</emphasis> - Your computer probably has a poor connection to the Internet or a poor wireless signal</para></listitem>
+					<listitem><para><emphasis>0% successful packets</emphasis> - Your computer has a very bad connection, or is connected to an access point or router which is not connected to the Internet</para></listitem>
+				</itemizedlist>
+			</listitem>
+		</orderedlist>
+		<para>If you get an error message which says <emphasis>The address &apos;ubuntu.com&apos; cannot be found</emphasis>, then your computer is probably not connected to the Internet or cannot reach a <emphasis>DNS server</emphasis>.</para>
+	</sect2>
+</sect1>
+
+<sect1 id="networking-enable" status="writing">
+	<title>Connect to a network</title>
+	<para>If you change the settings of your network connection or connect to a different network than usual, you may have to enable the connection yourself.</para>
+
+	<sect2 id="networking-enable-nm" status="writing">
+		<title>Use Network Manager to connect to a network</title>
+		<para>If your network connection is managed by <application>Network Manager</application> (as most are), the connection should be enabled automatically.</para>
+		<para>If the connection is not enabled automatically:</para>
+		<orderedlist>
+			<listitem><para>Find the Network Manager icon in the notification area. It should look like a small signal strength indicator or a computer monitor and will probably be close to the clock</para></listitem>
+			<listitem><para>Right-click the icon and ensure that <guilabel>Enable Networking</guilabel> is ticked</para></listitem>
+			<listitem><para>If you have a wireless network connection, also ensure that <guilabel>Enable Wireless</guilabel> is ticked</para></listitem>
+			<listitem><para>Left-click once on the Network Manager icon and then click on the network you want to connect to</para></listitem>
+			<listitem><para>After a short period you should receive a message which says <guilabel>Connection Established</guilabel></para></listitem>
+			<listitem><para>You should now be connected to a network.</para></listitem>
+		</orderedlist>
+		<para>If you are not connected to a network after following the procedure above:</para>
+		<orderedlist>
+			<listitem><para>Left-click the Network Manager icon again and press <guibutton>Manual configuration...</guibutton></para></listitem>
+			<listitem><para>Select the <guilabel>Connections</guilabel> tab</para></listitem>
+			<listitem><para>Tick the box next to your network connection to enable the connection</para></listitem>
+			<listitem><para>The connection process make take a short while</para></listitem>
+			<listitem><para>Press <guibutton>Close</guibutton></para></listitem>
+		</orderedlist>
+	</sect2>
+	
+	<sect2 id="networking-enable-ifup" status="writing">
+		<title>Use the ifup command to connect to a network</title>
+		<para><application>ifup</application> is a command-line tool for enabling network connections.</para>
+		<para>To enable a network connection:</para>
+		<orderedlist>
+			<listitem><para>Press &terminal; to open a Terminal</para></listitem>
+			<listitem><para>Type <userinput>sudo ifdown eth1</userinput> in the Terminal and press <keycap>Return</keycap>, replacing <emphasis>eth1</emphasis> with the name of your network interface if it is different</para></listitem>
+			<listitem><para>Enter your password if prompted</para></listitem>
+			<listitem><para>Type <userinput>sudo ifup eth1</userinput> in the Terminal and press <keycap>Return</keycap>, again replacing <emphasis>eth1</emphasis> with the name of your network interface</para></listitem>
+			<listitem>
+				<para>If you have connected successfully, you should see a message similar to the following (the numbers may be different):</para>
+				<screen>DHCPACK from 192.168.2.1
+bound to 192.168.2.4 -- renewal in 536349522 seconds.</screen>
+			</listitem>
+		</orderedlist>
+	</sect2>
+</sect1>
+	
+<sect1 id="networking-disable" status="writing">
+	<title>Disable a network connection</title>
+	<para>Sometimes you may want to disable a network connection. There are several different ways of achieving this.</para>
+	
+	<sect2 id="networking-disable-nm" status="writing">
+		<title>Disconnecting using Network Manager</title>
+		<para>It is likely that <application>Network Manager</application> is running your network connections. If so, you must disconnect from the network by disabling your network connection in Network Manager:</para>
+		<orderedlist>
+			<listitem><para>Find the Network Manager icon in the notification area. It should look like a small signal strength indicator or a computer monitor and will probably be close to the clock</para></listitem>
+			<listitem><para>Right-click the icon and untick <guilabel>Enable Networking</guilabel></para></listitem>
+			<listitem><para>You should be disconnected from the network</para></listitem>
+		</orderedlist>
+	</sect2>
+	
+	<sect2 id="networking-disable-networksettings" status="writing">
+		<title>Disconnecting using Network Settings</title>
+		<para>If Network Manager is not running, use the <application>Network Settings</application> tool to disconnect your network connection:</para>
+		<orderedlist>
+			<listitem><para>Press &networking;</para></listitem>
+			<listitem><para>Select the <guilabel>Connections</guilabel> tab</para></listitem>
+			<listitem><para>Untick your network connection to disconnect it</para></listitem>
+			<listitem><para>Press <guibutton>Close</guibutton></para></listitem>
+		</orderedlist>
+	</sect2>
+	
+	<sect2 id="networking-disable-ifdown" status="writing">
+		<title>Disconnecting using the ifdown command</title>
+		<para><application>ifdown</application> is a command-line tool for disabling network connections.</para>
+		<para>To disable a network connection using ifdown:</para>
+		<orderedlist>
+			<listitem><para>Press &terminal; to open a Terminal</para></listitem>
+			<listitem><para>Type <userinput>sudo ifdown eth1</userinput> in the Terminal and press <keycap>Return</keycap>, replacing <emphasis>eth1</emphasis> with the name of your network interface if it is different</para></listitem>
+			<listitem><para>Enter your password if prompted</para></listitem>
+			<listitem><para>Your network connection should be disconnected</para></listitem>
+		</orderedlist>
+	</sect2>
+</sect1>
+
+</chapter>
