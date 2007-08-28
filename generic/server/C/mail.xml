@@ -142,6 +142,17 @@ postconf -e 'myhostname = mail.example.com'
 </screen>
 		</para>
 		</step>
+		<step><para>Turn off the chroot operation for SMTP server. Locate
+    for the following line in
+      <filename>/etc/postfix/master.cf</filename> file:</para>
+<screen>
+smtp      inet  n       -       -       -       -       smtpd
+</screen>
+    <para>and modify it as follows:</para>
+<screen>
+smtp      inet  n       -       n       -       -       smtpd
+</screen>
+		</step>
 		</procedure>
             <note>
             <para>
@@ -184,8 +195,8 @@ postconf -e 'myhostname = mail.example.com'
 	    <para>
 		A few changes are necessary to make it work properly. Because <application>Postfix</application> runs chrooted in <filename>/var/spool/postfix</filename>, <application>SASL</application> needs to be configured to run in the false root (<filename>/var/run/saslauthd</filename> becomes <filename>/var/spool/postfix/var/run/saslauthd</filename>):
 <screen>
-<command>mkdir -p /var/spool/postfix/var/run/saslauthd</command>
-<command>rm -rf /var/run/saslauthd</command>
+<command>sudo mkdir -p /var/spool/postfix/var/run/saslauthd</command>
+<command>sudo rm -rf /var/run/saslauthd</command>
 </screen>
 	    </para>
 	    <para>
@@ -220,7 +231,7 @@ you are using on the server.
         <para>
 Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd</filename>. The saslauthd init script uses this setting to create the missing directory with the appropriate permissions and ownership:
 <screen>
-<command>dpkg-statoverride --force --update --add root sasl 755 /var/spool/postfix/var/run/saslauthd</command>
+<command>sudo dpkg-statoverride --force --update --add root sasl 755 /var/spool/postfix/var/run/saslauthd</command>
 </screen>
         </para>
         </sect2>
@@ -368,7 +379,7 @@ pop3_uidl_format = %08Xu%08Xv
             role="strong">mbox</emphasis> formats. These are the most
             commonly used mailbox formats. They both have their own
             benefits and they are discussed on <ulink
-            url="http://dovecot.org/doc/configuration.txt">the dovecot website</ulink>.
+            url="http://wiki.dovecot.org/MailboxFormat">the dovecot website</ulink>.
             </para>
             <para>
             Once you have chosen your mailbox type, edit the file
@@ -414,19 +425,20 @@ Escape character is '^]'.
             <filename>/etc/dovecot/dovecot.conf</filename> and amend
             following lines:
 <programlisting>
-ssl_cert_file = /etc/ssl/certs/dovecot.pem
-ssl_key_file = /etc/ssl/private/dovecot.pem
+ssl_cert_file = /etc/ssl/certs/ssl-cert-snakeoil.pem
+ssl_key_file = /etc/ssl/private/ssl-cert-snakeoil.key
 ssl_disable = no
 disable_plaintext_auth = no
 </programlisting>
 
-          The <emphasis role="strong">cert</emphasis> and <emphasis
-          role="strong">key</emphasis> files are created automatically
-          by <application>dovecot</application> when you install it. Please note that these keys
-          are not signed and will give "bad signature" errors when
-          connecting from a client. To avoid this, you can use
-          commercial certificates, or even better, you can use your own
-          SSL certificates.
+          You can get the SSL certificate from a Certificate Issuing
+          Authority or you can create self signed SSL certificate. Please
+          refer to <xref linkend="creating-a-self-signed-certificate"/>
+          for details about how to create self signed SSL certificate. Once
+          you create the certificate, you will have a key file and a
+          certificate file.  Please copy them to the location pointed
+          in the <filename>/etc/dovecot/dovecot.conf</filename>
+          configuration file.
           </para>
 	</sect2>
 	<sect2>

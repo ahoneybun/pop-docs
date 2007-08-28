@@ -29,7 +29,7 @@ for x in about-ubuntu add-applications advanced-topics config-desktop files-and-
 done
 
 # Group two - those without an omf file
-for y in administrative basic-commands desktop-effects games office programming switching windows; do
+for y in administrative basic-commands desktop-effects games hardware office programming switching windows; do
 	echo ${y}
 	xml2po -e -o ${y}/${y}.pot ${y}/C/*.xml
 done
