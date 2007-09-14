@@ -1,0 +1,25 @@
+### PREPARE DESKTOP FILES FOR TRANSLATIONS
+1.)  Copy the application.desktop to application.desktop.in
+2.)  Create the po/ directory
+3.)  Create po/POTFILES.in and add the applications .in files you want to translate
+4.)  From the po/ directory enter the following command:
+		intltool-update --pot --gettext-package=application_name
+5.)  File ready for translations
+
+
+### AFTER RECEIVING TRANSLATED FILES
+1.)  Copy the application.pot file to the country_code.po (ie. cp application.pot sv.po)
+2.)  Merge the translation back into the desktop file by typing the following command:
+		intltool-merge /path/to/po application.desktop.in application.desktop
+3.)  All done!
+
+
+### COMMANDS TO CREATE THE FILES NECESSARY FOR KUBUNTU DESKTOP TRANSLATIONS
+cd trunk/kubuntu/khelpdesktop/kubuntu
+cp systemdocs.desktop systemdocs.desktop.in
+cp .directory systemdocs.directory.in
+###### once you copied the files, edit the .in files and add a _ before the line you want to translate
+mkdir po && cd po
+echo systemdocs.desktop.in > POTFILES.in
+echo .directory.in >> POTFILES.in
+intltool-update --pot --gettext-package=systemdocs

@@ -19,70 +19,6 @@
 Version control is the art of managing changes to information. It has long been a critical tool for programmers, who typically spend their time making small changes to software and then undoing those changes the next day. But the usefulness of version control software extends far beyond the bounds of the software development world. Anywhere you can find people using computers to manage information that changes often, there is room for version control.</para>
 <para>
           </para>
-      <sect1 id="bazaar" status="complete">
-        <title>Bazaar</title> 
-          <para>
-          Bazaar is a new version control system sponsored by Canonical, the
-          commercial company behind Ubuntu. Unlike Subversion and CVS that
-          only support a central repository model, Bazaar also supports
-          <emphasis>distributed version control</emphasis>, giving people
-          the ability to collaborate more efficiently. In particular,
-          Bazaar is designed to maximise the level of community participation
-          in open source projects.
-          </para>
-        <sect2 id="bzr-installation" status="complete">
-          <title>Installation</title>
-            <para>
-              At a terminal prompt, enter the following command to install
-              <application>bzr</application>:
-
-<screen>
-<command>sudo apt-get install bzr</command>
-</screen>
-            </para>
-        </sect2>
-        <sect2 id="bzr-configuration" status="complete">
-          <title>Configuration</title>
-            <para>
-            To introduce yourself to <application>bzr</application>,
-            use the <emphasis>whoami</emphasis> command like this:
-<screen>
-<command>$ bzr whoami 'Joe Doe &lt;joe.doe&#64;gmail.com&gt;'</command>
-</screen>
-            </para>
-        </sect2>
-        <sect2 id="bzr-learning" status="complete">
-          <title>Learning Bazaar</title>
-            <para>
-            Bazaar comes with bundled documentation installed into
-            <application>/usr/share/doc/bzr/html</application> by default.
-            The tutorial is a good place to start. The
-            <application>bzr</application> command also comes with
-            built-in help:
-<screen>
-<command>$ bzr help</command>
-</screen>
-            </para>
-            <para>
-            To learn more about the <emphasis>foo</emphasis> command:
-<screen>
-<command>$ bzr help foo</command>
-</screen>            
-            </para>
-        </sect2>
-        <sect2 id="bzr-lp-integration" status="complete">
-          <title>Launchpad Integration</title>
-            <para>
-            While highly useful as a stand-alone system, Bazaar has good, optional
-            integration with <ulink url="https://launchpad.net/">Launchpad</ulink>,
-            the collaborative development system used by Canonical and the
-            broader open source community to manage and extend Ubuntu itself.
-            For information on how Bazaar can be used with Launchpad to
-            collaborate on open source projects, see
-            <ulink url="http://bazaar-vcs.org/LaunchpadIntegration/">
-            http://bazaar-vcs.org/LaunchpadIntegration</ulink>.</para>
-        </sect2>
-      </sect1>
       <sect1 id="subversion" status="complete">
         <title>Subversion</title>
           <para>
@@ -123,7 +59,18 @@ configure the digital certificate.
 </screen>
         </para>
 			</sect3>
-
+                        <sect3 id="import-svn-files" status="complete">
+          		  <title>Importing Files</title>
+			    <para>
+                            Once you create the repository you can
+                            <emphasis>import</emphasis> files into the
+                            repository.  To import a directory, enter the
+                            following from a terminal prompt:
+<screen>
+<command>svn import /path/to/import/directory file:///path/to/repos/project</command>
+</screen>
+                            </para>	
+                        </sect3>
         </sect2>
         <sect2 id="access-methods" status="complete">
           <title>Access Methods</title>
@@ -210,12 +157,32 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
   Require valid-user
   &lt;/LimitExcept&gt;
   &lt;/Location&gt; </programlisting>
+         <para>
+         To import or commit files to your Subversion repository over
+         HTTP, the repository should be owned by the HTTP user. In
+         Ubuntu systems, normally the HTTP user is
+         <command>www-data</command>.  To change the ownership of the
+         repository files enter the following command from terminal
+         prompt:
+         </para>
+<screen>
+<command>sudo chown -R www-data:www-data /path/to/repos</command>
+</screen>
+        <note>
+        <para>
+        By changing the ownership of repository as
+        <command>www-data</command> you will not be able to import or
+        commit files into the repository by running <command>svn import
+        file:///</command> command as any user other than
+        <command>www-data</command>.
+        </para>
+        </note>
   <para>Next, you must create the <filename>/etc/subversion/passwd</filename> 
   file. This file contains user authentication details. To add an entry, i.e. 
   to add a user, you can run the following command from a terminal prompt:</para>
 	<para>
 <screen>
-<command>sudo htpasswd2 /etc/subversion/passwd user_name</command>
+<command>sudo htpasswd -c /etc/subversion/passwd user_name</command>
 </screen>
         </para>
 	<para>This command will prompt you to enter the password. Once you enter the password, the user is added. Now, to access the repository you can run the following command:</para>
@@ -388,7 +355,7 @@ prompt, enter the following command to install
 Once the initial repository is set up, you can configure
 <application>xinetd</application> to start the CVS server. 
 You can copy the following lines to the <filename>
-/etc/xinetd/cvspserver</filename> file.
+/etc/xinetd.d/cvspserver</filename> file.
 
 <programlisting>
 service cvspserver
@@ -462,13 +429,13 @@ to the CVS manual for details.
 			command to add this project to CVS repository:
 <screen>
 <command>cd your/project</command>
-<command>cvs import -d :pserver:username@hostname.com:/var/lib/cvs -m "Importing my project to CVS repository" . new_project start</command>
+<command>cvs -d :pserver:username@hostname.com:/var/lib/cvs import -m "Importing my project to CVS repository" . new_project start</command>
 </screen>
 
 <tip>
 <para>
 You can use the CVSROOT environment variable to store the CVS root directory.
-Once you export the CVSROOT environment variable, you can avoid using -d option to
+Once you export the CVSROOT environment variable, you can avoid using -d option in the
 above cvs command.
 </para>
 </tip>

@@ -1,0 +1,82 @@
+#!/usr/bin/make -f
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/makefile.mk
+
+DEB_COMPRESS_EXCLUDE := .bz2 .css .dcl .docbook -license .tag .sty .el
+
+DEB_DH_INSTALL_ARGS = -X.svn
+
+DEB_SRCDIR = kubuntu
+
+DEB_MAKE_BUILD_TARGET = kdeb
+
+install755=install -m755 -oroot -groot
+preptrans=prepare-firefox-startpage-translations
+preptransdir=debian/kubuntu-docs/usr/share/ubuntu-artwork/common
+
+common-binary-post-install-indep::
+
+	mv debian/kubuntu-docs/usr/share/ubuntu-artwork/home/kindex.html \
+	       	debian/kubuntu-docs/usr/share/ubuntu-artwork/home/kfirefox-index.html
+	$(install755) -d $(preptransdir)
+	$(install755) debian/$(preptrans) $(preptransdir)
+	$(preptransdir)/$(preptrans) \
+		kubuntu/firefox-startpage \
+		debian/kubuntu-docs \
+		/usr/share/ubuntu-artwork/home/locales-kubuntu \
+		../index.html
+
+install/kubuntu-docs::
+
+	# Install Firefox startpage for Kubuntu
+	dh_install kubuntu/firefox-startpage/kindex.html usr/share/ubuntu-artwork/home/
+	dh_install kubuntu/firefox-startpage/kubuntu.css usr/share/ubuntu-artwork/
+	dh_install kubuntu/firefox-startpage/images/* usr/share/ubuntu-artwork/images/
+	# Install Firefox startpage translations for Kubuntu
+	dh_install kubuntu/firefox-startpage/kindex-*.html usr/share/ubuntu-artwork/home/locales-kubuntu/
+
+	# *.desktop files to make documents appear in khelpcenter
+	dh_install kubuntu/khelpdesktop/kubuntu/*.desktop usr/share/apps/khelpcenter/plugins/kubuntu/
+	
+	# this is the .directory file for proper naming in khelpcenter.
+	dh_install kubuntu/khelpdesktop/kubuntu/.directory usr/share/apps/khelpcenter/plugins/kubuntu/
+	
+	# now add a pinch of css
+	dh_install build/kubuntu/common/kubuntu-default.css usr/share/doc/kde/HTML/en/common/
+
+	# image love
+	dh_install build/kubuntu/images/* usr/share/doc/kde/HTML/en/images/
+
+	# install doc-base files
+	dh_install debian/kubuntu-systemdocs usr/share/doc-base
+
+	# install contributors and cc-by-sa documentation into help:/kubuntu/$$
+	dh_install kubuntu/libs/*.html usr/share/doc/kde/HTML/en/kubuntu/
+
+	# install english docs
+	dh_install build/kubuntu/about-kubuntu/C/* usr/share/doc/kde/HTML/en/kubuntu/about-kubuntu/
+	dh_install build/kubuntu/add-applications/C/* usr/share/doc/kde/HTML/en/kubuntu/add-applications/
+	dh_install build/kubuntu/basic-concepts/C/* usr/share/doc/kde/HTML/en/kubuntu/basic-concepts/
+	dh_install build/kubuntu/config-desktop/C/* usr/share/doc/kde/HTML/en/kubuntu/config-desktop/
+	dh_install build/kubuntu/files-and-docs/C/* usr/share/doc/kde/HTML/en/kubuntu/files-and-docs/
+	dh_install build/kubuntu/games/C/* usr/share/doc/kde/HTML/en/kubuntu/games/
+	dh_install build/kubuntu/getting-help/C/* usr/share/doc/kde/HTML/en/kubuntu/getting-help/
+	dh_install build/kubuntu/hardware/C/* usr/share/doc/kde/HTML/en/kubuntu/hardware/
+	dh_install build/kubuntu/internet/C/* usr/share/doc/kde/HTML/en/kubuntu/internet/
+	dh_install build/kubuntu/keeping-safe/C/* usr/share/doc/kde/HTML/en/kubuntu/keeping-safe/
+	dh_install build/kubuntu/musicvideophotos/C/* usr/share/doc/kde/HTML/en/kubuntu/musicvideophotos/
+	dh_install build/kubuntu/network/C/* usr/share/doc/kde/HTML/en/kubuntu/network/
+	dh_install build/kubuntu/newtokubuntu/C/* usr/share/doc/kde/HTML/en/kubuntu/newtokubuntu/
+	dh_install build/kubuntu/office/C/* usr/share/doc/kde/HTML/en/kubuntu/office/
+	dh_install build/kubuntu/printing/C/* usr/share/doc/kde/HTML/en/kubuntu/printing/
+	dh_install build/kubuntu/programming/C/* usr/share/doc/kde/HTML/en/kubuntu/programming/
+	dh_install build/kubuntu/sysdocs-index/C/* usr/share/doc/kde/HTML/en/kubuntu/sysdocs-index/
+	dh_install build/kubuntu/system-settings/C/* usr/share/doc/kde/HTML/en/kubuntu/system-settings/
+
+clean::
+
+	# clean up
+	make -C kubuntu clean
+	rm -f build-stamp
+	rm -rf debian/kubuntu-docs

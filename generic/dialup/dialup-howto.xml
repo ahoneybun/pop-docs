@@ -1,0 +1,550 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % gnome SYSTEM "../libs/generic.ent">
+%gnome;
+<!ENTITY language "&EnglishAmerican;">
+]>
+<article lang="&language;" id="dialup-config">
+    <title>Linux Dialup Modem Howto</title>
+    <articleinfo>
+        <authorgroup> &author-henry-meyerding; </authorgroup>
+        <revhistory>
+            <revision>
+                <revnumber>0.1</revnumber>
+                <date>27, April 2005</date>
+                <authorinitials>HM</authorinitials>
+                <revdescription>
+                    <para>Original Document</para>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>0.2</revnumber>
+                <date>11, May 2005</date>
+                <authorinitials>SW</authorinitials>
+                <revdescription>
+                    <para>First version converted from OOo to Docbook.</para>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>0.3</revnumber>
+                <date>18, May 2005</date>
+                <authorinitials>JSG</authorinitials>
+                <revdescription>
+                    <para>Document modified to be Ubuntu-specific; fixes to docbook tags</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+        <abstract>
+            <para>This document is about connecting to the Internet using a dialup (analog) modem in
+                Ubuntu &distro-version;</para>
+        </abstract>
+    </articleinfo>
+    <sect1 id="intro">
+        <title>Introduction</title>
+        <para>This document is intended for novice Ubuntu users, but certain basic functions of
+            Linux and basic familiarity with personal computers is assumed. There are several steps
+            in this process:</para>
+        <orderedlist numeration="arabic">
+            <listitem>
+                <para>
+                    <xref linkend="about-modems" endterm="title-about-modems"/>: Discusses types of
+                    modems and whether the modem you have works with Linux</para>
+            </listitem>
+            <listitem>
+                <para>
+                    <xref linkend="whats-needed" endterm="title-whats-needed"/>: Describes the
+                    things you need to set up your computer via a dialup connection to your Internet
+                    Service Provider (ISP) for Internet access</para>
+            </listitem>
+            <listitem>
+                <para>
+                    <xref linkend="setup-ppp" endterm="title-setup-ppp"/>: Describes how to
+                    configure the peer-to-peer protocol that is required to connect</para>
+            </listitem>
+            <listitem>
+                <para>
+                    <xref linkend="setup-wvdial" endterm="title-setup-wvdial"/>: Describes how to
+                    configure the <application>wvdial</application> software that is used to control your modem when connecting
+                    to your ISP</para>
+            </listitem>
+            <listitem>
+                <para>
+                    <xref linkend="connecting" endterm="title-connecting"/>: Describes how to
+                    connect and disconnect your ISP connection, once everything has been
+                configured</para>
+            </listitem>
+            <listitem>
+                <para>
+                    <xref linkend="trouble" endterm="title-trouble"/>: Discusses common errors and
+                    how you can fix them</para>
+            </listitem>
+        </orderedlist>
+    </sect1>
+    <sect1 id="about-modems">
+        <title id="title-about-modems">About Modems</title>
+        <para>There are two basic kinds of dialup modem: hardware modems and software modems.
+            Software modems are also commonly referred to as WinModems. Most computers sold today
+            are sold with WinModems (they are cheaper). WinModems require software (drivers)
+            installed on the computer to work. Very few manufacturers of WinModems make drivers for
+            Linux.</para>
+        <para>If you have a WinModem, you can try to obtain drivers for it, but those drivers may
+            require a different setup than described here. This howto describes how to configure
+            your computer to connect with a hardware modem. If you have Linux drivers for your
+            WinModem, ideally those drivers make the software modem act just like a hardware modem.
+            If that is so, then you should be able to use this howto to configure your computer as
+            if you had a hardware modem.</para>
+        <sect2 id="do-winmodem">
+            <title>Do I have a WinModem?</title>
+            <para>You can view the current devices found on your system by selecting <menuchoice>
+                    <guimenu>System</guimenu>
+                    <guisubmenu>Administration</guisubmenu>
+                    <guimenuitem>Device Manager</guimenuitem>
+                </menuchoice> from the Gnome menu. In Device Manager, you may see an entry like
+                this: </para>
+            <para>HCF 56k Data/Fax/Voice/Spkp</para>
+            <para>When you highlight the entry, the vendor, device name, status, bus type, device,
+                and capabilities are listed. WinModems list the Device and Capabilities as
+                &#x201C;unknown&#x201D; unless the correct drivers are installed.</para>
+            <para>If you have a device listed and identified as a modem under Capabilities, then you
+                have a hardware modem (or the equivalent) and do not need any other kind of
+            modem.</para>
+        </sect2>
+        <sect2 id="modem-kind">
+            <title>What Kind of Modem Do I Have?</title>
+            <para>A modem can either be an internal modem or an external modem. </para>
+            <note>
+                <para>Internal modems are cards that are installed onto the chassis of the computer.
+                    The telephone cord plugs directly into the back of the computer. Internal modems
+                    are most often WinModems.</para>
+                <para>Most of the hardware modems you can buy today are external modems. They are
+                    little boxes with lights that connect to your computer's serial port.<emphasis
+                        role="bold"> Not all external modems are hardware modems.</emphasis>
+                </para>
+            </note>
+            <para>An external modem is actually preferred because analog (telephone line dialup)
+                modems occasionally get confused and &#x201C;hang.&#x201D; If you have an
+                internal modem and it hangs, you have to reboot your computer. If you have an
+                external modem, you turn the modem off, and then turn it back on again.</para>
+        </sect2>
+        <sect2 id="get-modem">
+            <title>How Do I Get a Hardware Modem?</title>
+            <para>When you go shopping for a hardware modem, there are many helpful salespeople who
+                state categorically that you can only buy WinModems nowadays and that there is no
+                such thing as a hardware modem. <emphasis role="bold">They are
+                misinformed.</emphasis> There are several manufacturers who continue to make
+                external hardware modems. You may need to shop online to get one.</para>
+            <para> Be sure to verify that the modem you buy is a hardware modem and that the seller
+                allows you to return it for a full refund if it turns out to be incompatible.
+            </para>
+        </sect2>
+    </sect1>
+    <sect1 id="whats-needed">
+        <title id="title-whats-needed">What You Will Need</title>
+        <para>You will need several things:</para>
+        <itemizedlist>
+            <listitem>
+                <para>Hardware modem (or equivalent)</para>
+            </listitem>
+            <listitem>
+                <para>Serial Cable, if external modem</para>
+            </listitem>
+        </itemizedlist>
+        <para>
+            In <emphasis role="bold">Ubuntu</emphasis> &#x2013; your main user's password is your
+            superuser password and there is no &#x201C;root&#x201D; user. When you open a
+            terminal and enter a command preceded by <emphasis role="bold">sudo</emphasis> you are
+            prompted to supply your password before the command is executed. If you then
+            enter another command preceded by <emphasis role="bold">sudo</emphasis> within fifteen
+            minutes, in the same terminal, it just runs without prompting you for the password. For
+            more about this, enter <command>man sudo</command> in a terminal.</para>
+        <itemizedlist>
+            <listitem>
+                <para>Your Internet Service Provider (ISP) dialup access phone number</para>
+            </listitem>
+            <listitem>
+                <para>Your username and password for this dialup account with your service
+                provider</para>
+            </listitem>
+            <listitem>
+                <para>The name of the modem device (/dev/...)</para>
+                <para>See the next section to find out what this should be</para>
+            </listitem>
+        </itemizedlist>
+        <sect2 id="will-modem-work">
+            <title>Determining Whether Your Modem Will Work</title>
+            <para>In order to determine whether your modem can be found, use the following
+                procedure:</para>
+            <orderedlist numeration="arabic">
+                <listitem>
+                    <para>Connect/install the modem to/in the computer and to the phone line.</para>
+                    <para>Most modems have <emphasis role="bold">line</emphasis> and <emphasis
+                            role="bold">phone</emphasis> sockets. Connect the line in to the wall
+                        jack through the <emphasis role="bold">line</emphasis> socket. Connect a
+                        telephone to the <emphasis role="bold">phone</emphasis> socket and listen
+                        for the dial tone. You must have a dial tone. You can then hang up (or
+                        disconnect) the phone. It is not needed.</para>
+                </listitem>
+                <listitem>
+                    <para>If external, turn the modem on.</para>
+                </listitem>
+                <listitem>
+                    <para>Log in to your account and open a terminal window (<menuchoice>
+                            <guimenu>Applications</guimenu>
+                            <guisubmenu>System Tools</guisubmenu>
+                            <guimenuitem>Terminal</guimenuitem>
+                        </menuchoice>).</para>
+                </listitem>
+                <listitem>
+                    <para>Enter: <command>sudo wvdialconf /etc/wvdial.conf</command> This results in
+                        something like: </para>
+                    <screen>
+ttyS0&lt;*1&gt;: ATQ0 V1 E1 &#x2013; failed with 2400 baud,
+next try: 9600 baud
+ttyS0&lt;*1&gt;: ATQ0 V1 E1 &#x2013; failed with 9600 baud,
+next try: 115200 baud
+ttyS0&lt;*1&gt;: ATQ0 V1 E1 &#x2013; and failed too at 115200,
+giving up.
+ttyS1&lt;*1&gt;: ATQ0 V1 E1 &#x2013; OK
+.
+.
+.
+Found modem on /dev/ttyS1.
+Modem configuration written to /etc/wvdial.conf.
+ttyS1&lt;info&gt;: Speed 115200; init &#x201C;ATQ0 V1 E1 S0=0
+&amp;C1 &amp;D2 +FCLASS=0&#x201D;
+</screen>
+                </listitem>
+            </orderedlist>
+            <para>If no modem is found, then you need to buy a hardware modem. See <xref
+                    linkend="about-modems"/>; above.</para>
+            <para>The &#x201C;Found modem on...&#x201D; indicates the device name that you
+                need to supply when configuring ppp and wvdial. Write this down.</para>
+        </sect2>
+    </sect1>
+    <sect1 id="setup-ppp">
+        <title id="title-setup-ppp">Setting Up the ppp Protocol</title>
+        <procedure>
+            <step>
+                <para>Open a terminal (<menuchoice>
+                        <guimenu>Applications</guimenu>
+                        <guisubmenu>System Tools</guisubmenu>
+                        <guimenuitem>Terminal</guimenuitem>
+                    </menuchoice>).</para>
+            </step>
+            <step>
+                <para>Enter: <command>sudo pppconfig</command>
+                </para>
+                <para>A main menu screen opens. At the bottom are several choices.</para>
+            </step>
+            <step>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="images/img003.jpg" width="4.5575inch" depth="2.4902inch" />
+                    </imageobject>
+                </mediaobject>
+                <!-- What are  &#xE4AF; and &#xE4B0; -->
+                <para>Select <guibutton>Create a connection</guibutton>. Use the <keycap>Up</keycap>
+                    and <keycap>Down</keycap> arrow keys to highlight the desired selection, and
+                    press <keycap>Enter</keycap>.</para>
+            </step>
+            <step>
+                <para>Specify the name as <varname>MyISP</varname>, press <keycap>Tab</keycap> to
+                        <guibutton>OK</guibutton>, and press <keycap>Enter</keycap>.</para>
+            </step>
+            <step>
+                <para>Select <guibutton>Dynamic Use dynamic DNS</guibutton>. Press the
+                    <keycap>Down</keycap> arrows key to highlight, press the
+                    <keycap>spacebar</keycap> to select it (the asterisk moves), press
+                    <keycap>Tab</keycap> to <guibutton>OK</guibutton>, and press
+                    <keycap>Enter</keycap>.</para>
+            </step>
+            <step>
+                <para>Select <guibutton>PAP Peer Authentication Protocol</guibutton>, press
+                        <keycap>Tab</keycap> to <guibutton>OK</guibutton>, and press
+                    <keycap>Enter</keycap>.</para>
+            </step>
+            <step>
+                <para>Enter your username for service provider account, press <keycap>Tab</keycap>
+                    to <guibutton>OK</guibutton>, and press <keycap>Enter</keycap>.</para>
+                <note>
+                    <para>Remember, your username is probably case-sensitive.</para>
+                </note>
+            </step>
+            <step>
+                <para>Enter your password for service provider account, press <keycap>Tab</keycap>
+                    to <guibutton>OK</guibutton>, and press <keycap>Enter</keycap>.</para>
+                <note>
+                    <para>Remember, your password is probably case-sensitive.</para>
+                </note>
+            </step>
+            <step>
+                <para>Leave the speed at 115200 as recommended, press <keycap>Tab</keycap> to
+                        <guibutton>OK</guibutton>, and press <keycap>Enter</keycap>.</para>
+            </step>
+            <step>
+                <para>Select <guibutton>Tone</guibutton> dialing, press <keycap>Tab</keycap> to
+                        <guibutton>OK</guibutton>, and press <keycap>Enter</keycap>.</para>
+            </step>
+            <step>
+                <para>Enter the phone number for your local service provider dialup location, press
+                        <keycap>Tab</keycap> to <keycap>OK</keycap>, and press Enter.</para>
+                <note>
+                    <para>Do not use any dashes. Example: 5551234</para>
+                </note>
+            </step>
+            <step>
+                <para>You can try to have your modem detected automatically, but it probably will
+                    not be detected. If it is detected, skip #13. If it is not detected, proceed to
+                    #13.</para>
+            </step>
+            <step>
+                <para>If the modem was not detected, it prompts you for the port your modem is on.
+                    Enter the device name for your modem (See <xref linkend="will-modem-work"/>),
+                    press <keycap>Tab</keycap> to <guibutton>OK</guibutton>, and press
+                    <keycap>Enter</keycap>.</para>
+            </step>
+            <step>
+                <para>A summary screen appears and gives you the opportunity to make changes if
+                    needed. Check your username and password very carefully.</para>
+            </step>
+            <step>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="images/img004.jpg" width="4.4957inch" depth="2.7102inch"
+                        />
+                    </imageobject>
+                </mediaobject>
+                <para>Select <guibutton>Finished Write files and return to main menu.</guibutton>
+                </para>
+            </step>
+            <step>
+                <para>Select <guibutton>Quit Exit this utility</guibutton>.</para>
+            </step>
+            <step>
+                <para>Exit the terminal window by entering: <userinput>exit</userinput> or by closing the
+                    terminal window.</para>
+            </step>
+        </procedure>
+        <para>If you make a mistake or need to change the information for your service provider, you can
+            run <application>pppconfig</application> again (see <xref linkend="setup-ppp"/>), and
+            select <guibutton>Change a connection</guibutton> from the main menu.</para>
+    </sect1>
+    <sect1 id="setup-wvdial">
+        <title id="title-setup-wvdial">Setting Up wvdial</title>
+        <para>As you have already run the <application>wvdialconfig</application> utility in <xref
+                linkend="will-modem-work"/>, the <filename class="devicefile">/etc/wvdial.config</filename> 
+				file already exists and looks something like this:</para>
+        <screen>
+[Dialer Defaults]Modem = /dev/ttyS1Baud = 115200Init1 = ATZInit2 = ATQ0 V1 E1 ...ISDN
+= 0Modem Type = Analog Modem; Phone = &lt;Target Phone Number&gt;; Username =
+&lt;Your login name&gt;; Password = &lt;Your password&gt;
+        </screen>
+        <para>Modify this file to make the following changes. In a terminal, enter <command>sudo
+                gedit /etc/wvdial.conf</command>
+        </para>
+        <procedure>
+            <step>
+                <para>(optional) Below the Init2 line, add another line:</para>
+                <para>
+                    <command>Init3 ATM0</command>
+                </para>
+                <para>That is ATM{zero} &#x2013; this turns off the modem speaker so it does not
+                    squeal at you.</para>
+            </step>
+            <step>
+                <para>After the ISDN line, add the following line:</para>
+                <para>
+                    <command>Stupid Mode = Yes</command>
+                </para>
+                <para>This causes the wvdial program to invoke ppp as soon as the connection is
+                    established.</para>
+            </step>
+            <step>
+                <para>From the beginning of the Phone line remove the leading <emphasis role="bold">; </emphasis>
+					(the first thing on this line should be the letter P) and
+                    replace &lt;Target Phone Number&gt; with the service provider dialup
+                    phone number.</para>
+            </step>
+            <step>
+                <para>From the beginning of the Username line remove the leading <emphasis
+                        role="bold">;</emphasis> (the first thing on this line should be the letter
+                    U)and replace &lt;Your login name&gt; with your service provider account
+                    username.</para>
+            </step>
+            <step>
+                <para>From the beginning of the Password line remove the leading <emphasis
+                        role="bold">;</emphasis> (the first thing on this line should be the letter
+                    P)and replace &lt;Your password&gt; with your service provider account
+                    password.</para>
+            </step>
+            <step>
+                <para>Click <guibutton>Save</guibutton> and then exit the editor by selecting <menuchoice>
+                        <guimenu>File</guimenu>
+                        <guimenuitem>Quit</guimenuitem>
+                    </menuchoice> from the main menu.</para>
+            </step>
+        </procedure>
+    </sect1>
+    <sect1 id="connecting">
+        <title id="title-connecting">Connecting to your Internet Service Provider</title>
+        <para>Everything should now be correctly configured. Use the following procedure to connect
+            to your service provider:</para>
+        <orderedlist continuation="restarts" numeration="arabic">
+            <listitem>
+                <para>Make sure that your modem is connected to the telephone line.</para>
+            </listitem>
+            <listitem>
+                <para>Open a terminal (<menuchoice>
+                        <guimenu>Applications</guimenu>
+                        <guisubmenu>System Tools</guisubmenu>
+                        <guimenuitem>Terminal</guimenuitem>
+                    </menuchoice>).</para>
+            </listitem>
+            <listitem>
+                <para>Enter <command>sudo wvdial</command></para>
+                <para>You are prompted to supply your user password.</para>
+            </listitem>
+        </orderedlist>
+        <para>Your computer should now connect to your service provider and establish a connection.
+            It may hang-up once, but should then reconnect immediately and stay connected. If your
+            connection is interrupted, wvdial immediately attempts to restore the connection.</para>
+        <note>
+            <para>You can minimize the terminal window, but you must leave the terminal window open
+                while you are connected. Closing the terminal window closes the connection to your
+                ISP.</para>
+            <para>If you create a launcher to invoke this process with a mouse click, be sure to set
+                the launcher to open the application in a terminal. </para>
+        </note>
+        <sect2 id="disconnecting">
+            <title>Disconnecting</title>
+            <para>When you want to disconnect from your service provider, click on the Terminal
+                window and enter <keycombo>
+                    <keycap>Ctrl</keycap>
+                    <keycap>C</keycap>
+                </keycombo>, or you can close the terminal window. Logging out also closes the
+                connection.</para>
+        </sect2>
+        <sect2 id="verify">
+            <title>Verifying Connection</title>
+            <para>Several means exist to do this. You can open a Web browser and attempt to open a
+                known URL. Alternatively, you can open another terminal window and enter
+                    <command>ping ubuntu.org </command> - or any other valid domain name. You should see
+                some kind of response, depending on the speed of your connection.</para>
+            <note>
+                <para>if you are going to be using this connection frequently, you should turn off
+                    call waiting, as this may disconnect you whenever anyone calls you.</para>
+            </note>
+        </sect2>
+    </sect1>
+    <sect1 id="trouble">
+        <title id="title-trouble">Troubleshooting</title>
+        <para>The most common problems arise from entering an incorrect username or password. If
+            you do this, <application>wvdial</application> invokes the ppp protocol daemon (pppd)
+            and then the connection is almost immediately broken. It dials again, is disconnected,
+            and dials again (forever), until you stop <application>wvdial</application> manually.
+            Contact your service provider to verify that your username and password have been
+            entered into <application>pppconfig</application> and 
+			<filename class="devicefile">wvdial.conf</filename> correctly.</para>
+        <table>
+            <title>Examples</title>
+            <tgroup cols="4">
+                <colspec colname="c1" colwidth="1inch"/>
+                <colspec colname="c2" colwidth="1.1inch"/>
+                <colspec colname="c3" colwidth="1inch"/>
+                <colspec colname="c4" colwidth="1.8inch"/>
+                <thead>
+                    <row>
+                        <entry>
+                            <para>Parameter</para>
+                        </entry>
+                        <entry>
+                            <para>Correct</para>
+                        </entry>
+                        <entry>
+                            <para>Incorrect</para>
+                        </entry>
+                        <entry>
+                            <para>Problem</para>
+                        </entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>
+                            <para>Username</para>
+                        </entry>
+                        <entry>
+                            <para>sty123456</para>
+                        </entry>
+                        <entry>
+                            <para>STY123456</para>
+                        </entry>
+                        <entry>
+                            <para>incorrect capitalization</para>
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>
+                            <para>Username</para>
+                        </entry>
+                        <entry>
+                            <para>sty123456</para>
+                        </entry>
+                        <entry>
+                            <para>sty 123456</para>
+                        </entry>
+                        <entry>
+                            <para>added spaces</para>
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>
+                            <para>Password</para>
+                        </entry>
+                        <entry>
+                            <para>cG34peXOe</para>
+                        </entry>
+                        <entry>
+                            <para>cg34pexoe</para>
+                        </entry>
+                        <entry>
+                            <para>incorrect capitalization</para>
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>
+                            <para>Password</para>
+                        </entry>
+                        <entry>
+                            <para>cG34peXOe</para>
+                        </entry>
+                        <entry>
+                            <para>cG34peX0e</para>
+                        </entry>
+                        <entry>
+                            <para>zero instead of O</para>
+                        </entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <para>Verify that you have input the correct telephone number to connect to your service
+            provider. A customer once spent almost two days of frustration trying to connect because
+            he transposed two digits of the service provider number and had been dialing a fax
+            machine.</para>
+        <para>If you experience problems, you may want to remove the <command>Init3 ATM0</command>
+            line from your <filename class="devicefile">/etc/wvdial.conf file</filename>, so that
+            you can listen to the modem transaction. You should hear the dial tone, then the modem
+            dialing, then the &#x201C;screech&#x201D; of the modem handshake. If you do not
+            hear this, then you may have a problem with your telephone or modem hardware.</para>
+        <para>Speed: wvdial negotiates the fastest modem speed available at the time of connection
+            that your hardware is capable of. Sometimes this is faster and sometimes it is slower.
+            If you consistently get a very slow speed, the reason for this may be the quality of the
+            telephone line between you and your service provider. </para>
+    </sect1>
+</article>
