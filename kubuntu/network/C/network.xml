@@ -1,0 +1,1385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % kde-menus-C SYSTEM "../../libs/kde-menus-C.ent">
+%kde-menus-C;
+<!ENTITY % kde SYSTEM "../../libs/kde.ent">
+%kde;
+<!ENTITY % kde-general SYSTEM
+"/usr/share/apps/ksgmltools2/customization/obsolete/general.entities">
+%kde-general;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<article id="network" status="complete">
+
+<articleinfo>
+<title>Networking</title>
+&klegalnotice;
+<abstract>
+<para>
+This chapter contains information on general networking with Kubuntu. Topics
+covered include connecting to the internet as well as connecting and sharing
+files between a Windows or Mac system and Kubuntu.
+</para>
+</abstract>
+</articleinfo>
+
+<!-- INTRODUCTION TO NETWORKING -->
+<sect1 id="network-intro" status="complete">
+<title>Introduction to networking in Kubuntu</title>
+
+<para>
+Networking in Kubuntu has gotten much easier for everyone. The days of
+configuring your settings via the command line are almost gone completely. A
+majority of users will never have to use the command line when configuring their
+network settings in order to share files between PCs or to gain access to the
+Internet. There are those select few who might be utilizing hardware that is not
+Linux certified as of yet. For those, there might be the possibility of making
+changes via the command line.
+</para>
+
+<para>
+New in Kubuntu &distro-rev; is <application>KNetworkManager</application>.
+<application>KNetworkManager</application> makes connecting and managing your
+connections a snap. Whether you are using a wired (Ethernet) connection or a
+wireless connection, <application>KNetworkManager</application> can monitor for
+connects and disconnects, locates wireless access points, and manages your
+wireless encryption (see <xref linkend="network-apps-knetworkmanager"/>).
+</para>
+
+<para>
+Some users will want to do more than surf the Internet or read Email such as
+sharing files between a Windows PC or a Mac. Setting up Kubuntu on a Windows
+network is a very simple task and at most will only require very minor command
+line usage.
+</para>
+
+<note>
+<title>Determining your network hardware</title>
+<para>
+If you are having issues connecting to your network or the Internet, the first
+thing you need to do is locate the model of the network device you are using.
+To do so, unfortunately you will have to use the command line at this time. To
+get to the command line in Kubuntu, press
+<keycombo><keycap>Alt</keycap><keycap>Space</keycap></keycombo>. This will open
+up a pop-up called <application>Katapult</application>. Enter the word
+<userinput>konsole</userinput> and press <keycap>Enter</keycap>. You will
+notice that once <application>Konsole</application> opens, you will see
+something similar to <prompt>username@hostname:~$</prompt>. Here you will type
+<userinput>lspci</userinput> and press <keycap>Enter</keycap>. Locate your
+network hardware information, you will need this for the upcoming sections,
+especially for wireless cards.
+</para>
+</note>
+
+</sect1>
+
+<!-- SETTINGS (IP ADDRESS, GATEWAY, NETMASK, BROADCASE, NETWORK, DNS) -->
+<sect1 id="network-connect-settings" status="complete">
+<title>Common network settings</title>
+
+<para>
+A majority of connection settings can be changed from within the
+<guilabel>Network Settings</guilabel> section of System Settings. To access the
+Network Settings, go to
+<menuchoice>
+<guimenu>KMenu</guimenu>
+<guimenuitem>System Settings</guimenuitem>
+</menuchoice>
+and then select <guilabel>Network Settings</guilabel> at the lower left of the
+window.
+</para>
+
+<para>
+No matter the connection you are using, the network settings will usually be
+configured the same. Most users are probably familiar with Windows networking
+and seeing terms such as <acronym>IP</acronym> address, gateway address,
+netmask address, and <acronym>DNS</acronym> addresses. They are still the same
+in Kubuntu however there are two extra settings that are common with Linux
+systems, network address and broadcast address however these extra settings
+are not necessary for basic home networking and connecting to the Internet.
+</para>
+
+<para>
+Please select from the following to get a brief introduction to each settings.
+<itemizedlist>
+<listitem><para><xref linkend="network-connect-settings-ip"/></para></listitem>
+<listitem><para><xref
+linkend="network-connect-settings-gateway"/></para></listitem>
+<listitem><para><xref
+linkend="network-connect-settings-netmask"/></para></listitem>
+<listitem><para><xref linkend="network-connect-settings-dns"/></para></listitem>
+<listitem><para><xref linkend="network-connect-settings-hostname"
+/></para></listitem>
+</itemizedlist>
+</para>
+
+<example id="nic-settings">
+<title>Kubuntu Network Interface Setting</title>
+<programlisting>
+# eth0 is set to automatically receive its address (DHCP)
+auto eth0
+iface eth0 inet dhcp
+
+# eth1 is setting its own address (static)
+auto eth1
+iface eth1 inet static
+    address 192.168.1.100
+    netmask 255.255.255.0
+    network 192.168.1.0
+    broadcast 192.168.0.255
+    gateway 192.168.1.1
+</programlisting>
+</example>
+
+
+<!-- IP ADDRESS  --> 
+<sect2 id="network-connect-settings-ip" status="complete">
+<title><acronym>IP</acronym>  Address</title>
+
+<para>
+An <acronym>IP</acronym> address is a unique identifier, commonly known as the
+computer's address, that is used in communicating between other computers on a
+network and the Internet.  There are two versions of <acronym>IP</acronym>
+addressing, <acronym>IPv4</acronym> which is the most widely used and the
+oldest, and <acronym>IPv6</acronym> which is newer. <acronym>IPv6</acronym>
+was created to cure the fact the world was running out of <acronym>IP</acronym>
+addresses.
+</para>
+
+<example id="ipv4">
+<title><acronym>IPv4</acronym> <acronym>IP</acronym> address</title>
+<itemizedlist>
+<listitem><para>192.168.1.100</para></listitem>
+<listitem><para>10.0.0.100</para></listitem>
+<listitem><para>63.184.200.19</para></listitem>
+</itemizedlist>
+</example>
+
+<example id="ipv6">
+<title><acronym>IPv6</acronym> <acronym>IP</acronym> address</title>
+<itemizedlist>
+<listitem><para>E3D7:0000:0000:0000:51F4:9BC8:C0A8:6420</para></listitem>
+<listitem><para>E3D7::51F4:9BC8:C0A8:6420</para></listitem>
+</itemizedlist>
+</example>
+
+</sect2>
+
+<!-- GATEWAY ADDRESS --> 
+<sect2 id="network-connect-settings-gateway" status="complete">
+<title>Gateway <acronym>IP</acronym> Address</title>
+
+<para>
+A gateway address is also known as the default gateway. The gateway serves as
+an access point to another network and a majority of the times would be your
+service provider in order to gain access to the Internet. A gateway
+<acronym>IP</acronym> address looks the same as an <acronym>IP</acronym>
+address.
+</para>
+
+</sect2>
+
+<!-- NETMASK -->
+<sect2 id="network-connect-settings-netmask" status="complete">
+<title>Netmask</title>
+
+<para>
+A netmask address, or subnet mask, is an address that allows the splitting of
+a large network into small subnetworks.
+</para>
+
+</sect2>
+
+<!-- DNS -->
+<sect2 id="network-connect-settings-dns" status="complete">
+<title><acronym>DNS</acronym> <acronym>IP</acronym> Address</title>
+
+<para>
+<acronym>DNS</acronym> (Domain Name System) translates domain names as well as
+computer hostnames to <acronym>IP</acronym> addresses. This is the system that
+will translate www.kubuntu.org into the websites actual <acronym>IP</acronym>
+address.
+</para>
+</sect2>
+
+<!-- HOSTNAME -->
+<sect2 id="network-connect-settings-hostname" status="draft">
+<title>Host name</title>
+
+<para>
+The host name is the physical, unique name of your computer. A valid hostname
+consists of <acronym>ASCII</acronym> letters &quot;a&quot; through
+&quot;z&quot;, digits &quot;0&quot; through &quot;9&quot;, and the hyphen (-).
+It can consist of any combination of the previous allowed characters.
+</para>
+</sect2>
+
+</sect1>
+
+<!-- NETWORK-CONNECTING -->
+<sect1 id="network-connecting" status="complete">
+<title>Establishing a connection</title>
+
+<para>
+Establishing a connection depends on various things. Are you connecting
+directly to the Internet utilizing a modem whether it be a
+<acronym>DSL</acronym> modem or a dial-up modem? Do you have broadband access
+and have a router or a system providing Internet sharing? Are you using Ethernet
+or wireless network connection? <acronym>DHCP</acronym> or static? These are
+just a few of the variables that need to be researched and understood prior to
+moving on and possibly causing more problems now or later on.
+</para>
+
+<para>
+There are multiple ways of connecting to a network or the Internet however only
+three main topics will be covered.
+<itemizedlist>
+<listitem><para><xref linkend="network-connect-eth"/></para></listitem>
+<listitem><para><xref linkend="network-connect-wifi"/></para></listitem>
+<listitem><para><xref linkend="network-connect-modems"/></para></listitem>
+</itemizedlist>
+</para>
+
+<note>
+<para>
+<acronym>DSL</acronym> (Digital Subscriber Line) is a form of broadband Internet
+service that has a modem that connects to the service providers network. Some
+users will either connect directly to that modem or may have a router connected
+to it in order to share the connection.
+</para>
+</note>
+
+<note>
+<para>
+<acronym>DHCP</acronym> (Dynamic Host Configuration Protocol) is
+a networking protocol that allows your system to obtain an
+<acronym>IP</acronym> (Internet Protocol) address, gateway address, netmask, as
+well as <acronym>DNS</acronym> (Domain Name System) addresses. Using DHCP
+is setup by default for each network interface installed into the system.
+This makes connecting easier and seamless in most situations. Please <xref
+linkend="network-connect-settings"/>.
+</para>
+</note>
+</sect1>
+
+<!-- ETHERNET -->
+<sect1 id="network-connect-eth" status="complete">
+<title>Ethernet</title>
+
+<para>
+Ethernet adapters are the most common types of networking interfaces in use
+today. Ethernet is physically connected with a cable to either your broadband
+modem, router or switch, or another <acronym>PC</acronym>. The most common type
+of cable in use is know as Category-5 (<acronym>CAT</acronym>-5). It looks
+similar to the typical telephone cable, but instead of four wires inside the
+cable there are eight. For an example of what a <acronym>CAT</acronym>-5 cable
+looks like, please review <ulink url="http://en.wikipedia.org/wiki/Cat-5"/>.
+</para>
+
+<para>
+A majority of users who are using this form of Ethernet for a connection are
+not going to run into any problems. If you do in fact run into an issue
+connecting with this type of connection, the following could potentially assist
+you in fixing your issue.
+</para>
+
+<sect2 id="network-connect-eth-gui" status="complete">
+<title>GUI based troubleshooting and settings</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>KMenu</guimenu>
+<guimenuitem>System Settings</guimenuitem>
+<guilabel>Network Settings</guilabel>
+</menuchoice>
+</term>
+<listitem>
+<para>
+From within the <guilabel>Network Connection</guilabel> window there is a tab
+named <guilabel>Network Interfaces</guilabel>. Hopefully you will see your
+adapter labeled something like <guilabel>eth0</guilabel>. If there is an issue
+with the card or the settings, usually the system will automatically disable
+the card. If the card is disabled, you will see <guilabel>X Disabled</guilabel>
+under the <guilabel>State</guilabel> column. To enable the device, simply press
+the <guibutton>Administrator Mode...</guibutton> at the bottom of the window.
+This will open a password dialog in which you enter your username's password.
+Once you have entered this mode, simply press the <guibutton>Enable
+Interface</guibutton> button. If there are issues enabling the device, you will
+be notified with an error. To see the settings of this device, press the
+<guibutton>Configure Interface...</guibutton> button. The window that opens
+will allow you to manually configure your network settings to match your
+network.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="network-connect-eth-cli" status="complete">
+<title>Command line based troubleshooting and settings</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>KMenu</guimenu>
+<guisubmenu>System</guisubmenu>
+<guimenuitem>Konsole (Terminal Program)</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+The main file that the user will be working with is
+<filename>/etc/network/interfaces</filename>. A typical default
+<filename>interfaces</filename> file will look similar to the following:
+</para>
+<example id="etc-net-interface">
+<title><filename>/etc/network/interfaces</filename></title>
+<programlisting>
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+
+auto eth1
+iface eth1 inet dhcp
+</programlisting>
+</example>
+<note><title>KNetworkManager Warning</title>
+<para>
+If you are planning on using <application>KNetworkManager</application> it is
+advised that you <emphasis role="bold">DO NOT</emphasis> edit
+<filename>/etc/network/interfaces</filename> unless it is necessary to get your
+network connection working. If you do manually edit your
+<filename>/etc/network/interfaces</filename> then
+<application>KNetworkManager</application> will not work.
+</para>
+</note>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+</sect1>
+
+<!-- WIFI -->
+<sect1 id="network-connect-wifi" status="complete">
+<title>WiFi</title>
+
+<para>
+Wireless networking has gotten better with Kubuntu &distro-rev;, however there
+are still problems for users who do not have a card supported natively. 
+If you have not purchased a wireless card yet, please take a look at the
+supported hardware at
+<ulink
+    url="https://help.ubuntu.com/community/WifiDocs/WirelessCardsSupported"/>.
+</para>
+
+<sect2 id="network-connect-wifi-howdoi" status="complete">
+<title>How do I...</title>
+
+<variablelist>
+    
+<varlistentry>
+<term>...figure out if my wireless card works?</term>
+<listitem>
+<para>
+If your wireless card has been detected,
+<application>KNetworkManager</application> will have a menu entry listing your
+wireless device. You can attempt to connect to your wireless network by
+clicking on the System Tray icon and selecting your wireless network. If you
+are able to browse the network with the a web browser, you have successfully
+connected to the internet. 
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>...configure encryptions such as <acronym>WEP</acronym> or
+<acronym>WPA</acronym></term>
+<listitem>
+<para>
+With <application>KNetworkManager</application> you simple click the
+application icon in the system tray and select the wireless network you want to
+connect to. When you click on a network that has encryption enabled, you will
+get a pop-up dialog to enter this information. Once entered, this information is
+stored within the <application>KWallet</application> utility. This allows you
+to connect to that network in the future just by entering your
+<application>KWallet</application> password.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>...check if I have a Internet connection?</term>
+<listitem>
+<para>
+    Open up <application>Konqueror</application>, and try to browse to 
+<ulink url="http://www.ubuntu.com"/>. If this worked, you have a fully working
+internet connection. 
+</para>
+<para>
+    If the above did not work, open up <application>Konsole</application>
+    (&menukonsole;) and type <userinput>ping gateway_ip_address</userinput>
+    (substitude gateway_ip_address by the ip address of your gateway. This
+    address is usually 192.168.1.1, but may vary depending on the nature of
+    your network). If you are able to ping your gateway, then the DNS on your
+    computer is not being correctly. If you are not able to ping the gateway,
+    then you donot have a proper internet connection. 
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>...figure out which wireless card my system uses?</term>
+<listitem>
+<para>
+<application>KInfoCenter</application>: (&menukinfoctr;) A KDE utility that
+provides information about your computer system. Once
+<application>KInfoCenter</application> is opened, select
+<guilabel>PCI</guilabel> from the left hand window. This will display all of the
+<acronym>PCI</acronym> information about your system. Scroll down until you see
+<guilabel>Network controller:</guilabel>. This will provide information about
+your wireless adapter.
+</para>
+
+<para>
+<emphasis role="bold">Command line</emphasis>: (&menukonsole;) This will
+open up <application>Konsole</application> providing you with a terminal or the
+command line. Once you are sitting at the command prompt simply type
+<userinput>lspci</userinput> and press the <keycap>Enter</keycap> key. Locate
+the <guilabel>Network controller:</guilabel> line as this will provide
+information about your wireless adapter.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>...get help with my wireless connection?</term>
+<listitem>
+<para>
+It is recommended that you use another
+connection source to the Internet and read through the many topics for wireless
+connections. The following are just a couple locations to review.
+</para>
+<itemizedlist>
+<listitem>
+<para>
+<ulink url="https://help.ubuntu.com/community/WifiDocs"/>
+</para>
+</listitem>
+<listitem>
+<para>
+<ulink url="http://www.ubuntuforums.org/forumdisplay.php?f=136"/>
+</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>...get my Broadcom wireless adapter to work?</term>
+<listitem>
+<para>
+Since kernel version 2.6.17, support for Broadcom wireless devices were
+included. This means that there are some Broadcom devices that work out of the
+box, however there are still many that don't. If your Broadcom wireless device
+isn't working then you have two choices;
+<application>bcm43xx-fwcutter</application> or
+<application>NdisWrapper</application>. 
+</para>
+<para>
+With the
+<application>bcm43xx-fwcutter</application> utility there are only a select few
+devices that actually work. To see the devices that are currently supported
+please review <ulink url="http://bcm43xx.berlios.de/?go=devices"/>. If your
+device is not supported then it is advised that you use the
+<application>NdisWrapper</application> utility. For information on configuring
+your device with the <application>bcm43xx-fwcutter</application> utility please
+see <xref linkend="network-connect-wifi-bcm43xx"/> and for configuring your
+device with <application>NdisWrapper</application> utility please see <xref
+linkend="network-connect-wifi-ndiswrapper"/>.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="network-connect-wifi-ndiswrapper" status="complete">
+<title>NdisWrapper</title>
+
+<note>
+<title>Command Line Intensive</title>
+<para>
+Configuration of <application>NdisWrapper</application> is command line
+intensive. There are currently no graphical clients to aide in this
+configuration. Even though it is command line oriented, the instructions are
+easy to follow.
+</para>
+</note>
+
+<note>
+<title>Hardware Platforms</title>
+<para>
+This method is only supported for users of the Intel and AMD platforms. Users
+of older iBooks and Powerbooks cannot use this method. However, users of
+MacBooks (Intel based) should be able to use this method. 
+</para>
+</note>
+
+<para>
+<application>NdisWrapper</application> is considered the wireless fix-all for
+Linux. A great percentage of wireless adapters that are not supported natively
+or with other utilities are supported with
+<application>NdisWrapper</application>. Install
+<application>ndiswrapper</application> by using
+<application>Adept</application>. If you are uncomfortable with installation
+practices then it is advised that you review the <ulink
+url="help:/kubuntu/add-applications/">Adding Applications</ulink> document.
+</para>
+
+<para>
+Once you have installed <application>NdisWrapper</application>, 
+locate the Windows drivers either on a <acronym>CD</acronym> or the
+Internet. Drivers for Windows XP are preferred, however Windows 2000 drivers
+will usually work just as well. Once you have located the CD or the drivers on
+the Internet, copy them to a local folder on your system. In
+some instances, you may have your drivers in a <filename>driver.zip</filename>
+or a <filename>driver.exe</filename> file. If it the file is in a
+<filename>.zip</filename> format, unzip the file by either
+<mousebutton>right</mousebutton> clicking on the file and selecting
+<guilabel>Extract</guilabel> from the pop-up menu. If the file is in a
+<filename>.exe</filename> format, then install the
+<application>cabextract</application> utility and open up
+<application>Konsole</application> to navigate the correct directory. Once you
+have navigated to the directory storing the <filename>.exe</filename> file,
+type <userinput>cabextract filename.exe</userinput>. This will extract or
+unzip the file to the directory you are in. The driver will be in the
+<filename>.inf</filename> format, so what you will want to do is type
+<userinput>sudo ndiswrapper -i filename.inf</userinput> and press
+<keycap>Enter</keycap>. If successful you shouldn't receive any errors. This
+command has gone ahead and loaded or installed the drivers in the
+<application>NdisWrapper</application> module. To see if these drivers worked,
+simply type <userinput>sudo modprobe ndiswrapper</userinput> and press
+<keycap>Enter</keycap>. Test to see if you have a network and/or Internet
+connection.
+</para>
+
+<para>
+If everything went well then the final step would be to load the
+<application>NdisWrapper</application> module by default. To do this simple
+type <userinput>sudo sh -c "echo ndiswrapper >> /etc/modules"</userinput> and
+press <keycap>Enter</keycap>. This will automatically start
+<application>NdisWrapper</application> at boot time.
+</para>
+
+<para>
+If everything didn't go so well, the issue may not be with
+<application>NdisWrapper</application> but possibly with
+<application>KNetworkManager</application>. To see if in fact that
+<application>KNetworkManager</application> was at fault, simply click the system
+tray icon and select <guilabel>Quit</guilabel>. Once
+<application>KNetworkManager</application> has closed, go back to the command
+line and type <userinput>sudo modprobe -r ndiswrapper &amp;&amp; sudo modprobe
+ndiswrapper</userinput> and press <keycap>Enter</keycap>. This will unload
+<application>NdisWrapper</application> and then reload it. After you have
+reloaded it, test your network and/or Internet connection again.
+</para>
+
+</sect2>
+
+<sect2 id="network-connect-wifi-bcm43xx" status="complete">
+<title>Broadcom</title>
+
+<para>
+Since the 6.10 (Edgy Eft) release, the kernel has included driver support for
+some Broadcom cards utilizing the <application>bcm43xx-fwcutter</application>
+utility. Currently there are not that many supported cards, however development
+continues. To see if your card is supported please review the list at <ulink
+url="http://bcm43xx.berlios.de/?go=devices"/>. If your card is not included in
+the list, then refer to <xref linkend="network-connect-wifi-ndiswrapper"/>.
+</para>
+
+<para>
+To get started, the first thing you will need to do is install the
+<application>bcm43xx-fwcutter</application> utility. For more information on
+installing extra applications, please refer to the <ulink
+url="help:/kubuntu/add-applications/">Adding Applications</ulink> section.
+</para>
+
+<para>
+Once you have <application>bcm43xx-fwcutter</application> installed you can
+read through a list of links to various drivers for your Broadcom device. To do
+this open up <application>Konsole</application> (&menukonsole;) and type at the
+prompt <userinput>zless /usr/share/doc/bcm43xx-fwcutter/README.gz</userinput>
+and press <keycap>Enter</keycap>. You have the choice of picking a driver from
+that list, driver CD, or manufacturer's website. The file you are interested in
+using is the <filename>bcwl5.sys</filename> file. If you have the drivers in a
+<filename>.zip</filename> format, unzip the files to a local directory. If the
+drivers are in a <filename>.exe</filename> format, you will need to install
+<application>Cabextract</application>. With
+<application>Cabextract</application>, at the command line locate the directory
+where you downloaded or copied the file to. Once there type at the prompt
+<userinput>cabextract filename.exe</userinput> and press
+<keycap>Enter</keycap>. This will extract the file into the directory you are
+in.
+</para>
+
+<para>
+Now that you have the driver files extracted, navigate with
+<application>Konsole</application> to the directory with the driver files. Next
+you will use the <application>bcm43xx-fwcutter</application> utility to install
+the drivers. To do so, at the prompt type <userinput>sudo bcm43xx-fwcutter -w
+/lib/firmware/$(uname -r) bcwl5.sys</userinput>. You may receive a couple of
+warnings which are nothing to worry about. If it didn't work, it will provide
+an error that states either driver isn't supported or the driver is to old. If
+this is the case, you would repeat this step using one of the drivers from the
+list in the <filename>README.gz</filename> file shown above. If you continue to
+have issues, connect to the Internet with another source and review the
+following sites:
+<itemizedlist>
+<listitem><para><ulink url="http://bcm43xx.spugna.org/"/></para></listitem>
+<listitem><para><ulink
+url="http://www.ubuntuforums.org/forumdisplay.php?f=136"/></para></listitem>
+</itemizedlist>
+If you continue to have issues with loading the drivers, then you may need to
+use the <application>NdisWrapper</application> utility.
+</para>
+
+<para>
+Now if you went through the driver installation without any major errors or
+issues, the next step would be to load the new module you created in the
+previous step. At the command line type <userinput>sudo modprobe
+bcm43xx</userinput> and press <keycap>Enter</keycap>. To see if the module
+loaded and is working, at the prompt type <userinput>iwconfig</userinput> and
+press <keycap>Enter</keycap>. If it works it should return the name of the
+interface as <acronym>ethX</acronym> where X is the number of the device. In
+most cases it may be <acronym>eth1</acronym> if you have a
+<acronym>CAT-5</acronym> Ethernet device already installed and configured. Also
+to test and see if your device can scan, at the command prompt type
+<userinput>sudo iwlist ethX scan</userinput> and press <keycap>Enter</keycap>.
+Don't worry if it reports <emphasis>no networks found</emphasis> as your
+connection may still be working. Test and see if you can connect to your
+network and the Internet. If everything has worked then you will want to add
+the module so it will load at boot. To do so, at the command prompt type
+<userinput>sudo sh -c "echo bcm43xx >> /etc/modules"</userinput> and press
+<keycap>Enter</keycap>.
+</para>
+
+</sect2>
+
+</sect1>
+
+<!-- MODEMS -->
+<sect1 id="network-connect-modems" status="complete">
+<title>MODEMS</title>
+
+<sect2 id="modems-adsl" status="complete">
+<title>ADSL</title>
+
+<note>
+<para>
+Please refer to <ulink url="https://help.ubuntu.com/community/ADSLPPPoE"/> for
+further information if you run into issues with the following procedures.
+</para>
+</note>
+
+<sect3 id="pppoe-adsl" status="complete">
+<title>PPPoE ADSL Modem Installation</title>
+
+<procedure>
+<step>
+<para>
+Open <application>Konsole</application> by going to &menukonsole;.
+</para>
+</step>
+
+<step>
+<para>
+At the command prompt type <userinput>sudo pppoeconf</userinput> and press
+<keycap>Enter</keycap>.
+</para>
+</step>
+
+<step>
+<para>
+A text-based menu program will guide you through the next steps, which are:
+</para>
+<substeps>
+<step>
+<para>
+Confirm that your Ethernet card is detected.
+</para>
+</step>
+<step>
+<para>
+Enter your username provided by your <acronym>ISP</acronym>.
+</para>
+</step>
+<step>
+<para>
+Enter your password provided by your <acronym>ISP</acronym>.
+</para>
+</step>
+<step>
+<para>
+If you already have a <acronym>PPPoE</acronym> connection configured, you will
+be asked if it may be modified.
+</para>
+</step>
+<step>
+<para>
+When asked if you want the <option>noauth</option> and the
+<option>defaultroute</option> options and want to remove the
+<option>nodetach</option> option, choose <emphasis role="bold">Yes</emphasis>.
+</para>
+</step>
+<step>
+<para>
+When asked if you want to use <option>peer DNS</option>, choose <emphasis
+role="bold">Yes</emphasis>.
+</para>
+</step>
+<step>
+<para>
+When asked if you want the <option>Limited MSS</option>, choose <emphasis
+role="bold">Yes</emphasis>.
+</para>
+</step>
+<step>
+<para>
+When asked if you want to connect at start up, select <emphasis
+role="bold">Yes</emphasis> to enable a start up connection, or <emphasis
+role="bold">No</emphasis> to manually connect.
+</para>
+</step>
+<step>
+<para>
+When asked if you want to connect immediately, select the appropriate response.
+</para>
+</step>
+</substeps>
+</step>
+
+<step>
+<para>
+To start your <acronym>ADSL</acronym> connection on demand type <userinput>pon
+dsl-provider</userinput> and press <keycap>Enter</keycap>.
+</para>
+</step>
+
+<step>
+<para>
+To stop your <acronym>ADSL</acronym> connection type <userinput>poff
+dsl-provider</userinput> and press <keycap>Enter</keycap>.
+</para>
+</step>
+</procedure>
+
+</sect3>
+
+<sect3 id="usb-adsl" status="complete">
+<title>USB ADSL Modem Installation</title>
+
+<para>
+Due to similar issues of that with a Winmodem, installation and configuration
+of a <acronym>USB</acronym> <acronym>ADSL</acronym> modem may require lengthy
+procedures depending on the type of modem. For further installation
+information, pleas refer to <ulink
+url="https://help.ubuntu.com/community/UsbAdslModem"/>. You will of course need
+another means of connection in order to review this documentation.
+</para>
+
+</sect3>
+</sect2>
+
+<sect2 id="modems-dialup" status="complete">
+<title>Dial-Up</title>
+
+<para>
+Many people still access the Internet via a dial-up modem today. There are two
+basic types of dial-up modems in use.
+<variablelist>
+<varlistentry><term>Software Modems</term>
+<listitem>
+<para>
+Software modems, also known as Winmodems, are the type that are usually built
+into the system itself whether it is a desktop or a laptop. These modems are
+usually connected to a <acronym>PCI</acronym> port inside of the computer or a
+<acronym>USB</acronym> port outside of the computer. There are still quite a
+few of these types of modems that are not supported by Linux due to the type of
+binary driver or firmware they use. Winmodems supported in Linux are also known
+as Linmodems.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term>Hardware Modems</term>
+<listitem>
+<para>
+Hardware modems, or true modems, are usually connected to the serial port
+outside of the computer and process the raw modem commands unlike a Winmodem.
+These types of modems have become rare of late however they still stand as the
+most supported type of modem for Linux as they typically do not need a special
+driver.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+<para>
+The following sections will provide information on installation and
+configuration of your modem. The last section will provide configuration
+information on configuring a dial-up connection (see <xref
+linkend="dialup-config"/>).
+</para>
+
+<sect3 id="winmodem" status="complete">
+<title>Winmodem Installation</title>
+
+<para>
+Unfortunately due to the many different types of chipsets and the work involved
+in getting a Winmodem installed and functioning would be difficult to document
+in this one location. However, there are already documents out there to help
+you in your success at getting your Winmodem to work with Kubuntu. Not every
+Winmodem is guaranteed to work, but there are utilities out there to aide you
+in getting a supported Winmodem to work. The following links will hopefully
+provide the information needed to get your Winmodem working.
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+<ulink url="http://www.linmodems.org/"/> - This site is the main informational
+point for getting Winmodems, or Linmodems as they are also known as, installed
+and working in Linux.
+</para>
+</listitem>
+
+<listitem>
+<para>
+<ulink url="http://132.68.73.235/linmodems/index.html#scanmodem"/> - This site
+provides useful information on the <application>scanModem</application>
+utility. This is the utility that will not only detect your Winmodem, but it
+will also provide information on the type of support for your device.
+</para>
+</listitem>
+
+<listitem>
+<para>
+<ulink url="https://help.ubuntu.com/community/DialupModemHowto/ScanModem"/> -
+Ubuntu community documentation on utilizing the
+<application>scanModem</application> utility within Ubuntu and Kubuntu.
+</para>
+</listitem>
+
+<listitem>
+<para>
+<ulink url="https://help.ubuntu.com/community/DialupModemHowto"/> - Ubuntu
+community documentation on general dial-up modem information. A good starting
+point for Ubuntu and Kubuntu systems alike.
+</para>
+</listitem>
+
+<listitem>
+<para>
+<ulink url="http://start.at/modem"/> - Winmodems are not modems website that
+contains a very broad database of Winmodem support. Use this to further verify
+support for your modem, or research the list first before trying to install a
+device that may not be supported.
+</para>
+</listitem>
+</itemizedlist>
+
+</sect3>
+
+<sect3 id="hardware-modem" status="complete">
+<title>Hardware Modem Installation</title>
+
+<para>
+Unlike software modems, or Winmodems, hardware modems do not need special
+software drivers. If your modem connects to your <acronym>PC</acronym> via the
+serial port, then you are in fact using a hardware modem. In order to configure
+your modem, you need to know which <acronym>COM</acronym> port, or serial port,
+you are using. The typical structure for <acronym>COM</acronym> devices is
+<filename>/dev/ttySx</filename>, where x is one less than the
+<acronym>COM</acronym> port number. For instance, if you plug your modem into
+<acronym>COM</acronym> port 1, then you would use the
+<filename>/dev/ttyS0</filename> device. Port 2 would be
+<filename>/dev/ttyS1</filename> and so on.
+</para>
+
+</sect3>
+
+<sect3 id="dialup-config" status="complete">
+<title>Dial-up Internet configuration</title>
+
+<para>
+There are a few ways in order for you to get your dial-up connection working
+with the Internet.
+</para>
+
+<sect4 id="kppp" status="complete">
+<title>Using KPPP</title>
+
+<para>
+<application>KPPP</application> - The dialer and front end for
+<application>pppd</application> which allows for interactive script generation
+and network setup. This is the preferred application in Kubuntu for dial-up
+modems. For more information on setting up <application>KPPP</application>,
+please refer to <ulink type="help" url="help:/kppp">The KPPP
+Handbook</ulink>.
+</para>
+
+</sect4>
+
+<sect4 id="wvdial" status="complete">
+<title>Using WvDial</title>
+
+<para>
+<application>WvDial</application> - The command line Linux application for
+dial-up modems. This utility has been around almost since the invention of
+Linux itself. The following is a quick step-by-step procedure for using
+<application>WvDial</application>. Note that <application>WvDial</application>
+use is command line intensive.
+</para>
+
+<procedure>
+<step>
+<para>
+Open <application>Konsole</application> by going to &menukonsole;.
+</para>
+</step>
+
+<step>
+<para>
+At the command prompt, type <userinput>sudo wvdialconf
+/etc/wvdial.conf</userinput> and then press <keycap>Enter</keycap>.
+</para>
+<note><title>ERROR</title>
+<para>
+If you see the following error, then your modem is not supported, in use, or
+not properly configured.
+</para>
+</note>
+<screen>
+Editing `/etc/wvdial.conf'.
+
+Scanning your serial ports for a modem.
+
+Modem Port Scan&lt;*1&gt;: S0   S1   S2   S3
+
+
+Sorry, no modem was detected!  Is it in use by another program?
+Did you configure it properly with setserial?
+
+Please read the FAQ at http://open.nit.ca/wiki/?WvDial
+
+If you still have problems, send mail to &lt;wvdial-list@lists.nit.ca&gt;.
+</screen>
+</step>
+
+<step>
+<para>
+If you did not receive the previous error message then you can move on and
+finish the setup by manually editing the <filename>/etc/wvdial.conf</filename>
+configuration file. To do so press
+<keycombo><keycap>Alt</keycap><keycap>F2</keycap></keycombo>, type
+<userinput>kdesu kwrite /etc/wvdial.conf</userinput> and press the
+<keycap>OK</keycap> button.
+</para>
+</step>
+
+<step>
+<para>
+After opening the <filename>wvdial.conf</filename>, insert your
+<acronym>ISP</acronym> information where needed. Other options may be needed in
+order to get your Winmodem to work correctly. This information is either
+available on the <ulink url="http://www.linmodems.org/">Linmodems</ulink>
+website, or if you sent an email to their mailing-list, the information they
+provided to aide you in your setup. You can also type <userinput>man
+wvdial.conf</userinput> at the command prompt for further information.
+</para>
+</step>
+
+<step>
+<para>
+Save and close out of the <filename>/etc/wvdial.conf</filename> configuration
+file.
+</para>
+</step>
+
+<step>
+<para>
+At the command line, try to dial out by typing <userinput>sudo
+wvdial</userinput> and pressing <keycap>Enter</keycap>.
+</para>
+</step>
+
+</procedure>
+
+</sect4>
+
+<sect4 id="pppconfig" status="complete">
+<title>Using pppconfig with pon &amp; poff</title>
+
+<para>
+<application>pppconfig</application> is another command line option used to
+manage dial-up connections. This setup is not the easiest to configure, however
+it is a very flexible application. The <application>pon</application> and
+<application>poff</application> dial and hang-up when using the
+<application>pppconfig</application> utility.
+</para>
+
+<para>
+If you are interested in using this utility, please refer to the <ulink
+url="https://help.ubuntu.com/community/DialupModemHowto/SetUpDialer#head-
+0769b0061bf81bfba710118540bd86223e815761">wiki topic for pppconfig</ulink>.
+</para>
+
+</sect4>
+</sect3>
+</sect2>
+</sect1>
+
+<!-- SHARING BETWEEN SYSTEMS -->
+<sect1 id="network-sharing" status="complete">
+<title>Network sharing</title>
+
+<para>
+Network sharing in Kubuntu, or Linux in general is easy and only requires very
+little configuration. Three quick choices are
+<variablelist>
+<varlistentry>
+<term><application>Samba</application></term>
+<listitem>
+<para>
+Provides file and print services to all
+<acronym>SMB</acronym>/<acronym>CIFS</acronym> clients, including Microsoft
+Windows. <acronym>Samba</acronym> is the recommended way to connecting to your
+Microsoft shares and the easiest to setup and configure.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><application>NFS</application></term>
+<listitem>
+<para>
+Network File System supports sharing of files, printers and resources over a
+network. <application>NFS</application> is more difficult to setup and
+configure however it contains extra features and added benefits to an all Linux
+network.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><application>ZeroConf</application></term>
+<listitem>
+<para>
+Zero Configuration Networking is a system that automatically creates an
+<acronym>IP</acronym> network without configuration or servers. This type of
+setup allows users without the knowledge of networking to easily configure a
+simple network.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+<sect2 id="network-sharing-samba" status="complete">
+<title>Samba</title>
+
+<para>
+If you are using a Windows network, then <application>Samba</application> may
+be your choice and configuration does not require use of the command line. To
+start simply press <keycombo><keycap>Alt</keycap><keycap>F2</keycap></keycombo>
+and type <userinput>kdesu kwrite /etc/samba/smb.conf</userinput> and press the
+<guibutton>Run</guibutton> button. This will open the
+<application>KWrite</application> text editor. Navigate down just below the
+<guilabel>Global Settings</guilabel> section to where it says
+<guilabel>workgroup = MSHOME</guilabel> and change out the
+<guilabel>MSHOME</guilabel> to match your Windows workgroup. Save the file and
+close <application>KWrite</application>. The next step is to install
+<application>Samba</application>. For more information on installation please
+review the section <ulink url="help:/kubuntu/add-applications">Adding
+Applications</ulink>.
+</para>
+
+<para>
+Using the icons located in the <application>Kicker</application>, the terminal
+looking icon (<application>System Menu</application>) to the immediate right of
+the <application>KMenu</application> icon will allow you to navigate to
+<guilabel>Remote Places</guilabel>. Once you have navigated to there, you will
+be able to access <guilabel>Samba Shares</guilabel>.
+</para>
+
+<para>
+For more information, further instructions, or advanced features of
+<application>Samba</application> please review <ulink
+url="https://help.ubuntu.com/community/SettingUpSamba"/>.
+</para>
+
+</sect2>
+
+<sect2 id="network-sharing-nfs" status="complete">
+<title><acronym>NFS</acronym></title>
+
+<para>
+<acronym>NFS</acronym>, or Network File System, is a file system supporting the
+sharing of files, printers and resources permanently over a network.
+<acronym>NFS</acronym> is much more advanced and difficult than
+<application>Samba</application>. Considering <acronym>NFS</acronym> is a very
+extensive protocol for file sharing, this portion of the Kubuntu System
+Documentation will ask you to review the following sites for further
+information:
+<itemizedlist>
+<listitem>
+<para><ulink url="https://help.ubuntu.com/community/NFSv4Howto"/></para>
+</listitem>
+<listitem>
+<para><ulink url="https://help.ubuntu.com/community/SettingUpNFSHowTo"/></para>
+</listitem>
+<listitem>
+<para><ulink
+url="https://help.ubuntu.com/community/Installation/OnNFSDrive"/></para>
+</listitem>
+<listitem>
+<para><ulink url="http://nfs.sourceforge.net/"/></para>
+</listitem>
+</itemizedlist>
+
+
+</para>
+
+</sect2>
+
+<sect2 id="network-sharing-zeroconf" status="complete">
+<title>ZeroConf Networking</title>
+
+<para>
+<acronym>ZeroConf</acronym>, or Zero Configuration Networking, is a system that
+automatically creates an <acronym>IP</acronym> network without special
+configurations or servers. This type of networking and sharing is by far the
+most simple and is targeted to users with little or no networking knowledge.
+<acronym>ZeroConf</acronym> allows a user to to connect to computers, networked
+printers, and other shareable resources on the network without configuring
+network settings by hand.
+</para>
+
+<procedure>
+<title>ZeroConf Configuration</title>
+<step>
+<para>
+Open <application>System Settings</application> by going to &menusysset;.
+</para>
+</step>
+
+<step>
+<para>
+Select <guilabel>Network Settings</guilabel>.
+</para>
+</step>
+
+<step>
+<para>
+In the left hand side of the <application>Network Settings</application>
+dialog, select the <guilabel>Zeroconf Service Discovery</guilabel> option.
+</para>
+</step>
+
+<step>
+<para>
+If the <guilabel>Enable Zeroconf network browsing</guilabel> or the
+<guilabel>Browse local network</guilabel> options are not selected, please
+select them now and press the <guibutton>Apply</guibutton> button.
+</para>
+</step>
+</procedure>
+
+<procedure>
+<title>Accessing network shares</title>
+<step>
+<para>
+Select <guimenuitem>Remote Places</guimenuitem> from the <guibutton>System
+Menu</guibutton> icon located to the immediate right of the
+<application>KMenu</application>.
+</para>
+</step>
+
+<step>
+<para>
+To view other <acronym>ZeroConf</acronym> systems, select <guilabel>Network
+Services</guilabel> from the main window.
+</para>
+</step>
+
+<step>
+<para>
+To view all available systems on your network, select <guilabel>Samba
+Shares</guilabel> from the main window.
+</para>
+</step>
+</procedure>
+
+</sect2>
+</sect1>
+
+<!-- NETWORK APPLICATIONS -->
+<sect1 id="network-apps" status="complete">
+<title>Networking Applications</title>
+
+<para>
+Kubuntu has a a great deal of applications designed around networking. Whether
+it is network monitoring, network security, or many others, Kubuntu has a
+solution for you. For more information on some of the available networking
+applications for Kubuntu, please see:
+<itemizedlist>
+<listitem><para><xref linkend="network-apps-knetworkmanager"/></para></listitem>
+<listitem><para><xref linkend="network-apps-wireshark"/></para></listitem>
+<listitem><para><xref linkend="network-apps-etherape"/></para></listitem>
+<listitem><para><xref linkend="network-apps-firewall"/></para></listitem>
+</itemizedlist>
+</para>
+
+<sect2 id="network-apps-knetworkmanager" status="complete">
+<title>KNetworkManager</title>
+
+<para>
+<application>KNetworkManager</application> is the KDE front end for
+<application>NetworkManager</application>. Providing a sophisticated yet
+intuitive user interface, <application>KNetworkManager</application> allows
+users to easily switch their network environment.
+<application>KNetworkManager</application> is installed with every Kubuntu
+system. The following is a brief list of the devices that
+<application>KNetworkManager</application> supports:
+<itemizedlist>
+<listitem>
+<para>
+Wired Ethernet (<acronym>IEEE</acronym> 802.3)
+</para>
+</listitem>
+
+<listitem>
+<para>
+Wireless Ethernet (<acronym>IEEE</acronym> 802.11): Unencrypted, WEP, WPA
+(Personal and Enterprise)
+</para>
+</listitem>
+
+<listitem>
+<para>
+Virtual Private Network (<acronym>VPN</acronym>):
+<application>OpenVPN</application>, <application>VPNC</application>
+</para>
+</listitem>
+
+<listitem>
+<para>
+Dial-Up (<acronym>PPP</acronym>)
+</para>
+</listitem>
+
+</itemizedlist>
+</para>
+
+<para>
+More information can be found on the <application>KNetworkManager</application>
+website located at <ulink
+url="http://en.opensuse.org/Projects/KNetworkManager"/>.
+</para>
+
+</sect2>
+
+<sect2 id="network-apps-wireshark" status="complete">
+<title>Wireshark</title>
+
+<para>
+<application>Wireshark</application> is a network traffic analyzer, or
+&quot;sniffer&quot;, used to capture packets off the wire while decoding
+numerous protocols. More information can be found on the
+<application>Wireshark</application> website located at <ulink
+url="http://www.wireshark.org/"/>.
+</para>
+
+<para>
+<application>Wireshark</application> isn't installed initially with Kubuntu.
+Installation is easy using <application>Adept</application>. For more
+information on installing extra applications with Kubuntu, please see the <ulink
+url="help:/kubuntu/add-applications/">Adding Applications</ulink> document.
+</para>
+</sect2>
+
+<sect2 id="network-apps-etherape" status="complete">
+<title>EtherApe</title>
+
+<para>
+<application>EtherApe</application> graphically displays network activities.
+Active hosts are shown as circles of varying size, and the traffic among them
+is shown as lines of varying width. <application>EtherApe</application> is a
+<application>GNOME</application> application and requires the
+<application>GNOME</application> libraries. These libraries will automatically
+be installed and configured for you if you decide to use
+<application>EtherApe</application>. More information can be found on the
+<application>EtherApe</application> website located at <ulink
+url="http://etherape.sourceforge.net"/>.
+</para>
+
+<para>
+<application>EtherApe</application> isn't installed initially with Kubuntu.
+Installation is easy using <application>Adept</application>. For more
+information on installing extra applications with Kubuntu, please see the
+<ulink url="help:/kubuntu/add-applications/">Adding Applications</ulink>
+document.
+</para>
+</sect2>
+
+<sect2 id="network-apps-firewall" status="complete">
+<title>Guarddog</title>
+
+<para>
+<application>Guarddog</application> is a firewall configuration utility for
+KDE. It is aimed at two groups of users:
+<itemizedlist>
+<listitem>
+<para>
+Novice to intermediate users who are not experts in <acronym>TCP/IP</acronym>
+networking and security
+</para>
+</listitem>
+
+<listitem>
+<para>
+Those users who don't want the hassle of dealing with cryptic shell scripts and
+ipchains or iptables parameters.
+</para>
+</listitem>
+</itemizedlist>
+More information can be found on the <application>Guarddog</application>
+website located at <ulink url="http://www.simonzone.com/software/guarddog/"/>.
+</para>
+
+<para>
+<application>Guarddog</application> isn't installed initially with Kubuntu.
+Installation is easy using <application>Adept</application>. For more
+information on installing extra applications with Kubuntu, please see the
+<ulink url="help:/kubuntu/add-applications/">Adding Applications</ulink>
+document.
+</para>
+
+</sect2>
+</sect1>
+
+</article>

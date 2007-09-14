@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../../libs/global.ent">
+%globalent;
+<!ENTITY % cdo-C SYSTEM "../../../libs/cdo-C.ent">
+%cdo-C;
+<!ENTITY % kde SYSTEM "../../libs/kde.ent">
+%kde;
+<!ENTITY % kde-menus-C SYSTEM "../../libs/kde-menus-C.ent">
+%kde-menus-C;
+<!ENTITY % kde-general SYSTEM
+"/usr/share/apps/ksgmltools2/customization/obsolete/general.entities">
+%kde-general;
+<!ENTITY % xinclude SYSTEM "../../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "en">
+]>
+<article id="config-desktop" status="complete">
+<articleinfo>
+<title>Desktop Configuration</title>
+&klegalnotice;
+<abstract>
+<para>
+This section contains information on how to configure your desktop, layout, and
+themes.
+</para>
+</abstract>
+</articleinfo>
+
+<!-- INTRODUCTION -->
+<sect1 id="intro" status="complete">
+<title>Introduction to Desktop Customization</title>
+
+<para>
+The great thing about KDE is the ability to customize just about every aspect
+of the desktop environment. Wallpapers, themes, widgets, color schemes, splash
+screens and more, the options for customization are endless.
+</para>
+
+<para>
+<ulink url="http://www.kde-look.org">KDE-Look.org</ulink> is the number one
+location to find customized settings for your KDE desktop. Some of the
+applications within KDE even allow you to connect directly to KDE-Look and
+download a new configuration or image.
+</para>
+
+<para>
+For more detailed information on some of the customization options available to
+you, please refer to the <ulink type="help"
+url="help:/khelpcenter/userguide/customizing-desktop.html">Customizing and
+Appearance</ulink> section of the KDE Users' Manual.
+</para>
+
+</sect1>
+
+<!-- DESKTOP TIPS -->
+<sect1 id="tips" status="complete">
+<title>Desktop Tips</title>
+
+<para>
+This section details some tips for using and customizing the desktop.
+</para> 
+
+<sect2 id="kde-startup" status="complete">
+<title>Run programs automatically when KDE starts</title>
+
+<procedure>
+<step>
+<para>
+The easiest way to run programs automatically when KDE
+starts is to use the <emphasis>Session Management</emphasis> feature of KDE. You
+can setup KDE exactly the way you'd like it to start every time you login.
+</para>
+</step>
+
+<step>
+<para>
+Choose <menuchoice><guimenu>K-Menu</guimenu><guisubmenu>System
+Settings</guisubmenu><guimenuitem>Session Manager</guimenuitem></menuchoice>
+from the Advanced tab on the top and then under <emphasis>Advanced User
+Settings</emphasis> section. Click the <guibutton>Session Manager</guibutton>
+button on the right. Ensure that the <guibutton>Restore manually saved
+session</guibutton> checkbox is enabled.
+</para>
+</step>
+
+<step>
+<para>
+Launch all the applications you want running <emphasis>everytime
+you log in</emphasis>. Once you have everything set to your satisfaction, click
+choose <menuchoice><guimenu>K-Menu</guimenu><guisubmenu>Save
+Session</guisubmenu></menuchoice>. Every time you start KDE, you will return to
+this configuration.
+</para>
+</step>
+
+<step>
+<para>
+Another method to do this is to copy the desktop entry of the application you
+want to autostart from <filename>/usr/share/applications</filename> to the
+<filename>~/.kde/Autostart</filename> directory.
+</para>
+</step>
+</procedure>
+</sect2>
+
+<sect2 id="login-kde-automatic" status="complete">
+<title>Login automatically to KDE when the computer starts</title>
+
+<para>
+It is possible to login a user automatically when the computer boots. This is
+not recommended for most computers, as it is not secure and may allow other
+users access to your information.
+</para>
+
+<procedure>
+<step>
+<para>
+Go to <application>System Settings</application> by going to &menusysset;.
+Under the <guilabel>Advanced</guilabel> tab select the <guilabel>Login
+Manager</guilabel>.
+</para>
+</step>
+
+<step>
+<para>
+Click on the <guibutton>Administrator Mode...</guibutton> and enter your user
+password to gain administrator privileges.
+</para>
+</step>
+
+<step>
+<para>
+Select the <guibutton>Convenience</guibutton> tab. Check the <guilabel>Enable
+Autologin</guilabel> and select the user to autologin from the drop down menu
+and select an appropriate time delay.
+</para>
+</step>
+</procedure>
+</sect2>
+
+<sect2 id="restartwithoutreboot" status="complete">
+<title>Restart KDE without rebooting the computer</title>
+
+<procedure>
+<step>
+<para>
+Save and close all open applications.
+</para>
+</step>
+
+<step>
+<para>
+Press &ctrlaltbkspc; to restart KDE or X-Windows.
+</para>
+</step>
+
+<step>
+<para>If &ctrlaltbkspc; is disabled, open <application>Konsole</application> by
+going to &menukonsole;. At the command prompt type the following and press the
+<keycap>Enter</keycap> key (if asked for a password, type in your user password
+followed by the <keycap>Enter</keycap> key):
+<screen>
+sudo /etc/init.d/kdm restart
+</screen>
+</para>
+<para>
+(See <xref linkend="disable-ctrlaltbkspc"/> to disable &ctrlaltbkspc;.)
+</para>
+</step>
+</procedure>
+</sect2>
+
+<sect2 id="disable-ctrlaltbkspc" status="complete">
+<title>Preventing the Ctrl-Alt-Backspace shortcut keys from restarting X</title>
+
+<procedure>
+<step>
+<para>
+Make a backup copy of your existing <filename>/etc/X11/xorg.conf</filename>
+file. To do so, open <application>Konsole</application> by going to
+&menukonsole;. At the command prompt type the following and then press the
+<keycap>Enter</keycap> key (if asked for a password, type in your user password
+followed by the <keycap>Enter</keycap> key):
+<screen>
+sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf_backup
+</screen>
+</para>
+</step>
+
+<step>
+<para>
+Open <filename>/etc/X11/xorg.conf</filename> for editing. To do so, press
+<keycombo><keycap>Alt</keycap><keycap>F2</keycap></keycombo> and at the
+<guilabel>Run Command</guilabel> dialog type the following and then press the
+<guibutton>OK</guibutton> key (if asked for a password, type in your user
+password followed by pressing the <guibutton>OK</guibutton> button):
+<screen>
+kdesu kwrite /etc/X11/xorg.conf
+</screen>
+</para>
+</step>
+
+<step>
+<para>
+Add the following lines to the end of the file:
+<programlisting>
+Section	"ServerFlags"
+	Option	"DontZap"	"yes"
+EndSection
+</programlisting>
+</para>
+</step>
+
+<step>
+<para>
+Save the edited file and close out of <application>KWrite</application>.
+</para>
+</step>
+
+<step>
+<para>
+The change will take effect the next time you log in to KDE. If you want the
+change to take effect immediately, restart KDE manually. (See <xref
+linkend="restartwithoutreboot"/>.)</para>
+</step>
+</procedure>
+</sect2>
+
+<sect2 id="run-application" status="complete">
+<title>Start a Program Manually</title>
+
+<para>
+Sometimes it can be useful to start a program manually, for example when the
+program does not have an entry in the menu. This is easy to do with the
+<guilabel>Run Command</guilabel> dialog.
+</para>
+
+<procedure>
+<step>
+<para>
+Open the <guilabel>Run Command</guilabel> dialog by pressing
+<keycombo><keycap>Alt</keycap><keycap>F2</keycap></keycombo>
+</para>
+</step>
+
+<step>
+<para>
+Enter the name of the program you wish to run, and press the
+<guibutton>OK</guibutton> button.
+</para>
+</step>
+</procedure>
+</sect2>
+
+<sect2 id="numlock-on-startup" status="complete">
+<title>Automatically turn on NumLock when KDE starts</title>
+
+<procedure>
+<step>
+<para>
+Open <application>System Settings</application> by going to &menusysset;. In
+the <application>System Settings</application> window select the
+<guilabel>Keyboard &amp; Mouse</guilabel> option.
+</para>
+</step>
+
+<step>
+<para>
+Under the <guilabel>Keyboard</guilabel> section, locate the subsection titled
+<guilabel>NumLock on KDE Startup</guilabel>, enable the <guibutton>Turn
+On</guibutton> checkbox. Click on <guibutton>Apply</guibutton> to save your
+settings.
+</para>
+</step>
+</procedure>
+
+<para>
+The change will take effect the next time you log in to KDE. If you want to test
+it right away, turn off NumLock and restart KDE (see <xref
+linkend="restartwithoutreboot"/>).
+</para>
+</sect2>
+
+<sect2 id="firefox-help-handler" status="complete">
+<title>Handle help:/ links in Firefox like Konqueror</title>
+
+<para>
+<application>Firefox</application> is not installed by default so in order for
+this to work you will have had to previously installed
+<application>Firefox</application>. Please refer to the <ulink type="help"
+url="help:/kubuntu/add-applications/">Adding Applications</ulink> documentation
+for more information on installing applications.
+</para>
+
+<para>
+<application>Konqueror</application> is able to handle help:/
+<acronym>URL</acronym>s by default. <application>Firefox</application> is also
+able to handle these the same way however it requires you to manually edit the
+configuration of <application>Firefox</application> to do so. The following
+procedure will aide you in such configuration.
+</para>
+
+<procedure>
+<step>
+<para>
+Start <application>Firefox</application> by choosing left &menuff;.
+</para>
+</step>
+
+<step>
+<para>
+In the address bar type <userinput>about:config</userinput> and press the
+<keycap>Enter</keycap> key.
+</para>
+</step>
+
+<step>
+<para>
+<mousebutton>Right</mousebutton> click on the list and select
+<menuchoice><guimenu>New</guimenu><guimenuitem>Boolean</guimenuitem></menuchoice
+>. Type <userinput>network.protocol-handler.external.help</userinput> as the
+<guilabel>Preference Name</guilabel> and <userinput>true</userinput> as the
+<guilabel>Value</guilabel>. Press the <guibutton>OK</guibutton> button when
+complete.
+</para>
+</step>
+
+<step>
+<para>
+<mousebutton>Right</mousebutton> click again on the list and select <menuchoice>
+<guimenu>New</guimenu><guimenuitem>String</guimenuitem></menuchoice>. Type
+<userinput>network.protocol-handler.app.help</userinput> as the
+<guilabel>Preference Name</guilabel> and <userinput>khelpcenter</userinput> as
+the <guilabel>Value</guilabel>. Press the <guibutton>OK</guibutton> button when
+complete.
+</para>
+</step>
+</procedure>
+</sect2>
+
+<sect2 id="menu-editing" status="complete">
+<title>Edit K-Menu</title>
+
+<para>
+Kubuntu comes with the <application>KDE Menu Editor</application>, so you can
+customize your menus and add entries for applications that don't automatically
+appear after they are installed. To add, remove, or modify an entry, refer to
+the following procedure.
+</para>
+
+<procedure>
+<step>
+<para>
+Open <application>KDE Menu Editor</application> by
+<mousebutton>right</mousebutton> clicking on <application>KMenu</application>
+and choosing <guimenuitem>Menu Editor</guimenuitem>. If you have locked your
+<application>Kicker</application>, you can also open <application>KDE Menu
+Editor</application> by pressing
+<keycombo><keycap>Alt</keycap><keycap>F2</keycap></keycombo> and typing
+<userinput>kmenuedit</userinput> followed by pressing the
+<guibutton>OK</guibutton> button.
+</para>
+</step>
+
+<step>
+<para>
+In <application>KDE Menu Editor</application>'s left-hand pane, choose the
+submenu the new entry should appear in.
+</para>
+</step>
+
+<step>
+<para>Choose <menuchoice><guimenu>File</guimenu><guimenuitem>New
+Item</guimenuitem></menuchoice> or press the <guibutton>New Item</guibutton>
+button. In the <guilabel>New Item</guilabel> window, choose a
+<guilabel>Name</guilabel>. Then add the <guilabel>Description</guilabel>,
+<guilabel>Comment</guilabel>, and <guilabel>Command</guilabel>. Select the icon
+by clicking on <guilabel>Icon</guilabel>. The <guilabel>Command</guilabel> will
+usually be the package name, <guilabel>Name</guilabel> is what will appear on
+the menu, and the <guilabel>Comment</guilabel> will appear in the tooltip that
+appears near the menu entry. <guilabel>Icons</guilabel> are chosen from
+<filename>/usr/share/icons/icon_theme</filename> directory by default, or can be
+chosen from anywhere in your files.
+</para>
+</step>
+</procedure>
+
+<para>
+To change the order of menu entries, click and drag the entry in the
+<application>KDE Menu Editor</application> window.
+</para>
+</sect2>
+
+<sect2 id="desktop-applets" status="complete">
+<title>Advanced Desktop Applets</title>
+
+<para>
+<application>SuperKaramba</application> is a system for bringing mini programs
+(desklets) such as weather forecasts, news tickers, system information displays,
+or music player controls onto your desktop, where they are sitting there in a
+symbiotic relationship of eye candy and usefulness.
+</para>
+
+<procedure>
+<step>
+<para>Install the <application>superkaramba</application> package. For more
+information on installing extra applications, please refer to the <ulink
+type="help" url="help:/kubuntu/add-applications/">Adding Applications</ulink>
+documentation.
+</para>
+</step>
+
+<step>
+<para>
+Once installed, open <application>SuperKaramba</application> by going to
+&menukaramba;.
+</para>
+</step>
+</procedure>
+
+<para>
+To download extra applets for <application>SuperKaramba</application> you can
+either select the <guibutton>New Stuff...</guibutton> button in the main window
+or you can go to <ulink url="http://www.kde-look.org">KDE-Look.org</ulink> and
+select the <emphasis>Karamba</emphasis> link.
+</para>
+</sect2>
+
+<sect2 id="fonts" status="complete">
+<title>Install Extra Fonts</title>
+
+<para>
+This section describes how to install extra fonts from the
+Kubuntu archives.
+</para>
+
+<procedure>
+<step>
+<para>
+For <emphasis role="bold">international fonts</emphasis>, install the following
+packages (please refer to the <ulink type="help"
+url="help:/kubuntu/add-applications/">Adding Applications</ulink> documentation
+for help on installing extra applications):
+</para>
+
+<para>
+<literallayout>
+xfonts-intl-arabic
+xfonts-intl-asian
+xfonts-intl-chinese
+xfonts-intl-chinese-big
+xfonts-intl-european
+xfonts-intl-japanese 
+xfonts-intl-japanese-big
+xfonts-intl-phonetic
+</literallayout>
+</para>
+</step>
+
+<step>
+<para>
+For <emphasis role="bold">Microsoft TrueType core fonts</emphasis>, install the
+<application>msttcorefonts</application> package (please refer to the <ulink
+type="help"
+url="help:/kubuntu/add-applications/">Adding Applications</ulink> documentation
+for help on installing extra applications).
+</para>
+</step>
+
+<step>
+<para>
+For <emphasis role="bold">Ghostscript fonts</emphasis>, install the
+<application>gsfonts-x11</application> package (please refer to the <ulink
+type="help" url="help:/kubuntu/add-applications/">Adding Applications</ulink>
+documentation for help on installing extra applications).
+</para>
+</step>
+</procedure>
+
+<para>
+If you prefer to download individual fonts by hand, you can install them easily
+by opening <application>Konqueror</application> and typing
+<userinput>fonts:/</userinput> into the location bar. Then you can install the
+font, either system-wide or for personal use by dragging and dropping into the
+respective folders.
+</para>
+</sect2>
+
+<!-- COMPIZ-FUSION -->
+<sect2 id="compiz-fusion" status="writing">
+<title>Install Compiz Fusion</title>
+
+<para>
+Compiz Fusion is a project that uses 3D graphics acceleration to bring new
+graphical effects and features to your desktop. The project resulted from the
+mergence of Compiz and Beryl (a previous project based on Compiz). This section
+describes how to install Compiz Fusion on Gutsy Gibbon.
+</para>
+
+<note>
+<para>
+Before installing Compiz Fusion, you may need to check whether you have
+the correct drivers installed for your graphics card. Please refer to <ulink
+type="http" url="http://www.compiz.org/NVidia"/>, <ulink
+type="http" url="http://www.compiz.org/ATI"/> and <ulink
+type ="http" url="http://www.compiz.org/Intel"/> for
+information about nVidia, ATI and Intel graphics card drivers respectively.
+</para>
+</note>
+
+<procedure> 
+<step> 
+<para>
+Go to &menuadept; (when prompted for a password at the <guilabel>Run as root -
+KDE su</guilabel> dialog, type in your password and press
+the <guibutton>OK</guibutton> button).
+</para>
+</step>
+
+<step> 
+<para>
+Install the following packages:
+<literallayout>
+compiz-kde
+compiz-fusion-plugins-main
+compiz-fusion-plugins-extra
+compiz-config-settings-manager
+</literallayout>
+</para>
+</step>
+
+<step>
+<para>
+After the installation finishes, you can run Compiz Fusion by
+pressing <keycombo><keycap>Alt</keycap><keycap>F2</keycap></keycombo> and typing
+the following at the <guilabel>Run Command</guilabel> dialog followed by
+pressing the <guibutton>OK</guibutton> button: 
+<screen>
+compiz --replace
+</screen>
+</para>
+</step>
+</procedure>
+
+<para>
+The following procedure describes how to configure Compiz Fusion to run at
+start-up.
+</para>
+
+<procedure>
+<step>
+<para>
+Go to <filename>~/.kde/Autostart</filename> using
+<application>Konqueror</application>.
+</para>
+</step>
+
+<step>
+ <para>
+Right click the content area and
+choose <menuchoice><guimenu>Create New</guimenu><guimenuitem>Link to
+Application</guimenuitem></menuchoice>. This opens a properties tabbed window.
+</para>
+</step>
+
+<step>
+<para>
+In the <guilabel>General</guilabel> tab, provide a descriptive
+name for the program e.g. Compiz-Fusion.
+</para>
+</step>
+ 
+<step>
+<para>
+Click the <guilabel>Application</guilabel> tab and type the
+following at the <guilabel>Command</guilabel> text box followed by pressing the
+<guibutton>OK</guibutton> button to finish and close the tabbed window:
+<screen>
+compiz --replace
+</screen>
+</para>
+
+<para>
+From now on, when you start <application>KDE</application>, Compiz Fusion
+should start up automatically.
+</para>
+</step>
+
+</procedure>
+
+<para>
+To configure Compiz Fusion, go to
+<menuchoice><guimenu>K-Menu</guimenu><guisubmenu>Settings</guisubmenu><guimenuitem>CompizConfig
+Settings Manager</guimenuitem></menuchoice>.
+</para> 
+
+</sect2>
+
+</sect1>
+
+</article>

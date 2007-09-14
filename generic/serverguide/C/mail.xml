@@ -72,27 +72,45 @@
             Replace mail.example.com with your mail server hostname.
             </para>
             </note>
+            <para>
+            Now is a good time to decide which mailbox format you want to use.  By default 
+            Postifx will use  <emphasis role="strong">mbox</emphasis> for the mailbox format.
+            Rather than editing the configuration file directly, 
+	    you can use the <command>postconf</command> command to configure
+            all <application>postfix</application> parameters.  The
+            configuration parameters will be stored in
+            <filename>/etc/postfix/main.cf</filename> file. Later if you
+            wish to re-configure a particular parameter, you can either
+            run the command or change it manually in the file.
+            </para>
+            <para>
+            To configure the mailbox format for <emphasis role="strong">Maildir:</emphasis>
+            </para>
+<screen>
+<command>sudo postconf -e 'home_mailbox = Maildir/'</command>
+</screen>
+            <note>
+            <para>
+            This will place new mail in /home/<emphasis role="italic">username</emphasis>/Maildir so 
+            you'll need to configure your Mail Delivery Agent to use the same path.
+            </para>
+            </note>
 	 </sect2>
         <sect2 id="postfix-smtp-authentication" status="complete">
           <title>SMTP Authentication</title>
             <para>The next steps are to configure
             <application>postfix</application> to use SASL for SMTP
-            AUTH. Rather than editing the configuration file directly, 
-	     you can use the <command>postconf</command> command to configure
-            all <application>postfix</application> parameters.  The
-            configuration parameters will be stored in
-            <filename>/etc/postfix/main.cf</filename> file. Later if you
-            wish to re-configure a particular parameter, you can either
-            run the command or change it manually in the file.</para>
+            AUTH. 
+            </para>
 	<procedure>
 		<step><para>Configure Postfix to do SMTP AUTH using SASL (saslauthd):
 <screen>
-postconf -e 'smtpd_sasl_local_domain ='
-postconf -e 'smtpd_sasl_auth_enable = yes'
-postconf -e 'smtpd_sasl_security_options = noanonymous'
-postconf -e 'broken_sasl_auth_clients = yes'
-postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination'
-postconf -e 'inet_interfaces = all'
+sudo postconf -e 'smtpd_sasl_local_domain ='
+sudo postconf -e 'smtpd_sasl_auth_enable = yes'
+sudo postconf -e 'smtpd_sasl_security_options = noanonymous'
+sudo postconf -e 'broken_sasl_auth_clients = yes'
+sudo postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination'
+sudo postconf -e 'inet_interfaces = all'
 </screen>
 Open the <filename>/etc/postfix/sasl/smtpd.conf</filename> file and add
 the following lines to end of the file:
@@ -127,18 +145,18 @@ sudo mv cacert.pem /etc/ssl/certs/
 		</step>
 		<step><para>Configure Postfix to do TLS encryption for both incoming and outgoing mail:
 <screen>
-postconf -e 'smtpd_tls_auth_only = no'
-postconf -e 'smtp_use_tls = yes'
-postconf -e 'smtpd_use_tls = yes'
-postconf -e 'smtp_tls_note_starttls_offer = yes'
-postconf -e 'smtpd_tls_key_file = /etc/ssl/private/smtpd.key'
-postconf -e 'smtpd_tls_cert_file = /etc/ssl/certs/smtpd.crt'
-postconf -e 'smtpd_tls_CAfile = /etc/ssl/certs/cacert.pem'
-postconf -e 'smtpd_tls_loglevel = 1'
-postconf -e 'smtpd_tls_received_header = yes'
-postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
-postconf -e 'tls_random_source = dev:/dev/urandom'
-postconf -e 'myhostname = mail.example.com'
+sudo postconf -e 'smtpd_tls_auth_only = no'
+sudo postconf -e 'smtp_use_tls = yes'
+sudo postconf -e 'smtpd_use_tls = yes'
+sudo postconf -e 'smtp_tls_note_starttls_offer = yes'
+sudo postconf -e 'smtpd_tls_key_file = /etc/ssl/private/smtpd.key'
+sudo postconf -e 'smtpd_tls_cert_file = /etc/ssl/certs/smtpd.crt'
+sudo postconf -e 'smtpd_tls_CAfile = /etc/ssl/certs/cacert.pem'
+sudo postconf -e 'smtpd_tls_loglevel = 1'
+sudo postconf -e 'smtpd_tls_received_header = yes'
+sudo postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
+sudo postconf -e 'tls_random_source = dev:/dev/urandom'
+sudo postconf -e 'myhostname = mail.example.com'
 </screen>
 		</para>
 		</step>
@@ -183,13 +201,13 @@ smtp      inet  n       -       n       -       -       smtpd
 	  <title>Configuring SASL</title>
             <para>
             The
-            <application>libsasl2</application>,
+            <application>libsasl2-2</application>,
             <application>sasl2-bin</application> and
             <application>libsasl2-modules</application> are necessary to
             enable SMTP AUTH using SASL. You can install these applications if
             you have not installed them already.
 <screen>
-<command>sudo apt-get install libsasl2 sasl2-bin</command>
+<command>sudo apt-get install libsasl2-2 sasl2-bin</command>
 </screen>
 	    </para>
 	    <para>
@@ -386,9 +404,9 @@ pop3_uidl_format = %08Xu%08Xv
             <filename>/etc/dovecot/dovecot.conf</filename> and change
             the following line:
 <programlisting>
-default_mail_env = maildir:~/Maildir # (for maildir)
+mail_location = maildir:~/Maildir # (for maildir)
 or
-default_mail_env = mbox:~/mail:INBOX=/var/spool/mail/%u # (for mbox)
+mail_location = mbox:~/mail:INBOX=/var/spool/mail/%u # (for mbox)
 </programlisting>
             </para>
 <note>

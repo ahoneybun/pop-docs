@@ -1,0 +1,28 @@
+#! /bin/sh
+set -e
+
+#DEBHELPER#
+
+case "$1" in
+  configure)
+    update-alternatives \
+    --install /usr/share/ubuntu-artwork/home/index.html \
+    	firefox-homepage /usr/share/ubuntu-artwork/home/kfirefox-index.html 42 \
+    --slave /usr/share/ubuntu-artwork/home/locales \
+	firefox-homepage-locales /usr/share/ubuntu-artwork/home/locales-kubuntu
+
+    update-alternatives \
+    --set firefox-homepage /usr/share/ubuntu-artwork/home/kfirefox-index.html
+
+  if which install-docs >/dev/null 2>&1; then
+	  install-docs -i /usr/share/doc-base/kubuntu-systemdocs
+	  ln -sf /usr/share/doc/kde/HTML/en/common /usr/share/doc/kde/HTML/en/kubuntu/
+	  ln -sf /usr/share/ubuntu-artwork/images /usr/share/ubuntu-artwork/home/images
+	  ln -sf /usr/share/ubuntu-artwork/kubuntu.css /usr/share/ubuntu-artwork/home/kubuntu.css
+	  ln -sf /usr/share/doc/kde/HTML/en/kubuntu/sysdocs-index/index.html /usr/share/doc/kde/HTML/en/kubuntu/index.html
+  fi
+
+  ;;
+esac
+
+exit 0

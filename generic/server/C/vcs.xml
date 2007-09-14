@@ -59,7 +59,18 @@ configure the digital certificate.
 </screen>
         </para>
 			</sect3>
-
+                        <sect3 id="import-svn-files" status="complete">
+          		  <title>Importing Files</title>
+			    <para>
+                            Once you create the repository you can
+                            <emphasis>import</emphasis> files into the
+                            repository.  To import a directory, enter the
+                            following from a terminal prompt:
+<screen>
+<command>svn import /path/to/import/directory file:///path/to/repos/project</command>
+</screen>
+                            </para>	
+                        </sect3>
         </sect2>
         <sect2 id="access-methods" status="complete">
           <title>Access Methods</title>
@@ -146,12 +157,32 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
   Require valid-user
   &lt;/LimitExcept&gt;
   &lt;/Location&gt; </programlisting>
+         <para>
+         To import or commit files to your Subversion repository over
+         HTTP, the repository should be owned by the HTTP user. In
+         Ubuntu systems, normally the HTTP user is
+         <command>www-data</command>.  To change the ownership of the
+         repository files enter the following command from terminal
+         prompt:
+         </para>
+<screen>
+<command>sudo chown -R www-data:www-data /path/to/repos</command>
+</screen>
+        <note>
+        <para>
+        By changing the ownership of repository as
+        <command>www-data</command> you will not be able to import or
+        commit files into the repository by running <command>svn import
+        file:///</command> command as any user other than
+        <command>www-data</command>.
+        </para>
+        </note>
   <para>Next, you must create the <filename>/etc/subversion/passwd</filename> 
   file. This file contains user authentication details. To add an entry, i.e. 
   to add a user, you can run the following command from a terminal prompt:</para>
 	<para>
 <screen>
-<command>htpasswd2 /etc/subversion/passwd user_name</command>
+<command>sudo htpasswd -c /etc/subversion/passwd user_name</command>
 </screen>
         </para>
 	<para>This command will prompt you to enter the password. Once you enter the password, the user is added. Now, to access the repository you can run the following command:</para>
@@ -324,7 +355,7 @@ prompt, enter the following command to install
 Once the initial repository is set up, you can configure
 <application>xinetd</application> to start the CVS server. 
 You can copy the following lines to the <filename>
-/etc/xinetd/cvspserver</filename> file.
+/etc/xinetd.d/cvspserver</filename> file.
 
 <programlisting>
 service cvspserver
@@ -398,13 +429,13 @@ to the CVS manual for details.
 			command to add this project to CVS repository:
 <screen>
 <command>cd your/project</command>
-<command>cvs import -d :pserver:username@hostname.com:/var/lib/cvs -m "Importing my project to CVS repository" . new_project start</command>
+<command>cvs -d :pserver:username@hostname.com:/var/lib/cvs import -m "Importing my project to CVS repository" . new_project start</command>
 </screen>
 
 <tip>
 <para>
 You can use the CVSROOT environment variable to store the CVS root directory.
-Once you export the CVSROOT environment variable, you can avoid using -d option to
+Once you export the CVSROOT environment variable, you can avoid using -d option in the
 above cvs command.
 </para>
 </tip>
@@ -427,6 +458,8 @@ manage projects in the CVS repository.
       </sect1>
       <sect1 id="version-control-ref" status="complete">
         <title>References</title> 
+				<para><ulink url="http://bazaar-vcs.org/">Bazaar Home Page</ulink></para>
+				<para><ulink url="https://launchpad.net/">Launchpad</ulink></para>
 				<para><ulink url="http://subversion.tigris.org/">Subversion Home Page</ulink></para>
 				<para><ulink url="http://svnbook.red-bean.com/">Subversion Book</ulink></para>
 				<para><ulink
