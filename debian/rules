@@ -17,6 +17,10 @@ install755=install -m755 -oroot -groot
 preptrans=prepare-firefox-startpage-translations
 preptransdir=debian/ubuntu-docs/usr/share/ubuntu-docs/common
 
+clean::
+	@grep -E ^"\*" debian/README.Debian | sed 's/^\*\ //' | xargs rm -rf
+	@echo "---"
+
 common-binary-post-install-indep::
 	mv debian/ubuntu-docs/usr/share/ubuntu-artwork/home/index.html debian/ubuntu-docs/usr/share/ubuntu-artwork/home/firefox-index.html
 	$(install755) -d $(preptransdir)
@@ -29,8 +33,8 @@ common-binary-post-install-indep::
 
 # Install the documents; skip documents which are less than 30% translated
 
-		for doc in `cat ubuntu/libs/shipped-docs`; do \
-			numstrings=`LANG=C msgfmt --statistics ubuntu/$$doc/po/*.pot 2>&1 | sed -r 's/^.* ([[:digit:]]+) untranslated.*$$/\1/'`; \
+	set -x; for doc in `cat ubuntu/libs/shipped-docs`; do \
+		numstrings=`LANG=C msgfmt --statistics ubuntu/$$doc/*.pot 2>&1 | sed -r 's/^.* ([[:digit:]]+) untranslated.*$$/\1/'`; \
 			for lang in `ls ubuntu/$$doc/`; do \
 				if [ -e ubuntu/$$doc/po/$$lang.po ]; then \
 					translated=`LANG=C msgfmt -o /dev/null --statistics ubuntu/$$doc/po/$$lang.po 2>&1| cut -f1 -d\ `; \
@@ -53,7 +57,7 @@ common-binary-post-install-indep::
 # Server material is done slightly differently
 
 		for doc in server; do \
-			numstrings=`LANG=C msgfmt --statistics generic/serverguide/po/*.pot 2>&1 | sed -r 's/^.* ([[:digit:]]+) untranslated.*$$/\1/'`; \
+            numstrings=`LANG=C msgfmt --statistics generic/serverguide/*.pot 2>&1 | sed -r 's/^.* ([[:digit:]]+) untranslated.*$$/\1/'`; \
 			for lang in `ls generic/$$doc/`; do \
 				if [ -e generic/serverguide/po/$$lang.po ]; then \
 					translated=`LANG=C msgfmt -o /dev/null --statistics generic/serverguide/po/$$lang.po 2>&1| cut -f1 -d\ `; \
@@ -66,12 +70,16 @@ common-binary-post-install-indep::
 				mkdir -p debian/ubuntu-docs/usr/share/gnome/help/$$doc/$$lang; \
 				cp -r generic/$$doc/$$lang/*xml debian/ubuntu-docs/usr/share/gnome/help/$$doc/$$lang/; \
 				fi; \
+				if [ -e generic/$$doc/$$lang/*.omf ]; then \
+					mkdir -p debian/ubuntu-docs/usr/share/omf/$$doc; \
+					cp generic/$$doc/$$lang/*omf debian/ubuntu-docs/usr/share/omf/$$doc/; \
+				fi; \
 			done; \
 		done; \
 
 # Common documents
 
-	cp -r common debian/ubuntu-docs/usr/share/ubuntu-docs/ 
+		cp -r common debian/ubuntu-docs/usr/share/ubuntu-docs/ 
 
 # Scrollkeeper loving
 
@@ -98,3 +106,6 @@ install/packaging-guide::
 	cp -R generic/packagingguide/files/ debian/packaging-guide/usr/share/packaging-guide/
 	cp ubuntu/libs/ubuntu-book.css debian/packaging-guide/usr/share/packaging-guide/common/
 	cp -R build/ubuntu/packagingguide/C/*.html debian/packaging-guide/usr/share/packaging-guide/html/C/
+
+binary-fixup/ubuntu-docs::
+	(cd debian/ubuntu-docs; ../../symlink-dupes)
