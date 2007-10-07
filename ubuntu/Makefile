@@ -109,6 +109,7 @@ switching:
 
 serverguide: style
 
+	for i in ../generic/serverguide/po/*.po ; do y=$$(basename $$i .po) ; echo $$y ; xsltproc --xinclude -o $(BASE)serverguide/$$y/index.html $(UBUNTUCHUNKXSL) ../generic/serverguide/$$y/serverguide.xml ; done
 	xsltproc --xinclude -o $(BASE)serverguide/C/index.html $(UBUNTUCHUNKXSL) ../generic/serverguide/C/serverguide.xml
 
 package: style
