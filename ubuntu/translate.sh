@@ -48,7 +48,7 @@ translate () {
 	    sed -i -e s@\"C\"@\"${y}\"@g -e s@C/@${y}/@g ${y}/${document}-${y}.omf
 	fi
 	../../validate.sh ${y}/${document}.xml
-	svn add ${y}
+	svn add -q ${y}
 }
 
 choose_language () {
