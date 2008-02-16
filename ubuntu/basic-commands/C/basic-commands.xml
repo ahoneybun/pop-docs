@@ -100,7 +100,7 @@
 	changes directories. When you open a
 	terminal you will be in your home directory. To move
 	around the file system you will use 
-	<command>cd</command>. Examples:
+	<command>cd</command>.
       </para>
 	<itemizedlist>
 	  <listitem>
@@ -115,6 +115,15 @@
 	      or
 	      <screen>cd ~</screen>
 	    </para>
+	    <note>
+                <para>
+                The <command>~</command> character represents the current user's home directory.
+	        As seen above, <command>cd ~</command> is equivalent to <command>cd /home/username/</command>.
+	        However, when running a command as root (using <command>sudo</command>, for example), <command>~</command>
+	        points instead to <filename class="directory">/root</filename>. When running a command with <command>sudo</command>, the full path to
+                your home directory must be given.
+                </para>
+	  </note>
 	  </listitem>
 
 	  <listitem>
@@ -150,18 +159,17 @@
     <sect2 id="pwd" status="review">
       <title>pwd</title>
       <para>
-	<command>pwd</command>: The 
-	<command>pwd</command> command will show 
-	you which directory you're located in 
+	The 
+	<command>pwd</command> command outputs which directory you are currently located in 
 	(<acronym>pwd</acronym> stands for <quote>print working
 	directory</quote>). For example, typing 
 	<screen>pwd</screen> in the <filename class="directory">Desktop</filename>
 	directory, will show
-	<computeroutput>~/Desktop</computeroutput>.
+	<computeroutput>/home/username/Desktop</computeroutput>.
 	<note>
 	  <para>
 	    <application>GNOME Terminal</application> also 
-	    displays this information in the title bar of it's window.
+	    displays this information in the title bar of its window.
 	  </para>
 	</note>
       </para>
@@ -170,23 +178,26 @@
     <sect2 id="ls" status="review">
       <title>ls</title>
       <para>
-	The <command>ls</command> command shows
-	you the files in your current directory. Used with
-	certain options, you can see sizes of files, when files
-	where made, and permissions of files. For example, typing 
+	The <command>ls</command> command outputs a list of the files in the current directory.
+	For example, typing 
 	<screen>ls ~</screen> will show you
 	the files that are in your home directory.
       </para>
+      <para>
+      Used with the <command>-l</command> options, <command>ls</command> outputs 
+      various other information alongside the filename, such as the current permissions
+      on the file, and the file's owner.
+      </para> 
     </sect2>
 
     <sect2 id="cp" status="review">
       <title>cp</title>
       <para>
 	The <command>cp</command> command makes a
-	copy of a file for you. For example, type: 
-	<screen>cp file foo</screen> to make
-	a exact copy of <filename>file</filename> and name it <filename>foo</filename>, but the file
-	<filename>file</filename> will still be there.	
+	copy of a file. For example, type: 
+	<screen>cp foo bar</screen> to make
+	an exact copy of <filename>foo</filename> and name it <filename>bar</filename>.
+	<filename>foo</filename> will be unchanged.	
       </para>
     </sect2>
 
@@ -196,41 +207,36 @@
 	The <command>mv</command> command moves a
 	file to a different location or will rename a file.
 	Examples are as follows: 
-	<screen>mv file foo</screen>
-	will rename the file <filename>file</filename> to <filename>foo</filename>. 
+	<screen>mv foo bar</screen>
+	will rename the file <filename>foo</filename> to <filename>bar</filename>. 
 	<screen>mv foo ~/Desktop</screen> 
 	will move the file <filename>foo</filename> to your <filename class="directory">Desktop</filename>
-	directory but will not rename it. You must specify a new
-	file name to rename a file.
-	<note>
-	  <para>
-	    If you are using <command>mv</command> with 
-	    <command>sudo</command> you will not
-	    be able to use the <emphasis role="strong">~</emphasis> shortcut, but will have to use
-	    the full pathnames to your files. This is because
-	    when you are working as root, <emphasis role="strong">~</emphasis> will refer to the
-	    root account's home directory, not your own.
-	  </para>
-	</note>
+	directory but will not rename it.
       </para>
     </sect2>
 
     <sect2 id="rm" status="review">
       <title>rm</title>
       <para>
-	Use the <command>rm</command> command
-	to remove or delete a file in your directory. It will not
-	work on directories which have files in them.
+	<command>rm</command> is used to delete files.
+	<screen>rm foo</screen>
+	deletes the file <filename>foo</filename> from the current directory.
+      </para>
+      <para>
+	By default, <command>rm</command> will not remove directories. To remove a directory,
+	you must use the <command>-R</command> argument. For example,
+	<screen>rm -R foobar</screen>
+	will remove the directory foobar, <emphasis role="strong">and all of its contents!</emphasis>
       </para>
     </sect2>
     
     <sect2 id="mkdir" status="review">
       <title>mkdir</title>
       <para>
-	The <command>mkdir</command> command will
-	allow you to create directories. For example, typing: 
+	The <command>mkdir</command> command
+	allows you to create directories. For example, typing: 
 	<screen>mkdir music</screen>
-	will create a music directory in the current directory.
+	will create a directory named <filename class="directory">music</filename> in the current directory.
       </para>
     </sect2>
   </sect1>
@@ -295,9 +301,9 @@
       <screen>
 No LSB modules are available.
 Distributor ID: Ubuntu
-Description:    Ubuntu 7.04 
-Release:        7.04
-Codename:       feisty</screen>
+Description:    Ubuntu &distro-rev; 
+Release:        &distro-rev;
+Codename:       &distro-short-codename;</screen>
       </para>
     </sect2>
 

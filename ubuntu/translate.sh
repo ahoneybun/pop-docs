@@ -19,8 +19,6 @@
 #    at /usr/share/common-licenses/GPL
 ####################################################################################
 
-# NB - DON'T ATTEMPT TO USE THIS YET, IT HASN'T BEEN TESTED MUCH.
-#
 # This script is for generating XML documents from po files downloaded from Launchpad
 # Put your freshly downloaded po files into the po folder under each document, then run:
 #
@@ -37,9 +35,7 @@ translate () {
 	mkdir -p ${y}
 	for i in C/*xml; do
 		j=$(basename ${i} C/)
-		echo ${j}
 		k=$(basename ${j} .xml)
-		echo ${k}
 		xml2po -e -p po/${y}.po C/${j} >${y}/${j}
 	done
 	if [ -e C/${document}-C.omf ]; then
@@ -48,7 +44,7 @@ translate () {
 	    sed -i -e s@\"C\"@\"${y}\"@g -e s@C/@${y}/@g ${y}/${document}-${y}.omf
 	fi
 	../../validate.sh ${y}/${document}.xml
-	svn add -q ${y}
+	bzr add -q ${y}
 }
 
 choose_language () {
