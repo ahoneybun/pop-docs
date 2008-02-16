@@ -62,7 +62,7 @@ IMAGES=../build/ubuntu/images/
 
 gdeb: 
 
-all: clean style server index serverguide switching status package
+all: clean style server index serverguide switching status
 
 	for doc in `cat libs/shipped-docs`; do xsltproc --xinclude -o $(BASE)$$doc/C/index.html $(UBUNTUCHUNKXSL) $$doc/C/$$doc.xml; done
 
@@ -109,12 +109,7 @@ switching:
 
 serverguide: style
 
-	for i in ../generic/serverguide/po/*.po ; do y=$$(basename $$i .po) ; echo $$y ; xsltproc --xinclude -o $(BASE)serverguide/$$y/index.html $(UBUNTUCHUNKXSL) ../generic/serverguide/$$y/serverguide.xml ; done
 	xsltproc --xinclude -o $(BASE)serverguide/C/index.html $(UBUNTUCHUNKXSL) ../generic/serverguide/C/serverguide.xml
-
-package: style
-
-	xsltproc --xinclude -o $(BASE)packagingguide/C/index.html $(UBUNTUCHUNKXSL) ../generic/packagingguide/C/packagingguide.xml
 
 status: style
 
