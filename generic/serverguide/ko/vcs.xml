@@ -476,16 +476,10 @@
         </para>
 			</sect3>
                         <sect3 id="import-svn-files" status="complete">
-          		  <title>Importing Files</title>
-			    <para>
-                            Once you create the repository you can
-                            <emphasis>import</emphasis> files into the
-                            repository.  To import a directory, enter the
-                            following from a terminal prompt:
-<screen>
+          		  <title>파일 임포트(import)하기</title>
+			    <para>저장소를 만들고 나면 파일들을 저장소로 <emphasis>임포트</emphasis> 할 수 있습니다. 디렉토리를 임포트 하려면 터미널 프롬프트에서 다음을 입력하세요: <screen>
 <command>svn import /path/to/import/directory file:///path/to/repos/project</command>
-</screen>
-                            </para>	
+</screen></para>	
                         </sect3>
         </sect2>
         <sect2 id="access-methods" status="complete">
@@ -562,25 +556,12 @@
   Require valid-user
   &lt;/LimitExcept&gt;
   &lt;/Location&gt; </programlisting>
-         <para>
-         To import or commit files to your Subversion repository over
-         HTTP, the repository should be owned by the HTTP user. In
-         Ubuntu systems, normally the HTTP user is
-         <command>www-data</command>.  To change the ownership of the
-         repository files enter the following command from terminal
-         prompt:
-         </para>
+         <para>HTTP 를 통해 서브버전 저장소에서 파일을 임포트 하거나 커밋하려면, 저장소의 소유자가 HTTP 사용자여야 합니다. 우분투 시스템에서, 보통 HTTP 사용자는 <command>www-data</command> 입니다. 저장소 파일들의 소유자를 변경하려면 터미널 프롬프트에서 다음을 입력하세요:</para>
 <screen>
 <command>sudo chown -R www-data:www-data /path/to/repos</command>
 </screen>
         <note>
-        <para>
-        By changing the ownership of repository as
-        <command>www-data</command> you will not be able to import or
-        commit files into the repository by running <command>svn import
-        file:///</command> command as any user other than
-        <command>www-data</command>.
-        </para>
+        <para>저장소의 소유자를 <command>www-data</command> 로 변경하면, <command>www-data</command> 이외의 사용자로는 <command>svn import file:///</command> 명령을 통해 파일 임포트 혹은 커밋할 수 없습니다.</para>
         </note>
   <para>다음에, <filename>/etc/subversion/passwd</filename> 파일을 반드시 만듭니다. 이 파일은 사용자 인증의 상세한 것을 가집니다. 예를 들어 사용자를 추가하는 것과 같이 항목을 추가하려면, 터미널 프롬프트에서 다음의 명령을 사용할 수 있습니다:</para>
 	<para>
@@ -669,22 +650,9 @@ $ svnserve --help</programlisting>
         </sect2>
         <sect2 id="cvs-configuration" status="complete">
           <title>설정</title>
-            <para>
-            Once you install cvs, the repository will be automatically
-            initialized. By default, the repository resides under the
-            <application>/var/lib/cvs</application> directory. You can
-            change this path by running following command:
-
-<screen>
+            <para>cvs 를 설치하고 나면, 기본적으로 저장소가 초기화 될 것입니다. 기본적으로, 저장소는 <application>/var/lib/cvs</application> 디렉토리에 존재합니다. 다음 명령을 통해 이 경로를 변경할 수 있습니다: <screen>
 <command>cvs -d /your/new/cvs/repo init</command>
-</screen>
-
-Once the initial repository is set up, you can configure
-<application>xinetd</application> to start the CVS server. 
-You can copy the following lines to the <filename>
-/etc/xinetd.d/cvspserver</filename> file.
-
-<programlisting>
+</screen> 초기 저장소가 설정되면, CVS 서버를 실행하기 위해 <application>xinetd</application> 를 설정할 수 있습니다. <filename> /etc/xinetd.d/cvspserver</filename> 파일에 다음과 같은 부분을 복사하십시오. <programlisting>
 service cvspserver
 {
      port = 2401
@@ -697,19 +665,11 @@ service cvspserver
      server_args = -f --allow-root /var/lib/cvs pserver
      disable = no
 }
-</programlisting>
-
-<note>
+</programlisting><note>
 <para>만약 기본 지정된 저장소 (<application>/var/lib/cvs</application>) 디렉토리를 변경하였다면 그 저장소를 편집하는 것을 확신 하십시오.</para>
-</note>
-
-Once you have configured <application>xinetd</application> you 
-can start the cvs server by running following command:
-
-<screen>
+</note> <application>xinetd</application> 를 설정하면, 다음 명령을 통해 cvs 서버를 실행할 수 있습니다: <screen>
 <command>sudo /etc/init.d/xinetd start</command>
-</screen>
-            </para>
+</screen></para>
             <para>다음의 명령을 수행하여 CVS 서버가 실행 중인 것을 확인할 수 있습니다:</para>
 
             <para>
@@ -732,37 +692,19 @@ tcp 0 0 *:cvspserver *:* LISTEN
         </sect2>
         <sect2 id="cvs-add-projects" status="complete">
           <title>프로젝트 더하기</title>
-            <para>
-            This section explains how to add new project to the CVS 
-			repository. Create the directory and add necessary document 
-			and source files to the directory. Now, run the following 
-			command to add this project to CVS repository:
-<screen>
+            <para>이 부분에서는 새로운 프로젝트를 CVS 저장소에 추가하는 방법을 설명합니다. 먼저 디렉토리를 만들고 필요한 문서와 소스 파일들을 해당 디렉토리에 복사합니다. 이제 다음 명령을 입력하여 이 프로젝트를 CVS 저장소에 추가합니다: <screen>
 <command>cd your/project</command>
 <command>cvs -d :pserver:username@hostname.com:/var/lib/cvs import -m "Importing my project to CVS repository" . new_project start</command>
-</screen>
-
-<tip>
-<para>
-You can use the CVSROOT environment variable to store the CVS root directory.
-Once you export the CVSROOT environment variable, you can avoid using -d option in the
-above cvs command.
-</para>
-</tip>
-The string <emphasis>new_project</emphasis> is a vendor
-tag, and <emphasis>start</emphasis> is a release tag.
-They serve no purpose in this context, but since CVS requires them, they
-must be present.
-
-<warning>
+</screen><tip>
+<para>CVS 루트 디렉토리를 저장하기 위해 CVSROOT 환경 변수를 사용할 수 있습니다. CVSROOT 환경 변수를 익스포트(export) 하고 나면, 위의 cvs 명령에서 -d 옵션을 제거할 수 있습니다.</para>
+</tip> 여기서 <emphasis>new_project</emphasis> 는 제작자 태그이고, <emphasis>start</emphasis> 는 배포용 태그입니다. 이들은 아무 의미가 없지만, CVS 가 필요로 하기 때문에 입력해야 합니다. <warning>
 <para>새로운 프로젝트를 추가할 때, 여러분이 사용하는 CVS 사용자는 반드시 CVS 저장소 <application>/var/lib/cvs</application>) 의 쓰기 권한을 가져야 합니다. 기본 설정으로, <application>src</application> 그룹은 그 CVS 저장소로의 쓰기 권한을 가지고 있습니다. 그러므로, 여러분은 그 사용자를 이 그룹에 추가할 수 있고, 그런 후 그 사용자는 CVS 저장소 내의 프로젝트를 관리할 수 있습니다.</para>
-</warning>
-            </para>
+</warning></para>
         </sect2>
       </sect1>
       <sect1 id="version-control-ref" status="complete">
         <title>참조</title> 
-				<para><ulink url="http://bazaar-vcs.org/">Bazaar Home Page</ulink></para>
+				<para><ulink url="http://bazaar-vcs.org/">Bazaar 홈 페이지</ulink></para>
 				<para><ulink url="https://launchpad.net/">Launchpad</ulink></para>
 				<para><ulink url="http://subversion.tigris.org/">Subversion 홈 페이지</ulink></para>
 				<para><ulink url="http://svnbook.red-bean.com/">Subversion 책</ulink></para>

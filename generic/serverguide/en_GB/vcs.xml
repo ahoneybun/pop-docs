@@ -477,15 +477,9 @@
 			</sect3>
                         <sect3 id="import-svn-files" status="complete">
           		  <title>Importing Files</title>
-			    <para>
-                            Once you create the repository you can
-                            <emphasis>import</emphasis> files into the
-                            repository.  To import a directory, enter the
-                            following from a terminal prompt:
-<screen>
+			    <para>Once you create the repository you can <emphasis>import</emphasis> files into the repository. To import a directory, enter the following from a terminal prompt: <screen>
 <command>svn import /path/to/import/directory file:///path/to/repos/project</command>
-</screen>
-                            </para>	
+</screen></para>	
                         </sect3>
         </sect2>
         <sect2 id="access-methods" status="complete">
@@ -562,25 +556,12 @@
   Require valid-user
   &lt;/LimitExcept&gt;
   &lt;/Location&gt; </programlisting>
-         <para>
-         To import or commit files to your Subversion repository over
-         HTTP, the repository should be owned by the HTTP user. In
-         Ubuntu systems, normally the HTTP user is
-         <command>www-data</command>.  To change the ownership of the
-         repository files enter the following command from terminal
-         prompt:
-         </para>
+         <para>To import or commit files to your Subversion repository over HTTP, the repository should be owned by the HTTP user. In Ubuntu systems, normally the HTTP user is <command>www-data</command>. To change the ownership of the repository files enter the following command from terminal prompt:</para>
 <screen>
 <command>sudo chown -R www-data:www-data /path/to/repos</command>
 </screen>
         <note>
-        <para>
-        By changing the ownership of repository as
-        <command>www-data</command> you will not be able to import or
-        commit files into the repository by running <command>svn import
-        file:///</command> command as any user other than
-        <command>www-data</command>.
-        </para>
+        <para>By changing the ownership of repository as <command>www-data</command> you will not be able to import or commit files into the repository by running <command>svn import file:///</command> command as any user other than <command>www-data</command>.</para>
         </note>
   <para>Next, you must create the <filename>/etc/subversion/passwd</filename> file. This file contains user authentication details. To add an entry, i.e. to add a user, you can run the following command from a terminal prompt:</para>
 	<para>
@@ -669,22 +650,9 @@ $ svnserve --help</programlisting>
         </sect2>
         <sect2 id="cvs-configuration" status="complete">
           <title>Configuration</title>
-            <para>
-            Once you install cvs, the repository will be automatically
-            initialized. By default, the repository resides under the
-            <application>/var/lib/cvs</application> directory. You can
-            change this path by running following command:
-
-<screen>
+            <para>Once you install cvs, the repository will be automatically initialised. By default, the repository resides under the <application>/var/lib/cvs</application> directory. You can change this path by running following command: <screen>
 <command>cvs -d /your/new/cvs/repo init</command>
-</screen>
-
-Once the initial repository is set up, you can configure
-<application>xinetd</application> to start the CVS server. 
-You can copy the following lines to the <filename>
-/etc/xinetd.d/cvspserver</filename> file.
-
-<programlisting>
+</screen> Once the initial repository is set up, you can configure <application>xinetd</application> to start the CVS server. You can copy the following lines to the <filename> /etc/xinetd.d/cvspserver</filename> file. <programlisting>
 service cvspserver
 {
      port = 2401
@@ -697,19 +665,11 @@ service cvspserver
      server_args = -f --allow-root /var/lib/cvs pserver
      disable = no
 }
-</programlisting>
-
-<note>
+</programlisting><note>
 <para>Be sure to edit the repository if you have changed the default repository (<application>/var/lib/cvs</application>) directory.</para>
-</note>
-
-Once you have configured <application>xinetd</application> you 
-can start the cvs server by running following command:
-
-<screen>
+</note> Once you have configured <application>xinetd</application> you can start the cvs server by running following command: <screen>
 <command>sudo /etc/init.d/xinetd start</command>
-</screen>
-            </para>
+</screen></para>
             <para>You can confirm that the CVS server is running by issuing the following command:</para>
 
             <para>
@@ -732,32 +692,14 @@ tcp        0      0 *:cvspserver            *:* LISTEN
         </sect2>
         <sect2 id="cvs-add-projects" status="complete">
           <title>Add Projects</title>
-            <para>
-            This section explains how to add new project to the CVS 
-			repository. Create the directory and add necessary document 
-			and source files to the directory. Now, run the following 
-			command to add this project to CVS repository:
-<screen>
+            <para>This section explains how to add new project to the CVS repository. Create the directory and add necessary document and source files to the directory. Now, run the following command to add this project to CVS repository: <screen>
 <command>cd your/project</command>
 <command>cvs -d :pserver:username@hostname.com:/var/lib/cvs import -m "Importing my project to CVS repository" . new_project start</command>
-</screen>
-
-<tip>
-<para>
-You can use the CVSROOT environment variable to store the CVS root directory.
-Once you export the CVSROOT environment variable, you can avoid using -d option in the
-above cvs command.
-</para>
-</tip>
-The string <emphasis>new_project</emphasis> is a vendor
-tag, and <emphasis>start</emphasis> is a release tag.
-They serve no purpose in this context, but since CVS requires them, they
-must be present.
-
-<warning>
+</screen><tip>
+<para>You can use the CVSROOT environment variable to store the CVS root directory. Once you export the CVSROOT environment variable, you can avoid using -d option in the above cvs command.</para>
+</tip> The string <emphasis>new_project</emphasis> is a vendor tag, and <emphasis>start</emphasis> is a release tag. They serve no purpose in this context, but since CVS requires them, they must be present. <warning>
 <para>When you add a new project, the CVS user you use must have write access to the CVS repository (<application>/var/lib/cvs</application>). By default, the <application>src</application> group has write access to the CVS repository. So, you can add the user to this group, and he can then add and manage projects in the CVS repository.</para>
-</warning>
-            </para>
+</warning></para>
         </sect2>
       </sect1>
       <sect1 id="version-control-ref" status="complete">

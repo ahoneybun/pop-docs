@@ -475,53 +475,30 @@
             <note>
             <para>Replace mail.example.com with your mail server hostname.</para>
             </note>
-            <para>
-            Now is a good time to decide which mailbox format you want to use.  By default 
-            Postifx will use  <emphasis role="strong">mbox</emphasis> for the mailbox format.
-            Rather than editing the configuration file directly, 
-	    you can use the <command>postconf</command> command to configure
-            all <application>postfix</application> parameters.  The
-            configuration parameters will be stored in
-            <filename>/etc/postfix/main.cf</filename> file. Later if you
-            wish to re-configure a particular parameter, you can either
-            run the command or change it manually in the file.
-            </para>
-            <para>
-            To configure the mailbox format for <emphasis role="strong">Maildir:</emphasis>
-            </para>
+            <para>Now is a good time to decide which mailbox format you want to use. By default Postifx will use <emphasis role="strong">mbox</emphasis> for the mailbox format. Rather than editing the configuration file directly, you can use the <command>postconf</command> command to configure all <application>postfix</application> parameters. The configuration parameters will be stored in <filename>/etc/postfix/main.cf</filename> file. Later if you wish to re-configure a particular parameter, you can either run the command or change it manually in the file.</para>
+            <para>To configure the mailbox format for <emphasis role="strong">Maildir:</emphasis></para>
 <screen>
 <command>sudo postconf -e 'home_mailbox = Maildir/'</command>
 </screen>
             <note>
-            <para>
-            This will place new mail in /home/<emphasis role="italic">username</emphasis>/Maildir so 
-            you'll need to configure your Mail Delivery Agent to use the same path.
-            </para>
+            <para>This will place new mail in /home/<emphasis role="italic">username</emphasis>/Maildir so you'll need to configure your Mail Delivery Agent to use the same path.</para>
             </note>
 	 </sect2>
         <sect2 id="postfix-smtp-authentication" status="complete">
           <title>SMTP Authentication</title>
-            <para>The next steps are to configure
-            <application>postfix</application> to use SASL for SMTP
-            AUTH. 
-            </para>
+            <para>The next steps are to configure <application>postfix</application> to use SASL for SMTP AUTH.</para>
 	<procedure>
-		<step><para>Configure Postfix to do SMTP AUTH using SASL (saslauthd):
-<screen>
+		<step><para>Configure Postfix to do SMTP AUTH using SASL (saslauthd): <screen>
 sudo postconf -e 'smtpd_sasl_local_domain ='
 sudo postconf -e 'smtpd_sasl_auth_enable = yes'
 sudo postconf -e 'smtpd_sasl_security_options = noanonymous'
 sudo postconf -e 'broken_sasl_auth_clients = yes'
 sudo postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination'
 sudo postconf -e 'inet_interfaces = all'
-</screen>
-Open the <filename>/etc/postfix/sasl/smtpd.conf</filename> file and add
-the following lines to end of the file:
-<screen>
+</screen> Open the <filename>/etc/postfix/sasl/smtpd.conf</filename> file and add the following lines to end of the file: <screen>
 pwcheck_method: saslauthd
 mech_list: plain login
-</screen>
-		</para>
+</screen></para>
 		</step>
 		<step><para>Next, configure the digital certificate for TLS. When asked questions, follow the instructions and answer appropriately. <screen>
 openssl genrsa -des3 -rand /etc/hosts -out smtpd.key 1024
@@ -538,8 +515,7 @@ sudo mv cacert.pem /etc/ssl/certs/
 </screen></para>
 		<note><para>You can get the digital certificate from a certificate authority. Alternatively, you can create the certificate yourself. Refer to <ulink url="./web-servers.xml#creating-a-self-signed-certificate">Creating a self Signed Certification</ulink> sub-section for more details.</para></note>
 		</step>
-		<step><para>Configure Postfix to do TLS encryption for both incoming and outgoing mail:
-<screen>
+		<step><para>Configure Postfix to do TLS encryption for both incoming and outgoing mail: <screen>
 sudo postconf -e 'smtpd_tls_auth_only = no'
 sudo postconf -e 'smtp_use_tls = yes'
 sudo postconf -e 'smtpd_use_tls = yes'
@@ -552,18 +528,15 @@ sudo postconf -e 'smtpd_tls_received_header = yes'
 sudo postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
 sudo postconf -e 'tls_random_source = dev:/dev/urandom'
 sudo postconf -e 'myhostname = mail.example.com'
-</screen>
-		</para>
+</screen></para>
 		</step>
-		<step><para>Turn off the chroot operation for SMTP server. Locate
-    for the following line in
-      <filename>/etc/postfix/master.cf</filename> file:</para>
+		<step><para>Turn off the chroot operation for SMTP server. Locate for the following line in <filename>/etc/postfix/master.cf</filename> file:</para>
 <screen>
-smtp      inet  n       -       -       -       -       smtpd
+smtp inet n - - - - smtpd
 </screen>
     <para>and modify it as follows:</para>
 <screen>
-smtp      inet  n       -       n       -       -       smtpd
+smtp inet n - n - - smtpd
 </screen>
 		</step>
 		</procedure>
@@ -575,24 +548,13 @@ smtp      inet  n       -       n       -       -       smtpd
 	</sect2>
 	<sect2 id="sasl">
 	  <title>Configuring SASL</title>
-            <para>
-            The
-            <application>libsasl2-2</application>,
-            <application>sasl2-bin</application> and
-            <application>libsasl2-modules</application> are necessary to
-            enable SMTP AUTH using SASL. You can install these applications if
-            you have not installed them already.
-<screen>
+            <para>The <application>libsasl2-2</application>, <application>sasl2-bin</application> and <application>libsasl2-modules</application> are necessary to enable SMTP AUTH using SASL. You can install these applications if you have not installed them already. <screen>
 <command>sudo apt-get install libsasl2-2 sasl2-bin</command>
-</screen>
-	    </para>
-	    <para>
-		A few changes are necessary to make it work properly. Because <application>Postfix</application> runs chrooted in <filename>/var/spool/postfix</filename>, <application>SASL</application> needs to be configured to run in the false root (<filename>/var/run/saslauthd</filename> becomes <filename>/var/spool/postfix/var/run/saslauthd</filename>):
-<screen>
+</screen></para>
+	    <para>A few changes are necessary to make it work properly. Because <application>Postfix</application> runs chrooted in <filename>/var/spool/postfix</filename>, <application>SASL</application> needs to be configured to run in the false root (<filename>/var/run/saslauthd</filename> becomes <filename>/var/spool/postfix/var/run/saslauthd</filename>): <screen>
 <command>sudo mkdir -p /var/spool/postfix/var/run/saslauthd</command>
 <command>sudo rm -rf /var/run/saslauthd</command>
-</screen>
-	    </para>
+</screen></para>
 	    <para>To activate <application>saslauthd</application>, edit the file <filename>/etc/default/saslauthd</filename>, and change or add the START variable. In order to configure <application>saslauthd</application> to run in the false root, add the PWDIR, PIDFILE and PARAMS variables. Finally, configure the MECHANISMS variable to your liking. The file should look like this: <programlisting>
 # This needs to be uncommented before saslauthd will be run
 # automatically
@@ -612,12 +574,9 @@ MECHANISMS="pam"
 <note>
 <para>If you prefer, you can use <emphasis role="strong">shadow</emphasis> instead of <emphasis role="strong">pam</emphasis>. This will use MD5 hashed password transfer and is perfectly secure. The username and password needed to authenticate will be those of the users on the system you are using on the server.</para>
 </note>
-        <para>
-Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd</filename>. The saslauthd init script uses this setting to create the missing directory with the appropriate permissions and ownership:
-<screen>
+        <para>Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd</filename>. The saslauthd init script uses this setting to create the missing directory with the appropriate permissions and ownership: <screen>
 <command>sudo dpkg-statoverride --force --update --add root sasl 755 /var/spool/postfix/var/run/saslauthd</command>
-</screen>
-        </para>
+</screen></para>
         </sect2>
         <sect2 id="postfix-testing" status="complete">
           <title>Testing</title>
@@ -666,25 +625,11 @@ Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd<
           <title>Configuration</title>
             <para>To configure <application>dovecot</application>, you can edit the file <filename>/etc/dovecot/dovecot.conf</filename>. You can choose the protocol you use. It could be pop3, pop3s (pop3 secure), imap and imaps (imap secure). A description of these protocols is beyond the scope of this guide. For further information, refer to the wikipedia articles on <ulink url="http://en.wikipedia.org/wiki/POP3">POP3</ulink> and <ulink url="http://en.wikipedia.org/wiki/Internet_Message_Access_Protocol">IMAP</ulink>.</para>
 
-            <para>
-            IMAPS and POP3S are more secure that the simple IMAP and
-            POP3 because they use SSL encryption to connect. Once you
-            have chosen the protocol, amend the following line in the file
-            <filename>/etc/dovecot/dovecot.conf</filename>:
-<programlisting>
+            <para>IMAPS and POP3S are more secure that the simple IMAP and POP3 because they use SSL encryption to connect. Once you have chosen the protocol, amend the following line in the file <filename>/etc/dovecot/dovecot.conf</filename>: <programlisting>
 protocols = pop3 pop3s imap imaps
-</programlisting>
-
-            It enables the protocols when <application>dovecot</application> is started. Next, add the following line in the pop3 section of the file <filename>/etc/dovecot/dovecot.conf</filename>:
-<programlisting>
+</programlisting> It enables the protocols when <application>dovecot</application> is started. Next, add the following line in the pop3 section of the file <filename>/etc/dovecot/dovecot.conf</filename>: <programlisting>
 pop3_uidl_format = %08Xu%08Xv
-</programlisting>
-
-            Next, choose the mailbox you use. <application>Dovecot</application> supports
-            <emphasis role="strong">maildir</emphasis> and <emphasis role="strong">mbox</emphasis> formats. These are the most
-            commonly used mailbox formats. They both have their own
-            benefits and they are discussed on <ulink url="http://wiki.dovecot.org/MailboxFormat">the dovecot website</ulink>.
-            </para>
+</programlisting> Next, choose the mailbox you use. <application>Dovecot</application> supports <emphasis role="strong">maildir</emphasis> and <emphasis role="strong">mbox</emphasis> formats. These are the most commonly used mailbox formats. They both have their own benefits and they are discussed on <ulink url="http://wiki.dovecot.org/MailboxFormat">the dovecot website</ulink>.</para>
             <para>Once you have chosen your mailbox type, edit the file <filename>/etc/dovecot/dovecot.conf</filename> and change the following line: <programlisting>
 mail_location = maildir:~/Maildir # (for maildir)
 or
@@ -703,26 +648,12 @@ Escape character is '^]'.
         </sect2>
         <sect2 id="dovecot-ssl" status="complete">
           <title>Dovecot SSL Configuration</title>
-            <para>
-            To configure <application>dovecot</application> to use SSL, you can edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename> and amend
-            following lines:
-<programlisting>
+            <para>To configure <application>dovecot</application> to use SSL, you can edit the file <filename>/etc/dovecot/dovecot.conf</filename> and amend following lines: <programlisting>
 ssl_cert_file = /etc/ssl/certs/ssl-cert-snakeoil.pem
 ssl_key_file = /etc/ssl/private/ssl-cert-snakeoil.key
 ssl_disable = no
 disable_plaintext_auth = no
-</programlisting>
-
-          You can get the SSL certificate from a Certificate Issuing
-          Authority or you can create self signed SSL certificate. Please
-          refer to <xref linkend="creating-a-self-signed-certificate"/>
-          for details about how to create self signed SSL certificate. Once
-          you create the certificate, you will have a key file and a
-          certificate file.  Please copy them to the location pointed
-          in the <filename>/etc/dovecot/dovecot.conf</filename>
-          configuration file.
-          </para>
+</programlisting> You can get the SSL certificate from a Certificate Issuing Authority or you can create self signed SSL certificate. Please refer to <xref linkend="creating-a-self-signed-certificate"/> for details about how to create self signed SSL certificate. Once you create the certificate, you will have a key file and a certificate file. Please copy them to the location pointed in the <filename>/etc/dovecot/dovecot.conf</filename> configuration file.</para>
 	</sect2>
 	<sect2>
 	  <title>Firewall Configuration for an E-mail Server</title>
