@@ -475,53 +475,30 @@
             <note>
             <para>Замените mail.example.com именем хостав вашего почтового сервера</para>
             </note>
-            <para>
-            Now is a good time to decide which mailbox format you want to use.  By default 
-            Postifx will use  <emphasis role="strong">mbox</emphasis> for the mailbox format.
-            Rather than editing the configuration file directly, 
-	    you can use the <command>postconf</command> command to configure
-            all <application>postfix</application> parameters.  The
-            configuration parameters will be stored in
-            <filename>/etc/postfix/main.cf</filename> file. Later if you
-            wish to re-configure a particular parameter, you can either
-            run the command or change it manually in the file.
-            </para>
-            <para>
-            To configure the mailbox format for <emphasis role="strong">Maildir:</emphasis>
-            </para>
+            <para>Сейчас удобный момент решить какой формат почтового ящика использовать. По-умолчанию, Postfix будет использовать формат ящика <emphasis role="strong">mbox</emphasis>. Вместо прямого редактирования файла конфигурации, Вы можете использовать комманду <command>postconf</command> для настройки всех параметров <application>postfix</application>. Параметры конфигурации будут храниться в файле <filename>/etc/postfix/main.cf</filename>. Позже, если Вы захотите перенастроить отдельный параметр, Вы сможете выполнить команду или изменить его вручную в файле.</para>
+            <para>Для настройки формата почтового ящика в <emphasis role="strong">Maildir:</emphasis></para>
 <screen>
 <command>sudo postconf -e 'home_mailbox = Maildir/'</command>
 </screen>
             <note>
-            <para>
-            This will place new mail in /home/<emphasis role="italic">username</emphasis>/Maildir so 
-            you'll need to configure your Mail Delivery Agent to use the same path.
-            </para>
+            <para>Это будет помещать новую почту в /home/<emphasis role="italic">username</emphasis>/Maildir , так что Вам придется настроить Агент по доставке почты (MTA) так, чтобы он использвал тот же путь.</para>
             </note>
 	 </sect2>
         <sect2 id="postfix-smtp-authentication" status="complete">
           <title>Аутентификация SMTP</title>
-            <para>The next steps are to configure
-            <application>postfix</application> to use SASL for SMTP
-            AUTH. 
-            </para>
+            <para>Следующим шагом будет настройка <application>postfix</application> для использования SASL для SMTP AUTH.</para>
 	<procedure>
-		<step><para>Configure Postfix to do SMTP AUTH using SASL (saslauthd):
-<screen>
+		<step><para>Настройте Postfix для использования SMTP AUTH с помощью SASL (saslauthd): <screen>
 sudo postconf -e 'smtpd_sasl_local_domain ='
 sudo postconf -e 'smtpd_sasl_auth_enable = yes'
 sudo postconf -e 'smtpd_sasl_security_options = noanonymous'
 sudo postconf -e 'broken_sasl_auth_clients = yes'
 sudo postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination'
 sudo postconf -e 'inet_interfaces = all'
-</screen>
-Open the <filename>/etc/postfix/sasl/smtpd.conf</filename> file and add
-the following lines to end of the file:
-<screen>
+</screen> Откройте файл <filename>/etc/postfix/sasl/smtpd.conf</filename> и добавьте следующие строки в его конец: <screen>
 pwcheck_method: saslauthd
 mech_list: plain login
-</screen>
-		</para>
+</screen></para>
 		</step>
 		<step><para>После этого, сконфигурируйте цифровой сертификат для TLS. Когда будут заданы вопросы, следуйте инструкциям и отвечайте соответствующим образом. <screen>
 openssl genrsa -des3 -rand /etc/hosts -out smtpd.key 1024
@@ -538,8 +515,7 @@ sudo mv cacert.pem /etc/ssl/certs/
 </screen></para>
 		<note><para>Вы можете получить цифровой сертификат у органа управления сертификатами. В качестве альтернативы, вы можете сами создать сертификат. Подробнее см. подраздел <ulink url="./web-servers.xml#creating-a-self-signed-certificate">Создание собственноручно подписанного сертификата</ulink>.</para></note>
 		</step>
-		<step><para>Configure Postfix to do TLS encryption for both incoming and outgoing mail:
-<screen>
+		<step><para>Настройте Postfix для использования шифрования TLS для исходящей и входящей почты: <screen>
 sudo postconf -e 'smtpd_tls_auth_only = no'
 sudo postconf -e 'smtp_use_tls = yes'
 sudo postconf -e 'smtpd_use_tls = yes'
@@ -552,18 +528,15 @@ sudo postconf -e 'smtpd_tls_received_header = yes'
 sudo postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
 sudo postconf -e 'tls_random_source = dev:/dev/urandom'
 sudo postconf -e 'myhostname = mail.example.com'
-</screen>
-		</para>
+</screen></para>
 		</step>
-		<step><para>Turn off the chroot operation for SMTP server. Locate
-    for the following line in
-      <filename>/etc/postfix/master.cf</filename> file:</para>
+		<step><para>Выключить команду chroot для сервера SMTP. Найдите следующую строку в файле <filename>/etc/postfix/master.cf</filename>:</para>
 <screen>
-smtp      inet  n       -       -       -       -       smtpd
+smtp inet n - - - - smtpd
 </screen>
-    <para>and modify it as follows:</para>
+    <para>и измените на:</para>
 <screen>
-smtp      inet  n       -       n       -       -       smtpd
+smtp inet n - n - - smtpd
 </screen>
 		</step>
 		</procedure>

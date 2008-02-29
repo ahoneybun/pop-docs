@@ -455,11 +455,7 @@
   </para>
 	<sect1 id="network-configuration" status="complete">
 		<title>Konfigurasi Jaringan</title>
-          <para>
-            Ubuntu ships with a number of graphical utilities to configure your network devices.
-			This document is geared toward server administrators and will focus on managing your
-			network on the command line.
-          </para>
+          <para>Ubuntu berisi sejumlah program dengan tampilan grafis untuk mengkonfigurasikan perangkat network anda. Dokumen ini ditujukan bagi server administrator dan berfokus pada pengelolaan network anda dengan menggunakan command line</para>
       <sect2 id="ethernet" status="complete">
         <title>Ethernet</title> 
           <para>
@@ -628,9 +624,7 @@ nameserver 208.185.179.218
 			configuration values must be set correctly in order to facilitate the proper network 
 			operation of your Ubuntu system.
             </para>
-            <para>
-            The common configuration elements of TCP/IP and their purposes are as follows:
-            <itemizedlist>
+            <para>Komponen-komponen umum konfigurasi TCP/IP dan kegunaannya adalah sebagai berikut: <itemizedlist>
                <listitem>
                   <para>
                   <emphasis role="bold">IP address</emphasis> The IP address is a unique
@@ -722,8 +716,7 @@ nameserver 208.185.179.218
 <screen><command>man resolv.conf</command></screen>
                     </para>
                </listitem>
-            </itemizedlist>
-            </para>
+            </itemizedlist></para>
         </sect2>
         <sect2 id="ip-routing" status="complete">
           <title>Routing IP</title>
@@ -810,7 +803,7 @@ nameserver 208.185.179.218
                 manually configuring each network host. Computers configured to be DHCP clients have
                 no control over the settings they receive from the DHCP server, and the configuration
                 is transparent to the computer's user.</para>
-            <para>The most common settings provided by a DHCP server to DHCP clients include:</para>
+            <para>Pengaturan umum yang di sediakan oleh server DHCP kepada klient DHCP termasuk:</para>
             <itemizedlist spacing="compact">
                 <listitem>
                     <para>IP-Address dan Netmask</para>
@@ -1013,16 +1006,11 @@ option netbios-name-servers 192.168.1.1; </screen>
             <para>Berikut ini adalah contoh bagian konfigurasi yang dapat Anda ubah:</para>
            <itemizedlist>
                <listitem>
-               <para>
-               To set your OpenSSH to listen on TCP port 2222 instead of the default TCP port 22, change
-               the Port directive as such:
-               </para>
+               <para>Untuk membuat OpenSSH listen pada port TCP 2222 bukan pada port TCP default 22, ubah parameter Port seperti berikut:</para>
                <para>Port 2222</para>
                </listitem>
 	<listitem>
-            <para>
-            To have <application>sshd</application> allow public key-based login credentials, simply add or modify the line:
-            </para>
+            <para>Untuk membuat <application>sshd</application> mengizinkan login berdasarkan public key-based, cukup tambahkan atau modifikasi baris berikut:</para>
                <para>PubkeyAuthentication yes</para>
             <para>
             in the <filename>/etc/ssh/sshd_config</filename> file, or if already present, ensure the line is not commented out.
@@ -1069,12 +1057,8 @@ option netbios-name-servers 192.168.1.1; </screen>
 
 	<sect1 id="NTP" status="complete">
 		<title>Sinkhronisasi Waktu dengan NTP</title>
-	<para>
-This page describes methods for keeping your computer's time accurate. This is useful for servers, but is not necessary (or desirable) for desktop machines. 
-</para>
-	<para>
-NTP is a TCP/IP protocol for synchronising time over a network. Basically a client requests the current time from a server, and uses it to set its own clock.  
-</para>
+	<para>Halaman berikut menjelaskan metoda untuk menjaga agar jam di komputer anda akurat. Hal ini berguna bagi server, tetapi tidak terlalu penting bagi komputer desktop.</para>
+	<para>NTP ada TPC/IP protocol untuk sinkronisasi waktu melalui jaringan. Secara mendasar dari sisi klien meminta nilai waktu di server, dan diset di komputer sisi klien.</para>
 	<para>
 Behind this simple description, there is a lot of complexity - there are tiers of NTP servers, with the tier one NTP servers connected to atomic clocks (often via GPS), and tier two and three servers spreading the load of actually handling requests across the internet. Also the client software is a lot more complex than you might think - it has to factor out communication delays, and adjust the time in a way that does not upset all the other processes that run on the server. But luckily all that complexity is hidden from you! 
 </para>
@@ -1105,35 +1089,15 @@ ntpdate is a bit of a blunt instrument - it can only adjust the time once a day,
 </sect2>
 <sect2 id="timeservers" status="complete">
 <title>Mengubah Server Waktu</title>
-	<para>
-In both cases above, your system will use Ubuntu's NTP server at 
-<code>ntp.ubuntu.com</code>
- by default. This is OK, but you might want to use several servers to increase accuracy and resilience, and you may want to use time servers that are geographically closer to you. to do this for ntpdate, change the contents of 
-<code>/etc/cron.daily/ntpdate</code>
- to: 
-</para>
+	<para>Pada kedua kasus di atas, sistem anda akan menggunakan server NTP milik Ubuntu di <code>ntp.ubuntu.com</code> sebagai standar. Konfigurasi ini tidak ada masalah, tetapi mungkin anda ingin menggunakan beberapa server untuk meningkatkan akurasi dan resilience, dan anda mungkin ingin menggunakan time server yang terdekat dengan anda secara geografis. Untuk melakukannya pada ntpdate, ubah isi dari file <code>/etc/cron.daily/ntpdate</code> menjadi:</para>
 <screen>ntpdate ntp.ubuntu.com pool.ntp.org 
 </screen>
 	<para>Dan untuk ntpd sunting <code>/etc/ntp.conf</code> untuk menyertakan berbagai server tambahan:</para>
 <screen>server ntp.ubuntu.com
 server pool.ntp.org
 </screen>
-	<para>
-You may notice 
-<code>pool.ntp.org</code>
- in the examples above. This is a really good idea which uses round-robin DNS to return an NTP server from a pool, spreading the load between several different servers. Even better, they have pools for different regions - for instance, if you are in New Zealand, so you could use  
-<code>nz.pool.ntp.org</code>
- instead of 
-<code>pool.ntp.org</code>
-. Look at 
-<ulink url="http://www.pool.ntp.org/">http://www.pool.ntp.org/</ulink>
- for more details. 
-</para>
-	<para>
-You can also Google for NTP servers in your region, and add these to your configuration. To test that a server works, just type 
-<code>sudo ntpdate ntp.server.name</code>
- and see what happens. 
-</para>
+	<para>Anda mungkin memperhatikan <code>pool.ntp.org</code> pada contoh di atas. Ini merupakan ide bagus untuk menggunakan round-robin DNS untuk memberikan alamat server dari sebuah pool, membagi beban dengan server lainnya. Bahkan lebih baik, server-server tersebut memiliki pool dari berbagai wilayah - misalnya, jika anda di New Zealand, anda dapat menggunakan <code>nz.pool.ntp.org</code> sebagai pengganti dari <code>pool.ntp.org</code>. Lihat <ulink url="http://www.pool.ntp.org/">http://www.pool.ntp.org/</ulink> untuk lebih detail.</para>
+	<para>Anda dapat mencari NTP server yang terdekat melalui mesin pencari Google, dan tambahkan alamat NTP tersebut ke file konfigurasi anda. Untuk mencoba apakah server tersebut berfungsi/aktif, ketikkan <code>sudo ntpdate ntp.server.name</code> dan perhatikan apa yang tampil di layar monitor anda.</para>
 <para/>
 </sect2>
 	<sect2 id="relatedpages" status="complete">

@@ -25,7 +25,7 @@
 # Group one - shipped docs
 for x in `cat libs/shipped-docs`; do
 	echo ${x}
-	xml2po -e -o ${x}/${x}.pot ${x}/C/*.xml ${x}/C/*-C.omf
+	xml2po -e -o ${x}/po/${x}.pot ${x}/C/*.xml ${x}/C/*-C.omf
 done
 
 # Group two - other docs

@@ -473,59 +473,34 @@
             <listitem><para>all</para></listitem>
             </itemizedlist></para>
             <note>
-            <para>Substitua mail.example.com pelo nome do seu servidor de email.</para>
+            <para>Substitua mail.example.com pelo nome do seu servidor de e-mail.</para>
             </note>
-            <para>
-            Now is a good time to decide which mailbox format you want to use.  By default 
-            Postifx will use  <emphasis role="strong">mbox</emphasis> for the mailbox format.
-            Rather than editing the configuration file directly, 
-	    you can use the <command>postconf</command> command to configure
-            all <application>postfix</application> parameters.  The
-            configuration parameters will be stored in
-            <filename>/etc/postfix/main.cf</filename> file. Later if you
-            wish to re-configure a particular parameter, you can either
-            run the command or change it manually in the file.
-            </para>
-            <para>
-            To configure the mailbox format for <emphasis role="strong">Maildir:</emphasis>
-            </para>
+            <para>Agora é uma boa hora para decidir qual formato de caixa de e-mails (mailbox) você quer usar. Por padrão o Postfix isrá usar <emphasis role="strong">mbox</emphasis> como formato da caixa de e-mails. Ao invés de editar o arquivo de configuração manualmente você pode usar o comando <command>postconf</command> para configurar todos os parâmetros do <application>postfix</application>. Os parâmetros de configuração serão guardados no arquivo <filename>/etc/postfix/main.cf</filename>. Se você desejar reconfigurar um parâmetro particilar, você pode tanto executar o comando como mudar manualmente o arquivo.</para>
+            <para>Para configurar o formato das caixas postais para <emphasis role="strong">Maildir:</emphasis></para>
 <screen>
 <command>sudo postconf -e 'home_mailbox = Maildir/'</command>
 </screen>
             <note>
-            <para>
-            This will place new mail in /home/<emphasis role="italic">username</emphasis>/Maildir so 
-            you'll need to configure your Mail Delivery Agent to use the same path.
-            </para>
+            <para>Isso irá colocar os e-mails novos em /home/<emphasis role="italic">username</emphasis>/Maildir então você precisará configurar seu Agente Entregador de E-mails (Mail Delivery Agent) para usar o mesmo caminho.</para>
             </note>
 	 </sect2>
         <sect2 id="postfix-smtp-authentication" status="complete">
           <title>Autenticação SMTP</title>
-            <para>The next steps are to configure
-            <application>postfix</application> to use SASL for SMTP
-            AUTH. 
-            </para>
+            <para>Os próximos passos destinam-se a configurar o <application>postfix</application> para usar SASL para SMTP AUTH.</para>
 	<procedure>
-		<step><para>Configure Postfix to do SMTP AUTH using SASL (saslauthd):
-<screen>
+		<step><para>Configure o Postfix para fazer SMTP AUTH usando SASL (saslauthd): <screen>
 sudo postconf -e 'smtpd_sasl_local_domain ='
 sudo postconf -e 'smtpd_sasl_auth_enable = yes'
 sudo postconf -e 'smtpd_sasl_security_options = noanonymous'
 sudo postconf -e 'broken_sasl_auth_clients = yes'
 sudo postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination'
 sudo postconf -e 'inet_interfaces = all'
-</screen>
-Open the <filename>/etc/postfix/sasl/smtpd.conf</filename> file and add
-the following lines to end of the file:
-<screen>
+</screen> Abra o arquivo <filename>/etc/postfix/sasl/smtpd.conf</filename> e adicione as seguintes linhas no final do arquivo: <screen>
 pwcheck_method: saslauthd
 mech_list: plain login
-</screen>
-		</para>
+</screen></para>
 		</step>
-		<step><para>Next, configure the digital certificate 
-            for TLS. When asked questions, follow the instructions and answer appropriately.
-<screen>
+		<step><para>Em seguida, configure o certificado digital para TLS. Quando questionado, siga as instruções e respondo-as adequadamente. <screen>
 openssl genrsa -des3 -rand /etc/hosts -out smtpd.key 1024
 chmod 600 smtpd.key
 openssl req -new -key smtpd.key -out smtpd.csr
@@ -537,17 +512,10 @@ sudo mv smtpd.key /etc/ssl/private/
 sudo mv smtpd.crt /etc/ssl/certs/
 sudo mv cakey.pem /etc/ssl/private/
 sudo mv cacert.pem /etc/ssl/certs/
-</screen>
-		</para>
-		<note><para>You can get the digital
-            certificate from a certificate authority. Alternatively, you
-            can create the certificate yourself. Refer to 
-			<ulink url="./web-servers.xml#creating-a-self-signed-certificate">Creating
-      a self Signed Certification</ulink> sub-section for more
-      details.</para></note>
+</screen></para>
+		<note><para>Você pode conseguir um certificado digitalde uma autoridade certificadora. Alternativamente, você pode criar seu próprio certificado. Para mais detalhes veja a sub-sessão <ulink url="./web-servers.xml#creating-a-self-signed-certificate">Criando uma sua Própria Certificação Assinada</ulink>.</para></note>
 		</step>
-		<step><para>Configure Postfix to do TLS encryption for both incoming and outgoing mail:
-<screen>
+		<step><para>Configure o Postfix para fazer encriptação TLS para os e-mails de entrada e de saída : <screen>
 sudo postconf -e 'smtpd_tls_auth_only = no'
 sudo postconf -e 'smtp_use_tls = yes'
 sudo postconf -e 'smtpd_use_tls = yes'
@@ -559,48 +527,34 @@ sudo postconf -e 'smtpd_tls_loglevel = 1'
 sudo postconf -e 'smtpd_tls_received_header = yes'
 sudo postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
 sudo postconf -e 'tls_random_source = dev:/dev/urandom'
-sudo postconf -e 'myhostname = mail.example.com'
-</screen>
-		</para>
+sudo postconf -e 'myhostname = mail.examplo.com'
+</screen></para>
 		</step>
-		<step><para>Turn off the chroot operation for SMTP server. Locate
-    for the following line in
-      <filename>/etc/postfix/master.cf</filename> file:</para>
+		<step><para>Desligar a operação de chroot para o servidor SMTP. Localize a seguinte linha no arquivo <filename>/etc/postfix/master.cf</filename>:</para>
 <screen>
 smtp      inet  n       -       -       -       -       smtpd
 </screen>
-    <para>and modify it as follows:</para>
+    <para>e modifique isso com o seguinte:</para>
 <screen>
 smtp      inet  n       -       n       -       -       smtpd
 </screen>
 		</step>
 		</procedure>
             <note>
-            <para>Depois que você executar todos os comandos, o SMTP AUTH é configurado com o <application>postfix</application>. O cerficado auto-assinado é criado para o TLS  e é configurado com o <application>postfix</application>.</para>
+            <para>Depois que você executar todos os comandos, o SMTP AUTH é configurado com o <application>postfix</application>. O certificado auto-assinado é criado para o TLS  e é configurado com o <application>postfix</application>.</para>
             </note>
             <para>Agora, o arquivo <filename>/etc/postfix/main.cf</filename> parecerá com <ulink url="../sample/postfix_configuration">este</ulink>.</para>
 		<para>A configuração inicial do postfix está completa. Execute o seguinte comando para iniciar o daemon do postfix: <screen><command>sudo /etc/init.d/postfix start</command></screen> Agora o <application>postfix</application> daemon está instalado, configurado e executando com sucesso. O <application>Postfix</application> suporta o SMTP AUTH como definido na <ulink url="ftp://ftp.isi.edu/in-notes/rfc2554.txt">RFC2554</ulink>. É baseado no <ulink url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>. Entretanto é necessário configurar a autenticação SASL antes de usar o SMTP.</para>
 	</sect2>
 	<sect2 id="sasl">
 	  <title>Configurando SASL</title>
-            <para>
-            The
-            <application>libsasl2-2</application>,
-            <application>sasl2-bin</application> and
-            <application>libsasl2-modules</application> are necessary to
-            enable SMTP AUTH using SASL. You can install these applications if
-            you have not installed them already.
-<screen>
+            <para>A <application>libsasl2-2</application>, o <application>sasl2-bin</application> e o <application>libsasl2-modules</application> são necessários para habilitar o SMTP AUTH usando SASL. Você pode instalar essas aplicações se você ainda não o fez. <screen>
 <command>sudo apt-get install libsasl2-2 sasl2-bin</command>
-</screen>
-	    </para>
-	    <para>
-		A few changes are necessary to make it work properly. Because <application>Postfix</application> runs chrooted in <filename>/var/spool/postfix</filename>, <application>SASL</application> needs to be configured to run in the false root (<filename>/var/run/saslauthd</filename> becomes <filename>/var/spool/postfix/var/run/saslauthd</filename>):
-<screen>
+</screen></para>
+	    <para>Poucas mudanças são necessárias para fazer com que isso funcione devidamente. Devido ao <application>Postfix</application> ser executado em um chroot em <filename>/var/spool/postfix</filename>, o <application>SASL</application> precisa ser configurado para rodar na falsa raiz (<filename>/var/run/saslauthd</filename> passa a ser <filename>/var/spool/postfix/var/run/saslauthd</filename>): <screen>
 <command>sudo mkdir -p /var/spool/postfix/var/run/saslauthd</command>
 <command>sudo rm -rf /var/run/saslauthd</command>
-</screen>
-	    </para>
+</screen></para>
 	    <para>Para ativar o <application>saslauthd</application>, edite o arquivo <filename>/etc/default/saslauthd</filename> e modifique ou adicione a variável START. Para configurar o <application>saslauthd</application> para rodar na raíz falsa, adicione as variáveis PWDIR, PIDFILE e PARAMS. Finalmente, configure a variável MECHANISMS à sua maneira. O arquivo deve se parecer com isso: <programlisting>
 # Isso deve ser descomentado antes que o saslauthd rode
 # automaticamente
@@ -621,12 +575,9 @@ MECHANISMS="pam"
 <note>
 <para>Se preferir, você pode utilizar <emphasis role="strong">shadow</emphasis> ao invés de <emphasis role="strong">pam</emphasis>. Ele irá usar transferência encriptada de senha MD5 e isso é perfeitamente seguro. O nome do usuário e a senha necessários para a autenticação serão aqueles  mesmos dos usuários do sistema que você está usando no servidor.</para>
 </note>
-        <para>
-Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd</filename>. The saslauthd init script uses this setting to create the missing directory with the appropriate permissions and ownership:
-<screen>
+        <para>A seguir, atualize o "estado" do dpkg de <filename>/var/spool/portfix/var/run/saslauthd</filename>. O script saslauthd init usa esta configuração para criar o diretório não encontrado com as apropriadas premissões e donos: <screen>
 <command>sudo dpkg-statoverride --force --update --add root sasl 755 /var/spool/postfix/var/run/saslauthd</command>
-</screen>
-        </para>
+</screen></para>
         </sect2>
         <sect2 id="postfix-testing" status="complete">
           <title>Testando</title>
@@ -654,34 +605,13 @@ Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd<
 <command>sudo dpkg-reconfigure exim4-config</command>
 </screen> A interface de usuário será mostrada. A interface de usuário permite a você configurar vários parâmetros. Por exemplo, no <application>exim4</application> os arquivos de configuração estão divididos em múltiplos arquivos. Se você quiser tê-los em um único arquivo você pode configurar isso através da interface de usuário.</para>
 
-            <para>
-            All the parameters you configure in the user interface are
-            stored in
-            <filename>/etc/exim4/update-exim4.conf.conf</filename> file.
-            If you wish to re-configure, either you re-run the
-            configuration wizard or manually edit this file
-            using your favourite editor. Once you configure, you can run
-            the following command to generate the master configuration
-            file:
-<screen>
+            <para>Todos os parâmetros que você configura através da interface de usuário são armazenados no arquivo <filename>/etc/exim4/update-exim4.conf.conf</filename>. Se você deseja reconfigurá-lo, então você deve rodar novamente o assistente de configuração ou editar esse arquivo manualmente usando o seu editor favorito. Uma vez que você o tenha configurado, você pode rodar o seguinte comando para gerar o arquivo de configuração principal: <screen>
 <command>sudo update-exim4.conf</command>
-</screen>
-            The master configuration file, is generated and
-            it is stored in
-            <filename>/var/lib/exim4/config.autogenerated</filename>. 
-            
-            <warning>
+</screen> O arquivo de configuração principal é gerado e é armazenado em <filename>/var/lib/exim4/config.autogenerated</filename>. <warning>
             <para>Em nenhum momento você deve editar o arquivo de configuração principal <filename>/var/lib/exim4/config.autogenerated</filename> manualmente. Ele é atualizado automaticamente toda vez que você roda o <command>update-exim4.conf</command></para>
-            </warning>
-            You can run
-            the following command to start
-            <application>exim4</application> daemon.
-<screen>
+            </warning> Você pode rodar o seguinte comando para iniciar o daemon do <application>exim4</application>. <screen>
 <command>sudo /etc/init.d/exim4 start</command>
-</screen>
-            <emphasis role="strong">TODO:</emphasis> This section should
-            cover configuring SMTP AUTH with exim4. 
-            </para>
+</screen><emphasis role="strong">TODO:</emphasis> Essa seção deverá cobrir a configuração da Autenticação SMTP com o exim4.</para>
         </sect2>
       </sect1>
       <sect1 id="dovecot-server" status="complete">
@@ -697,29 +627,15 @@ Next, update the dpkg "state" of <filename>/var/spool/portfix/var/run/saslauthd<
           <title>Configuração</title>
             <para>Para configurar o <application>dovecot</application>, você pode editar o arquivo <filename>/etc/dovecot/dovecot.conf</filename>. Você pode escolher o protocolo que você usa. Ele pode ser pop3, pop3s (pop3 seguro), imap e imaps (imap seguro). Uma descrição desses protocolos está além do escopo desse guia. Para maiores informações, consulte os artigos da wikipedia em <ulink url="http://pt.wikipedia.org/wiki/POP3">POP3</ulink> e <ulink url="http://pt.wikipedia.org/wiki/Internet_Message_Access_Protocol">IMAP</ulink>.</para>
 
-            <para>
-            IMAPS and POP3S are more secure that the simple IMAP and
-            POP3 because they use SSL encryption to connect. Once you
-            have chosen the protocol, amend the following line in the file
-            <filename>/etc/dovecot/dovecot.conf</filename>:
-<programlisting>
+            <para>IMAPS e POP3S são mais seguros que simplesmente IMAP e POP3 por quê usam criptografia SSL para conectar. Uma vez que você tenha escolhiso o protocolo, altere a seguinte linha no arquivo <filename>/etc/dovecot/dovecot.conf</filename>: <programlisting>
 protocols = pop3 pop3s imap imaps
-</programlisting>
-
-            It enables the protocols when <application>dovecot</application> is started. Next, add the following line in the pop3 section of the file <filename>/etc/dovecot/dovecot.conf</filename>:
-<programlisting>
+</programlisting> Isso habilita os protocolos quando o <application>dovecot</application> é iniciado. A seguir, adicione a seguinte linha na sessão pop3 do arquivo <filename>/etc/dovecot/dovecot.conf</filename>: <programlisting>
 pop3_uidl_format = %08Xu%08Xv
-</programlisting>
-
-            Next, choose the mailbox you use. <application>Dovecot</application> supports
-            <emphasis role="strong">maildir</emphasis> and <emphasis role="strong">mbox</emphasis> formats. These are the most
-            commonly used mailbox formats. They both have their own
-            benefits and they are discussed on <ulink url="http://wiki.dovecot.org/MailboxFormat">the dovecot website</ulink>.
-            </para>
+</programlisting> Em seguida, escolha uma caixa de e-mails (mailbox) para usar. O <application>Dovecot</application> suporta os formatos <emphasis role="strong">maildir</emphasis> e <emphasis role="strong">mbox</emphasis>. Estes são os formatos de caixa de e-mails mais usados. Ambos tem seus próprios benefícios e são discutidos no <ulink url="http://wiki.dovecot.org/MailboxFormat">website do dovecot</ulink>.</para>
             <para>Após escolhido o seu tipo de caixa de e-mail, edite o arquivo <filename>/etc/dovecot/dovecot.conf</filename> e modifique a seguinte linha: <programlisting>
-mail_location = maildir:~/Maildir # (for maildir)
-or
-mail_location = mbox:~/mail:INBOX=/var/spool/mail/%u # (for mbox)
+mail_location = maildir:~/Maildir # (para maildir)
+ou
+mail_location = mbox:~/mail:INBOX=/var/spool/mail/%u # (para mbox)
 </programlisting></para>
 <note>
 <para>Você deverá configurar seu Agente de Transporte de Email (Mail Transport Agent - MTA) para transferir os e-mails de entrada para esse tipo de caixa de e-mail se ele estiver diferente do que você configurou.</para>
@@ -734,26 +650,12 @@ Escape character is '^]'.
         </sect2>
         <sect2 id="dovecot-ssl" status="complete">
           <title>Configuração de SSL do Dovecot</title>
-            <para>
-            To configure <application>dovecot</application> to use SSL, you can edit the file
-            <filename>/etc/dovecot/dovecot.conf</filename> and amend
-            following lines:
-<programlisting>
+            <para>Para configurar o <application>dovecot</application> para usar SSL, você pode editar o arquivo <filename>/etc/dovecot/dovecot.conf</filename> e alterar as seguintes linhas: <programlisting>
 ssl_cert_file = /etc/ssl/certs/ssl-cert-snakeoil.pem
 ssl_key_file = /etc/ssl/private/ssl-cert-snakeoil.key
 ssl_disable = no
 disable_plaintext_auth = no
-</programlisting>
-
-          You can get the SSL certificate from a Certificate Issuing
-          Authority or you can create self signed SSL certificate. Please
-          refer to <xref linkend="creating-a-self-signed-certificate"/>
-          for details about how to create self signed SSL certificate. Once
-          you create the certificate, you will have a key file and a
-          certificate file.  Please copy them to the location pointed
-          in the <filename>/etc/dovecot/dovecot.conf</filename>
-          configuration file.
-          </para>
+</programlisting> Você pode adquirir o certificado de uma Autoridade Certificadora ou pode criar seu próprio certificado SSL. Por favor, veja <xref linkend="creating-a-self-signed-certificate"/> para detalhes sobre como criar seus próprios certificados SSL. Uma vez que você tenha criado o certificado, você terá um arquivo de chave e um arquivo de certificado. Por favor copie-os para o local apontado no arquivo de configuração <filename>/etc/dovecot/dovecot.conf</filename>.</para>
 	</sect2>
 	<sect2>
 	  <title>Configuração de Firewall para um Servidor de Email</title>
@@ -791,10 +693,7 @@ disable_plaintext_auth = no
             <para>Nós veremos como instalar o mailman, o servidor web apache e o servidor de e-mail Exim. Caso você queira instalar o mailman com um servidor de e-mail diferente, favor consultar a seção de referências.</para>
           <sect3 id="mailman-apache2">
             <title>Apache2</title>
-              <para>
-                To install apache2 you refer to <ulink url="./web-servers.xml#http-installation">HTTPD
-                Installation</ulink> section for details.
-              </para>
+              <para>Para instalar o apache2 veja a seção<ulink url="./web-servers.xml#http-installation">Instalação do HTTPD</ulink> para mais detalhes.</para>
           </sect3>
           <sect3 id="mailman-exim4">
             <title>Exim4</title>
@@ -802,7 +701,7 @@ disable_plaintext_auth = no
 <command>sudo apt-get install exim4</command>
 <command>sudo apt-get install exim4-base</command>
 <command>sudo apt-get install exim4-config</command>
-</screen> Depois que o exim4 estiver instalado, os arquivos de configuração estarão localizados no diretório <filename>/etc/exim4</filename>. No Ubuntu, por padrão, os arquivos de confguração do exim4 são distribuidos entre diferentes arquivos. Você pode mudar essa característica modificando a seguinte variável no arquivo <filename>/etc/exim4/update-exim4.conf</filename>: <itemizedlist spacing="compact">
+</screen> Depois que o exim4 estiver instalado, os arquivos de configuração estarão localizados no diretório <filename>/etc/exim4</filename>. No Ubuntu, por padrão, os arquivos de configuração do exim4 são distribuídos entre diferentes arquivos. Você pode mudar essa característica modificando a seguinte variável no arquivo <filename>/etc/exim4/update-exim4.conf</filename>: <itemizedlist spacing="compact">
               <listitem>
                 <para><application>dc_use_split_config='true'</application></para>
               </listitem>
@@ -865,7 +764,7 @@ domainlist mm_domains=hostname.com
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #
-# Estes valores são derivados daqueles acima and você não deverá 
+# Estes valores são derivados daqueles acima e você não deverá 
 # precisar editá-los a não ser que você tenha bagunçado a sua instalação
 # do mailman
 #
@@ -912,21 +811,11 @@ MM_LISTCHK=MM_HOME/lists/${lc::$local_part}/config.pck
           </sect3>
           <sect3 id="mailman-conf-mailman">
             <title>Mailman</title>
-              <para>
-Once mailman is installed, you can run it using the following command:
-<screen>
+              <para>Uma vez que o mailman esteja instalado, você pode executá-lo utilizando o seguinte comando: <screen>
 <command>sudo /etc/init.d/mailman start</command>
-</screen>
-
-Once mailman is installed, you should create the default mailing list.
-Run the following command to create the mailing list:
-
-
-<screen>
+</screen> Uma vez que o mailman esteja instalado, você deveria criar a lista de e-mail padrão. Execute o seguinte comando para criar a lista de e-mail: <screen>
 <command>sudo /usr/sbin/newlist mailman</command>
-</screen>
-
-<programlisting>
+</screen><programlisting>
   Informe o endereço de e-mail da pessoa que administra a lista: bhuvan at ubuntu.com
   Senha inicial do mailman:
   Para finalizar a criação de sua lista de e-mail, você deve editar o arquivo <filename>/etc/aliases</filename> (ou
@@ -948,30 +837,23 @@ Run the following command to create the mailing list:
   Aperte enter para notificar o proprietário mailman...
 
   # 
-</programlisting>
-
-We have configured exim to recognize all emails from mailman. So, it is
-not mandatory to make any new entries in
-<filename>/etc/aliases</filename>.  If you have made any changes
-to the configuration files, please ensure that you restart those
-services before continuing to next section.
-</para>
+</programlisting> Nós configuramos o exim para reconhecer todos os e-mails do mailman. Logo, não é imperativo fazer qualquer nova entrada em <filename>/etc/aliases</filename>. Caso você tenha feito alguma modificação nos arquivos de configuração, garanta, por favor, que tais serviços sejam reinicializados antes de continuar para a próxima seção.</para>
           </sect3>
         </sect2>
         <sect2 id="mailman-admin" status="complete">
           <title>Administração</title>
-<para>Nós assumimos que você tem uma instalação padrão. Os scripts cgi do mailman estãono diretório <application>/usr/lib/cgi-bin/mailman/</application>. Mailman provê a facilidade de administração baseada em web. Para acessar essa página, aponte seu navegador para  a seguinte url:</para>
+<para>Nós assumimos que você tem uma instalação padrão. Os scripts cgi do mailman estão no diretório <application>/usr/lib/cgi-bin/mailman/</application>. Mailman provê a facilidade de administração baseada em web. Para acessar essa página, aponte seu navegador para  a seguinte url:</para>
 <para>http://hostname/cgi-bin/mailman/admin</para>
 
-<para>A lista de email padrão, <emphasis>mailman</emphasis>, irá aparecer nessa tela. Se você clicar no nome da lista de email, isso irá solicitar a você a senha e autenticação. Se você entrar com a senha correta, você será capaz de alterar as configurações administrativas da lista de email. Você pode criar uma nova lista de email usando a linha de comando (<command>/usr/sbin/newlist</command>). Alternativamente, você pode criar uma nova lista de email usando a interface web.</para>
+<para>A lista de e-mail padrão, <emphasis>mailman</emphasis>, irá aparecer nessa tela. Se você clicar no nome da lista de e-mail, isso irá solicitar a você a senha e autenticação. Se você entrar com a senha correta, você será capaz de alterar as configurações administrativas da lista de e-mail. Você pode criar uma nova lista de email usando a linha de comando (<command>/usr/sbin/newlist</command>). Alternativamente, você pode criar uma nova lista de email usando a interface web.</para>
         </sect2>
         <sect2 id="mailman-users" status="complete">
           <title>Usuários</title>
-<para>O Mailman fornece uma interface web aos usuários. Para acessar essa página, aponte seu browser para a seguinte URL:</para>
+<para>O Mailman fornece uma interface web aos usuários. Para acessar essa página, aponte seu navegador para a seguinte URL:</para>
 
 <para>http://hostname/cgi-bin/mailman/listinfo</para>
 
-<para>A lista de e-mail padrão, <emphasis>mailman</emphasis>, aparecerá nesta tela. Se você clicar no nome da lista, será apresentado o formulário para inscrição. Você pode informar se endereço de e-mail, nome (opcional), e senha para se inscrever. Um convite será enviado a você por e-mail. Você pode seguir as instruções no email para se inscrever.</para>
+<para>A lista de e-mail padrão, <emphasis>mailman</emphasis>, aparecerá nesta tela. Se você clicar no nome da lista, será apresentado o formulário para inscrição. Você pode informar se endereço de e-mail, nome (opcional), e senha para se inscrever. Um convite será enviado a você por e-mail. Você pode seguir as instruções no e-mail para se inscrever.</para>
         </sect2>
         <sect2 id="mailman-references" status="complete">
           <title>Referências</title>

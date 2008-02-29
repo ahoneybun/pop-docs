@@ -445,29 +445,26 @@
 ]>
 <chapter id="windows-networking" status="complete">
 	<title>Jaringan Windows</title>
-  <para>Jaringan komputer seringkali terdiri dari sistem yang beragam, mengelola jaringan komputer yang terdiri dari komputer-komputer Ubuntu Desktop ataupun Ubuntu Server merupakan hal yang mudah, bahkan komputer-komputer Ubuntu dapat bekerja bersama dalam satu jaringan dengan komputer-komputer bersistem <trademark class="registered">Microsoft</trademark><trademark class="registered">Windows</trademark> secara harmonis. Panduan <phrase>Ubuntu</phrase> Server, khususnya bagian ini akan memperkenalkan prinsip-prinsip dan tools (umumnya adalah aplikasi) yang digunakan untuk mengkonfigurasi Ubuntu Server agar dapat melakukan sharing network resources dengan komputer-komputer yang menggunakan sistem operasi Windows.</para>
+  <para>Jaringan komputer seringkali terdiri dari sistem yang beragam, mengelola jaringan komputer yang terdiri dari komputer Ubuntu Desktop ataupun Ubuntu Server merupakan hal yang mudah dilakukan, bahkan komputer Ubuntu dapat bekerja bersama dalam satu jaringan dengan komputer bersistem <trademark class="registered">Microsoft</trademark><trademark class="registered">Windows</trademark> secara harmonis. Panduan Server <phrase>Ubuntu</phrase>, khususnya bagian ini akan memperkenalkan prinsip-prinsip dan alat (umumnya adalah aplikasi) yang digunakan untuk mengonfigurasi Server Ubuntu anda agar dapat melakukan pembagian sumber daya jaringan dengan komputer yang menggunakan sistem operasi Windows.</para>
 	<sect1 id="windows-networking-introduction" status="complete">
 		<title>Pengenalan</title>
-          <para>Kesuksesan jaringan sistem Ubuntu anda dengan client Windows melibatkan ketersediaan intregritas dengan service - service umum ke lingkungan Windows. Seperti service - service yang melayani sharing data dan informasi tentang komputer dan user - user yang terhubung kedalam jaringan, dam dapat diklasifikasikan dibawah tiga katagori utama berdasarkan fungsionalitasnya:</para>
+          <para>Suksesnya hubungan jaringan sistem Ubuntu anda dengan klien Windows didukung oleh ketersediaan dan intregritas dengan layanan umum ke lingkungan Windows. Seperti layanan yang melayani pembagian data dan informasi tentang komputer dan pengguna yang terhubung kedalam jaringan, dan dapat diklasifikasikan dibawah tiga kategori utama berdasarkan fungsionalitasnya:</para>
           <itemizedlist>
              <listitem>
-             <para><emphasis role="bold">Service File dan Printer Sharing</emphasis>. Menggunakan protocol Server Message Block (SMB) sebagai fasilitas untuk sharing file, folder, volumes, dan sharing printer keseluruh jaringan.</para>
+             <para><emphasis role="bold">Layanan Pembagian Berkas dan Pencetak</emphasis>. Menggunakan protocol Blok Pesan Server (SMB) sebagai fasilitas untuk berbagi berkas, folder, volume, dan berbagi pencetak keseluruh jaringan.</para>
              </listitem>
              <listitem>
-             <para><emphasis role="bold">Service Directory</emphasis>. Berbagi informasi penting tentang komputer dan user jaringan dengan menggunakan teknologi seperti Lighweight Directory Access Protocol (LDAP) dan Microsoft <trademark class="registered">Active Direktory&gt;/trademark&gt;.</trademark></para>
+             <para><emphasis role="bold">Layanan Direktori</emphasis>. Berbagi informasi penting tentang komputer dan pengguna jaringan dengan menggunakan teknologi seperti Protokol Akses Direktori Ringan (LDAP) dan Microsoft <trademark class="registered">Active Directory</trademark>.</para>
              </listitem>
              <listitem>
              <para><emphasis role="bold">Pembuktian Keaslian dan Akses</emphasis>. Menetapkan Identitas dari sebuah komputer atau seorang pengguna dari sebuah jaringan dan memutuskan bahwa komputer atau pengguna tersebut disahkan untuk mengakses menggunakan asas-asas dan teknologi seperti izin file (permission file), kebijakan kelompok (group policies), dan layanan pembuktian keaslian Kerberos (the Kerberos authentication service).</para>
              </listitem>
           </itemizedlist>
-          <para>Untungnya, sistem Ubuntu anda dapat menyediakan semua fasilitas kepada client Windows dan memungkinkan diantara mereka untuk saling berbagi sumberdaya jaringan. Salah satu dari sekian banyak software yang terdapat pada sistem Ubuntu anda termasuk untuk jaringan Windows adalah tools dan server aplikasi SMB SAMBA suite. Ini adalah bagian dari <phrase>Ubuntu</phrase>Panduan Server yang akan memperkenalkan secara singkat tentang installasi dan konfigurasi terbatas dari utiliti dan aplikasi server SAMBA suite. Informasi dan dokumentasi tambahan yang lebih rinci tentang SAMBA tidak terdapat pada dokumentasi ini, tapi berada pada <ulink url="http://www.samba.org">website SAMBA</ulink>.</para>
+          <para>Untungnya, sistem Ubuntu anda dapat menyediakan semua fasilitas kepada client Windows dan memungkinkan diantara mereka untuk saling berbagi sumberdaya jaringan. Salah satu dari sekian banyak software yang terdapat pada sistem Ubuntu anda termasuk untuk jaringan Windows adalah tools dan server aplikasi SMB SAMBA suite. Ini adalah bagian dari <phrase>Ubuntu</phrase>Panduan Server yang akan memperkenalkan secara singkat tentang installasi dan konfigurasi terbatas dari utiliti dan aplikasi server SAMBA suite. Informasi dan dokumentasi tambahan yang lebih rinci tentang SAMBA tidak terdapat pada dokumentasi ini, tapi berada pada <ulink url="http://www.samba.org">situs SAMBA</ulink>.</para>
     </sect1>
 	<sect1 id="installing-samba" status="complete">
 		<title>Menginstall SAMBA</title>
-          <para>
-          At the prompt enter the following command to install the SAMBA
-          server and client applications:
-          </para>
+          <para>Pada prompt masukkan perintah berikut untuk menginstal aplikasi server dan klien SAMBA:</para>
           <para>
 <screen>
 <command>sudo apt-get install samba smbclient</command>
@@ -552,12 +549,12 @@
                <para>
                   <emphasis role="bold">write list = @authors, richard</emphasis>
                </para>
-             <para>Simpat file<filename>/etc/samba/smb.conf</filename>untuk melihat perubahannya.</para>
-            <para>Hak lainnya yang mungkin adalah mendeklarasikan hak <emphasis role="italic">administrative</emphasis> pada folder yang di share. User yang memiliki hak administratif dapat mengakses, menulis atau modifikasi setiap informasi di folder yang dishare yang secara eksplisit memiliki hak akses administratif. Contohnya, jika anda hendak memberikan hak administratif kepada user <emphasis role="italic">melissa</emphasis> terhadap folder <emphasis role="italic">sourcedocs</emphasis> yang dishare, anda dapat mengedit file <filename>/etc/samba/smb.conf</filename>, dan tambahkan baris berikut di bawah kelompok <emphasis role="italic">[sourcedocs]</emphasis>:</para>
+             <para>Simpan berkas<filename>/etc/samba/smb.conf</filename>untuk melihat perubahannya.</para>
+            <para>Hak lainnya yang mungkin adalah mendeklarasikan hak <emphasis role="italic">administratif</emphasis> pada folder yang dibagi. Pengguna yang memiliki hak administratif dapat mengakses, menulis atau modifikasi setiap informasi di folder terbagi yang secara eksplisit memiliki hak akses administratif. Contohnya, jika anda hendak memberikan hak administratif kepada pengguna <emphasis role="italic">melissa</emphasis> terhadap folder <emphasis role="italic">sourcedocs</emphasis> yang dibagi, anda dapat menyunting berkas <filename>/etc/samba/smb.conf</filename>, dan tambahkan baris berikut di bawah kelompok <emphasis role="italic">[sourcedocs]</emphasis>:</para>
                <para>
                   <emphasis role="bold">admin users = melissa</emphasis>
                </para>
-             <para>Simpat file<filename>/etc/samba/smb.conf</filename>untuk melihat perubahannya.</para>
+             <para>Simpan berkas<filename>/etc/samba/smb.conf</filename>untuk melihat perubahannya.</para>
         </sect3>
       </sect2>
       <sect2 id="windows-networking-clients" status="complete">

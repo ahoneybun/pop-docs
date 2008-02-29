@@ -66,13 +66,17 @@ all: clean style server index serverguide switching status package
 
 	for doc in `cat libs/shipped-docs`; do xsltproc --xinclude -o $(BASE)$$doc/C/index.html $(UBUNTUCHUNKXSL) $$doc/C/$$doc.xml; done
 
+website: clean style server index
+
+	for doc in `cat libs/shipped-docs`; do xsltproc --xinclude -o $(BASE)$$doc/C/index.html $(UBUNTUCHUNKXSL) $$doc/C/$$doc.xml; done
+
 server:
 
 	xsltproc --xinclude -o $(BASE)server/C/index.html $(UBUNTUCHUNKXSL) ../generic/server/C/server.xml
 
 index:
 
-	xsltproc --stringparam html.stylesheet "../common/ubuntu-book.css" -o $(BASE)index.html $(UBUNTUCHUNKXSL) index.xml
+	xsltproc --stringparam html.stylesheet "common/ubuntu-book.css" -o $(BASE)index.html $(UBUNTUCHUNKXSL) index.xml
 
 clean:
 	rm -rf $(BASE)*
