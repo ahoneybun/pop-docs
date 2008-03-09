@@ -25,13 +25,11 @@
 # Group one - shipped docs
 for x in `cat libs/shipped-docs`; do
 	echo ${x}
-	xml2po -e -o ${x}/${x}.pot ${x}/C/*.xml ${x}/C/*-C.omf
+	xml2po -e -o ${x}/po/${x}.pot ${x}/C/*.xml ${x}/C/*-C.omf
 done
 
 # Group two - other docs
 
-	echo switching
-	xml2po -e -o switching/switching.pot switching/C/*.xml
 	echo server
-	xml2po -e -o ../generic/serverguide/serverguide.pot ../generic/serverguide/C/*xml ../generic/server/C/*xml
+	xml2po -e -o ../generic/serverguide/po/serverguide.pot ../generic/serverguide/C/*xml ../generic/server/C/*xml
 
