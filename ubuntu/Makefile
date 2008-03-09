@@ -62,9 +62,9 @@ IMAGES=../build/ubuntu/images/
 
 gdeb: 
 
-all: clean style server index serverguide switching status
+all: clean style server index serverguide switching status contributors
 
-	for doc in `cat libs/shipped-docs`; do xsltproc --xinclude -o $(BASE)$$doc/C/index.html $(UBUNTUCHUNKXSL) $$doc/C/$$doc.xml; done
+	for doc in `cat libs/shipped-docs`; do xsltproc --xinclude -o $(BASE)$$doc/C/index.html $(UBUNTUCHUNKXSL) $$doc/C/$$doc.xml; sed -i $(BASE)$$doc/C/ln-legal.html -e "s#\.\./common/C/contributors\.xml#common/C/contributors\.html#g"; done
 
 server:
 
@@ -110,8 +110,14 @@ switching:
 serverguide: style
 
 	xsltproc --xinclude -o $(BASE)serverguide/C/index.html $(UBUNTUCHUNKXSL) ../generic/serverguide/C/serverguide.xml
+	sed -i ../build/ubuntu/serverguide/C/ln-legal.html -e "s#\.\./common/C/contributors\.xml#common/C/contributors\.html#g"
+
 
 status: style
 
 	xsltproc --xinclude -o $(BASE)status/sg-report.xml $(wOS) ../generic/serverguide/C/serverguide.xml
 	xsltproc --xinclude -o $(BASE)status/sg-report.html $(NWDBXSL) $(BASE)status/sg-report.xml
+
+contributors: style
+
+	xsltproc --stringparam root.filename "contributors" -o $(BASE)common/C/ $(UBUNTUCHUNKXSL) ../common/C/contributors.xml

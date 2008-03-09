@@ -394,4 +394,115 @@
         </sect3>
       </sect2>
     </sect1>
+    <sect1 id="likewise-open" status="review">
+      <title>Likewise Open</title>
+      <para>
+      <application>Likewise Open</application> simplifies the necessary configuration needed to authenticate a Linux machine to an Active Directory
+      domain.  Based on <application>winbind</application>, the <application>likewise-open</application> package takes the pain out of integrating
+      Ubuntu authentication into an existing Windows network.
+      </para>
+      <sect2 id="likewise-open-install" status="review">
+	<title>Installation</title>
+	<para>
+	There are two ways to use Likwise Open, <application>likewise-open</application> the command line utility and 
+	<application>likewise-open-gui</application>.  This section focuses on the command line utillity.
+	</para>
+	<para>
+	To install the <application>likewise-open</application> package, open a terminal prompt and enter:
+	</para>
+<screen>
+<command>sudo apt-get install likewise-open</command>
+</screen>
+      </sect2>
+      <sect2 id="likewise-open-configuration" status="review">
+	<title>Joining a Domain</title>
+        <para>
+	The main executable file of the <application>likewise-open</application> package is <filename>/usr/bin/domainjoin-cli</filename>, 
+	which is used to join your computer to the domain. Before you join a domain you will need to make sure and have:
+	</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>
+	    Access to an Active Directory user with appropriate rights to join the domain.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	    The <emphasis>Fully Qualified Domain Name</emphasis> (FQDN) of the domain you want to join.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	    DNS for the domain setup properly.  In a production AD environment this should be the case.
+	    </para>
+	  </listitem>
+	</itemizedlist>
+	<para>
+	To join a domain, from a terminal prompt enter:
+	</para>
+<screen>
+<command>sudo domainjoin-cli join example.local Administrator</command>
+</screen>
+	<note>
+	  <para>
+	  Replace <emphasis>example.local</emphasis> with your domain name, and <emphasis>Administrator</emphasis> with the appropriate user name.
+	  </para>
+	</note>
+	<para>
+	You will then be prompted for the user's password.  If all goes well a <emphasis>SUCCESS</emphasis> message should be printed to the console.
+	</para>
+	<para>
+	After successfully joining an Ubuntu machine to an Active Directory domain you can authenticate using any valid AD user.  
+	To login you will need to enter the user name as 'domain\username'. For example to ssh to a server joined to the domain enter:
+	</para>
+<screen>
+<command>ssh 'example\steve'@hostname</command>
+</screen>
+	<note>
+	  <para>
+	  If configuring a Desktop the user name will need to be prefixed with <emphasis role="italic">domain\</emphasis> in the graphical logon as well.
+	  </para>
+	</note>
+	<para>
+	The <application>domainjoin-cli</application> utility can also be used to leave the domain.  From a terminal:
+	</para>
+<screen>
+<command>sudo domainjoin-cli leave</command>
+</screen>
+      </sect2>
+      <sect2 id="likewise-open-utilities" status="review">
+	<title>Other Utilities</title>
+	<para>
+	The <application>likewise-open</application> package comes with a few other utilities that may be useful for gathering information about the
+	Active Directory environment.  These utilities are used to join the machine to the domain, and are the same as those available in the 
+	<application>samba-common</application> and <application>winbind</application> packages:
+	</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>
+	    <application>lwinet</application>:  Returns information about the network and the domain.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	    <application>lwimsg</application>:  Allows interaction with the <application>likewise-winbindd</application> daemon.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	    <application>lwiinfo</application>:  Displays information about various parts of the Domain.
+	    </para>
+	  </listitem>
+	</itemizedlist>
+	<para>
+	Please refer to each utility's man page specific for details.
+	</para>
+      </sect2>
+      <sect2 id="likewise-open-references" status="review">
+	<title>References</title>
+	<para>
+	Please refere to the <ulink url="http://www.likewisesoftware.com/">Likewise</ulink> home page for further information.
+	</para>	
+      </sect2>
+    </sect1>
 	</chapter>

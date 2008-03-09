@@ -28,7 +28,7 @@
         Debian package files typically have the extension '.deb', and typically exist in <emphasis role="italics">repositories</emphasis> which are collections of packages found on various media, such as CD-ROM discs, or online.  Packages are normally of the pre-compiled binary format; thus installation is quick and requires no compiling of software.
         </para>
         <para>
-        Many complex packages use the concept of <emphasis role="italics">dependencies</emphasis>.  Dependencies are additional packages required by the principal package in order to function properly.  For example, the speech synthesis package <application>Festival</application> depends upon the package <application>festvox-kalpc16k</application>, which is a package supplying one of the voices used by the application.  In order for <application>Festival</application> to function, it and all of it's dependencies must be installed. The software management tools in Ubuntu will do this automatically.
+        Many complex packages use the concept of <emphasis role="italics">dependencies</emphasis>.  Dependencies are additional packages required by the principal package in order to function properly.  For example, the speech synthesis package <application>Festival</application> depends upon the package <application>libasound2</application>, which is a package supplying the <application>ALSA</application> sound library needed for audio playback.  In order for <application>Festival</application> to function, it and all of it's dependencies must be installed. The software management tools in Ubuntu will do this automatically.
         </para>
   </sect1>
   <sect1 id="apt-get" status="complete">
@@ -77,23 +77,14 @@
 <command>sudo apt-get upgrade</command>
 </screen>
                 </para>
-                <para>
-                If a package needs to install or remove new dependencies when being upgraded, it will not be upgraded by the <emphasis>upgrade</emphasis> command. For such an upgrade, it is necessary to use the <emphasis role="italics">dist-upgrade</emphasis> command.
-                </para>
-                <para>
-                Also, you may upgrade your entire Ubuntu system from one revision to another with dist-upgrade.  For example, to upgrade from Ubuntu version 6.06 to version &distro-rev;, you would first ensure the version &distro-rev; repositories replace the existing 6.06 repositories in your computer's <filename>/etc/apt/sources.list</filename>, then simply issue the <application>apt-get update</application> command as detailed above, and finally, perform the actual upgrade by typing:
-<screen>
-<command>sudo apt-get dist-upgrade</command>
-</screen>               
-                </para>
-                <para>
-                After a fairly considerable amount of time, your computer will be upgraded to the new revision. Typically, some post-upgrade steps would be required as detailed in the upgrade notes for the revision you are upgrading to.
-                </para>
-                <para>
-                Actions of the <application>apt-get</application> command, such as installation and removal of packages, are logged in the /var/log/dpkg.log log file.
-                </para>
+		<para>
+		For information on upgrading to a new Ubuntu release see <xref linkend="installing-upgrading"/>.
+		</para>
                 </listitem>
         </itemizedlist>
+        </para>
+        <para>
+        Actions of the <application>apt-get</application> command, such as installation and removal of packages, are logged in the /var/log/dpkg.log log file.
         </para>
 		<para>For further information about the use of <application>APT</application>, read the comprehensive <ulink url="&debian-apt;">Debian APT User Manual</ulink> or type: <screen>apt-get help</screen></para>
   </sect1>
@@ -188,7 +179,7 @@ as a normal user with the following command at a terminal prompt:
           <para>
 <screen>
 # no more prompting for CD-ROM please
-# deb cdrom:[Ubuntu 7.04 _Feisty Fawn_ - Release i386 (20070419.1)]/ feisty main restricted
+# deb cdrom:[&distro-apt-cd-name; - Release i386 (20070419.1)]/ &distro-short-codename; main restricted
 </screen>
           </para>
           
@@ -208,18 +199,31 @@ as a normal user with the following command at a terminal prompt:
           Many other package sources are available, sometimes even offering only one package, as in the case of package sources provided by the developer of a single application.  You should always be very careful and cautious when using non-standard package sources, however.  Research the source and packages carefully before performing any installation, as some package sources and their packages could render your system unstable or non-functional in some respects.
           </para>
           <para>
-          Starting &distro-version;, by default, the
-          <emphasis>Universe</emphasis> and
-          <emphasis>Multiverse</emphasis> repositories are enabled. But if
-          you have disabled them, add or edit the
-          <filename>/etc/apt/sources.list</filename> file and uncomment
-          the following lines to enable those repositories:
+          By default, the <emphasis>Universe</emphasis> and
+          <emphasis>Multiverse</emphasis> repositories are enabled but if
+          you would like to disable them edit <filename>/etc/apt/sources.list</filename> 
+	  and comment the following lines:
           </para>
           <para>
-<screen>
-deb http://archive.ubuntu.com/ubuntu feisty universe multiverse
-deb-src http://archive.ubuntu.com/ubuntu feisty universe multiverse
-</screen>
+<programlisting>
+deb http://archive.ubuntu.com/ubuntu &distro-short-codename; universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu &distro-short-codename; universe multiverse
+
+deb http://us.archive.ubuntu.com/ubuntu/ &distro-short-codename; universe
+deb-src http://us.archive.ubuntu.com/ubuntu/ &distro-short-codename; universe
+deb http://us.archive.ubuntu.com/ubuntu/ &distro-short-codename;-updates universe
+deb-src http://us.archive.ubuntu.com/ubuntu/ &distro-short-codename;-updates universe
+
+deb http://us.archive.ubuntu.com/ubuntu/ &distro-short-codename; multiverse
+deb-src http://us.archive.ubuntu.com/ubuntu/ &distro-short-codename; multiverse
+deb http://us.archive.ubuntu.com/ubuntu/ &distro-short-codename;-updates multiverse
+deb-src http://us.archive.ubuntu.com/ubuntu/ &distro-short-codename;-updates multiverse
+
+deb http://security.ubuntu.com/ubuntu &distro-short-codename;-security universe
+deb-src http://security.ubuntu.com/ubuntu &distro-short-codename;-security universe
+deb http://security.ubuntu.com/ubuntu &distro-short-codename;-security multiverse
+deb-src http://security.ubuntu.com/ubuntu &distro-short-codename;-security multiverse
+</programlisting>
           </para>
           <sect2 id="extra-repositories-references" status="complete">
                 <title>References</title>
