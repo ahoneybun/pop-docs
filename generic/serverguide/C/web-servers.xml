@@ -245,11 +245,15 @@
             Some options are specified on a per-directory basis rather than per-server.
 			Option is one of these directives.  A Directory stanza is enclosed in 
 			XML-like tags, like so:
-			<screen><command>&lt;Directory /var/www/mynewsite&gt;
+	    </para>
+<screen>
+<command>&lt;Directory /var/www/mynewsite&gt;
 ...
-&lt;/Directory&gt;</command></screen>
-			The Options directive within a Directory stanza accepts one or more of the
-			following values (among others), separated by spaces:
+&lt;/Directory&gt;</command>
+</screen>
+	    <para>
+	    The Options directive within a Directory stanza accepts one or more of the
+	    following values (among others), separated by spaces:
             </para>
             <itemizedlist spacing="compact">
                 <listitem>
@@ -269,7 +273,7 @@
 					Server-side includes allow an HTML file to <emphasis>
 					include</emphasis> other files.  This is not a common option.  See
 					<ulink url="http://httpd.apache.org/docs/2.2/howto/ssi.html">the Apache2
-					SSI Howto</ulink> for mor information.</para>
+					SSI Howto</ulink> for more information.</para>
                 </listitem>
                 <listitem>
                     <para><emphasis
@@ -511,7 +515,7 @@ SSLCertificateKeyFile /etc/ssl/private/server.key
       can enter the following command in the terminal prompt:
 
 <screen>
-<command>sudo apt-get install php5-common php5 libapache2-mod-php5</command>
+<command>sudo apt-get install php5 libapache2-mod-php5</command>
 </screen>
 </para>
 
@@ -625,7 +629,7 @@ print_r (phpinfo());
           </para>
           <para>
 <screen>
-<command>sudo apt-get install squid squid-common</command>
+<command>sudo apt-get install squid</command>
 </screen>
           </para>
       </sect2>
@@ -656,18 +660,18 @@ print_r (phpinfo());
                   To set your Squid server to listen on TCP port 8888 instead of the default TCP port 3128, change
                   the http_port directive as such:
                   </para>
-                  <para>
-                  http_port 8888
-                  </para>
+<programlisting>
+http_port 8888
+</programlisting>
                </listitem>
 	            <listitem>
                   <para>
                   Change the visible_hostname directive in order to give the Squid server a specific hostname.  This hostname
                   does not necessarily need to be the computer's hostname. In this example it is set to <emphasis>weezie</emphasis>
                   </para>
-                  <para>
-                  visible_hostname weezie
-                  </para>
+<programlisting>
+visible_hostname weezie
+</programlisting>
                </listitem>
                <listitem>
                   <para>
@@ -678,16 +682,16 @@ print_r (phpinfo());
                   <para>
                      Add the following to the <emphasis role="bold">bottom</emphasis> of the ACL section of your <filename>/etc/squid/squid.conf</filename> file:
                   </para>
-                  <para>
-                     acl fortytwo_network src 192.168.42.0/24
-                  </para>
+<programlisting>
+acl fortytwo_network src 192.168.42.0/24
+</programlisting>
                   <para>
                      Then, add the following to the <emphasis role="bold">top</emphasis> of the http_access section of your
                      <filename>/etc/squid/squid.conf</filename> file:
                   </para>
-                  <para>
-                     http_access allow fortytwo_network
-                  </para>
+<programlisting>
+http_access allow fortytwo_network
+</programlisting>
                </listitem>
                <listitem>
                   <para>
@@ -698,17 +702,17 @@ print_r (phpinfo());
                   <para>
                      Add the following to the <emphasis role="bold">bottom</emphasis> of the ACL section of your <filename>/etc/squid/squid.conf</filename> file:
                   </para>
-                  <para>
-                     acl biz_network src 10.1.42.0/24
-                     acl biz_hours time M T W T F 9:00-17:00
-                  </para>
+<programlisting>
+acl biz_network src 10.1.42.0/24
+acl biz_hours time M T W T F 9:00-17:00
+</programlisting>
                   <para>
                      Then, add the following to the <emphasis role="bold">top</emphasis> of the http_access section of your
                      <filename>/etc/squid/squid.conf</filename> file:
                   </para>
-                  <para>
-                     http_access allow biz_network biz_hours
-                  </para>
+<programlisting>
+http_access allow biz_network biz_hours
+</programlisting>
                </listitem>
           </itemizedlist>
           </para>
@@ -808,8 +812,8 @@ DocumentRoot /path/to/rails/application/public
     <application>Apache</application> process:
     </para>
 <screen>
-<command>chown -R www-data:www-data /path/to/rails/application/public</command>
-<command>chown -R www-data:www-data /path/to/rails/application/tmp</command>
+<command>sudo chown -R www-data:www-data /path/to/rails/application/public</command>
+<command>sudo chown -R www-data:www-data /path/to/rails/application/tmp</command>
 </screen>
 
     <para>Thats it! Now you have your Server ready for your

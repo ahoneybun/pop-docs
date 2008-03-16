@@ -72,7 +72,7 @@ server:
 
 index:
 
-	xsltproc --stringparam html.stylesheet "../common/ubuntu-book.css" -o $(BASE)index.html $(UBUNTUCHUNKXSL) index.xml
+	xsltproc --stringparam html.stylesheet "common/ubuntu-book.css" -o $(BASE)index.html $(UBUNTUCHUNKXSL) index.xml
 
 clean:
 	rm -rf $(BASE)*
@@ -121,3 +121,36 @@ status: style
 contributors: style
 
 	xsltproc --stringparam root.filename "contributors" -o $(BASE)common/C/ $(UBUNTUCHUNKXSL) ../common/C/contributors.xml
+
+index-test: style
+
+	xsltproc --xinclude -o $(BASE)index-test/ $(UBUNTUCHUNKXSL) index2.xml
+	sed -i $(BASE)index-test/*.html -e "s#ghelp:add-applications#add-applications.html#g"
+
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:administrative##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:users-admin##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:server##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:basic-commands##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:programming##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:user-guide\#panels##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:user-guide\#menubar##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:user-guide\#prefs##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:desktop-effects##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:add-applications\#synaptic##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:hardware\#restricted-manager##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:user-guide\#nautilus##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:hardware\#disks##g"
+#
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:server##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:server##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:server##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:server##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:server##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:server##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:server##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:server##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:server##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:server##g"
+#	sed -i $(BASE)index-test/*.html -e "s#ghelp:server##g"
+#
+
