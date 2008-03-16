@@ -34,7 +34,7 @@ common-binary-post-install-indep::
 # Install the documents; skip documents which are less than 40% translated
 
 	set -x; for doc in `cat ubuntu/libs/shipped-docs`; do \
-		numstrings=`LANG=C msgfmt --statistics ubuntu/$$doc/*.pot 2>&1 | sed -r 's/^.* ([[:digit:]]+) untranslated.*$$/\1/'`; \
+		numstrings=`LANG=C msgfmt --statistics ubuntu/$$doc/po/$$doc.pot 2>&1 | sed -r 's/^.* ([[:digit:]]+) untranslated.*$$/\1/'`; \
 			for lang in `ls ubuntu/$$doc/`; do \
 				if [ -e ubuntu/$$doc/po/$$lang.po ]; then \
 					translated=`LANG=C msgfmt -o /dev/null --statistics ubuntu/$$doc/po/$$lang.po 2>&1| cut -f1 -d\ `; \
@@ -56,8 +56,8 @@ common-binary-post-install-indep::
 
 # Server material is done slightly differently
 
-		for doc in server; do \
-            numstrings=`LANG=C msgfmt --statistics generic/serverguide/*.pot 2>&1 | sed -r 's/^.* ([[:digit:]]+) untranslated.*$$/\1/'`; \
+	set -x;	for doc in serverguide; do \
+	       numstrings=`LANG=C msgfmt --statistics generic/serverguide/po/*.pot 2>&1 | sed -r 's/^.* ([[:digit:]]+) untranslated.*$$/\1/'`; \
 			for lang in `ls generic/$$doc/`; do \
 				if [ -e generic/serverguide/po/$$lang.po ]; then \
 					translated=`LANG=C msgfmt -o /dev/null --statistics generic/serverguide/po/$$lang.po 2>&1| cut -f1 -d\ `; \

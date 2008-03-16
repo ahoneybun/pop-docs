@@ -137,7 +137,7 @@ sudo postconf -e 'inet_interfaces = all'
 openssl genrsa -des3 -rand /etc/hosts -out smtpd.key 1024
 chmod 600 smtpd.key
 openssl req -new -key smtpd.key -out smtpd.csr
-openssl x509 -req -days 365 -in smtpd.csr -signkey smtpd.key -out smtpd.crt
+sudo openssl x509 -req -days 365 -in smtpd.csr -signkey smtpd.key -out smtpd.crt
 openssl rsa -in smtpd.key -out smtpd.key.unencrypted
 mv -f smtpd.key.unencrypted smtpd.key
 openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650
@@ -153,8 +153,7 @@ sudo mv cacert.pem /etc/ssl/certs/
 		complain about
 		"self-signed certificates", so alternatively, you
                 can create the certificate yourself. Refer to 
-		<ulink url="./web-servers.xml#creating-a-self-signed-certificate">Creating
-	        a self Signed Certification</ulink> sub-section for more
+		<xref linkend="creating-a-self-signed-certificate"/> for more
                 details.
                 </para>
                 </note>
@@ -191,10 +190,10 @@ sudo postconf -e 'myhostname = mail.example.com'
 	    </para>
 	    <para>
             The postfix initial configuration is complete. Run
-            the following command to start the postfix daemon:
+            the following command to restart the postfix daemon:
 	    </para>
 <screen>
-<command>sudo /etc/init.d/postfix start</command>
+<command>sudo /etc/init.d/postfix restart</command>
 </screen>
 	    <para>
             <application>Postfix</application> supports SMTP-AUTH as defined in
@@ -243,10 +242,10 @@ sudo postconf -e 'myhostname = mail.example.com'
   }
 </programlisting>
 	    <para>
-	    Once you have <application>Dovecot</application> configured start it with:
+	    Once you have <application>Dovecot</application> configured restart it with:
 	    </para>
 <screen>
-<command>sudo /etc/init.d/dovecot start</command>
+<command>sudo /etc/init.d/dovecot restart</command>
 </screen>
         </sect2>
         <sect2 id="postfix-testing" status="complete">
@@ -585,7 +584,7 @@ START=yes
             command prompt:
 	    </para>
 <screen>
-<command>sudo apt-get install dovecot-common dovecot-imapd dovecot-pop3d</command>
+<command>sudo apt-get install dovecot-imapd dovecot-pop3d</command>
 </screen>
         </sect2>
         <sect2 id="dovecot-configuration" status="complete">
@@ -610,17 +609,11 @@ START=yes
 protocols = pop3 pop3s imap imaps
 </programlisting>
 	    <para>
-            It enables the protocols when <application>dovecot</application> is started. Next, add the following line in the pop3 section of the file <filename>/etc/dovecot/dovecot.conf</filename>:
-	    </para>
-<programlisting>
-pop3_uidl_format = %08Xu%08Xv
-</programlisting>
-	    <para>
-            Next, choose the mailbox you use. <application>Dovecot</application> supports
+            Next, choose the mailbox you would like to use. <application>Dovecot</application> supports
             <emphasis role="strong">maildir</emphasis> and <emphasis
             role="strong">mbox</emphasis> formats. These are the most
             commonly used mailbox formats. They both have their own
-            benefits and they are discussed on <ulink
+            benefits and are discussed on <ulink
             url="http://wiki.dovecot.org/MailboxFormat">the dovecot website</ulink>.
             </para>
             <para>
@@ -641,10 +634,10 @@ mail_location = mbox:~/mail:INBOX=/var/spool/mail/%u # (for mbox)
 	  </para>
 	  </note>
           <para>
-          Once you have configured dovecot, start the <application>dovecot</application> daemon
+          Once you have configured dovecot, restart the <application>dovecot</application> daemon
           in order to test your setup:
 	  </para>
-          <screen><command>sudo /etc/init.d/dovecot start</command></screen>
+          <screen><command>sudo /etc/init.d/dovecot restart</command></screen>
 	  <para>
           If you have enabled imap, or pop3, you can also try to log in
           with the commands <command>telnet localhost pop3</command> or
@@ -679,7 +672,7 @@ disable_plaintext_auth = no
 	  The latter is a good option for email, because SMTP clients rarely
 	  complain about "self-signed certificates".
 	  Please
-          refer to <xref linkend="creating-a-self-signed-certificate"/>
+          refer to <xref linkend="certificates-and-security"/>
           for details about how to create self signed SSL certificate. Once
           you create the certificate, you will have a key file and a
           certificate file.  Please copy them to the location pointed
@@ -1202,11 +1195,8 @@ instructions in the email to subscribe.
 	   To install the rest of the applications enter the following from a terminal prompt:
 	   </para>
 <screen>
-<command>sudo apt-get install amavisd-new</command>
-<command>sudo apt-get install spamassassin</command>
-<command>sudo apt-get install clamav-daemon</command>
-<command>sudo apt-get install dkim-filter</command>
-<command>sudo apt-get install python-policyd-spf</command>
+<command>sudo apt-get install amavisd-new spamassassin clamav-daemon</command>
+<command>sudo apt-get install dkim-filter python-policyd-spf</command>
 </screen>
   	<para>
 	There are some optional packages that integrate with <application>Spamassassin</application> for better spam detection:
@@ -1234,11 +1224,11 @@ instructions in the email to subscribe.
 	     <filename>/etc/clamav</filename>.
 	     </para>
 	     <para>
-	     Add the <emphasis>clamav</emphasis> user to the <emphasis>amavis</emphasis> group in order for <application>Amavisd-new</application>
+	     Add the <emphasis>amavis</emphasis> user to the <emphasis>clamav</emphasis> group in order for <application>Amavisd-new</application>
  	     to have the appropriate access to scan files:
  	     </para>
 <screen>
-<command>sudo adduser clamav amavis</command>
+<command>sudo adduser amavis clamav</command>
 </screen>
 	   </sect3>
 	   <sect3 id="spamassassin-configuration" status="review">
@@ -1319,13 +1309,13 @@ $final_spam_destiny       = D_DISCARD;
 	     Next edit <filename>/etc/postfix/master.cf</filename> and add the following to the end of the file:	
 	     </para>
 <programlisting>
-smtp-amavis     unix                                2       smtp
+smtp-amavis     unix    -       -       -       -       2       smtp
         -o smtp_data_done_timeout=1200
         -o smtp_send_xforward_command=yes
         -o disable_dns_lookups=yes
         -o max_use=20
 
-127.0.0.1:10025 inet    n                                   smtpd
+127.0.0.1:10025 inet    n       -       -       -       -       smtpd
         -o content_filter=
         -o local_recipient_maps=
         -o relay_recipient_maps=
