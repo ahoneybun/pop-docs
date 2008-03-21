@@ -88,6 +88,22 @@ iface br0 inet static
 <screen>
 <command>sudo /etc/init.d/networking restart</command>
 </screen>
+    <para>
+    If setting up a bridge interface using Ubuntu Desktop Edition, or if <application>dhcdbd</application> is installed,  the 
+    <application>dhcdbd</application> daemon will need to be stopped and disabled.  
+    </para>
+    <para>
+    After configuring the bridge in <filename>/etc/network/interfaces</filename>, shutdown <application>dhcdbd</application> by:
+    </para>
+<screen>
+<command>sudo /etc/init.d/dhcdbd stop</command>
+</screen>
+    <para>
+    Now to disable it from starting on boot enter:
+    </para>
+<screen>
+<command>sudo update-rc.d -f dhcdbd remove</command>
+</screen>
     </sect2>
     <sect2 id='libvirt-installation' status='review'>
       <title>Installation</title>
@@ -115,7 +131,7 @@ iface br0 inet static
       <para>
       You are now ready to install a <emphasis>Guest</emphasis> operating system.  Installing a virtual machine follows the same
       process as installing the operating system directly on the hardware.  You either need a way to automate the installation, or 
-      a keyboard and monitor will need to be attached to the machine.  
+      a keyboard and monitor will need to be attached to the physical machine.  
       </para>
       <para>
       In the case of virtual machines a Graphical User Interface (GUI) is analogous to using a physical keyboard and mouse.  Instead of installing
@@ -127,7 +143,8 @@ iface br0 inet static
       preseeds, kickstart, etc.  Refer to the <ulink url="https://help.ubuntu.com/&distro-rev;/installation-guide/">Ubuntu Installation Guide</ulink> for details.
       </para>
       <para>
-      Another way to install an Ubuntu virtual machine is to use <application>ubuntu-vm-builder</application>.  For details see <xref linkend="ubuntu-vm-builder"/>
+      Yet another way to install an Ubuntu virtual machine is to use <application>ubuntu-vm-builder</application>.  <application>ubuntu-vm-builder</application> 
+      allows you to setup advanced partitions, execute custom post-install scripts, etc.  For details see <xref linkend="ubuntu-vm-builder"/>
       </para>
     </sect2>
     <sect2 id='libvirt-virt-install' status='review'>
@@ -158,7 +175,7 @@ iface br0 inet static
         <listitem>
           <para>
           <emphasis>-f web_devel.img:</emphasis> indicates the path to the virtual disk which can be a file, partition, or logical volume.
-          In this exmaple a file named <filename>web_devel.img</filename>.
+          In this example a file named <filename>web_devel.img</filename>.
           </para>
         </listitem>
         <listitem>
@@ -204,7 +221,7 @@ iface br0 inet static
       <itemizedlist>
         <listitem>
           <para>
-          <emphasis>-o:</emphasis> orginal virtual machine.
+          <emphasis>-o:</emphasis> original virtual machine.
           </para>
         </listitem>
         <listitem>
@@ -344,7 +361,8 @@ iface br0 inet static
         <note>
           <para>
           The above example assumes that <application>SSH</application> connectivity between the management system and virtnode1.mydomain.com 
-          has already been configured, and uses ssh keys for authentication.  For details on configuring 
+          has already been configured, and uses SSH keys for authentication.  SSH <emphasis>keys</emphasis> are needed because 
+          <application>libvirt</application> sends the password prompt to another process.  For details on configuring 
 	  <application>SSH</application> see <xref linkend="openssh-server"/>
           </para>
         </note>
@@ -363,15 +381,14 @@ iface br0 inet static
 <command>sudo apt-get install virt-viewer</command>
 </screen>
       <para>
-      Once a virtual machine is installed and running you can connect to the virtual machine's console using 
-      by:
+      Once a virtual machine is installed and running you can connect to the virtual machine's console by using:
       </para>
 <screen>
 <command>virt-viewer qemu:///system web_devel</command>
 </screen>
       <para>
       Similar to <application>virt-manager</application>, <application>virt-viewer</application> can connect to a remote host using 
-      <emphasis>SSH</emphasis> as well:
+      <emphasis>SSH</emphasis> with key authentication, as well:
       </para>
 <screen>
 <command>virt-viewer -c qemu+ssh://virtnode1.mydomain.com/system web_devel</command>
@@ -419,9 +436,9 @@ iface br0 inet static
     can be used to create customized virtual machines.
     </para>
     <para>
-    <application>ubuntu-vm-builder</application> provides a method to quickly create a clean testing environmnet, a way to automate the 
-    virtual machine installation process, and for software developers, the ablility to integrate the creation of a virtual machine into 
-    the build proccess of an application.  If using a local mirror the virtual machine creation process can take less than two minutes 
+    <application>ubuntu-vm-builder</application> provides a method to quickly create a clean testing environment, a way to automate the 
+    virtual machine installation process, and for software developers, the ability to integrate the creation of a virtual machine into 
+    the build process of an application.  If using a local mirror the virtual machine creation process can take less than two minutes 
     from start to finish.
     </para>
     <para>
