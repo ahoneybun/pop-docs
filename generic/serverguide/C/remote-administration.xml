@@ -168,6 +168,41 @@
                   </para>
                 </warning>
         </sect2>
+   <sect2 id="openssh-keys" status="review">
+     <title>SSH Keys</title>
+     <para>
+     SSH <emphasis>keys</emphasis> allow authentication between two hosts without the need of a password.  SSH key authentication 
+     uses two keys a <emphasis>private</emphasis> key and a <emphasis>public</emphasis> key.
+     </para>
+     <para>
+     To generate the keys, from a terminal prompt enter:
+     </para>
+<screen>
+<command>ssh-keygen -t dsa</command>
+</screen>
+     <para>
+     This will generate the keys using a <emphasis>DSA</emphasis> authentication identity of the user.  During the process you
+     will be prompted for a password.  Simply hit <emphasis>Enter</emphasis> when prompted to create the key.  
+     </para>
+     <para>
+     By default the <emphasis>public</emphasis> key is saved in the file <filename>~/.ssh/id_dsa.pub</filename>, while 
+     <filename>~/.ssh/id_dsa</filename> is the <emphasis>private</emphasis> key.  Now copy the <filename>id_dsa.pub</filename> file
+     to the remote host and appended it to <filename>~/.ssh/authorized_keys2</filename>:
+     </para>
+<screen>
+<command>cat id_dsa.pub >> .ssh/authorized_keys2</command>
+</screen>
+     <para>
+     Finally, double check the permissions on the <filename>authorized_keys2</filename> file, only the authenticated user should have read and write permissions.
+     If the permissions are not correct change them by:
+     </para>
+<screen>
+<command>chmod 644 .ssh/authorized_keys2</command>
+</screen>
+     <para>
+     You should now be able to SSH to the host without being prompted for a password.
+     </para>
+   </sect2>
    <sect2 id="openssh-references" status="complete">
       <title>References</title>
       <para>
@@ -367,7 +402,7 @@
     <sect2 id="ebox-additional-modules" status="review">
       <title>Additional Modules</title>
       <para>
-      Here is a quick description of other availble <application>eBox</application> modules:
+      Here is a quick description of other available <application>eBox</application> modules:
       </para> 
       <itemizedlist>
         <listitem>
