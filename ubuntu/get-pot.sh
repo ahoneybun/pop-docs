@@ -31,5 +31,5 @@ done
 # Group two - other docs
 
 	echo server
-	xml2po -e -o ../generic/serverguide/po/serverguide.pot ../generic/serverguide/C/*xml
+	xml2po -e -o ../generic/serverguide/po/serverguide.pot ../generic/serverguide/C/*xml ../generic/serverguide/C/*omf
 
