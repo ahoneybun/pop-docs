@@ -55,7 +55,7 @@ choose_language () {
 	if [ ${2} ]; then
 		translate "po/${2}.po"
 	else
-		for x in po/*; do
+		for x in po/*.po; do
 			translate ${x}
 		done
 	fi
