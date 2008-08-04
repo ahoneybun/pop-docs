@@ -487,11 +487,54 @@ $1$s3YiK$M3lxAbqA6JLm2FbDWnClQ0</computeroutput>
 		</para>
 	      </listitem>
               <listitem>
+
+                <para>
+                Adding the <emphasis>--dry-run</emphasis> option to a <emphasis>ufw</emphasis> command will output the resulting
+                rules, but not apply them.  For example, the following is what would be applied if opening the HTTP port:
+                </para>
+
+<screen>
+<command> sudo ufw --dry-run allow http</command>
+</screen>
+
+<screen>
+<computeroutput>*filter
+:ufw-user-input - [0:0]
+:ufw-user-output - [0:0]
+:ufw-user-forward - [0:0]
+:ufw-user-limit - [0:0]
+:ufw-user-limit-accept - [0:0]
+### RULES ###
+
+### tuple ### allow tcp 80 0.0.0.0/0 any 0.0.0.0/0
+-A ufw-user-input -p tcp --dport 80 -j ACCEPT
+
+### END RULES ###
+-A ufw-user-input -j RETURN
+-A ufw-user-output -j RETURN
+-A ufw-user-forward -j RETURN
+-A ufw-user-limit -m limit --limit 3/minute -j LOG --log-prefix "[UFW LIMIT]: "
+-A ufw-user-limit -j REJECT
+-A ufw-user-limit-accept -j ACCEPT
+COMMIT
+Rules updated</computeroutput>
+</screen>
+
+              </listitem>
+              <listitem>
                 <para>
                 <application>ufw</application> can be disabled by:
 	        </para>
 <screen>
 <command>sudo ufw disable</command>
+</screen>
+	      </listitem>
+              <listitem>
+                <para>
+                To see the firewall status, enter:
+	        </para>
+<screen>
+<command>sudo ufw status</command>
 </screen>
 	      </listitem>
 	    </itemizedlist>
@@ -501,9 +544,127 @@ $1$s3YiK$M3lxAbqA6JLm2FbDWnClQ0</computeroutput>
 	      In the above examples, replace <emphasis>22</emphasis> with <emphasis>ssh</emphasis>. 
               </para>
 	    </note>
+
   	    <para>
-	    This is a quick introduction to using <application>ufw</application>. Please refer to the <application>ufw</application> man page for more information.
+	    This is a quick introduction to using <application>ufw</application>. Please refer to the <application>ufw</application> man page for 
+            more information.
 	    </para>
+
+            <sect3 id="ufw-application-integration" status="review">
+              <title>ufw Application Integration</title>
+
+              <para>
+              Applications that open ports can include an <application>ufw</application> profile, which details the ports needed for the 
+              application to function properly.  The profiles are kept in <filename role="directory">/etc/ufw/applications.d</filename>,
+              and can be edited if the default ports have been changed.
+              </para>
+
+              <itemizedlist>
+                <listitem>
+
+                  <para>
+                  To view which applications have installed a profile, enter the following in a terminal:
+                  </para>
+
+<screen>
+<command>sudo ufw app list</command>
+</screen>
+
+                </listitem>
+                <listitem>
+
+                  <para>
+                  Similar to allowing traffic to a port, enabling an application profile is accomplished by entering:
+                  </para>
+
+<screen>
+<command>sudo ufw allow samba</command>
+</screen>
+
+                </listitem>
+                <listitem>
+
+                  <para>
+                  An extended syntax is available as well:
+                  </para>
+
+<screen>
+<command>ufw allow from 192.168.0.0/24 to any app samba</command>
+</screen>
+
+                  <para>
+                  Replace <emphasis>samba</emphasis> and <emphasis>192.168.0.0/24</emphasis> with the application you are enabling and
+                  the IP range for your network. 
+                  </para>
+
+                  <note>
+                    <para>
+                    There is no need to specify the <emphasis>protocol</emphasis> for the application, because that information is detailed in
+                    the profile.  Also, note that the <emphasis>app</emphasis> name replaces the <emphasis>port</emphasis> number.
+                    </para>
+                  </note>
+
+                </listitem>
+                <listitem>
+
+                  <para>
+                  To view details about which ports, protocols, etc are enabled for an application, enter:
+                  </para>
+
+<screen>
+<command>sudo ufw info samba</command>
+</screen>
+
+                </listitem>
+                <listitem>
+
+                  <para>
+                  If you have edited an application's profile, enable the changes with:
+                  </para>
+
+<screen>
+<command>sudo ufw app update apache2</command>
+</screen>
+
+                  <para>
+                  If there are no <application>ufw</application> rules applying the profile, then the above command will simply make 
+                  the new rule available.  However, with the <emphasis>--add-new</emphasis> option added to the above command, the application 
+                  profile and any new rules will be applied automatically.
+                  </para>
+
+                </listitem>
+                <listitem>
+
+                  <para>
+                  By default the <emphasis>--add-new</emphasis> option will <emphasis>skip</emphasis> any new rules added to an application
+                  profile.  To change this policy, enter:
+                  </para>
+
+<screen>
+<command>ufw app default allow</command>
+</screen>
+
+                  <para>
+                  This will automatically open any ports enabled in a profile when using the <emphasis>--add-new</emphasis> option.
+                  </para>
+
+                  <warning>
+                    <para>
+                    Setting the default policy to <emphasis>allow</emphasis> may have security implications, use caution when enabling
+                    applications using this policy.
+                    </para>
+                  </warning>
+
+                </listitem>
+              </itemizedlist>
+
+              <para>
+              Not all applications that require opening a network port come with <application>ufw</application> profiles, but if 
+              you have profiled an application and want the file to be included with the package, please file a bug against the 
+              package in <ulink url="https://launchpad.net/">Launchpad</ulink>.
+              </para>
+
+            </sect3>
 	  </sect2>
         <sect2 id="ip-masquerading" status="review">
           <title>IP Masquerading</title>
@@ -583,6 +744,20 @@ COMMIT
 # don't delete the 'COMMIT' line or these rules won't be processed
 COMMIT
 </programlisting>
+
+                  <para>
+                  For each <emphasis>Table</emphasis> a corresponding <emphasis>COMMIT</emphasis> statement is required.  In these examples 
+                  only the <emphasis>nat</emphasis> and <emphasis>filter</emphasis> tables are shown, but you can also add rules for the 
+                  <emphasis>raw</emphasis> and <emphasis>mangle</emphasis> tables.
+                  </para>
+
+                  <note>
+                   <para>
+                   In the above example replace <emphasis>eth0</emphasis>, <emphasis>eth1</emphasis>, and <emphasis>192.168.0.0/24</emphasis> 
+                   with the appropriate interfaces and IP range for your network.
+                   </para>
+                  </note>
+
 		</listitem>
 	        <listitem>
 		  <para>
@@ -1147,7 +1322,7 @@ sudo iptables -A INPUT -m state --state NEW -p tcp --dport 80 -j LOG --log-prefi
             <para>
             A <emphasis>Certificate</emphasis> is a method used to distribute a <emphasis>public key</emphasis> and other information
             about a server and the organization who is responsible for it.  Certificates can be digitally signed by a 
-            <emphasis>Certificate Authority</emphasis> or CA.  A CA is a trusted third party that has confirmed that the information
+            <emphasis>Certification Authority</emphasis> or CA.  A CA is a trusted third party that has confirmed that the information
             contained in the certificate is accurate.
             </para>
         <sect2 id="types-of-certificates" status="review">
@@ -1357,6 +1532,145 @@ Enter pass phrase for server.key:
         provide HTTPS, <application>Dovecot</application> can provide IMAPS and POP3S, etc. 
         </para>
         </sect2>
+        <sect2 id="certificate-authority" status="review">
+          <title>Certification Authority</title>
+
+          <para>
+          If the services on your network require more than a few self-signed certificates it may be worth the 
+          additional effort to setup your own internal <emphasis>Certification Authority (CA)</emphasis>.  Using 
+          certificates signed by your own CA, allows the various services using the certificates to easily
+          trust other services using certificates issued from the same CA.
+          </para>
+
+          <procedure>
+            <step>
+  
+              <para>
+              First, create the directories to hold the CA certificate and related files:
+              </para>    
+
+<screen>
+<command>sudo mkdir /etc/ssl/CA</command>
+<command>sudo mkdir /etc/ssl/newcerts</command>
+</screen>
+
+            </step>
+            <step>
+  
+              <para>
+              The CA needs a few additional files to operate, one to keep track of the last serial number used by the CA, each 
+              certificate must have a unique serial number, and another file to record which certificates have been
+              issued:
+              </para>    
+
+<screen>
+<command>sudo sh -c "echo '01' > /etc/ssl/CA/serial"</command>
+<command>sudo touch /etc/ssl/CA/index.txt</command>
+</screen>
+
+            </step>
+            <step>
+  
+              <para>
+              The third file is a CA configuration file.  Though not strictly necessary, it is very convenient when
+              issuing multiple certificates.  Edit <filename>/etc/ssl/openssl.cnf</filename>, and in the 
+              <emphasis>[ CA_default ]</emphasis> change:
+              </para>    
+
+<programlisting>
+dir             = /etc/ssl/             # Where everything is kept
+database        = $dir/CA/index.txt     # database index file.
+certificate     = $dir/certs/cacert.pem # The CA certificate
+serial          = $dir/CA/serial        # The current serial number
+private_key     = $dir/private/cakey.pem# The private key
+</programlisting>    
+
+            </step>
+            <step>
+  
+              <para>
+              Next, create the self-singed root certificate:
+              </para>    
+
+<screen>
+<command>openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 3650</command>
+</screen>
+
+              <para>
+              You will then be asked to enter the details about the certificate.
+              </para>
+
+            </step>
+            <step>
+  
+              <para>
+              Now install the root certificate and key:
+              </para>    
+
+<screen>
+<command>sudo mv cakey.pem /etc/ssl/private/</command>
+<command>sudo mv cacert.pem /etc/ssl/certs/</command>
+</screen>
+
+            </step>
+            <step>
+  
+              <para>
+              You are now ready to start signing certificates.  The first item needed is a Certificate Signing 
+              Request (CSR), see <xref linkend="generating-a-csr"/> for details.  Once
+              you have a CSR, enter the following to generate a certificate signed by the CA:
+              </para>    
+
+<screen>
+<command>sudo openssl ca -in server.csr -config /etc/ssl/openssl.cnf</command>
+</screen>
+
+              <para>
+              After entering the password for the CA key, you will be prompted to sign the certificate, and again
+              to commit the new certificate.  You should then see a somewhat large amount of output related to the 
+              certificate creation.
+              </para>
+
+            </step>
+            <step>
+  
+              <para>
+              There should now be a new file, <filename>/etc/ssl/newcerts/01.pem</filename>, containing the same output.
+              Copy and paste everything between the <emphasis>-----BEGIN CERTIFICATE-----</emphasis> and
+              <emphasis>----END CERTIFICATE-----</emphasis> lines to a file named after the hostname of
+              the server where the certificate will be installed.  For example <filename>mail.example.com.crt</filename>,
+              is a nice descriptive name.
+              </para>    
+
+              <para>
+              Subsequent certificates will be named <filename>02.pem</filename>, <filename>03.pem</filename>, etc.
+              </para>
+
+              <note>
+                <para>
+                Replace <emphasis>mail.example.com.crt</emphasis> with your own descriptive name.
+                </para>
+              </note>
+
+            </step>
+            <step>
+  
+              <para>
+              Finally, copy the new certificate to the host that needs it, and configure the appropriate applications to use it.
+              The default location to install certificates is <filename role="directory">/etc/ssl/certs</filename>.  This
+              enables multiple services to use the same certificate without overly complicated file permissions.
+              </para>    
+
+              <para>
+              For applications that can be configured to use a CA certificate, you should also copy the 
+              <filename>/etc/ssl/certs/cacert.pem</filename> file to the <filename role="directory">/etc/ssl/certs/</filename>
+              directory on each server.
+              </para>
+
+            </step>
+          </procedure>
+
+        </sect2>
         <sect2 id="certificate-references" status="review">
           <title>References</title>
           <itemizedlist>
@@ -1379,6 +1693,12 @@ Enter pass phrase for server.key:
             <listitem>
               <para>
               For more information on <emphasis>OpenSSL</emphasis> see the <ulink url="http://www.openssl.org/">OpenSSL Home Page</ulink>.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+              Also, O'Reilly's <ulink url="http://oreilly.com/catalog/9780596002701/">Network Security with OpenSSL</ulink> is a good
+              in depth reference.
               </para>
             </listitem>
           </itemizedlist>
