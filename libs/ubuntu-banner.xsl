@@ -1,10 +1,24 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
 
-<!-- This adds the header and tabs -->
+<!-- This adds the header -->
 
 <xsl:template name="header.navigation">
 	<div id="header">
+	<div id="logo-floater"><h1><a href="http://help.ubuntu.com" title="Ubuntu Documentation"><img alt="Ubuntu" id="logo" src="https://help.ubuntu.com/htdocs/ubuntunew/img/logo.png" /></a></h1>
+	</div>
+<form action="https://help.ubuntu.com/search.html" id="cse-search-box">
+  <div>
+
+    <input type="hidden" name="cx" value="003883529982892832976:e2vwumte3fq" />
+    <input type="hidden" name="cof" value="FORID:9" />
+    <input type="hidden" name="ie" value="UTF-8" />
+    <input type="text" name="q" size="27" />
+    <input type="submit" name="sa" value="Search" />
+  </div>
+</form>
+<script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en"></script>
+	<div id="sitename"><a href="https://help.ubuntu.com/"><img alt="Official Documentation" src="http://doc.ubuntu.com/~mdke/help-about.png" /><span>Official Documentation</span></a></div>
 	</div>
 </xsl:template>
 
@@ -39,17 +53,13 @@
 <!-- This adds the footer -->
 
 <xsl:template name="user.footer.navigation">
-  <HR/>
-
+<hr />
 <div id="footer">
 
   <div id="ubuntulinks">
 
-	<xsl:apply-templates select="//copyright[1]" mode="titlepage.mode"/>
-	<p><a href="https://launchpad.net/ubuntu-doc">Feedback</a></p>
-	<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
-	<img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/80x15.png" />
-	</a></p>
+	<p>The material in this document is available under a free license, see <a href="legal.html">Legal</a> for details<br />
+	For information on contributing or to report a problem, visit the <a href="https://bugs.launchpad.net/ubuntu-doc">Ubuntu Documentation Project</a></p>
 
   </div>
 
@@ -81,7 +91,8 @@
 
     <body>
 	<div id="round">
-	<div id="container">
+	<img id="topcap" alt="" src="https://help.ubuntu.com/htdocs/ubuntunew/img/cap-top.png" />
+	<div id="layout" class="container clear-block">
       <xsl:call-template name="body.attributes"/>
       <xsl:call-template name="user.header.navigation"/>
 
@@ -92,6 +103,7 @@
       </xsl:call-template>
 
       <xsl:call-template name="user.header.content"/>
+	<div id="page">
 	<div id="content">
   	<xsl:call-template name="breadcrumbs"/>
       <xsl:copy-of select="$content"/>
@@ -105,6 +117,7 @@
       </xsl:call-template>
 
       <xsl:call-template name="user.footer.navigation"/>
+	</div>
 	</div>
 	</div>
     </body>
