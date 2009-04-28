@@ -31,7 +31,7 @@
 
 translate () {
 	y=$(basename ${1} .po)
-	echo " --Translating ${y}"
+	echo " --translating ${y}"
 	mkdir -p ${y}
 	for i in C/*xml; do
 		j=$(basename ${i} C/)
@@ -46,7 +46,6 @@ translate () {
 }
 
 choose_language () {
-	echo "Entering ${1}"
 	cd ${1}
 	if [ ${2} ]; then
 		translate "po/${2}.po"

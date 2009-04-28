@@ -20,7 +20,7 @@
 #
 # remarks: Use this script to validate your documents.
 # usage: ./validate.sh path/to/xmlinstance.xml
-# example: ./validate userguide/userguide.xml
+# example: ./validate.sh ../config-desktop/C/config-desktop.xml
 #################################################################################
 
 echo " --Validating $1 ..."
