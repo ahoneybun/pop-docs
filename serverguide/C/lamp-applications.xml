@@ -302,15 +302,20 @@ http://localhost/mywiki?action=test
       <title>Configuration</title>
 
       <para>
-      Run the following commands to configure MediaWiki:
+      The Apache configuration file <filename>mediawiki.conf</filename>
+      for MediaWiki is installed in
+        <filename>/etc/apache2/conf.d/</filename> directory. You should
+        uncomment the following line in this file to access MediaWiki
+        application.
       </para>
 
 <screen>
-<command>sudo ln -s /var/lib/mediawiki /var/www/mediawiki</command>
+# Alias /mediawiki /var/lib/mediawiki
 </screen>
 
       <para>
-      Point your web browser to the following URL for MediaWiki setup:
+      After you uncomment the above line, restart Apache server and
+      access MediaWiki using the following url:
       </para>
 
 <programlisting>
@@ -325,7 +330,34 @@ http://localhost/mediawiki/config/index.php
         </para>
       </tip>
 
+      <para>
+      Once the configuration is complete, you should copy the
+      <filename>/var/lib/mediawiki/LocalSettings.php</filename> file to
+      <filename>/etc/mediawiki</filename> directory.
+      </para>
     </sect2>
+
+    <sect2 id="mediawiki-extensions" status="review">
+      <title>Extensions</title>
+      <para>
+      The extensions add new features and enhancements for the MediaWiki
+      application. The extensions give wiki administrators and end users
+      the ability to customize MediaWiki to their requirements.
+      </para>
+
+      <para>
+      You can download MediaWiki extensions as an archive file or
+      checkout from the Subversion repository. You should copy it to
+      <filename>/var/lib/mediawiki/extensions</filename> directory. You
+      should also add the following line at the end of file: 
+      <filename>/etc/mediawiki/LocalSettings.php</filename>.
+      </para>
+
+<programlisting>
+require_once "$IP/extensions/ExtentionName/ExtentionName.php";
+</programlisting>
+    </sect2>
+
     <sect2 id="mediawiki-references" status="review">
       <title>References</title>
 
