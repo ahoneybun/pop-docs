@@ -221,8 +221,8 @@
     <caution>
     <para>
     Only add software repositories from sources that you trust. Third-party 
-    software repositories are not checked for security by Ubuntu members, so 
-    could contain software which is harmful to your computer.
+    software repositories are not checked for security by Ubuntu members, and 
+    may contain software which is harmful to your computer.
     </para>
     </caution>
     <procedure>
@@ -237,7 +237,7 @@
         <para>Enter the APT line for the extra repository. This should be 
         available from the website of the repository, and should look similar 
         to the following:</para>
-        <screen>deb http://ftp.debian.org etch main</screen>
+        <programlisting>deb http://archive.ubuntu.com/ubuntu/ &distro-short-codename; main</programlisting>
     </step>
     <step>
         <para>Click <guibutton>Add Source</guibutton> and then click 
@@ -265,8 +265,58 @@
     <guilabel>Authentication</guilabel> tab, click <guibutton>Import Key 
     File</guibutton> and select the GPG key to be imported.
     </para>
-</sect1>
+    <para>
+    You can also add the GPG key using the terminal by entering the following command:
+    </para>
+    <screen><command>sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com key-fingerprint</command></screen>
 
+	<sect2 id="adding-ppa" status="review">
+	     <title>Adding a Personal Package Archive (PPA)</title>
+	     <para>
+	     <ulink url="https://launchpad.net/">Launchpad</ulink> provides all users
+	     with their own Personal Package Archive (PPA) that can be used to build
+	     and store Ubuntu packages. In the same way that you can
+	     add a normal software repository, you can also add a PPA to the
+	     package manager's list of available repositories. PPAs work like normal
+	     Ubuntu archives. You can install software in the usual way -- for example,
+	     through apt-get or synaptic -- and whenever there's an update Ubuntu will
+	     prompt you to install it.
+	     </para>
+	     <caution>
+	     <para>
+	     You download and install PPA packages at your own risk. Ubuntu, Launchpad
+	     and Canonical do not endorse these packages. You must be certain that you
+	     trust the PPA owner before you install their software. 
+	     </para>
+	     </caution>
+	     <para>
+	     You should begin by familiarizing yourself with <xref linkend="adding-repos"/> before beginning.
+	     </para>
+	     <para>
+	     The APT line for the PPA can be found on the PPA overview page on Launchpad,
+	     and should look similar to the following:
+	     </para>
+	     <programlisting>deb http://ppa.launchpad.net/<emphasis>user</emphasis>/ppa/<emphasis>ppa-name</emphasis> &distro-short-codename; main</programlisting>
+	     <para>
+	     As a security measure, all PPAs use a unique GPG key to digitally sign the
+	     packages that they provide. This makes it easy to check that the packages
+	     have not been tampered with since Launchpad built them and to be sure that
+	     you are downloading from the PPA that you want. In order for your package
+	     manager to be able to check this, you need the public key that corresponds
+	     to the signatures. The key should be available for download on the PPA
+	     overview page on Launchpad. Until you add the PPA's key to your system, you
+	     will see warnings that you are downloading from an untrusted source.
+	     </para>
+	     <para>
+	     The key used to sign a PPA is listed on the PPA overview page. Instructions
+	     on how to add the key can be found in <xref linkend="adding-repos"/>.
+	     </para>
+	     <para>
+	     Additional information about adding a PPA repository can be found on
+	     <ulink url="https://help.launchpad.net/Packaging/PPA">Launchpad</ulink>.
+	     </para>
+	</sect2>
+</sect1>
 <sect1 id="offline" status="draft">
     <title>Installing software packages without an Internet connection</title>
     <para>

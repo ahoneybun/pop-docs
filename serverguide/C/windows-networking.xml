@@ -177,7 +177,7 @@
         </listitem>
         <listitem>
           <para>
-          <emphasis>read only:</emphasis> gives write access to the shared directory.
+          <emphasis>read only:</emphasis> determines if the share is read only or if write privileges are granted.  Write privileges are allowed only when the value is <emphasis>no</emphasis>, as is seen in this example.  If the value is <emphasis>yes</emphasis>, then access to the share is read only.
           </para>
         </listitem>
         <listitem>
@@ -777,7 +777,7 @@ UUID=66bcdd2e-8861-4fb0-b7e4-e61c569fe17d /srv  ext3    noatime,relatime,acl 0  
    logon drive = H:
    logon home = \\%N\%U
    logon script = logon.cmd
-   add machine script = sudo /usr/sbin/useradd -n -g machines -c Machine -d /var/lib/samba -s /bin/false %u
+   add machine script = sudo /usr/sbin/useradd -N -g machines -c Machine -d /var/lib/samba -s /bin/false %u
 </programlisting>
  
           <itemizedlist>
@@ -1373,6 +1373,13 @@ UUID=66bcdd2e-8861-4fb0-b7e4-e61c569fe17d /srv  ext3    noatime,relatime,acl 0  
       You will then be prompted for the user's password.  If all goes well a <emphasis>SUCCESS</emphasis> message should be
       printed to the console.
       </para>
+
+	  <note>
+		  <para>
+			  After joining the domain, it is necessary to reboot before
+			  attempting to authenticate against the domain.
+		  </para>
+	  </note>
 
       <para>
       After successfully joining an Ubuntu machine to an Active Directory domain you can authenticate using any valid AD user.  
