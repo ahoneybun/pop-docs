@@ -63,7 +63,10 @@
 				Ubuntu developers often issue updates to the Ubuntu software.
 				These updates may improve security or fix other problems.
 			</para>
-			<para>
+
+			<!-- There is a new behavior of notify new updates introduced in Jaunty. See 9.04's release notes for more info. If it will back in Karmic to previous manner, below should be replaced to old description before we put the keeping-safe to 9.10 release.
+			=======================			
+			<para>			
 				When updates are available, the update icon (an orange star) appears in the panel,
 				usually near the top right of the screen.
 				To install updates you must be an <ulink type="help" url="ghelp:administrative">administrator</ulink>
@@ -82,6 +85,12 @@
 					</para>
 				</step>
 			</procedure>
+			=======================
+-->
+  
+			<para>
+				When security updates are available, the <application>Update Manager</application> automatically starts up. For other updates you will be prompted once a week.   
+				To install updates, just click <guibutton>Install Updates</guibutton> and enter your password when prompted.</para>		
 			<para>The update process may take a while if many updates need to be installed.</para>
 			<para>
 				If a pair of blue arrows appears in the panel when the updates have
@@ -102,7 +111,7 @@
     <para>You can lock your screen in one of the following ways:</para>
     <itemizedlist>
       <listitem>
-	<para>Press &lockscreen;.</para>
+	<para>Click the <application>User Switcher</application> in the top right of the panel and then press <guibutton>Lock screen</guibutton>.</para>
       </listitem>
       <listitem>
 	<para>Press
@@ -176,24 +185,42 @@
 				</itemizedlist>
 				
 				<para>A simple way of backing-up your files is to manually copy them to a safe location (see above) by using the <application>File Browser</application>.</para>
-				<para>Alternatively, you can use a dedicated back-up application, such as <application>HUBackup</application>:</para>
-				
+				<para>Alternatively, you can use a dedicated back-up application, such as <application>Simple Backup Suite</application>.</para>
 				<procedure>
 				<step>
-					<para><ulink url="apt:hubackup">Install the <application>hubackup</application> package</ulink> from the <quote>Universe</quote> repository.</para>
+					<para><ulink url="apt:sbackup">Install the <application>sbackup</application> package</ulink> from the <quote>Universe</quote> repository.</para>
 				</step>
 				<step>
-					<para>To make a backup, press &hubackup;.
+					<para>To make a backup, press &sbackup; and enter your administrator password when prompted.
 					</para>
 				</step>
 				<step>
-					<para>Select the files which you would like to make a backup copy of and choose the location which you would like to save the backup to. If you have a CD or DVD writer, it should be present in this list.</para>
+					<para>Under <guilabel>General</guilabel> tab, choose backup mode which you would like to use. If you are not sure what you should backup, select <guilabel>Use recommended backup settings</guilabel>. This will perform daily incremental and weekly full backup of all user and system files to <filename>/var/backup</filename> default directory, excluding multimedia and temporary files as well as files larger than 100 MB.
+</para>
 				</step>
 				<step>
-					<para>Press <guibutton>Backup</guibutton> and follow the instructions given on-screen.</para>
+					<para>Press <guibutton>Save</guibutton> to save your settings.</para>
 				</step>
+				<step>
+					<para>If you want to backup your files immediately, then press <guibutton>Backup Now!</guibutton>; otherwise, click <guibutton>Close</guibutton> button to leave the scheduled backup.
+					</para>
+				</step>
+				<step>
+					<para>Your backup will launch in the background and you will see pop-up window with information about process id. Click <guibutton>Close</guibutton>. The backup process may takes a while, depend on amount of copied files.</para>    
+				</step>
+				<step>
+					<para>Your backup will be placed as directory into <filename>/var/backup</filename>. You must be an <ulink type="help" url="ghelp:administrative">administrator</ulink> to access your backup. 
+					</para>
+				</step>  
 			</procedure>
-			<para>To restore a backup made with <application>HUBackup</application>, press &hurestore; and follow the instructions on-screen.</para>
+
+			<!-- Below note should be changed or removed if sbackup will be armed with CD/DVD burning feature. There is a plan to add CD/DVD buckup fincionality to one of forthcoming verion, but at this time don't know if it will be available in Karmic release.-->
+  
+			<note><para>The Simple Backup Suite does not provide an option to write backup files directly to CDs or DVDs. You have to write backup manualy using for example a Brasero Disc Burning software (&brasero;). Alternatively you can customize <application>Simple Backup Config</application> to backup your files into another place (eg. remote server or external drives). See <ulink url='https://help.ubuntu.com/community/BackupYourSystem/SimpleBackupSuite'>community help wiki</ulink> for details how to use Simple Backup Suite software.
+			</para></note>      
+			<para>To restore a backup made with <application>Simple Backup Config</application>, press &sbackup-restore; and select restore source folder and available backups from drop-down menu. Choose the files and folders you want to restore, click on the <guibutton>Restore</guibutton> button and confirm your choice. If you want to restore in a different location you need to select the <guibutton>Restore As</guibutton> option.</para>
+			<note><para>By default, restored files and directories are owned by root. This is because Simple Backup Suite runs with root priveleges. You need to <ulink type="help" url="ghelp:user-guide#nautilus-permissions">change these file or folder permissions</ulink> using <application>File Browser</application>.
+			</para></note>
 				
 				<para>Some general advice on how to keep good back-ups is given below:</para>
 				<itemizedlist>
