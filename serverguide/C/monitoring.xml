@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../libs/global.ent">
+%globalent;
+<!ENTITY % gnome-menus-C SYSTEM "../../libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "&EnglishAmerican;">
+]>
+<chapter id="monitoring" status="review">
+  <title>Monitoring</title>
+  <sect1 id="monitoring-overview" status="review">
+    <title>Overview</title>
+
+    <para>
+    The monitoring of essential servers and services is an important part of system administration.
+    Most network services are monitored for performance, availability, or both.  This section will cover
+    installation and configuration of <application>Nagios</application> for availability monitoring, and 
+    <application>Munin</application> for performance monitoring.
+    </para>
+
+    <para>
+    The examples in this section will use two servers with hostnames <emphasis>server01</emphasis> and 
+    <emphasis>server02</emphasis>.  <emphasis>Server01</emphasis> will be configured with 
+    <application>Nagios</application> to monitor services on itself and <emphasis>server02</emphasis>.  
+    Server01 will also be setup with the <application>munin</application> package to gather information
+    from the network.  Using the <application>munin-node</application> package, <emphasis>server02</emphasis>
+    will be configured to send information to <emphasis>server01</emphasis>.
+    </para>
+
+    <para>
+    Hopefully these simple examples will allow you to monitor additional servers and services on your network.
+    </para>
+
+  </sect1>
+  <sect1 id="nagios" status="review">
+    <title>Nagios</title>
+
+    <sect2 id="nagios-installation" status="review">
+      <title>Installation</title>
+
+      <para>
+      First, on <emphasis>server01</emphasis> install the <application>nagios</application> package.  In a terminal
+      enter:
+      </para>
+
+<screen>
+<command>sudo apt-get install nagios3 nagios-nrpe-plugin</command>
+</screen>
+
+      <para>
+      You will be asked to enter a password for the <emphasis>nagiosadmin</emphasis> user.  The user's credentials are
+      stored in <filename>/etc/nagios3/htpasswd.users</filename>.  To change the <emphasis>nagiosadmin</emphasis> password, or
+      add additional users to the Nagios CGI scripts, use the <application>htpasswd</application> that is part of the 
+      <application>apache2-utils</application> package.
+      </para>
+
+      <para>
+      For example, to change the password for the <emphasis>nagiosadmin</emphasis> user enter:
+      </para>
+
+<screen>
+<command>sudo htpasswd /etc/nagios3/htpasswd.users nagiosadmin</command>
+</screen>
+
+      <para>
+      To add a user:
+      </para>
+
+<screen>
+<command>sudo htpasswd /etc/nagios3/htpasswd.users steve</command>
+</screen>
+
+      <para>
+      Next, on <emphasis>server02</emphasis> install the <application>nagios-nrpe-server</application> package.  From a terminal on 
+      server02 enter:
+      </para>
+
+<screen>
+<command>sudo apt-get install nagios-nrpe-server</command>
+</screen>
+
+      <note>
+        <para>
+        <application>NRPE</application> allows you to execute local checks on remote hosts.  There are other ways of accomplishing
+        this through other Nagios plugins as well as other checks.  
+        </para>
+      </note>
+
+    </sect2>
+    <sect2 id="nagios-configuration-overview" status="review">
+      <title>Configuration Overview</title>
+ 
+      <para>
+      There are a couple of directories containing <application>Nagios</application> configuration and check files.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+          <filename>/etc/nagios3</filename>: contains configuration files for the operation of the <application>nagios</application>
+          daemon, CGI files, hosts, etc.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <filename>/etc/nagios-plugins</filename>: houses configuration files for the service checks. 
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <filename>/etc/nagios</filename>: on the remote host contains the <application>nagios-nrpe-server</application> configuration files. 
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <filename>/usr/lib/nagios/plugins/</filename>: where the check binaries are stored.  To see the options of a check use the
+          <emphasis>-h</emphasis> option.  
+          </para>
+          
+          <para>   
+          For example: <command>/usr/lib/nagios/plugins/check_dhcp -h</command>
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+      There are a plethora of checks <application>Nagios</application> can be configured to execute for any given host.  For this example Nagios
+      will be configured to check disk space, DNS, and a MySQL hostgroup.  The DNS check will be on <emphasis>server02</emphasis>, and the 
+      MySQL hostgroup will include both <emphasis>server01</emphasis> and <emphasis>server02</emphasis>.
+      </para>
+
+      <note>
+        <para>
+        See <xref linkend="httpd"/> for details on setting up Apache, <xref linkend="dns"/> for DNS, and <xref linkend="mysql"/> for MySQL.
+        </para>
+      </note>
+
+      <para>
+      Additionally, there are some terms that once explained will hopefully make understanding Nagios configuration easier:
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+          <emphasis>Host</emphasis>: a server, workstation, network device, etc that is being monitored.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Host Group</emphasis>: a group of similar hosts.  For example, you could group all web servers, file server, etc.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Service</emphasis>: the service being monitored on the host.  Such as HTTP, DNS, NFS, etc.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Service Group</emphasis>: allows you to group multiple services together.  This is useful for grouping multiple HTTP
+          for example.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Contact</emphasis>: person to be notified when an event takes place.  Nagios can be configured to send emails, SMS messages, etc.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+      By default Nagios is configured to check HTTP, disk space, SSH, current users, processes, and load on the <emphasis>localhost</emphasis>.
+      Nagios will also <application>ping</application> check the <emphasis>gateway</emphasis>.
+      </para>
+
+      <para>
+      Large Nagios installations can be quite complex to configure.  It is usually best to start small, one or two hosts, get things configured the way you like
+      then expand.
+      </para>
+    
+
+    </sect2>
+    <sect2 id="nagios-configuration" status="review">
+      <title>Configuration</title>
+
+      <itemizedlist>
+        <listitem>
+
+          <procedure>
+            <step>
+              <para>
+              First, create a <emphasis>host</emphasis> configuration file for <emphasis>server02</emphasis>.  In a terminal enter:
+             </para>
+
+<screen>
+<command>sudo cp /etc/nagios3/conf.d/localhost_nagios2.cfg /etc/nagios3/conf.d/server02.cfg</command>
+</screen>
+
+             <note>
+               <para>
+               In the above and following command examples, replace <emphasis>"server01"</emphasis>, <emphasis>"server02"</emphasis>
+               <emphasis>172.18.100.100</emphasis>, and <emphasis>172.18.100.101</emphasis> with the host names and IP addresses
+               of your servers.
+               </para>
+             </note>
+             
+           </step>
+           <step>
+             <para>
+             Next, edit <filename>/etc/nagios3/conf.d/server02.cfg</filename>:
+             </para>
+
+<programlisting>
+define host{
+        use                     generic-host            ; Name of host template to use
+        host_name               server02
+        alias                   Server 02
+        address                 172.18.100.101
+}
+
+# check DNS service.
+define service {
+        use                             generic-service
+        host_name                       server02
+        service_description             DNS
+        check_command                   check_dns!172.18.100.101
+}
+</programlisting>
+
+           </step>
+           <step>
+
+             <para>
+             Restart the <application>nagios</application> daemon to enable the new configuration:
+             </para>
+
+<screen>
+<command>sudo /etc/init.d/nagios3 restart</command>
+</screen>
+           
+           </step>
+         </procedure>
+       </listitem>
+       <listitem>
+         <procedure>
+           <step>
+
+             <para>
+             Now add a service definition for the MySQL check by adding the following to <filename>/etc/nagios3/conf.d/services_nagios2.cfg</filename>:
+             </para>
+
+<programlisting>
+# check MySQL servers.
+define service {
+        hostgroup_name                  mysql-servers
+        service_description             MySQL
+        check_command                   check_mysql_cmdlinecred!nagios!secret!$HOSTADDRESS
+        use                             generic-service
+        notification_interval           0 ; set > 0 if you want to be renotified
+}
+</programlisting>
+
+           </step>
+           <step>
+
+             <para>
+             A <emphasis>mysqsl-servers</emphasis> hostgroup now needs to be defined.  Edit 
+             <filename>/etc/nagios3/conf.d/hostgroups_nagios2.cfg</filename> adding:
+             </para>
+
+<programlisting>
+# MySQL hostgroup.
+define hostgroup {
+        hostgroup_name  mysql-servers
+                alias           MySQL servers
+                members         localhost, server02
+        }
+</programlisting>
+
+           </step>
+           <step>
+
+             <para>
+             The Nagios check needs to authenticate to MySQL.  To add a <emphasis>nagios</emphasis> user to MySQL enter:
+             </para>
+
+<screen>
+<command>mysql -u root -p -e "create user nagios identified by 'secret';"</command>
+</screen>
+
+             <note>
+               <para>
+               The <emphasis>nagios</emphasis> user will need to be added all hosts in the <emphasis>mysql-servers</emphasis> hostgroup.
+               </para>
+             </note>
+
+           </step>
+           <step>
+
+             <para>
+             Restart <application>nagios</application> to start checking the MySQL servers.
+             </para>
+
+<screen>
+<command>sudo /etc/init.d/nagios3 restart</command>
+</screen>
+
+           </step>
+         </procedure>
+       </listitem>
+       <listitem>
+         <procedure>
+           <step>  
+
+             <para>
+             Lastly configure NRPE to check the disk space on <emphasis>server02</emphasis>.
+             </para>
+ 
+             <para>
+             On <emphasis>server01</emphasis> add the
+             service check to <filename>/etc/nagios3/conf.d/server02.cfg</filename>:
+             </para>
+
+<programlisting>
+# NRPE disk check.
+define service {
+        use                             generic-service
+        host_name                       server02
+        service_description             nrpe-disk
+        check_command                   check_nrpe_1arg!check_all_disks!172.18.100.101
+}
+</programlisting>
+
+           </step>
+           <step>
+
+             <para>
+             Now on <emphasis>server02</emphasis> edit <filename>/etc/nagios/nrpe.cfg</filename> changing:
+             </para>
+
+<programlisting>
+allowed_hosts=172.18.100.100
+</programlisting>
+
+             <para>
+             And below in the command definition area add:
+             </para>
+
+<programlisting>
+command[check_all_disks]=/usr/lib/nagios/plugins/check_disk -w 20% -c 10% -e
+</programlisting>
+
+           </step>
+           <step>
+
+             <para>
+             Finally, restart <application>nagios-nrpe-server</application>:
+             </para>
+
+<screen>
+<command>sudo /etc/init.d/nagios-nrpe-server restart</command>
+</screen>
+
+           </step>
+           <step>
+
+             <para>
+             Also, on <emphasis>server01</emphasis> restart <application>nagios</application>:
+             </para>
+
+<screen>
+<command>sudo /etc/init.d/nagios3 restart</command>
+</screen>
+
+           </step>
+         </procedure>
+       </listitem>
+     </itemizedlist>        
+
+      <para>
+      You should now be able to see the host and service checks in the Nagios CGI files.  To access them point a 
+      browser to http://server01/nagios3.  You will then be prompted for the <emphasis>nagiosadmin</emphasis> username 
+      and password.
+      </para>
+
+    </sect2>
+    <sect2 id="nagios-references" status="review">
+      <title>References</title>
+
+      <para>
+      This section has just scratched the surface of Nagios' features.  The <application>nagios-plugins-extra</application> and 
+      <application>nagios-snmp-plugins</application> contain many more service checks.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+          For more information see <ulink url="http://www.nagios.org/">Nagios</ulink> website.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          Specifically the <ulink url="http://nagios.sourceforge.net/docs/3_0/">Online Documentation</ulink> site.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          There is also a list of <ulink url="http://www.nagios.org/propaganda/books/">books</ulink> related to Nagios
+          and network monitoring:
+          </para>
+        </listitem>
+      </itemizedlist>
+
+    </sect2>
+  </sect1>
+  <sect1 id="munin" status="review">
+    <title>Munin</title>
+
+    <sect2 id="munin-installation" status="review">
+      <title>Installation</title>
+
+      <para>
+      Before installing <application>Munin</application> on <emphasis>server01</emphasis> <application>apache2</application>
+      will need to be installed.  The default configuration is fine for running a <application>munin</application> server.  
+      For more information see <xref linkend="httpd"/>.
+      </para>
+
+      <para>
+      First, on <emphasis>server01</emphasis> install <application>munin</application>. In a terminal enter:
+      </para>
+
+<screen>
+<command>sudo apt-get install munin</command>
+</screen>
+
+      <para>
+      Now on <emphasis>server02</emphasis> install the <application>munin-node</application> package:
+      </para>
+
+<screen>
+<command>sudo apt-get install munin-node</command>
+</screen>
+
+    </sect2>
+    <sect2 id="munin-configuration" status="review">
+      <title>Configuration</title>
+
+      <para>
+      On <emphasis>server01</emphasis> edit the <filename>/etc/munin/munin.conf</filename> adding the IP address 
+      for <emphasis>server02</emphasis>:
+      </para>
+
+<programlisting>
+## First our "normal" host.
+[server02]
+       address 172.18.100.101
+</programlisting>
+
+      <note>
+        <para>
+        Replace <emphasis>server02</emphasis> and <emphasis>172.18.100.101</emphasis> with the actual hostname
+        and IP address for your server.
+        </para>
+      </note>
+
+      <para>
+      Next, configure <application>munin-node</application> on <emphasis>server02</emphasis>. Edit 
+      <filename>/etc/munin/munin-node.conf</filename> to allow access by <emphasis>server01</emphasis>:
+      </para>
+
+<programlisting>
+allow ^172\.18\.100\.100$
+</programlisting>
+
+      <note>
+        <para>
+        Replace <emphasis>^172\.18\.100\.100$</emphasis> with IP address for your <application>munin</application> server.
+        </para>
+      </note>
+
+      <para>
+      Now restart <application>munin-node</application> on <emphasis>server02</emphasis> for the changes to take effect:
+      </para>
+
+<screen>
+<command>sudo /etc/init.d/munin-node restart</command>
+</screen>
+
+      <para>
+      Finally, in a browser go to <emphasis>http://server01/munin</emphasis>, and you should see links to nice graphs 
+      displaying information from the standard <emphasis>munin-plugins</emphasis> for disk, network, processes, and system.
+      </para>
+
+      <note>
+        <para>
+        Since this is a new install it may take some time for the graphs to display anything useful.
+        </para>
+      </note>
+
+    </sect2>
+    <sect2 id="munin-plugins" status="review">
+      <title>Additional Plugins</title>
+
+      <para>
+      The <application>munin-plugins-extra</application> package contains performance checks additional services such as DNS, DHCP, Samba, etc.
+      To install the package, from a terminal enter:
+      </para>
+
+<screen>
+<command>sudo apt-get install munin-plugins-extra</command>
+</screen>
+
+      <para>
+      Be sure to install the package on both the server and node machines.
+      </para>
+
+    </sect2>
+    <sect2 id="munin-references" status="review">
+      <title>References</title>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+          See the <ulink url="http://munin.projects.linpro.no/">Munin</ulink> website for more details.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          Specifically the <ulink url="http://munin.projects.linpro.no/wiki/Documentation">Munin Documentation</ulink> page
+          includes information on additional plugins, writing plugins, etc.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          Also, there is a book in German by Open Source Press: 
+          <ulink url="https://www.opensourcepress.de/index.php?26&amp;backPID=178&amp;tt_products=152">Munin Graphisches Netzwerk- und System-Monitoring</ulink>.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+  </sect1>
+</chapter>
