@@ -32,6 +32,10 @@ common-binary-post-install-indep::
 # Install the documents; skip documents which are less than 75% translated
 
 	for doc in `cat libs/shipped-docs`; do \
+		mkdir -p debian/ubuntu-docs/usr/share/gnome/help/$$doc/C/; \
+		cp $$doc/C/*xml debian/ubuntu-docs/usr/share/gnome/help/$$doc/C/; \
+		mkdir -p debian/ubuntu-docs/usr/share/omf/$$doc; \
+		cp $$doc/C/*omf debian/ubuntu-docs/usr/share/omf/$$doc/; \
 		echo "Building and installing translated xml for $$doc"; \
 		numstrings=`LANG=C msgfmt --statistics $$doc/po/$$doc.pot 2>&1 | sed -r 's/^.* ([[:digit:]]+) untranslated.*$$/\1/'`; \
 			for pofile in `ls $$doc/po/`; do \
@@ -51,7 +55,6 @@ common-binary-post-install-indep::
 					cp $$doc/$$lang/*xml debian/ubuntu-docs/usr/share/gnome/help/$$doc/$$lang/; \
 				fi; \
 				if [ -e $$doc/$$lang/*.omf ]; then \
-					mkdir -p debian/ubuntu-docs/usr/share/omf/$$doc; \
 					cp $$doc/$$lang/*omf debian/ubuntu-docs/usr/share/omf/$$doc/; \
 				fi; \
 			done; \
