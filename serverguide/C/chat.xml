@@ -123,35 +123,111 @@ sudo /etc/init.d/ircd-irc2 restart
     </itemizedlist>
   </sect2>
   </sect1>
-  <sect1 id="jabber-server" status="review">
+  <sect1 id="jabberd2-server" status="review">
     <title>Jabber Instant Messenging Server</title>
 
     <para>
-    todo ...
+    <emphasis>Jabber</emphasis> a popular instant message protocol is based on XMPP, an open standard for instant messaging, and
+    used by many popular applications.  This section covers setting up a <emphasis>Jabberd 2</emphasis> server on a local LAN.  
+    This configuration can also be adapted to providing messaging services to users over the Internet.
     </para>
 
-    <sect2 id="jabber-installation" status="review">
+    <sect2 id="jabberd2-installation" status="review">
       <title>Installation</title>
 
       <para>
-      todo ...
+      To install <application>jabberd2</application>, in a terminal enter:
       </para>
 
-  </sect2>
-    <sect2 id="jabber-configuration" status="review">
-      <title>Configuration</title>
-
-      <para>
-      todo ...
-      </para>
+<screen>
+<command>sudo apt-get install jabberd2</command>
+</screen>
 
   </sect2>
-  <sect2 id="jabber-references" status="review">
-    <title>References</title>
+  <sect2 id="jabberd2-configuration" status="review">
+    <title>Configuration</title>
 
     <para>
-    todo ...
+    A couple of XML configuration files will be used to configure <application>jabberd2</application> for 
+    <emphasis>Berkely DB</emphasis> user authentication.  This is a very simple form of authentication.  However,
+    <application>jabberd2</application> can be configured to use LDAP, MySQL, Postgresql, etc for 
+    for user authentication.
     </para>
+    
+    <para>
+    First, edit <filename>/etc/jabberd2/sm.xml</filename> changing:
+    </para>
+
+<programlisting>
+  &lt;id&gt;jabber.example.com&lt;/id&gt;
+</programlisting>
+
+    <note>
+      <para>
+      Replace <emphasis>jabber.example.com</emphasis> with the hostname, or other id, of your server.  
+      </para>
+    </note>
+
+    <para>
+    Now in the &lt;storage&gt; section change the &lt;driver&gt; to:
+    </para>
+
+<programlisting>
+   &lt;driver&gt;db&lt;/driver&gt;
+</programlisting>
+
+    <para>
+    Next, edit <filename>/etc/jabberd2/c2s.xml</filename> in the <emphasis>&lt;local&gt;</emphasis> section change: 
+    </para>
+
+<programlisting>
+    &lt;id&gt;jabber.example.com&lt;/id&gt;
+</programlisting>
+
+    <para>
+    And in the &lt;authreg&gt; section adjust the &lt;module&gt; section to:
+    </para>
+
+<programlisting>
+    &lt;module&gt;db&lt;/module&gt;
+</programlisting>
+
+    <para>
+    Finally, restart <application>jabberd2</application> to enable the new settings:
+    </para>
+
+<screen>
+<command>sudo /etc/init.d/jabberd2 restart</command>
+</screen>
+
+  <para>
+  You should now be able to connect to the server using a Jabber client like <application>Pidgin</application> for example.
+  </para>
+
+  <note>
+    <para>
+    The advantage of using Berkeley DB for user data is that after being configured no additional maintenance is required.  If you need
+    more control over user accounts and credentials another authentication method is recommended.
+    </para>
+  </note>
+
+  </sect2>
+  <sect2 id="jabberd2-references" status="review">
+    <title>References</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+        The <ulink url="http://codex.xiaoka.com/wiki/jabberd2:start">Jabberd2 Web Site</ulink> contains more details on configuring 
+        <application>Jabberd2</application>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+        For more authentication options see the <ulink url="http://jabberd2.xiaoka.com/wiki/InstallGuide">Jabberd2 Install Guide</ulink>.
+        </para>
+      </listitem>
+    </itemizedlist>
   </sect2>
   </sect1>
 </chapter>
