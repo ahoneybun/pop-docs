@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % globalent SYSTEM "../../libs/global.ent">
+%globalent;
+<!ENTITY % gnome-menus-C SYSTEM "../../libs/gnome-menus-C.ent">
+%gnome-menus-C;
+<!ENTITY % xinclude SYSTEM "../../libs/xinclude.mod">
+%xinclude;
+<!ENTITY language "&EnglishAmerican;">
+]>
+<chapter id="vpn" status="review">
+  <title>VPN</title>
+
+  <para>
+  A Virtual Private Network, or <emphasis>VPN</emphasis>, is an encrypted network connection between two or more networks.  
+  There are several ways to create a VPN using software as well as dedicated hardware appliances.  This chapter will cover 
+  installing and configuring <application>OpenVPN</application> to create a VPN between two servers.
+  </para>
+
+
+  <sect1 id="openvpn">
+    <title>OpenVPN</title>
+
+    <para>
+    OpenVPN uses Public Key Infrastructure (PKI) to encrypt VPN traffic between nodes.  A simple way of setting up a VPN
+    with OpenVPN is to connect the clients through a bridge interface on the VPN server.  This guide will assume that one
+    VPN node, the server in this case, has a bridge interface configured.  For more information on setting up a bridge
+    see <xref linkend="bridging"/>.
+    </para>
+
+    <sect2 id="openvpn-installation" status="review">
+      <title>Installation</title>
+
+      <para>
+
+      To install <application>openvpn</application> in a terminal enter:
+      </para>
+
+<screen>
+<command>sudo apt-get install openvpn</command>
+</screen>
+
+      <sect3 id="openvpn-server-cert" status="review">
+        <title>Server Certificates</title>
+   
+        <para>
+        Now that the <application>openvpn</application> package is installed, the certificates for the VPN server need to be 
+        created.
+        </para>
+
+        <para>
+        First, copy the <filename>easy-rsa</filename> directory to <filename>/etc/openvpn</filename>.  This will ensure that any 
+        changes to the scripts will not be lost when the package is updated.  From a terminal enter:
+        </para>
+
+<screen>
+<command>sudo mkdir /etc/openvpn/easy-rsa/</command>
+<command>sudo cp -r /usr/share/doc/openvpn/examples/easy-rsa/2.0/ /etc/openvpn/</command>
+</screen>
+
+        <para>
+        Next, edit <filename>/etc/openvpn/easy-rsa/vars</filename> adjusting the following to your environment:
+        </para>
+
+<programlisting>
+export KEY_COUNTRY="US"
+export KEY_PROVINCE="NC"
+export KEY_CITY="Winston-Salem"
+export KEY_ORG="Example Company"
+export KEY_EMAIL="steve@example.com"
+</programlisting>
+
+        <para>
+        Enter the following to create the server certificates:
+        </para>
+
+<screen>
+<command>cd /etc/openvpn/easy-rsa/easy-rsa</command>
+<command>source vars</command>
+<command>./clean-all</command>
+<command>./build-dh</command>
+<command>./pkitool --initca</command>
+<command>./pkitool --server server</command>
+<command>cd keys</command>
+<command>openvpn --genkey --secret ta.key</command>
+<command>sudo cp server.crt server.key ca.crt dh1024.pem ta.key /etc/openvpn/</command>
+</screen>
+
+      </sect3>
+      <sect3 id="openvpn-client-cert" status="review">
+        <title>Client Certificates</title>
+
+        <para>
+        The VPN client will also need a certificate to authenticate itself to the server.  To create the 
+        certificate, enter the following in a terminal:
+        </para>
+
+<screen>
+<command>cd /etc/openvpn/easy-rsa/</command>
+<command>source vars</command>
+<command>./pkitool hostname</command>
+</screen>
+
+        <note>
+          <para>
+          Replace <emphasis>hostname</emphasis> with the actual hostname of the machine connecting to the VPN.
+          </para>
+        </note>
+
+        <para>
+        Copy the following files to the client:
+        </para>
+
+        <itemizedlist>
+          <listitem><para>/etc/openvpn/easy-rsa/hostname.ovpn</para></listitem>
+          <listitem><para>/etc/openvpn/easy-rsa/ca.crt</para></listitem>
+          <listitem><para>/etc/openvpn/easy-rsa/hostname.crt</para></listitem>
+          <listitem><para>/etc/openvpn/easy-rsa/hostname.key</para></listitem>
+          <listitem><para>/etc/openvpn/easy-rsa/ta.key</para></listitem>
+        </itemizedlist>
+
+        <note>
+          <para>
+          Remember to adjust the above file names for your client machine's <emphasis>hostname</emphasis>.
+          </para>
+        </note>
+
+        <para>
+        It is best to use a secure method to copy the certificate and key files.  The <application>scp</application> utility is a
+        good choice, but copying the files to removable media then to the client, also works well.
+        </para>
+
+      </sect3>
+    </sect2>
+    <sect2 id="openvpn-configuration" status="review">
+      <title>Configuration</title>
+      
+      <sect3 id="openvpn-server-configuration" status="review">
+        <title>Server Configuration</title>
+
+        <para>
+        Now configure the <application>openvpn</application> server by creating <filename>/etc/openvpn/server.conf</filename> from the 
+        example file.  In a terminal enter: 
+        </para>
+
+<screen>
+<command>sudo cp /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz /etc/openvpn/</command>
+<command>sudo gzip -d /etc/openvpn/server.conf.gz</command>
+</screen>
+
+        <para>
+        Edit <filename>etc/openvpn/server.conf</filename> changing the following options to:
+        </para>
+
+<programlisting>
+local 172.18.100.101
+dev tap0
+server-bridge 172.18.100.101 255.255.255.0 172.18.100.105 172.18.100.200
+push "route 172.18.100.1 255.255.255.0"
+push "dhcp-option DNS 172.18.100.20"
+push "dhcp-option DOMAIN example.com"
+tls-auth ta.key 0 # This file is secret
+user nobody
+group nogroup
+</programlisting>
+
+        <itemizedlist>
+          <listitem>
+            <para>
+            <emphasis>local</emphasis>: is the IP address of the bridge interface.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+            <emphasis>server-bridge</emphasis>: needed when the configuration uses bridging.  The <emphasis>172.18.100.101 255.255.255.0</emphasis> 
+            portion is the bridge interface and mask.  The IP range <emphasis>172.18.100.105 172.18.100.200</emphasis> is the range of IP addresses
+            that will be assigned to clients.  
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+            <emphasis>push</emphasis>: are directives to add networking options for clients.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+            <emphasis>user and group</emphasis>: configure which user and group the <application>openvpn</application> daemon executes as.
+            </para>
+          </listitem>
+        </itemizedlist> 
+
+        <note>
+          <para>
+          Replace all IP addresses and domain names above with those of your network.
+          </para>
+        </note>
+
+        <para>
+        Next, create a couple of helper scripts to add the <emphasis>tap</emphasis> interface to the bridge.  Create <filename>/etc/openvpn/up.sh</filename>:
+        </para>
+
+<programlisting>
+#!/bin/sh
+
+BR=$1
+DEV=$2
+MTU=$3
+/sbin/ifconfig $DEV mtu $MTU promisc up
+/usr/sbin/brctl addif $BR $DEV
+</programlisting>
+
+        <para>
+        And <filename>/etc/openvpn/down.sh</filename>:
+        </para>
+
+<programlisting>
+#!/bin/sh
+
+BR=$1
+DEV=$2
+
+/usr/sbin/brctl delif $BR $DEV
+/sbin/ifconfig $DEV down
+</programlisting>
+
+        <para>
+        Then make them executable:
+        </para>
+
+<screen>
+<command>sudo chmod 755 /etc/openvpn/down.sh</command>
+<command>sudo chmod 755 /etc/openvpn/up.sh</command>
+</screen>
+
+        <para>
+        After configuring the server, restart <application>openvpn</application> by entering:
+        </para>
+
+<screen>
+<command>sudo /etc/init.d/openvpn restart</command>
+</screen>
+
+      </sect3>
+      <sect3 id="openvpn-client-configuration" status="review">
+        <title>Client Configuration</title>
+
+        <para>
+        With the server configured and the client certificates copied over, create a client configuration file by 
+        copying the example.  In a terminal on the client machine enter:
+        </para>
+
+<screen>
+<command>sudo cp /usr/share/doc/openvpn/examples/sample-config-files/client.conf /etc/openvpn</command>
+</screen>
+
+        <para>
+        Now edit <filename>/etc/openvpn/client.conf</filename> changing the following options:
+        </para>
+
+<programlisting>
+dev tap
+remote vpn.example.com 1194
+cert hostname.crt
+key hostname.key
+tls-auth ta.key 1
+</programlisting>
+
+        <note>
+          <para>
+          Replace <emphasis>vpn.example.com</emphasis> with the hostname of your VPN server, and <emphasis>hostname.*</emphasis>
+          with the actual certificate and key filenames.
+          </para>
+        </note>
+
+        <para>
+        Finally, restart <application>openvpn</application>:
+        </para>
+
+<screen>
+<command>sudo /etc/init.d/openvpn restart</command>
+</screen>
+
+        <para>
+        You should now be able to connect to the remote LAN through the VPN.
+        </para>
+
+      </sect3>
+    </sect2>
+    <sect2 id="openvpn-references" status="review">
+      <title>References</title>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+          See the <ulink url="http://openvpn.net/">OpenVPN</ulink> website for additional information.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          Also, Pakt's <ulink url="http://www.packtpub.com/openvpn/book">OpenVPN: Building and Integrating Virtual Private Networks</ulink> 
+          is a good resource.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+    </sect2>
+  </sect1>
+</chapter>

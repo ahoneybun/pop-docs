@@ -457,7 +457,7 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
           </para>
           <para>
 <screen>
-<command>sudo apt-get install cupsys</command>
+<command>sudo apt-get install cups</command>
 </screen>
           </para>
           <para>
@@ -508,7 +508,7 @@ example.hostname.com:/ubuntu /local/ubuntu nfs rsize=8192,wsize=8192,timeo=14,in
                 <emphasis role="bold">ServerAdmin</emphasis>: To configure the email 
 				address of the designated administrator of the CUPS server, simply 
 				edit the <filename>/etc/cups/cupsd.conf</filename> configuration file 
-				with your preferred text editor, and modify the <emphasis 
+				with your preferred text editor, and add or modify the <emphasis 
 				role="italics">ServerAdmin</emphasis> line accordingly.  For example, 
 				if you are the Administrator for the CUPS server, and your e-mail 
 				address is 'bjoy@somebigco.com', then you would modify the ServerAdmin 
@@ -520,29 +520,6 @@ ServerAdmin bjoy@somebigco.com
 </screen>
                 </para>
                 </listitem>
-          </itemizedlist>
-                <para>
-                For more examples of configuration directives in the CUPS server 
-				configuration file, view the associated system manual page by entering the 
-				following command at a terminal prompt:
-               </para>
-               <para>
-<screen>
-<command>man cupsd.conf</command>
-</screen>
-               </para>
-                               <note>
-                <para>
-                Whenever you make changes to the <filename>/etc/cups/cupsd.conf</filename> configuration file, you'll need to restart the CUPS server by typing the following command at a terminal prompt:
-                </para>
-                </note>
-                <para>
-<screen>
-<command>sudo /etc/init.d/cupsys restart</command>
-</screen>
-                </para>
-	<para>Some other configuration for the CUPS server is done in the file <filename>/etc/cups/cups.d/ports.conf</filename>:</para>
-          <itemizedlist>
                 <listitem>
                 <para>
                 <emphasis role="bold">Listen</emphasis>: By default on Ubuntu, the CUPS 
@@ -587,7 +564,49 @@ Port 631  # Listen on port 631 on all interfaces
                 </listitem>
 	</itemizedlist>
 
+                <para>
+                For more examples of configuration directives in the CUPS server 
+				configuration file, view the associated system manual page by entering the 
+				following command at a terminal prompt:
+               </para>
+               <para>
+<screen>
+<command>man cupsd.conf</command>
+</screen>
+               </para>
+                               <note>
+                <para>
+                Whenever you make changes to the <filename>/etc/cups/cupsd.conf</filename> configuration file, you'll need to restart the CUPS server by typing the following command at a terminal prompt:
+                </para>
+                </note>
+                <para>
+<screen>
+<command>sudo /etc/init.d/cups restart</command>
+</screen>
+                </para>
       </sect2>
+
+      <sect2 id="cups-web" status="review">
+        <title>Web Interface</title>
+	  <tip>
+	    <para>
+	    CUPS can be configured and monitored using a web interface, which by default is available at <ulink url="http://localhost:631/admin">http://localhost:631/admin</ulink>.  The web interface can be used to perform all printer management tasks.
+	    </para>
+	  </tip>
+	  <para>
+	  In order to perform administrative tasks via the web interface, you must either have the root account enabled on your server, or authenticate as a user in the <emphasis role="italic">lpadmin</emphasis> group.  For security reasons, CUPS won't authenticate a user that doesn't have a password.
+	  </para>
+	  <para>
+	  To add a user to the <emphasis role="italic">lpadmin</emphasis> group, run at the terminal prompt:
+<screen>
+<command>sudo usermod -aG lpadmin username</command>
+</screen>
+	  </para>
+	  <para>
+	    Further documentation is available in the <emphasis role="italic">Documentation/Help</emphasis> tab of the web interface.
+	  </para>
+      </sect2>
+
       <sect2 id="cups-references" status="review">
         <title>References</title>
         <para>
