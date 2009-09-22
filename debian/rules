@@ -9,7 +9,6 @@ DEB_DH_BUILDDEB_ARGS := -- -Z bzip2
 DEB_SRCDIR = .
 
 $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/%:
-	dh_scrollkeeper -p$(cdbs_curpkg) $(DEB_DH_SCROLLKEEPER_ARGS)
 
 install755=install -m755 -oroot -groot
 preptrans=prepare-firefox-startpage-translations
@@ -37,18 +36,11 @@ common-binary-post-install-indep::
 		mkdir -p debian/ubuntu-docs/usr/share/omf/$$doc; \
 		cp $$doc/C/*omf debian/ubuntu-docs/usr/share/omf/$$doc/; \
 		echo "Building and installing translated xml for $$doc"; \
-		numstrings=`LANG=C msgfmt --statistics $$doc/po/$$doc.pot 2>&1 | sed -r 's/^.* ([[:digit:]]+) untranslated.*$$/\1/'`; \
 			for pofile in `ls $$doc/po/`; do \
 				lang=$$(basename $$pofile .po); \
-				if [ -e $$doc/po/$$pofile ]; then \
-					translated=`LANG=C msgfmt -o /dev/null --statistics $$doc/po/$$pofile 2>&1| cut -f1 -d\ `; \
-					if [ "`echo "$$translated./$$numstrings > 0.75" | bc -l`" = "0" ]; then \
-						echo "--$$doc $$lang is less than 75% translated, skipping"; \
-						continue; \
-					else \
-						echo "--$$doc $$lang is more than 75% translated, building xml..."; \
+				if [ -e $$doc/po/$$lang.po ]; then \
+					echo "--$$doc $$lang, building xml..."; \
 						scripts/translate.sh -d $$doc -l $$lang ; \
-					fi; \
 				fi; \
 				if [ -e $$doc/$$lang/$$doc.xml ]; then \
 					mkdir -p debian/ubuntu-docs/usr/share/gnome/help/$$doc/$$lang/; \
@@ -63,10 +55,6 @@ common-binary-post-install-indep::
 # Common documents
 
 		cp -r libs debian/ubuntu-docs/usr/share/ubuntu-docs/ 
-
-# Scrollkeeper loving
-
-	dh_scrollkeeper 
 
 build/ubuntu-serverguide::
 	$(MAKE) serverguide; $(MAKE) contributors
