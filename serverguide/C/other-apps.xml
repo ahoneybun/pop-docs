@@ -191,26 +191,28 @@ weather -i KINT >> /var/run/update-motd/60-local-weather
 </screen>
 
     <para>
-    The main configuration file, <filename>/etc/etckeeper/etckeeper.conf</filename>, is fairly simple.  The main options being which
-    VCS and which package management system to use.  By default <application>etckeeper</application> is configured to use 
-    <application>bzr</application> for version control, <application>apt</application> for high level package mangement, and 
-    <application>dpkg</application> for low level package management.
-    </para>
-
-    <para>
-    With the package installed, it is time to initialize the repository.  In a terminal enter:
+    The main configuration file, <filename>/etc/etckeeper/etckeeper.conf</filename>, is fairly simple.  The main option is which
+    VCS to use.  By default <application>etckeeper</application> is configured to use 
+    <application>bzr</application> for version control.
+    The repository is automatically initialized (and committed for the first
+    time) during package installation. It is possible to undo this by entering
+    the following command:
     </para>
 
 <screen>
-<command>sudo etckeeper init</command>
+<command>sudo etckeeper uninit</command>
 </screen>
 
-   <para>
-   Next, commit the files to the repository:
-   </para>
+    <para>
+    By default, etckeeper will commit uncommitted changes made to /etc daily.
+    This can be disabled using the AVOID_DAILY_AUTOCOMMITS configuration
+    option. It will also automatically commit changes before and after package
+    installation. For a more precise tracking of changes, it is recommended
+    to commit your changes manually, together with a commit message, using:
+    </para>
 
 <screen>
-<command>sudo etckeeper commit "initial import"</command>
+<command>sudo etckeeper commit "..Reason for configuration change.."</command>
 </screen>
 
     <para>
@@ -218,7 +220,7 @@ weather -i KINT >> /var/run/update-motd/60-local-weather
     </para>
 
 <screen>
-<command>sudo bzr log /etc/passswd</command>
+<command>sudo bzr log /etc/passwd</command>
 </screen>
 
     <para>

@@ -29,6 +29,14 @@
 <command>sudo apt-get install drbd8-utils</command>
 </screen>
 
+    <note>
+      <para>
+      If you are using the <emphasis>virtual kernel</emphasis> as part of a virtual machine you will need to manually compile 
+      the <application>drbd</application> module.  It may be easier to install the <application>linux-server</application>
+      package inside the virtual machine.
+      </para>
+    </note>
+
     <para>
     This section covers setting up a <application>drbd</application> to replicate a separate <filename>/srv</filename>
     partition, with an <application>ext3</application> filesystem between two hosts.  The partition size is not 
@@ -62,7 +70,6 @@ resource r0 {
         net {
                 cram-hmac-alg sha1;
                 shared-secret "secret";
-                allow-two-primaries;
         }
         on drbd01 {
                 device /dev/drbd0;
