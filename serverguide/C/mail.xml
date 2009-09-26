@@ -1302,7 +1302,7 @@ instructions in the email to subscribe.
    Along with the main filtering applications compression utilities are needed to process some email attachments:
    </para>
 <screen>
-<command>sudo apt-get install arj cabextract cpio lha nomarch pax rar unrar unzip zip zoo</command>
+<command>sudo apt-get install arj cabextract cpio lha nomarch pax rar unrar unzip zip</command>
 </screen>
 	 </sect2>
 	 <sect2 id="mail-filter-configuration" status="review">
@@ -1381,8 +1381,20 @@ use strict;
 	     <filename>/etc/amavis/conf.d/20-debian_defaults</filename> to set <emphasis>$final_spam_destiny</emphasis> to D_DISCARD
 	     rather than D_BOUNCE, as follows:
 	     </para>
+
 <programlisting>
 $final_spam_destiny       = D_DISCARD;
+</programlisting>
+
+             <para>
+             Additionally, you may want to adjust the following options to flag more messages as spam:
+             </para>
+
+<programlisting>
+$sa_tag_level_deflt = -999; # add spam info headers if at, or above that level
+$sa_tag2_level_deflt = 6.0; # add 'spam detected' headers at that level
+$sa_kill_level_deflt = 21.0; # triggers spam evasive actions
+$sa_dsn_cutoff_level = 4; # spam level beyond which a DSN is not sent
 </programlisting>
 
              <para>

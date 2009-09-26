@@ -205,16 +205,16 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
 				<title>Access via WebDAV protocol (http://)</title>
 <para> To access the Subversion repository via WebDAV protocol, you must configure your Apache 2 web server. You must add the following snippet in your <filename>/etc/apache2/apache2.conf</filename> file:</para>
 
-	<programlisting> &lt;Location /svn&gt;
+<programlisting>
+ &lt;Location /svn&gt;
   DAV svn
   SVNParentPath /home/svn
   AuthType Basic
   AuthName "Your repository name"
   AuthUserFile /etc/subversion/passwd
-  &lt;LimitExcept GET PROPFIND OPTIONS REPORT&gt;
   Require valid-user
-  &lt;/LimitExcept&gt;
-  &lt;/Location&gt; </programlisting>
+ &lt;/Location&gt; 
+</programlisting>
 	<note>
 		<para>The above configuration snippet assumes that Subversion
     repositories are created under <filename>/home/svn/</filename>
@@ -272,15 +272,17 @@ syntax of the command, entered at a terminal prompt, is as follows:</para>
 			<sect3 id="access-via-webdav-with-ssl" status="review">
 				<title>Access via WebDAV protocol with SSL encryption (https://)</title>
 					<para> 
-						Accessing Subversion repository via WebDAV protocol with SSL 
-						encryption (https://) is similar to http:// except that you 
-						must install and configure the digital certificate in your 
-						Apache2 web server.
+					Accessing Subversion repository via WebDAV protocol with SSL 
+					encryption (https://) is similar to http:// except that you 
+					must install and configure the digital certificate in your 
+					Apache2 web server.  To use SSL with Subversion add the above
+                                        Apache2 configuration to <filename>/etc/apache2/sites-available/default-ssl</filename>.
+                                        For more information on setting up Apache2 with SSL see <xref linkend="https-configuration"/>.
 					</para>
 
 					<para>
 						You can install a digital certificate issued by a signing 
-						authority like Verisign. Alternatively, you can install your 
+						authority. Alternatively, you can install your 
 						own self-signed certificate.
 					</para>
 					<para>
