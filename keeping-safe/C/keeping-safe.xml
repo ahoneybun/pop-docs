@@ -126,32 +126,63 @@
 		    <para>To unlock the screen, move the mouse or press a key. Then, type your password and either press the <keycap>Enter</keycap> key or press the <guibutton>Unlock</guibutton> button.</para>
 		    <para>If more than one person has a user account on your computer and the screen is locked, other users can press the <guibutton>Switch user...</guibutton> button to use the computer, even while the screen is locked. They will be unable to access your currently-open work, and you will be able to switch back to your locked session when they have finished using the computer.</para>
 		</sect1>
-		<sect1 id="firewall" status="review">
+		<sect1 id="firewall" status="complete">
 			<title>Set up a firewall</title>
-			<para>You can optionally install a firewall to protect your computer against unauthorized access by people on the Internet or your network. Firewalls block connections to your computer from unknown sources, which helps to prevent security breaches.</para>
-			<procedure>
-				<step>
-					<para><ulink url="apt:firestarter">Install the <application>firestarter</application> package</ulink> from the <quote>Universe</quote> repository.</para>
-				</step>
-				<step>
-					<para>To start
-					<application>Firestarter</application>,
-					choose &firestarter-firewall-tool;, and enter your administrator password when prompted.
-					</para>
-				</step>
-				<step>
-					<para>The <application>Firewall Wizard</application> should run. If it does not, press <menuchoice><guimenu>Firewall</guimenu><guimenuitem>Run Wizard</guimenuitem></menuchoice>.</para>
-				</step>
-				<step>
-					<para>Follow the steps in the <application>Firewall Wizard</application>. After completing all of the steps, the firewall should be configured and running.</para>
-				</step>
-				<step>
-					<para>To check that your firewall is working correctly, make use of an online firewall testing service such as <ulink url="http://www.grc.com/">ShieldsUP</ulink>.</para>
-				</step>
-			</procedure>
-			<para>For help and advice on the advanced configuration of <application>Firestarter</application>, see the <ulink url='http://www.fs-security.com/docs.php'>Firestarter Online Manual</ulink>.</para>
-			<para>More advanced users may wish to use the UFW firewall, which is installed by default. See the <ulink type="help" url="man:ufw">UFW manual</ulink> for more information.</para>
-			
+			<para>You may wish to install a firewall to protect your computer against unauthorized access by people on the Internet or your network. Firewalls block connections to your computer from unknown sources, which helps to prevent security breaches. If you use a router to connect to the Internet, the router may already have a firewall configured which regulates connections from the Internet to your network. This section deals with setting up a firewall on Ubuntu to regulate connections to your computer.</para>
+			<sect2>
+				<title>Firewall configuration tools</title>
+				<para><application>Uncomplicated Firewall (UFW)</application> is the standard firewall configuration program in Ubuntu. It is a command line program. Most users will prefer to use <application>Gufw</application>, which is a graphical program to configure <application>UFW</application>.</para>
+				<para>Advanced users may wish to use <application>UFW</application> directly in the terminal. See the <ulink type="help" url="man:ufw">UFW manual</ulink> or the <ulink url='https://help.ubuntu.com/community/UFW'>Community Documentation page on <application>UFW</application></ulink> for more information.  Alternatively, you can use <application>iptables</application> - see the <ulink type="help" url="man:iptables">iptables manual</ulink>.</para>
+				<sect3 id="gufw" status="review">
+					<title>Gufw</title>
+					<para>To install and enable <application>Gufw</application>:</para>
+					<procedure>
+						<step>
+							<para><ulink url="apt:gufw">Install the <application>gufw</application> package.</ulink></para>
+						</step>
+						<step>
+							<para>To start <application>Gufw</application>, choose &gufw;.</para>
+						</step>
+						<step>
+							<para>To enable the firewall, simply check the box next to <guibutton>Enabled</guibutton> under <quote>Actual Status.</quote></para>
+						</step>
+					</procedure>
+					<para>The default configuration is to deny connections. This means that a program attempting to connect to your computer will be denied. Certain programs or services which use the internet may require you to add an exception.</para>
+					<para>To add an exception:</para>
+					<procedure>
+						<step>
+							<para>Click <guibutton>Add</guibutton>.</para>
+						</step>
+						<step>
+							<para>You can choose from <guibutton>Preconfigured</guibutton> options for common programs and services, or you can manually add port exceptions in the <guibutton>Simple</guibutton> or <guibutton>Advanced</guibutton> tabs.</para>
+						</step>
+						<step>
+							<para>To find out what type of exception a particular program requires, you should consult the help for that program.</para>
+						</step>
+					</procedure>
+					<para>For a graphical walkthrough of basic Gufw usage, see the <ulink url='https://help.ubuntu.com/community/Gufw'>Ubuntu Community Documentation page on <application>Gufw</application></ulink>.</para>
+				</sect3>
+			</sect2>
+			<sect2>
+				<title>Testing the firewall and monitoring network traffic</title>
+				<para>To test the firewall it is best to scan it from a second computer. A popular application to use is called <application>nmap</application>.</para>
+				<procedure>
+				 	<step>
+				 		<para><ulink url="apt:nmap">Install the <application>nmap</application> package.</ulink></para>
+				 	</step>
+				 	<step>
+				 		<para>Run: </para>
+				 		<screen><command>nmap -vAPN 192.168.1.100</command></screen>
+						<note><para>Substitute the IP address of the computer you want to scan for <emphasis>192.168.1.100</emphasis>.</para></note> 
+				 	</step>
+				 	<step>
+				 		<para>To see what services are associated with the open ports, run: </para>
+				 		<screen><command>lsof -i -n -P</command></screen>
+				 	</step>
+				</procedure>
+				<para>You can also make use of an online firewall testing service such as <ulink url="http://www.grc.com/">ShieldsUP</ulink>.</para>
+				<para>Actual monitoring of your network traffic can be done with either <application>Wireshark</application> or <application>Snort</application>. <application>Wireshark</application> can analyze network packets and <application>Snort</application> is used in Network Intrusion Detection Systems (NIDS) and will notify you of unusual traffic.</para>
+			</sect2>
 		</sect1>
 		<sect1 id="avoid-internet-crime" status="review">
 			<title>Avoid Internet nuisances and crime</title>
