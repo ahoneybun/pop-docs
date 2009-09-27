@@ -741,7 +741,8 @@ modifying entry "cn=config"
           <note>
             <para>
             Adjust the <filename>server.crt</filename>, <filename>server.key</filename>, and <filename>cacert.pem</filename>
-            names if yours are different.
+            names if yours are different. If you have a self-signed
+            certificate, do <emphasis>NOT</emphasis> add the olcTLSCACertificateFile property, as it will cause GnuTLS to fail..
             </para>
           </note>
 
@@ -760,12 +761,13 @@ SLAPD_SERVICES="ldap:/// ldapi:/// ldaps:///"
 <screen>
 <command>sudo adduser openldap ssl-cert</command>
 <command>sudo chgrp ssl-cert /etc/ssl/private/server.key</command>
+<command>sudo chmod g+r /etc/ssl/private/server.key</command>
 </screen>
 
           <note>
             <para>
             If the <filename role="directory">/etc/ssl/private</filename> and <filename>/etc/ssl/private/server.key</filename> have
-            different permissions, adjust the commands appropriately.     
+            different permissions, adjust the commands appropriately.
             </para>
           </note>
 
@@ -781,6 +783,18 @@ SLAPD_SERVICES="ldap:/// ldapi:/// ldaps:///"
           The <application>slapd</application> daemon should now be listening for LDAPS connections and be able to use STARTTLS during
           authentication.
           </para>
+
+	  <note>
+	    <para>If you run into troubles with the server not starting,
+	      check the /var/log/syslog. If you see errors like 
+	      main: TLS init def ctx failed: -1,
+	      it is likely there is a configuration problem.
+	      Check that the certificate is signed by the authority from 
+	      in the files configured, and that the ssl-cert group
+	      has read permissions on the private key.
+	    </para>
+	  </note>
+
 
           <sect3 id="openldap-tls-replication" status="review">
             <title>TLS Replication</title>
