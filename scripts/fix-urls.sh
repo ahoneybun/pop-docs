@@ -39,7 +39,7 @@ for y in `cat libs/shipped-docs`; do
  	sed -i build/$y/$lang/*.html -e "s#ghelp:office#\.\./\.\./office/$lang/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:hardware\#disks#\.\./\.\./hardware/$lang/disks.html#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:hardware\#laptops-touchpads#\.\./\.\./office/$lang/laptops.html#g"
- 	sed -i build/$y/$lang/*.html -e "s#ghelp:hardware\#restricted-manager#\.\./\.\./hardware/$lang/restricted-manager.html#g"
+ 	sed -i build/$y/$lang/*.html -e "s#ghelp:hardware\#jockey#\.\./\.\./hardware/$lang/jockey.html#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:musicvideophotos\#codecs#\.\./\.\./musicvideophotos/$lang/codecs.html#g"
 	sed -i build/$y/$lang/*.html -e "s#ghelp:musicvideophotos\#onlinemedia-plugins#\.\./\.\./musicvideophotos/$lang/onlinemedia.html#g"
 	sed -i build/$y/$lang/*.html -e "s#ghelp:musicvideophotos\#onlinemedia-audiostreams#\.\./\.\./musicvideophotos/$lang/onlinemedia.html\#onlinemedia-audiostreams#g"
