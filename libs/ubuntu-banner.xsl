@@ -19,7 +19,7 @@ urchinTracker();
 <noscript>
  <form action="http://www.google.com/cse" id="cse-search-box">
    <div>
-     <input type="hidden" name="cx" value="003883529982892832976:e2vwumte3fq" />
+     <input type="hidden" name="cx" value="004599128559784038176:vj_p0xo-nng" />
      <input type="hidden" name="ie" value="UTF-8" />
      <input type="text" name="q" size="27" />
      <input type="submit" name="sa" value="Search" />
@@ -31,7 +31,7 @@ urchinTracker();
  document.write('<form action="https://help.ubuntu.com/search.html" id="cse-search-box">');
  document.write('  <div>');
  document.write('    <input type="hidden" name="cof" value="FORID:9" />');
- document.write('    <input type="hidden" name="cx" value="003883529982892832976:e2vwumte3fq" />');
+ document.write('    <input type="hidden" name="cx" value="004599128559784038176:vj_p0xo-nng" />');
  document.write('    <input type="hidden" name="ie" value="UTF-8" />');
  document.write('    <input type="text" name="q" size="27" />');
  document.write('    <input type="submit" name="sa" value="Search" />');

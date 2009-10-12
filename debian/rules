@@ -5,7 +5,7 @@ include /usr/share/cdbs/1/class/makefile.mk
 
 DEB_DH_INSTALL_ARGS = -X.svn
 DEB_DH_BUILDDEB_ARGS := -- -Z bzip2
-
+export CDBS_NO_GNOME_HELP_SYMLINKING=1
 DEB_SRCDIR = .
 
 $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/%:
@@ -68,5 +68,3 @@ install/ubuntu-serverguide::
 	cp -R build/serverguide/* debian/ubuntu-serverguide/usr/share/ubuntu-serverguide/html/
 	cp -R build/libs/C/contributors.html debian/ubuntu-serverguide/usr/share/ubuntu-serverguide/libs/C/
 
-binary-fixup/ubuntu-docs::
-	(cd debian/ubuntu-docs; ../../scripts/symlink-dupes)
