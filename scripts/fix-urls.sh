@@ -50,14 +50,15 @@ for y in `cat libs/shipped-docs`; do
  	sed -i build/$y/$lang/*.html -e "s#ghelp:musicvideophotos\#photos-slideshow#\.\./\.\./musicvideophotos/$lang/photos.html\#photos-slideshow#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:musicvideophotos\#photos-printing#\.\./\.\./musicvideophotos/$lang/photos.html\#photos-printing#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:internet\#web-plugins-flash#\.\./\.\./internet/$lang/web-plugins.html\#web-plugins-flash#g"
- 	sed -i build/$y/$lang/*.html -e "s#ghelp:programming\#java#\.\./\.\./programming/$lang/java.html#g"
- 	sed -i build/$y/$lang/*.html -e "s#ghelp:programming#\.\./\.\./programming/$lang/index.html#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:serverguide#\.\./\.\./serverguide/$lang/index.html#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:windows#\.\./\.\./windows/$lang/#g"
         sed -i build/$y/$lang/*.html -e "s#\"legal\.html\"#\"/legal\.html\"#g"
  	sed -i build/$y/$lang/*.html -e "s#man:apt-get#http://manpages\.ubuntu\.com/manpages/intrepid/en/man8/apt-get\.html#g"
         sed -i build/$y/$lang/*.html -e "s#x-yelp-toc:\#Man#http://manpages\.ubuntu\.com#g"
         sed -i build/$y/$lang/*.html -e "s#x-yelp-toc:\#Info#http://manpages\.ubuntu\.com#g"
+
+## For Software Center, documentation is not online so the best we can do for now is to remove the link
+        sed -i build/$y/$lang/*.html -e "s#ghelp:software-center##g"
 
 ## Gnome links
 
@@ -105,7 +106,8 @@ for y in `cat libs/shipped-docs`; do
  	sed -i build/$y/$lang/*.html -e "s#ghelp:rhythmbox#http://library\.gnome\.org/users/rhythmbox/unstable/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:rhythmbox\#cd-burning#http://library\.gnome\.org/users/rhythmbox/unstable/AudioCD\.html\.en\#cd-burning#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:rhythmbox\#cd-import#http://library\.gnome\.org/users/rhythmbox/unstable/AudioCD\.html\.en\#cd-import#g"
- 	sed -i build/$y/$lang/*.html -e "s#ghelp:brasero#http://library\.gnome\.org/users/brasero/0\.8/#g"
+ 	sed -i build/$y/$lang/*.html -e "s#ghelp:brasero#http://library\.gnome\.org/users/brasero/stable/#g"
+ 	sed -i build/$y/$lang/*.html -e "s#ghelp:empathy#http://library\.gnome\.org/users/empathy/stable/#g"
 
 ## Other links
  	sed -i build/$y/$lang/*.html -e "s#ghelp:synaptic\#synaptic-single#https://help\.ubuntu\.com/community/SynapticHowto#g"

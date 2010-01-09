@@ -40,7 +40,7 @@
 <sect2 id="http-installation" status="review">
   <title>Installation</title>
     <para>
-    The Apache2 web server is available in Ubuntu Linux. To install Apache2:
+    The <application>Apache2</application> web server is available in Ubuntu Linux. To install Apache2:
     </para>
     
     <procedure>
@@ -62,7 +62,7 @@
  
         <para>
         Apache2 is configured by placing <emphasis>directives</emphasis> in plain text
-        configuration files.  The configuration files are separated between the following
+        configuration files.  These <emphasis>directives</emphasis> are separated between the following
         files and directories:
         </para>
 
@@ -75,7 +75,7 @@
           </listitem>
           <listitem>
             <para>
-            <emphasis>conf.d:</emphasis> contains configuration files which apply <emphasis>globally</emphasis> to Apache. 
+            <emphasis>conf.d:</emphasis> contains configuration files which apply <emphasis>globally</emphasis> to Apache2. 
             Other packages that use Apache2 to serve content may add files, or symlinks, to this directory.
             </para>
           </listitem>
@@ -111,7 +111,7 @@
           </listitem>
           <listitem>
             <para>
-            <emphasis>sites-available:</emphasis> this directory has configuration files for Apache <emphasis>Virtual Hosts</emphasis>.  
+            <emphasis>sites-available:</emphasis> this directory has configuration files for Apache2 <emphasis>Virtual Hosts</emphasis>.  
             Virtual Hosts allow Apache2 to be configured for multiple sites that have separate configurations.
             </para>
           </listitem>
@@ -119,7 +119,7 @@
             <para>
             <emphasis>sites-enabled:</emphasis> like mods-enabled, <filename role='directory'>sites-enabled</filename> contains 
             symlinks to the <filename>/etc/apache2/sites-available</filename> directory.  Similarly when a configuration file in 
-            sites-available is symlinked it will be active once Apache is restarted.
+            sites-available is symlinked, the site configured by it will be active once Apache2 is restarted.
             </para>
           </listitem>
         </itemizedlist>
@@ -240,7 +240,7 @@ ServerAlias *.ubunturocks.com
                </listitem>
                <listitem>
                  <para>
-		 The <emphasis>DocumentRoot</emphasis> directive specifies where Apache should look for the
+		 The <emphasis>DocumentRoot</emphasis> directive specifies where Apache2 should look for the
 		 files that make up the site.  The default value is /var/www.  No site
 		 is configured there, but if you uncomment the <emphasis>RedirectMatch</emphasis> directive
 		 in <filename>/etc/apache2/apache2.conf</filename> requests will be
@@ -259,7 +259,7 @@ ServerAlias *.ubunturocks.com
 
             <para>
             Enable the new <emphasis>VirtualHost</emphasis> using the 
-            <application>a2ensite</application> utility and restart Apache:
+            <application>a2ensite</application> utility and restart Apache2:
             </para>
 
 <screen>
@@ -317,12 +317,12 @@ ServerAlias *.ubunturocks.com
 	      if neither is true.  The server will try to
               find one of the files listed in the DirectoryIndex
               directive and will return the first one it finds. If it
-              does not find any of these files and if Options Indexes is
+              does not find any of these files and if <emphasis>Options Indexes</emphasis> is
               set for that directory, the server will generate and
               return a list, in HTML format, of the subdirectories and
               files in the directory.  The default value, found in
-	      <filename>/etc/apache2/apache2.conf</filename> is &quot;
-	      index.html index.cgi index.pl index.php index.xhtml&quot;.
+	      <filename>/etc/apache2/mods-available/dir.conf</filename> is 
+	      &quot;index.html index.cgi index.pl index.php index.xhtml index.htm&quot;.
 	      Thus, if Apache2 finds a file in a requested directory
 	      matching any of these names, the first will be displayed.
               </para>
@@ -331,7 +331,7 @@ ServerAlias *.ubunturocks.com
 
               <para>
               The <emphasis>ErrorDocument</emphasis> directive allows you to specify a file
-       	      for Apache to use for specific error events.  For example,
+       	      for Apache2 to use for specific error events.  For example,
 	      if a user requests a resource that does not exist, a 404
 	      error will occur, and per Apache2's default configuration,
 	      the file <filename>/usr/share/apache2/error/HTTP_NOT_FOUND.html.var
@@ -493,17 +493,17 @@ ServerAlias *.ubunturocks.com
 
         </sect3>
         <sect3 id="apache-modules" status="review">
-          <title>Apache Modules</title>
+          <title>Apache2 Modules</title>
 
           <para>
-          Apache is a modular server. This implies that only the most
+          Apache2 is a modular server. This implies that only the most
           basic functionality is included in the core server. Extended
           features are available through modules which can be loaded
-          into Apache. By default, a base set of modules is included in
+          into Apache2. By default, a base set of modules is included in
           the server at compile-time. If the server is compiled to use
           dynamically loaded  modules, then modules can be compiled
           separately, and added at any time using the LoadModule
-          directive. Otherwise, Apache must be recompiled to add or
+          directive. Otherwise, Apache2 must be recompiled to add or
           remove modules. 
           </para>
 
@@ -573,7 +573,7 @@ ServerAlias *.ubunturocks.com
 
           <para>
           There is a default HTTPS configuration file in <filename>/etc/apache2/sites-available/default-ssl</filename>.
-          In order for <application>Apache</application> to provide HTTPS, 
+          In order for <application>Apache2</application> to provide HTTPS, 
           a <emphasis>certificate</emphasis> and <emphasis>key</emphasis> file are also needed.  The default HTTPS 
           configuration will use a certificate and key generated by the <application>ssl-cert</application> package.  They 
           are good for testing, but the auto-generated certificate and key should be replaced by a certificate specific
@@ -582,7 +582,7 @@ ServerAlias *.ubunturocks.com
           </para>
 
 	  <para>
-          To configure <application>Apache</application> for HTTPS, enter the following:
+          To configure <application>Apache2</application> for HTTPS, enter the following:
           </para>
 
 <screen>
@@ -598,7 +598,7 @@ ServerAlias *.ubunturocks.com
             </note>
 
             <para>
-            With Apache now configured for HTTPS, restart the service to enable the new settings:
+            With Apache2 now configured for HTTPS, restart the service to enable the new settings:
             </para>
 
             
@@ -610,7 +610,7 @@ ServerAlias *.ubunturocks.com
             <note>
               <para>
               Depending on how you obtained your certificate you may need to 
-              enter a passphrase when <application>Apache</application> starts. 
+              enter a passphrase when <application>Apache2</application> starts. 
               </para>
             </note>
 
@@ -661,9 +661,9 @@ ServerAlias *.ubunturocks.com
       section explains how to install and configure PHP5 in Ubuntu
       System with Apache2 and MySQL.</para>
       <para> This section assumes you have installed and configured
-      Apache 2 Web Server and MySQL Database Server. You can refer to
-      Apache 2 section and MySQL sections in this document to install and
-      configure Apache 2 and MySQL respectively.</para>
+      Apache2 Web Server and MySQL Database Server. You can refer to
+      Apache2 section and MySQL sections in this document to install and
+      configure Apache2 and MySQL respectively.</para>
 
 <sect2 id="php5-installation" status="review">
   <title>Installation</title>
@@ -853,7 +853,7 @@ visible_hostname weezie
                </listitem>
                <listitem>
                   <para>
-                     Again, Using Squid's access control, you may configure use of Internet services proxied by Squid
+                     Using Squid's access control, you may configure use of Internet services proxied by Squid
                      to be available only users with certain Internet Protocol (IP) addresses.  For example, we will illustrate access 
                      by users of the 192.168.42.0/24 subnetwork only:
                   </para>
