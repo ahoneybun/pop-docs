@@ -31,16 +31,16 @@
     Before getting started with <application>libvirt</application> it is best to make sure your hardware supports the necessary 
     virtualization extensions for <application>KVM</application>.  Enter the following from a terminal prompt:
     </para>
-<screen> <command>egrep '(vmx|svm)' /proc/cpuinfo</command>
+<screen> 
+<command>kvm-ok</command>
 </screen>
     <para>
-    If nothing is printed, it means that your cpu does <emphasis>not</emphasis> support hardware virtualization.
+    A message will be printed informing you if your CPU <emphasis>does</emphasis> or <emphasis>does not</emphasis> support hardware virtualization.
     </para>
     <note>
       <para>
       On most computer whose processor supports virtualization, it is
-      necessary to activate an option in the bios to enable it. The method
-      described above does not show the status of it's activation.
+      necessary to activate an option in the BIOS to enable it. 
       </para>
     </note>
     <sect2 id="virtual-networking" status="review">
@@ -387,6 +387,11 @@
           discuss virtualization technology in Ubuntu.
           </para>
         </listitem>
+        <listitem>
+          <para>
+          Another good resource is the <ulink url="https://help.ubuntu.com/community/KVM">Ubuntu Wiki KVM</ulink> page.
+          </para>
+        </listitem>
       </itemizedlist>
     </sect2>
   </sect1>
@@ -442,7 +447,7 @@
 
       <para>
       With vmbuilder, there is no need to download a JeOS ISO anymore. vmbuilder will fetch the various package and build a virtual machine 
-      tailored for our need in about a minute for us. Vmbuilder is a Script that automates the process of creating a ready to use Linux based
+      tailored for your needs in about a minute. vmbuilder is a script that automates the process of creating a ready to use Linux based
       VM. The currently supported hypervisors are KVM and Xen.
       </para>
 
@@ -453,7 +458,7 @@
       </para>
 
       <para>
-      First introduced as a shell script in Ubuntu 8.04LTS, <application>ubuntu-vm-builder</application> started with little emphasis as 
+      First introduced as a shell script in Ubuntu 8.04 LTS, <application>ubuntu-vm-builder</application> started with little emphasis as 
       a hack to help developers test their new code in a virtual machine without having to restart from scratch each time. As a few Ubuntu 
       administrators started to notice this script, a few of them went on improving it and adapting it for so many use case that 
       Soren Hansen (the author of the script and Ubuntu virtualization specialist, not the golf player) decided to rewrite it from scratch 
@@ -722,7 +727,7 @@
 
 <programlisting>
 --part PATH
-  Allows to specify a partition table in partfile each  line  of  partfile  should  specify
+  Allows you to specify a partition table in a partition file, located at PATH. Each line of the partition file should specify
   (root first):
       mountpoint size
   where  size  is  in megabytes. You can have up to 4 virtual disks, a new disk starts on a
@@ -806,7 +811,7 @@ swap 4000
         </para>
 
 <screen>
-<command>sudo vmbuilder kvm ubuntu --suite intrepid --flavour virtual --arch i386 \
+<command>sudo vmbuilder kvm ubuntu --suite &distro-short-codename; --flavour virtual --arch i386 \
          -o --libvirt qemu:///system --ip 192.168.0.100 --part vmbuilder.partition \ 
          --user user --name user --pass default</command>
 </screen>
@@ -831,7 +836,7 @@ swap 4000
       </itemizedlist>
 
       <para>
-      This is done using vmbuilder by specifying the --addpkg command multiple times:
+      This is done using vmbuilder by specifying the --addpkg option multiple times:
       </para>
 
 <programlisting>
@@ -899,7 +904,7 @@ swap 4000
           to one of the official repositories, which, depending on your internet connection speed and the load of the mirror, can 
           have a big impact on the actual build time. In order to reduce this, it is recommended to either have a local repository 
           (which can be created using <application>apt-mirror</application>) or using a caching proxy such as 
-          <application>apt-cache</application>. The later option being much simpler to implement and requiring less disk space, it
+          <application>apt-proxy</application>. The later option being much simpler to implement and requiring less disk space, it
           is the one we will pick in this tutorial. To install it, simply type:
           </para>
 
@@ -929,8 +934,8 @@ swap 4000
 
           <note>
             <para>
-            The mirror address specified here will also be used in the <filename>/etc/apt/source.list</filename> of the newly created 
-            guest, so it is usefull to specify here an address that can be resolved by the guest or to plan on reseting this address 
+            The mirror address specified here will also be used in the <filename>/etc/apt/sources.list</filename> of the newly created 
+            guest, so it is useful to specify here an address that can be resolved by the guest or to plan on reseting this address 
             later on, such as in a <emphasis>--firstboot</emphasis> script.
             </para>
           </note>
@@ -1146,7 +1151,7 @@ echo "browser to http://serverip/limesurvey/admin"
       </para>
 
 <screen>
-<command>sudo vmbuilder kvm ubuntu --suite intrepid --flavour virtual --arch i386 -o \ 
+<command>sudo vmbuilder kvm ubuntu --suite &distro-short-codename; --flavour virtual --arch i386 -o \ 
          --libvirt qemu:///system --ip 192.168.0.100 --part vmbuilder.partition --user user \
          --name user --pass default --addpkg apache2 --addpkg apache2-mpm-prefork \ 
          --addpkg apache2-utils --addpkg apache2.2-common --addpkg dbconfig-common \ 
@@ -1175,142 +1180,690 @@ echo "browser to http://serverip/limesurvey/admin"
           Mailing list: <ulink url="https://lists.ubuntu.com/mailman/listinfo/ubuntu-server">ubuntu-server at lists.ubuntu.com</ulink>
           </para>
         </listitem>
+        <listitem>
+          <para>
+          Also, see the <ulink url="https://help.ubuntu.com/community/JeOSVMBuilder">JeOSVMBuilder Ubuntu Wiki</ulink> page.
+          </para>
+        </listitem>
       </itemizedlist>
     </sect2>
   </sect1>
-  <sect1 id="eucalyptus" status="review">
-    <title>Eucalyptus</title>
+  <sect1 id="uec" status="review">
+    <title>UEC</title>
 
-    <sect2 id="eucalyptus-overview" status="review">
+    <sect2 id="uec-overview" status="review">
       <title>Overview</title>
 
       <para>
-      <emphasis>Eucalyptus</emphasis> is an open-source software infrastructure for implementing "cloud computing" on your own clusters. 
-      <emphasis>Eucalyptus</emphasis> allows you to create your own cloud computing environment in order to maximize computing resources
-      and provide a cloud computing environment to your users. 
+      This tutorial covers <application>UEC</application> installation from the Ubuntu &distro-rev; Server Edition CD, and assumes a basic network topology, 
+      with a single system serving as the <emphasis>"all-in-one controller"</emphasis>, and one or more nodes attached.
       </para>
 
       <para>
-      This section will cover setting up a Cloud Computing environment using <application>Eucalyptus</application> with 
-      <application>KVM</application>. For more information on KVM see <xref linkend="libvirt"/>.
+      From this Tutorial you will learn how to install, configure, register and perform several operations on a basic <application>UEC</application> 
+      setup that results in a cloud with a one controller <emphasis>"front-end"</emphasis> and one or several node(s) for running Virtual Machine (VM)
+      instances. You will also use examples to help get you started using your own private compute cloud.
       </para>
 
+    </sect2>
+    <sect2 id="uec-prerequisites" status="review">
+      <title>Prerequisites</title>
+
       <para>
-      The Cloud Computing environment will consist of three components, typically installed on at least two separate machines 
-      (termed the 'front-end' and 'node(s)' for the rest of this document): 
+      To deploy a minimal cloud infrastructure, you’ll need at least <emphasis>two</emphasis> dedicated systems:
       </para>
 
       <itemizedlist>
         <listitem>
           <para>
-          <emphasis>One Front-End:</emphasis> hosts one Cloud Controller, a Java based Web configuration interface, and a Cluster Controller,
-          which determines where virtual machines (VMs) will be housed and manages cluster level VM networking. 
+          A front end.
           </para>
         </listitem>
         <listitem>
           <para>
-          <emphasis>One or more Compute Nodes:</emphasis> runs the Node Controller component of Eucalyptus, which allows the machine to be part 
-          of the cloud as a host for VMs. 
+          One or more node(s).
           </para>
         </listitem>
       </itemizedlist>
 
       <para>
-      The simple <emphasis>System</emphasis> networking option will be used by default. This network method allows virtual machine instances, to 
-      obtain IP addresses from the local LAN, assuming that a DHCP server is properly configured on the LAN to hand out IPs dynamically to VMs 
-      that request them. Each node will be configured for bridge  networking. For more details see <xref linkend="bridging"/>. 
+      The following are recommendations, rather than fixed requirements. However, our experience in developing this documentation indicated the following suggestions.
       </para>
+
+      <sect3 id="uec-frontend-requirements" status="review">
+        <title>Front End Requirements</title>
+ 
+        <para>
+        Use the following table for a system that will run one or more of:
+        </para>
+
+        <itemizedlist>
+          <listitem><para>Cloud Controller (CLC)</para></listitem>
+          <listitem><para>Cluster Controller (CC)</para></listitem>
+          <listitem><para>Walrus (the S3-like storage service)</para></listitem>
+          <listitem><para>Storage Controller (SC)</para></listitem>
+        </itemizedlist>
+
+        <table>
+          <title>UEC Front End Requirements</title>
+          <tgroup cols="4" rowsep="1">
+          <colspec colname="1"/>
+          <colspec colname="2"/>
+          <colspec colname="3"/>
+          <colspec colname="4"/>
+          <thead>
+            <row>
+              <entry morerows="1" valign="middle"><para>Hardware</para></entry>
+              <entry morerows="1" valign="middle"><para>Minimum</para></entry>
+              <entry morerows="1" valign="middle"><para>Suggested</para></entry>
+              <entry morerows="1" valign="middle"><para>Notes</para></entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><para>CPU</para></entry>
+              <entry><para>1 GHz</para></entry>
+              <entry><para>2 x 2 GHz</para></entry>
+              <entry><para>For an <emphasis>all-in-one</emphasis> front end, it helps to have at least a dual core processor.</para></entry>
+            </row>
+            <row>
+              <entry><para>Memory</para></entry>
+              <entry><para>512 MB</para></entry>
+              <entry><para>2 GB</para></entry>
+              <entry><para>The Java web front end benefits from lots of available memory.</para></entry>
+            </row>
+            <row>
+              <entry><para>Disk</para></entry>
+              <entry><para>5400 RPM IDE</para></entry>
+              <entry><para>7200 RPM SATA</para></entry>
+              <entry><para>Slower disks will work, but will yield much longer instance startup times.</para></entry>
+            </row>
+            <row>
+              <entry><para>Disk Space</para></entry>
+              <entry><para>40 GB</para></entry>
+              <entry><para>200 GB</para></entry>
+              <entry><para>40GB is only enough space for only a single image, cache, etc., Eucalyptus does not like to run out of disk space.</para></entry>
+            </row>
+            <row>
+              <entry><para>Networking</para></entry>
+              <entry><para>100 Mbps</para></entry>
+              <entry><para>1000 Mbps</para></entry>
+              <entry><para>Machine images are hundreds of MB, and need to be copied over the network to nodes.</para></entry>
+            </row>
+          </tbody>
+          </tgroup>
+        </table>
+
+      </sect3>
+            <sect3 id="uec-node-requirements" status="review">
+        <title>Node Requirements</title>
+ 
+        <para>
+        The other system(s) are <emphasis>nodes</emphasis>, which will run::
+        </para>
+
+        <itemizedlist>
+          <listitem><para>the Node Controller (NC)</para></listitem>
+        </itemizedlist>
+
+        <table>
+          <title>UEC Node Requirements</title>
+          <tgroup cols="4" rowsep="1">
+          <colspec colname="1"/>
+          <colspec colname="2"/>
+          <colspec colname="3"/>
+          <colspec colname="4"/>
+          <thead>
+            <row>
+              <entry morerows="1" valign="middle"><para>Hardware</para></entry>
+              <entry morerows="1" valign="middle"><para>Minimum</para></entry>
+              <entry morerows="1" valign="middle"><para>Suggested</para></entry>
+              <entry morerows="1" valign="middle"><para>Notes</para></entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><para>CPU</para></entry>
+              <entry><para>VT Extensions</para></entry>
+              <entry><para>VT, 64-bit, Multicore</para></entry>
+              <entry><para>64-bit can run both i386, and amd64 instances; by default, Eucalyptus will only run 1 VM per CPU core on a Node.</para></entry>
+            </row>
+            <row>
+              <entry><para>Memory</para></entry>
+              <entry><para>1 GB</para></entry>
+              <entry><para>4 GB</para></entry>
+              <entry><para>Additional memory means more, and larger guests.</para></entry>
+            </row>
+            <row>
+              <entry><para>Disk</para></entry>
+              <entry><para>5400 RPM IDE</para></entry>
+              <entry><para>7200 RPM SATA or SCSI</para></entry>
+              <entry><para>Eucalyptus nodes are disk-intensive; I/O wait will likely be the performance bottleneck.</para></entry>
+            </row>
+            <row>
+              <entry><para>Disk Space</para></entry>
+              <entry><para>40 GB</para></entry>
+              <entry><para>100 GB</para></entry>
+              <entry><para>Images will be cached locally, Eucalyptus does not like to run out of disk space.</para></entry>
+            </row>
+            <row>
+              <entry><para>Networking</para></entry>
+              <entry><para>100 Mbps</para></entry>
+              <entry><para>1000 Mbps</para></entry>
+              <entry><para>Machine images are hundreds of MB, and need to be copied over the network to nodes.</para></entry>
+            </row>
+          </tbody>
+          </tgroup>
+        </table>
+
+      </sect3>
 
     </sect2>
-    <sect2 id="eucalyptus-configuration" status="review">
-      <title>Configuration</title>
+    <sect2 id="uec-frontend-installation" status="review">
+      <title>Installing the Cloud/Cluster/Storage/Walrus Front End Server</title>
+      
+      <procedure>
+        <step>
+          <para>
+          Download the Ubuntu &distro-rev; Server ISO file, and burn it to a CD.
+          </para>
+        </step>
+        <step>
+          <para>
+          When you boot, select <emphasis>“Install Ubuntu Enterprise Cloud”</emphasis>. 
+          </para>
+        </step>
+        <step>
+          <para>
+          When asked whether you want a <emphasis>“Cluster”</emphasis> or a <emphasis>“Node”</emphasis> install, select
+          <emphasis>“Cluster”</emphasis>.
+          </para>
+        </step>
+        <step>
+          <para>
+          It will ask two other cloud-specific questions during the course of the install:
+          </para>
+          <itemizedlist>
+            <listitem>
+              <para>
+              Name of your cluster.
+              </para>
+              <itemizedlist><listitem><para>e.g. <emphasis>cluster1</emphasis>.</para></listitem></itemizedlist>
+            </listitem>
+            <listitem>
+              <para>
+              A range of public IP addresses on the LAN that the cloud can allocate to instances.
+              </para>
+              <itemizedlist><listitem><para>e.g. <emphasis>192.168.1.200-192.168.1.249</emphasis>.</para></listitem></itemizedlist>
+              </listitem>
+          </itemizedlist>
+        </step>
+      </procedure>
+
+    </sect2>
+    <sect2 id="uec-node-installation" status="review">
+      <title>Installing the Node Controller(s)</title>
 
       <para>
-      First, on the <emphasis>Front-End</emphasis> install the appropriate packages. In a terminal prompt on the Front-End enter: 
+      The node controller install is even simpler. Just make sure that you are connected to the network on which the cloud/cluster controller is already running.
+      </para>
+      
+      <procedure>
+        <step>
+          <para>
+          Boot from the same ISO on the node(s).
+          </para>
+        </step>
+        <step>
+          <para>
+          When you boot, select <emphasis>“Install Ubuntu Enterprise Cloud”</emphasis>. 
+          </para>
+        </step>
+        <step>
+          <para>
+          Select <emphasis>“Install Ubuntu Enterprise Cloud”</emphasis>.
+          </para>
+        </step>
+        <step>
+          <para>
+          It should detect the Cluster and preselect <emphasis>“Node”</emphasis> install for you.
+          </para>
+        </step>
+        <step>
+          <para>
+          Confirm the partitioning scheme.
+          </para>
+        </step>
+        <step>
+          <para>
+          The rest of the installation should proceed uninterrupted; complete the installation and reboot the node.
+          </para>
+        </step>
+      </procedure>
+
+    </sect2>
+    <sect2 id="uec-register-nodes" status="review">
+      <title>Register the Node(s)</title>
+
+      <para>
+      Nodes are the physical systems within <application>UEC</application> that actually run the virtual machine instances of the cloud.
+      </para>
+
+      <para>
+      Once one or more Ubuntu Server node(s) are installed and running the <application>eucalyptus-nc</application> service, log onto the 
+      <emphasis>Cloud Controller (CLC)</emphasis> and run: 
       </para>
 
 <screen>
-<command>sudo apt-get install eucalyptus-cloud eucalyptus-cc</command>
+<command>sudo euca_conf --no-rsync --discover-nodes</command>
 </screen>
 
       <para>
-      Next, on the each <emphasis>Compute Node</emphasis> install the node controller package. In a terminal prompt on each Compute Node enter: 
+      This will discover the systems on the network running the <application>eucalyptus-nc</application> service, and the 
+      administrator can confirm the registration of each node by its IP address.
       </para>
-
-<screen>
-<command>sudo apt-get install eucalyptus-nc</command>
-</screen>
-
-      <para>
-      Once the installation is complete, and it may take a while, in a browser go to <emphasis>https://front-end:8443</emphasis> and login to the 
-      administration interface using the default username and password of <emphasis>admin</emphasis>. You will then be prompted to change the 
-      password, configure an email address for the admin user, and set the storage URL. 
-      </para>
-
-      <para>
-      In the web interface's <emphasis>"Configuration"</emphasis> tab, add a cluster under the <emphasis>"Clusters"</emphasis> heading 
-      (in this configuration, the cluster controller is on the same system as the cloud controller, so entering 'localhost' as the cluster hostname is correct). 
-      Once the form is filled out click the <emphasis>"Add Cluster"</emphasis>  button. 
-      </para>
-
-      <para>
-      Now, back on the <emphasis>Front-End</emphasis>, add the nodes to the cluster:
-      </para>
-
-<screen>
-<command>sudo euca_conf -addnode hostname_of_node</command>
-</screen>
-
-      <para>
-      You will then be prompted to log into your Node, install the <application>eucalyptus-nc</application> package, and add the <emphasis>eucalyptus</emphasis>
-      user's ssh key to the node's <filename>authorized_keys</filename> file, and confirm authenticity of the host's OpenSSH RSA key fingerprint. 
-      Finally, the command will complete by synchronizing the eucalyptus component keys and node registration is complete.
-      </para>
-
-      <para>
-      On the Node, the <filename>/etc/eucalyptus/eucalyptus.conf</filename> configuration file will need editing to use your node's bridge interface 
-      (assuming here that the interface is named <emphasis>'br0'</emphasis>): 
-      </para>
-
-<programlisting>
-VNET_INTERFACE="br0"
-...
-VNET_BRIDGE="br0"
-</programlisting>
-
-      <para>
-      Finally, restart <application>eucalyptus-nc</application>:
-      </para>
-
-<screen>
-<command>sudo /etc/init.d/eucalyptus-nc restart</command>
-</screen>
-
 
       <note>
         <para>
-        Be sure to replace <emphasis>nodecontroller</emphasis>, <emphasis>node01</emphasis>, and <emphasis>node02</emphasis> 
-        with actual hostnames.
+        If you get prompted for passwords, or receive errors from scp, you may need to revisit the key synchronization instructions at 
+        <ulink url="https://help.ubuntu.com/community/UEC/NodeInstallation">UEC/NodeInstallation</ulink>.
         </para>
       </note>
 
+    </sect2>
+    <sect2 id="uec-obtain-credentials" status="review">
+      <title>Obtain Credentials</title>
+
       <para>
-      <application>Eucalyptus</application> is now ready to host images on the cloud. 
+      After installing and booting the <emphasis>Cloud Controller</emphasis>, users of the cloud will need to retrieve their credentials. 
+      This can be done either through a web browser, or at the command line.
+      </para>
+
+      <sect3 id="uec-creds-browser" status="review">
+        <title>From a Web Browser</title>
+
+        <procedure>
+          <step>
+            <para>
+            From your web browser (either remotely or on your Ubuntu server) access the following URL:
+            </para>
+<programlisting>
+https://&lt;cloud-controller-ip-address&gt;:8443/
+</programlisting>
+
+            <warning>
+              <para>
+              You must use a secure connection, so make sure you use "https" not "http" in your URL. You will get a security 
+              certificate warning. You will have to add an exception to view the page. If you do not accept it you will not 
+              be able to view the Eucalyptus configuration page. 
+              </para>
+            </warning>
+          </step>
+          <step>
+            <para>
+            Use username <emphasis>'admin'</emphasis> and password <emphasis>'admin'</emphasis> for the first time login 
+            (you will be prompted to change your password).
+            </para>
+          </step>
+          <step>
+            <para>
+            Then follow the on-screen instructions to update the admin password and email address.
+            </para>
+          </step>
+          <step>
+            <para>
+            Once the first time configuration process is completed, click the <emphasis>'credentials'</emphasis> tab 
+            located in the top-left portion of the screen. 
+            </para>
+          </step>
+          <step>
+            <para>
+            Click the <emphasis>'Download Credentials'</emphasis> button to get your certificates.
+            </para>
+          </step>
+          <step>
+            <para>
+            Save them to <filename>~/.euca</filename>.
+            </para>
+          </step>
+          <step>
+            <para>
+            Unzip the downloaded zip file into a safe location (<filename>~/.euca</filename>).
+            </para>
+<screen>
+<command>unzip -d ~/.euca mycreds.zip</command>
+</screen>
+          </step>
+        </procedure>
+
+      </sect3>
+      <sect3 id="uec-creds-cli" status="review">
+        <title>From a Command Line</title>
+
+        <procedure>
+          <step>
+            <para>
+            Alternatively, if you are on the command line of the <emphasis>Cloud Controller</emphasis>, you can run:
+            </para>
+<screen>
+<command>mkdir -p ~/.euca</command>
+<command>chmod 700 ~/.euca</command>
+<command>cd ~/.euca</command>
+<command>sudo euca_conf --get-credentials mycreds.zip</command>
+<command>unzip mycreds.zip</command>
+<command>cd -</command>
+</screen>
+          </step>
+        </procedure>
+
+      </sect3>
+      <sect3 id="uec-creds-usage" status="review">
+        <title>Extracting and Using Your Credentials</title>
+
+        <para>
+        Now you will need to setup EC2 API and AMI tools on your server using X.509 certificates.
+        </para>
+
+        <procedure>
+          <step>
+            <para>
+            Source the included <emphasis>"eucarc"</emphasis> file to set up your Eucalyptus environment:
+            </para>
+<screen>
+<command>. ~/.euca/eucarc</command>
+</screen>
+          </step>
+          <step>
+            <para>
+            You may additionally wish to add this command to your <filename>~/.bashrc</filename> file so that your Eucalyptus 
+            environment is set up automatically when you log in. Eucalyptus treats this set of credentials as <emphasis>'administrator'</emphasis>
+            credentials that allow the holder global privileges across the cloud. As such, they should be protected in the same way that other 
+            elevated-priority access is protected (e.g. should not be made visible to the general user population).
+            </para>
+<screen>
+<command>echo "[ -r ~/.euca/eucarc ] &amp;&amp; . ~/.euca/eucarc" &gt;&gt; ~/.bashrc</command>
+</screen>
+          </step>
+          <step>
+            <para>
+            Install the required cloud user tools:
+            </para>
+<screen>
+<command>sudo apt-get install euca2ools</command>
+</screen>
+          </step>
+          <step>
+            <para>
+            To validate that everything is working correctly, get the local cluster availability details:
+            </para>
+<screen>
+<command>. ~/.euca/eucarc</command>
+<command>euca-describe-availability-zones verbose</command>
+<computeroutput>AVAILABILITYZONE   myowncloud                 192.168.1.1
+AVAILABILITYZONE   |- vm types                free / max   cpu   ram  disk
+AVAILABILITYZONE   |- m1.small                0004 / 0004   1    128     2
+AVAILABILITYZONE   |- c1.medium               0004 / 0004   1    256     5
+AVAILABILITYZONE   |- m1.large                0002 / 0002   2    512    10
+AVAILABILITYZONE   |- m1.xlarge               0002 / 0002   2   1024    20
+AVAILABILITYZONE   |- c1.xlarge               0001 / 0001   4   2048    20</computeroutput>
+</screen>
+
+            <note>
+              <para>
+              Your output from the above command will vary.
+              </para>
+            </note>
+          </step>
+        </procedure>
+
+      </sect3>
+    </sect2>
+    <sect2 id="uec-image-running" status="review">
+      <title>Running an Image</title>
+
+      <para>
+      There are multiple ways to instantiate an image in UEC:
+      </para>
+
+      <itemizedlist>
+        <listitem><para>Use the command line.</para></listitem>
+        <listitem><para>Use one of the UEC compatible management tools such as <emphasis>Landscape</emphasis>.</para></listitem>
+        <listitem>
+          <para>
+          Use the <ulink url="https://help.ubuntu.com/community/UEC/ElasticFox">ElasticFox</ulink> extension to Firefox.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+      Here we will describe the process from the command line:
+      </para>
+
+      <procedure>
+        <step>
+          <para>
+          Before running an instance of your image, you should first create a <emphasis>keypair</emphasis> (ssh key) that you can 
+          use to log into your instance as root, once it boots. The key is stored, so you will only have to do this once. 
+          </para>
+          <para>
+          Run the following command:
+          </para>
+<programlisting>
+if [ ! -e ~/.euca/mykey.priv ]; then
+    touch ~/.euca/mykey.priv
+    chmod 0600 ~/.euca/mykey.priv
+    euca-add-keypair mykey &gt; ~/.euca/mykey.priv
+fi
+</programlisting>
+          <note>
+            <para>
+            You can call your key whatever you like (in this example, the key is called <emphasis>'mykey'</emphasis>), but remember what it is called. 
+            If you forget, you can always run <command>euca-describe-keypairs</command> to get a list of created keys stored in the system.
+            </para>
+          </note>
+        </step>
+        <step>
+          <para>
+          You must also allow access to port 22 in your instances:
+          </para>
+<screen>
+<command>euca-describe-groups</command>
+<command>euca-authorize default -P tcp -p 22 -s 0.0.0.0/0</command>
+</screen>
+        </step>
+        <step>
+          <para>
+          Next, you can create instances of your registered image:
+          </para>
+<screen>
+<command>euca-run-instances $EMI -k mykey -t c1.medium</command>
+</screen>
+          <note>
+            <para>
+             If you receive an error regarding <emphasis>image_id</emphasis>, you may find it by viewing Images page or click 
+             <emphasis>"How to Run"</emphasis> on the <emphasis>Store</emphasis> page to see the sample command.
+            </para>
+          </note>
+        </step>
+        <step>
+          <para>
+          The first time you run an instance, the system will be setting up caches for the image from which it will be created.
+          This can often take some time the first time an instance is run given that VM images are usually quite large.
+          </para>
+          <para> 
+          To monitor the state of your instance, run:
+          </para>
+<screen>
+<command>watch -n5 euca-describe-instances</command>
+</screen>
+          <para>
+          In the output, you should see information about the instance, including its state. While first-time caching is being performed, 
+          the instance's state will be <emphasis>'pending'</emphasis>.
+          </para>
+        </step>
+        <step>
+          <para>
+          When the instance is fully started, the above state will become <emphasis>'running'</emphasis>. Look at the IP address assigned 
+          to your instance in the output, then connect to it:
+          </para>
+<screen>
+<command>IPADDR=$(euca-describe-instances | grep $EMI | grep running | tail -n1 | awk '{print $4}')</command>
+<command>ssh -i ~/.euca/mykey.priv ubuntu@$IPADDR</command>
+</screen>
+        </step>
+        <step>
+          <para>
+          And when you are done with this instance, exit your SSH connection, then terminate your instance:
+          </para>
+<screen>
+<command>INSTANCEID=$(euca-describe-instances | grep $EMI | grep running | tail -n1 | awk '{print $2}')</command>
+<command>euca-terminate-instances $INSTANCEID</command>
+</screen>
+        </step>
+      </procedure>
+
+    </sect2>
+    <sect2 id="uec-image-installation" status="review">
+      <title>Install an Image from the Store</title>
+
+      <para>
+      The following is by far the simplest way to install an image. However, advanced users may be interested in learning how to 
+      <ulink url="https://help.ubuntu.com/community/UEC/BundlingImages">Bundle their own image</ulink>.
+      </para>
+
+      <para>
+      The simplest way to add an image to <application>UEC</application> is to install it from the Image Store on the UEC web interface.
+      </para>
+
+      <procedure>
+        <step>
+          <para>
+          Access the web interface at the following URL (Make sure you specify https):
+          </para>
+<programlisting>
+https://&lt;cloud-controller-ip-address&gt;:8443/
+</programlisting>
+        </step>
+        <step>
+          <para>
+          Enter your login and password (if requested, as you may still be logged in from earlier).
+          </para>
+        </step>
+        <step>
+          <para>
+          Click on the <emphasis>Store</emphasis> tab.
+          </para>
+        </step>
+        <step>
+          <para>
+          Browse available images.
+          </para>
+        </step>
+        <step>
+          <para>
+          Click on <emphasis>install</emphasis> for the image you want.
+          </para>
+        </step>
+      </procedure>
+
+      <para>
+      Once the image has been downloaded and installed, you can click on <emphasis>"How to run?"</emphasis> that will be displayed
+      below the image button to view the command to execute to instantiate (start) this image. The image will also appear on the 
+      list given on the <emphasis>Image</emphasis> tab.
       </para>
 
     </sect2>
-    <sect2 id="eucalyptus-references" status="review">
+    <sect2 id="uec-more-info" status="review">
+      <title>More Information</title>
+
+      <para>
+      How to use the <ulink url="https://help.ubuntu.com/community/UEC/StorageController">Storage Controller</ulink>
+      </para>
+
+      <para>
+      Controlling eucalyptus services:
+      </para>
+
+      <itemizedlist>
+        <listitem><para>sudo service eucalyptus [start|stop|restart] (on the CLC/CC/SC/Walrus side)</para></listitem>
+        <listitem><para>sudo service eucalyptus-nc [start|stop|restart] (on the Node side)</para></listitem>
+      </itemizedlist>
+
+      <para>
+      Locations of some important files:
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+          <emphasis>Log files:</emphasis>
+          </para>
+          <itemizedlist>
+            <listitem><para>/var/log/eucalyptus</para></listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Configuration files:</emphasis>
+          </para>
+          <itemizedlist>
+            <listitem><para>/etc/eucalyptus</para></listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Database:</emphasis>
+          </para>
+          <itemizedlist>
+            <listitem><para>/var/lib/eucalyptus/db</para></listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Keys:</emphasis>
+          </para>
+          <itemizedlist>
+            <listitem><para>/var/lib/eucalyptus</para></listitem>
+            <listitem><para>/var/lib/eucalyptus/.ssh</para></listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <note>
+        <para>
+        Don't forget to source your <filename>~/.euca/eucarc</filename> before running the client tools. 
+        </para>
+      </note>
+
+    </sect2>
+    <sect2 id="uec-references" status="review">
       <title>References</title>
 
       <itemizedlist>
         <listitem>
           <para>
-          See the <ulink url="http://eucalyptus.cs.ucsb.edu/">Eucalyptus website</ulink> for more information.
+          For information on loading instances see the <ulink url="https://help.ubuntu.com/community/Eucalyptus">Eucalyptus Wiki</ulink> page.
           </para>
         </listitem>
         <listitem>
           <para>
-          For information on loading instances see the <ulink url="https://help.ubuntu.com/community/Eucalyptus">Eucalyptus Wiki</ulink> page.
+          <ulink url="http://open.eucalyptus.com/">Eucalyptus Project Site (forums, documentation, downloads)</ulink>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <ulink url="https://launchpad.net/eucalyptus/">Eucalyptus on Launchpad (bugs, code)</ulink>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <ulink url="http://open.eucalyptus.com/wiki/EucalyptusTroubleshooting_v1.5">Eucalyptus Troubleshooting (1.5)</ulink>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <ulink url="http://support.rightscale.com/2._References/02-Cloud_Infrastructures/Eucalyptus/03-Administration_Guide/Register_with_RightScale">
+          Register your cloud with RightScale</ulink>.
           </para>
         </listitem>
         <listitem>
@@ -1321,6 +1874,126 @@ VNET_BRIDGE="br0"
         </listitem>
       </itemizedlist>
       
+    </sect2>
+    <sect2 id="uec-glossary" status="review">
+      <title>Glossary</title>
+
+      <para>
+      The Ubuntu Enterprise Cloud documentation uses terminology that might be unfamiliar to some readers. 
+      This page is intended to provide a glossary of such terms and acronyms.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+          <emphasis>Cloud</emphasis> - A federated set of physical machines that offer computing resources through virtual machines,
+          provisioned and recollected dynamically.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Cloud Controller (CLC)</emphasis> - Eucalyptus component that provides the web UI (an https server on port 8443), 
+          and implements the Amazon EC2 API. There should be only one Cloud Controller in an installation of UEC. This service is 
+          provided by the Ubuntu <application>eucalyptus-cloud</application> package.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Cluster</emphasis> - A collection of nodes, associated with a Cluster Controller. There can be more than one 
+          Cluster in an installation of UEC. Clusters are sometimes physically separate sets of nodes. (e.g. floor1, floor2, floor2).
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Cluster Controller (CC)</emphasis> - Eucalyptus component that manages collections of node resources. 
+          This service is provided by the Ubuntu <application>eucalyptus-cc</application> package.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>EBS</emphasis> - Elastic Block Storage.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>EC2</emphasis> - Elastic Compute Cloud. Amazon's pay-by-the-hour, pay-by-the-gigabyte public cloud computing offering.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>EKI</emphasis> - Eucalyptus Kernel Image.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>EMI</emphasis> - Eucalyptus Machine Image.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>ERI</emphasis> - Eucalyptus Ramdisk Image.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Eucalyptus</emphasis> - Elastic Utility Computing Architecture for Linking Your Programs To Useful Systems. 
+          An open source project originally from the University of California at Santa Barbara, now supported by Eucalyptus Systems, 
+          a Canonical Partner.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Front-end</emphasis> - Physical machine hosting one (or more) of the high level Eucalyptus components (cloud, 
+          walrus, storage controller, cluster controller).
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Node</emphasis> - A node is a physical machine that's capable of running virtual machines, running a node controller.
+          Within Ubuntu, this generally means that the CPU has VT extensions, and can run the KVM hypervisor.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Node Controller (NC)</emphasis> - Eucalyptus component that runs on nodes which host the virtual machines that comprise
+          the cloud. This service is provided by the Ubuntu package <application>eucalyptus-nc</application>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>S3</emphasis> - Simple Storage Service. Amazon's pay-by-the-gigabyte persistent storage solution for EC2.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Storage Controller (SC)</emphasis> - Eucalyptus component that manages dynamic block storage services (EBS). 
+          Each 'cluster' in a Eucalyptus installation can have its own Storage Controller. This component is provided by the 
+          <application>eucalyptus-sc</application> package.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>UEC</emphasis> - Ubuntu Enterprise Cloud. Ubuntu's cloud computing solution, based on Eucalyptus.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>VM</emphasis> - Virtual Machine.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>VT</emphasis> - Virtualization Technology. An optional feature of some modern CPUs, allowing for accelerated virtual machine hosting.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          <emphasis>Walrus</emphasis> - Eucalyptus component that implements the Amazon S3 API, used for storing VM images and user storage using 
+          S3 bucket put/get abstractions.
+          </para>
+        </listitem>
+      </itemizedlist>
+
     </sect2>
   </sect1>  
 <sect1 id="opennebula" status="review">
@@ -1501,6 +2174,11 @@ GRAPHICS = [type="vnc",listen="127.0.0.1",port="-1"]
           <para>
           You can also find help in the <emphasis>#ubuntu-virt</emphasis> and 
           <emphasis>#ubuntu-server</emphasis> IRC channels on <ulink url="http://freenode.net">Freenode</ulink>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          Also, the <ulink url="https://help.ubuntu.com/community/OpenNebula">OpenNebula Ubuntu Wiki</ulink> page has more details.
           </para>
         </listitem>
       </itemizedlist>

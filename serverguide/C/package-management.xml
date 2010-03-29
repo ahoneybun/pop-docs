@@ -326,6 +326,28 @@ Unattended-Upgrade::Package-Blacklist {
     </note>
 
     <para>
+    To enable automatic updates, edit <filename>/etc/apt/apt.conf.d/10periodic</filename> and set the appropriate <application>apt</application> configuration options:
+    </para>
+
+<programlisting>
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Download-Upgradeable-Packages "1";
+APT::Periodic::AutocleanInterval "7";
+APT::Periodic::Unattended-Upgrade "1";
+</programlisting>
+
+    <para>
+    The above configuration updates the package list, downloads, and installs available upgrades every day.
+    The local download archive is cleaned every week.
+    </para>
+
+    <note>
+      <para>
+      You can read more about <application>apt</application> Periodic configuration options in the <filename>/etc/cron.daily/apt</filename> script header.
+     </para>
+    </note>
+
+    <para>
     The results of <application>unattended-upgrades</application> will be logged to <filename>/var/log/unattended-upgrades</filename>.
     </para>
 
@@ -439,20 +461,25 @@ deb-src http://security.ubuntu.com/ubuntu &distro-short-codename;-security multi
     <itemizedlist>
       <listitem>
         <para>
+        The <ulink url="https://help.ubuntu.com/community/InstallingSoftware">InstallingSoftware</ulink> Ubuntu wiki page has more information.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
         For more <application>dpkg</application> details see the 
-        <ulink url="http://manpages.ubuntu.com/manpages/jaunty/en/man1/dpkg.1.html">dpkg man page</ulink>.
+        <ulink url="http://manpages.ubuntu.com/manpages/&distro-short-codename;/en/man1/dpkg.1.html">dpkg man page</ulink>.
         </para>
       </listitem>
       <listitem>
         <para>
         The <ulink url="http://www.debian.org/doc/manuals/apt-howto/">APT HOWTO</ulink> and 
-        <ulink url="http://manpages.ubuntu.com/manpages/jaunty/en/man8/apt-get.8.html">apt-get man page</ulink>
+        <ulink url="http://manpages.ubuntu.com/manpages/&distro-short-codename;/en/man8/apt-get.8.html">apt-get man page</ulink>
         contain useful information regarding <application>apt-get</application> usage.
         </para>
       </listitem>
       <listitem>
         <para>
-        See the <ulink url="http://manpages.ubuntu.com/manpages/jaunty/man8/aptitude.8.html">aptitude man page</ulink> 
+        See the <ulink url="http://manpages.ubuntu.com/manpages/&distro-short-codename;/man8/aptitude.8.html">aptitude man page</ulink> 
         for more <application>aptitude</application> options.
         </para>
       </listitem>

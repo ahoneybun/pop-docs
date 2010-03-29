@@ -162,7 +162,6 @@ sudo postconf -e 'smtpd_use_tls = yes'
 sudo postconf -e 'smtp_tls_note_starttls_offer = yes'
 sudo postconf -e 'smtpd_tls_key_file = /etc/ssl/private/server.key'
 sudo postconf -e 'smtpd_tls_cert_file = /etc/ssl/certs/server.crt'
-sudo postconf -e 'smtpd_tls_CAfile = /etc/ssl/certs/cacert.pem'
 sudo postconf -e 'smtpd_tls_loglevel = 1'
 sudo postconf -e 'smtpd_tls_received_header = yes'
 sudo postconf -e 'smtpd_tls_session_cache_timeout = 3600s'
@@ -170,6 +169,18 @@ sudo postconf -e 'tls_random_source = dev:/dev/urandom'
 sudo postconf -e 'myhostname = mail.example.com'
 </screen>
 		</step>
+                <step>
+                  <para>
+                  If you are using your own <emphasis>Certificate Authority</emphasis> to sign the certificate enter:
+                  </para>
+<screen>
+<command>sudo postconf -e 'smtpd_tls_CAfile = /etc/ssl/certs/cacert.pem'</command>
+</screen>
+
+                  <para>
+                  Again, for more details about certificates see <xref linkend="certificates-and-security"/>.
+                  </para>
+                </step>
 		</procedure>
             <note>
             <para>
@@ -185,6 +196,10 @@ sudo postconf -e 'myhostname = mail.example.com'
             The postfix initial configuration is complete. Run
             the following command to restart the postfix daemon:
 	    </para>
+
+<screen>
+<command>sudo /etc/init.d/postfix restart</command>
+</screen>
 
 	    <para>
             <application>Postfix</application> supports SMTP-AUTH as defined in
@@ -459,6 +474,9 @@ auth_debug_passwords=yes
 	  Finally, the <ulink url="http://www.postfix.org/documentation.html">Postfix</ulink> website also has great documentation on all
 	  the different configuration options available.
 	  </para>
+      <para>
+      Also, the <ulink url="https://help.ubuntu.com/community/Postfix">Ubuntu Wiki Postifx</ulink> page has more information.
+      </para>
 	</sect3>
       </sect2>
       </sect1>
@@ -635,6 +653,11 @@ START=yes
               There is also an <ulink url="http://www.uit.co.uk/content/exim-smtp-mail-server">Exim4 Book</ulink> available.
               </para>
             </listitem>
+            <listitem>
+              <para>
+              Another resource is the <ulink url="https://help.ubuntu.com/community/Exim4">Exim4 Ubuntu Wiki </ulink> page.
+              </para>
+            </listitem>
           </itemizedlist>
 
         </sect2>
@@ -775,6 +798,11 @@ disable_plaintext_auth = no
             <listitem>
               <para>
               See the <ulink url="http://www.dovecot.org/">Dovecot website</ulink> for more information.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+              Also, the <ulink url="https://help.ubuntu.com/community/Dovecot">Dovecot Ubuntu Wiki</ulink> page has more details.
               </para>
             </listitem>
           </itemizedlist>
@@ -1195,6 +1223,9 @@ instructions in the email to subscribe.
 <ulink url="http://www.exim.org/howto/mailman21.html">HOWTO - Using Exim
 4 and Mailman 2.1 together</ulink>
 </para>
+          <para>
+          Also, see the <ulink url="https://help.ubuntu.com/community/Mailman">Mailman Ubuntu Wiki</ulink> page.
+          </para>
         </sect2>
       </sect1>
       <sect1 id="mail-filtering" status="review">
@@ -1304,6 +1335,10 @@ instructions in the email to subscribe.
 <screen>
 <command>sudo apt-get install arj cabextract cpio lha nomarch pax rar unrar unzip zip</command>
 </screen>
+	<note>
+		<para>If some packages are not found, check that the <emphasis>multiverse</emphasis> repository is enabled in <filename>/etc/apt/sources.list</filename></para>
+		<para>If you make changes to the file, be sure to run <command>sudo apt-get update</command> before trying to install again.</para>
+	</note>
 	 </sect2>
 	 <sect2 id="mail-filter-configuration" status="review">
 	   <title>Configuration</title>
@@ -1642,6 +1677,11 @@ LogVerbose true
 	     <listitem>
 	       <para>
                <ulink url="http://dkim.org/">DKIM.org</ulink>
+  	       </para>
+	     </listitem>
+	     <listitem>
+	       <para>
+               <ulink url="https://help.ubuntu.com/community/PostfixAmavisNew">Postfix Amavis New</ulink>
   	       </para>
 	     </listitem>
 	   </itemizedlist>

@@ -19,8 +19,8 @@
   make administering an Ubuntu server, or many Ubuntu servers, that much easier.
   </para>
 
-  <sect1 id="update-motd" status="review">
-    <title>Update MOTD</title>
+  <sect1 id="pam_motd" status="review">
+    <title>pam_motd</title>
 
     <para>
     When logging into an Ubuntu server you may have noticed the informative Message Of The Day (MOTD).  This information
@@ -38,50 +38,15 @@
       </listitem>
       <listitem>
         <para>
-        <emphasis>update-motd:</emphasis> is used to automatically update the MOTD via <application>cron</application>.
+        <emphasis>update-notifier-common:</emphasis> is used to automatically update the MOTD via <application>pam_motd</application> module.
         </para>
       </listitem>
     </itemizedlist>
 
-    <para>
-    The <application>update-motd</application> utility has several options to further customize the MOTD:
-    </para>
-
-    <itemizedlist>
-      <listitem>
-        <para>
-        <emphasis>--disable:</emphasis> prevents automatic updates of the MOTD.  Using this option creates the
-        <filename>/var/lib/update-motd/disabled</filename> file, which if present stops <application>update-motd</application>
-        from modifying <filename>/etc/motd</filename>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-        <emphasis>--enable:</emphasis> enables the automatic MOTD updates.  If <filename>/var/lib/update-motd</filename>
-        is present it will be removed.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-        <emphasis>--force:</emphasis> does a one time update of <filename>/etc/motd</filename>, overriding <application>update-motd</application>
-        if it has been disabled. 
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-        <emphasis>d, hourly, weekly, monthly:</emphasis> option will run the scripts in <filename>/etc/update-motd.d/</filename> (default), 
-        <filename>/etc/update-motd.d/hourly</filename>, <filename>/etc/update-motd.d/weekly</filename>, or
-        <filename>/etc/update-motd.d/monthly</filename> respectively.
-        </para>
-      </listitem>
-    </itemizedlist>
-
-    <para>
-    <application>update-motd</application> executes the scripts in <filename>/etc/update-motd.d</filename> in order based on the number 
-    prepended to the script.  Separate <application>cron</application> scripts execute every ten minutes, hourly, weekly, and monthly
-    running the corresponding scripts in <filename>/etc/update-motd.d</filename>.  The output of the scripts is written to 
-    <filename>/var/run/update-motd/</filename>, keeping the numerical order, then concatenated with 
-    <filename>/etc/motd.tail</filename> and written to <filename>/etc/motd</filename>.
+    <para>    
+    <application>pam_motd</application> executes the scripts in <filename>/etc/update-motd.d</filename> in order based on the number 
+    prepended to the script.  The output of the scripts is written to <filename>/var/run/motd</filename>, keeping the numerical order, 
+    then concatenated with <filename>/etc/motd.tail</filename>.
     </para>
 
     <para>
@@ -120,18 +85,18 @@
 
 <programlisting>
 #!/bin/sh
-##########################################################################
 #
-# Prints the local weather to /var/run/update-motd/60-local-weather  
-# for update-motd.
 #
-##########################################################################
+# Prints the local weather information for the MOTD.
+#
+#
 
 # Replace KINT with your local weather station.
 # Local stations can be found here: http://www.weather.gov/tg/siteloc.shtml
 
-echo "" > /var/run/update-motd/60-local-weather
-weather -i KINT >> /var/run/update-motd/60-local-weather
+echo
+weather -i KINT
+echo
 
 </programlisting>
       </listitem>
@@ -146,28 +111,24 @@ weather -i KINT >> /var/run/update-motd/60-local-weather
       </listitem>
       <listitem>
         <para>
-        Next, create a symlink to <filename>/etc/update-motd.d/60-local-weather</filename>:
+        Next, create a symlink to <filename>/etc/update-motd.d/98-local-weather</filename>:
         </para>
 
 <screen>
-<command>sudo ln -s /usr/local/bin/local-weather /etc/update-motd.d/60-local-weather</command>
+<command>sudo ln -s /usr/local/bin/local-weather /etc/update-motd.d/98-local-weather</command>
 </screen>
       </listitem>
       <listitem>
         <para>
-        Finally, update the MOTD:
+        Finally, exit the server and re-login to view the new MOTD.
         </para>
-
-<screen>
-<command>sudo update-motd</command>
-</screen>
       </listitem>
     </itemizedlist>
 
     <para>
     You should now be greeted with some useful information, and some information about the local weather that may not be
     quite so useful. Hopefully the <application>local-weather</application> example demonstrates the flexibility of
-    <application>update-motd</application>.
+    <application>pam_motd</application>.
     </para>
 
   </sect1>
@@ -301,61 +262,53 @@ Committed revision 2.</computeroutput>
     </para>
    
   </sect1>
-  <sect1 id="screen-profiles" status="review">
-    <title>Screen Profiles</title>
+  <sect1 id="byobu" status="review">
+    <title>Byobu</title>
 
     <para>
     One of the most useful applications for any system administrator is <application>screen</application>.  It allows the execution
     of multiple shells in one terminal. To make some of the advanced <application>screen</application> features more 
-    user friendly, and provide some useful information about the system, the <application>screen-profiles</application> package was 
+    user friendly, and provide some useful information about the system, the <application>byobu</application> package was 
     created.  
     </para>
 
     <para>
-    When executing <application>screen</application> for the first time you will be presented with the 
-    <application>screen-profiles-helper</application> menu.  This menu will allow you to:
+    When executing <application>byobu</application> pressing the <emphasis>F9</emphasis> key will bring up the  
+    <application>Configuration</application> menu.  This menu will allow you to:
     </para>
 
     <itemizedlist>
       <listitem><para>View the Help menu</para></listitem>
+      <listitem><para>Change Byobu's background color</para></listitem>
+      <listitem><para>Change Byobu's foreground color</para></listitem>
+      <listitem><para>Toggle status notifications</para></listitem>
       <listitem><para>Change the key binding set</para></listitem>
-      <listitem><para>Change screen profiles</para></listitem>
       <listitem><para>Change the escape sequence</para></listitem>
-      <listitem><para>Create new screen windows</para></listitem>
+      <listitem><para>Create new windows</para></listitem>
       <listitem><para>Manage the default windows</para></listitem>
-      <listitem><para>Install screen by default at login</para></listitem>
+      <listitem><para>Byobu currently does not launch at login (toggle on)</para></listitem>
     </itemizedlist>
 
     <para>
     The <emphasis>key bindings</emphasis> determine such things as the escape sequence, new window, change window, etc.  There 
-    are two key binding sets to choose from <emphasis>common</emphasis> and <emphasis>none</emphasis>.  If you wish to use the 
+    are two key binding sets to choose from <emphasis>f-keys</emphasis> and <emphasis>screen-escape-keys</emphasis>.  If you wish to use the 
     original key bindings choose the <emphasis>none</emphasis> set.
     </para>
 
     <para>
-    The Ubuntu <application>screen-profiles</application> provide a menu which displays the Ubuntu release, processor information,
-    memory information, and the time and date. The effect is similar to a desktop menu.  When a profile is selected it will be 
-    symlinked to <filename>~/.screenrc</filename>.  The <application>select-screen-profile</application> utility can also be used 
-    to change profiles, in a terminal enter:
-    </para>
-
-<screen>
-<command>select-screen-profile -s ubuntu-light</command>
-</screen>
-   
-    <para>
-    The <emphasis>plain</emphasis> profile will change <application>screen</application> back to the defaults, which does not include
-    the information menu at the bottom.
+    <application>byobu</application> provides a menu which displays the Ubuntu release, processor information,
+    memory information, and the time and date. The effect is similar to a desktop menu. 
     </para>
 
     <para>
-    Using the <emphasis>"Install screen by default at login"</emphasis> option will cause screen to be executed any time a terminal is opened.
-    Changes made to <application>screen</application> are on a per user basis, and will not affect other users on the system.
+    Using the <emphasis>"Byobu currently does not launch at login (toggle on)"</emphasis> option will cause <application>byobu</application>
+    to be executed any time a terminal is opened.  Changes made to <application>byobu</application> are on a per user basis, and will not 
+    affect other users on the system.
     </para>
 
     <para>
-    One difference when using screen is the <emphasis>scrollback</emphasis> mode.  If you are using one of the Ubuntu profiles press the 
-    <emphasis>F7</emphasis>, or <emphasis>Ctrl+a+[</emphasis> if not, to enter scrollback mode.  Scrollback mode allows you to navigate 
+    One difference when using byobu is the <emphasis>scrollback</emphasis> mode.  Press the 
+    <emphasis>F7</emphasis> key to enter scrollback mode.  Scrollback mode allows you to navigate 
     past output using <emphasis>vi</emphasis> like commands.  Here is a quick list of movement commands:
     </para>
 
@@ -367,10 +320,6 @@ Committed revision 2.</computeroutput>
       <listitem><para><emphasis>0</emphasis> - Move to the beginning of the current line</para></listitem>
       <listitem><para><emphasis>$</emphasis> - Move to the end of the current line</para></listitem>
       <listitem><para><emphasis>G</emphasis> - Moves to the specified line (defaults to the end of the buffer)</para></listitem>
-      <listitem><para><emphasis>C-u</emphasis> - Scrolls a half page up</para></listitem>
-      <listitem><para><emphasis>C-b</emphasis> - Scrolls a full page up</para></listitem>
-      <listitem><para><emphasis>C-d</emphasis> - Scrolls a half page down</para></listitem>
-      <listitem><para><emphasis>C-f</emphasis> - Scrolls the full page down</para></listitem>
       <listitem><para><emphasis>/</emphasis> - Search forward</para></listitem>
       <listitem><para><emphasis>?</emphasis> - Search backward</para></listitem>
       <listitem><para><emphasis>n</emphasis> - Moves to the next match, either forward or backword</para></listitem>
@@ -383,7 +332,7 @@ Committed revision 2.</computeroutput>
     <itemizedlist>
       <listitem>
         <para>
-        See the <ulink url="http://manpages.ubuntu.com/manpages/jaunty/en/man1/update-motd.1.html">update-motd man page</ulink> for
+        See the <ulink url="http://manpages.ubuntu.com/manpages/&distro-short-codename;/en/man1/update-motd.1.html">update-motd man page</ulink> for
         more options available to <application>update-motd</application>.
         </para>
       </listitem>
@@ -402,6 +351,11 @@ Committed revision 2.</computeroutput>
       </listitem>
       <listitem>
         <para>
+        The <ulink url="https://help.ubuntu.com/community/etckeeper">etckeeper Ubuntu Wiki</ulink> page.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
         For the latest news and information about <application>bzr</application> see the <ulink url="http://bazaar-vcs.org/">bzr</ulink> web site.
         </para>
       </listitem>
@@ -412,7 +366,12 @@ Committed revision 2.</computeroutput>
       </listitem>
       <listitem>
         <para>
-        Also, see the <application>screen-profiles</application> <ulink url="https://launchpad.net/screen-profiles">project page</ulink> for more
+        And the <ulink url="https://help.ubuntu.com/community/Screen">Ubuntu Wiki screen</ulink> page.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+        Also, see the <application>byobu</application> <ulink url="https://launchpad.net/byobu">project page</ulink> for more
         information.
         </para>
       </listitem>

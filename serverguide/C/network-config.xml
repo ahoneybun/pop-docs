@@ -22,166 +22,487 @@
         to networking, including an overview of network concepts and detailed 
 	discussion of popular network protocols.
 	</para>
-	<sect1 id="network-configuration" status="review">
-		<title>Network Configuration</title>
-		<para>
-            	Ubuntu ships with a number of graphical utilities to configure your 
-		network devices.  This document is geared toward server administrators 
-		and will focus on managing your	network on the command line.
-          	</para>
-      <sect2 id="ethernet" status="review">
-        <title>Ethernet</title> 
-          <para>
-	  Most Ethernet configuration is centralized in a single file,
-	  <filename>/etc/network/interfaces</filename>.  If you have no Ethernet devices, 
-	  only the loopback interface will appear in this file, and it will look something
-	  like this:
-	  </para>
-<programlisting>
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
 
-# The loopback network interface
-auto lo
-iface lo inet loopback
-address 127.0.0.1
-netmask 255.0.0.0
+	<sect1 id="network-configuration" status="review">
+	<title>Network Configuration</title>
+	<para>
+	Ubuntu ships with a number of graphical utilities to configure your 
+	network devices.  This document is geared toward server administrators 
+	and will focus on managing your	network on the command line.
+    </para>
+
+		<sect2 id="ethernet-interfaces" status="review">
+		<title>Ethernet Interfaces</title>
+		<para>
+		Ethernet interfaces are identified by the system using the naming convention of 
+		<emphasis role="italix">ethX</emphasis>, where <emphasis role="italic">X</emphasis> 
+		represents a numeric value.  The first Ethernet interface is typically identified 
+		as <emphasis role="italic">eth0</emphasis>, the second as 
+		<emphasis role="italic">eth1</emphasis>, and all others should move up in 
+		numerical order.
+		</para>
+
+			<sect3 id="identify-ethernet-interfaces" status="review">
+			<title>Identify Ethernet Interfaces</title>
+			<para>
+			To quickly identify all available Ethernet interfaces, you can use the 
+			<application>ifconfig</application> command as shown below.
+			</para>
+<screen>
+<userinput>ifconfig -a | grep eth</userinput>
+eth0      Link encap:Ethernet  HWaddr 00:15:c5:4a:16:5a
+</screen>
+			<para>
+			Another application that can help identify all network interfaces available to your system 
+			is the <application>lshw</application> command.  In the example below, <application>lshw</application> 
+			shows a single Ethernet interface with the logical name of <emphasis role="italic">eth0</emphasis>
+			along with bus information, driver details and all supported capabilities.
+			</para>
+<screen>
+<userinput>sudo lshw -class network</userinput>
+  *-network
+       description: Ethernet interface
+       product: BCM4401-B0 100Base-TX
+       vendor: Broadcom Corporation
+       physical id: 0
+       bus info: pci@0000:03:00.0
+       logical name: eth0
+       version: 02
+       serial: 00:15:c5:4a:16:5a
+       size: 10MB/s
+       capacity: 100MB/s
+       width: 32 bits
+       clock: 33MHz
+       capabilities: (snipped for brevity)
+       configuration: (snipped for brevity)
+       resources: irq:17 memory:ef9fe000-ef9fffff
+</screen>
+			</sect3>
+
+			<sect3 id="ethernet-interface-names" status="review">
+			<title>Ethernet Interface Logical Names</title>
+			<para>
+			Interface logical names are configured in the file 
+			<filename>/etc/udev/rules.d/70-persistent-net.rules.</filename>  If you would 
+			like control which interface receives a particular logical name, find the line 
+			matching the interfaces physical MAC address and modify the value of 
+			<emphasis role="italic">NAME=ethX</emphasis> to the desired logical name. 
+			Reboot the system to commit your changes.
+			</para>
+<programlisting>
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:15:c5:4a:16:5a", ATTR{dev_id}=="0x0", ATTR{type}=="1", KERNEL=="eth*", NAME="eth0"
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:15:c5:4a:16:5b", ATTR{dev_id}=="0x0", ATTR{type}=="1", KERNEL=="eth*", NAME="eth1"
 </programlisting>
-	  <para>
-	  If you have only one Ethernet device, eth0, and it gets its configuration from a
-	  DHCP server, and it should come up automatically at boot, only two additional 
-	  lines are required:
-	  </para>
+			</sect3>
+
+			<sect3 id="ethernet-interface-settings" status="review">
+			<title>Ethernet Interface Settings</title>
+			<para>
+			<application>ethtool</application> is a program that displays and changes Ethernet 
+			card settings such as auto-negotiation, port speed, duplex mode, and Wake-on-LAN. It
+			is not installed by default, but is available for installation in the repositories.
+			</para>
+<screen>
+<userinput>sudo apt-get install ethtool</userinput>
+</screen>
+			<para>
+			The following is an example of how to view supported features and configured 
+			settings of an Ethernet interface.
+			</para>
+<screen>
+<userinput>sudo ethtool eth0</userinput>
+Settings for eth0:
+        Supported ports: [ TP ]
+        Supported link modes:   10baseT/Half 10baseT/Full 
+                                100baseT/Half 100baseT/Full 
+                                1000baseT/Half 1000baseT/Full 
+        Supports auto-negotiation: Yes
+        Advertised link modes:  10baseT/Half 10baseT/Full 
+                                100baseT/Half 100baseT/Full 
+                                1000baseT/Half 1000baseT/Full 
+        Advertised auto-negotiation: Yes
+        Speed: 1000Mb/s
+        Duplex: Full
+        Port: Twisted Pair
+        PHYAD: 1
+        Transceiver: internal
+        Auto-negotiation: on
+        Supports Wake-on: g
+        Wake-on: d
+        Current message level: 0x000000ff (255)
+        Link detected: yes
+</screen>
+			<para>
+			Changes made with the <application>ethtool</application> command are temporary 
+			and will be lost after a reboot. If you would like to retain settings, simply add 
+			the desired <application>ethtool</application> command to a <emphasis role="italic">pre-up</emphasis> 
+			statement in the interface configuration file <filename>/etc/network/interfaces</filename>. 
+			</para>
+			<para>
+			The following is an example of how the interface identified as <emphasis role="italic">eth0</emphasis>
+			could be permanently configured with a port speed of 1000Mb/s running in full duplex mode.
+			</para>
+<programlisting>
+auto eth0
+iface eth0 inet static
+pre-up /usr/sbin/ethtool -s eth0 speed 1000 duplex full
+</programlisting>
+			<note>
+			<para>
+			Although the example above shows the interface configured to use the 
+			<emphasis role="italic">static</emphasis> method, it actually works with other 
+			methods as well, such as DHCP.  The example is meant to demonstrate only proper 
+			placement of the <emphasis role="italic">pre-up</emphasis> statement in relation 
+			to the rest of the interface configuration.
+			</para>
+			</note>
+			</sect3>
+		</sect2>
+
+		<sect2 id="ip-addressing" status="review">
+		<title>IP Addressing</title>
+		<para>
+		The following section describes the process of configuring your systems IP address
+		and default gateway needed for communicating on a local area network and the
+		Internet.
+		</para>
+
+			<sect3 id="temp-ip-assignment" status="review">
+			<title>Temporary IP Address Assignment</title>
+			<para>
+			For temporary network configurations, you can use standard commands 
+			such as <application>ip</application>, <application>ifconfig</application> 
+			and <application>route</application>, which are also found on most other 
+			GNU/Linux operating systems.  These commands allow you to configure settings
+			which take effect immediately, however they are not persistent and will
+			be lost after a reboot.
+			</para>
+			<para>
+			To temporarily configure an IP address, you can use the <application>ifconfig</application> 
+			command in the following manner. Just modify the IP address and subnet mask to match your 
+			network requirements.
+			</para>
+<screen>
+<userinput>sudo ifconfig eth0 10.0.0.100 netmask 255.255.255.0</userinput>
+</screen>
+			<para>
+			To verify the IP address configuration of <application>eth0</application>, 
+			you can use the <application>ifconfig</application> command in the following manner.
+			</para>
+<screen>
+<userinput>ifconfig eth0</userinput>
+eth0      Link encap:Ethernet  HWaddr 00:15:c5:4a:16:5a  
+          inet addr:10.0.0.100  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::215:c5ff:fe4a:165a/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:466475604 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:403172654 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:2574778386 (2.5 GB)  TX bytes:1618367329 (1.6 GB)
+          Interrupt:16 
+</screen>
+			<para>
+			To configure a default gateway, you can use the <application>route</application> 
+			command in the following manner.  Modify the default gateway address to match 
+			your network requirements.
+			</para>
+<screen>
+<userinput>sudo route add default gw 10.0.0.1 eth0</userinput>
+</screen>
+			<para>
+			To verify your default gateway configuration, you can use the <application>route</application> 
+			command in the following manner.
+			</para>
+<screen>
+<userinput>route -n</userinput>
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+10.0.0.0        0.0.0.0         255.255.255.0   U     1      0        0 eth0
+0.0.0.0         10.0.0.1        0.0.0.0         UG    0      0        0 eth0
+</screen>
+			<para>
+			If you require DNS for your temporary network configuration, you can add DNS server
+			IP addresses in the file <filename>/etc/resolv.conf</filename>. The example below 
+			shows how to enter two DNS servers to <filename>/etc/resolv.conf</filename>, which 
+			should be changed to servers appropriate for your network. A more lengthy description 
+			of DNS client configuration is in a following section.
+			</para>
+<programlisting>
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+</programlisting>
+			<para>
+			If you no longer need this configuration and wish to purge all IP configuration from
+			an interface, you can use the <application>ip</application> command with the flush option
+			as shown below.  
+			</para>
+<screen>
+<userinput>ip addr flush eth0</userinput>
+</screen>
+			<note>
+			<para>
+			Flushing the IP configuration using the <application>ip</application> command does not clear the 
+			contents of <filename>/etc/resolv.conf</filename>.  You must remove or modify those entries manually.
+			</para>
+			</note>
+			</sect3>
+
+			<sect3 id="dynamic-ip-addressing" status="review">
+			<title>Dynamic IP Address Assignment (DHCP Client)</title>
+			<para>
+			To configure your server to use DHCP for dynamic address assignment, add the
+			<emphasis role="italic">dhcp</emphasis> method to the inet address family statement 
+			for the appropriate interface in the file <filename>/etc/network/interfaces</filename>.
+			The example below assumes you are configuring your first Ethernet interface identified as 
+			<emphasis role="italic">eth0</emphasis>.
+			</para>
 <programlisting>
 auto eth0
 iface eth0 inet dhcp
 </programlisting>
-	  <para>
-	  The first line specifies that the eth0 device should come up automatically when
-	  you boot.  The second line means that interface (<quote>iface</quote>) eth0 
-	  should have an IPv4 address space (replace <quote>inet</quote> with 
-	  <quote>inet6</quote> for an IPv6 device) and that it should get its 
-	  configuration automatically from DHCP.  Assuming your network and DHCP server 
-	  are properly configured, this machine's network should need no further 
-	  configuration to operate properly.  The DHCP server will provide the default 
-	  gateway (implemented via the <application>route</application> command), the 
-	  device's IP address (implemented via the <application>ifconfig</application> 
-	  command), and DNS servers used on the network (implemented in the 
-	  <filename>/etc/resolv.conf</filename> file.)
-	  </para>
-	  <para>
-	  To configure your Ethernet device with a static IP address and custom 
-	  configuration, some more information will be required.  Suppose you want to 
-	  assign the IP address	192.168.0.2 to the device eth1, with the typical netmask 
-	  of 255.255.255.0.  Your default gateway's IP address is 192.168.0.1.  You would 
-	  enter something like this into <filename>/etc/network/interfaces</filename>:
-	  </para>
+			<para>
+			By adding an interface configuration as shown above, you can manually enable the 
+			interface through the <application>ifup</application> command which initiates the 
+			DHCP process via <application>dhclient</application>.
+			</para>
+<screen>
+<userinput>sudo ifup eth0</userinput>
+</screen>
+			<para>
+			To manually disable the	interface, you can use the <application>ifdown</application> 
+			command, which in turn will initiate the DHCP release process and shut down the 
+			interface.
+			</para>
+<screen>
+<userinput>sudo ifdown eth0</userinput>
+</screen>
+			</sect3>
+
+			<sect3 id="static-ip-addressing" status="review">
+			<title>Static IP Address Assignment</title>
+			<para>
+			To configure your system to use a static IP address assignment, add the 
+			<emphasis role="italic">static</emphasis> method to the inet address family statement 
+			for the appropriate interface in the file <filename>/etc/network/interfaces</filename>. 
+			The example below assumes you are configuring your first Ethernet interface identified as 
+			<emphasis role="italic">eth0</emphasis>.  Change the <emphasis role="italic">address</emphasis>, 
+			<emphasis role="italic">netmask</emphasis>, and <emphasis role="italic">gateway</emphasis> 
+			values to meet the requirements of your network.
+			</para>
 <programlisting>
-auto eth1
-iface eth1 inet static
-	address 192.168.0.2
-	netmask 255.255.255.0
-	gateway 192.168.0.1
+auto eth0
+iface eth0 inet static
+address 10.0.0.100
+netmask 255.255.255.0
+gateway 10.0.0.1
 </programlisting>
-	<para>
-	In this case, you will need to specify your DNS servers manually in
-	<filename>/etc/resolv.conf</filename>, which should look something like this:
-	</para>
+			<para>
+			By adding an interface configuration as shown above, you can manually enable the 
+			interface through the <application>ifup</application> command.
+			</para>
+<screen>
+<userinput>sudo ifup eth0</userinput>
+</screen>
+			<para>
+			To manually disable the	interface, you can use the <application>ifdown</application> 
+			command.
+			</para>
+<screen>
+<userinput>sudo ifdown eth0</userinput>
+</screen>
+			</sect3>
+
+			<sect3 id="loopback-interface" status="review">
+			<title>Loopback Interface</title>
+			<para>
+			The loopback interface is identified by the system as <emphasis role="italic">lo</emphasis>
+			and has a default IP address of 127.0.0.1.  It can be viewed using the ifconfig command. 
+			</para>
+<screen>
+<userinput>ifconfig lo</userinput>
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:2718 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:2718 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:183308 (183.3 KB)  TX bytes:183308 (183.3 KB)
+</screen>
+			<para>
+			By default, there should be two lines in <filename>/etc/network/interfaces</filename> 
+			responsible for automatically configuring your loopback interface. It is recommended that you 
+			keep the default settings unless you have a specific purpose for changing them.  An example of 
+			the two default lines are shown below.
+			</para>
 <programlisting>
-search mydomain.example
-nameserver 192.168.0.1
-nameserver 4.2.2.2
+auto lo
+iface lo inet loopback
 </programlisting>
-	<para>
-	The <emphasis role="italics">search</emphasis> directive will append mydomain.example
-	to hostname queries in an attempt to resolve names to your network.  For example,
-	if your network's domain is mydomain.example and you try to ping the host
-	<quote>mybox</quote>, the DNS query will be modified to 
-	<quote>mybox.mydomain.example</quote> for resolution.  The 
-	<emphasis role="italics">nameserver</emphasis> directives specify DNS servers to be 
-	used to resolve hostnames to IP addresses.  If you use your own nameserver, enter it 
-	here.  Otherwise, ask your Internet Service Provider for the primary and secondary DNS 
-	servers to use, and enter them into <filename>/etc/resolv.conf</filename> as shown 
-	above.
-	</para>
-	<para>
-	Many more configurations are possible, including dialup PPP interfaces, IPv6
-	networking, VPN devices, etc.  Refer to <application>man 5 interfaces</application>
-	for more information and supported options.  Remember that 
-	<filename>/etc/network/interfaces</filename> is used by the 
-	<application>ifup</application>/<application>ifdown</application> scripts as a
-	higher level configuration scheme than may be used in some other Linux distributions,
-	and that the traditional, lower level utilities such as 
-	<application>ifconfig</application>, <application>route</application>, and 
-	<application>dhclient</application> are still available to you for ad hoc 
-	configurations.
-	</para>
-      </sect2>
-      <sect2 id="managing-dns-entries" status="review">
-          <title>Managing DNS Entries</title>
-            <para>This section explains how to configure which nameserver
-            to use when resolving IP addresses to hostnames and vice
-            versa. It does not explain how to configure the system as a name
-            server.
-            </para>
-            <para>
-            To manage DNS entries, you can add, edit, or remove DNS names
-            from the <filename>/etc/resolv.conf</filename> file. A sample file is given below:
-            </para>
+			</sect3>
+		</sect2>
+
+
+		<sect2 id="name-resolution" status="review">
+		<title>Name Resolution</title>
+		<para>
+		Name resolution as it relates to IP networking is the process of mapping IP addresses 
+		to hostnames, making it easier to identify resources on a network.  The following section
+		will explain how to properly configure your system for name resolution using DNS and static
+		hostname records.
+		</para>
+
+			<sect3 id="dns-client-configuration" status="review">
+			<title>DNS Client Configuration</title>
+			<para>
+			To configure your system to use DNS for name resolution, add the IP addresses of the DNS 
+			servers that are appropriate for your network in the file <filename>/etc/resolv.conf</filename>. 
+			You can also add an optional DNS suffix search-lists to match your network domain names.
+			</para>
+			<para>
+			Below is an example of a typical configuration of <filename>/etc/resolv.conf</filename>
+			for a server on the domain "<emphasis role="italic">example.com</emphasis>" and using 
+			two public DNS servers.
+			</para>
 <programlisting>
-search com
-nameserver 204.11.126.131
-nameserver 64.125.134.133
-nameserver 64.125.134.132
-nameserver 208.185.179.218
+search example.com
+nameserver 8.8.8.8
+nameserver 8.8.4.4
 </programlisting>
-            
-            <para>
-             The <application>search</application> key specifies the string
-             which will be appended to an incomplete hostname. Here, we
-             have configured it to <application>com</application>. So, when we
-             run: <command>ping ubuntu</command> it would be interpreted
-             as <command>ping ubuntu.com</command>.
-            </para> 
+			<para>
+			The <emphasis role="italic">search</emphasis> option can also be used with multiple domain names 
+			so that DNS queries will be appended in the order in which they are entered.  For example,
+			your network may have multiple sub-domains to search; a parent domain of 
+			<emphasis role="italic">example.com</emphasis>, and two sub-domains, 
+			<emphasis role="italic">sales.example.com</emphasis> and 
+			<emphasis role="italic">dev.example.com</emphasis>.  
+			</para>
+			<para>
+			If you have multiple domains you wish to search, your configuration might look like the following.
+			</para>
+<programlisting>
+search example.com sales.example.com dev.example.com
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+</programlisting>
+			<para>
+			If you try to ping a host with the name of <emphasis role="italic">server1</emphasis>, your system 
+			will automatically query DNS for its Fully Qualified Domain Name (FQDN) in the following order:
+			</para>
+			<orderedlist>
+			<listitem>
+			<para>
+			server1<emphasis role="bold">.example.com</emphasis>
+			</para>
+			</listitem>
+			<listitem>
+			<para>
+			server1<emphasis role="bold">.sales.example.com</emphasis>
+			</para>
+			</listitem>
+			<listitem>
+			<para>
+			server1<emphasis role="bold">.dev.example.com</emphasis>
+			</para>
+			</listitem>
+			</orderedlist>
+			<para>
+			If no matches are found, the DNS server will provide a result of 
+			<emphasis role="italic">notfound</emphasis> and the DNS query will fail.
+			</para>
+			</sect3>
 
-            <para>
-            The <application>nameserver</application> key specifies the
-            nameserver IP address. It will be used to resolve a given
-            IP address or hostname. This file can have multiple nameserver
-            entries. The nameservers will be used by the network query
-            in the same order.
-            </para>
+			<sect3 id="static-hostnames" status="review">
+			<title>Static Hostnames</title>
+			<para>
+			Static hostnames are locally defined hostname-to-IP mappings located in the file <filename>/etc/hosts</filename>.
+			Entries in the <filename>hosts</filename> file will have precedence over DNS by default. This means that if your
+			system tries to resolve a hostname and it matches an entry in /etc/hosts, it will not attempt to look up the
+			record in DNS.  In some configurations, especially when Internet access is not required, servers that 
+			communicate with a limited number of resources can be conveniently set to use static hostnames instead of DNS.
+			</para>
+			<para>
+			The following is an example of a <filename>hosts</filename> file where a number of local servers 
+			have been identified by simple hostnames, aliases and their equivalent Fully Qualified Domain Names (FQDN's).
+			</para>
+<programlisting>
+127.0.0.1	localhost
+127.0.1.1	ubuntu-server
+10.0.0.11	server1 vpn server1.example.com
+10.0.0.12	server2 mail server2.example.com
+10.0.0.13	server3 www server3.example.com
+10.0.0.14	server4 file server4.example.com
+</programlisting>
+			<note>
+			<para>
+			In the above example, notice that each of the servers have been given aliases in addition to their 
+			proper names and FQDN's. <emphasis role="italic">Server1</emphasis> has been mapped to the name 
+			<emphasis role="italic">vpn</emphasis>, <emphasis role="italic">server2</emphasis> is referred 
+			to as <emphasis role="italic">mail</emphasis>, <emphasis role="italic">server3</emphasis> as 
+			<emphasis role="italic">www</emphasis>, and <emphasis role="italic">server4</emphasis> as 
+			<emphasis role="italic">file</emphasis>.
+			</para>
+			</note>
+			</sect3>
 
-            <warning>
-            <para>
-            If the DNS server names are retrieved dynamically from DHCP
-            or PPPoE (retrieved from your ISP), do not add nameserver
-            entries in this file. It will be overwritten.
-           </para>
-            </warning>
+			<sect3 id="name-service-switch-config" status="review">
+			<title>Name Service Switch Configuration</title>
+			<para>
+			The order in which your system selects a method of resolving hostnames to IP addresses is
+			controlled by the Name Service Switch (NSS) configuration file <filename>/etc/nsswitch.conf</filename>.
+			As mentioned in the previous section, typically static hostnames defined in the systems 
+			<filename>/etc/hosts</filename> file have precedence over names resolved from DNS. The following 
+			is an example of the line responsible for this order of hostname lookups in the file 
+			<filename>/etc/nsswitch.conf</filename>.
+			</para>
+<programlisting>
+hosts:          files mdns4_minimal [NOTFOUND=return] dns mdns4
+</programlisting>
 
-        </sect2>
-        <sect2 id="managing-hosts" status="review">
-          <title>Managing Hosts</title>
-            <para>
-            To manage hosts, you can add, edit, or remove hosts from
-            <filename>/etc/hosts</filename> file. The file contains IP
-            addresses and their corresponding hostnames.  When your
-            system tries to resolve a hostname to an IP address or
-            determine the hostname for an IP address, it refers to the
-            <filename>/etc/hosts</filename> file before using the name
-            servers.  If the IP address is listed in the
-            <filename>/etc/hosts</filename> file, the name servers are
-            not used.  This behavior can be modified by editing 
-	    <filename>/etc/nsswitch.conf</filename> at your peril.
-            </para>
+			<itemizedlist>
+			<listitem>
+			<para>
+			<emphasis role="bold">files</emphasis> first tries to resolve static hostnames located in 
+			<filename>/etc/hosts</filename>.
+			</para>
+			</listitem>
+			<listitem>
+			<para>
+			<emphasis role="bold">mdns4_minimal</emphasis> attempts to resolve the name using Multicast DNS.
+			</para>
+			</listitem>
+			<listitem>
+			<para>
+			<emphasis role="bold">[NOTFOUND=return]</emphasis> means that any response of 
+			<emphasis role="italic">notfound</emphasis> by the preceeding 
+			<emphasis role="italic">mdns4_minimal</emphasis> process should be treated as 
+			authoritative and that the system should not try to continue hunting for an answer.
+			</para>
+			</listitem>
+			<listitem>
+			<para>
+			<emphasis role="bold">dns</emphasis> represents a legacy unicast DNS query.
+			</para>
+			</listitem>
+			<listitem>
+			<para>
+			<emphasis role="bold">mdns4</emphasis> represents a Multicast DNS query.
+			</para>
+			</listitem>
+			</itemizedlist>
 
-            <para>
-            If your network contains computers whose IP
-            addresses are not listed in DNS, it is recommended that you
-            add them to the <filename>/etc/hosts</filename> file.
-            </para>
-        </sect2>
+			<para>
+			To modify the order of the above mentioned name resolution methods, you can
+			simply change the <emphasis role="italic">hosts:</emphasis> string to the value 
+			of your choosing. For example, if you prefer to use legacy Unicast DNS versus 
+			Multicast DNS, you can change the string in <filename>/etc/nsswitch.conf</filename> 
+			as shown below.
+			</para>
+<programlisting>
+hosts:          files dns [NOTFOUND=return] mdns4_minimal mdns4
+</programlisting>
+			</sect3>
+		</sect2>
 
     <sect2 id="bridging" status="review">
       <title>Bridging</title>
@@ -254,14 +575,26 @@ iface br0 inet static
         <itemizedlist>
           <listitem>
             <para>
+            The <ulink url="https://help.ubuntu.com/community/Network">Ubuntu Wiki Network page</ulink> has 
+            links to articles covering more advanced network configuration.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
             The <ulink url="http://manpages.ubuntu.com/manpages/&distro-short-codename;/en/man5/interfaces.5.html">interfaces man page</ulink> has 
             details on more options for <filename>/etc/network/interfaces</filename>.
             </para>
           </listitem>
           <listitem>
             <para>
+            The <ulink url="http://manpages.ubuntu.com/manpages/&distro-short-codename;/en/man8/dhclient.8.html">dhclient man page</ulink> has 
+            details on more options for configuring DHCP client settings.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
             For more information on DNS client configuration see the 
-            <ulink url="http://manpages.ubuntu.com/manpages/jaunty/en/man5/resolver.5.html">resolver man page</ulink>.  Also, Chapter 
+            <ulink url="http://manpages.ubuntu.com/manpages/&distro-short-codename;/en/man5/resolver.5.html">resolver man page</ulink>.  Also, Chapter 
             6 of O'Reilly's <ulink url="http://oreilly.com/catalog/linag2/book/ch06.html">Linux Network Administrator's Guide</ulink> is 
             a good source of resolver and name service configuration information.
             </para>
@@ -269,7 +602,7 @@ iface br0 inet static
           <listitem>
             <para>
             For more information on <emphasis>bridging</emphasis> see the 
-            <ulink url="http://manpages.ubuntu.com/manpages/jaunty/en/man8/brctl.8.html">brctl man page</ulink> and the Linux Foundation's
+            <ulink url="http://manpages.ubuntu.com/manpages/&distro-short-codename;/en/man8/brctl.8.html">brctl man page</ulink> and the Linux Foundation's
             <ulink url="http://www.linuxfoundation.org/en/Net:Bridge">Net:Bridge</ulink> page.
             </para>
           </listitem>
@@ -493,8 +826,8 @@ iface br0 inet static
           <itemizedlist>
             <listitem>
               <para>
-              There are man pages for <ulink url="http://manpages.ubuntu.com/manpages/jaunty/en/man7/tcp.7.html">TCP</ulink> and
-              <ulink url="http://manpages.ubuntu.com/manpages/jaunty/man7/ip.7.html">IP</ulink> that contain more useful information.
+              There are man pages for <ulink url="http://manpages.ubuntu.com/manpages/&distro-short-codename;/en/man7/tcp.7.html">TCP</ulink> and
+              <ulink url="http://manpages.ubuntu.com/manpages/&distro-short-codename;/man7/ip.7.html">IP</ulink> that contain more useful information.
               </para>
             </listitem>
             <listitem>
@@ -675,8 +1008,13 @@ option netbios-name-servers 192.168.1.1;
           <itemizedlist>
             <listitem>
               <para>
+              The <ulink url="https://help.ubuntu.com/community/dhcp3-server">dhcp3-server Ubuntu Wiki</ulink> page has more information.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
               For more <filename>/etc/dhcp3/dchpd.conf</filename> options see the 
-              <ulink url="http://manpages.ubuntu.com/manpages/jaunty/en/man5/dhcpd.conf.5.html">dhcpd.conf man page</ulink>.
+              <ulink url="http://manpages.ubuntu.com/manpages/&distro-short-codename;/en/man5/dhcpd.conf.5.html">dhcpd.conf man page</ulink>.
               </para>
             </listitem>
             <listitem>
@@ -764,23 +1102,28 @@ You can also Google for NTP servers in your region, and add these to your config
 <code>sudo ntpdate ntp.server.name</code>
  and see what happens. 
 </para>
-<para/>
 </sect2>
-	<sect2 id="relatedpages" status="review">
-<title>Related Pages</title>
+  <sect2 id="ntp-references" status="review">
+    <title>References</title>
+
 	<itemizedlist>
-	<listitem>
-	<para>
-<ulink url="http://ntp.isc.org/bin/view/Support/WebHome">NTP Support</ulink>
-</para>
-</listitem>
-	<listitem>
-	<para>
-<ulink url="http://www.ntp.org/ntpfaq/NTP-a-faq.htm">The NTP FAQ and HOWTO</ulink>
-</para>
-</listitem>
-</itemizedlist>
-<para/>
-</sect2>
-    </sect1>
+	  <listitem>
+  	    <para>
+          See the <ulink url="https://help.ubuntu.com/community/UbuntuTime">Ubuntu Time</ulink> wiki page for more information.
+        </para>
+      </listitem>
+	  <listitem>
+  	    <para>
+          <ulink url="http://ntp.isc.org/bin/view/Support/WebHome">NTP Support</ulink>
+        </para>
+      </listitem>
+	  <listitem>
+	    <para>
+          <ulink url="http://www.ntp.org/ntpfaq/NTP-a-faq.htm">The NTP FAQ and HOWTO</ulink>
+        </para>
+      </listitem>
+    </itemizedlist>
+
+  </sect2>
+  </sect1>
 </chapter>

@@ -88,7 +88,7 @@ style:
 	mkdir -p build/libs/callouts
 	mkdir -p build/libs/navig
 	cp libs/*css build/libs/
-	cp libs/img/*png build/libs/img/
+	cp libs/img/*.* build/libs/img/
 	cp -r libs/admon/*.* build/libs/admon	
 	cp -r libs/callouts/*.* build/libs/callouts
 	cp -r libs/navig/*.* build/libs/navig
@@ -148,9 +148,9 @@ contributors: style
 install: style
 
 # To build an Ubuntu look n feel version of the installation-guide, download
-# the source package and unpack it to ubuntu/installation-guide. Then amend
+# the source package and unpack it to installation-guide. Then amend
 # build/buildone.sh so that the "web" stylesheet refers to the Ubuntu installguide stylesheet
-# in ubuntu/libs. Then use this make target.
+# in libs. Then use this make target.
 
 	cd installation-guide/build && mkdir -p ../../build/installation-guide && destination='../../build/installation-guide/'  formats='html txt' architectures='amd64 hppa i386 ia64 powerpc sparc' ./buildweb.sh && cd ../../
 
