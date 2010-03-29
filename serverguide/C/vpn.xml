@@ -51,12 +51,14 @@
 
         <para>
         First, copy the <filename>easy-rsa</filename> directory to <filename>/etc/openvpn</filename>.  This will ensure that any 
-        changes to the scripts will not be lost when the package is updated.  From a terminal enter:
+        changes to the scripts will not be lost when the package is updated.  You will also need to adjust permissions in the 
+        <filename>easy-rsa</filename> directory to allow the current user permission to create files.  From a terminal enter:
         </para>
 
 <screen>
 <command>sudo mkdir /etc/openvpn/easy-rsa/</command>
-<command>sudo cp -r /usr/share/doc/openvpn/examples/easy-rsa/2.0/ /etc/openvpn/</command>
+<command>sudo cp -r /usr/share/doc/openvpn/examples/easy-rsa/2.0/* /etc/openvpn/easy-rsa/</command>
+<command>sudo chown -R $USER /etc/openvpn/easy-rsa/</command>
 </screen>
 
         <para>
@@ -76,7 +78,7 @@ export KEY_EMAIL="steve@example.com"
         </para>
 
 <screen>
-<command>cd /etc/openvpn/easy-rsa/easy-rsa</command>
+<command>cd /etc/openvpn/easy-rsa/</command>
 <command>source vars</command>
 <command>./clean-all</command>
 <command>./build-dh</command>
@@ -113,11 +115,10 @@ export KEY_EMAIL="steve@example.com"
         </para>
 
         <itemizedlist>
-          <listitem><para>/etc/openvpn/easy-rsa/hostname.ovpn</para></listitem>
-          <listitem><para>/etc/openvpn/easy-rsa/ca.crt</para></listitem>
-          <listitem><para>/etc/openvpn/easy-rsa/hostname.crt</para></listitem>
-          <listitem><para>/etc/openvpn/easy-rsa/hostname.key</para></listitem>
-          <listitem><para>/etc/openvpn/easy-rsa/ta.key</para></listitem>
+          <listitem><para>/etc/openvpn/ca.crt</para></listitem>
+          <listitem><para>/etc/openvpn/easy-rsa/keys/hostname.crt</para></listitem>
+          <listitem><para>/etc/openvpn/easy-rsa/keys/hostname.key</para></listitem>
+          <listitem><para>/etc/openvpn/ta.key</para></listitem>
         </itemizedlist>
 
         <note>
@@ -150,12 +151,15 @@ export KEY_EMAIL="steve@example.com"
 </screen>
 
         <para>
-        Edit <filename>etc/openvpn/server.conf</filename> changing the following options to:
+        Edit <filename>/etc/openvpn/server.conf</filename> changing the following options to:
         </para>
 
 <programlisting>
 local 172.18.100.101
 dev tap0
+up "/etc/openvpn/up.sh br0"
+down "/etc/openvpn/down.sh br0"
+;server 10.8.0.0 255.255.255.0
 server-bridge 172.18.100.101 255.255.255.0 172.18.100.105 172.18.100.200
 push "route 172.18.100.1 255.255.255.0"
 push "dhcp-option DNS 172.18.100.20"
@@ -246,7 +250,15 @@ DEV=$2
         <title>Client Configuration</title>
 
         <para>
-        With the server configured and the client certificates copied over, create a client configuration file by 
+        First, install <application>openvpn</application> on the client:
+        </para>
+
+<screen>
+<command>sudo apt-get install openvpn</command>
+</screen>
+
+        <para>
+        Then with the server configured and the client certificates copied to the <filename>/etc/openvpn/</filename> directory, create a client configuration file by 
         copying the example.  In a terminal on the client machine enter:
         </para>
 
@@ -300,6 +312,11 @@ tls-auth ta.key 1
           <para>
           Also, Pakt's <ulink url="http://www.packtpub.com/openvpn/book">OpenVPN: Building and Integrating Virtual Private Networks</ulink> 
           is a good resource.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          Another source of further information is the <ulink url="https://help.ubuntu.com/community/OpenVPN">Ubuntu Wiki OpenVPN</ulink> page.
           </para>
         </listitem>
       </itemizedlist>

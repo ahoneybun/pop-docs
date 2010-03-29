@@ -52,7 +52,7 @@ urchinTracker();
   <div class="breadcrumbs">
 	<a href="https://help.ubuntu.com/">Ubuntu Documentation</a>
       <xsl:text> &gt; </xsl:text>
-	<a href="https://help.ubuntu.com/9.10">Ubuntu 9.10</a>
+	<a href="https://help.ubuntu.com/10.04">Ubuntu 10.04</a>
       <xsl:text> &gt; </xsl:text>
     <xsl:for-each select="$this.node/ancestor::*">
       <span class="breadcrumb-link">

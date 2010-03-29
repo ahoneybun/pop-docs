@@ -56,6 +56,7 @@ for y in `cat libs/shipped-docs`; do
  	sed -i build/$y/$lang/*.html -e "s#man:apt-get#http://manpages\.ubuntu\.com/manpages/intrepid/en/man8/apt-get\.html#g"
         sed -i build/$y/$lang/*.html -e "s#x-yelp-toc:\#Man#http://manpages\.ubuntu\.com#g"
         sed -i build/$y/$lang/*.html -e "s#x-yelp-toc:\#Info#http://manpages\.ubuntu\.com#g"
+        sed -i build/$y/$lang/*.html -e "s#ghelp:printing\#faxing#\.\./\.\./printing/$lang/faxing.html#g"
 
 ## For Software Center, documentation is not online so the best we can do for now is to remove the link
         sed -i build/$y/$lang/*.html -e "s#ghelp:software-center##g"
@@ -82,7 +83,7 @@ for y in `cat libs/shipped-docs`; do
  	sed -i build/$y/$lang/*.html -e "s#ghelp:gnome-access-guide\#keynav-0#http://library\.gnome\.org/users/gnome-access-guide/stable/keynav-0\.html#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:gswitchit\#gswitchit-applet-switching#http://library\.gnome\.org/users/gswitchit/stable/gswitchit-applet-switching\.html#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:accessx-status\#index#http://library\.gnome\.org/users/accessx-status/stable/#g"
- 	sed -i build/$y/$lang/*.html -e "s#ghelp:char-palette\#charpick-characters#http://library\.gnome\.org/users/char-palette/stable/charpick-usage\.html/#g"
+ 	sed -i build/$y/$lang/*.html -e "s#ghelp:char-palette\#charpick-characters#http://library\.gnome\.org/users/char-palette/stable/charpick-usage\.html#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:baobab#http://library\.gnome\.org/users/baobab/stable/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:users-admin#http://library\.gnome\.org/users/users-admin/stable/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:evolution#http://library\.gnome\.org/users/evolution/stable/#g"
@@ -114,6 +115,25 @@ for y in `cat libs/shipped-docs`; do
 
 ## index.html
  	sed -i build/index.html -e "s#$y/C/#$y/$lang/#g"
+
+## Images
+
+ 	sed -i build/$y/$lang/*.html -e "s#/usr/share/pixmaps/firefox-3.5\.png#../../libs/img/firefox-3.5\.png#g"
+ 	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/hicolor/48x48/apps/empathy\.png#../../libs/img/empathy\.png#g"
+ 	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/hicolor/48x48/apps/f-spot\.png#../../libs/img/f-spot\.png#g"
+ 	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/hicolor/48x48/apps/rhythmbox\.png#../../libs/img/rhythmbox\.png#g"
+ 	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/hicolor/48x48/apps/ubuntuone-client\.png#../../libs/img/ubuntuone-client\.png#g"
+ 	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/Humanity/places/48/distributor-logo\.svg#../../libs/img/distributor-logo\.svg#g"
+ 	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/Humanity/apps/48/evolution\.svg#../../libs/img/evolution\.svg#g"
+ 	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/Humanity/categories/48/applications-office\.svg#../../libs/img/applications-office\.svg#g"
+ 	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/Humanity/apps/48/gnome-apt\.svg#../../libs/img/gnome-apt\.svg#g"
+ 	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/Humanity/apps/48/update-manager\.svg#../../libs/img/update-manager\.svg#g"
+ 	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/Humanity/apps/48/gnome-help\.svg#../../libs/img/gnome-help\.svg#g"
+ 	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/Humanity/status/24/gnome-netstatus-disconn\.svg#../../libs/img/gnome-netstatus-disconn\.svg#g"
+ 	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/Humanity/devices/24/network-wired\.svg#../../libs/img/network-wired\.svg#g"
+ 	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/Humanity/devices/24/network-wireless\.svg#../../libs/img/network-wireless\.svg#g"
+ 	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/Humanity/apps/48/gnome-volume-control\.svg#../../libs/img/gnome-volume-control\.svg#g"
+	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/gnome/24x24/status/dialog-password\.png#../../libs/img/dialog-password\.png#g"
 
 done
 

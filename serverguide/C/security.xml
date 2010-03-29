@@ -346,64 +346,6 @@ AllowGroups sshlogin
 		</listitem>
 		</itemizedlist>
    </sect2>
-   <sect2 id="grub-password-security" status="review">
-	<title>GRUB Password Security</title>
-	<para>
-	Ubuntu installs GNU GRUB as its default boot loader, which allows for great flexibility and recovery options.  For example, when you install additional kernel images, these are automatically added as available boot options in the <application>grub</application> menu.  Also, by default, alternate boot options are available for each kernel entry that may be used for system recovery, aptly labeled (recovery mode).  Recovery mode simply boots the corresponding kernel image into single user mode (init 1), which lands the administrator at a root prompt without the need for any password.  
-	</para>
-	<para>
-	Therefore, it is important to control who may edit the <application>grub</application> menu items which, would otherwise allow for someone to perform the following dangerous actions:
-	</para> 
-		<itemizedlist>
-	  	<listitem>
-	  	<para>
-	  	Pass kernel options at boot up.
-	  	</para>
-	  	</listitem>
-		<listitem>
-		<para>
-		Boot the server into single user mode.
-		</para>
-		</listitem>
-		</itemizedlist>
-	<para>
-	You can prevent these actions by adding a password to GRUB's configuration file of <filename>/boot/grub/menu.lst</filename>, which will be required to unlock GRUB's more advanced features prior to use.
-	</para>
-		<itemizedlist>
-	  	<listitem>
-	  	<para>
-		To add a password for use with <application>grub</application>, first you must generate an md5 password hash using the <application>grub-md5-crypt</application> utility:
-		</para>
-<screen>
-<command>grub-md5-crypt</command>
-</screen>
-		<para>The command will ask you to enter a password and offer a resulting hash value as shown below: 
-		</para>
-<screen>
-<computeroutput>Password: <userinput>(enter new password)</userinput>
-Retype password: <userinput>(repeat password)</userinput>
-$1$s3YiK$M3lxAbqA6JLm2FbDWnClQ0</computeroutput>
-</screen>
-	  	</listitem>
-	  	<listitem>
-		<para>
-		Add the resulting hash value to the file <filename>/boot/grub/menu.lst</filename> in the following format:
-		</para>
-<programlisting>password --md5 $1$s3YiK$M3lxAbqA6JLm2FbDWnClQ0</programlisting>
-	  	</listitem>
-	  	<listitem>
-	  	<para>
-		To require use of the password for entering single user mode, change the value of the <varname>lockalternative</varname> variable in the file <filename>/boot/grub/menu.lst</filename> to <varname>true</varname>, as shown in the following example.
-		</para>
-<programlisting># lockalternative=true</programlisting>
-		</listitem>
-		</itemizedlist>
-	<note>
-	<para>
-	This does not prevent someone from booting the server from alternate media.  A determined attacker would simply boot into an alternate environment, overwrite your master boot record, mount or copy your physical volumes, destroy your data, or anything else they can imagine.  Please explore other countermeasures that may help you with these types of attacks.
-	</para>
-	</note>
-   </sect2>
    </sect1>
 
 	<sect1 id="firewall" status="review">
@@ -942,7 +884,7 @@ sudo iptables -A INPUT -m state --state NEW -p tcp --dport 80 -j LOG --log-prefi
 	    </listitem> 
 	    <listitem>
 	      <para>
-              Also, the <application>ufw</application> manual page contains some very useful information: <command>man ufw</command>.
+          Also, the <application>ufw</application> manual page contains some very useful information: <command>man ufw</command>.
 	      </para>
 	    </listitem> 
 	    <listitem>
@@ -955,6 +897,11 @@ sudo iptables -A INPUT -m state --state NEW -p tcp --dport 80 -j LOG --log-prefi
 	      <para>
 	      The <ulink url="http://www.netfilter.org/documentation/HOWTO/NAT-HOWTO.html">nat-HOWTO</ulink> contains further details on
 	      masquerading.
+	      </para>
+	    </listitem>
+	    <listitem>
+	      <para>
+	      The <ulink url="https://help.ubuntu.com/community/IptablesHowTo">IPTables HowTo</ulink> in the Ubuntu wiki is a great resource.
 	      </para>
 	    </listitem> 
 	  </itemizedlist>
@@ -1484,10 +1431,10 @@ Enter pass phrase for server.key:
         <para>
         It will prompt you enter the passphrase. If you enter the
         correct passphrase, it will prompt you to enter Company Name,
+        Site Name, Email Id, etc.
         Once you enter all these details, your
         CSR will be created and it will be stored in the
         <filename>server.csr</filename> file.
-        Site Name, Email Id, etc. 
         </para>
 	<para>
  	You can now submit this CSR file
@@ -1872,7 +1819,7 @@ passphrase_passwd=[secrets]
             <itemizedlist>
               <listitem>
                 <para>
-                For more information on eCryptfs see the <ulink url="https://launchpad.net/ecryptfs">Launch Pad project page</ulink>
+                For more information on eCryptfs see the <ulink url="https://launchpad.net/ecryptfs">Launchpad project page</ulink>.
                 </para>
               </listitem>
               <listitem>
@@ -1883,7 +1830,12 @@ passphrase_passwd=[secrets]
               <listitem>
                 <para>
                 Also, for more <application>ecryptfs</application> options see the
-                <ulink url="http://manpages.ubuntu.com/manpages/jaunty/en/man7/ecryptfs.7.html">ecryptfs man page</ulink>.
+                <ulink url="http://manpages.ubuntu.com/manpages/&distro-short-codename;/en/man7/ecryptfs.7.html">ecryptfs man page</ulink>.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                The <ulink url="https://help.ubuntu.com/community/eCryptfs">eCryptfs Ubuntu Wiki</ulink> page also has more details.
                 </para>
               </listitem>
             </itemizedlist>

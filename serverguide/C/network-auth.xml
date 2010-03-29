@@ -85,7 +85,7 @@
 
 	<para>
 	The backend <emphasis>cn=config</emphasis> directory has only a minimal configuration and will 
-        need additional options in order to populate the frontend directory.  The frontend will be populated
+        need additional configuration options in order to populate the frontend directory.  The frontend will be populated
         with a "classical" scheme that will be compatible with address book applications and with Unix Posix 
         accounts.  Posix accounts will allow authentication to various applications, such as web 
 	applications, email Mail Transfer Agent (MTA) applications, etc.
@@ -144,7 +144,8 @@ olcDbConfig: set_lk_max_lockers 1500
 olcDbIndex: objectClass eq
 olcLastMod: TRUE
 olcDbCheckpoint: 512 30
-olcAccess: to attrs=userPassword,shadowLastChange by dn="cn=admin,dc=example,dc=com" write by anonymous auth by self write by * none
+olcAccess: to attrs=userPassword by dn="cn=admin,dc=example,dc=com" write by anonymous auth by self write by * none
+olcAccess: to attrs=shadowLastChange by self write by * read
 olcAccess: to dn.base="" by * read
 olcAccess: to * by dn="cn=admin,dc=example,dc=com" write by * read
 
@@ -354,7 +355,7 @@ SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
 SASL SSF: 0
 <userinput>dn: olcDatabase={1}hdb,cn=config
 add: olcDbIndex
-olcDbIndex: entryUUID eq</userinput>
+olcDbIndex: uidNumber eq</userinput>
 
 modifying entry "olcDatabase={1}hdb,cn=config"
 </computeroutput>
@@ -518,7 +519,7 @@ modifyTimestamp: 20080826021140Z
         </sect2>
 
 	<sect2 id="openldap-server-replication" status="review">
-		<title>LDAP replication</title>
+		<title>LDAP Replication</title>
 
 	<para>
 	LDAP often quickly becomes a highly critical service to the network.  Multiple systems 
@@ -528,110 +529,173 @@ modifyTimestamp: 20080826021140Z
 	
 	<para>
 	Replication is achieved using the <emphasis>Syncrepl</emphasis> engine. Syncrepl allows the
-	directory to be synced using either a <emphasis>push</emphasis> or <emphasis>pull</emphasis> based
-	system.  In a push based configuration a <quote>primary</quote> server will push directory updates
-	to <quote>secondary</quote> servers, while a pull based approach allows replication servers to sync on
-	a time based interval.
+	changes to be synced using a <emphasis>consumer</emphasis>, <emphasis>provider</emphasis> model.
+        A provider sends directory changes to consumers.
 	</para>
 
-	<para>
-	The following is an example of a <emphasis>Multi-Master</emphasis> configuration.  In this configuration each
-        OpenLDAP server is configured for both <emphasis>push</emphasis> and <emphasis>pull</emphasis> replication. 
-	</para>
+    <sect3 id="openldap-provider-configuration" status="review">
+      <title>Provider Configuration</title>
+
+  	  <para>
+	  The following is an example of a <emphasis>Single-Master</emphasis> configuration.  In this configuration one
+      OpenLDAP server is configured as a <emphasis>provider</emphasis> and another as a <emphasis>consumer</emphasis>. 
+	  </para>
 
         <procedure>
           <step>
   
             <para>
-            First, configure the server to sync the <emphasis>cn=config</emphasis> database.  Copy the following to a 
-            file named <filename>syncrepl_cn-config.ldif</filename>:
+            First, configure the provider server.  Copy the following to a 
+            file named <filename>provider_sync.ldif</filename>:
             </para>
 
 <programlisting>
+# Add indexes to the frontend db.
+dn: olcDatabase={1}hdb,cn=config
+changetype: modify
+add: olcDbIndex
+olcDbIndex: entryCSN eq
+-
+add: olcDbIndex
+olcDbIndex: entryUUID eq
+
+#Load the syncprov and accesslog modules.
 dn: cn=module{0},cn=config
 changetype: modify
 add: olcModuleLoad
 olcModuleLoad: syncprov
+-
+add: olcModuleLoad
+olcModuleLoad: accesslog
 
-dn: cn=config
-changetype: modify
-replace: olcServerID
-olcServerID: 1 ldap://ldap01.example.com
-olcServerID: 2 ldap://ldap02.example.com
+# Accesslog database definitions
+dn: olcDatabase={2}hdb,cn=config
+objectClass: olcDatabaseConfig
+objectClass: olcHdbConfig
+olcDatabase: {2}hdb
+olcDbDirectory: /var/lib/ldap/accesslog
+olcSuffix: cn=accesslog
+olcRootDN: cn=admin,dc=example,dc=com
+olcDbIndex: default eq
+olcDbIndex: entryCSN,objectClass,reqEnd,reqResult,reqStart
 
-dn: olcOverlay=syncprov,olcDatabase={0}config,cn=config
+# Accesslog db syncprov.
+dn: olcOverlay=syncprov,olcDatabase={2}hdb,cn=config
 changetype: add
 objectClass: olcOverlayConfig
 objectClass: olcSyncProvConfig
 olcOverlay: syncprov
+olcSpNoPresent: TRUE
+olcSpReloadHint: TRUE
 
-dn: olcDatabase={0}config,cn=config
-changetype: modify
-add: olcSyncRepl
-olcSyncRepl: rid=001 provider=ldap://ldap01.example.com binddn="cn=admin,cn=config" bindmethod=simple
-  credentials=secret searchbase="cn=config" type=refreshAndPersist
-  retry="5 5 300 5" timeout=1
-olcSyncRepl: rid=002 provider=ldap://ldap02.example.com binddn="cn=admin,cn=config" bindmethod=simple
-  credentials=secret searchbase="cn=config" type=refreshAndPersist
-  retry="5 5 300 5" timeout=1
--
-add: olcMirrorMode
-olcMirrorMode: TRUE
--
-add: olcRootPW
-olcRootPW: secret
+# syncrepl Provider for primary db
+dn: olcOverlay=syncprov,olcDatabase={1}hdb,cn=config
+changetype: add
+objectClass: olcOverlayConfig
+objectClass: olcSyncProvConfig
+olcOverlay: syncprov
+olcSpNoPresent: TRUE
+
+# accesslog overlay definitions for primary db
+dn: olcOverlay=accesslog,olcDatabase={1}hdb,cn=config
+objectClass: olcOverlayConfig
+objectClass: olcAccessLogConfig
+olcOverlay: accesslog
+olcAccessLogDB: cn=accesslog
+olcAccessLogOps: writes
+olcAccessLogSuccess: TRUE
+# scan the accesslog DB every day, and purge entries older than 7 days
+olcAccessLogPurge: 07+00:00 01+00:00
 </programlisting>
-
-            <note>
-              <para>
-              Change <emphasis>secret</emphasis> to an appropriate password for the admin user.
-              </para>
-            </note>
           
           </step>
           <step>
 
             <para>
-            Edit the file changing:
+            The <application>AppArmor</application> profile for <application>slapd</application> will need to be adjusted for the 
+            accesslog database location.  Edit <filename>/etc/apparmor.d/usr.sbin.slapd</filename> adding:
             </para>
 
-            <itemizedlist>
-              <listitem>
-                <para>
-                <emphasis>ldap://ldap01.example.com</emphasis> and <emphasis>ldap://ldap02.example.com</emphasis>
-                to the hostnames of your LDAP servers.  
-                </para>
-                <note>
-                  <para>
-                  You can have more than two LDAP servers, and when a change is made to one of them it will by synced
-                  to the rest.  Be sure to increment the <emphasis>olcServerID</emphasis> for each server, and the
-                  <emphasis>rid</emphasis> for each <emphasis>olcSyncRepl</emphasis> entry.
-                  </para>
-                </note>
-              </listitem>
-              <listitem>
-                <para>
-                And adjust <emphasis>credentials=secret</emphasis> to match your admin password.
-                </para>
-              </listitem>
-            </itemizedlist>
+<programlisting>
+  /var/lib/ldap/accesslog/ r,
+  /var/lib/ldap/accesslog/** rwk,
+</programlisting>
+
+            <para>
+            Then create the directory, reload the <application>apparmor</application> profile, and copy 
+            the <filename>DB_CONFIG</filename> file:
+            </para>
+
+<screen>
+<command>sudo -u openldap mkdir /var/lib/ldap/accesslog</command>
+<command>sudo -u openldap cp /var/lib/ldap/DB_CONFIG /var/lib/ldap/accesslog/</command>
+<command>sudo /etc/init.d/apparmor reload</command>
+</screen>
+
+            <note>
+              <para>
+              Using the <emphasis>-u openldap</emphasis> option with the <application>sudo</application> commands above
+              removes the need to adjust permissions for the new directory later.
+              </para>
+            </note>
+
+          </step>
+          <step>
+
+            <para>
+            Edit the file and change the <emphasis>olcRootDN</emphasis> to match your directory:
+            </para>
+
+<programlisting>
+olcRootDN: cn=admin,dc=example,dc=com
+</programlisting>
 
           </step>
           <step>
 
 
             <para>
-            Next, add the LDIF file using the <application>ldapmodify</application> utility:
+            Next, add the LDIF file using the <application>ldapadd</application> utility:
             </para>
 
 <screen>
-<command>sudo ldapmodify -Y EXTERNAL -H ldapi:/// -f syncrepl_cn-config.ldif</command>
+<command>sudo ldapadd -Y EXTERNAL -H ldapi:/// -f provider_sync.ldif</command>
 </screen>
 
           </step>
           <step>
+
+
             <para>
-            On the second LDAP server, <emphasis>ldap02.example.com</emphasis> in this case, add the additional schema files:
+            Restart <application>slapd</application>:
+            </para>
+
+<screen>
+<command>sudo /etc/init.d/slapd restart</command>
+</screen>
+
+          </step>
+        </procedure>
+
+        <para>
+        The <emphasis>Provider</emphasis> server is now configured, and it is time to configure a <emphasis>Consumer</emphasis>
+        server. 
+        </para>
+
+      </sect3>
+      <sect3 id="openldap-consumer-configuration" status="review">
+        <title>Consumer Configuration</title>
+
+        <procedure>
+          <step>
+
+            <para>
+            On the <emphasis>Consumer</emphasis> server configure it the same as the <emphasis>Provider</emphasis> except for the 
+            <emphasis>Syncrepl</emphasis> configuration steps.
+            </para>
+
+            <para>
+            Add the additional schema files:
             </para>
 
 <screen>
@@ -641,8 +705,7 @@ olcRootPW: secret
 </screen>
 
             <para>
-            Also, load the <emphasis>cn=module</emphasis> object.  Create a <filename>module.ldif</filename> with the
-            following contents:
+            Also, create, or copy from the provider server, the <filename>backend.example.com.ldif</filename>
             </para>
 
 <programlisting>
@@ -652,6 +715,27 @@ objectClass: olcModuleList
 cn: module
 olcModulepath: /usr/lib/ldap
 olcModuleload: back_hdb
+
+# Database settings
+dn: olcDatabase=hdb,cn=config
+objectClass: olcDatabaseConfig
+objectClass: olcHdbConfig
+olcDatabase: {1}hdb
+olcSuffix: dc=example,dc=com
+olcDbDirectory: /var/lib/ldap
+olcRootDN: cn=admin,dc=example,dc=com
+olcRootPW: secret
+olcDbConfig: set_cachesize 0 2097152 0
+olcDbConfig: set_lk_max_objects 1500
+olcDbConfig: set_lk_max_locks 1500
+olcDbConfig: set_lk_max_lockers 1500
+olcDbIndex: objectClass eq
+olcLastMod: TRUE
+olcDbCheckpoint: 512 30
+olcAccess: to attrs=userPassword by dn="cn=admin,dc=example,dc=com" write by anonymous auth by self write by * none
+olcAccess: to attrs=shadowLastChange by self write by * read
+olcAccess: to dn.base="" by * read
+olcAccess: to * by dn="cn=admin,dc=example,dc=com" write by * read
 </programlisting>
 
             <para>
@@ -659,134 +743,84 @@ olcModuleload: back_hdb
             </para>
 
 <screen>
-<command>sudo ldapadd -Y EXTERNAL -H ldapi:/// -f module.ldif</command>
+<command>sudo ldapadd -Y EXTERNAL -H ldapi:/// -f backend.example.com.ldif</command>
 </screen>
 
           </step>
           <step>
 
             <para>
-            Now copy the <filename>syncrepl_cn-config.ldif</filename> file to the next LDAP server and add it to the directory:
+            Do the same with the <filename>frontend.example.com.ldif</filename> file listed above, and add it:
             </para>
 
 <screen>
-<command>sudo ldapadd -Y EXTERNAL -H ldapi:/// -f syncrepl_cn-config.ldif</command>
+<command>sudo ldapadd -x -D cn=admin,dc=example,dc=com -W -f frontend.example.com.ldif</command>
 </screen>
 
-          </step>
-          <step>
-
             <para>
-            Because a new module has been added, the <application>slapd</application> daemon, on all replicated
-            servers, needs to be restarted:
+            The two severs should now have the same configuration except for the <emphasis>Syncrepl</emphasis>
+            options.
             </para>
 
-<screen>
-<command>sudo /etc/init.d/slapd restart</command>
-</screen>
-
           </step>
           <step>
 
             <para>
-            To Test that the <emphasis>cn=config</emphasis> directory is being synced add another index to the frontend directory:
-            </para>
-
-<screen>
-<command>sudo ldapmodify -Y EXTERNAL -H ldapi:///</command>
-</screen>
-
-<screen>
-<computeroutput>
-SASL/EXTERNAL authentication started
-SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
-SASL SSF: 0
-<userinput>dn: olcDatabase={1}hdb,cn=config
-add: olcDbIndex
-olcDbIndex: cn eq,pres,sub</userinput>
-
-modifying entry "olcDatabase={1}hdb,cn=config"
-</computeroutput>
-</screen>
-
-
-          </step>
-          <step>
-
-            <para>
-            Now that the configuration directory is synced between servers, the <emphasis>frontend</emphasis> 
-            database needs to be synced as well.  Copy and paste the following into another LDIF file named 
-            <filename>syncrepl_frontend.ldif</filename>:
+            Now create a file named <filename>consumer_sync.ldif</filename> containing:
             </para>
 
 <programlisting>
+#Load the syncprov module.
+dn: cn=module{0},cn=config
+changetype: modify
+add: olcModuleLoad
+olcModuleLoad: syncprov
+
+# syncrepl specific indices
 dn: olcDatabase={1}hdb,cn=config
 changetype: modify
-add: olcSyncRepl
-olcSyncRepl: rid=003 provider=ldap://ldap01.example.com binddn="cn=admin,dc=example,dc=com" 
- bindmethod=simple credentials=secret searchbase="dc=example,dc=com" type=refreshOnly 
- interval=00:00:00:10 retry="5 5 300 5" timeout=1
-olcSyncRepl: rid=004 provider=ldap://ldap02.example.com binddn="cn=admin,dc=example,dc=com" 
- bindmethod=simple credentials=secret searchbase="dc=example,dc=com" type=refreshOnly 
- interval=00:00:00:10 retry="5 5 300 5" timeout=1
+add: olcDbIndex
+olcDbIndex: entryUUID eq
 -
-add: olcMirrorMode
-olcMirrorMode: TRUE
-
-dn: olcOverlay=syncprov,olcDatabase={1}hdb,cn=config
-changetype: add
-objectClass: olcOverlayConfig
-objectClass: olcSyncProvConfig
-olcOverlay: syncprov
+add: olcSyncRepl
+olcSyncRepl: rid=0 provider=ldap://ldap01.example.com bindmethod=simple binddn="cn=admin,dc=example,dc=com" 
+ credentials=secret searchbase="dc=example,dc=com" logbase="cn=accesslog" 
+ logfilter="(&amp;(objectClass=auditWriteObject)(reqResult=0))" schemachecking=on 
+ type=refreshAndPersist retry="60 +" syncdata=accesslog
+-
+add: olcUpdateRef
+olcUpdateRef: ldap://ldap01.example.com
 </programlisting>
 
-          </step>
-          <step>
-
             <para>
-            Like the previous LDIF file, edit this one changing:
+            You will probably want to change the following attributes:
             </para>
 
             <itemizedlist>
-              <listitem>
-                <para>
-                <emphasis>searchbase="dc=example,dc=com"</emphasis> to your directory's searchbase.
-                </para>
-              </listitem>              
-              <listitem>
-                <para>
-                If you use a different admin user, change <emphasis>binddn="cn=admin,dc=example,dc=com"</emphasis>.
-                </para>
-              </listitem>
-              <listitem>
-                <para>
-                Also, replace <emphasis>credentials=secret</emphasis> with your admin password.
-                </para>
-              </listitem>
+              <listitem><para><emphasis>ldap01.example.com</emphasis> to your server's hostname.</para></listitem>
+              <listitem><para><emphasis>binddn</emphasis></para></listitem>
+              <listitem><para><emphasis>credentials</emphasis></para></listitem>
+              <listitem><para><emphasis>searchbase</emphasis></para></listitem>
+              <listitem><para><emphasis>olcUpdateRef:</emphasis></para></listitem>
             </itemizedlist>
 
           </step>
           <step>
 
             <para>
-            Add the LDIF file:
+            Add the LDIF file to the configuration tree:
             </para>
 
 <screen>
-<command>ldapmodify -x -D cn=admin,cn=config -W -f syncrepl_frontend.ldif</command>
+<command>sudo ldapadd -c -Y EXTERNAL -H ldapi:/// -f consumer_sync.ldif</command>
 </screen>
-
-            <para>
-            Because the servers' configuration is already synced there is no need to copy this LDIF 
-            file to the other servers.
-            </para>
 
           </step>
         </procedure>
 
         <para>
-        The configuration and backend databases should now sycnc to the other servers.  You can add additional servers using the 
-        <application>ldapmodify</application> utility as the need arises.  See <xref linkend="openldap-configuration"/> for details.
+        The frontend database should now sync between servers.  You can add additional servers using the 
+        steps above as the need arises. 
         </para>
 
         <note>
@@ -797,7 +831,8 @@ olcOverlay: syncprov
           with a line similar to: <programlisting>127.0.0.1	ldap01.example.com ldap01</programlisting>.
           </para>
         </note>
-		
+
+      </sect3>
 	</sect2>
 
 	<sect2 id="openldap-server-acl" status="review">
@@ -839,9 +874,106 @@ olcAccess: {2}to * by dn="cn=admin,dc=example,dc=com" write by * read
           </para>
 
           <para>
-          The first step in the process is to obtain or create a <emphasis>certificate</emphasis>.  See <xref linkend="certificates-and-security"/>
-          and <xref linkend="certificate-authority"/> for details.
+          The first step in the process is to obtain or create a <emphasis>certificate</emphasis>.  Because <application>slapd</application> 
+          is compiled using the <application>gnutls</application> library, the <application>certtool</application> utility will be 
+          used to create certificates.
           </para>
+        
+          <procedure>
+            <step>
+
+              <para>
+              First, install <application>gnutls-bin</application> by entering the following in a terminal:
+              </para>
+
+<screen>
+<command>sudo apt-get install gnutls-bin</command>
+</screen>
+
+            </step>
+            <step>
+
+              <para>
+              Next, create a private key for the <emphasis>Certificate Authority</emphasis> (CA):
+              </para>
+
+<screen>
+<command>sudo sh -c "certtool --generate-privkey > /etc/ssl/private/cakey.pem"</command>
+</screen>
+
+            </step>
+            <step>
+
+              <para>
+              Create a <filename>/etc/ssl/ca.info</filename> details file to self-sign the CA certificate containing:
+              </para>
+
+<programlisting>
+cn = Example Company
+ca
+cert_signing_key
+</programlisting>
+
+            </step>
+            <step>
+
+              <para>
+              Now create the self-signed CA certificate:
+              </para>
+
+<screen>
+<command>sudo certtool --generate-self-signed --load-privkey /etc/ssl/private/cakey.pem \ 
+ --template  /etc/ssl/ca.info --outfile /etc/ssl/certs/cacert.pem</command>
+</screen>
+
+            </step>
+            <step>
+
+              <para>
+              Make a private key for the server:
+              </para>
+
+<screen>
+<command>sudo sh -c "certtool --generate-privkey > /etc/ssl/private/ldap01_slapd_key.pem"</command>
+</screen>
+
+              <note>
+                <para>
+                Replace <emphasis>ldap01</emphasis> in the filename with your server's hostname.  Naming the certificate and key for the host
+                and service that will be using them will help keep filenames and paths straight.
+                </para>
+              </note>
+
+            </step>
+            <step>
+
+              <para>
+              To sign the server's certificate with the CA, create the <filename>/etc/ssl/ldap01.info</filename> info file containing:
+              </para>
+
+<programlisting>
+organization = Example Company
+cn = ldap01.example.com
+tls_www_server
+encryption_key
+signing_key
+</programlisting>
+
+            </step>
+            <step>
+
+              <para>
+              Create the server's certificate:
+              </para>
+
+<screen>
+<command>sudo certtool --generate-certificate --load-privkey /etc/ssl/private/x01-test_slapd_key.pem \
+ --load-ca-certificate /etc/ssl/certs/cacert.pem --load-ca-privkey /etc/ssl/private/cakey.pem \
+ --template /etc/ssl/x01-test.info --outfile /etc/ssl/certs/x01-test_slapd_cert.pem</command>
+</screen>
+
+            </step>
+          </procedure>
 
           <para>
           Once you have a certificate, key, and CA cert installed, use <application>ldapmodify</application> to add the new 
@@ -849,7 +981,7 @@ olcAccess: {2}to * by dn="cn=admin,dc=example,dc=com" write by * read
           </para>
 
 <screen>
-<command>ldapmodify -x -D cn=admin,cn=config -W</command>
+<command>sudo ldapmodify -Y EXTERNAL -H ldapi:///</command>
 </screen>
 
 <screen>
@@ -859,10 +991,10 @@ add: olcTLSCACertificateFile
 olcTLSCACertificateFile: /etc/ssl/certs/cacert.pem
 -
 add: olcTLSCertificateFile
-olcTLSCertificateFile: /etc/ssl/certs/server.crt
+olcTLSCertificateFile: /etc/ssl/certs/ldap01_slapd_cert.pem
 -
 add: olcTLSCertificateKeyFile
-olcTLSCertificateKeyFile: /etc/ssl/private/server.key</userinput>
+olcTLSCertificateKeyFile: /etc/ssl/private/ldap01_slapd_key.pem</userinput>
 
 modifying entry "cn=config"
 </computeroutput>
@@ -870,9 +1002,8 @@ modifying entry "cn=config"
 
           <note>
             <para>
-            Adjust the <filename>server.crt</filename>, <filename>server.key</filename>, and <filename>cacert.pem</filename>
-            names if yours are different. If you have a self-signed
-            certificate, do <emphasis>NOT</emphasis> add the olcTLSCACertificateFile property, as it will cause GnuTLS to fail..
+            Adjust the <filename>ldap01_slapd_cert.pem</filename>, <filename>ldap01_slapd_key.pem</filename>, and 
+            <filename>cacert.pem</filename> names if yours are different. 
             </para>
           </note>
 
@@ -890,8 +1021,8 @@ SLAPD_SERVICES="ldap:/// ldapi:/// ldaps:///"
 
 <screen>
 <command>sudo adduser openldap ssl-cert</command>
-<command>sudo chgrp ssl-cert /etc/ssl/private/server.key</command>
-<command>sudo chmod g+r /etc/ssl/private/server.key</command>
+<command>sudo chgrp ssl-cert /etc/ssl/private/ldap01_slapd_key.pem</command>
+<command>sudo chmod g+r /etc/ssl/private/ldap01_slapd_key.pem</command>
 </screen>
 
           <note>
@@ -936,73 +1067,144 @@ SLAPD_SERVICES="ldap:/// ldapi:/// ldaps:///"
             </para>
 
             <para>
-            After setting up replication, and following the instructions in <xref linkend="openldap-tls"/>, there are a couple of 
-            consequences that should be kept in mind:
+            Assuming you have followed the above instructions and created a CA certificate and server certificate on the 
+            <emphasis>Provider</emphasis> server.  Follow the following instructions to create a certificate and key for the 
+            <emphasis>Consumer</emphasis> server.
             </para>
 
-            <itemizedlist>
-              <listitem>
+            <procedure>
+              <step>
+
                 <para>
-                The configuration only needs to be modified on <emphasis>one</emphasis> server.
+                Create a new key for the Consumer server:
                 </para>
-              </listitem>
-              <listitem>
-                <para>
-                The path names for the <emphasis>certificate</emphasis> and <emphasis>key</emphasis> must be the 
-                same on all servers.
-                </para>
-              </listitem>
-            </itemizedlist>
-
-            <para>
-            So on each replicated server: install a certificate, edit <filename>/etc/default/slapd</filename>, and 
-            restart <application>slapd</application>.
-            </para>
-
-            <para>
-            Once <emphasis>TLS</emphasis> has been setup on each server, modify the <emphasis>cn=config</emphasis> replication
-            by entering the following in a terminal:
-            </para>
 
 <screen>
-<command>ldapmodify -x -D cn=admin,cn=config -W</command>
+<command>mkdir ldap02-ssl</command>
+<command>cd ldap02-ssl</command>
+<command>certtool --generate-privkey > ldap02_slapd_key.pem</command>
 </screen>
 
-<screen>
-<computeroutput>Enter LDAP Password: 
-<userinput>dn: olcDatabase={0}config,cn=config
-replace: olcSyncrepl
-olcSyncrepl: {0}rid=001 provider=ldap://ldap01.example.com binddn="cn=admin,cn
- =config" bindmethod=simple credentials=secret searchbase="cn=config" type=refre
- shAndPersist retry="5 5 300 5" timeout=1 starttls=yes
-olcSyncrepl: {1}rid=002 provider=ldap://ldap02.example.com binddn="cn=admin,cn
- =config" bindmethod=simple credentials=secret searchbase="cn=config" type=refre
- shAndPersist retry="5 5 300 5" timeout=1 starttls=yes</userinput>
+                <note>
+                  <para>
+                  Creating a new directory is not strictly necessary, but it will help keep things organized and make it easier to copy the 
+                  files to the Consumer server.
+                  </para>
+                </note>
+            
+              </step>
+              <step>       
 
-modifying entry "olcDatabase={0}config,cn=config"
-</computeroutput>
+                <para>
+                Next, create an info file, <filename>ldap02.info</filename> for the Consumer server, changing the attributes to match your 
+                locality and server:
+                </para>  
+
+<programlisting>
+country = US
+state = North Carolina
+locality = Winston-Salem
+organization = Example Company
+cn = ldap02.salem.edu
+tls_www_client
+encryption_key
+signing_key
+</programlisting>
+
+              </step>
+              <step>  
+
+                <para>
+                Create the certificate:
+                </para>
+
+<screen>
+<command>sudo certtool --generate-certificate --load-privkey ldap02_slapd_key.pem \
+ --load-ca-certificate /etc/ssl/certs/cacert.pem --load-ca-privkey /etc/ssl/private/cakey.pem \
+ --template ldap02.info --outfile ldap02_slapd_cert.pem</command>
 </screen>
 
-            <para>
-            Now adjust the <emphasis>backend</emphasis> database replication:
-            </para>
+              </step>
+              <step>  
+           
+                <para>
+                Copy the <filename>cacert.pem</filename> to the dicretory:
+                </para>
 
 <screen>
-<command>ldapmodify -x -D cn=admin,cn=config -W</command>
+<command>cp /etc/ssl/certs/cacert.pem .</command>
+</screen>
+
+              </step>
+              <step>  
+
+                <para>
+                The only thing left is to copy the <filename>ldap02-ssl</filename> directory to the Consumer server, then copy 
+                <filename>ldap02_slapd_cert.pem</filename> and <filename>cacert.pem</filename> to <filename>/etc/ssl/certs</filename>,
+                and copy <filename>ldap02_slapd_key.pem</filename> to <filename>/etc/ssl/private</filename>.
+                </para>
+
+              </step>
+              <step>  
+
+                <para>
+                Once the files are in place adjust the <emphasis>cn=config</emphasis> tree by entering:
+                </para>
+
+<screen>
+<command>sudo ldapmodify -Y EXTERNAL -H ldapi:///</command>
 </screen>
 
 <screen>
 <computeroutput>Enter LDAP Password:
-<userinput>dn: olcDatabase={1}hdb,cn=config
-replace: olcSyncrepl
-olcSyncrepl: {0}rid=003 provider=ldap://ldap01.example.com binddn="cn=admin,dc=example,dc=
- com" bindmethod=simple credentials=secret searchbase="dc=example,dc=com" type=r
- efreshOnly interval=00:00:00:10 retry="5 5 300 5" timeout=1 starttls=yes
-olcSyncrepl: {1}rid=004 provider=ldap://ldap02.example.com binddn="cn=admin,dc=example,dc=
- com" bindmethod=simple credentials=secret searchbase="dc=example,dc=com" type=r
- efreshOnly interval=00:00:00:10 retry="5 5 300 5" timeout=1 starttls=yes</userinput>
+<userinput>dn: cn=config
+add: olcTLSCACertificateFile
+olcTLSCACertificateFile: /etc/ssl/certs/cacert.pem
+-
+add: olcTLSCertificateFile
+olcTLSCertificateFile: /etc/ssl/certs/ldap02_slapd_cert.pem
+-
+add: olcTLSCertificateKeyFile
+olcTLSCertificateKeyFile: /etc/ssl/private/ldap02_slapd_key.pem</userinput>
 
-modifying entry "olcDatabase={1}hdb,cn=config"</computeroutput>
+modifying entry "cn=config"
+</computeroutput>
+</screen>
+
+              </step>
+              <step>  
+
+                <para>
+                As with the Provider you can now edit <filename>/etc/default/slapd</filename> and add the <emphasis>ldaps:///</emphasis>
+                parameter to the <emphasis>SLAPD_SERVICES</emphasis> option.
+                </para>
+              
+              </step>
+            </procedure>
+  
+            <para>
+            Now that <emphasis>TLS</emphasis> has been setup on each server, once again modify the <emphasis>Consumer</emphasis> server's
+            <emphasis>cn=config</emphasis> tree by entering the following in a terminal:
+            </para>
+
+<screen>
+<command>sudo ldapmodify -Y EXTERNAL -H ldapi:///</command>
+</screen>
+
+<screen>
+<computeroutput>SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+<userinput>
+dn: olcDatabase={1}hdb,cn=config
+replace: olcSyncrepl
+olcSyncrepl: {0}rid=0 provider=ldap://ldap01.example.com bindmethod=simple binddn="cn=ad
+ min,dc=example,dc=com" credentials=secret searchbase="dc=example,dc=com" logbas
+ e="cn=accesslog" logfilter="(&amp;(objectClass=auditWriteObject)(reqResult=0))" s
+ chemachecking=on type=refreshAndPersist retry="60 +" syncdata=accesslog starttls=yes</userinput>
+
+modifying entry "olcDatabase={1}hdb,cn=config"
+</computeroutput>
 </screen>
 
             <para>
@@ -1011,8 +1213,8 @@ modifying entry "olcDatabase={1}hdb,cn=config"</computeroutput>
             </para>
 
 <programlisting>
-TLS_CERT /etc/ssl/certs/server.crt
-TLS_KEY /etc/ssl/private/server.key
+TLS_CERT /etc/ssl/certs/ldap02_slapd_cert.pem
+TLS_KEY /etc/ssl/private/ldap02_slapd_key.pem
 TLS_CACERT /etc/ssl/certs/cacert.pem
 </programlisting>
 
@@ -1329,7 +1531,12 @@ title: Employee
 	  <title>Resources</title>
 	  <itemizedlist>
 	    <listitem>
-              <para>
+          <para>
+	      The <ulink url="https://help.ubuntu.com/community/OpenLDAPServer">OpenLDAP Ubuntu Wiki</ulink> page has more details.
+	      </para>
+	    </listitem>
+	    <listitem>
+          <para>
 	      For more information see <ulink url="http://www.openldap.org/">OpenLDAP Home Page</ulink>
 	      </para>
 	    </listitem>
@@ -1791,6 +1998,12 @@ olcDbIndex: default sub
           Again, for more information on <application>smbldap-tools</application> see the man pages: 
           <command>man smbldap-useradd</command>, <command>man smbldap-groupadd</command>, <command>man smbldap-populate</command>,
           etc.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          Also, there is a list of 
+          <ulink url="https://help.ubuntu.com/community/Samba#samba-ldap">Ubuntu wiki</ulink> articles with more information.
           </para>
         </listitem>
       </itemizedlist>
@@ -2373,6 +2586,11 @@ klist: You have no tickets cached</computeroutput>
         </listitem>
         <listitem>
           <para>
+          The <ulink url="https://help.ubuntu.com/community/Kerberos">Ubuntu Wiki Kerberos</ulink> page has more details.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
           O'Reilly's <ulink url="http://oreilly.com/catalog/9780596004033/">Kerberos: The Definitive Guide</ulink> is a great reference when
           setting up Kerberos.
           </para>
@@ -2880,12 +3098,17 @@ Principal "steve@EXAMPLE.COM" created.</computeroutput>
           For more information on <application>kdb5_ldap_util</application> see 
           <ulink url="http://web.mit.edu/Kerberos/krb5-1.6/krb5-1.6.3/doc/krb5-admin.html#Global-Operations-on-the-Kerberos-LDAP-Database">
           Section 5.6</ulink> and the 
-          <ulink url="http://manpages.ubuntu.com/manpages/jaunty/en/man8/kdb5_ldap_util.8.html">kdb5_ldap_util man page</ulink>.
+          <ulink url="http://manpages.ubuntu.com/manpages/&distro-short-codename;/en/man8/kdb5_ldap_util.8.html">kdb5_ldap_util man page</ulink>.
           </para>
         </listitem>
         <listitem>
           <para>
-          Another useful link is the <ulink url="http://manpages.ubuntu.com/manpages/jaunty/en/man5/krb5.conf.5.html">krb5.conf man page</ulink>.
+          Another useful link is the <ulink url="http://manpages.ubuntu.com/manpages/&distro-short-codename;/en/man5/krb5.conf.5.html">krb5.conf man page</ulink>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          Also, see the <ulink url="https://help.ubuntu.com/community/Kerberos#kerberos-ldap">Kerberos and LDAP</ulink> Ubuntu wiki page.
           </para>
         </listitem>
       </itemizedlist>

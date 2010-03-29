@@ -56,6 +56,12 @@
 				It is a minimalist design providing a platform for the desired services, such 
 	 			as file/print services, web hosting, email hosting, etc. 
 				</para>
+
+                <para>
+                The requirements for UEC are slightly different for Front End requirements see <xref linkend="uec-frontend-requirements"/> and for 
+                UEC Node requirements see <xref linkend="uec-node-requirements"/>.
+                </para>
+
     		</sect2>
 
   <sect2 id="intro-server-differences" status="review">
@@ -156,9 +162,17 @@
 	    </listitem>
 	    <listitem>
 	      <para>
+	      From the main boot menu there are some additional options to install Ubuntu Server Edition.  You can install a
+          basic Ubuntu Server, or install Ubuntu Server as part of a <emphasis>Ubuntu Enterprise Cloud</emphasis>.
+          For more information on UEC see <xref linkend="uec"/>.  The rest of this section will cover the basic
+          Ubuntu Server install.
+	      </para>
+	    </listitem>
+	    <listitem>
+	      <para>
 	      The installer then discovers your hardware configuration, and configures the 
 	      network settings using DHCP.  If you do not wish to use DHCP at the next screen
-              choose "Go Back", and you have the option to "Configure the network manually".
+          choose "Go Back", and you have the option to "Configure the network manually".
 	      </para>
 	    </listitem>
 	    <listitem>
@@ -169,7 +183,7 @@
 	    <listitem>
 	      <para>
 	      You can then choose from several options to configure the hard drive layout.
-              For advanced disk options see <xref linkend="advanced-installation"/>.
+          For advanced disk options see <xref linkend="advanced-installation"/>.
 	      </para>
 	    </listitem>
 	    <listitem>
@@ -185,14 +199,14 @@
 	    </listitem>
 	    <listitem>
 	      <para>
-              After the user is setup, you will be asked to encrypt your 
-              <filename role="directory">home</filename> directory. 
+          After the user is setup, you will be asked to encrypt your 
+          <filename role="directory">home</filename> directory. 
 	      </para>
 	    </listitem>
 	    <listitem>
 	      <para>
-              The next step in the installation process is to decide how you want to update the system.
-              There are three options: 
+          The next step in the installation process is to decide how you want to update the system.
+          There are three options: 
 	      </para>
                 <itemizedlist>
                   <listitem>
@@ -221,8 +235,8 @@
 	      <para>
 	      You now have the option to install, or not install, several package tasks.  See 
 	      <xref linkend="install-tasks"/> for details.  Also, there is an option to launch
-              <application>aptitude</application> to choose specific packages to install.  For more
-              information see <xref linkend="aptitude"/>.
+          <application>aptitude</application> to choose specific packages to install.  For more
+          information see <xref linkend="aptitude"/>.
 	      </para>
 	    </listitem>
 	    <listitem>
@@ -254,6 +268,36 @@
 	    are grouped by the type of service they provide. 
 	    </para>
 	    <itemizedlist>
+	      <listitem>
+	        <para>
+		    Cloud computing: Walrus storage service
+	        </para>
+	      </listitem>
+	      <listitem>
+	        <para>
+		    Cloud computing: all-in-one cluster
+	        </para>
+	      </listitem>
+	      <listitem>
+	        <para>
+		    Cloud computing: Cluster controller
+	        </para>
+	      </listitem>
+	      <listitem>
+	        <para>
+		    Cloud computing: Node controller
+	        </para>
+	      </listitem>
+	      <listitem>
+	        <para>
+		    Cloud computing: Storage controller
+	        </para>
+	      </listitem>
+	      <listitem>
+	        <para>
+		    Cloud computing: top-level cloud controller
+	        </para>
+	      </listitem>
 	      <listitem>
 	        <para>
 		DNS server: Selects the BIND DNS server and its documentation.
@@ -300,6 +344,11 @@
 		Virtual machine host: Includes packages needed to run KVM virtual machines.
 	        </para>
 	      </listitem>
+	      <listitem>
+	        <para>
+		    Manually select packages: Executes <application>apptitude</application> allowing you to individually select packages.
+	        </para>
+	      </listitem>
 	    </itemizedlist>
   	    <para>
 	    Installing the package groups is accomplished using the <application>tasksel</application> utility.  
@@ -308,6 +357,9 @@
             information. Likewise, when installing a task, the packages are not only installed, but also configured to provided
             a fully integrated service.
 	    </para>
+        <para>
+        For more information on the <emphasis>Cloud Computing</emphasis> tasks see <xref linkend="uec"/>.
+        </para>
 	    <para>
             Once the installation process has finished you can view a list of available tasks by entering the following from a 
             terminal prompt:
@@ -703,22 +755,17 @@ BOOT_DEGRADED=true
               <itemizedlist>
                 <listitem>
                   <para>
-                  When the server is booting press <emphasis>ESC</emphasis> to open the <application>Grub</application> menu.
+                  When the server is booting press <keycap>Shift</keycap> to open the <application>Grub</application> menu.
                   </para>
                 </listitem>
                 <listitem>
                   <para>
-                  Press <emphasis>"e"</emphasis> to edit your Kernel command options.
+                  Press <keycap>e</keycap> to edit your kernel command options.
                   </para>
                 </listitem>
                 <listitem>
                   <para>
-                  Press the <emphasis>DOWN</emphasis> arrow to highlight the kernel line.
-                  </para>
-                </listitem>
-                <listitem>
-                  <para>
-                  Press the <emphasis>"e"</emphasis> key again to edit the kernel line.
+                  Press the <keycap>down</keycap> arrow to highlight the kernel line.
                   </para>
                 </listitem>
                 <listitem>
@@ -728,12 +775,7 @@ BOOT_DEGRADED=true
                 </listitem>
                 <listitem>
                   <para>
-                  Press <emphasis>"ENTER"</emphasis>.
-                  </para>
-                </listitem>
-                <listitem>
-                  <para>
-                  Finally, press <emphasis>"b"</emphasis> to boot the system.
+                  Press <keycombo><keycap>Ctrl</keycap><keycap>x</keycap></keycombo> to boot the system.
                   </para>
                 </listitem>
               </itemizedlist>
@@ -855,6 +897,11 @@ unused devices: &lt;none&gt;</computeroutput>
           </para>
 
           <itemizedlist>
+            <listitem>
+              <para>
+              <ulink url="https://help.ubuntu.com/community/Installation#raid">Ubuntu Wiki Articles on RAID</ulink>.
+              </para>
+            </listitem>
             <listitem>
               <para>
               <ulink url="http://www.faqs.org/docs/Linux-HOWTO/Software-RAID-HOWTO.html">Software RAID HOWTO</ulink>
@@ -1128,6 +1175,11 @@ unused devices: &lt;none&gt;</computeroutput>
           <itemizedlist>
             <listitem>
               <para>
+              See the <ulink url="https://help.ubuntu.com/community/Installation#lvm">Ubuntu Wiki LVM Articles</ulink>.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
               See the <ulink url="http://tldp.org/HOWTO/LVM-HOWTO/index.html">LVM HOWTO</ulink> for more information.
               </para>
             </listitem>
@@ -1141,7 +1193,7 @@ unused devices: &lt;none&gt;</computeroutput>
             <listitem>
               <para>
               For more information on <application>fdisk</application> see the
-              <ulink url="http://manpages.ubuntu.com/manpages/jaunty/en/man8/fdisk.8.html">fdisk man page</ulink>.
+              <ulink url="http://manpages.ubuntu.com/manpages/&distro-short-codename;/en/man8/fdisk.8.html">fdisk man page</ulink>.
               </para>
             </listitem>
           </itemizedlist>

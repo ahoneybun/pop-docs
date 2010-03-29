@@ -109,58 +109,30 @@
 	<sect1 id="dualboot-custom" status="review">
 		<title>Customizing your dual-boot setup</title>
 		<para>This section briefly explains how to make basic changes to the settings of your dual-boot setup.</para>
+		<para>For directions on more advanced configuration options, see the <ulink url='https://help.ubuntu.com/community/Grub2'>Community Documentation page for Grub2</ulink>.</para>
 		<sect2 id="dualboot-custom-timeout" status="review">
 			<title>Changing the boot menu timeout</title>
 			<para>It is possible to change the length of time for which the boot menu is shown. This is useful if you would like the computer to start up faster (without the delay of showing the menu) or would like more time to choose which operating system to start. The instructions for changing the boot menu timeout are given below:</para>
 			<orderedlist>
-				<listitem><para>Press &terminal;.</para></listitem>
-				<listitem><para>The <application>Terminal</application> screen will appear. Type the following into the Terminal, entering your administrative password if prompted:</para>
-				<screen>cd /boot/grub
-sudo cp menu.lst menu_backup.lst
-sudo gedit menu.lst</screen></listitem>
-				<listitem><para>The <application>Text Editor</application> will start, and will open the file <filename>menu.lst</filename>.</para></listitem>
-				<listitem><para>Find the part of the file which contains text similar to the following:</para>
-				<screen>## timeout sec
-# Set a timeout, in SEC seconds, before automatically booting the default entry
-# (normally the first entry defined).
-timeout		10</screen></listitem>
-				<listitem><para>The line beginning with the word <emphasis>timeout</emphasis> determines the time, in seconds, which the boot menu will be shown for. Change the number on this line to the number of seconds which you would like the menu to be shown for. Use <emphasis>0</emphasis> if you would not like the menu to be shown at all.</para></listitem>
-				<listitem><para>Press <menuchoice><guimenuitem>File</guimenuitem><guimenuitem>Save</guimenuitem></menuchoice> to save your changes and close the <application>Text Editor</application>. Your changes should take effect the next time you restart your computer.</para></listitem>
+				<listitem><para>Install <ulink url='apt:startupmanager'>startupmanager</ulink> if you have not already done so.</para></listitem>
+				<listitem><para>Press &startupmanager;.</para></listitem>
+				<listitem><para>Enter your administrative password if prompted.</para></listitem>
+				<listitem><para>In the <guilabel>Boot options</guilabel> tab, find the <guilabel>Timeout</guilabel> section.
+				Change the "Timeout in seconds" value to the desired length of time.
+				Use <emphasis>0</emphasis> to disable showing the menu.</para></listitem>
+				<listitem><para>Press <guibutton>Close</guibutton>.</para></listitem>
 			</orderedlist>
 		</sect2>
 		<sect2 id="dualboot-custom-bootorder" status="review">
 			<title>Changing the default operating system to boot</title>
 			<para>You can decide which operating system will be started automatically if you have not chosen one from the boot menu within a certain time (see <xref linkend="dualboot-custom-timeout"/> for more information on this).</para>
 			<orderedlist>
-				<listitem><para>Press &terminal;.</para></listitem>
-				<listitem><para>The <application>Terminal</application> screen will appear. Type the following into the Terminal, entering your administrative password if prompted:</para>
-				<screen>cd /boot/grub
-sudo cp menu.lst menu_backup.lst
-sudo gedit menu.lst</screen></listitem>
-				<listitem><para>The <application>Text Editor</application> will start, and will open the file <filename>menu.lst</filename>.</para></listitem>
-				<listitem><para>The entry for each available operating system is arranged in blocks similar to the following:</para>
-				<screen>title		Ubuntu, kernel 2.6.15-26-686
-root		(hd0,0)
-kernel		/boot/vmlinuz-2.6.15-26-686 root=/dev/hda1 ro quiet splash
-initrd		/boot/initrd.img-2.6.15-26-686
-savedefault
-boot</screen>
-				<para>Find the operating system you would like to set as the default by looking at the lines marked <emphasis>title</emphasis> in each block.</para></listitem>
-				<listitem><para> Find out the number of the block you found; the first block is 0, the second is 1 and so on. Count down the list until you get to the block you chose.</para></listitem>
-				
-				<listitem><para>Find the following lines:</para>
-				<screen>## default num
-# Set the default entry to the entry number NUM. Numbering starts from 0, and
-# the entry number 0 is the default if the command is not used.
-#
-# You can specify 'saved' instead of a number. In this case, the default entry
-# is the entry saved with the command 'savedefault'.           
-default		0</screen></listitem>
-				<listitem><para>Go to the line beginning with the word <emphasis>default</emphasis> and replace the number there with the number of the block you just found. For example:</para>
-				<screen>default		2</screen>
-				<para>This will cause the computer to boot the third operating system in the list, which is described by block 2.</para></listitem>
-				
-				<listitem><para>If you are happy with your changes, press <menuchoice><guimenuitem>File</guimenuitem><guimenuitem>Save</guimenuitem></menuchoice> to save your changes and close the <application>Text Editor</application>. The new default should take effect the next time you restart your computer.</para></listitem>
+				<listitem><para>Install <ulink url='apt:startupmanager'>startupmanager</ulink> if you have not already done so.</para></listitem>
+				<listitem><para>Press &startupmanager;.</para></listitem>
+				<listitem><para>Enter your administrative password if prompted.</para></listitem>
+				<listitem><para>In the <guilabel>Boot options</guilabel> tab, find the <guilabel>Default operating system</guilabel> section.
+				From the dropdown box, choose the operating system you would like to use as the default.</para></listitem>
+				<listitem><para>Press <guibutton>Close</guibutton>.</para></listitem>
 			</orderedlist>
 		</sect2>
 	</sect1>

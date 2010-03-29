@@ -59,13 +59,13 @@
 					<para>Type <command>shares-admin</command> and press <keycap>Enter</keycap> to open <application>Shared Folders</application>.</para>
 				</step>
 				<step>
-					<para>Press the <guibutton>Unlock</guibutton> button and enter your password in the <guilabel>Password for (username): </guilabel> field.</para>
+					<para>You may receive a message which says <guilabel>Sharing services are not installed</guilabel>. If this happens, ensure that the two checkboxes in the message box are checked and press <guibutton>Install services</guibutton>. Sharing service support will then be downloaded and installed; this may take a while.</para>
+				</step>
+				<step>
+					<para>Press the <guibutton><inlinegraphic fileref="/usr/share/icons/gnome/24x24/status/dialog-password.png"/></guibutton> button and enter your password in the <guilabel>Password</guilabel> field.</para>
 				</step>	
 				<step>
 					<para>Press the <guibutton>Authenticate</guibutton> button.</para>
-				</step>
-				<step>
-					<para>You may receive a message which says <guilabel>Sharing services are not installed</guilabel>. If this happens, ensure that the two checkboxes in the message box are checked and press <guibutton>Install services</guibutton>. Sharing service support will then be downloaded and installed; this may take a while.</para>
 				</step>
 				<step>
 					<para>Select the <guilabel>Shared Folders</guilabel> tab and press <guibutton>Add</guibutton>.</para>
@@ -83,7 +83,7 @@
 					<para>If you would like people accessing the shared folder to be able to add, change and remove files in the folder, uncheck <guilabel>Read only</guilabel>. If you leave <guilabel>Read only</guilabel> checked, people will only be able to view files in the folder.</para>
 				</step>
 				<step>
-					<para>Press <guibutton>OK</guibutton> to make the shared folder available. Other people on the same network (LAN) as you should now be able to access the folder.</para>
+					<para>Press <guibutton>Share</guibutton> to make the shared folder available. Other people on the same network (LAN) as you should now be able to access the folder.</para>
 				</step>
 			</procedure>
 			<para>See the <ulink type='help' url='ghelp:shares-admin'>Shared Folders Administration Tool manual</ulink> for more information on managing network shares.</para>
@@ -99,7 +99,7 @@
 			<para>Right click the folder you wish to share and select <guimenuitem>Sharing Options</guimenuitem> on the popup menu.</para>
 		</step>
 		<step>
-			<para>Select <guilabel>Share this folder</guilabel> from the popup menu. You may change the <guilabel> Share name</guilabel> field if you want to use a different share name.</para>
+			<para>Check <guilabel>Share this folder</guilabel> in the <guilabel>Folder Sharing</guilabel> window. You may change the <guilabel>Share name</guilabel> field if you want to use a different share name.</para>
 		</step>
 		<step>
 			<para>You may receive a message which says <guilabel>Sharing services are not installed</guilabel>. If this happens, ensure that the two checkboxes in the message box are checked and press <guibutton>Install services</guibutton>. Sharing service support will then be downloaded and installed; this may take a while.</para>
@@ -173,19 +173,25 @@
 						<para>Press <guibutton>OK</guibutton> to connect to the shared folder.</para>
 					</step>
 				</procedure>
-				
-				<para>If you are still unable to access the shared folder, check that the folder sharing service is running on the Ubuntu computer:</para>
-				<procedure>
-					<step>
-						<para>Press &services;</para>
-					</step>
-					<step>
-						<para>Find the <guilabel>Folder sharing service (samba)</guilabel> and ensure that the checkbox next to it is checked. If it is not checked, press <guibutton>Unlock</guibutton> and enter your administrative password. Press <guibutton>Authenticate</guibutton>, then enable the Folder sharing service.</para>
-					</step>
-					<step>
-						<para>Press <guibutton>Close</guibutton></para>
-					</step>
-				</procedure>
+				<tip>
+					<para>The folder sharing service in Ubuntu that supports sharing with Windows computers is called <application>Samba</application>.
+					The background process, or daemon, is called <application>smbd</application>.</para>
+				</tip>
+				<para>If you are still unable to access the shared folder, check that the folder sharing service is running on the Ubuntu computer. 
+				In a terminal, run:</para>
+<screen>
+<command>service smbd status</command>
+</screen>
+				<para>You should see an output like:</para>
+<screen>
+smbd start/running, process 123
+</screen>
+				<para>If the service is stopped, you will see:</para>
+<screen>smbd stop/waiting</screen> 
+				<para>If you find that the service is stopped, try starting the service:</para>
+<screen>
+<command>sudo service smbd start</command>
+</screen>
 				<para>More information can be found on the Ubuntu <ulink url='https://help.ubuntu.com/community/SettingUpSamba'>community help pages</ulink>.</para>
 			</sect2>
         </sect1>
