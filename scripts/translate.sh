@@ -54,7 +54,6 @@ choose_language () {
 			translate ${x}
 		done
 	fi
-	rm .xml2po.mo
 	cd ..
 }
 
@@ -75,4 +74,3 @@ else
 		choose_language ${doc} ${lang}
 	done
 fi
-
