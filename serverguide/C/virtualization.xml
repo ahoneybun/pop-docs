@@ -93,7 +93,7 @@
       </para>
       <para>
       There are several ways to automate the Ubuntu installation process, for example using 
-      preseeds, kickstart, etc.  Refer to the <ulink url="https://help.ubuntu.com/&distro-rev;/installation-guide/">Ubuntu Installation Guide</ulink> for details.
+      preseeds, kickstart, etc.  Refer to the <ulink url="https://help.ubuntu.com/&distro-rev-short;/installation-guide/">Ubuntu Installation Guide</ulink> for details.
       </para>
       <para>
       Yet another way to install an Ubuntu virtual machine is to use <application>ubuntu-vm-builder</application>.  <application>ubuntu-vm-builder</application> 
@@ -1159,7 +1159,7 @@ echo "browser to http://serverip/limesurvey/admin"
          --addpkg php5-gd --addpkg php5-ldap --addpkg php5-mysql --addpkg wwwconfig-common \
          --addpkg mysql-server --addpkg unattended-upgrades --addpkg acpid --ppa nijaba \ 
          --mirror http://mirroraddress:9999/ubuntu --tmpfs - --firstboot boot.sh \
-         --firstlogin login.sh es
+         --firstlogin login.sh
          </command>
 </screen>
 
@@ -1268,8 +1268,8 @@ echo "browser to http://serverip/limesurvey/admin"
             </row>
             <row>
               <entry><para>Memory</para></entry>
-              <entry><para>512 MB</para></entry>
               <entry><para>2 GB</para></entry>
+              <entry><para>4 GB</para></entry>
               <entry><para>The Java web front end benefits from lots of available memory.</para></entry>
             </row>
             <row>
@@ -1370,7 +1370,12 @@ echo "browser to http://serverip/limesurvey/admin"
         </step>
         <step>
           <para>
-          When you boot, select <emphasis>“Install Ubuntu Enterprise Cloud”</emphasis>. 
+          When you boot, select <emphasis>“Install Ubuntu Enterprise Cloud”</emphasis>.   The installer will detect if any other Eucalyptus components are present. 
+          </para>
+        </step>
+        <step>
+          <para>
+          You can then choose which components to install, based on your chosen <ulink url="https://help.ubuntu.com/community/UEC/Topologies">topology</ulink>.
           </para>
         </step>
         <step>
@@ -1444,31 +1449,210 @@ echo "browser to http://serverip/limesurvey/admin"
     </sect2>
     <sect2 id="uec-register-nodes" status="review">
       <title>Register the Node(s)</title>
+ 
+      <procedure>
+        <step>
 
       <para>
       Nodes are the physical systems within <application>UEC</application> that actually run the virtual machine instances of the cloud.
       </para>
 
       <para>
-      Once one or more Ubuntu Server node(s) are installed and running the <application>eucalyptus-nc</application> service, log onto the 
-      <emphasis>Cloud Controller (CLC)</emphasis> and run: 
+      All component registration should be automatic, assuming:
       </para>
 
-<screen>
-<command>sudo euca_conf --no-rsync --discover-nodes</command>
-</screen>
+      <orderedlist numeration="loweralpha">
+        <listitem>
+          <para>
+         Public SSH keys have been exchanged properly.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+         The services are configured properly.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          The appropriate <emphasis>uec-component-listener</emphasis> is running.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          Verify Registration.
+          </para>
+        </listitem>
+      </orderedlist>
 
       <para>
-      This will discover the systems on the network running the <application>eucalyptus-nc</application> service, and the 
-      administrator can confirm the registration of each node by its IP address.
+      Steps a to e should only be required if you're using the <ulink url="https://help.ubuntu.com/community/UEC/PackageInstall">UEC/PackageInstall</ulink> method. 
+      Otherwise, if you are following this guide, these steps should already be completed automatically for you, and therefore you can skip <emphasis>"a"</emphasis>
+      to <emphasis>"e"</emphasis>.
       </para>
 
-      <note>
+     </step>
+     <step>
+       <para>Exchange Public Keys</para>
+
         <para>
-        If you get prompted for passwords, or receive errors from scp, you may need to revisit the key synchronization instructions at 
-        <ulink url="https://help.ubuntu.com/community/UEC/NodeInstallation">UEC/NodeInstallation</ulink>.
+        The Cloud Controller's <emphasis>eucalyptus</emphasis> user needs to have SSH access to the Walrus Controller, Cluster Controller, and Storage Controller 
+        as the eucalyptus user.
+        </para> 
+
+        <para>
+        Install the Cloud Controller's <emphasis>eucalyptus</emphasis> user's public ssh key by:
+        </para> 
+
+        <itemizedlist>
+          <listitem>
+            <para>
+           On the target controller, temporarily set a password for the eucalyptus user:
+            </para>
+<screen>
+<command>sudo passwd eucalyptus</command>
+</screen>
+          </listitem>
+          <listitem>
+            <para>
+           Then, on the Cloud Controller:
+            </para>
+<screen>
+<command>sudo -u eucalyptus ssh-copy-id -i ~eucalyptus/.ssh/id_rsa.pub eucalyptus@&lt;IP_OF_NODE&gt;</command>
+</screen>
+          </listitem>
+          <listitem>
+            <para>
+           You can now remove the password of the eucalyptus account on the target controller, if you wish:
+            </para>
+<screen>
+<command>sudo passwd -d eucalyptus</command>
+</screen>
+          </listitem>
+        </itemizedlist>
+
+      </step>
+      <step>
+        <para>Configuring the Services</para>
+        
+        <para>
+        On the <emphasis>Cloud Controller</emphasis>:
         </para>
-      </note>
+
+        <itemizedlist>
+          <listitem>
+            <para>
+            For the <emphasis>Cluster Controller</emphasis> Registration:
+            </para>
+            <itemizedlist>
+              <listitem><para>Define the shell variable CC_NAME in <filename>/etc/eucalyptus/eucalyptus-cc.conf</filename></para></listitem>
+              <listitem>
+                <para>
+                Define the shell variable CC_IP_ADDR in <filename>/etc/eucalyptus/eucalyptus-ipaddr.conf</filename>, as a space separated list of one or more IP addresses.
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+          <listitem>
+            <para>
+            For the <emphasis>Walrus Controller</emphasis> Registration:
+            </para>
+            <itemizedlist>
+              <listitem><para>Define the shell variable WALRUS_IP_ADDR in <filename>/etc/eucalyptus/eucalyptus-ipaddr.conf</filename>, as a single IP address.</para></listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+
+        <para>
+        On the <emphasis>Cluster Controller</emphasis>:
+        </para>
+
+        <itemizedlist>
+          <listitem>
+            <para>
+            For <emphasis>Storage Controller</emphasis> Registration:
+            </para>
+            <itemizedlist>
+              <listitem><para>Define the shell variable CC_NAME in <filename>/etc/eucalyptus/eucalyptus-cc.conf</filename></para></listitem>
+              <listitem>
+                <para>
+                Define the shell variable SC_IP_ADDR in <filename>/etc/eucalyptus/eucalyptus-ipaddr.conf</filename>, as a space separated list of one or more IP addresses.
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+
+      </step>
+      <step>
+        <para>Publish</para>
+
+        <para>
+        Now start the publication services.
+        </para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>Walrus Controller:</emphasis></para> 
+<screen>
+<command>sudo start eucalyptus-walrus-publication</command>
+</screen>
+          </listitem>
+          <listitem>
+            <para><emphasis>Cluster Controller:</emphasis></para> 
+<screen>
+<command>sudo start eucalyptus-cc-publication</command>
+</screen>
+          </listitem>
+          <listitem>
+            <para><emphasis>Storage Controller:</emphasis></para> 
+<screen>
+<command>sudo start eucalyptus-sc-publication</command>
+</screen>
+          </listitem>
+          <listitem>
+            <para><emphasis>Node Controller:</emphasis></para> 
+<screen>
+<command>sudo start eucalyptus-nc-publication</command>
+</screen>
+          </listitem>
+        </itemizedlist>
+
+      </step>
+      <step>
+        <para>Start the Listener</para>
+
+        <para>
+       On the <emphasis>Cloud Controller</emphasis> and the <emphasis>Cluster Controller(s)</emphasis>, run:
+        </para>
+
+<screen>
+<command>sudo start uec-component-listener</command>
+</screen>
+ 
+      </step>
+      <step>
+        <para>Verify Registration</para>
+
+<screen>
+<command>cat /var/log/eucalyptus/registration.log</command>
+<computeroutput>2010-04-08 15:46:36-05:00 | 24243 -> Calling node cluster1 node 10.1.1.75
+2010-04-08 15:46:36-05:00 | 24243 -> euca_conf --register-nodes returned 0
+2010-04-08 15:48:47-05:00 | 25858 -> Calling walrus Walrus 10.1.1.71
+2010-04-08 15:48:51-05:00 | 25858 -> euca_conf --register-walrus returned 0
+2010-04-08 15:49:04-05:00 | 26237 -> Calling cluster cluster1 10.1.1.71
+2010-04-08 15:49:08-05:00 | 26237 -> euca_conf --register-cluster returned 0
+2010-04-08 15:49:17-05:00 | 26644 -> Calling storage cluster1 storage 10.1.1.71
+2010-04-08 15:49:18-05:00 | 26644 -> euca_conf --register-sc returned 0</computeroutput>
+</screen>
+
+        <note>
+          <para>
+          The output on your machine will vary from the example above.
+          </para>
+        </note>
+ 
+      </step>
+      </procedure>  
 
     </sect2>
     <sect2 id="uec-obtain-credentials" status="review">
@@ -1551,6 +1735,7 @@ https://&lt;cloud-controller-ip-address&gt;:8443/
 <command>cd ~/.euca</command>
 <command>sudo euca_conf --get-credentials mycreds.zip</command>
 <command>unzip mycreds.zip</command>
+<command>ln -s ~/.euca/eucarc ~/.eucarc</command>
 <command>cd -</command>
 </screen>
           </step>
@@ -1565,25 +1750,6 @@ https://&lt;cloud-controller-ip-address&gt;:8443/
         </para>
 
         <procedure>
-          <step>
-            <para>
-            Source the included <emphasis>"eucarc"</emphasis> file to set up your Eucalyptus environment:
-            </para>
-<screen>
-<command>. ~/.euca/eucarc</command>
-</screen>
-          </step>
-          <step>
-            <para>
-            You may additionally wish to add this command to your <filename>~/.bashrc</filename> file so that your Eucalyptus 
-            environment is set up automatically when you log in. Eucalyptus treats this set of credentials as <emphasis>'administrator'</emphasis>
-            credentials that allow the holder global privileges across the cloud. As such, they should be protected in the same way that other 
-            elevated-priority access is protected (e.g. should not be made visible to the general user population).
-            </para>
-<screen>
-<command>echo "[ -r ~/.euca/eucarc ] &amp;&amp; . ~/.euca/eucarc" &gt;&gt; ~/.bashrc</command>
-</screen>
-          </step>
           <step>
             <para>
             Install the required cloud user tools:
@@ -1617,111 +1783,6 @@ AVAILABILITYZONE   |- c1.xlarge               0001 / 0001   4   2048    20</comp
         </procedure>
 
       </sect3>
-    </sect2>
-    <sect2 id="uec-image-running" status="review">
-      <title>Running an Image</title>
-
-      <para>
-      There are multiple ways to instantiate an image in UEC:
-      </para>
-
-      <itemizedlist>
-        <listitem><para>Use the command line.</para></listitem>
-        <listitem><para>Use one of the UEC compatible management tools such as <emphasis>Landscape</emphasis>.</para></listitem>
-        <listitem>
-          <para>
-          Use the <ulink url="https://help.ubuntu.com/community/UEC/ElasticFox">ElasticFox</ulink> extension to Firefox.
-          </para>
-        </listitem>
-      </itemizedlist>
-
-      <para>
-      Here we will describe the process from the command line:
-      </para>
-
-      <procedure>
-        <step>
-          <para>
-          Before running an instance of your image, you should first create a <emphasis>keypair</emphasis> (ssh key) that you can 
-          use to log into your instance as root, once it boots. The key is stored, so you will only have to do this once. 
-          </para>
-          <para>
-          Run the following command:
-          </para>
-<programlisting>
-if [ ! -e ~/.euca/mykey.priv ]; then
-    touch ~/.euca/mykey.priv
-    chmod 0600 ~/.euca/mykey.priv
-    euca-add-keypair mykey &gt; ~/.euca/mykey.priv
-fi
-</programlisting>
-          <note>
-            <para>
-            You can call your key whatever you like (in this example, the key is called <emphasis>'mykey'</emphasis>), but remember what it is called. 
-            If you forget, you can always run <command>euca-describe-keypairs</command> to get a list of created keys stored in the system.
-            </para>
-          </note>
-        </step>
-        <step>
-          <para>
-          You must also allow access to port 22 in your instances:
-          </para>
-<screen>
-<command>euca-describe-groups</command>
-<command>euca-authorize default -P tcp -p 22 -s 0.0.0.0/0</command>
-</screen>
-        </step>
-        <step>
-          <para>
-          Next, you can create instances of your registered image:
-          </para>
-<screen>
-<command>euca-run-instances $EMI -k mykey -t c1.medium</command>
-</screen>
-          <note>
-            <para>
-             If you receive an error regarding <emphasis>image_id</emphasis>, you may find it by viewing Images page or click 
-             <emphasis>"How to Run"</emphasis> on the <emphasis>Store</emphasis> page to see the sample command.
-            </para>
-          </note>
-        </step>
-        <step>
-          <para>
-          The first time you run an instance, the system will be setting up caches for the image from which it will be created.
-          This can often take some time the first time an instance is run given that VM images are usually quite large.
-          </para>
-          <para> 
-          To monitor the state of your instance, run:
-          </para>
-<screen>
-<command>watch -n5 euca-describe-instances</command>
-</screen>
-          <para>
-          In the output, you should see information about the instance, including its state. While first-time caching is being performed, 
-          the instance's state will be <emphasis>'pending'</emphasis>.
-          </para>
-        </step>
-        <step>
-          <para>
-          When the instance is fully started, the above state will become <emphasis>'running'</emphasis>. Look at the IP address assigned 
-          to your instance in the output, then connect to it:
-          </para>
-<screen>
-<command>IPADDR=$(euca-describe-instances | grep $EMI | grep running | tail -n1 | awk '{print $4}')</command>
-<command>ssh -i ~/.euca/mykey.priv ubuntu@$IPADDR</command>
-</screen>
-        </step>
-        <step>
-          <para>
-          And when you are done with this instance, exit your SSH connection, then terminate your instance:
-          </para>
-<screen>
-<command>INSTANCEID=$(euca-describe-instances | grep $EMI | grep running | tail -n1 | awk '{print $2}')</command>
-<command>euca-terminate-instances $INSTANCEID</command>
-</screen>
-        </step>
-      </procedure>
-
     </sect2>
     <sect2 id="uec-image-installation" status="review">
       <title>Install an Image from the Store</title>
@@ -1771,6 +1832,259 @@ https://&lt;cloud-controller-ip-address&gt;:8443/
       below the image button to view the command to execute to instantiate (start) this image. The image will also appear on the 
       list given on the <emphasis>Image</emphasis> tab.
       </para>
+
+    </sect2>
+    <sect2 id="uec-image-running" status="review">
+      <title>Run an Image</title>
+
+      <para>
+      There are multiple ways to instantiate an image in UEC:
+      </para>
+
+      <itemizedlist>
+        <listitem><para>Use the command line.</para></listitem>
+        <listitem><para>Use one of the UEC compatible management tools such as <emphasis>Landscape</emphasis>.</para></listitem>
+        <listitem>
+          <para>
+          Use the <ulink url="https://help.ubuntu.com/community/UEC/ElasticFox">ElasticFox</ulink> extension to Firefox.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+      Here we will describe the process from the command line:
+      </para>
+
+      <procedure>
+        <step>
+          <para>
+          Before running an instance of your image, you should first create a <emphasis>keypair</emphasis> (ssh key) that you can 
+          use to log into your instance as root, once it boots. The key is stored, so you will only have to do this once. 
+          </para>
+          <para>
+          Run the following command:
+          </para>
+<programlisting>
+if [ ! -e ~/.euca/mykey.priv ]; then
+    mkdir -p -m 700 ~/.euca
+    touch ~/.euca/mykey.priv
+    chmod 0600 ~/.euca/mykey.priv
+    euca-add-keypair mykey > ~/.euca/mykey.priv
+fi
+</programlisting>
+          <note>
+            <para>
+            You can call your key whatever you like (in this example, the key is called <emphasis>'mykey'</emphasis>), but remember what it is called. 
+            If you forget, you can always run <command>euca-describe-keypairs</command> to get a list of created keys stored in the system.
+            </para>
+          </note>
+        </step>
+        <step>
+          <para>
+          You must also allow access to port 22 in your instances:
+          </para>
+<screen>
+<command>euca-authorize default -P tcp -p 22 -s 0.0.0.0/0</command>
+</screen>
+        </step>
+        <step>
+          <para>
+          Next, you can create instances of your registered image:
+          </para>
+<screen>
+<command>euca-run-instances $EMI -k mykey -t m1.small</command>
+</screen>
+          <note>
+            <para>
+             If you receive an error regarding <emphasis>image_id</emphasis>, you may find it by viewing Images page or click 
+             <emphasis>"How to Run"</emphasis> on the <emphasis>Store</emphasis> page to see the sample command.
+            </para>
+          </note>
+        </step>
+        <step>
+          <para>
+          The first time you run an instance, the system will be setting up caches for the image from which it will be created.
+          This can often take some time the first time an instance is run given that VM images are usually quite large.
+          </para>
+          <para> 
+          To monitor the state of your instance, run:
+          </para>
+<screen>
+<command>watch -n5 euca-describe-instances</command>
+</screen>
+          <para>
+          In the output, you should see information about the instance, including its state. While first-time caching is being performed, 
+          the instance's state will be <emphasis>'pending'</emphasis>.
+          </para>
+        </step>
+        <step>
+          <para>
+          When the instance is fully started, the above state will become <emphasis>'running'</emphasis>. Look at the IP address assigned 
+          to your instance in the output, then connect to it:
+          </para>
+<screen>
+<command>IPADDR=$(euca-describe-instances | grep $EMI | grep running | tail -n1 | awk '{print $4}')</command>
+<command>ssh -i ~/.euca/mykey.priv ubuntu@$IPADDR</command>
+</screen>
+        </step>
+        <step>
+          <para>
+          And when you are done with this instance, exit your SSH connection, then terminate your instance:
+          </para>
+<screen>
+<command>INSTANCEID=$(euca-describe-instances | grep $EMI | grep running | tail -n1 | awk '{print $2}')</command>
+<command>euca-terminate-instances $INSTANCEID</command>
+</screen>
+        </step>
+      </procedure>
+
+      <sect3 id="uec-first-boot" status="review">
+        <title>First Boot</title>
+
+        <para>
+       The <application>cloud-init</application> package provides "first boot" functionality for the Ubuntu UEC images. 
+       It is in charge of taking the generic filesystem image that is booting and customizing it for this particular instance.
+       That includes things like:
+        </para>
+
+        <itemizedlist>
+          <listitem>
+            <para>
+            Setting the hostname.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+            Putting the provided ssh public keys into <filename>~ubuntu/.ssh/authorized_keys</filename>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+            Running a user provided script, or otherwise modifying the image.
+            </para>
+          </listitem>
+        </itemizedlist>
+
+        <para>
+        Setting hostname and configuring a system so the person who launched it can actually log into it are not terribly interesting. 
+        The interesting things that can be done with <application>cloud-init</application> are made possible by data provided at launch 
+        time called <ulink url="http://developer.amazonwebservices.com/connect/entry.jspa?externalID=1085">user-data</ulink>.
+         </para>
+
+         <para>
+         First, install the <application>cloud-init</application> package:
+         </para>
+
+<screen>
+<command>sudo apt-get install cloud-init</command>
+</screen>
+
+         <para>
+         If the user-data starts with <emphasis>'#!'</emphasis>, then it will be stored and executed as root late in the boot process of the 
+         instance's first boot (similar to a traditional 'rc.local' script). Output from the script is directed to the console. 
+         </para>
+
+         <para>
+        For example, create a file named <filename>ud.txt</filename> containing:
+         </para>
+
+<programlisting>
+#!/bin/sh
+echo ========== Hello World: $(date) ==========
+echo "I have been up for $(cut -d\  -f 1 &lt; /proc/uptime) sec"
+</programlisting>
+
+          <para>
+         Now start an instance with the <emphasis>--user-data-file</emphasis> option:
+          </para>
+
+<screen>
+<command>euca-run-instances $EMI -k mykey -t m1.small  --user-data-file=ud.txt</command>
+</screen>
+
+           <para>
+           Wait now for the system to come up and console to be available.  To see the result of the data file commands enter:
+           </para>
+
+<screen>
+<command>euca-get-console-output $EMI | grep --after-context=1 Hello</command>
+<computeroutput>========== Hello World: Mon Mar 29 18:05:05 UTC 2010 ==========
+I have been up for 28.26 sec</computeroutput>
+</screen>
+
+        <note>
+          <para>
+          Your output may vary.
+          </para>
+        </note>
+
+        <para>
+        The simple approach shown above gives a great deal of power.  The user-data can contain a script in any language where an interpreter already exists
+        in the image (#!/bin/sh, #!/usr/bin/python, #!/usr/bin/perl, #!/usr/bin/awk ... ).
+        </para>
+
+        <para>
+       For many cases, the user may not be interested in writing a program.  For this case, cloud-init provides <emphasis>"cloud-config"</emphasis>, a configuration based approach
+       towards customization.  To utilize the cloud-config syntax, the supplied user-data must start with a <emphasis>'#cloud-config'</emphasis>. 
+        </para>
+
+        <para>
+        For example, create a text file named <filename>clout-config.txt</filename> containing:
+        </para>
+
+<programlisting>
+#cloud-config
+apt_upgrade: true
+apt_sources:
+- source: "ppa:ubuntu-server-edgers/server-edgers-apache "
+
+packages:
+- build-essential
+- pastebinit
+
+runcmd:
+- echo ======= Hello World =====
+- echo "I have been up for $(cut -d\  -f 1 &lt; /proc/uptime) sec"
+</programlisting>
+
+       <para>
+      Create a new instance:
+       </para>
+
+<screen>
+<command>euca-run-instances $EMI -k mykey -t m1.small --user-data-file=cloud-config.txt</command>
+</screen>
+
+        <para>
+        Now, when the above system is booted, it will have: 
+        </para> 
+
+        <itemizedlist>
+          <listitem><para>Added the Apache Edgers PPA.</para></listitem>
+          <listitem><para>Run an upgrade to get all updates available</para></listitem>
+          <listitem><para>Installed the 'build-essential' and 'pastebinit' packages</para></listitem>
+          <listitem><para>Printed a similar message to the script above</para></listitem>
+        </itemizedlist>
+
+        <warning>
+          <para>
+          The <emphasis>Apache Edgers PPA</emphasis>, in the above example, contains the latest version of Apache from upstream source repositories.
+          Package versions in the PPA are unsupported, and depending on your situation, this may or may not be desirable.  See  the 
+          <ulink url="https://launchpad.net/~ubuntu-server-edgers">Ubuntu Server Edgers</ulink> web page for more details.
+          </para>
+        </warning>
+
+        <para>
+       The <emphasis>'runcmd'</emphasis> commands are run at the same point in boot that the <emphasis>'#!'</emphasis> script would run in the previous example. 
+       It is present to allow you to get the full power of a scripting language if you need it without abandoning <emphasis>cloud-config</emphasis>.
+        </para>
+
+       <para>
+       For more information on what kinds of things can be done with <application>cloud-config</application>, see
+       <ulink url="http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/files/head:/doc/examples/">doc/examples</ulink> in the source.
+       </para>
+
+      </sect3>
 
     </sect2>
     <sect2 id="uec-more-info" status="review">
@@ -1996,193 +2310,4 @@ https://&lt;cloud-controller-ip-address&gt;:8443/
 
     </sect2>
   </sect1>  
-<sect1 id="opennebula" status="review">
-    <title>OpenNebula</title>
-
-    <para>
-    <application>OpenNebula</application> allows virtual machines to be placed and re-placed dynamically on a pool of physical resources.
-    This allows a virtual machine to be hosted from any location available.  
-    </para>
-
-    <para>
-    This section will detail configuring an OpenNebula cluster using three machines: one <emphasis>Front-End</emphasis> host, and two 
-    <emphasis>Compute Nodes</emphasis> used to run the virtual machines. The Compute Nodes will also need a bridge configured to allow the 
-    virtual machines access to the local network.  For details see <xref linkend="bridging"/>.
-    </para>
-
-    <sect2 id="opennebula-installation" status="review">
-      <title>Installation</title>
-
-      <para>
-      First, from a terminal on the Front-End enter:
-      </para>
-
-<screen>
-<command>sudo apt-get install opennebula</command>
-</screen>
-  
-      <para>
-      On each Compute Node install:
-      </para>
-
-<screen>
-<command>sudo apt-get install opennebula-node</command>
-</screen>
-
-      <para>
-      In order to copy SSH keys, the <emphasis>oneadmin</emphasis> user will need to have a password.  On each machine execute:
-      </para>
-
-<screen>
-<command>sudo passwd oneadmin</command>
-</screen>
-
-      <para>
-      Next, copy the <emphasis>oneadmin</emphasis> user's SSH key to the Compute Nodes, and to the Front-End's <filename>authorized_keys</filename> file:
-      </para>
-
-<screen>
-<command>sudo scp /var/lib/one/.ssh/id_rsa.pub oneadmin@node01:/var/lib/one/.ssh/authorized_keys</command>
-<command>sudo scp /var/lib/one/.ssh/id_rsa.pub oneadmin@node02:/var/lib/one/.ssh/authorized_keys</command>
-<command>sudo sh -c "cat /var/lib/one/.ssh/id_rsa.pub >> /var/lib/one/.ssh/authorized_keys"</command>
-</screen>  
-
-      <para>
-      The SSH key for the Compute Nodes needs to be added to the <filename>/etc/ssh/ssh_known_hosts</filename> file on the Front-End host.  To accomplish
-      this <application>ssh</application> to each Compute Node as a user other than <emphasis>oneadmin</emphasis>.  Then exit from the SSH session, and 
-      execute the following to copy the SSH key from <filename>~/.ssh/known_hosts</filename> to <filename>/etc/ssh/ssh_known_hosts</filename>:
-      </para>
-
-<screen>
-<command>sudo sh -c "ssh-keygen -f .ssh/known_hosts -F node01 1>> /etc/ssh/ssh_known_hosts"</command>
-<command>sudo sh -c "ssh-keygen -f .ssh/known_hosts -F node02 1>> /etc/ssh/ssh_known_hosts"</command>
-</screen>
-
-      <note>
-        <para>
-        Replace <emphasis>node01</emphasis> and <emphasis>node02</emphasis> with the appropriate host names.
-        </para>
-      </note>
-
-      <para>
-      This allows the <emphasis>oneadmin</emphasis> to use <application>scp</application>, without a password or manual intervention, to deploy an
-      image to the Compute Nodes.
-      </para>
-
-      <para>
-      On the Front-End create a directory to store the VM images, giving the <emphasis>oneadmin</emphasis> user access to the directory:
-      </para>
-
-<screen>
-<command>sudo mkdir /var/lib/one/images</command>
-<command>sudo chown oneadmin /var/lib/one/images/</command>
-</screen>
-
-      <para>
-      Finally, copy a virtual machine disk file into <filename>/var/lib/one/images</filename>.  You can create an Ubuntu virtual machine
-      using <application>vmbuilder</application>, see <xref linkend="jeos-and-vmbuilder"/> for details.
-      </para>
-
-    </sect2>
-    <sect2 id="opennebula-configuration" status="review">
-      <title>Configuration</title>
-    
-      <para>
-      The <emphasis>OpenNebula Cluster</emphasis> is now ready to be configured, and virtual machines added to the cluster.
-      </para>
-
-      <para>
-      From a terminal prompt enter:
-      </para>
-
-<screen>
-<command>onehost create node01 im_kvm vmm_kvm tm_ssh</command>
-<command>onehost create node02 im_kvm vmm_kvm tm_ssh</command>
-</screen>
-
-      <para>
-      Next, create a <emphasis>Virtual Network</emphasis> template file named <filename>vnet01.template</filename>:
-      </para>
-
-<programlisting>
-NAME            = "LAN"
-TYPE            = RANGED
-BRIDGE          = br0
-NETWORK_SIZE    = C
-NETWORK_ADDRESS = 192.168.0.0
-</programlisting>
-
-      <note>
-        <para>
-        Be sure to change <emphasis>192.168.0.0</emphasis> to your local network.
-        </para>
-      </note>
-
-      <para>
-      Using the <application>onevnet</application> utility, add the virtual network to OpenNebula:
-      </para>
-
-<screen>
-<command>onevnet create vnet01.template</command>
-</screen>
-
-      <para>
-      Now create a <emphasis>VM Template</emphasis> file named <filename>vm01.template</filename>:
-      </para>
-
-<programlisting>
-NAME   = vm01
-CPU    = 0.5
-MEMORY = 512
-
-OS      = [ BOOT   = hd ]
-
-DISK   = [
-  source   = "/var/lib/one/images/vm01.qcow2",
-  target   = "hda",
-  readonly = "no" ]
-
-NIC    = [ NETWORK="LAN" ]
-
-GRAPHICS = [type="vnc",listen="127.0.0.1",port="-1"]
-</programlisting>
-
-      <para>
-      Start the virtual machine using <application>onevm</application>:
-      </para>
-
-<screen>
-<command>onevm submit vm01.template</command>
-</screen>
-
-      <para>
-      Use the <application>onevm list</application> option to view information about virtual machines.  Also, the <application>onevm show vm01</application> 
-      option will display more details about a specific virtual machine.
-      </para>
-
-    </sect2>
-    <sect2 id="opennebula-references" status="review">
-      <title>References</title>
-
-      <itemizedlist>
-        <listitem>
-          <para>
-          See the <ulink url="http://www.opennebula.org/doku.php?id=start">OpenNebula website</ulink> for more information.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-          You can also find help in the <emphasis>#ubuntu-virt</emphasis> and 
-          <emphasis>#ubuntu-server</emphasis> IRC channels on <ulink url="http://freenode.net">Freenode</ulink>.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-          Also, the <ulink url="https://help.ubuntu.com/community/OpenNebula">OpenNebula Ubuntu Wiki</ulink> page has more details.
-          </para>
-        </listitem>
-      </itemizedlist>
-
-    </sect2>
-  </sect1>
 </chapter>

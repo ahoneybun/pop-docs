@@ -1241,7 +1241,7 @@ instructions in the email to subscribe.
 	 <application>Postfix</application> Mail Transport Agent (MTA).  <application>Postfix</application> can also
 	 check email validity by passing it through external content filters.  These filters can sometimes determine if 
 	 a message is spam without needing to process it with more resource intensive applications.  Two common filters are 
-	 <application>dkim-filter</application> and <application>python-policyd-spf</application>.
+	 <application>opendkim</application> and <application>python-policyd-spf</application>.
 	 </para>
 	 <itemizedlist>
 	   <listitem>
@@ -1262,7 +1262,7 @@ instructions in the email to subscribe.
 	   </listitem>
 	   <listitem>
 	     <para>
-	     <application>dkim-filter</application> implements a Sendmail Mail Filter (Milter) for the DomainKeys 
+	     <application>opendkim</application> implements a Sendmail Mail Filter (Milter) for the DomainKeys 
 	     Identified Mail (DKIM) standard. 
 	     </para>
 	   </listitem>
@@ -1283,7 +1283,7 @@ instructions in the email to subscribe.
 	   </listitem>
 	   <listitem>
 	     <para>
-     	     The message is passed through any external filters <application>dkim-filter</application> and 
+     	     The message is passed through any external filters <application>opendkim</application> and 
 	     <application>python-policyd-spf</application> in this case. 
    	     </para>
 	   </listitem>
@@ -1321,7 +1321,7 @@ instructions in the email to subscribe.
 	   </para>
 <screen>
 <command>sudo apt-get install amavisd-new spamassassin clamav-daemon</command>
-<command>sudo apt-get install dkim-filter python-policyd-spf</command>
+<command>sudo apt-get install opendkim python-policyd-spf</command>
 </screen>
   	<para>
 	There are some optional packages that integrate with <application>Spamassassin</application> for better spam detection:
@@ -1484,7 +1484,7 @@ $myhostname = 'mail.example.com';
                  <listitem>
                    <para>
                    <emphasis>'./@example.com' => 'WHITELIST',</emphasis>: adds addresses that have a valid signature from "example.com".  
-                   This is usually used for discussion groups that sign thier messages.
+                   This is usually used for discussion groups that sign their messages.
                    </para>
                  </listitem>
                </itemizedlist>
@@ -1563,6 +1563,39 @@ smtp-amavis     unix    -       -       -       -       2       smtp
 	   <para>
            Content filtering with spam and virus detection is now enabled.
 	   </para>
+     
+	   </sect3>
+       <sect3 id="amavisd-new-spamassassin-integration" status="review">  
+         <title>Amavisd-new and Spamassassin</title>
+
+         <para>
+         When integrating <application>Amavisd-new</application> with <application>Spamassassin</application>, if you choose to 
+         disable the bayes filtering by editing <filename>/etc/spamassassin/local.cf</filename> and use <application>cron</application> 
+         to update the nightly rules, the result can cause a situation where a large amount of error messages are sent to the 
+         <emphasis>amavis</emphasis> user via the amavisd-new <application>cron</application> job.
+         </para>
+
+         <para>
+         There are several ways to handle this situation:
+         </para>
+
+         <itemizedlist>
+           <listitem>
+             <para>
+             Configure your MDA to filter messages you do not wish to see.
+             </para>
+           </listitem>
+           <listitem>
+             <para>
+             Change <filename>/usr/sbin/amavisd-new-cronjob</filename> to check for <emphasis>use_bayes 0</emphasis>.  For example, edit
+             <filename>/usr/sbin/amavisd-new-cronjob</filename> and add the following to the top before the <emphasis>test</emphasis> statements:
+             </para>
+<programlisting>
+egrep -q "^[ \t]*use_bayes[ \t]*0" /etc/spamassassin/local.cf &amp;&amp; exit 0
+</programlisting>
+           </listitem>
+         </itemizedlist>
+
 	   </sect3>
 	 </sect2>	 
 	 <sect2 id="mail-filter-testing" status="review">

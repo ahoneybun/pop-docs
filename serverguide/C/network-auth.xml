@@ -408,7 +408,7 @@ modifying entry "olcDatabase={1}hdb,cn=config"
               schema to be converted to LDIF format.  The <filename role="directory">/etc/ldap/schema</filename>
               directory contains some schema files already converted to LDIF format as demonstrated in the previous section.
               Fortunately, the <application>slapd</application> program can be used to automate the conversion.  
-              The following example will add the <emphasis>dyngoup.schema</emphasis>:
+              The following example will add the <emphasis>dyngroup.schema</emphasis>:
               </para>
 
               <procedure>
@@ -846,21 +846,30 @@ olcUpdateRef: ldap://ldap01.example.com
 	</para>
 
         <para>
-        To view the Access Control List (ACL), use the <application>ldapsearch</application> utility:
+        To view the Access Control List (ACL) for the <emphasis>cn=config</emphasis> tree, use the 
+        <application>ldapsearch</application> utility:
         </para>
 
 <screen>
-<command>ldapsearch -xLLL -b cn=config -D cn=admin,cn=config -W olcDatabase=hdb olcAccess</command>
+<command>sudo ldapsearch -c -Y EXTERNAL -H ldapi:///  -LLL -b cn=config olcDatabase=config olcAccess</command>
 </screen>
 
 <screen>
-<computeroutput>Enter LDAP Password: 
-dn: olcDatabase={1}hdb,cn=config
-olcAccess: {0}to attrs=userPassword,shadowLastChange by dn="cn=admin,dc=exampl
- e,dc=com" write by anonymous auth by self write by * none
-olcAccess: {1}to dn.base="" by * read
-olcAccess: {2}to * by dn="cn=admin,dc=example,dc=com" write by * read
+<computeroutput>SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+dn: olcDatabase={0}config,cn=config
+olcAccess: {0}to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external
+ ,cn=auth manage by * break
 </computeroutput>
+</screen>
+
+      <para>
+      To see the ACL for the frontend tree enter:
+      </para>
+
+<screen>
+<command>sudo ldapsearch -c -Y EXTERNAL -H ldapi:///  -LLL -b cn=config olcDatabase={1}hdb olcAccess</command>
 </screen>
 
 	</sect2>
@@ -1125,10 +1134,10 @@ signing_key
 </screen>
 
               </step>
-              <step>  
-           
+              <step>
+
                 <para>
-                Copy the <filename>cacert.pem</filename> to the dicretory:
+                Copy the <filename>cacert.pem</filename> to the directory:
                 </para>
 
 <screen>
@@ -1490,7 +1499,7 @@ UTEMPLATE="/etc/ldapscripts/ldapadduser.template"
               </para>
 
 <screen>
-<command>sudo cp /etc/ldapscripts/ldapadduser.template.sample /etc/ldapscripts/ldapadduser.template</command>
+<command>sudo cp /usr/share/doc/ldapscripts/examples/ldapadduser.template.sample /etc/ldapscripts/ldapadduser.template</command>
 </screen>
 
               <para>
@@ -1515,7 +1524,7 @@ title: Employee
 </programlisting>
 
               <para>
-              Notice the <emphasis>&lt;ask&gt;</emphasis> option used for the <emphasis>cn</emphasis> value.  Using &lt;ask&gt; 
+              Notice the <emphasis>&lt;ask&gt;</emphasis> option used for the <emphasis>ssn</emphasis> value.  Using &lt;ask&gt; 
               will configure <application>ldapadduser</application> to prompt you for the attribute value during user creation.
               </para>
 
@@ -1857,7 +1866,8 @@ olcDbIndex: default sub
       </para>
 
 <screen>
-<command>sudo /etc/init.d/samba restart</command>
+<command>sudo restart smbd</command>
+<command>sudo restart nmbd</command>
 </screen>
 
       <para>
@@ -1990,7 +2000,7 @@ olcDbIndex: default sub
         <listitem>
           <para>
           Another good site is 
-          <ulink url="http://www.iallanis.info/smbldap-tools/docs/samba-ldap-howto/">Samba OpenLDAP HOWTO</ulink>.
+          <ulink url="http://download.gna.org/smbldap-tools/docs/samba-ldap-howto/">Samba OpenLDAP HOWTO</ulink>.
           </para>
         </listitem>
         <listitem>
@@ -2401,7 +2411,7 @@ host/kdc02.example.com@EXAMPLE.COM
 
 <screen>
 <command>kadmin -q "ktadd -k keytab.kdc01 host/kdc01.example.com"</command>
-<command>sudo mv keytab.kdc01 /etc/kr5b.keytab</command>
+<command>sudo mv keytab.kdc01 /etc/krb5.keytab</command>
 </screen>
 
           <note>
