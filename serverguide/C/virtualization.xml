@@ -31,7 +31,7 @@
     Before getting started with <application>libvirt</application> it is best to make sure your hardware supports the necessary 
     virtualization extensions for <application>KVM</application>.  Enter the following from a terminal prompt:
     </para>
-<screen> 
+<screen>
 <command>kvm-ok</command>
 </screen>
     <para>
@@ -565,7 +565,7 @@
       </para>
 
 <screen>
-<command>vmbuilder --help</command>
+<command>vmbuilder kvm ubuntu --help</command>
 </screen>
 
     <sect3 id="vm-base-parameters" status="review">
@@ -639,6 +639,11 @@
 	  </listitem>
           <listitem>
             <para>
+            <emphasis>--hostname NAME</emphasis>: Set NAME as the hostname of the guest.
+            </para>
+	  </listitem>
+          <listitem>
+            <para>
             <emphasis>--mask VALUE</emphasis>: IP mask in dotted form (default: 255.255.255.0)
             </para>
           </listitem>
@@ -669,47 +674,28 @@
         </para>
 
 <screen>
-<command>sudo vmbuilder kvm ubuntu --suite &distro-short-codename; --flavour virtual --arch i386 -o --libvirt qemu:///system --ip 192.168.0.100</command>
+<command>sudo vmbuilder kvm ubuntu --suite &distro-short-codename; --flavour virtual --arch i386 -o --libvirt qemu:///system --ip 192.168.0.100 --hostname myvm </command>
 </screen>
 
         </sect5>
         <sect5 id="jeos-bridging" status="review">
-          <title>Modifying the libvirt Template to use Bridging</title>
+          <title>Bridging</title>
 
           <para>
-          Because our appliance will be likely to need to be accessed by remote hosts, we need to configure libvirt so that the appliance uses bridge
-          networking. To do this we use vmbuilder template mechanism to modify the default one. 
-          </para>
-
-          <para>
-          In our working directory we create the template hierarchy and copy the default template: 
+          Because our appliance will be likely to need to be accessed by remote hosts, we need to configure libvirt so that the appliance
+          uses bridge networking.  To do this add the <emphasis>--bridge</emphasis> option to the command: 
           </para>
 
 <screen>
-<command>mkdir -p VMBuilder/plugins/libvirt/templates</command>
-<command>cp /etc/vmbuilder/libvirt/* VMBuilder/plugins/libvirt/templates/</command>
+<command>sudo vmbuilder kvm ubuntu --suite &distro-short-codename; --flavour virtual --arch i386 -o --libvirt qemu:///system --ip 192.168.0.100 --hostname myvm --bridge br0</command>
 </screen>
 
+        <note>
           <para>
-          We can then edit <filename>VMBuilder/plugins/libvirt/templates/libvirtxml.tmpl</filename> to change:
+          You will need to have previously setup a bridge interface, see <xref linkend="bridging"/> for more information.
+          Also, if the interface name is different change <emphasis>br0</emphasis> to the actual bridge interface.
           </para>
-
-<programlisting>
-          &lt;interface type='network'&gt;
-            &lt;source network='default'/&gt;
-          &lt;/interface&gt;
-</programlisting>
-
-          <para>
-          To:
-          </para>
-
-<programlisting>
-          &lt;interface type='bridge'&gt;
-            &lt;source bridge='br0'/&gt;
-          &lt;/interface&gt;
-</programlisting>
-
+        </note>
 
         </sect5>
       </sect4>
@@ -763,7 +749,7 @@ swap 4000
 
 <screen>
 <command>sudo vmbuilder kvm ubuntu --suite &distro-short-codename; --flavour virtual --arch i386 \ 
-         -o --libvirt qemu:///system --ip 192.168.0.100 --part vmbuilder.partition</command>
+         -o --libvirt qemu:///system --ip 192.168.0.100 --hostname myvm --part vmbuilder.partition</command>
 </screen>
 
         <note>
@@ -812,7 +798,7 @@ swap 4000
 
 <screen>
 <command>sudo vmbuilder kvm ubuntu --suite &distro-short-codename; --flavour virtual --arch i386 \
-         -o --libvirt qemu:///system --ip 192.168.0.100 --part vmbuilder.partition \ 
+         -o --libvirt qemu:///system --ip 192.168.0.100 --hostname myvm --part vmbuilder.partition \ 
          --user user --name user --pass default</command>
 </screen>
 
@@ -879,19 +865,6 @@ swap 4000
          --addpkg mysql-server --ppa nijaba</command>
 </screen>
 
-        <sect4 id="jeos-openssh" status="review">
-          <title>OpenSSH</title>
-
-          <para>
-          Another convenient tool that we want to have on our appliance is OpenSSH, as it will allow our admins to access 
-          the appliance remotely. However, pushing in the wild an appliance with a pre-installed OpenSSH server is a big security
-          risk as all these server will share the same secret key, making it very easy for hackers to target our appliance with all
-          the tools they need to crack it open in a breeze. As for the user password, we will instead rely on a script that will
-          install OpenSSH the first time a user logs in so that the key generated will be different for each appliance. For this
-          we'll use a <emphasis>--firstboot</emphasis> script, as it does not need any user interaction.
-          </para>
-
-        </sect4>
       </sect3>
       <sect3 id="jeos-speed-consideration" status="review">
         <title>Speed Considerations</title>
@@ -936,7 +909,7 @@ swap 4000
             <para>
             The mirror address specified here will also be used in the <filename>/etc/apt/sources.list</filename> of the newly created 
             guest, so it is useful to specify here an address that can be resolved by the guest or to plan on reseting this address 
-            later on, such as in a <emphasis>--firstboot</emphasis> script.
+            later on.
             </para>
           </note>
 
@@ -987,25 +960,6 @@ deb http://archive.ubuntu.com/ubuntu &distro-short-codename; main/debian-install
 
           </sect4>
         </sect3>
-        <sect3 id="jeos-ramdisk" status="review">
-          <title>Installing in a RAM Disk</title>
-        
-          <para>
-          As you can easily imagine, writing to RAM is a <emphasis>LOT</emphasis> faster than writing to disk. If you have some 
-          free memory, letting vmbuilder perform its operation in a RAMdisk will help a lot and the option <emphasis>--tmpfs</emphasis>
-          will help you do just that: 
-          </para>
-
-<programlisting>
---tmpfs OPTS  Use a tmpfs as the working directory, specifying its
-              size or "-" to use tmpfs default (suid,dev,size=1G).
-</programlisting>
-
-          <para>
-          So adding <command>--tmpfs -</command> sounds like a very good idea if you have 1G of free ram. 
-          </para>
-
-        </sect3>
       </sect2>
       <sect2 id="jeos-package-application" status="review">
         <title>Package the Application</title>
@@ -1037,76 +991,6 @@ deb http://archive.ubuntu.com/ubuntu &distro-short-codename; main/debian-install
         a virtual appliance. As noted before, we've made a version of the package available in a PPA (Personal Package Archive).
         </para>
 
-      </sect2>
-      <sect2 id="jeos-finish-install" status="review">
-        <title>Finishing Install</title>
-  
-        <sect3 id="jeos-first-boot" status="review">
-          <title>First Boot</title>
-
-          <para>
-          As we mentioned earlier, the first time the machine boots we'll need to install <application>openssh-server</application>
-          so that the key generated for it is unique for each machine. To do this, we'll write a script called <filename>boot.sh</filename>
-          as follows: 
-          </para>
-
-<programlisting>
-# This script will run the first time the virtual machine boots
-# It is ran as root.
-
-apt-get update
-apt-get install -qqy --force-yes openssh-server
-</programlisting>
-
-          <para>
-          And we add the <command>--firstboot boot.sh</command> option to our command line.
-          </para>
-
-        </sect3>
-        <sect3 id="jeos-first-login" status="review">
-          <title>First Login</title>
-
-          <para>
-          Mysql and Limesurvey needing some user interaction during their setup, we'll set them up the first time a user 
-          logs in using a script named login.sh. We'll also use this script to let the user specify: 
-          </para>
-
-          <itemizedlist>
-            <listitem><para>His own password</para></listitem>
-            <listitem><para>Define the keyboard and other locale info he wants to use</para></listitem>
-          </itemizedlist>
-
-          <para>
-          So we'll define <filename>login.sh</filename> as follows: 
-          </para>
-
-<programlisting>
-# This script is ran the first time a user logs in
-
-echo "Your appliance is about to be finished to be set up."
-echo "In order to do it, we'll need to ask you a few questions,"
-echo "starting by changing your user password."
-
-passwd
-
-#give the opportunity to change the keyboard
-sudo dpkg-reconfigure console-setup
-
-#configure the mysql server root password
-sudo dpkg-reconfigure mysql-server-5.0
-
-#install limesurvey
-sudo apt-get install -qqy --force-yes limesurvey
-
-echo "Your appliance is now configured.  To use it point your"
-echo "browser to http://serverip/limesurvey/admin"
-</programlisting>
-
-          <para>
-          And we add the <command>--firstlogin login.sh</command> option to our command line.
-          </para>
-
-        </sect3>
       </sect2>
       <sect2 id="jeos-additions" status="review">
         <title>Useful Additions</title>
@@ -1152,14 +1036,13 @@ echo "browser to http://serverip/limesurvey/admin"
 
 <screen>
 <command>sudo vmbuilder kvm ubuntu --suite &distro-short-codename; --flavour virtual --arch i386 -o \ 
-         --libvirt qemu:///system --ip 192.168.0.100 --part vmbuilder.partition --user user \
+         --libvirt qemu:///system --ip 192.168.0.100 --hostname myvm --part vmbuilder.partition --user user \
          --name user --pass default --addpkg apache2 --addpkg apache2-mpm-prefork \ 
          --addpkg apache2-utils --addpkg apache2.2-common --addpkg dbconfig-common \ 
          --addpkg libapache2-mod-php5 --addpkg mysql-client --addpkg php5-cli \ 
          --addpkg php5-gd --addpkg php5-ldap --addpkg php5-mysql --addpkg wwwconfig-common \
          --addpkg mysql-server --addpkg unattended-upgrades --addpkg acpid --ppa nijaba \ 
-         --mirror http://mirroraddress:9999/ubuntu --tmpfs - --firstboot boot.sh \
-         --firstlogin login.sh
+         --mirror http://mirroraddress:9999/ubuntu 
          </command>
 </screen>
 
