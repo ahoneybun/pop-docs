@@ -71,21 +71,28 @@
               <title>Anonymous FTP Configuration</title>
 
                 <para>
-                By default <application>vsftpd</application> is configured 
-                to only allow anonymous download.  During installation a 
-                <emphasis>ftp</emphasis> user is created with a home directory 
-                of <filename>/home/ftp</filename>.  This is the default FTP directory.
+                By default <application>vsftpd</application> is <emphasis>not</emphasis> configured to only allow anonymous download.
+                If you wish to enable anonymous download edit <filename>/etc/vsftpd.conf</filename> changing:
+                </para>
+
+<programlisting>
+anonymous_enable=Yes
+</programlisting>
+
+                <para>
+                During installation a <emphasis>ftp</emphasis> user is created with a home directory 
+                of <filename>/srv/ftp</filename>.  This is the default FTP directory.
                 </para>
 
                 <para>
-                If you wish to change this location, to <filename>/srv/ftp</filename>
+                If you wish to change this location, to <filename>/srv/files/ftp</filename>
                 for example, simply create a directory in another location and 
                 change the <emphasis>ftp</emphasis> user's home directory:
                 </para>
 
 <screen>
-<command>sudo mkdir /srv/ftp</command>
-<command>sudo usermod -d /srv/ftp ftp</command> 
+<command>sudo mkdir /srv/files/ftp</command>
+<command>sudo usermod -d /srv/files/ftp ftp</command> 
 </screen>
 
                 <para>
@@ -93,12 +100,13 @@
                 </para>
 
 <screen>
-<command>sudo /etc/init.d/vsftpd restart</command>
+<command>sudo restart vsftpd</command>
 </screen>
 
                 <para>
                 Finally, copy any files and directories you would like to make available
-                through anonymous FTP to <filename>/srv/ftp</filename>.
+                through anonymous FTP to <filename>/srv/files/ftp</filename>, or <filename>/srv/ftp</filename> if you wish to 
+                use the default.
                 </para>
 
               </sect2>
@@ -106,13 +114,12 @@
                 <title>User Authenticated FTP Configuration</title>
 
                 <para>
-                To configure <application>vsftpd</application> to authenticate
-                system users and allow them to upload files edit
+                By default <application>vsftpd</application> is configured to authenticate
+                system users and allow them to download files.  If you want users to be able to upload files, edit
                 <filename>/etc/vsftpd.conf</filename>:
                 </para>
 
 <programlisting>
-local_enable=YES
 write_enable=YES
 </programlisting>
 
@@ -121,7 +128,7 @@ write_enable=YES
                 </para>
 
 <screen>
-<command>sudo /etc/init.d/vsftpd restart</command>
+<command>sudo restart vsftpd</command>
 </screen>
 
                 <para>
@@ -186,7 +193,7 @@ chroot_list_file=/etc/vsftpd.chroot_list
                   </para>
 
 <screen>
-<command>sudo /etc/init.d/vsftpd restart</command>
+<command>sudo restart vsftpd</command>
 </screen>
                   
                   <para>
@@ -234,7 +241,7 @@ rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
                   </para>
 
 <screen>
-<command>sudo /etc/init.d/vsftpd restart</command>
+<command>sudo restart vsftpd</command>
 </screen>
 
                   <para>

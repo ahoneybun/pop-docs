@@ -221,4 +221,182 @@
 
    </sect2>
   </sect1>
+  <sect1 id="puppet" status="review">
+    <title>Puppet</title>
+
+      <para>
+      <application>Puppet</application> is a cross platform framework enabling system administrators to perform common tasks using code.  
+      The code can do a variety of tasks from installing new software, to checking file permissions, or updating user accounts.  Puppet is 
+      great not only during the initial installation of a system, but also throughout the system's entire life cycle.  In most circumstances
+      <application>puppet</application> will be used in a client/server configuration.  
+      </para>
+
+      <para>
+      This section will cover installing and configuring <application>puppet</application> in a client/server configuration.  This simple example
+      will demonstrate how to install <application>Apache</application> using <application>Puppet</application>.
+      </para>
+
+    <sect2 id="puppet-installation" status="review">
+      <title>Installation</title>
+
+      <para>
+      To install <application>puppet</application>, in a terminal on the <emphasis>server</emphasis> enter:
+      </para>
+
+<screen>
+<command>sudo apt-get install puppetmaster</command>
+</screen>
+
+      <para>
+      On the <emphasis>client</emphasis> machine, or machines, enter:
+      </para>
+
+<screen>
+<command>sudo apt-get install puppet</command>
+</screen>
+
+    </sect2>
+    <sect2 id="puppet-configuration" status="review">
+      <title>Configuration</title>
+
+      <para>
+      Prior to configuring <application>puppet</application> you may want to add a DNS <emphasis>CNAME</emphasis> record for 
+      <emphasis>puppet.example.com</emphasis>, where <emphasis>example.com</emphasis> is your domain.  By default 
+      <application>puppet</application> clients check DNS for puppet.example.com as the puppet server name, or 
+      <emphasis>Puppet Master</emphasis>.  See <xref linkend="dns"/> for more DNS details.
+      </para>
+
+      <para>
+      If you do not wish to use DNS, you can add entries to the server and client <filename>/etc/hosts</filename> file.  For example, in the 
+      <application>puppet</application> server's <filename>/etc/hosts</filename> file add:
+      </para>
+
+<programlisting>
+127.0.0.1 localhost.localdomain localhost puppet
+192.168.1.17 meercat02.example.com meercat02
+</programlisting>
+
+      <para>
+      On each <application>puppet</application> client, add an entry for the server:
+      </para>
+
+<programlisting>
+192.168.1.16 meercat.example.com meercat puppet
+</programlisting>
+
+      <note>
+        <para>
+        Replace the example IP addresses and domain names above with your actual server and client addresses and domain names.
+        </para>
+      </note>
+
+      <para>
+      Now setup some resources for <application>apache2</application>.  Create a file <filename>/etc/puppet/manifests/site.pp</filename>
+      containing the following:
+      </para>
+
+<programlisting>
+package {
+    'apache2':
+        ensure => installed
+}
+
+service {
+    'apache2':
+        ensure => true,
+        enable => true,
+        require => Package['apache2']
+}
+</programlisting>
+
+
+      <para>
+      Next, create a node file <filename>/etc/puppet/manifests/nodes.pp</filename> with:
+      </para>
+
+<programlisting>
+node 'meercat02.example.com' {
+   include apache2
+}
+</programlisting>
+
+      <note>
+        <para>
+        Replace <emphasis>meercat02.example.com</emphasis> with your actual puppet client's host name.
+        </para>
+      </note>
+
+      <para>
+      The final step for this simple <application>puppet</application> server is to restart the daemon:
+      </para>
+
+<screen>
+<command>sudo /etc/init.d/puppetmaster restart</command>
+</screen>
+
+      <para>
+      Now everything is configured on the <application>puppet</application> server, it is time to configure the client.  
+      </para>
+
+      <para>
+      First, configure the <application>puppet agent</application> daemon to start.  Edit <filename>/etc/default/puppet</filename>, changing 
+      <emphasis>START</emphasis> to yes:
+      </para>
+
+<programlisting>
+START=yes
+</programlisting>
+
+      <para>
+      Then start the service:
+      </para>
+
+<screen>
+<command>sudo /etc/init.d/puppet start</command>
+</screen>
+
+      <para>
+      Back on the <application>puppet</application> server sign the client certificate by entering:
+      </para>
+
+<screen>
+<command>sudo puppetca --sign meercat02.example.com</command>
+</screen>
+
+      <para>
+      Check <filename>/var/log/syslog</filename> for any errors with the configuration.  If all goes well the <application>apache2</application>
+      package and it's dependencies will be installed on the <application>puppet</application> client.
+      </para>
+
+      <note>
+        <para>
+        This example is <emphasis>very</emphasis> simple, and does not highlight many of <application>Puppet's</application> features and 
+        benefits.  For more information see <xref linkend="puppet-resources"/>.
+        </para>
+      </note>
+
+    </sect2>
+    <sect2 id="puppet-resources" status="review">
+      <title>Resources</title>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+          See the <ulink url="http://docs.puppetlabs.com/">Official Puppet Documentation</ulink> web site.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          Also see <ulink url="http://apress.com/book/view/1590599780">Pulling Strings with Puppet</ulink>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+          Another source of additional information is the <ulink url="https://help.ubuntu.com/community/Puppet">Ubuntu Wiki Puppet Page</ulink>.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+    </sect2>
+  </sect1>
 </chapter>

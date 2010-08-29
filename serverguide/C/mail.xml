@@ -204,9 +204,9 @@ sudo postconf -e 'myhostname = mail.example.com'
 	    <para>
             <application>Postfix</application> supports SMTP-AUTH as defined in
             <ulink
-            url="ftp://ftp.isi.edu/in-notes/rfc2554.txt">RFC2554</ulink>.
+            url="http://www.ietf.org/rfc/rfc2554.txt">RFC2554</ulink>.
             It is based on <ulink
-            url="ftp://ftp.isi.edu/in-notes/rfc2222.txt">SASL</ulink>. However it is still necessary 
+            url="http://www.ietf.org/rfc/rfc2222.txt">SASL</ulink>. However it is still necessary 
 	    to set up SASL authentication before you can use SMTP-AUTH.
             </para>
 	</sect2>
@@ -249,7 +249,7 @@ sudo postconf -e 'myhostname = mail.example.com'
 </programlisting>
 
             <para>
-            In order to let <application>Outlook</application> clients use SMTPAUTH, in the <emphasis>auth default</emphasis> 
+            In order to let <application>Outlook</application> clients use SMTP-AUTH, in the <emphasis>auth default</emphasis> 
             section of /etc/dovecot/dovecot.conf add <emphasis>"login"</emphasis>:
             </para>
 
@@ -280,7 +280,7 @@ sudo postconf -e 'myhostname = mail.example.com'
               <para>
               You may or may not want to run IMAP, IMAPS, POP3, or POP3S on your mail server.  For example, 
               if you are configuring your server to be a mail gateway, spam/virus filter, etc.  If this is 
-              the case it may be easier to use the above commands to configure Postfix for SMTPAUTH.
+              the case it may be easier to use the above commands to configure Postfix for SMTP-AUTH.
               </para>
             </note>
 
@@ -857,9 +857,7 @@ disable_plaintext_auth = no
           <sect3 id="mailman-apache2">
             <title>Apache2</title>
               <para>
-                To install apache2 you refer to <ulink
-                url="./web-servers.xml#http-installation">HTTPD
-                Installation</ulink> section for details.
+                To install apache2 you refer to <xref linkend="http-installation"/> for details.
               </para>
           </sect3>
 	  <sect3 id="mailman-postfix">
@@ -878,13 +876,13 @@ disable_plaintext_auth = no
 	      the <filename>/etc/exim4</filename> directory. In Ubuntu, by default, the exim4 configuration files are
 	      split across different files. You can change this behavior by changing
 	      the following variable in the <filename>/etc/exim4/update-exim4.conf</filename> file:
+          </para>
 
-              <itemizedlist spacing="compact">
-              <listitem>
-                <para><application>dc_use_split_config='true'</application></para>
-              </listitem>
-              </itemizedlist>
-              </para>
+<programlisting>
+dc_use_split_config='true'
+</programlisting>
+
+
           </sect3>
           <sect3 id="mailman-mailman">
             <title>Mailman</title>
@@ -1490,7 +1488,7 @@ $myhostname = 'mail.example.com';
                </itemizedlist>
 
                <para>
-               A domain can also have multiple Whitelist configurations.  After, editing the file restart <application>amaisd-new</application>:
+               A domain can also have multiple Whitelist configurations.  After, editing the file restart <application>amavisd-new</application>:
                </para>
 
 <screen>

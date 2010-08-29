@@ -738,7 +738,9 @@ iface br0 inet static
                     Access the system manual page for <filename>resolv.conf</filename> with the following command:
                     </para>
                     <para>
-<screen><command>man resolv.conf</command></screen>
+<screen>
+<command>man resolv.conf</command>
+</screen>
                     </para>
                </listitem>
             </itemizedlist>
@@ -1049,59 +1051,68 @@ Ubuntu comes with ntpdate as standard, and will run it once at boot time to set 
 <code>/etc/cron.daily/ntpdate</code>
  containing: 
 </para>
-<screen>ntpdate ntp.ubuntu.com
-</screen>
+<programlisting>
+ntpdate -s ntp.ubuntu.com
+</programlisting>
 <para>
 The file <code>/etc/cron.daily/ntpdate</code> must also be executable.
 </para>
 <screen>sudo chmod 755 /etc/cron.daily/ntpdate
 </screen>
 </sect2>
-      <sect2 id="ntpd" status="review">
-<title>ntpd</title>
-	<para>
-ntpdate is a bit of a blunt instrument - it can only adjust the time once a day, in one big correction. The ntp daemon ntpd is far more subtle. It calculates the drift of your system clock and continuously adjusts it, so there are no large corrections that could lead to inconsistent logs for instance. The cost is a little processing power and memory, but for a modern server this is negligible. 
-</para>
-<para>To set up ntpd: </para>
-<screen>sudo apt-get install ntp
+<sect2 id="ntpd" status="review">
+   <title>ntpd</title>
+   <para>
+   ntpdate is a bit of a blunt instrument - it can only adjust the time once a day, in one big correction. The ntp daemon ntpd is far 
+   more subtle. It calculates the drift of your system clock and continuously adjusts it, so there are no large corrections that could 
+   lead to inconsistent logs for instance. The cost is a little processing power and memory, but for a modern server this is negligible. 
+   </para>
+
+   <para>
+   To install ntpd, from a terminal prompt enter: 
+   </para>
+
+<screen>
+<command>sudo apt-get install ntp</command>
 </screen>
-<para/>
+
 </sect2>
 <sect2 id="timeservers" status="review">
-<title>Changing Time Servers</title>
-	<para>
-In both cases above, your system will use Ubuntu's NTP server at 
-<code>ntp.ubuntu.com</code>
- by default. This is OK, but you might want to use several servers to increase accuracy and resilience, and you may want to use time servers that are geographically closer to you. to do this for ntpdate, change the contents of 
-<code>/etc/cron.daily/ntpdate</code>
- to: 
-</para>
-<screen>ntpdate ntp.ubuntu.com pool.ntp.org 
-</screen>
-	<para>
-And for ntpd edit 
-<code>/etc/ntp.conf</code>
- to include additional server lines: 
-</para>
-<screen>server ntp.ubuntu.com
+  <title>Changing Time Servers</title>
+  <para>
+  In both cases above, your system will use Ubuntu's NTP server at <emphasis>ntp.ubuntu.com</emphasis> by default. This is OK, but you might
+  want to use several servers to increase accuracy and resilience, and you may want to use time servers that are geographically closer 
+  to you. to do this for ntpdate, change the contents of <filename>/etc/cron.daily/ntpdate</filename> to: 
+  </para>
+
+<programlisting>
+ntpdate -s ntp.ubuntu.com pool.ntp.org 
+</programlisting>
+
+  <para>
+  And for ntpd edit <filename>/etc/ntp.conf</filename> to include additional server lines: 
+  </para>
+
+<programlisting>
+server ntp.ubuntu.com
 server pool.ntp.org
+</programlisting>
+
+  <para>
+  You may notice <emphasis>pool.ntp.org</emphasis> in the examples above. This is a really good idea which uses round-robin DNS to
+  return an NTP server from a pool, spreading the load between several different servers. Even better, they have pools for different
+  regions - for instance, if you are in New Zealand, so you could use <emphasis>nz.pool.ntp.org</emphasis> instead of 
+  <emphasis>pool.ntp.org</emphasis>. Look at <ulink url="http://www.pool.ntp.org/">http://www.pool.ntp.org/</ulink> for more details. 
+  </para>
+
+  <para>
+  You can also Google for NTP servers in your region, and add these to your configuration. To test that a server works, just type:
+  </para>
+
+<screen>
+<command>sudo ntpdate ntp.server.name</command>
 </screen>
-	<para>
-You may notice 
-<code>pool.ntp.org</code>
- in the examples above. This is a really good idea which uses round-robin DNS to return an NTP server from a pool, spreading the load between several different servers. Even better, they have pools for different regions - for instance, if you are in New Zealand, so you could use  
-<code>nz.pool.ntp.org</code>
- instead of 
-<code>pool.ntp.org</code>
-. Look at 
-<ulink url="http://www.pool.ntp.org/">http://www.pool.ntp.org/</ulink>
- for more details. 
-</para>
-	<para>
-You can also Google for NTP servers in your region, and add these to your configuration. To test that a server works, just type 
-<code>sudo ntpdate ntp.server.name</code>
- and see what happens. 
-</para>
+
 </sect2>
   <sect2 id="ntp-references" status="review">
     <title>References</title>
@@ -1114,7 +1125,7 @@ You can also Google for NTP servers in your region, and add these to your config
       </listitem>
 	  <listitem>
   	    <para>
-          <ulink url="http://ntp.isc.org/bin/view/Support/WebHome">NTP Support</ulink>
+          <ulink url="http://support.ntp.org/bin/view/Support/WebHome">NTP Support</ulink>
         </para>
       </listitem>
 	  <listitem>

@@ -457,9 +457,22 @@ include /etc/ldap/schema/ppolicy.schema
 
                   <para>
                   Adjust the configuration file name and temporary directory names if yours are different.
-                  Also, it may be worthwhile to keep the <filename>ldif_output</filename> directory around
+                  It may be worthwhile to keep the <filename>ldif_output</filename> directory around
                   in case you want to add additional schemas in the future.
                   </para>
+
+                  <note>
+                    <para>
+                    The <emphasis>"cn={5}"</emphasis> index number may change according to the configuration
+                    ordering.  To find out the correct number execute the following:
+                    </para>
+<screen>
+<command>slapcat -f schema_convert.conf -F /tmp/ldif_output -n 0 | grep dyngroup</command>
+</screen>
+                    <para>
+                    Replace <emphasis>dyngroup</emphasis> with the appropriate schema name.
+                    </para>
+                  </note>
 
                 </step>
                 <step>
@@ -976,9 +989,9 @@ signing_key
               </para>
 
 <screen>
-<command>sudo certtool --generate-certificate --load-privkey /etc/ssl/private/x01-test_slapd_key.pem \
+<command>sudo certtool --generate-certificate --load-privkey /etc/ssl/private/ldap01_slapd_key.pem \
  --load-ca-certificate /etc/ssl/certs/cacert.pem --load-ca-privkey /etc/ssl/private/cakey.pem \
- --template /etc/ssl/x01-test.info --outfile /etc/ssl/certs/x01-test_slapd_cert.pem</command>
+ --template /etc/ssl/ldap01.info --outfile /etc/ssl/certs/ldap01_slapd_cert.pem</command>
 </screen>
 
             </step>
@@ -1688,7 +1701,8 @@ include /etc/ldap/schema/samba.schema
               <step>
 
                 <para>
-                Edit the generated <filename>/tmp/cn\=samba.ldif</filename> file, changing the following attributes:
+                Edit the generated <filename>/tmp/cn\=samba.ldif</filename> file by removing <emphasis>{XX}</emphasis> at the top 
+                of the file, where <emphasis>"{XX}"</emphasis> is the index number in curly braces:
                 </para> 
 
 <programlisting>

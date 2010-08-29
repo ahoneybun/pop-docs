@@ -202,8 +202,7 @@
 
       <note>
         <para>
-        The <emphasis>-p</emphasis> switch tells mkdir to create the entire directory tree if it doesn't exist.  Change the 
-        share name to fit your environment. 
+        The <emphasis>-p</emphasis> switch tells mkdir to create the entire directory tree if it doesn't exist.
         </para>
       </note>
 
@@ -239,6 +238,15 @@
       <filename>/etc/samba/smb.conf</filename>, and restart <emphasis>Samba</emphasis>.  Just make sure that the directory
       you want to share actually exists and the permissions are correct.
       </para>
+
+      <note>
+        <para>
+        The file share named <emphasis>"[share]"</emphasis> and the path <filename>/srv/samba/share</filename> are just examples.
+        Adjust the share and path names to fit your environment.  It is a good idea to name a share after a directory on the 
+        file system.  Another example would be a share name of <emphasis>[qa]</emphasis> with a path of <filename>/srv/samba/qa</filename>.
+        </para>
+      </note>
+
     </sect2>
     <sect2 id="samba-fileserver-resources" status="review">
       <title>Resources</title>
@@ -798,6 +806,13 @@ UUID=66bcdd2e-8861-4fb0-b7e4-e61c569fe17d /srv  ext3    noatime,relatime,acl 0  
    logon script = logon.cmd
    add machine script = sudo /usr/sbin/useradd -N -g machines -c Machine -d /var/lib/samba -s /bin/false %u
 </programlisting>
+
+          <note>
+            <para>
+            If you wish to not use <emphasis>Roaming Profiles</emphasis> leave the <emphasis>logon home</emphasis>
+            and <emphasis>logon path</emphasis> options commented.
+            </para>
+          </note>
  
           <itemizedlist>
             <listitem>
@@ -836,23 +851,9 @@ UUID=66bcdd2e-8861-4fb0-b7e4-e61c569fe17d /srv  ext3    noatime,relatime,acl 0  
               In this example the <emphasis>machines</emphasis> group will need to be created using the 
               <application>addgroup</application> utility see <xref linkend="adding-deleting-users"/> for details.
               </para>
-              <para>
-              Also, rights need to be explicitly provided to the <emphasis>Domain Admins</emphasis> group to allow the 
-              <emphasis>add machine script</emphasis> (and other admin functions) to work. This is achieved by executing:
-              </para>
-<screen>
-<command>net rpc rights grant "EXAMPLE\Domain Admins" SeMachineAccountPrivilege SePrintOperatorPrivilege \
-SeAddUsersPrivilege SeDiskOperatorPrivilege SeRemoteShutdownPrivilege</command>
-</screen>
+
             </listitem>
           </itemizedlist>
-
-          <note>
-            <para>
-            If you wish to not use <emphasis>Roaming Profiles</emphasis> leave the <emphasis>logon home</emphasis>
-            and <emphasis>logon path</emphasis> options commented.
-            </para>
-          </note>
 
         </step>
         <step>
@@ -920,6 +921,22 @@ SeAddUsersPrivilege SeDiskOperatorPrivilege SeRemoteShutdownPrivilege</command>
         <step>
 
           <para>
+          Restart Samba to enable the new domain controller:
+          </para> 
+
+<screen>
+<command>sudo restart smbd</command>
+<command>sudo restart nmbd</command>
+</screen>
+
+        </step>
+        <step>
+
+          <para>
+          Lastly, there are a few additional commands needed to setup the appropriate rights.
+          </para>
+
+          <para>
           With <emphasis>root</emphasis> being disabled by default, in order to join a workstation to the domain, a system
           group needs to be mapped to the Windows <emphasis>Domain Admins</emphasis> group.  
           Using the <application>net</application> utility, from a terminal enter:
@@ -934,20 +951,25 @@ SeAddUsersPrivilege SeDiskOperatorPrivilege SeRemoteShutdownPrivilege</command>
             Change <emphasis role="italic">sysadmin</emphasis> to whichever group you prefer.  Also, the user
             used to join the domain needs to be a member of the <emphasis>sysadmin</emphasis> group, as well 
             as a member of the system <emphasis>admin</emphasis> group.  The <emphasis>admin</emphasis> group allows 
-            <application>sudo</application> use.
+            <application>sudo</application> use.  
+            </para>
+            <para>
+            If the user does not have Samba credentials yet, you can add them with
+            the <application>smbpasswd</application> utility, change the <emphasis>sysadmin</emphasis> username appropriately:
+
+<screen>
+<command>sudo smbpasswd -a sysadmin</command>
+</screen>
             </para>
           </note>
 
-        </step>
-        <step>
-
           <para>
-          Finally, restart Samba to enable the new domain controller:
-          </para> 
-
+          Also, rights need to be explicitly provided to the <emphasis>Domain Admins</emphasis> group to allow the 
+          <emphasis>add machine script</emphasis> (and other admin functions) to work. This is achieved by executing:
+          </para>
 <screen>
-<command>sudo restart smbd</command>
-<command>sudo restart nmbd</command>
+<command>net rpc rights grant -U sysadmin "EXAMPLE\Domain Admins" SeMachineAccountPrivilege \
+SePrintOperatorPrivilege SeAddUsersPrivilege SeDiskOperatorPrivilege SeRemoteShutdownPrivilege</command>
 </screen>
 
         </step>
