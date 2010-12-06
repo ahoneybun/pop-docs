@@ -95,21 +95,6 @@ style:
 
 ## Targets for building standalone documents
 
-switching:
-
-	xsltproc --stringparam html.stylesheet "libs/ubuntu-book.css" --stringparam navig.graphics.path "images/navig/" --stringparam callout.graphics.path "images/callouts/" --stringparam admon.graphics.path "images/admin/" --xinclude -o $(BASE)switching/index.html $(UBUNTUCHUNKXSL) switching/C/switching.xml
-
-	# copy style sheet and common images to build directory
-	mkdir -p $(BASE)switching/libs/img
-	cp libs/*css $(BASE)switching/libs/
-	cp libs/img/*png $(BASE)switching/libs/img/
-	mkdir -p $(BASE)switching/images/admon
-	cp -r libs/admon/*.* $(BASE)switching/images/admon	
-	mkdir -p $(BASE)switching/images/callouts
-	cp -r libs/callouts/*.* $(BASE)switching/images/callouts	
-	mkdir -p $(BASE)switching/images/navig
-	cp -r libs/navig/*.* $(BASE)switching/images/navig	
-
 serverguide: style
 
 	if [ $(LN) != "C" ]; then \
