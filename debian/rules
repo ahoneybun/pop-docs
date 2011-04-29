@@ -1,58 +1,17 @@
 #!/usr/bin/make -f
 
 include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/makefile.mk
+include /usr/share/cdbs/1/class/gnome.mk
+include /usr/share/cdbs/1/rules/utils.mk
 
-DEB_DH_INSTALL_ARGS = -X.svn
-DEB_DH_BUILDDEB_ARGS := -- -Z bzip2
-export CDBS_NO_GNOME_HELP_SYMLINKING=1
-DEB_SRCDIR = .
+DEB_DH_BUILDDEB_ARGS := -- -Zbzip2
+DEB_CONFIGURE_EXTRA_FLAGS += --disable-scrollkeeper
+DEB_DH_INSTALL_SOURCEDIR = debian/tmp
 
-$(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/%:
-
-install755=install -m755 -oroot -groot
-preptrans=prepare-firefox-startpage-translations
-preptransdir=debian/ubuntu-docs/usr/share/ubuntu-docs/common
-
-clean::
-	@grep -E ^"\*" debian/README.Debian | sed 's/^\*\ //' | xargs rm -rf
+makebuilddir/ubuntu-docs::
+	@gnome-autogen.sh --prefix=/usr --disable-scrollkeeper
+	@echo "---"
+	@make -C ubuntu-help -f Makefile pot
 	@echo "---"
 
-common-binary-post-install-indep::
-	mv debian/ubuntu-docs/usr/share/ubuntu-artwork/home/index.html debian/ubuntu-docs/usr/share/ubuntu-artwork/home/firefox-index.html
-	$(install755) -d $(preptransdir)
-	$(install755) debian/$(preptrans) $(preptransdir)
-	$(preptransdir)/$(preptrans) \
-		browser-startpage \
-		debian/ubuntu-docs \
-		/usr/share/ubuntu-artwork/home/locales-ubuntu \
-		../index.html
-
-# Install the documents; skip documents which are less than 75% translated
-
-	for doc in `cat libs/shipped-docs`; do \
-		mkdir -p debian/ubuntu-docs/usr/share/gnome/help/$$doc/C/; \
-		cp $$doc/C/*xml debian/ubuntu-docs/usr/share/gnome/help/$$doc/C/; \
-		mkdir -p debian/ubuntu-docs/usr/share/omf/$$doc; \
-		cp $$doc/C/*omf debian/ubuntu-docs/usr/share/omf/$$doc/; \
-		echo "Building and installing translated xml for $$doc"; \
-			for pofile in `ls $$doc/po/`; do \
-				lang=$$(basename $$pofile .po); \
-				if [ -e $$doc/po/$$lang.po ]; then \
-					echo "--$$doc $$lang, building xml..."; \
-						scripts/translate.sh -d $$doc -l $$lang ; \
-				fi; \
-				if [ -e $$doc/$$lang/$$doc.xml ]; then \
-					mkdir -p debian/ubuntu-docs/usr/share/gnome/help/$$doc/$$lang/; \
-					cp $$doc/$$lang/*xml debian/ubuntu-docs/usr/share/gnome/help/$$doc/$$lang/; \
-				fi; \
-				if [ -e $$doc/$$lang/*.omf ]; then \
-					cp $$doc/$$lang/*omf debian/ubuntu-docs/usr/share/omf/$$doc/; \
-				fi; \
-			done; \
-		done; \
-
-# Common documents
-
-		cp -r libs debian/ubuntu-docs/usr/share/ubuntu-docs/ 
 
