@@ -130,6 +130,9 @@ contributors: style
 
 	xsltproc --stringparam root.filename "contributors" -o $(BASE)libs/C/ $(UBUNTUCHUNKXSL) libs/C/contributors.xml
 
+
+## Individual documents built separately for help.ubuntu.com
+
 install: style
 
 # To build an Ubuntu look n feel version of the installation-guide, download
@@ -137,5 +140,21 @@ install: style
 # build/buildone.sh so that the "web" stylesheet refers to the Ubuntu installguide stylesheet
 # in libs. Then use this make target.
 
-	cd installation-guide/build && mkdir -p ../../build/installation-guide && destination='../../build/installation-guide/'  formats='html txt' architectures='amd64 hppa i386 ia64 powerpc sparc' ./buildweb.sh && cd ../../
+	cd installation-guide/build && mkdir -p ../../build/installation-guide && destination='../../build/installation-guide/'  formats='html' architectures='amd64 hppa i386 ia64 powerpc sparc' ./buildweb.sh && cd ../../
+
+software-center: style
+
+# To build the software-center manual for help.ubuntu.com, download the source package
+# and unpack the "help" directory to a directory as follows: software-center/C/software-center.xml
+# Then use this make target:
+
+	xsltproc --xinclude -o $(BASE)software-center/$(LN)/index.html $(UBUNTUCHUNKXSL) software-center/$(LN)/software-center.xml
+
+language-selector: style
+
+# To build the language-selector manual for help.ubuntu.com, download the source package
+# and unpack the "help" directory to a directory as follows: language-selector/C/language-selector.xml
+# Then use this make target:
+
+	xsltproc --xinclude -o $(BASE)language-selector/$(LN)/index.html $(UBUNTUCHUNKXSL) language-selector/$(LN)/language-selector.xml
 
