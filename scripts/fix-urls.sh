@@ -26,6 +26,12 @@ do
 done
 
 for y in `cat libs/shipped-docs`; do
+
+## Skip this loop if the directory doesn't exist (probably means no translations for this section)
+	if [ ! -d build/$y/$lang ]; then
+		echo "Missing directory 'build/$y/$lang' - skipping..."
+		continue
+	fi
 	
 ## Ubuntu links
 
@@ -36,13 +42,17 @@ for y in `cat libs/shipped-docs`; do
  	sed -i build/$y/$lang/*.html -e "s#ghelp:add-applications#\.\./\.\./add-applications/$lang/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:administrative#\.\./\.\./administrative/$lang/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:basic-commands#\.\./\.\./basic-commands/$lang/#g"
+	sed -i build/$y/$lang/*.html -e "s#ghelp:config-desktop#\.\./\.\./config-desktop/$lang/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:desktop-effects#\.\./\.\./desktop-effects/$lang/#g"
+	sed -i build/$y/$lang/*.html -e "s#ghelp:files-and-docs#\.\./\.\./files-and-docs/$lang/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:keeping-safe\#users#\.\./\.\./keeping-safe/$lang/users.html#g"
 	sed -i build/$y/$lang/*.html -e "s#ghelp:keeping-safe#\.\./\.\./keeping-safe/$lang/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:office#\.\./\.\./office/$lang/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:hardware\#disks#\.\./\.\./hardware/$lang/disks.html#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:hardware\#laptops-touchpads#\.\./\.\./hardware/$lang/laptops.html#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:hardware\#jockey#\.\./\.\./hardware/$lang/jockey.html#g"
+ 	sed -i build/$y/$lang/*.html -e "s#ghelp:internet\#web-plugins-flash#\.\./\.\./internet/$lang/web-plugins.html\#web-plugins-flash#g"
+	sed -i build/$y/$lang/*.html -e "s#ghelp:internet#\.\./\.\./internet/$lang/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:musicvideophotos\#codecs#\.\./\.\./musicvideophotos/$lang/codecs.html#g"
 	sed -i build/$y/$lang/*.html -e "s#ghelp:musicvideophotos\#onlinemedia-plugins#\.\./\.\./musicvideophotos/$lang/onlinemedia.html#g"
 	sed -i build/$y/$lang/*.html -e "s#ghelp:musicvideophotos\#onlinemedia-audiostreams#\.\./\.\./musicvideophotos/$lang/onlinemedia.html\#onlinemedia-audiostreams#g"
@@ -54,18 +64,19 @@ for y in `cat libs/shipped-docs`; do
  	sed -i build/$y/$lang/*.html -e "s#ghelp:musicvideophotos\#photos-slideshow#\.\./\.\./musicvideophotos/$lang/photos.html\#photos-slideshow#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:musicvideophotos\#photos-printing#\.\./\.\./musicvideophotos/$lang/photos.html\#photos-printing#g"
 	sed -i build/$y/$lang/*.html -e "s#ghelp:musicvideophotos#\.\./\.\./musicvideophotos/$lang/#g"
- 	sed -i build/$y/$lang/*.html -e "s#ghelp:internet\#web-plugins-flash#\.\./\.\./internet/$lang/web-plugins.html\#web-plugins-flash#g"
-	sed -i build/$y/$lang/*.html -e "s#ghelp:internet#\.\./\.\./internet/$lang/#g"
+	sed -i build/$y/$lang/*.html -e "s#ghelp:newtoubuntu#\.\./\.\./newtoubuntu/$lang/#g"
+        sed -i build/$y/$lang/*.html -e "s#ghelp:printing\#faxing#\.\./\.\./printing/$lang/faxing.html#g"
+	sed -i build/$y/$lang/*.html -e "s#ghelp:printing#\.\./\.\./printing/$lang/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:serverguide#\.\./\.\./serverguide/$lang/index.html#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:windows#\.\./\.\./windows/$lang/#g"
         sed -i build/$y/$lang/*.html -e "s#\"legal\.html\"#\"/legal\.html\"#g"
- 	sed -i build/$y/$lang/*.html -e "s#man:apt-get#http://manpages\.ubuntu\.com/manpages/intrepid/en/man8/apt-get\.html#g"
+ 	sed -i build/$y/$lang/*.html -e "s#man:iptables#http://manpages\.ubuntu\.com/iptables#g"
+ 	sed -i build/$y/$lang/*.html -e "s#man:ufw#http://manpages\.ubuntu\.com/ufw#g"
         sed -i build/$y/$lang/*.html -e "s#x-yelp-toc:\#Man#http://manpages\.ubuntu\.com#g"
         sed -i build/$y/$lang/*.html -e "s#x-yelp-toc:\#Info#http://manpages\.ubuntu\.com#g"
-        sed -i build/$y/$lang/*.html -e "s#ghelp:printing\#faxing#\.\./\.\./printing/$lang/faxing.html#g"
 
-## For Software Center, documentation is not online so the best we can do for now is to remove the link
-        sed -i build/$y/$lang/*.html -e "s#ghelp:software-center##g"
+## For Software Center, documentation needs to be built separately
+        sed -i build/$y/$lang/*.html -e "s#ghelp:software-center#https://help\.ubuntu\.com/11\.04/software-center/C/index\.html#g"
 
 ## Gnome links
 
@@ -95,9 +106,11 @@ for y in `cat libs/shipped-docs`; do
  	sed -i build/$y/$lang/*.html -e "s#ghelp:char-palette\#charpick-characters#http://library\.gnome\.org/users/char-palette/stable/charpick-usage\.html#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:baobab#http://library\.gnome\.org/users/baobab/stable/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:users-admin#http://library\.gnome\.org/users/users-admin/stable/#g"
- 	sed -i build/$y/$lang/*.html -e "s#ghelp:evolution#http://library\.gnome\.org/users/evolution/stable/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:evolution\#usage-mail#http://library\.gnome\.org/users/evolution/stable/usage-mail\.html#g"
+ 	sed -i build/$y/$lang/*.html -e "s#ghelp:evolution\#usage-calendar-todo#http://library\.gnome\.org/users/evolution/stable/usage-calendar-todo\.html#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:evolution\#usage-calendar#http://library\.gnome\.org/users/evolution/stable/usage-calendar\.html#g"
+ 	sed -i build/$y/$lang/*.html -e "s#ghelp:evolution\#usage-contact#http://library\.gnome\.org/users/evolution/stable/usage-contact\.html#g"
+ 	sed -i build/$y/$lang/*.html -e "s#ghelp:evolution#http://library\.gnome\.org/users/evolution/stable/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:ekiga#http://library\.gnome\.org/users/ekiga/stable/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:clock\#clock-usage-calendar#http://library\.gnome\.org/users/clock/stable/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:f-spot\#sharing-e-mail#http://f-spot\.org/User_Guide/Share\#Email#g"
@@ -118,6 +131,9 @@ for y in `cat libs/shipped-docs`; do
  	sed -i build/$y/$lang/*.html -e "s#ghelp:rhythmbox\#cd-import#http://library\.gnome\.org/users/rhythmbox/unstable/AudioCD\.html\.en\#cd-import#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:brasero#http://library\.gnome\.org/users/brasero/stable/#g"
  	sed -i build/$y/$lang/*.html -e "s#ghelp:empathy#http://library\.gnome\.org/users/empathy/stable/#g"
+ 	sed -i build/$y/$lang/*.html -e "s#ghelp:banshee#http://library\.gnome\.org/users/banshee/1\.8/#g"
+ 	sed -i build/$y/$lang/*.html -e "s#ghelp:gnome-help\#nautilus-prefs#https://help\.ubuntu\.com/11\.04/ubuntu-help/nautilus-prefs\.html#g"
+ 	sed -i build/$y/$lang/*.html -e "s#ghelp:gnome-help\#nautilus-file-properties-permissions#https://help\.ubuntu\.com/11\.04/ubuntu-help/nautilus-file-properties-permissions\.html#g"
 
 ## Other links
  	sed -i build/$y/$lang/*.html -e "s#ghelp:synaptic\#synaptic-single#https://help\.ubuntu\.com/community/SynapticHowto#g"
@@ -145,4 +161,15 @@ for y in `cat libs/shipped-docs`; do
 	sed -i build/$y/$lang/*.html -e "s#/usr/share/icons/gnome/24x24/status/dialog-password\.png#../../libs/img/dialog-password\.png#g"
 
 done
+
+## Search for unfixed ghelp links
+echo "\nSearching for unfixed ghelp links:"
+grep -r "href=\"ghelp:" build/
+
+## Search for unfixed manpage links
+echo "\nSearching for unfixed manpage links:"
+grep -r "href=\"man:" build/
+grep -r "url=\"man:" build/
+
+exit 0
 
