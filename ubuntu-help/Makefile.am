@@ -1,10 +1,15 @@
-include $(top_srcdir)/gnome-doc-utils.make
+@YELP_HELP_RULES@
 
-DOC_ID = ubuntu-help
+HELP_ID = ubuntu-help
 
-DOC_LINGUAS = de fi es gl hu it nl pt_BR ru sl sr sv tr
+HELP_LINGUAS = de fi es gl hu it nl pt_BR ru sl sr sv tr
 
-DOC_FIGURES = \
+HELP_MEDIA = \
+	figures/color-average.png \
+	figures/color-camera.png \
+	figures/color-display.png \
+	figures/color-printer.png \
+	figures/color-space.png \
 	figures/gnome.png \
 	figures/gnome-searchtool.png \
 	figures/nautilus.png \
@@ -26,9 +31,8 @@ DOC_FIGURES = \
 	figures/unity-windows.png \
 	figures/unity-workspace-intro.png
 
-DOC_INCLUDES = legal.xml
-
-DOC_PAGES = \
+HELP_FILES = \
+	legal.xml \
 	a11y-bouncekeys.page \
 	a11y-braille.page \
 	a11y-contrast.page \
@@ -58,16 +62,36 @@ DOC_PAGES = \
 	backup-what.page \
 	backup-where.page \
 	backup-why.page \
+	bluetooth.page \
 	bluetooth-connect-device.page \
 	bluetooth-problem-connecting.page \
 	bluetooth-remove-connection.page \
 	bluetooth-send-file.page \
 	bluetooth-turn-on-off.page \
+	color-assignprofiles.page \
+	color-calibrate-camera.page \
+	color-calibrate-printer.page \
+	color-calibrate-scanner.page \
+	color-calibrate-screen.page \
+	color-calibrationcharacterization.page \
+	color-calibrationdevices.page \
+	color-calibrationtargets.page \
+	color-canshareprofiles.page \
+	color-gettingprofiles.page \
+	color-howtoimport.page \
+	color-missingvcgt.page \
+	color.page \
+	color-virtualdevice.page \
+	color-whatisprofile.page \
+	color-whatisspace.page \
+	color-why-calibrate.page \
+	color-whyimportant.page \
 	clock.page \
 	clock-calendar.page \
 	clock-more-info.page \
 	clock-set.page \
 	clock-timezone.page \
+	disk.page \
 	disk-benchmark.page \
 	disk-capacity.page \
 	disk-check.page \
@@ -94,10 +118,12 @@ DOC_PAGES = \
 	files-select.page \
 	files-share.page \
 	files-sort.page \
+	files-templates.page \
 	files-tilde.page \
 	get-involved.page \
 	hardware-driver.page \
 	hardware.page \
+	hardware-cardreader.page \
 	hardware-problems-bluetooth.page \
 	hardware-problems-graphics.page \
 	index.page \
@@ -213,6 +239,7 @@ DOC_PAGES = \
 	printing-cancel-job.page \
 	printing-differentsize.page \
 	printing-envelopes.page \
+	printing-inklevel.page \
 	printing-order.page \
 	printing-paperjam.page \
 	printing-select.page \
@@ -223,6 +250,7 @@ DOC_PAGES = \
 	screen-shot-record.page \
 	session-language.page \
 	session-loginsound.page \
+	session-screenlocks.page \
 	shell-apps-favorites.page \
 	shell-exit.page \
 	shell-guest-session.page \
@@ -247,7 +275,6 @@ DOC_PAGES = \
 	unity-appmenu-intro.page \
 	unity-dash-intro.page \
 	unity-introduction.page \
-	unity-launcher-change-autohide.page \
 	unity-launcher-change-size.page \
 	unity-launcher-intro.page \
 	user-accounts.page \
