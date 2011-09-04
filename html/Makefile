@@ -31,7 +31,7 @@ UBUNTUXSL=ubuntu.xsl
 
 ubuntu-help: clean style
 
-	./yelp-build html -o build -x $(UBUNTUXSL) ../ubuntu-help/$(LN)/
+	yelp-build html -o build -x $(UBUNTUXSL) ../ubuntu-help/$(LN)/
 # add html5 doctype header to html files
 # this can be removed once yelp-build does this for us
 	./add-html5-doctype.sh
