@@ -110,7 +110,6 @@ HELP_FILES = \
 	files-lost.page \
 	files-open.page \
 	files.page \
-	files-preview-music.page \
 	files-recover.page \
 	files-removedrive.page \
 	files-rename.page \
@@ -122,6 +121,7 @@ HELP_FILES = \
 	files-tilde.page \
 	get-involved.page \
 	hardware-driver.page \
+	hardware-driver-proprietary.page \
 	hardware.page \
 	hardware-cardreader.page \
 	hardware-problems-bluetooth.page \
