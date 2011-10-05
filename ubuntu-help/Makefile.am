@@ -2,7 +2,7 @@
 
 HELP_ID = ubuntu-help
 
-HELP_LINGUAS = de fi es gl hu it nl pt_BR ru sl sr sv tr
+HELP_LINGUAS = cs da de en_AU es fi gl hu it nl pt_BR ru sk sl sr sv tr
 
 HELP_MEDIA = \
 	figures/color-average.png \
@@ -10,8 +10,7 @@ HELP_MEDIA = \
 	figures/color-display.png \
 	figures/color-printer.png \
 	figures/color-space.png \
-	figures/gnome.png \
-	figures/gnome-searchtool.png \
+	figures/hardware-cardreader.png \
 	figures/nautilus.png \
 	figures/nautilus-icons.png \
 	figures/printing-select.png \
@@ -22,13 +21,11 @@ HELP_MEDIA = \
 	figures/unity-dash-intro.png \
 	figures/unity-dash.png \
 	figures/unity-dash-sample.png \
-	figures/unity-exit.png \
 	figures/unity-launcher-apps.png \
 	figures/unity-launcher-intro.png \
 	figures/unity-launcher.png \
 	figures/unity-overview.png \
 	figures/unity-shell.png \
-	figures/unity-windows.png \
 	figures/unity-workspace-intro.png
 
 HELP_FILES = \
@@ -251,6 +248,8 @@ HELP_FILES = \
 	session-language.page \
 	session-loginsound.page \
 	session-screenlocks.page \
+	sharing.page \
+	sharing-desktop.page \
 	shell-apps-favorites.page \
 	shell-exit.page \
 	shell-guest-session.page \
