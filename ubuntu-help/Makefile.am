@@ -2,7 +2,7 @@
 
 HELP_ID = ubuntu-help
 
-HELP_LINGUAS = ast cs da de en_AU es fi gl hu it nl pt_BR ru sk sl sr tr
+HELP_LINGUAS = ast bs cs de el en_AU es fi gl hu it nl pt_BR ru sk sl zh_TW
 
 HELP_MEDIA = \
 	figures/color-average.png \
