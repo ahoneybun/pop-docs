@@ -87,17 +87,18 @@ body {
 }
 
 #search-box {
-    margin-left: 620px;
+    margin-left: 650px;
     -moz-border-radius: 0px 0px 4px 4px;
     -webkit-border-bottom-left-radius: 4px;
     -webkit-border-bottom-right-radius: 4px;
     -moz-box-shadow: #bbb 0px 0px 2px;
     -webkit-box-shadow: #bbb 0px 0px 2px;
     background-color: #F2F2F2;
-    width: 324px;
+    width: 290px;
     height: 33px;
     padding: 7px 0 0 10px;
 }
+
 #search-box #searchinput {
     float: left;
     width: 172px;
@@ -309,7 +310,7 @@ body {
     background-image: url(img/header_logo.png);
     background-repeat: no-repeat;
     height: 32px;
-    right: 5px;
+    right: 16px;
     margin: 0;
     padding: 0;
     position: absolute;
@@ -318,6 +319,7 @@ body {
     overflow: hidden;
     text-indent: -9999px;
 }
+
 #ubuntu-header a {
     display: block;
     height: 100%;
@@ -364,7 +366,6 @@ body {
 
 .main-menu-item.current,
 #main-menu a:hover, #main-menu a.active {
-    line-height: 16px;
     background: url(img/topnav_active_bg.png) no-repeat right top transparent !important;
 }
 
@@ -723,7 +724,7 @@ input, select {
 <xsl:template name="mal2html.page.linktrails.trail">
   <xsl:param name="node" select="."/>
   <div class="trail">
-    <a href="https://help.ubuntu.com" class="trail">Official Documentation</a>
+    <a href="https://help.ubuntu.com/11.10" class="trail">Ubuntu 11.10</a>
   <xsl:variable name="direction">
     <xsl:call-template name="l10n.direction"/>
   </xsl:variable>
@@ -749,30 +750,6 @@ input, select {
       </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
-    <a href="https://help.ubuntu.com/11.10" class="trail">Ubuntu 11.10</a>
-  <xsl:choose>
-    <xsl:when test="$direction = 'rtl'">
-      <xsl:choose>
-        <xsl:when test="$node/@child = 'section'">
-          <xsl:text>&#x00A0;‹ </xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>&#x00A0;« </xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:choose>
-        <xsl:when test="$node/@child = 'section'">
-          <xsl:text>&#x00A0;› </xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>&#x00A0;» </xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:otherwise>
-  </xsl:choose>
-
     <xsl:call-template name="mal2html.page.linktrails.link">
       <xsl:with-param name="node" select="$node"/>
     </xsl:call-template>
