@@ -17,7 +17,7 @@
 <xsl:param name="color.red_border" select="'#ccc1c1'"/>
 
 <xsl:param name="color.text" select="'#333333'"/>
-<xsl:param name="color.text_light" select="'#aea79f'"/>
+<xsl:param name="color.text_light" select="'#333'"/>
 <xsl:param name="color.link" select="'#dd4814'"/>
 <xsl:param name="color.link_visited" select="'#dd4814'"/>
 
@@ -38,259 +38,582 @@
   </xsl:param>
   <xsl:text>
 
+/* Based on light-moin-theme from https://code.launchpad.net/ubuntu-website/light-moin-theme 
+   Some tweaks and adaptation for xsl by Matthew East for Ubuntu Documentation Team
+   ubuntu-doc@lists.ubuntu.com */
+
+/* Don't forget to set a foreground and background color
+ on the 'html' or 'body' element! */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dd, dl, dt, li, ol, ul, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    line-height: 1.5;
+    font-family: inherit;
+    text-align: left;
+    vertical-align: baseline;
+}
+
+a img, :link img, :visited img {
+    border: 0;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+q:before, q:after, blockquote:before, blockquote:after {
+    content: "";
+}
+
+/* moin specific overrides go below */
+.clear { clear: both; }
+#fullsearch { display: none; }
+
 body {
- background: #d3caaa url(img/bg-page.png) repeat-x top;
- margin: 20px;
- padding: 0;
- font-size: 90%;
- font-family:"Helvetica Neue", "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
- color:#000;
- max-width: 100%;
- position: relative;
+    background-image: url("img/bg_dotted.png");
 }
-#round {
-	background: #fff url(img/bg-content.png) repeat-y top;
-	width: 876px;
-	margin: auto;
-	margin-bottom: 50px;
-	position: relative;
+
+#main-menu a {
+    padding: 24px 8px;
 }
-#round .sb-inner {
-	background-color: #fff;
+
+#search-box {
+    margin-left: 650px;
+    -moz-border-radius: 0px 0px 4px 4px;
+    -webkit-border-bottom-left-radius: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+    -moz-box-shadow: #bbb 0px 0px 2px;
+    -webkit-box-shadow: #bbb 0px 0px 2px;
+    background-color: #F2F2F2;
+    width: 290px;
+    height: 33px;
+    padding: 7px 0 0 10px;
 }
-#page {
-	clear: both;
-	margin: 0;
-	padding: 10px 30px;
+
+#search-box #searchinput {
+    float: left;
+    width: 172px;
+    height: 20px;
+    margin: 8px 0 0 8px;
+    padding: 3px 0 1px 4px;
+    font-size: 11px;
+    border: 1px solid #ccc;
 }
-#content {
-	padding: 12px;
+#search-box #titlesearch {
+    float: left;
+    background: url("img/search_button_sprite.png") transparent;
+    width: 24px;
+    height: 24px;
+    margin: 8px 0 0 8px;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+	text-indent: 50px;
 }
-img.ubuntulogo {
-	margin: 20px;
+
+#search-box button span {
+    position: absolute;
+    overflow: hidden;
+    text-indent: -9999px;
 }
-#topcap {
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-#bottomcap {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-}
-#header {
-	padding-top: 12px;
-}
-#header h1 {
+
+#subheader ul {
 	display: inline;
-}
-#header h1 span {
-	display: none;
-}
-#logo-floater {
-	width: 225px;
 	float: left;
-	padding: 10px;
 }
-#logo-floater h1 {
-	border: none;
+#title span {
+	color: #333;
 }
-#sitename a {
-	position: relative;
-	top: 35px;
-	float: right;
-	font-size: 1.5em;
-	padding-right: 20px;
-	text-decoration: none;
-	color: black;
+
+/* fix TOC styles */
+#cwt-content table li {
+    margin-left: 1.5em;
+    line-height: 18px;
 }
-#sitename span {
-	padding-left: 5px;
+#cwt-content table ol {
+    list-style-type: decimal;
 }
-#cse-search-box {
-	position: absolute;
-	right: 3px;
-	top: 3px;
-	/* float: right; */
-	margin: 5px 10px;
-	padding: 0;
-	white-space: nowrap;
-	font-size: 13px;
+
+/* fix wiki styles */
+#cwt-content pre {
+    line-height: 16px;
+    margin-bottom: 8px;
 }
-#cse-search-box form div {
-    display: inline;
+#cwt-content h1 {
+    margin-bottom: 8px;
 }
-/* Links */
-a, a:visited {
-	color: #D90D19;
+
+#cwt-content dt {
+    font-weight: bold;
+    margin-top: 10px;
 }
-a:hover {
-	color: #800000;
+#cwt-content dt, #cwt-content dd {
+    line-height: 18px;
+    font-size: 14px;
 }
-/* Headings */
-h1, h2, h3, h4, h5, h6
-{
-        margin: 0;
-        padding: 2px 0;
-        font-weight: normal; 
-        color: #5A3320;
-        line-height: 1.2em;
-}	
-h1
-{
-        border-bottom: 2px solid #6d4c07; /* ubuntu dark brown */
-	font-size: 1.6em;
-}
-h2
-{
-        border-bottom: 1px solid #6d4c07; /* ubuntu dark brown */
-	font-size: 1.4em;
-}
-h3 {font-size: 1.3em;}
-h4 {font-size: 1.1em;}
-h4, h5, h6 {font-size: 1em;}
+
 #footer {
 	margin: 0;
 	font-size: 90%;
 	color: #444;
 }
-#ubuntulinks {
-	text-align: center;
-}
-li {
-  margin: 16px 0 0 0;
-  margin-</xsl:text><xsl:value-of select="$left"/><xsl:text>: 16px;
-  -webkit-margin-start: 16px; -webkit-margin-end: 0;
-  -moz-margin-start: 16px; -moz-margin-end: 0;
-}
-dt { margin-top: 16px; }
-dt:first-child { margin-top: 0; }
-dt + dt { margin-top: 0; }
-dd {
-  margin: 8px 0 0 0;
-  margin-</xsl:text><xsl:value-of select="$left"/><xsl:text>: 16px;
-  -webkit-margin-start: 16px; -webkit-margin-end: 0;
-  -moz-margin-start: 16px; -moz-margin-end: 0;
-}
-ol.compact li { margin-top: 8px; }
-ul.compact li { margin-top: 8px; }
-ol.compact li:first-child { margin-top: 0; }
-ul.compact li:first-child { margin-top: 0; }
-dl.compact dt { margin-top: 8px; }
-dl.compact dt:first-child { margin-top: 0; }
-dl.compact dt + dt { margin-top: 0; }
 
-div.title { margin: 0 0 8px 0; }
-div.desc { margin: 0 0 8px 0; }
-div.contents + div.desc { margin: 8px 0 0 0; }
-pre.contents { padding: 8px; }
-li.links {
-  margin: 8px 0 8px 0;
-  padding-</xsl:text><xsl:value-of select="$left"/><xsl:text>: 16px;
+/* edit form */
+#editor-textarea {
+    width: 100%;
+    font-size: 14px;
+    padding: 4px;
 }
-div.sectionlinks { padding: 0 16px 0 16px; }
-div.sectionlinks div.title { margin: 8px 0 8px 0; }
-div.sectionlinks div.sectionlinks { margin: 8px 0 0 0; }
-div.sectionlinks div.sectionlinks li {
-  padding-</xsl:text><xsl:value-of select="$left"/><xsl:text>: 16px;
+#cwt-content input[type=text] {
+    width: 100%;
 }
-div.nextlinks {
-  margin-</xsl:text><xsl:value-of select="$left"/><xsl:text>: 16px;
+
+/* moin's msg dialog */
+#message {
+    padding: 16px;
+    margin: 8px 0;
+    border: 20px #F1F1ED solid;
+    font-size: 14px;
+    background-color: white;
 }
-div.serieslinks { padding: 0 16px 0 16px; }
-div.serieslinks div.title { margin: 8xp 0 8px 0; }
-pre.numbered {
-  padding: 8px;
-  margin-</xsl:text><xsl:value-of select="$right"/><xsl:text>: 8px;
+#message p {
+    font-size: 14px;
+    font-weight: bold;
 }
-div.figure {
-  margin-</xsl:text><xsl:value-of select="$left"/><xsl:text>: 16px;
-  -webkit-margin-start: 16px;
-  -moz-margin-start: 16px;
-  padding: 4px;
+
+/* tables need a little spacing */
+#cwt-content td, #cwt-content th {
+    margin: 1px;
+    padding: 4px;
 }
-div.figure > div.inner > div.contents {
-  padding: 8px 16px 8px 16px;
+#cwt-content td, #cwt-content th {
+    border: 1px solid #E9E9E9;
 }
-div.list > div.title { margin-bottom: 8px; }
-div.note { padding: 8px; }
-div.note > div.inner > div.title {
-  margin-</xsl:text><xsl:value-of select="$left"/><xsl:text>: </xsl:text>
-    <xsl:value-of select="$icons.size.note + 8"/><xsl:text>px;
+#cwt-content ol, #cwt-content ul, #cwt-content dl {
+    margin-bottom: 8px;
+    list-style-type: decimal;
 }
-div.note > div.inner > div.contents {
-  margin-</xsl:text><xsl:value-of select="$left"/><xsl:text>: </xsl:text>
-    <xsl:value-of select="$icons.size.note + 8"/><xsl:text>px;
+#cwt-content li, #cwt-content dd, #cwt-content dt {
+    line-height: 14px;
 }
-div.note-sidebar {
-  margin-</xsl:text><xsl:value-of select="$left"/><xsl:text>: 8px;
-  padding: 8px;
+#cwt-content ol li {
+    margin-left: 18px;
 }
-div.quote > div.inner > div.title { margin: 0 0 8px 0; }
-div.quote > div.inner > div.cite { margin-top: 8px; }
-ol.steps, ul.steps {
-  padding: 8px 16px 8px 16px;
+#cwt-content tt {
+    font-family: monospace;
 }
-li.steps {
-  margin-</xsl:text><xsl:value-of select="$left"/><xsl:text>: 16px;
-  -webkit-margin-start: 16px;
-  -moz-margin-start: 16px;
+
+body {
+    font-family: "Ubuntu", "Ubuntu Beta", "Bitstream Vera Sans", DejaVu Sans, Tahoma, sans-serif;
+    color: #333;
+    background: white url(img/bg_dotted.png);
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0px;
+    padding: 0px;
 }
-li.steps li.steps {
-  margin-</xsl:text><xsl:value-of select="$left"/><xsl:text>: 32px;
-  -webkit-margin-start: 32px;
-  -moz-margin-start: 32px;
+#container {
+    background: #f7f6f5;
+    margin: 0px auto 20px;
+    padding: 0px;
+    width: 976px;
 }
-div.synopsis > div.inner > div.contents, div.synopsis > pre.contents {
-  padding: 8px 16px 8px 16px;
+#container-inner {
+    background-color: #fff;
 }
-span.cmd { padding: 0 4px 0 4px; }
-span.key { padding: 0 4px 0 4px; }
-div.media-ttml-p {
-  margin: 8px 0 0 0;
-  padding: 8px;
+#header, #container-inner {
+    -moz-border-radius: 0px 0px 5px 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-box-shadow: #bbb 0px 0px 5px;
+    -webkit-box-shadow: #bbb 0px 0px 5px;
 }
-div.floatleft { margin-right: 16px; }
-div.floatright { margin-left: 16px; }
-div.floatstart {
-  margin-</xsl:text><xsl:value-of select="$right"/><xsl:text>: 16px;
+#header {
+    background: #dd4814 url(img/header_bg.png) top left repeat-x;
+    height: 64px;
+    margin: 0px;
+    padding: 0px;
+    position: relative;
 }
-div.floatend {
-  margin-</xsl:text><xsl:value-of select="$left"/><xsl:text>: 16px;
+
+#mothership ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    height: 20px;
 }
-ul.mouseovers a { padding: 6px; }
-table.toronto td {
-  padding-top: 16px;
-  padding-</xsl:text><xsl:value-of select="$right"/><xsl:text>: 16px;
+
+#mothership li {
+    float: right;
+    padding: 3px 0;
+    margin: 0 16px 0 0;
+    font-size: 10px;
+    line-height: 14px;
 }
-td.twocolumnright {
-  padding-</xsl:text><xsl:value-of select="$left"/><xsl:text>: 16px;
-  -webkit-padding-start: 16px;
-  -moz-padding-start: 16px;
+
+#mothership a {
+    color: #333;
 }
-div.linkdiv div.title { font-size: 12px; }
-div.linkdiv {
-  padding: 8px;
-  -moz-border-radius: 0px;
-  border: solid 1px </xsl:text>
-    <xsl:value-of select="$color.background"/><xsl:text>;
+
+#menu-search {
+    height: 40px;
+    margin: 0 16px;
 }
-div.example {
-  padding-</xsl:text><xsl:value-of select="$left"/><xsl:text>: 16px;
+
+#cwt-content {
+    width: 850px;
+    padding: 16px 40px 16px 40px;
+    margin: 0 16px 16px;
+    background-color: #ffffff;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
 }
-div.comment { padding: 8px; }
-div.comment div.comment { margin: 16px 16px 0 16px; }
-div.comment div.cite { margin: 0 0 8px 0; }
-ul.tree ul.tree {
-  margin-</xsl:text><xsl:value-of select="$left"/><xsl:text>: 16px;
-  -webkit-margin-start: 16px;
-  -moz-margin-start: 16px;
+
+#end-content {
+    clear: both;
 }
-div.facets { padding: 8px; } 
-div.facet {
-  margin-bottom: 16px;
-  margin-</xsl:text><xsl:value-of select="$right"/><xsl:text>: 16px;
+
+.box-944 {
+    background: #ffffff;
+    width: 944px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+.box-304 {
+    background: #ffffff;
+    width: 304px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+.box-624 {
+    background: #ffffff;
+    width: 304px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+.content-box {
+    width: 912px;
+    padding: 16px;
+}
+
+#ubuntu-header {
+    background-image: url(img/header_logo.png);
+    background-repeat: no-repeat;
+    height: 32px;
+    right: 16px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 16px;
+    width: 292px;
+    overflow: hidden;
+    text-indent: -9999px;
+}
+
+#ubuntu-header a {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+#footer {
+    padding-top: 16px;
+}
+
+#footer p {
+    margin: 0;
+    padding-bottom: 16px;
+    border-bottom: 1px dotted #aea79f;
+    text-align: center;
+}
+
+#main-menu {
+    list-style: none;
+    margin: 0;
+    margin-left: 16px;
+    padding: 0;
+    height: 100%;
+    background: url(img/topnav_divider.png) no-repeat scroll left top transparent !important;
+}
+#main-menu li {
+    float: left;
+    margin: 0;
+    padding: 0;
+    height: 64px;
+    font-size: 14px;
+    line-height: 16px;
+    background: url(img/topnav_divider.png) no-repeat scroll right top transparent !important;
+}
+#main-menu a {
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 24px 8px;
+    text-decoration: none;
+    color: #fff;
+    text-shadow: #000 0px 1px;
+}
+
+.main-menu-item.current,
+#main-menu a:hover, #main-menu a.active {
+    background: url(img/topnav_active_bg.png) no-repeat right top transparent !important;
+}
+
+h1, h2, h3, h4, h5 {
+    color: #333;
+    padding: 0;
+    margin: 0;
+    font-weight: normal;
+    margin-top: 1em;
+}
+h1 {
+    font-size: 28px;
+    line-height: 32px;
+    margin-top: 0em;
+}
+h2 {
+    font-size: 24px;
+    line-height: 28px;
+    margin-bottom: 8px;
+}
+h3 {
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 8px;
+}
+h3.link-other {
+    color: #333;
+}
+h3.link-services {
+    color: #fff;
+}
+h4 {
+    font-size: 12px;
+    line-height: 14px;
+}
+h4.link-news {
+    color: #ef5a29;
+}
+h4.link-ubuntu {
+    color: #dd4814;
+}
+h4.partners {
+    color: #333;
+    font-size: 16px;
+    line-height: 20px;
+}
+h5 {
+    color: #333;
+    font-size: 10px;
+    line-height: 14px;
+}
+p {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+pre {
+    background-color:#F3F3F3;
+    border:1px dashed #C1B496;
+    font-family:UbuntuMono,courier,monospace;
+    padding:4pt;
+    white-space:pre-wrap;
+    word-wrap:break-word;
+}
+tt {
+    font-family:UbuntuMono,courier,monospace;
+}
+
+strong {
+    font-weight: bold;
+}
+
+a {
+    color: #DD4814;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+ul {
+    margin-bottom: 16px;
+}
+ul li {
+    margin-left: 2.4em;
+    margin-bottom: 8px;
+    line-height: 14px;
+}
+ul li:last-child {
+    margin-bottom: 0px;
+}
+
+p.call-to-action {
+    color: #333;
+}
+p.case-study {
+    color: #333;
+}
+p.highlight {
+    font-size: 16px;
+    line-height: 20px;
+}
+p.introduction {
+    color: #333;
+    font-size: 16px;
+    line-height: 20px;
+}
+p.services {
+    color: #fff;
+}
+#pageinfo {
+    font-size: 70%;
+    padding: 0 16px 12px;
+    text-align: right;
+}
+p.small-text {
+    color: #333;
+    font-size: 10px;
+}
+
+.newsfeed {
+    background: url(img/news_feed_bg.png) no-repeat scroll right top transparent;
+    padding: 0 20px 0 0;
+}
+
+/* Clearing floats without extra markup
+Based on How To Clear Floats Without Structural Markup by PiE
+[http://www.positioniseverything.net/easyclearing.html] */
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.clearfix {
+    display: inline-block;
+}  /* for IE/Mac */
+
+div.trail {
+  font-size: 100%;
+  text-indent: -1em;
+  color: #aea79f;
+}
+
+/* Form related styling */
+input, select {
+    /* Override mozilla's default form css inherited from the system */
+    font-size: 100%;
+}
+.wForm form label {
+    display: block;
+    padding-bottom: 3px;
+    color: black;
+}
+.wForm form input[type=text],
+.wForm form input[type=password],
+.wForm form textarea {
+    border: 1px solid #c7c7c7;
+    padding: 2px;
+    color: black;
+    background: #fff;
+}
+.wForm form input[type=text]:focus,
+.wForm form input[type=password]:focus,
+.wForm form textarea:focus {
+    border: 1px solid #dd4814;
+    outline: 1px solid #dd4814;
+}
+/* Override FormAssembly formatting */
+.wFormContainer {
+    padding: 0;
+    width: 100%;
+}
+.wForm form {
+    margin: 0;
+}
+.wForm form .actions {
+    text-align: right;
+}
+.wForm form .actions .primaryAction {
+    background-color: #dd4814;
+    color: #fff;
+    border: 0;
+    cursor: pointer;
+    font-weight: normal;
+    font-size: 16px;
+    padding: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    text-shadow: #333 0px 1px;
+    margin: 10px 8px 10px 8px;
+}
+.wForm form input[type=text].errFld {
+    border: 2px solid #dd4814;
+}
+.wForm form .errMsg {
+    color: #dd4814 !important;
+}
+.wForm form .oneChoice {
+    display: block;
+}
+.wForm form .oneField {
+    padding: 0 8px;
+    margin-bottom: 8px;
+}
+.wForm form span.reqMark {
+    color: #dd4814 !important;
+    font-weight: bold !important;
+}
+.wForm fieldset {
+    border: none;
+    padding: 0;
+    background: #dfdcd9;
+}
+.wForm input[type=text],
+.wForm input[type=password],
+.wForm select,
+.wForm textarea {
+    width: 290px;
+}
+.wForm legend {
+    padding: 8px;
+    font-size: 16px;
+    font-weight: normal !important;
+    background: #aea79f;
+    width: 100%;
+    color: #fff;
+    margin-bottom: 8px;
+}
+.wForm label.preField,
+.wForm .labelsLeftAligned label.preField,
+.wForm .labelsRightAligned label.preField  {
+    float: none;
+    padding-bottom: 4px;
+}
+.wForm label.postField {
+    display: inline;
+}
+/* Hack for WebKit based browsers to display the fieldset properly */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .wForm fieldset {
+        padding: 8px 8px .1px 0px;
+    }
+    .wForm legend {
+        padding: 8px 0px 8px 8px;
+    }
 }
 
 </xsl:text>
@@ -307,10 +630,8 @@ div.facet {
       <xsl:call-template name="html.js"/>
       <xsl:call-template name="html.head.custom"/>
     </head>
-    <body>
-     <div id="round">
-     <img id="topcap" alt="" src="https://help.ubuntu.com/htdocs/ubuntunew/img/cap-top.png" />
-     <div id="layout" class="container clear-block">
+    <body id="home">
+
       <xsl:apply-templates mode="html.body.attr.mode" select="$node"/>
       <script src="https://ssl.google-analytics.com/urchin.js"
       type="text/javascript"></script>
@@ -318,66 +639,92 @@ div.facet {
       _uacct = "UA-1018242-8";
       urchinTracker();
       </script>
-      <div id="header">
-      <div id="logo-floater">
-       <h1><a href="https://help.ubuntu.com" title="Ubuntu Documentation"><img alt="Ubuntu" id="logo" src="https://help.ubuntu.com/htdocs/ubuntunew/img/logo.png" /></a>
-       </h1>
-      </div> <!-- logo-floater -->
 
-      <!-- Provide a search box for clients with and without javascript -->
-      <noscript>
-       <form action="http://www.google.com/cse" id="cse-search-box">
-        <div>
-         <input type="hidden" name="cx" value="004599128559784038176:vj_p0xo-nng" />
-         <input type="hidden" name="ie" value="UTF-8" />
-         <input type="text" name="q" size="27" />
-         <input type="submit" name="sa" value="Search" />
-        </div>
-       </form>
-      </noscript>
 
-      <!-- Search box -->
-      <script>
-       document.write('<form action="https://help.ubuntu.com/search.html" id="cse-search-box">');
-       document.write('  <div>');
-       document.write('    <input type="hidden" name="cof" value="FORID:9" />');
-       document.write('    <input type="hidden" name="cx" value="004599128559784038176:vj_p0xo-nng" />');
-       document.write('    <input type="hidden" name="ie" value="UTF-8" />');
-       document.write('    <input type="text" name="q" size="27" />');
-       document.write('    <input type="submit" name="sa" value="Search" />');
-       document.write('  </div>');
-       document.write('</form>');
-      </script>
-      <div id="sitename"><a href="https://help.ubuntu.com/"><img alt="Official Documentation" src="https://help.ubuntu.com/htdocs/ubuntunew/img/help-about.png" /><span>Official Documentation</span></a>
-      </div> <!-- sitename -->
-      </div> <!-- header -->
-      <div id="page">
+    <div id="leftbanner">
+    </div>
+    <div id="rightbanner">
+    </div>
+    <div id="container">
+        <div id="container-inner">
+	    <div id="mothership">
+		<ul>
+	            <li><a href="http://www.ubuntu.com/partners">Partners</a> </li>
+        	    <li><a href="http://www.ubuntu.com/support">Support</a></li>
+        	    <li><a href="http://www.ubuntu.com/community">Community</a></li>
+        	    <li><a href="http://www.ubuntu.com">Ubuntu.com</a></li>
+	        </ul>
+	    </div>
+            <div id="header">
+                <h1 id="ubuntu-header"><a href="https://help.ubuntu.com/">Ubuntu Documentation</a></h1>
+                <ul id="main-menu">
+                    <li><a class="main-menu-item current" href="https://help.ubuntu.com/">Official Documentation</a></li>
+                    <li><a href="https://help.ubuntu.com/community">Community Help Wiki</a></li>
+                </ul>
+            </div>
+            <div id="menu-search">
+                <div id="subheader"> 
+                    <div class="subheader-menu"> 
+                    </div> 
+                </div>
+                <div id="search-box">
+		<noscript>
+		<form action="http://www.google.com/cse" id="cse-search-box">
+		    <div>
+		     <input type="hidden" name="cx" value="004599128559784038176:vj_p0xo-nng" />
+ 		    <input type="hidden" name="ie" value="UTF-8" />
+ 		    <input type="text" name="q" size="21" />
+ 		    <input type="submit" name="sa" value="Search" />
+ 		    </div>
+		</form>
+		</noscript>
+
+		<script>
+		 document.write('<form action="https://help.ubuntu.com/search.html" id="cse-search-box">');
+		 document.write('  <div>');
+		 document.write('    <input type="hidden" name="cof" value="FORID:9" />');
+		 document.write('    <input type="hidden" name="cx" value="004599128559784038176:vj_p0xo-nng" />');
+		 document.write('    <input type="hidden" name="ie" value="UTF-8" />');
+		 document.write('    <input type="text" name="q" size="21" />');
+		 document.write('    <input type="submit" name="sa" value="Search" />');
+		 document.write('  </div>');
+		 document.write('</form>');
+		</script>
+		</div>
+            </div>
         <xsl:apply-templates mode="html.header.mode" select="$node"/>
-      <div id="content">
-        <xsl:apply-templates mode="html.body.mode" select="$node"/>
-      </div> <!-- content -->
-      <hr />
-      <div id="footer">
-       <div id="ubuntulinks">
-	<p>The material in this document is available under a free license, see <a href="/legal.html">Legal</a> for details<br />
-	For information on contributing see the <a href="https://wiki.ubuntu.com/DocumentationTeam">Ubuntu Documentation Team wiki page</a>. To report a problem, visit the <a href="https://bugs.launchpad.net/ubuntu/+source/ubuntu-docs">bug page for Ubuntu Documentation</a></p>
-       </div> <!-- ubuntulinks -->
-      <br />
-      </div> <!-- footer -->
-      <div id="bottomcap">
-	<img src="https://help.ubuntu.com/htdocs/ubuntunew/img/cap-bottom.png" alt=""/>
-      </div> <!-- bottomcap -->
-      </div> <!-- page -->
-      </div> <!-- layout -->
-      </div> <!-- round -->
-    </body>
-  </html>
+        <div id="cwt-content" class="clearfix content-area">
+	    <div id="page">
+	        <div id="content">
+		    <xsl:apply-templates mode="html.body.mode" select="$node"/>
+		</div>
+		<div id="pagebottom">
+		</div>
+	    </div>
+        </div>
+    </div>
+    <div id="footer">
+	<p>The material in this document is available under a free license, see <a href="/legal.html">Legal</a> for details<br /> For information on contributing see the <a href="https://wiki.ubuntu.com/DocumentationTeam">Ubuntu Documentation Team wiki page</a>. To report a problem, visit the <a href="https://bugs.launchpad.net/ubuntu/+source/ubuntu-docs">bug page for Ubuntu Documentation</a></p>
+    </div>
+    </div>
+
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+
+  <!-- IE6 hacks -->
+  <!--[if IE 6 ]>
+          <script src="js/pngFix.js"></script>
+          <script> DD_belatedPNG.fix('.png'); </script>
+  <![endif]-->
+</body>
+</html>
+
 </xsl:template>
 
 <xsl:template name="mal2html.page.linktrails.trail">
   <xsl:param name="node" select="."/>
   <div class="trail">
-    <a href="https://help.ubuntu.com" class="trail">Ubuntu Documentation</a>
+    <a href="https://help.ubuntu.com/12.04" class="trail">Ubuntu 12.04 LTS</a>
   <xsl:variable name="direction">
     <xsl:call-template name="l10n.direction"/>
   </xsl:variable>
@@ -403,30 +750,6 @@ div.facet {
       </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
-    <a href="https://help.ubuntu.com/11.04" class="trail">Ubuntu 11.04</a>
-  <xsl:choose>
-    <xsl:when test="$direction = 'rtl'">
-      <xsl:choose>
-        <xsl:when test="$node/@child = 'section'">
-          <xsl:text>&#x00A0;‹ </xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>&#x00A0;« </xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:choose>
-        <xsl:when test="$node/@child = 'section'">
-          <xsl:text>&#x00A0;› </xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>&#x00A0;» </xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:otherwise>
-  </xsl:choose>
-
     <xsl:call-template name="mal2html.page.linktrails.link">
       <xsl:with-param name="node" select="$node"/>
     </xsl:call-template>
