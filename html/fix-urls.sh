@@ -41,6 +41,8 @@
  	sed -i build/*.html -e "s#/usr/share/icons/ubuntu-mono-light/status/24/indicator-messages\.svg#img/indicator-messages\.svg#g"
  	sed -i build/*.html -e "s#/usr/share/icons/ubuntu-mono-light/status/24/user-offline-panel\.svg#img/user-offline-panel\.svg#g"
  	sed -i build/*.html -e "s#/usr/share/icons/ubuntu-mono-light/actions/24/system-shutdown-panel\.svg#img/system-shutdown-panel\.svg#g"
+    sed -i build/*.html -e "s#/usr/share/icons/ubuntu-mono-light/stock/22/stock_person-panel\.svg#img/stock_person-panel\.svg#g"
+    sed -i build/*.html -e "s#/usr/share/icons/ubuntu-mono-light/status/22/system-devices-panel\.svg#img/system-devices-panel\.svg#g"
 
 ## Search for unfixed ghelp links
 echo "\nSearching for unfixed ghelp links:"
