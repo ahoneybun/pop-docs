@@ -95,17 +95,6 @@ style:
 
 ## Targets for building standalone documents
 
-serverguide: style
-
-	if [ $(LN) != "C" ]; then \
-		./scripts/translate.sh -d serverguide -l $(LN); \
-	fi
-	if find serverguide/$(LN) -name "*.xml"; then \
-		xsltproc --xinclude -o $(BASE)serverguide/$(LN)/index.html $(UBUNTUCHUNKXSL) serverguide/$(LN)/serverguide.xml; \
-		cp -r serverguide/sample $(BASE)serverguide/sample; \
-		sed -i $(BASE)serverguide/$(LN)/*legal.html -e "s#\.\./libs/C/contributors\.xml#libs/$(LN)/contributors\.html#g"; \
-	fi
-
 serverguide-pdf:
 
 	if [ $(LN) != "C" ]; then \
@@ -115,21 +104,6 @@ serverguide-pdf:
 		xsltproc --xinclude -o $(BASE)serverguide/$(LN)/serverguide.fo $(UBUNTUPDFXSL) serverguide/$(LN)/serverguide.xml; \
 		fop -fo $(BASE)serverguide/$(LN)/serverguide.fo -pdf $(BASE)serverguide/$(LN)/serverguide.pdf; \
 	fi
-
-status: style
-
-	if [ $(LN) != "C" ]; then \
-		./scripts/translate.sh -d serverguide -l $(LN); \
-	fi
-	if find serverguide/$(LN) -name "*.xml"; then \
-		xsltproc --xinclude -o $(BASE)status/sg-report.xml $(wOS) serverguide/$(LN)/serverguide.xml; \
-		xsltproc --xinclude -o $(BASE)status/sg-report.html $(NWDBXSL) $(BASE)status/sg-report.xml; \
-	fi
-
-contributors: style
-
-	xsltproc --stringparam root.filename "contributors" -o $(BASE)libs/C/ $(UBUNTUCHUNKXSL) libs/C/contributors.xml
-
 
 ## Individual documents built separately for help.ubuntu.com
 

@@ -1,12 +1,12 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  version="1.0">
+  xmlns="http://www.w3.org/1999/xhtml" version="1.0">
 
 <!-- This adds the header -->
 
 <xsl:template name="header.navigation">
-<script xmlns="" src="https://ssl.google-analytics.com/urchin.js"
+<script src="https://ssl.google-analytics.com/urchin.js"
 type="text/javascript"></script>
-<script xmlns="" type="text/javascript">
+<script type="text/javascript">
 _uacct = "UA-1018242-8";
 urchinTracker();
 </script>
@@ -17,7 +17,7 @@ urchinTracker();
 <!-- Provide a search box for clients with and without javascript -->
 
 <noscript>
- <form action="http://www.google.com/cse" id="cse-search-box">
+ <form action="http://www.google.com/cse" id="cse-search-box-noscript">
    <div>
      <input type="hidden" name="cx" value="003883529982892832976:e2vwumte3fq" />
      <input type="hidden" name="ie" value="UTF-8" />
@@ -27,7 +27,7 @@ urchinTracker();
  </form>
 </noscript>
 
-<script>
+<script type="text/javascript">
  document.write('<form action="https://help.ubuntu.com/search.html" id="cse-search-box">');
  document.write('  <div>');
  document.write('    <input type="hidden" name="cof" value="FORID:9" />');

@@ -1,5 +1,5 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  version="1.0">
+  xmlns="http://www.w3.org/1999/xhtml" version="1.0">
 
 <!-- This modification looks a bit large but is a couple of lines change to make the draft watermark appear in the #content div wrapper rather than the body background -->
 
