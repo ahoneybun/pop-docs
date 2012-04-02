@@ -1,23 +1,66 @@
-<page xmlns="http://projectmallard.org/1.0/" type="topic" style="task" id="net-wireless-troubleshooting-device-drivers">
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic" style="task"
+      id="net-wireless-troubleshooting-device-drivers">
   <info>
-    <link type="guide" xref="net-wireless-troubleshooting" />
-    <revision version="11.04" date="2011-05-04" status="review" />
+    <link type="guide" xref="net-wireless-troubleshooting"/>
+    <revision pkgversion="3.4.0" date="2012-03-05" status="outdated"/>
+    <revision version="12.04" date="2012-03-22" status="outdated"/>
+
     <credit type="author">
       <name>Contributors to the Ubuntu documentation wiki</name>
     </credit>
+
     <credit type="author">
-      <name>Jim Campbell</name>
-      <email>jwcampbell@gmail.com</email>
+      <name>Phil Bull</name>
+      <email>philbull@gmail.com</email>
     </credit>
-    <desc>Troubleshoot your connection to a wireless network.</desc>
+
+    <desc>Some device drivers don't work very well with certain wireless adapters, so you may need to find a better one.</desc>
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
   </info>
 
-<title>Check your device drivers</title>
+<title>Wireless network troubleshooter</title>
+<subtitle>Make sure that working device drivers are installed</subtitle>
 
-<section id="net-wireless-driver-check">
-  <title>Check for automatically loaded drivers</title>
+<!-- Needs links (see below) -->
 
+<p>In this step you can check to see if you can get working device drivers for your wireless adapter. A <em>device driver</em> is a piece of software which tells the computer how to make a hardware device work properly. Even though the wireless adapter has been recognized by the computer, it may not have drivers which work very well. You may be able to find different drivers for the wireless adapter which do work. Try some of the options below:</p>
+
+<list>
+ <item>
+  <p>Check to see if your wireless adapter is on a list of supported devices</p>
+  <p>Most Linux distributions keep a list of wireless devices that they have support for. Sometimes, these lists provide extra information on how to get the drivers for certain adapters working properly. Go to the list for your distribution (for example, <link href="https://help.ubuntu.com/community/WifiDocs/WirelessCardsSupported">Ubuntu</link>, <link href="http://linuxwireless.org/en/users/Drivers">Fedora</link> or <link href="http://en.opensuse.org/HCL:Network_(Wireless)">openSuSE</link>) and see if your make and model of wireless adapter is listed. You may be able to use some of the information there to get your wireless drivers working.</p>
+ </item>
+ 
+ <item>
+  <p>Look for additional open or proprietary drivers</p>
+  <p>Although Ubuntu includes support for a large amount of devices, some drivers need to be installed separately.
+  Use the <gui>Additional Drivers</gui> tool to check for these extra open or <link 
+  xref="hardware-driver-proprietary">proprietary</link> drivers.</p>
+
+  <steps>
+    <item>
+      <p>
+        Click the button at the far right side of the menu bar and select <gui>System Settings</gui>.
+    </p></item>
+    <item><p>
+        In the Hardware section, click <gui>Additional Drivers</gui>.
+    </p></item>
+  </steps>
+
+ </item>
+ 
+ <item>
+  <p>Use the Windows drivers for your adapter</p>
+  <p>In general, you cannot use a device driver designed for one operating system (like Windows) on another operating system (like Linux). This is because they have different ways of handling devices. For wireless adapters, however, you can install a compatibility layer called <em>NDISwrapper</em> which lets you use some Windows wireless drivers on Linux. This is useful because wireless adapters almost always have Windows drivers available for them, whereas Linux drivers are sometimes not available. You can learn more about how to use NDISwrapper <link href="http://sourceforge.net/apps/mediawiki/ndiswrapper/index.php?title=Main_Page">here</link>. Note that not all wireless drivers can be used through NDISwrapper.</p>
+  <p>Full information on ndiswrapper kept on
+        <link href="https://help.ubuntu.com/community/WifiDocs/Driver/Ndiswrapper">this page</link>
+        including troubleshooting help specific to ndiswrapper.</p>
+
+ </item>
+</list>
+
+<!-- 
   <p>
     Your device may already be supported with a preinstalled driver. To check if a driver was
     automatically loaded, run <cmd>sudo lshw -C network</cmd>. Look in the line that
@@ -27,56 +70,11 @@
   <p>
     If you are not running the most recent kernel, update your system first. Drivers,
     especially wireless, are constantly being added and modified. You can do this by clicking
-    on the <link xref="unity-appmenu-intro">session menu</link> and selecting <gui>System
+    on the <link xref="unity-appmenu-intro">system menu</link> and selecting <gui>System
     Settings</gui>. In the System section, click <gui>Update Manager</gui>.
   </p>
-</section>
 
-<section id="net-wireless-native-driver">
-  <title>Find additional Linux drivers</title>
-  <p>You can check for additional Linux drivers in the following locations:</p>
-  <list>
-    <item>
-      <p>
-        Check for a driver by clicking the <link xref="unity-appmenu-intro">session menu</link>
-  and selecting <gui>System Settings</gui>. In the Hardware section, click
-  <gui>Additional Drivers</gui>. Wait a moment for Ubuntu to update its database.
-      </p>
-      <p>
-        Many of the drivers found in <app>Additional Drivers</app> are proprietary and the source
-        code isn't freely available. Therefore, Linux community developers are unable to fix any
-        security or functionality problems in the driver. These drivers also cannot be installed
-        automatically as part of Ubuntu. If you are willing to accept this limitation, activate
-        the driver.
-      </p>
-    </item>
-    <item>
-      <p>Search your card manufacturer's website for a Linux driver.</p>
-    </item>
-  </list>
-</section>
 
-<section id="net-wireless-ndiswrapper">
-  <title>Use Ndiswrapper for cards without a Linux driver</title>
-  <p>
-    If you find your card does not have a Linux driver you could try <app>ndiswrapper</app>.
-  </p>
-  <list>
-    <item>
-      <p>
-        Check the <link href="http://sourceforge.net/apps/mediawiki/ndiswrapper/">device database</link>
-        to see if your card is supported by ndiswrapper.
-      </p>
-    </item>
-    <item>
-      <p>
-        Full information on ndiswrapper kept on
-        <link href="https://help.ubuntu.com/community/WifiDocs/Driver/Ndiswrapper">this page</link>
-        including troubleshooting help specific to ndiswrapper.
-      </p>
-    </item>
-  </list>
-</section>
 
 <section id="net-wireless-driver-check2">
   <title>Check Driver</title>
@@ -121,6 +119,8 @@
   </note>
 
 </section>
+
+-->
 
 <links type="series"/>
 </page>

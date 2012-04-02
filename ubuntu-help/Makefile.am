@@ -10,12 +10,12 @@ HELP_MEDIA = \
 	figures/color-display.png \
 	figures/color-printer.png \
 	figures/color-space.png \
-	figures/hardware-cardreader.png \
+	figures/input-keyboard-symbolic.svg \
 	figures/nautilus.png \
 	figures/nautilus-icons.png \
 	figures/printing-select.png \
 	figures/ubuntu-logo.png \
-	figures/ubuntu-natty.png \
+	figures/ubuntu-precise.png \
 	figures/unity.png \
 	figures/unity-appmenu-intro.png \
 	figures/unity-dash-intro.png \
@@ -34,7 +34,6 @@ HELP_FILES = \
 	a11y-braille.page \
 	a11y-contrast.page \
 	a11y-dwellclick.page \
-	a11y-icon.page \
 	a11y-font-size.page \
 	a11y-locate-pointer.page \
 	a11y.page \
@@ -44,7 +43,6 @@ HELP_FILES = \
 	a11y-stickykeys.page \
 	a11y-visualalert.page \
 	about-this-guide.page \
-	addremove.page \
 	addremove-install-synaptic.page \
 	addremove-install.page \
 	addremove-ppa.page \
@@ -65,6 +63,7 @@ HELP_FILES = \
 	bluetooth-remove-connection.page \
 	bluetooth-send-file.page \
 	bluetooth-turn-on-off.page \
+	bluetooth-visibility.page \
 	color-assignprofiles.page \
 	color-calibrate-camera.page \
 	color-calibrate-printer.page \
@@ -94,8 +93,8 @@ HELP_FILES = \
 	disk-check.page \
 	disk-format.page \
 	disk-partitions.page \
-	display-2monitors.page \
 	display-dimscreen.page \
+	display-dual-monitors.page \
 	display-lock.page \
 	fallback-mode.page \
 	files-autorun.page \
@@ -121,13 +120,14 @@ HELP_FILES = \
 	hardware-driver-proprietary.page \
 	hardware.page \
 	hardware-cardreader.page \
-	hardware-problems-bluetooth.page \
 	hardware-problems-graphics.page \
 	index.page \
 	keyboard.page \
 	keyboard-cursor-blink.page \
 	keyboard-layouts.page \
+	keyboard-osk.page \
 	keyboard-repeat-keys.page \
+	keyboard-shortcuts-set.page \
 	look-background.page \
 	look-display-fuzzy.page \
 	look-resolution.page \
@@ -158,7 +158,6 @@ HELP_FILES = \
 	nautilus-prefs.page \
 	nautilus-preview.page \
 	nautilus-views.page \
-	net-adhoc.page \
 	net-antivirus.page \
 	net-browser.page \
 	net-chat.page \
@@ -168,7 +167,6 @@ HELP_FILES = \
 	net-chat-video.page \
 	net-default-browser.page \
 	net-default-email.page \
-	net-editcon.page \
 	net-email.page \
 	net-email-virus.page \
 	net-findip.page \
@@ -184,9 +182,8 @@ HELP_FILES = \
 	net-mobile.page \
 	net-nonm.page \
 	net-othersconnect.page \
-	net-otherscontrol.page \
+	net-othersedit.page \
 	net.page \
-	net-passwordok-noconnect.page \
 	net-problem.page \
 	net-proxy.page \
 	net-security.page \
@@ -197,11 +194,14 @@ HELP_FILES = \
 	net-wired.page \
 	net-wired-connect.page \
 	net-wireless.page \
+	net-wireless-adhoc.page \
 	net-wireless-airplane.page \
 	net-wireless-connect.page \
 	net-wireless-disconnecting.page \
+	net-wireless-edit-connection.page \
 	net-wireless-find.page \
 	net-wireless-hidden.page \
+	net-wireless-noconnection.page \
 	net-wireless-troubleshooting.page \
 	net-wireless-troubleshooting-device-drivers.page \
 	net-wireless-troubleshooting-hardware-check.page \
@@ -215,17 +215,16 @@ HELP_FILES = \
 	power-batteryoptimal.page \
 	power-batteryslow.page \
 	power-batterywindows.page \
-	power-brighter.page \
 	power-closelid.page \
 	power-constantfan.page \
+	power-hibernate.page \
 	power-hotcomputer.page \
 	power-lowpower.page \
 	power-nowireless.page \
 	power-othercountry.page \
 	power.page \
 	power-suspendfail.page \
-	power-suspendhibernate.page \
-	power-turnoffbutton.page \
+	power-suspend.page \
 	power-whydim.page \
 	power-willnotturnon.page \
 	prefs.page \
@@ -245,8 +244,8 @@ HELP_FILES = \
 	printing-streaks.page \
 	report-ubuntu-bug.page \
 	screen-shot-record.page \
+	session-formats.page \
 	session-language.page \
-	session-loginsound.page \
 	session-screenlocks.page \
 	sharing.page \
 	sharing-desktop.page \
@@ -259,6 +258,7 @@ HELP_FILES = \
 	shell-windows.page \
 	shell-windows-states.page \
 	shell-windows-switching.page \
+	shell-windows-tiled.page \
 	shell-workspaces-movewindow.page \
 	shell-workspaces.page \
 	shell-workspaces-switch.page \
@@ -273,9 +273,11 @@ HELP_FILES = \
 	tips-specialchars.page \
 	unity-appmenu-intro.page \
 	unity-dash-intro.page \
+	unity-hud-intro.page \
 	unity-introduction.page \
 	unity-launcher-change-size.page \
 	unity-launcher-intro.page \
+	unity-scrollbars-intro.page \
 	user-accounts.page \
 	user-add.page \
 	user-admin-change.page \

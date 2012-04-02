@@ -20,34 +20,81 @@
 ####################################################################################
 
 MAKECMD=make
+HTMLDESTDIR=build
+SRCDIR=../ubuntu-help
+SED=/bin/sed
+INSTALLDIR=/var/www/
+URLFIXER=fix-urls.sed
 
-# Language code for documents
-# Ex. LN=ja for japanese
-LN=C
+# Space-separated list of language codes for documents. HTML will only be
+# built for those codes in the list
+# Ex. HELP_LINGUAS=ja it for Japanese and Italian
+# Note that the corresponding .page files for the locales must have been built
+# for the HTML to be built in turn. This means all the locales for which
+# HTML output is needed will have to have been specified in the main
+# HELP_LINGUAS variable in the ubuntu-help Makefile
+HELP_LINGUAS=
+
+index_file_exists = $(wildcard $(SRCDIR)/$(lingua)/index.page)
+linguas := $(HELP_LINGUAS)
+help_linguas := \
+    $(foreach lingua, $(linguas), \
+        $(if $(index_file_exists), \
+            $(lingua), \
+            $(warning Cannot find source index page for locale: $(lingua), \
+                skipping. You will probably have to build it adding it to \
+                the HELP_LINGUAS variable in the Makefile at $(SRCDIR) \
+                and rebuild)))
 
 # Ubuntu Mallard Customization Layer
-
 UBUNTUXSL=ubuntu.xsl
 
+# Builds the HTML files for all specified language codes, specifiying the
+# language in the final documents and performing some other necessary
+# text replacements not handled by yelp-build.
+# Language codes are normalized to IETF format, as opposed to glibc format
 ubuntu-help: clean style
-
-	yelp-build html -o build -x $(UBUNTUXSL) ../ubuntu-help/$(LN)/
-# add html5 doctype header to html files
-# this can be removed once yelp-build does this for us
-	./add-html5-doctype.sh
-	./fix-urls.sh
-	# Workaround for a bug in yelp-build
-	rm -rf build/usr
+	for lc in C $(help_linguas); do \
+		lang=`echo $$lc | $(SED) -e 's/[@_]/-/'`; \
+		if test "$$lang" = "C"; then lang=en-US; fi; \
+		yelp-build html -o "$(HTMLDESTDIR)/$$lang/" -x $(UBUNTUXSL) \
+			"$(SRCDIR)/$$lc/"; \
+		$(SED) -i \
+			-e '1s/^/<!DOCTYPE html\>\n/' \
+			-e "s/<html>/<html lang="$$lang">/" \
+			-e 's|/usr/share/icons/.*/\(.*\.svg\)|img/\1|'\
+			"$(HTMLDESTDIR)/$$lang/"*.html; \
+		$(SED) -i -f "$(URLFIXER)" "$(HTMLDESTDIR)/$$lang/"*.html; \
+		echo "\nSearching for unfixed ghelp links:"; \
+		grep "href=\"ghelp:" "$(HTMLDESTDIR)/$$lang/"*.html; \
+		rm -rf "$(HTMLDESTDIR)/$$lang/usr"; \
+	done
 
 clean:
 	rm -rf build
 
+# Copy style sheet and common images to build directory
+# TODO: copy C/figures to destination only for those cases where there are
+# no localized figures
 style:
+	for lc in C $(help_linguas); do \
+		lang=`echo $$lc | $(SED) -e 's/[@_]/-/'`; \
+		if test "$$lang" = "C"; then lang=en-US; fi; \
+		mkdir -p "$(HTMLDESTDIR)/$$lang/img"; \
+		mkdir -p "$(HTMLDESTDIR)/$$lang/figures"; \
+		cp img/* "$(HTMLDESTDIR)/$$lang/img"; \
+		cp "$(SRCDIR)/C/figures/"* "$(HTMLDESTDIR)/$$lang/figures"; \
+	done
 
-	# copy style sheet and common images to build directory
-	mkdir -p build/img
-	mkdir -p build/figures
-	cp img/* build/img/
-# figures are always in /C/ at this time
-	cp ../ubuntu-help/C/figures/* build/figures/
-
+# Installs all HTML files to a multilingual site (e.g. run with Apache and
+# MultiViews enabled)
+install:
+	rm -Rf "$(INSTALLDIR)"/*; \
+	cp -R "$(HTMLDESTDIR)/"* "$(INSTALLDIR)"; \
+	for lc in C $(help_linguas); do \
+		lang=`echo $$lc | $(SED) -e 's/[@_]/-/'`; \
+		if test "$$lang" = "C"; then lang=en-US; fi; \
+		find "$(INSTALLDIR)/$$lang" -type f -exec mv {} {}.$$lang \; ; \
+		cp -af "$(INSTALLDIR)/$$lang"/* "$(INSTALLDIR)"; \
+		rm -Rf "$(INSTALLDIR)/$$lang" ; \
+	done

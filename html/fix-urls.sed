@@ -1,5 +1,7 @@
+#!/bin/sed -f
+
 ####################################################################################           
-# Copyright (C) 2005-2011 Ubuntu Documentation Project (ubuntu-doc@lists.ubuntu.com)
+# Copyright (C) 2005-2006 Ubuntu Documentation Project (ubuntu-doc@lists.ubuntu.com)
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation; either version 2 of the License, or
@@ -17,8 +19,7 @@
 #    at /usr/share/common-licenses/GPL
 ####################################################################################
 
-# This script will add the HTML5 doctype header to all html files in build/
+## Fix ghelp links in the generated HTML documentation
 
-sed -i build/*.html -e '1i\
-\<!DOCTYPE html\>'
-
+s#ghelp:\(orca\|cheese\|baobab\|brasero\|gucharmap\)#http://library\.gnome\.org/users/\1/3\.4/#g
+s#ghelp:synaptic#https://help\.ubuntu\.com/community/SynapticHowto#g
