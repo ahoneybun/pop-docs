@@ -2,7 +2,7 @@
 
 HELP_ID = ubuntu-help
 
-HELP_LINGUAS = ast bs cs de el en_AU es fi gl hu it nl pt_BR ru sk sl zh_TW
+HELP_LINGUAS = ast az bs ca cs da de el en_AU en_CA en_GB es fi fo fr gl hi hr hu id it ja kk kn ko lt lv mg ms my nb nl oc pl pt pt_BR ru sk sl sq sr sv ta te tr ug uk uz zh_CN zh_TW
 
 HELP_MEDIA = \
 	figures/color-average.png \
@@ -21,11 +21,12 @@ HELP_MEDIA = \
 	figures/unity-dash-intro.png \
 	figures/unity-dash.png \
 	figures/unity-dash-sample.png \
+	figures/unity-exit.png \
 	figures/unity-launcher-apps.png \
 	figures/unity-launcher-intro.png \
 	figures/unity-launcher.png \
 	figures/unity-overview.png \
-	figures/unity-shell.png \
+	figures/unity-windows.png \
 	figures/unity-workspace-intro.png
 
 HELP_FILES = \
@@ -125,6 +126,7 @@ HELP_FILES = \
 	keyboard.page \
 	keyboard-cursor-blink.page \
 	keyboard-layouts.page \
+	keyboard-nav.page \
 	keyboard-osk.page \
 	keyboard-repeat-keys.page \
 	keyboard-shortcuts-set.page \
