@@ -708,9 +708,6 @@ input, select {
     </div>
     </div>
 
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-        <script type="text/javascript" src="js/main.js"></script>
-
   <!-- IE6 hacks -->
   <!--[if IE 6 ]>
           <script src="js/pngFix.js"></script>
