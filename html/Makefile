@@ -33,7 +33,7 @@ URLFIXER=fix-urls.sed
 # for the HTML to be built in turn. This means all the locales for which
 # HTML output is needed will have to have been specified in the main
 # HELP_LINGUAS variable in the ubuntu-help Makefile
-HELP_LINGUAS=ast bs ca cs da de el en_AU  es fi fr gl hu it ja nl pt_BR ru sk sl sr sv tr ug uk zh_CN
+HELP_LINGUAS = ast az bs ca cs da de el en_AU en_CA en_GB es fi fo fr gl hi hr hu id it ja kk kn ko lt lv mg ms my nb nl oc pl pt pt_BR ru sk sl sq sr sv ta te tr ug uk uz zh_CN zh_TW
 
 index_file_exists = $(wildcard $(SRCDIR)/$(lingua)/index.page)
 linguas := $(HELP_LINGUAS)
@@ -57,6 +57,9 @@ ubuntu-help: clean style
 	for lc in C $(help_linguas); do \
 		lang=`echo $$lc | $(SED) -e 's/[@_]/-/'`; \
 		if test "$$lang" = "C"; then lang=en-US; fi; \
+		if test "$$lang" = "gl"; then lang=gl-GL; fi; \
+		if test "$$lang" = "ms"; then lang=ms-MS; fi; \
+		if test "$$lang" = "pl"; then lang=pl-PL; fi; \
 		yelp-build html -o "$(HTMLDESTDIR)/$$lang/" -x $(UBUNTUXSL) \
 			"$(SRCDIR)/$$lc/"; \
 		$(SED) -i \
@@ -80,6 +83,9 @@ style:
 	for lc in C $(help_linguas); do \
 		lang=`echo $$lc | $(SED) -e 's/[@_]/-/'`; \
 		if test "$$lang" = "C"; then lang=en-US; fi; \
+		if test "$$lang" = "gl"; then lang=gl-GL; fi; \
+		if test "$$lang" = "ms"; then lang=ms-MS; fi; \
+		if test "$$lang" = "pl"; then lang=pl-PL; fi; \
 		mkdir -p "$(HTMLDESTDIR)/$$lang/img"; \
 		mkdir -p "$(HTMLDESTDIR)/$$lang/figures"; \
 		cp img/* "$(HTMLDESTDIR)/$$lang/img"; \
@@ -94,6 +100,9 @@ install:
 	for lc in C $(help_linguas); do \
 		lang=`echo $$lc | $(SED) -e 's/[@_]/-/'`; \
 		if test "$$lang" = "C"; then lang=en-US; fi; \
+		if test "$$lang" = "gl"; then lang=gl-GL; fi; \
+		if test "$$lang" = "ms"; then lang=ms-MS; fi; \
+		if test "$$lang" = "pl"; then lang=pl-PL; fi; \
 		find "$(INSTALLDIR)/$$lang" -type f -exec mv {} {}.$$lang \; ; \
 		cp -af "$(INSTALLDIR)/$$lang"/* "$(INSTALLDIR)"; \
 		rm -Rf "$(INSTALLDIR)/$$lang" ; \
