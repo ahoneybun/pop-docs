@@ -56,7 +56,7 @@ UBUNTUXSL=ubuntu.xsl
 ubuntu-help: clean style
 	for lc in C $(help_linguas); do \
 		lang=`echo $$lc | $(SED) -e 's/[@_]/-/'`; \
-		if test "$$lang" = "C"; then lang=en-US; fi; \
+		if test "$$lang" = "C"; then lang=en; fi; \
 		if test "$$lang" = "gl"; then lang=gl-GL; fi; \
 		if test "$$lang" = "ms"; then lang=ms-MS; fi; \
 		if test "$$lang" = "pl"; then lang=pl-PL; fi; \
@@ -82,7 +82,7 @@ clean:
 style:
 	for lc in C $(help_linguas); do \
 		lang=`echo $$lc | $(SED) -e 's/[@_]/-/'`; \
-		if test "$$lang" = "C"; then lang=en-US; fi; \
+		if test "$$lang" = "C"; then lang=en; fi; \
 		if test "$$lang" = "gl"; then lang=gl-GL; fi; \
 		if test "$$lang" = "ms"; then lang=ms-MS; fi; \
 		if test "$$lang" = "pl"; then lang=pl-PL; fi; \
@@ -99,7 +99,7 @@ install:
 	cp -R "$(HTMLDESTDIR)/"* "$(INSTALLDIR)"; \
 	for lc in C $(help_linguas); do \
 		lang=`echo $$lc | $(SED) -e 's/[@_]/-/'`; \
-		if test "$$lang" = "C"; then lang=en-US; fi; \
+		if test "$$lang" = "C"; then lang=en; fi; \
 		if test "$$lang" = "gl"; then lang=gl-GL; fi; \
 		if test "$$lang" = "ms"; then lang=ms-MS; fi; \
 		if test "$$lang" = "pl"; then lang=pl-PL; fi; \
