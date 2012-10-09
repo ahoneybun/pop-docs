@@ -2,7 +2,7 @@
 
 HELP_ID = ubuntu-help
 
-HELP_LINGUAS = ar ast az bs ca cs da de el en_AU en_CA en_GB es fi fo fr gl hi hr hu id it ja kk kn ko lt lv mg ms my nb nl oc pl pt pt_BR ru sk sl sq sr sv ta te tr ug uk uz zh_CN zh_TW
+HELP_LINGUAS = ar ast az bo bs ca cs da de el en_AU en_CA en_GB es fi fo fr gl he hi hr hu id it ja kk kn ko lt lv mg ms my nb nl oc pl pt pt_BR ro ru si sk sl sq sr sv ta te tl tr ug uk uz zh_CN zh_TW
 
 HELP_MEDIA = \
 	figures/color-average.png \
@@ -15,7 +15,7 @@ HELP_MEDIA = \
 	figures/nautilus-icons.png \
 	figures/printing-select.png \
 	figures/ubuntu-logo.png \
-	figures/ubuntu-precise.png \
+	figures/ubuntu-quantal.jpg \
 	figures/unity.png \
 	figures/unity-appmenu-intro.png \
 	figures/unity-dash-intro.png \
@@ -44,6 +44,12 @@ HELP_FILES = \
 	a11y-stickykeys.page \
 	a11y-visualalert.page \
 	about-this-guide.page \
+	accounts-add.page \
+	accounts-create.page \
+	accounts-disable-service.page \
+	accounts.page \
+	accounts-remove.page \
+	accounts-whyadd.page \
 	addremove-install-synaptic.page \
 	addremove-install.page \
 	addremove-ppa.page \
@@ -83,6 +89,13 @@ HELP_FILES = \
 	color-whatisspace.page \
 	color-why-calibrate.page \
 	color-whyimportant.page \
+	contacts-add-remove.page \
+	contacts-connect.page \
+	contacts-edit-details.page \
+	contacts-link-unlink.page \
+	contacts.page \
+	contacts-search.page \
+	contacts-setup.page \
 	clock.page \
 	clock-calendar.page \
 	clock-more-info.page \
@@ -97,7 +110,6 @@ HELP_FILES = \
 	display-dimscreen.page \
 	display-dual-monitors.page \
 	display-lock.page \
-	fallback-mode.page \
 	files-autorun.page \
 	files-browse.page \
 	files-copy.page \
@@ -251,6 +263,7 @@ HELP_FILES = \
 	session-screenlocks.page \
 	sharing.page \
 	sharing-desktop.page \
+	sharing-remote-login.page \
 	shell-apps-favorites.page \
 	shell-exit.page \
 	shell-guest-session.page \
@@ -273,13 +286,22 @@ HELP_FILES = \
 	sound-volume.page \
 	tips.page \
 	tips-specialchars.page \
-	unity-appmenu-intro.page \
+	unity-dash-apps.page \
+	unity-dash-files.page \
+	unity-dash-gwibber.page \
 	unity-dash-intro.page \
+	unity-dash-music.page \
+	unity-dash-photos.page \
+	unity-dash-video.page \
 	unity-hud-intro.page \
 	unity-introduction.page \
+	unity-launcher-change-autohide.page \
 	unity-launcher-change-size.page \
 	unity-launcher-intro.page \
+	unity-launcher-shapes.page \
+	unity-menubar-intro.page \
 	unity-scrollbars-intro.page \
+	unity-shopping.page \
 	user-accounts.page \
 	user-add.page \
 	user-admin-change.page \
@@ -293,6 +315,12 @@ HELP_FILES = \
 	video-dvd.page \
 	video-dvd-restricted.page \
 	video-sending.page \
+	wacom-left-handed.page \
+	wacom-mode.page \
+	wacom-multi-monitor.page \
+	wacom.page \
+	wacom-stylus.page \
+	whats-new.page \
 	windows-key.page
 
 dist-hook: doc-dist-hook
