@@ -669,7 +669,7 @@ input, select {
                 </div>
                 <div id="search-box">
 		<noscript>
-		<form action="http://www.google.com/cse" id="cse-search-box">
+		<form action="https://www.google.com/cse" id="cse-search-box">
 		    <div>
 		     <input type="hidden" name="cx" value="004599128559784038176:vj_p0xo-nng" />
  		    <input type="hidden" name="ie" value="UTF-8" />

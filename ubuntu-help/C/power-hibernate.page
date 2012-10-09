@@ -1,16 +1,16 @@
 <page xmlns="http://projectmallard.org/1.0/"
       xmlns:its="http://www.w3.org/2005/11/its"
+      xmlns:if="http://projectmallard.org/if/1.0/"
       type="topic" style="question"
       id="power-hibernate">
 
   <info>
     <link type="guide" xref="power"/>
     <link type="seealso" xref="power-suspendfail"/>
-    
-    <desc>Hibernate is disabled by default since it's not well supported.</desc>
-    <revision pkgversion="3.4.0" date="2012-02-20" status="review"/>
-    <revision version="12.04" date="2012-03-22" status="review"/>
 
+    <desc>Hibernate is disabled by default since it's not well supported..</desc>
+    <revision pkgversion="3.6.0" date="2012-08-14" status="review"/>
+    <revision version="12.10" date="2012-09-20" status="final"/>
     <credit type="author">
       <name>GNOME Documentation Project</name>
       <email>gnome-doc-list@gnome.org</email>
@@ -19,7 +19,11 @@
       <name>Ekaterina Gerasimova</name>
       <email>kittykat3756@gmail.com</email>
     </credit>
-    
+    <credit type="author">
+      <name>Jeremy Bicha</name>
+      <email>jbicha@ubuntu.com</email>
+    </credit>
+
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
   </info>
 
@@ -30,10 +34,10 @@ documents are stored and the computer completely switches off so it does not
 use any power, but the applications and documents will still be open when you
 switch on the computer again.</p>
 
-<p>Unfortunately, hibernate <link xref="power-suspendfail">doesn't work</link> in many cases with Ubuntu, which can cause
-you to lose data if you expect your documents and applications to re-open when
-you switch your computer back on. Therefore, hibernate is disabled by default in
-Ubuntu 12.04 LTS.</p>
+<p>Unfortunately, hibernate <link xref="power-suspendfail">doesn't work</link>
+ in many cases, which can cause you to lose data if you expect your documents
+ and applications to re-open when you switch your computer back on. Therefore,
+ hibernate is disabled by default.</p>
 
 <section id="test-hibernate">
 <title>Test if hibernate works</title>
@@ -49,8 +53,15 @@ Ubuntu 12.04 LTS.</p>
 
 <steps>
   <item>
-    <p>Open the <app>Terminal</app> by pressing <keyseq><key>Ctrl</key><key>Alt</key><key>t</key></keyseq>
-    or by searching for <input>terminal</input> in the <gui>dash</gui>.</p>
+    <if:choose>
+      <if:when test="platform:unity">
+        <p>Open the <app>Terminal</app> by pressing <keyseq><key>Ctrl</key>
+        <key>Alt</key><key>t</key></keyseq> or by searching for <input>terminal</input>
+        in the <gui>dash</gui>.</p>
+     </if:when>
+     <p>Open the <app>Terminal</app> by searching for <input>terminal</input>
+     in the <gui>Activities overview</gui>.</p>
+  </if:choose>
   </item>
   <item>
     <p>Type <cmd>sudo pm-hibernate</cmd> into the terminal and press <key>Enter</key>.</p>
@@ -65,7 +76,7 @@ Ubuntu 12.04 LTS.</p>
 </steps>
 
 </section>
-    
+
 <section id="enable-hibernate">
 <title>Enable hibernate</title>
 
