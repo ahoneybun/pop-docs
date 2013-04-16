@@ -23,7 +23,7 @@ MAKECMD=make
 HTMLDESTDIR=build
 SRCDIR=../ubuntu-help
 SED=/bin/sed
-INSTALLDIR=/var/www/
+INSTALLDIR=/var/www/13.04/
 URLFIXER=fix-urls.sed
 
 # Space-separated list of language codes for documents. HTML will only be
