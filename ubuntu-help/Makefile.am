@@ -2,7 +2,7 @@
 
 HELP_ID = ubuntu-help
 
-HELP_LINGUAS = ar ast az bo bs ca cs da de el en_AU en_CA en_GB es fi fo fr gl he hi hr hu id it ja kk kn ko lt lv mg ms my nb nl oc pl pt pt_BR ro ru si sk sl sq sr sv ta te tl tr ug uk uz zh_CN zh_TW
+HELP_LINGUAS = am ar ast az bg bo br bs ca cs da de el en_AU en_CA en_GB es fi fo fr gl he hi hr hu id it ja kk kn ko lt lv mg ms my nb nl oc pl pt_BR pt ro ru si sk sl sq sr sv ta te tl tr ug uk ur uz zh_CN zh_TW
 
 HELP_MEDIA = \
 	figures/color-average.png \
@@ -150,7 +150,6 @@ HELP_FILES = \
 	mouse.page \
 	mouse-disabletouchpad.page \
 	mouse-doubleclick.page \
-	mouse-drag-threshold.page \
 	mouse-lefthanded.page \
 	mouse-middleclick.page \
 	mouse-mousekeys.page \
