@@ -36,7 +36,7 @@ HELP_FILES = \
 	a11y-contrast.page \
 	a11y-dwellclick.page \
 	a11y-font-size.page \
-	a11y-locate-pointer.page \
+	a11y-icon.page \
 	a11y.page \
 	a11y-right-click.page \
 	a11y-screen-reader.page \
@@ -48,7 +48,9 @@ HELP_FILES = \
 	accounts-create.page \
 	accounts-disable-service.page \
 	accounts.page \
+	accounts-provider-not-available.page \
 	accounts-remove.page \
+	accounts-which-application.page \
 	accounts-whyadd.page \
 	addremove-install-synaptic.page \
 	addremove-install.page \
@@ -83,7 +85,10 @@ HELP_FILES = \
 	color-gettingprofiles.page \
 	color-howtoimport.page \
 	color-missingvcgt.page \
+	color-notifications.page \
+	color-notspecifiededid.page \
 	color.page \
+	color-testing.page \
 	color-virtualdevice.page \
 	color-whatisprofile.page \
 	color-whatisspace.page \
@@ -108,8 +113,21 @@ HELP_FILES = \
 	disk-format.page \
 	disk-partitions.page \
 	display-dimscreen.page \
+	display-dual-monitors-desktop.page \
 	display-dual-monitors.page \
 	display-lock.page \
+	documents-collections.page \
+	documents-filter.page \
+	documents-formats.page \
+	documents-info.page \
+	documents.page \
+	documents-previews.page \
+	documents-print.page \
+	documents-search.page \
+	documents-select.page \
+	documents-tracker.page \
+	documents-viewgrid.page \
+	documents-view.page \
 	files-autorun.page \
 	files-browse.page \
 	files-copy.page \
@@ -119,6 +137,7 @@ HELP_FILES = \
 	files-lost.page \
 	files-open.page \
 	files.page \
+	files-preview.page \
 	files-recover.page \
 	files-removedrive.page \
 	files-rename.page \
@@ -287,7 +306,7 @@ HELP_FILES = \
 	tips-specialchars.page \
 	unity-dash-apps.page \
 	unity-dash-files.page \
-	unity-dash-gwibber.page \
+	unity-dash-friends.page \
 	unity-dash-intro.page \
 	unity-dash-music.page \
 	unity-dash-photos.page \
@@ -297,6 +316,7 @@ HELP_FILES = \
 	unity-launcher-change-autohide.page \
 	unity-launcher-change-size.page \
 	unity-launcher-intro.page \
+	unity-launcher-menu.page \
 	unity-launcher-shapes.page \
 	unity-menubar-intro.page \
 	unity-scrollbars-intro.page \

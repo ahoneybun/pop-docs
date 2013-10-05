@@ -19,9 +19,9 @@
 #    at /usr/share/common-licenses/GPL
 ####################################################################################
 
-## Fix ghelp links in the generated HTML documentation
+## Fix some of the gnome help links in the generated HTML documentation
 
-s#help:\(orca\|cheese\|baobab\|brasero\|gucharmap\)#http://library\.gnome\.org/users/\1/3\.6/#g
+s#help:\(orca\|cheese\|baobab\|brasero\|gucharmap\)#http://help\.gnome\.org/users/\1/3\.8/#g
 s#ghelp:synaptic#https://help\.ubuntu\.com/community/SynapticHowto#g
 
 ## We use https for help.ubuntu.com, Chrome in particular doesn't
