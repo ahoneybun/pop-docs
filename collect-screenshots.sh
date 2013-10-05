@@ -107,11 +107,11 @@ convert $dir/nautilus.png -resize 250x125 $dir/nautilus.png
 xdotool key Alt+F4
 
 $short_pause
-gnome-screenshot -f dir/unity.png
+gnome-screenshot -f $dir/unity.png
 $long_pause
 convert $dir/unity.png -resize 250x188 $dir/unity2.png
 $long_pause
-if [ $dir -eq ".ubuntu-help/en-US/figures" ] # English only
+if [ $dir == ".ubuntu-help/en-US/figures" ] # English only
   then
     convert $dir/unity.png -crop 65x180+0+25 +repage $dir/unity-launcher.png
     $mid_pause

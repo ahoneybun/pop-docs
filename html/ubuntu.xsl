@@ -7,6 +7,8 @@
                 extension-element-prefixes="exsl"
                 version="1.0">
 
+<xsl:param name="mal.if.platform" select="'platform:unity'"/>
+
 <xsl:param name="color.gray_background" select="'#f7f6f5'"/>
 <xsl:param name="color.gray_border" select="'#ccc1c1'"/>
 <xsl:param name="color.blue_background" select="'#f7f6f5'"/>
@@ -17,9 +19,26 @@
 <xsl:param name="color.red_border" select="'#ccc1c1'"/>
 
 <xsl:param name="color.text" select="'#333333'"/>
-<xsl:param name="color.text_light" select="'#333'"/>
+<xsl:param name="color.text_light" select="'#333333'"/>
 <xsl:param name="color.link" select="'#dd4814'"/>
 <xsl:param name="color.link_visited" select="'#dd4814'"/>
+
+<!--  It seems that many color definitions above were done to force the resulting html to mimic
+      the light-moin-theme, but they also broke some other things.
+      So also added back, below, some realistic color definitions for possible override use in some cases.
+      (Note: These defintions are the same as the Ubuntu ServerGuide and any changes should be
+      made to both, for consistency. -->
+
+<xsl:param name="color.gray_background_actually" select="'#e5e5e5'"/>
+<xsl:param name="color.gray_border_actually" select="'#aaaaaa'"/>
+<xsl:param name="color.blue_background_actually" select="'#bebeff'"/>
+<xsl:param name="color.blue_border_actually" select="'#5050ff'"/>
+<xsl:param name="color.yellow_background_actually" select="'#ffff6e'"/>
+<xsl:param name="color.yellow_border_actually" select="'#ffff00'"/>
+<xsl:param name="color.red_background_actually" select="'#ffbebe'"/>
+<xsl:param name="color.red_border_actually" select="'#ff5050'"/>
+
+<xsl:param name="color.text_light_actually" select="'#808080'"/>
 
 <xsl:template name="html.css.custom">
   <xsl:param name="node" select="."/>
@@ -55,6 +74,29 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     font-family: inherit;
     text-align: left;
     vertical-align: baseline;
+}
+
+/* span.key is not defined in the yelp html.xsl, but it should be. Define it here because it is required. */
+span.key {
+  font-weight: bold;
+}
+
+/* overide the yelp html.xsl here. Why? Because the definition of text_light is wrong above, but fixing it breaks a multitude of other things. */
+span.gui, span.guiseq { color: </xsl:text>
+  <xsl:value-of select="$color.text_light_actually"/><xsl:text>; }
+
+/* overide some of the yelp html.xsl here. Why? Because the definition of gray stuff wrong above, but fixing it breaks a multitude of other things. */
+kbd {
+  background-color: </xsl:text>
+    <xsl:value-of select="$color.gray_background_actually"/><xsl:text>;
+  border: solid 1px </xsl:text>
+    <xsl:value-of select="$color.gray_border_actually"/><xsl:text>;
+  -moz-box-shadow: 1px 1px 1px </xsl:text>
+    <xsl:value-of select="$color.gray_border_actually"/><xsl:text>;
+  -webkit-box-shadow: 1px 1px 1px </xsl:text>
+    <xsl:value-of select="$color.gray_border_actually"/><xsl:text>;
+  box-shadow: 1px 1px 1px </xsl:text>
+    <xsl:value-of select="$color.gray_border_actually"/><xsl:text>;
 }
 
 a img, :link img, :visited img {
@@ -704,7 +746,7 @@ input, select {
         </div>
     </div>
     <div id="footer">
-	<p>The material in this document is available under a free license, see <a href="/legal.html">Legal</a> for details<br /> For information on contributing see the <a href="https://wiki.ubuntu.com/DocumentationTeam">Ubuntu Documentation Team wiki page</a>. To report a problem, visit the <a href="https://bugs.launchpad.net/ubuntu/+source/ubuntu-docs">bug page for Ubuntu Documentation</a></p>
+	<p>The material in this document is available under a free license, see <a href="/legal.html">Legal</a> for details<br /> For information on contributing see the <a href="https://wiki.ubuntu.com/DocumentationTeam">Ubuntu Documentation Team wiki page</a>. To report errors in this documentation, <a href="https://bugs.launchpad.net/ubuntu/+source/ubuntu-docs">file a bug</a>.</p>
     </div>
     </div>
 
@@ -721,7 +763,7 @@ input, select {
 <xsl:template name="mal2html.page.linktrails.trail">
   <xsl:param name="node" select="."/>
   <div class="trail">
-    <a href="https://help.ubuntu.com/13.04" class="trail">Ubuntu 13.04</a>
+    <a href="https://help.ubuntu.com/13.10" class="trail">Ubuntu 13.10</a>
   <xsl:variable name="direction">
     <xsl:call-template name="l10n.direction"/>
   </xsl:variable>
