@@ -7,10 +7,10 @@
     <link type="guide" xref="user-accounts#manage"/>
 
     <desc>Let a friend or colleague borrow your computer in a secure manner.</desc>
-    <revision version="12.10" date="2012-09-25" status="final"/>
+    <revision version="14.04" date="2014-02-04" status="review"/>
     <credit type="author">
       <name>Gunnar Hjalmarsson</name>
-      <email>ubuntu@gunnar.cc</email>
+      <email>gunnarhj@ubuntu.com</email>
     </credit>
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
   </info>
@@ -42,15 +42,21 @@ the appearance and behavior.</p>
 
 </section>
 
-<section id="comment">
-<title></title>
-<comment>
-<cite date="2012-01-14">jbicha</cite>
-<p>Create a new section and explain why someone might want to disable guest logins
-and how to disable it (there's a gsettings key for it). Perhaps we need a whole
-article just for dconf-editor or we could just list the gsettings set and gsettings
-reset terminal commands necessary for flipping this one setting.</p>
-</comment>
+<section id="disable">
+<title>Disabling the feature</title>
+
+<p>If you prefer to not allow guest access to your computer, you can disable the <app>Guest
+Session</app> feature. To do so, press <keyseq><key>Ctrl</key><key>Alt</key><key>T</key></keyseq>
+to open a terminal window, and then run this command (it's one long command, even if it may be
+shown wrapped on the screen - copy and paste to get it right):</p>
+
+<p><cmd>sudo sh -c 'printf "[SeatDefaults]\nallow-guest=false\n" >/usr/share/lightdm/lightdm.conf.d/50-no-guest.conf'</cmd></p>
+
+<p>The command creates a small configuration file. To re-enable <app>Guest Session</app>, simply
+remove that file:</p>
+
+<p><cmd>sudo rm /usr/share/lightdm/lightdm.conf.d/50-no-guest.conf</cmd></p>
+
 </section>
 
 </page>

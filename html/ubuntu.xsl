@@ -760,39 +760,20 @@ input, select {
 
 </xsl:template>
 
-<xsl:template name="mal2html.page.linktrails.trail">
+<xsl:template name="mal2html.page.linktrails.trail.prefix">
   <xsl:param name="node" select="."/>
-  <div class="trail">
-    <a href="https://help.ubuntu.com/13.10" class="trail">Ubuntu 13.10</a>
+  <a href="https://help.ubuntu.com/14.04" class="trail">Ubuntu 14.04</a>
   <xsl:variable name="direction">
     <xsl:call-template name="l10n.direction"/>
   </xsl:variable>
   <xsl:choose>
     <xsl:when test="$direction = 'rtl'">
-      <xsl:choose>
-        <xsl:when test="$node/@child = 'section'">
-          <xsl:text>&#x00A0;‹ </xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>&#x00A0;« </xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:text>&#x00A0;« </xsl:text>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:choose>
-        <xsl:when test="$node/@child = 'section'">
-          <xsl:text>&#x00A0;› </xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>&#x00A0;» </xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:text>&#x00A0;» </xsl:text>
     </xsl:otherwise>
   </xsl:choose>
-    <xsl:call-template name="mal2html.page.linktrails.link">
-      <xsl:with-param name="node" select="$node"/>
-    </xsl:call-template>
-  </div>
 </xsl:template>
 
 </xsl:stylesheet>
