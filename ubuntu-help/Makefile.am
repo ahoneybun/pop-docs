@@ -2,18 +2,21 @@
 
 HELP_ID = ubuntu-help
 
-HELP_LINGUAS = am ar ast az bg bo br bs ca cs da de el en_AU en_CA en_GB es fi fo fr gl he hi hr hu id it ja kk kn ko lt lv mg ms my nb nl oc pl pt_BR pt ro ru si sk sl sq sr sv ta te tl tr ug uk ur uz zh_CN zh_TW
+HELP_LINGUAS = am ar ast az bg bo br bs ca cs da de el en_AU en_CA en_GB es et eu fi fo fr gl he hi hr hu id it ja kk kn ko lt lv mg ms my nb nl oc pl pt_BR pt ro ru si sk sl sq sr sv ta te tg th tl tr ug uk ur uz zh_CN zh_TW
 
 HELP_MEDIA = \
 	figures/color-average.png \
 	figures/color-camera.png \
 	figures/color-display.png \
 	figures/color-printer.png \
+	figures/color-profile-default.png \
 	figures/color-space.png \
+	figures/go-down.png \
 	figures/input-keyboard-symbolic.svg \
 	figures/nautilus.png \
 	figures/nautilus-icons.png \
 	figures/printing-select.png \
+	figures/system-devices-panel.svg \
 	figures/ubuntu-logo.png \
 	figures/ubuntu-quantal.jpg \
 	figures/unity.png \
@@ -36,7 +39,6 @@ HELP_FILES = \
 	a11y-contrast.page \
 	a11y-dwellclick.page \
 	a11y-font-size.page \
-	a11y-icon.page \
 	a11y.page \
 	a11y-right-click.page \
 	a11y-screen-reader.page \
@@ -44,10 +46,9 @@ HELP_FILES = \
 	a11y-stickykeys.page \
 	a11y-visualalert.page \
 	about-this-guide.page \
-	accounts-add.page \
-	accounts-create.page \
-	accounts-disable-service.page \
 	accounts.page \
+	accounts-add.page \
+	accounts-disable-service.page \
 	accounts-provider-not-available.page \
 	accounts-remove.page \
 	accounts-which-application.page \
@@ -57,6 +58,7 @@ HELP_FILES = \
 	addremove-ppa.page \
 	addremove-remove.page \
 	addremove-sources.page \
+	addremove.page \
 	app-cheese.page \
 	backup-check.page \
 	backup-frequency.page \
@@ -260,6 +262,7 @@ HELP_FILES = \
 	power-whydim.page \
 	power-willnotturnon.page \
 	prefs.page \
+	prefs-language-install.page \
 	prefs-language.page \
 	prefs-display.page \
 	printing.page \
