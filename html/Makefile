@@ -68,7 +68,8 @@ ubuntu-help: clean style
 			-e 's|/usr/share/icons/.*/\(.*\.svg\)|img/\1|'\
 			"$(HTMLDESTDIR)/$$lang/"*.html; \
 		$(SED) -i -f "$(URLFIXER)" "$(HTMLDESTDIR)/$$lang/"*.html; \
-		echo "\nSearching for unfixed ghelp links:"; \
+		echo "\nSearching for yelp help system internal links and either changing them to equivalent or related external links or deleting them:"; \
+		$(SED) -i -e '/help:language-selector/d' "$(HTMLDESTDIR)/$$lang/"session*.html; \
 		grep "href=\"ghelp:" "$(HTMLDESTDIR)/$$lang/"*.html; \
 		rm -rf "$(HTMLDESTDIR)/$$lang/usr"; \
 	done
