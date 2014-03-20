@@ -13,12 +13,13 @@ HELP_MEDIA = \
 	figures/color-space.png \
 	figures/go-down.png \
 	figures/input-keyboard-symbolic.svg \
+	figures/input-preferences.png \
 	figures/nautilus.png \
 	figures/nautilus-icons.png \
 	figures/printing-select.png \
 	figures/system-devices-panel.svg \
 	figures/ubuntu-logo.png \
-	figures/ubuntu-quantal.jpg \
+	figures/ubuntu-mascot-creature.jpg \
 	figures/unity.png \
 	figures/unity-appmenu-intro.png \
 	figures/unity-dash-intro.png \
@@ -283,6 +284,7 @@ HELP_FILES = \
 	session-language.page \
 	session-screenlocks.page \
 	sharing.page \
+	sharing-bluetooth.page \
 	sharing-desktop.page \
 	sharing-remote-login.page \
 	shell-apps-favorites.page \

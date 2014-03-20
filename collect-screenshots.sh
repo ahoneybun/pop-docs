@@ -49,7 +49,7 @@ xdotool mousemove 1024 350
 # Change the time to match the version number
 # This needs to be updated for different locales
 gsettings set com.canonical.indicator.datetime time-format "custom"
-gsettings set com.canonical.indicator.datetime custom-time-format "12:10 %p"
+gsettings set com.canonical.indicator.datetime custom-time-format "14:04 %p"
 gsettings set org.gnome.Evince.Default show-sidebar false # This doesn't seem to work
 gsettings set com.canonical.Unity form-factor "Netbook"
 
