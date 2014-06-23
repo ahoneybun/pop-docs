@@ -707,6 +707,7 @@ input, select {
                 <ul id="main-menu">
                     <li><a class="main-menu-item current" href="https://help.ubuntu.com/">Official Documentation</a></li>
                     <li><a href="https://help.ubuntu.com/community">Community Help Wiki</a></li>
+                    <li><a href="http://community.ubuntu.com/contribute/documentation/">Contribute</a></li>
                 </ul>
             </div>
             <div id="menu-search">
