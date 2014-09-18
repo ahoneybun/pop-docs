@@ -23,7 +23,7 @@ MAKECMD=make
 HTMLDESTDIR=build
 SRCDIR=../ubuntu-help
 SED=/bin/sed
-INSTALLDIR=/var/www/14.04/
+INSTALLDIR=/var/www/14.10/
 URLFIXER=fix-urls.sed
 
 # Space-separated list of language codes for documents. HTML will only be
@@ -33,7 +33,7 @@ URLFIXER=fix-urls.sed
 # for the HTML to be built in turn. This means all the locales for which
 # HTML output is needed will have to have been specified in the main
 # HELP_LINGUAS variable in the ubuntu-help Makefile
-HELP_LINGUAS = ast az bs ca cs da de el en_AU en_CA en_GB es et eu fi fo fr gl hi hr hu id it ja kk kn ko lt lv mg ms my nb nl oc pl pt pt_BR ru sk sl sq sr sv ta te tg th tr ug uk uz zh_CN zh_TW
+HELP_LINGUAS = am ar ast az bg bo br bs ca ce cs da de el en_AU en_CA en_GB es et eu fi fo fr gl he hi hr hu id it ja kk kn ko lt lv mg ms my nb nl oc pl pt_BR pt ro ru si sk sl sq sr sv ta te tg th tl tr ug uk ur uz zh_CN zh_HK zh_TW
 
 index_file_exists = $(wildcard $(SRCDIR)/$(lingua)/index.page)
 linguas := $(HELP_LINGUAS)
@@ -104,6 +104,8 @@ install:
 		if test "$$lang" = "gl"; then lang=gl-GL; fi; \
 		if test "$$lang" = "ms"; then lang=ms-MS; fi; \
 		if test "$$lang" = "pl"; then lang=pl-PL; fi; \
+		cp -af "$(INSTALLDIR)/$$lang"/*.css "$(INSTALLDIR)"; \
+		rm -Rf "$(INSTALLDIR)/$$lang"/*.css ; \
 		find "$(INSTALLDIR)/$$lang" -type f -exec mv {} {}.$$lang \; ; \
 		cp -af "$(INSTALLDIR)/$$lang"/* "$(INSTALLDIR)"; \
 		rm -Rf "$(INSTALLDIR)/$$lang" ; \
