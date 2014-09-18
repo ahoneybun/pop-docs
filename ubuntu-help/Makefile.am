@@ -306,6 +306,7 @@ HELP_FILES = \
 	sound-usemic.page \
 	sound-usespeakers.page \
 	sound-volume.page \
+	startup-applications.page \
 	tips.page \
 	tips-specialchars.page \
 	unity-dash-apps.page \
@@ -343,7 +344,6 @@ HELP_FILES = \
 	wacom-multi-monitor.page \
 	wacom.page \
 	wacom-stylus.page \
-	whats-new.page \
 	windows-key.page
 
 dist-hook: doc-dist-hook
