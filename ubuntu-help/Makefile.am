@@ -244,6 +244,7 @@ HELP_FILES = \
 	net-wireless-troubleshooting-initial-check.page \
 	net-wireless-wepwpa.page \
 	net-wrongnetwork.page \
+	numeric-keypad.page \
 	power-batterybroken.page \
 	power-batteryestimate.page \
 	power-batterylife.page \

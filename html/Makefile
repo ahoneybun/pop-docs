@@ -23,7 +23,7 @@ MAKECMD=make
 HTMLDESTDIR=build
 SRCDIR=../ubuntu-help
 SED=/bin/sed
-INSTALLDIR=/var/www/14.10/
+INSTALLDIR=ubuntu-docs
 URLFIXER=fix-urls.sed
 
 # Space-separated list of language codes for documents. HTML will only be
@@ -93,10 +93,11 @@ style:
 		cp "$(SRCDIR)/C/figures/"* "$(HTMLDESTDIR)/$$lang/figures"; \
 	done
 
-# Installs all HTML files to a multilingual site (e.g. run with Apache and
-# MultiViews enabled)
+# Installs all HTML files to a single multilingual directory for subsequent copying to
+# the web server document structure (e.g. to run with Apache and MultiViews enabled)
 install:
 	rm -Rf "$(INSTALLDIR)"/*; \
+	mkdir -p "$(INSTALLDIR)"; \
 	cp -R "$(HTMLDESTDIR)/"* "$(INSTALLDIR)"; \
 	for lc in C $(help_linguas); do \
 		lang=`echo $$lc | $(SED) -e 's/[@_]/-/'`; \
