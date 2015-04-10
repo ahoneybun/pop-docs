@@ -68,6 +68,9 @@ ubuntu-help: clean style
 			-e 's|/usr/share/icons/.*/\(.*\.svg\)|img/\1|'\
 			"$(HTMLDESTDIR)/$$lang/"*.html; \
 		$(SED) -i -f "$(URLFIXER)" "$(HTMLDESTDIR)/$$lang/"*.html; \
+		sed -i -r -e \
+			's|(Guide</span></h1></div>)|\1<div class="title" style="margin-bottom: 1.5em"><span>Ubuntu 15.04</span></div>|' \
+			"$(HTMLDESTDIR)/$$lang/index.html"; \
 		echo "\nSearching for yelp help system internal links and either changing them to equivalent or related external links or deleting them:"; \
 		$(SED) -i -e '/help:language-selector/d' "$(HTMLDESTDIR)/$$lang/"session*.html; \
 		grep "href=\"ghelp:" "$(HTMLDESTDIR)/$$lang/"*.html; \
