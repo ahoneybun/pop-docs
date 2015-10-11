@@ -761,7 +761,7 @@ input, select {
 
 <xsl:template name="mal2html.page.linktrails.trail.prefix">
   <xsl:param name="node" select="."/>
-  <span style="color: #333">Ubuntu 15.04</span>
+  <span style="color: #333">Ubuntu 15.10</span>
   <xsl:variable name="direction">
     <xsl:call-template name="l10n.direction"/>
   </xsl:variable>

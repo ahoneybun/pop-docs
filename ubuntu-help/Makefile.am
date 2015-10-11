@@ -19,7 +19,7 @@ HELP_MEDIA = \
 	figures/printing-select.png \
 	figures/system-devices-panel.svg \
 	figures/ubuntu-logo.png \
-	figures/ubuntu-mascot-creature.jpg \
+	figures/ubuntu-mascot-creature.png \
 	figures/unity.png \
 	figures/unity-appmenu-intro.png \
 	figures/unity-dash-intro.png \
