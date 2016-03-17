@@ -33,7 +33,7 @@ URLFIXER=fix-urls.sed
 # for the HTML to be built in turn. This means all the locales for which
 # HTML output is needed will have to have been specified in the main
 # HELP_LINGUAS variable in the ubuntu-help Makefile
-HELP_LINGUAS = am ar ast az bg bo br bs ca ce cs da de el en_AU en_CA en_GB es et eu fi fo fr gl he hi hr hu id it ja kk kn ko lt lv mg ms my nb nl oc pl pt_BR pt ro ru si sk sl sq sr sv ta te tg th tl tr ug uk ur uz zh_CN zh_HK zh_TW
+HELP_LINGUAS = am ar ast az bg bo br bs ca ce cs da de el en_AU en_CA en_GB eo es et eu fi fo fr gl he hi hr hu id it ja kk kn ko lt lv mg ms my nb ne nl oc pl pt_BR pt ro ru si sk sl sq sr sv ta te tg th tl tr ug uk ur uz zh_CN zh_HK zh_TW
 
 index_file_exists = $(wildcard $(SRCDIR)/$(lingua)/index.page)
 linguas := $(HELP_LINGUAS)
@@ -69,7 +69,7 @@ ubuntu-help: clean style
 			"$(HTMLDESTDIR)/$$lang/"*.html; \
 		$(SED) -i -f "$(URLFIXER)" "$(HTMLDESTDIR)/$$lang/"*.html; \
 		sed -i -r -e \
-			's|(<div class="region"><div class="contents">)|<div class="title" style="margin-bottom: 1.5em"><span>Ubuntu 15.10</span></div>\1|' \
+			's|(<div class="region"><div class="contents">)|<div class="title" style="margin-bottom: 1.5em"><span>Ubuntu 16.04</span></div>\1|' \
 			"$(HTMLDESTDIR)/$$lang/index.html"; \
 		echo "\nSearching for yelp help system internal links and either changing them to equivalent or related external links or deleting them:"; \
 		$(SED) -i -e '/help:language-selector/d' "$(HTMLDESTDIR)/$$lang/"session*.html; \
