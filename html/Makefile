@@ -65,7 +65,6 @@ ubuntu-help: clean style
 		$(SED) -i \
 			-e '1s/^/<!DOCTYPE html\>\n/' \
 			-e "s/<html>/<html lang="$$lang">/" \
-			-e 's|/usr/share/icons/.*/\(.*\.svg\)|img/\1|'\
 			"$(HTMLDESTDIR)/$$lang/"*.html; \
 		$(SED) -i -f "$(URLFIXER)" "$(HTMLDESTDIR)/$$lang/"*.html; \
 		sed -i -r -e \
