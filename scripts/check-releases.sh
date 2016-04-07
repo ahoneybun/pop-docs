@@ -5,10 +5,14 @@
 # need to be updated, depending on use.
 #
 # Instructions
-# Type this command in the current directory to run this script:
-# bash check_releases.sh
-#
-# DO NOT TRANSLATE
+# Type this command to run this script:
+# ./check_releases.sh
+
+if [ "${PWD##*/}" != 'scripts' -o ! -d ../ubuntu-help ]; then
+    echo "ERROR: You should run this script from the 'scripts' directory."
+    exit 1
+fi
+cd ../ubuntu-help/C
 
 ReleaseNames=(
 Warty
