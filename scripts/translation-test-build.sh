@@ -1,5 +1,16 @@
 #!/bin/sh -e
 
+INSTALL=
+for P in gnome-common yelp-tools yelp-xsl; do
+    if ! dpkg -l $P >/dev/null 2>&1; then
+        INSTALL="$INSTALL $P"
+    fi
+done
+if [ -n "$INSTALL" ]; then
+    echo "To use this script, please install required packages by running this command:"
+    echo "\nsudo apt install$INSTALL\n"
+    exit 1
+fi
 if [ "${PWD##*/}" != 'scripts' -o ! -d ../ubuntu-help ]; then
     echo "ERROR: You should run this script from the 'scripts' directory."
     exit 1
