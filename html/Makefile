@@ -33,7 +33,7 @@ URLFIXER=fix-urls.sed
 # for the HTML to be built in turn. This means all the locales for which
 # HTML output is needed will have to have been specified in the main
 # HELP_LINGUAS variable in the ubuntu-help Makefile
-HELP_LINGUAS = am ar ast az bg bo br bs ca ce cs da de el en_AU en_CA en_GB eo es et eu fi fo fr gl he hi hr hu id it ja kk kn ko lt lv mg ms my nb ne nl oc pl pt_BR pt ro ru si sk sl sq sr sv ta te tg th tl tr ug uk ur uz zh_CN zh_HK zh_TW
+HELP_LINGUAS = am ar ast az bg bo br bs ca ce cs da de el en_AU en_CA en_GB eo es et eu fi fo fr gl he hi hr hu id it ja kab kk kn ko lt lv mg ms my nb ne nl oc pl pt_BR pt ro ru si sk sl sq sr sv ta te tg th tl tr ug uk ur uz zh_CN zh_HK zh_TW
 
 index_file_exists = $(wildcard $(SRCDIR)/$(lingua)/index.page)
 linguas := $(HELP_LINGUAS)
@@ -80,8 +80,6 @@ clean:
 	rm -rf build
 
 # Copy style sheet and common images to build directory
-# TODO: copy C/figures to destination only for those cases where there are
-# no localized figures
 style:
 	for lc in C $(help_linguas); do \
 		lang=`echo $$lc | $(SED) -e 's/[@_]/-/'`; \
@@ -91,8 +89,8 @@ style:
 		if test "$$lang" = "pl"; then lang=pl-PL; fi; \
 		mkdir -p "$(HTMLDESTDIR)/$$lang/img"; \
 		mkdir -p "$(HTMLDESTDIR)/$$lang/figures"; \
-		cp img/* "$(HTMLDESTDIR)/$$lang/img"; \
-		cp "$(SRCDIR)/C/figures/"* "$(HTMLDESTDIR)/$$lang/figures"; \
+		cp -n img/* "$(HTMLDESTDIR)/$$lang/img"; \
+		cp -n "$(SRCDIR)/C/figures/"* "$(HTMLDESTDIR)/$$lang/figures"; \
 	done
 
 # Installs all HTML files to a single multilingual directory for subsequent copying to
