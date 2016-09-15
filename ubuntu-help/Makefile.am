@@ -216,7 +216,6 @@ HELP_FILES = \
 	net-general.page \
 	net-install-flash.page \
 	net-install-java-plugin.page \
-	net-install-moonlight.page \
 	net-macaddress.page \
 	net-manual.page \
 	net-mobile.page \
