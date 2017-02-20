@@ -43,18 +43,7 @@
 #    languages. To do so just run the script with the argument 'all'. Execution
 #    will take awhile.
 #
-#    Currently, February 2014, there is a problem in the package libxml2
-#    resulting an severe spew of meaningless errors. Hence the "grep" portion
-#    of the command line. The master libxml2 has been fixed, but has not yet
-#    propagated to any release.
-#
-#    Also currently, a newer yelp-tools (yelp-check) than will initially be
-#    part of the 14.04 release is needed for the use of --strict.
-#
-#    This script needs to be modified as the improved tools come on-line so
-#    ultimately strict validation is used properly.
-#
-#    Additionally, this script includes paases that check for ID, orphans
+#    Additionally, this script includes passes that check for ID, orphans
 #    and internal link desintation issues.
 #    Orphans can be confusing, as there might be a navigation path, but
 #    there needs to be a link back trail. If a problem page is idenified, then
@@ -67,18 +56,10 @@
 #################################################################################
 
 validate() {
-    DIR="../ubuntu-help/$1"
+    DIR="$1"
 
     echo " --Validation pass 1: The .page files actual validation pass (syntax):"
-#
-# The command we eventually want to exectute:
-#yelp-check validate --strict --allow http://www.w3.org/2005/11/its --allow http://www.w3.org/1999/xlink --allow http://projectmallard.org/experimental/ *.page
-#
-# The command we might need in the interim (between newer yelp-tools and newer libxml2):
-#yelp-check validate --strict --allow http://www.w3.org/2005/11/its --allow http://www.w3.org/1999/xlink --allow http://projectmallard.org/experimental/ *.page | grep -v "relaxng\.c"
-#
-# The watered down command we have to use for now:
-    yelp-check validate "$DIR"/*.page
+    yelp-check validate --strict --allow http://www.w3.org/2005/11/its --allow http://www.w3.org/1999/xlink --allow http://projectmallard.org/experimental/ "$DIR"/*.page
 
     echo " --Validation pass 2: Check the IDs:"
     yelp-check ids "$DIR"/*.page
@@ -90,8 +71,13 @@ validate() {
     yelp-check links "$DIR"/*.page
 }
 
-if [ "${PWD##*/}" != 'scripts' ]; then
-    echo "ERROR: You must run this script from the 'scripts' directory."
+if [ "${PWD##*/}" = 'scripts' -o "${PWD##*/}" = 'html' ]; then
+    cd ../ubuntu-help
+elif [ "${PWD##*ubuntu}" = '-help/C' ]; then
+    cd ..
+else
+    echo "ERROR: You must run this script from either the 'scripts' directory,"
+    echo "the 'html' directory or the 'ubuntu-help/C' directory."
     exit 1
 fi
 
@@ -100,19 +86,19 @@ if [ -z "$1" ]; then
     validate C
     echo
 elif [ "$1" = 'all' ]; then
-    for lang in $( ls ../ubuntu-help ); do
-        test -d "../ubuntu-help/$lang" || continue
-        test -f "../ubuntu-help/$lang/index.page" || continue
+    for lang in $( ls ); do
+        test -d "$lang" || continue
+        test -f "$lang/index.page" || continue
         echo "Language '$lang':"
         validate $lang
         echo
     done
 else
-    test -d "../ubuntu-help/$1" || {
+    test -d "$1" || {
         echo "ERROR: Language code '$1' does not exist."
         exit 1
     }
-    test -f "../ubuntu-help/$1/index.page" || {
+    test -f "$1/index.page" || {
         echo "ERROR: '$1/index.page' not found."
         exit 1
     }

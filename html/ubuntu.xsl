@@ -245,9 +245,13 @@ body {
 #cwt-content td, #cwt-content th {
     border: 1px solid #E9E9E9;
 }
-#cwt-content ol, #cwt-content ul, #cwt-content dl {
+#cwt-content ol, #cwt-content dl {
     margin-bottom: 8px;
     list-style-type: decimal;
+}
+#cwt-content ul {
+    margin-bottom: 8px;
+    list-style-type: disc;
 }
 #cwt-content li, #cwt-content dd, #cwt-content dt {
     line-height: 14px;
@@ -761,7 +765,7 @@ input, select {
 
 <xsl:template name="mal2html.page.linktrails.trail.prefix">
   <xsl:param name="node" select="."/>
-  <span style="color: #333">Ubuntu 16.10</span>
+  <span style="color: #333">Ubuntu 17.04</span>
   <xsl:variable name="direction">
     <xsl:call-template name="l10n.direction"/>
   </xsl:variable>

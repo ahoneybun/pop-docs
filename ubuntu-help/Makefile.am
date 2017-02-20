@@ -60,6 +60,7 @@ HELP_FILES = \
 	accounts-remove.page \
 	accounts-which-application.page \
 	accounts-whyadd.page \
+	addremove-creator.page \
 	addremove-install-synaptic.page \
 	addremove-install.page \
 	addremove-ppa.page \
@@ -285,6 +286,7 @@ HELP_FILES = \
 	printing-streaks.page \
 	report-ubuntu-bug.page \
 	screen-shot-record.page \
+	security-settings.page \
 	session-formats.page \
 	session-language.page \
 	session-screenlocks.page \
