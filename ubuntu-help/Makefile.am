@@ -2,7 +2,7 @@
 
 HELP_ID = ubuntu-help
 
-HELP_LINGUAS = am ar ast az bg bo br bs ca ce cs da de el en_AU en_CA en_GB eo es et eu fi fo fr gl he hi hr hu id it ja kab kk kn ko lt lv mg ms my nb ne nl oc pl pt_BR pt ro ru si sk sl sq sr sv ta te tg th tl tr ug uk ur uz zh_CN zh_HK zh_TW
+HELP_LINGUAS = am ar ast az bg bo br bs ca ce cs da de el en_AU en_CA en_GB eo es et eu fi fo fr gl he hi hr hu ia id it ja kab kk kn ko lt lv mg ms my nb ne nl oc pl pt_BR pt ro ru si sk sl sq sr sv ta te tg th tl tr ug uk ur uz zh_CN zh_HK zh_TW
 
 HELP_MEDIA = \
 	figures/audio-volume-high-panel.svg \
@@ -24,6 +24,7 @@ HELP_MEDIA = \
 	figures/network-offline.svg \
 	figures/printing-select.png \
 	figures/system-devices-panel.svg \
+	figures/system-search.png \
 	figures/ubuntu-logo.png \
 	figures/ubuntu-mascot-creature.png \
 	figures/unity.png \
@@ -37,7 +38,8 @@ HELP_MEDIA = \
 	figures/unity-launcher.png \
 	figures/unity-overview.png \
 	figures/unity-windows.png \
-	figures/unity-workspace-intro.png
+	figures/unity-workspace-intro.png \
+	figures/window-menu.png
 
 HELP_FILES = \
 	legal.xml \
@@ -216,7 +218,6 @@ HELP_FILES = \
 	net-fixed-ip-address.page \
 	net-general.page \
 	net-install-flash.page \
-	net-install-java-plugin.page \
 	net-macaddress.page \
 	net-manual.page \
 	net-mobile.page \
