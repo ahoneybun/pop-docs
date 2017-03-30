@@ -63,7 +63,6 @@ ubuntu-help: clean style
 		yelp-build html -o "$(HTMLDESTDIR)/$$lang/" -x $(UBUNTUXSL) \
 			"$(SRCDIR)/$$lc/"; \
 		$(SED) -i \
-			-e '1s/^/<!DOCTYPE html\>\n/' \
 			-e "s/<html>/<html lang="$$lang">/" \
 			"$(HTMLDESTDIR)/$$lang/"*.html; \
 		$(SED) -i -f "$(URLFIXER)" "$(HTMLDESTDIR)/$$lang/"*.html; \
@@ -96,9 +95,9 @@ style:
 # Installs all HTML files to a single multilingual directory for subsequent copying to
 # the web server document structure (e.g. to run with Apache and MultiViews enabled)
 install:
-	rm -Rf "$(INSTALLDIR)"/*; \
-	mkdir -p "$(INSTALLDIR)"; \
-	cp -R "$(HTMLDESTDIR)/"* "$(INSTALLDIR)"; \
+	rm -Rf "$(INSTALLDIR)"/*
+	mkdir -p "$(INSTALLDIR)"
+	cp -R "$(HTMLDESTDIR)/"* "$(INSTALLDIR)"
 	for lc in C $(help_linguas); do \
 		lang=`echo $$lc | $(SED) -e 's/[@_]/-/'`; \
 		if test "$$lang" = "C"; then lang=en; fi; \
@@ -112,5 +111,5 @@ install:
 		find "$(INSTALLDIR)/$$lang" -type f -exec mv {} {}.$$lang \; ; \
 		cp -af "$(INSTALLDIR)/$$lang"/* "$(INSTALLDIR)"; \
 		rm -Rf "$(INSTALLDIR)/$$lang" ; \
-	done ; \
+	done
 	cp img/* "$(INSTALLDIR)/img"
