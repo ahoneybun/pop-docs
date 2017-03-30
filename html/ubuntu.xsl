@@ -167,6 +167,10 @@ body {
 	text-indent: 50px;
 }
 
+#search-box input[name="q"] {
+    width: 172px;
+}
+
 #search-box button span {
     position: absolute;
     overflow: hidden;
