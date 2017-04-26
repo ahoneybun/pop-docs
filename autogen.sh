@@ -7,7 +7,7 @@ test -z "$srcdir" && srcdir=.
 PKG_NAME="ubuntu-docs"
 
 (test -f $srcdir/configure.in \
-  && test -d $srcdir/ubuntu-help) || {
+  && test -d $srcdir/gnome-help) || {
     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
     echo " top-level $PKG_NAME directory"
     exit 1

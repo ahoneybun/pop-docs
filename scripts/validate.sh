@@ -24,7 +24,7 @@
 # usage: ./validate.sh [ARGUMENT]
 #
 #    When called without an argument, the script checks the original untranslated
-#    .page files in ubuntu-help/C.
+#    .page files in gnome-help/C.
 #    Calling it with an argument is useful only after you have built the
 #    translated .page files. Pass the language code as argument to check a
 #    specific translation, or 'all' to check all the built .page files.
@@ -72,17 +72,17 @@ validate() {
 }
 
 if [ "${PWD##*/}" = 'scripts' -o "${PWD##*/}" = 'html' ]; then
-    cd ../ubuntu-help
+    cd ../gnome-help
 elif [ "${PWD##*ubuntu}" = '-help/C' ]; then
     cd ..
 else
     echo "ERROR: You must run this script from either the 'scripts' directory,"
-    echo "the 'html' directory or the 'ubuntu-help/C' directory."
+    echo "the 'html' directory or the 'gnome-help/C' directory."
     exit 1
 fi
 
 if [ -z "$1" ]; then
-    echo 'Validation of original untranslated pages in ubuntu-help/C:'
+    echo 'Validation of original untranslated pages in gnome-help/C:'
     validate C
     echo
 elif [ "$1" = 'all' ]; then
