@@ -8,11 +8,11 @@
 # Type this command to run this script:
 # ./check_releases.sh
 
-if [ "${PWD##*/}" != 'scripts' -o ! -d ../ubuntu-help ]; then
+if [ "${PWD##*/}" != 'scripts' -o ! -d ../gnome-help ]; then
     echo "ERROR: You should run this script from the 'scripts' directory."
     exit 1
 fi
-cd ../ubuntu-help/C
+cd ../gnome-help/C
 
 ReleaseNames=(
 Warty
