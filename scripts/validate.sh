@@ -73,7 +73,7 @@ validate() {
 
 if [ "${PWD##*/}" = 'scripts' -o "${PWD##*/}" = 'html' ]; then
     cd ../gnome-help
-elif [ "${PWD##*ubuntu}" = '-help/C' ]; then
+elif [ "${PWD##*gnome}" = '-help/C' ]; then
     cd ..
 else
     echo "ERROR: You must run this script from either the 'scripts' directory,"

@@ -33,7 +33,7 @@ URLFIXER=fix-urls.sed
 # for the HTML to be built in turn. This means all the locales for which
 # HTML output is needed will have to have been specified in the main
 # HELP_LINGUAS variable in the gnome-help Makefile
-HELP_LINGUAS = am ar ast az bg bo br bs ca ce cs da de el en_AU en_CA en_GB eo es et eu fi fo fr gl he hi hr hu ia id it ja kab kk kn ko lt lv mg ms my nb ne nl oc pl pt_BR pt ro ru si sk sl sq sr sv ta te tg th tl tr ug uk ur uz zh_CN zh_HK zh_TW
+HELP_LINGUAS = ca cs da de el es fi fr gl he hi hu id it ja kn lv nl pt_BR ru sl sr sv ta te zh_CN
 
 index_file_exists = $(wildcard $(SRCDIR)/$(lingua)/index.page)
 linguas := $(HELP_LINGUAS)
