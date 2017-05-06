@@ -10,4 +10,4 @@
 sed -i \
 	-e 's,< /,</,g' \
 	-e 's,</ ,</,g' \
-	../gnome-help/*/*.po
+	../ubuntu-help/*/*.po

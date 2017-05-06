@@ -8,5 +8,5 @@ AM_MAINTAINER_MODE
 
 AC_OUTPUT([
 Makefile
-gnome-help/Makefile
+ubuntu-help/Makefile
 ])
