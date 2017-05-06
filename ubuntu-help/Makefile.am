@@ -1,6 +1,6 @@
 @YELP_HELP_RULES@
 
-HELP_ID = gnome-help
+HELP_ID = ubuntu-help
 
 # ubuntu-docs languages:
 #   am ar ast az bg bo br bs ca ce cs da de el en_AU en_CA en_GB eo es et eu fi fo fr gl
@@ -28,9 +28,9 @@ FORKED = \
 	net-install-flash.page \
 	translate.page
 
-# Ubuntu extras (legal.xml excluded since it's installed by
-# gnome-user-guide)
+# Ubuntu extras
 EXTRAS = \
+	legal.xml \
 	addremove-creator.page \
 	addremove-install.page \
 	addremove-install-synaptic.page \
@@ -52,5 +52,3 @@ EXTRAS = \
 	video-dvd-restricted.page
 
 HELP_FILES = $(FORKED) $(EXTRAS)
-
-dist-hook: doc-dist-hook
