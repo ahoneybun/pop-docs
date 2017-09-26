@@ -21,7 +21,8 @@
 
 MAKECMD=make
 HTMLDESTDIR=build
-SRCDIR=../ubuntu-help
+SRCDIR=/usr/share/help
+TMPDIR=/tmp/desktop-guide-build
 SED=/bin/sed
 INSTALLDIR=ubuntu-docs
 URLFIXER=fix-urls.sed
@@ -33,9 +34,9 @@ URLFIXER=fix-urls.sed
 # for the HTML to be built in turn. This means all the locales for which
 # HTML output is needed will have to have been specified in the main
 # HELP_LINGUAS variable in the ubuntu-help Makefile
-HELP_LINGUAS = ca cs da de el es fi fr gl he hi hu id it ja kn lv nl pt_BR ru sl sr sv ta te zh_CN
+HELP_LINGUAS = ca cs da de el es fi fr gl he hi hu id it ja kn lv nl pl pt pt_BR ro ru sl sr sv ta te zh_CN
 
-index_file_exists = $(wildcard $(SRCDIR)/$(lingua)/index.page)
+index_file_exists = $(wildcard $(SRCDIR)/$(lingua)/gnome-help/index.page)
 linguas := $(HELP_LINGUAS)
 help_linguas := \
     $(foreach lingua, $(linguas), \
@@ -60,8 +61,12 @@ ubuntu-help: clean style
 		if test "$$lang" = "gl"; then lang=gl-GL; fi; \
 		if test "$$lang" = "ms"; then lang=ms-MS; fi; \
 		if test "$$lang" = "pl"; then lang=pl-PL; fi; \
+		mkdir -p "$(TMPDIR)/$$lc"; \
+		cp -rf "$(SRCDIR)/$$lc/gnome-help" "$(TMPDIR)/$$lc"; \
+		find "$(TMPDIR)/$$lc" -type l -exec rm -f {} \; ; \
+		cp "$(TMPDIR)/$$lc/gnome-help/"*.svg "$(HTMLDESTDIR)/$$lang/"; \
 		yelp-build html -o "$(HTMLDESTDIR)/$$lang/" -x $(UBUNTUXSL) \
-			"$(SRCDIR)/$$lc/"; \
+			"$(TMPDIR)/$$lc/gnome-help"; \
 		$(SED) -i \
 			-e "s/<html>/<html lang="$$lang">/" \
 			"$(HTMLDESTDIR)/$$lang/"*.html; \
@@ -77,6 +82,7 @@ ubuntu-help: clean style
 
 clean:
 	rm -rf build
+	rm -rf $(TMPDIR)
 
 # Copy style sheet and common images to build directory
 style:
@@ -89,7 +95,7 @@ style:
 		mkdir -p "$(HTMLDESTDIR)/$$lang/img"; \
 		mkdir -p "$(HTMLDESTDIR)/$$lang/figures"; \
 		#cp -n img/* "$(HTMLDESTDIR)/$$lang/img"; \
-		#cp -n "$(SRCDIR)/C/figures/"* "$(HTMLDESTDIR)/$$lang/figures"; \
+		#cp -n "$(SRCDIR)/C/gnome-help/figures/"* "$(HTMLDESTDIR)/$$lang/figures"; \
 	done
 
 # Installs all HTML files to a single multilingual directory for subsequent copying to

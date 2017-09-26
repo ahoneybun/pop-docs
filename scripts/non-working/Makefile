@@ -21,7 +21,7 @@
 
 MAKECMD=make
 HTMLDESTDIR=build
-SRCDIR=/usr/share/help
+SRCDIR=../ubuntu-help
 SED=/bin/sed
 INSTALLDIR=ubuntu-docs
 URLFIXER=fix-urls.sed
@@ -35,7 +35,7 @@ URLFIXER=fix-urls.sed
 # HELP_LINGUAS variable in the ubuntu-help Makefile
 HELP_LINGUAS = ca cs da de el es fi fr gl he hi hu id it ja kn lv nl pt_BR ru sl sr sv ta te zh_CN
 
-index_file_exists = $(wildcard $(SRCDIR)/$(lingua)/gnome-help/index.page)
+index_file_exists = $(wildcard $(SRCDIR)/$(lingua)/index.page)
 linguas := $(HELP_LINGUAS)
 help_linguas := \
     $(foreach lingua, $(linguas), \
@@ -60,9 +60,8 @@ ubuntu-help: clean style
 		if test "$$lang" = "gl"; then lang=gl-GL; fi; \
 		if test "$$lang" = "ms"; then lang=ms-MS; fi; \
 		if test "$$lang" = "pl"; then lang=pl-PL; fi; \
-		cp "$(SRCDIR)/$$lc/gnome-help/"*.svg "$(HTMLDESTDIR)/$$lang/"; \
 		yelp-build html -o "$(HTMLDESTDIR)/$$lang/" -x $(UBUNTUXSL) \
-			"$(SRCDIR)/$$lc/gnome-help"; \
+			"$(SRCDIR)/$$lc/"; \
 		$(SED) -i \
 			-e "s/<html>/<html lang="$$lang">/" \
 			"$(HTMLDESTDIR)/$$lang/"*.html; \
@@ -90,7 +89,7 @@ style:
 		mkdir -p "$(HTMLDESTDIR)/$$lang/img"; \
 		mkdir -p "$(HTMLDESTDIR)/$$lang/figures"; \
 		#cp -n img/* "$(HTMLDESTDIR)/$$lang/img"; \
-		#cp -n "$(SRCDIR)/C/gnome-help/figures/"* "$(HTMLDESTDIR)/$$lang/figures"; \
+		#cp -n "$(SRCDIR)/C/figures/"* "$(HTMLDESTDIR)/$$lang/figures"; \
 	done
 
 # Installs all HTML files to a single multilingual directory for subsequent copying to
