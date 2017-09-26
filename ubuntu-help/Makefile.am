@@ -7,10 +7,10 @@ HELP_ID = ubuntu-help
 #   he hi hr hu ia id it ja kab kk kn ko lt lv mg ms my nb ne nl oc pl pt_BR pt ro ru si
 #   sk sl sq sr sv ta te tg th tl tr ug uk ur uz zh_CN zh_HK zh_TW
 # gnome-user-docs languages:
-#   as ca cs da de el fi fr es gl gu he hi hu id it ja kn lv mr nl pa pt_BR ru sl sr sr@latin sv te vi ta zh_CN
+#   as ca cs da de el fi fr es gl gu he hi hu id it ja kn lv mr nl pa pl pt pt_BR ro ru sl sr sr@latin sv te vi ta zh_CN
 #
 # We build localized pages for the intersection of the two sets:
-HELP_LINGUAS = ca cs da de el es fi fr gl he hi hu id it ja kn lv nl pt_BR ru sl sr sv ta te zh_CN
+HELP_LINGUAS = ca cs da de el es fi fr gl he hi hu id it ja kn lv nl pl pt pt_BR ro ru sl sr sv ta te zh_CN
 
 HELP_MEDIA = \
 	figures/ubuntu-logo.png
@@ -19,14 +19,14 @@ HELP_MEDIA = \
 # Not installed:
 #   help-irc.page
 #   help-mailing-list.page
+#   translate.page
 FORKED = \
 	about-this-guide.page \
 	get-involved.page \
 	index.page \
 	keyboard-layouts.page \
 	more-help.page \
-	net-install-flash.page \
-	translate.page
+	net-install-flash.page
 
 # Ubuntu extras
 EXTRAS = \
@@ -47,7 +47,6 @@ EXTRAS = \
 	power-hibernate.page \
 	prefs-language-install.page \
 	report-ubuntu-bug.page \
-	shell-guest-session.page \
 	startup-applications.page \
 	video-dvd-restricted.page
 

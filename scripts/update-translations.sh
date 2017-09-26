@@ -36,10 +36,10 @@ for i in ../ubuntu-help/*/ubuntu-help-*.po; do
     mv $OLDFILENAME ../ubuntu-help/$POLANG/$NEWFILENAME
 done
 
-echo "Updating Makefile.am..."
-cp ../ubuntu-help/Makefile.am ../ubuntu-help/Makefile.am.old
-sed "s/HELP_LINGUAS = .*$/HELP_LINGUAS =$POLANGS/" ../ubuntu-help/Makefile.am.old > ../ubuntu-help/Makefile.am
-rm -fr ../ubuntu-help/Makefile.am.old
+#echo "Updating Makefile.am..."
+#cp ../ubuntu-help/Makefile.am ../ubuntu-help/Makefile.am.old
+#sed "s/HELP_LINGUAS = .*$/HELP_LINGUAS =$POLANGS/" ../ubuntu-help/Makefile.am.old > ../ubuntu-help/Makefile.am
+#rm -fr ../ubuntu-help/Makefile.am.old
 
 echo "Done!"
 
