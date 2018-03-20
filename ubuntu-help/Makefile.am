@@ -5,7 +5,7 @@ HELP_ID = ubuntu-help
 # ubuntu-docs languages:
 #   am ar ast az bg bo br bs ca ce cs da de el en_AU en_CA en_GB eo es et eu fi fo fr gl
 #   he hi hr hu ia id it ja kab kk kn ko lt lv mg ms my nb ne nl oc pl pt_BR pt ro ru si
-#   sk sl sq sr sv ta te tg th tl tr ug uk ur uz zh_CN zh_HK zh_TW
+#   sk sl sq sr sv ta te tg th tl tr ug uk ur uz wo zh_CN zh_HK zh_TW
 # gnome-user-docs languages:
 #   as ca cs da de el fi fr es gl gu he hi hu id it ja kn lv mr nl pa pl pt pt_BR ro ru sl sr sr@latin sv te vi ta zh_CN
 #
@@ -24,7 +24,6 @@ FORKED = \
 	about-this-guide.page \
 	get-involved.page \
 	index.page \
-	keyboard-layouts.page \
 	more-help.page \
 	net-install-flash.page
 
@@ -44,7 +43,6 @@ EXTRAS = \
 	net-chat-skype.page \
 	net-chat-video.page \
 	numeric-keypad.page \
-	power-hibernate.page \
 	prefs-language-install.page \
 	report-ubuntu-bug.page \
 	startup-applications.page \
