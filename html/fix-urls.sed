@@ -35,8 +35,8 @@ s#help:\(gnome-orca\|cheese\|baobab\|brasero\|gucharmap\|empathy\)#https://help\
 
 ## Fix some of the appplication references
 ## s#"apt:#https://apps\.ubuntu\.com/cat/applications/#g
-s#href=\"apt:#href=\"https://apps\.ubuntu\.com/cat/applications/#g
-s#title=\"apt:#title=\"https://apps\.ubuntu\.com/cat/applications/#g
+#s#href=\"apt:#href=\"https://apps\.ubuntu\.com/cat/applications/#g
+#s#title=\"apt:#title=\"https://apps\.ubuntu\.com/cat/applications/#g
 
 ## We use https for help.ubuntu.com, Chrome in particular doesn't
 ## like mixing http & https on the same page (LP: #1044714)

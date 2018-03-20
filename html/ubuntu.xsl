@@ -7,7 +7,8 @@
                 extension-element-prefixes="exsl"
                 version="1.0">
 
-<xsl:param name="mal.if.platform" select="'platform:unity'"/>
+<xsl:param name="mal.if.platform" select="'platform:ubuntu'"/>
+<xsl:param name="mal.link.extension" select="concat('.html.','#LANG#')"/>
 
 <xsl:param name="color.gray_background" select="'#f2f2f2'"/>
 <xsl:param name="color.gray_border" select="'#ccc1c1'"/>
@@ -696,14 +697,37 @@ input, select {
         urchinTracker();
       </script>
 
+      <script>
+      function englishPageVersion() {
+
+        var href = window.location.href;
+	if (href.slice(-1) == "/") {
+		window.location = "index.html.en";
+	} else {
+		window.location = href.replace(/\.html.*/, ".html.en");
+	}
+	 return false;
+      }
+
+      function browserPreferredLanguage() {
+	var href = window.location.href;
+	if (href.slice(-1) == "/") {
+		window.location = href;
+	} else {
+		window.location = href.replace(/\.html.*/, ".html");
+	}
+	return false;
+      }
+      </script>
+
       <div id="container">
         <div id="container-inner">
           <div id="mothership">
             <ul>
-              <li><a href="http://www.ubuntu.com/partners">Partners</a> </li>
-              <li><a href="http://www.ubuntu.com/support">Support</a></li>
-              <li><a href="http://www.ubuntu.com/community">Community</a></li>
-              <li><a href="http://www.ubuntu.com">Ubuntu.com</a></li>
+              <li><a href="https://partners.ubuntu.com">Partners</a> </li>
+              <li><a href="https://www.ubuntu.com/support/community-support">Support</a></li>
+              <li><a href="https://community.ubuntu.com">Community</a></li>
+              <li><a href="https://www.ubuntu.com">Ubuntu.com</a></li>
             </ul>
           </div>
           <div id="header">
@@ -711,7 +735,7 @@ input, select {
             <ul id="main-menu">
               <li><a class="main-menu-item current" href="../../">Official Documentation</a></li>
               <li><a href="https://help.ubuntu.com/community/CommunityHelpWiki">Community Help Wiki</a></li>
-              <li><a href="http://community.ubuntu.com/contribute/documentation/">Contribute</a></li>
+              <li><a href="https://community.ubuntu.com/t/contribute/26">Contribute</a></li>
             </ul>
           </div>
           <div id="menu-search">
@@ -752,6 +776,11 @@ input, select {
           </div>
         </div>
         <div id="footer">
+          <p style="padding-bottom: 0.4em">You can choose the <b>displayed language</b> by adding a language suffix to the web address so it ends with e.g. <tt>.html.en</tt> or <tt>.html.de</tt>.<br />
+          If the web address has no language suffix, the preferred language specified in your web browser's settings is used. For your convenience:<br />
+
+          [ <a title="English page version" href="#" onClick="englishPageVersion();">Change to English Language</a> | 
+          <a title="Language selected by browser" href="#" onClick="browserPreferredLanguage()">Change to Browser's Preferred Language</a> ]</p>
           <p>The material in this document is available under a free license, see <a href="../../legal.html">Legal</a> for details.<br />
           For information on contributing see the <a href="https://wiki.ubuntu.com/DocumentationTeam">Ubuntu Documentation Team wiki page</a>.
           To report errors in this documentation, <a href="https://bugs.launchpad.net/ubuntu/+source/ubuntu-docs">file a bug</a>.</p>
@@ -769,7 +798,7 @@ input, select {
 
 <xsl:template name="mal2html.page.linktrails.trail.prefix">
   <xsl:param name="node" select="."/>
-  <span style="color: #333">Ubuntu 17.10</span>
+  <span style="color: #333">Ubuntu 18.04</span>
   <xsl:variable name="direction">
     <xsl:call-template name="l10n.direction"/>
   </xsl:variable>
