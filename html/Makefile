@@ -65,6 +65,7 @@ ubuntu-help: clean style
 		cp -rf "$(SRCDIR)/$$lc/gnome-help" "$(TMPDIR)/$$lc"; \
 		find "$(TMPDIR)/$$lc" -type l -exec rm -f {} \; ; \
 		cp "$(TMPDIR)/$$lc/gnome-help/"*.svg "$(HTMLDESTDIR)/$$lang/"; \
+		$(SED) -i -r 's/(test="action:install)"/\1, target:html"/' "$(TMPDIR)/$$lc/gnome-help/"*.page; \
 		$(SED) "s/#LANG#/$$lang/" $(UBUNTUXSL) > "$(TMPDIR)/ubuntu.xsl"; \
 		yelp-build html -o "$(HTMLDESTDIR)/$$lang/" -x "$(TMPDIR)/ubuntu.xsl" \
 			"$(TMPDIR)/$$lc/gnome-help"; \
