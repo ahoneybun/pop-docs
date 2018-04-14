@@ -26,20 +26,26 @@ echo "Extracting translations from $TMPDOCS..."
 tar -zxf "$TMPDOCS" --exclude='*.pot' --directory ..
 
 echo "Renaming translation files..."
-POLANGS=""
 for i in ../ubuntu-help/*/ubuntu-help-*.po; do
     OLDFILENAME=$i
     NEWFILENAME=$(basename $i | sed -e 's/^ubuntu-help-//')
     POLANG=$(basename $i .po | sed -e 's/^ubuntu-help-//')
-    POLANGS="$POLANGS $POLANG"
     mkdir -p ../ubuntu-help/$POLANG
     mv $OLDFILENAME ../ubuntu-help/$POLANG/$NEWFILENAME
 done
 
-#echo "Updating Makefile.am..."
-#cp ../ubuntu-help/Makefile.am ../ubuntu-help/Makefile.am.old
-#sed "s/HELP_LINGUAS = .*$/HELP_LINGUAS =$POLANGS/" ../ubuntu-help/Makefile.am.old > ../ubuntu-help/Makefile.am
-#rm -fr ../ubuntu-help/Makefile.am.old
+echo "Removing obsolete translations..."
+# PO files exported from LP contain to a large extent obsolete
+# translations of previously present strings. These commands clean
+# up the PO files from such translations, since it's unnecessary to
+# pollute the branch and the source package with them.
+#
+# Remove obsolete translations
+sed -i '/^#~/d' ../ubuntu-help/*/*.po
+# Remove orphans as a result of the previous command
+sed -i '$!N;/#.*\n$/d;P;D' ../ubuntu-help/*/*.po
+# Remove blank lines at the end
+sed -i -e :a -e '/^\n*$/{$d;N;};/\n$/ba' ../ubuntu-help/*/*.po
 
 echo "Done!"
 

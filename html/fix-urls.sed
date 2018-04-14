@@ -33,11 +33,7 @@
 s#help:empathy/audio-video#https://help\.gnome\.org/users/empathy/stable/audio-video#g
 s#help:\(gnome-orca\|cheese\|baobab\|brasero\|gucharmap\|empathy\)#https://help\.gnome\.org/users/\1/stable/#g
 
-## Fix some of the appplication references
-## s#"apt:#https://apps\.ubuntu\.com/cat/applications/#g
-#s#href=\"apt:#href=\"https://apps\.ubuntu\.com/cat/applications/#g
-#s#title=\"apt:#title=\"https://apps\.ubuntu\.com/cat/applications/#g
-
-## We use https for help.ubuntu.com, Chrome in particular doesn't
-## like mixing http & https on the same page (LP: #1044714)
-s#http://www.google#https://www.google#g
+## Use old name of gnome-tweaks for now (gnome-tweak-tool is a
+## transitional dummy package in 18.04), since the new name is
+## available only to users of Ubuntu 18.04 and later.
+s#\(apt:gnome-\)tweaks#\1tweak-tool#g

@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 INSTALL=
-for P in gnome-common yelp-tools yelp-xsl; do
+for P in automake make yelp-tools yelp-xsl; do
     if ! dpkg -l $P >/dev/null 2>&1; then
         INSTALL="$INSTALL $P"
     fi

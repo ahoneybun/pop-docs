@@ -13,12 +13,5 @@ PKG_NAME="ubuntu-docs"
     exit 1
 }
 
-which gnome-autogen.sh || {
-    echo "You need to install gnome-common from the GNOME CVS"
-    exit 1
-}
-
-REQUIRED_AUTOMAKE_VERSION=1.6
-export REQUIRED_AUTOMAKE_VERSION
-
-USE_GNOME2_MACROS=1 . gnome-autogen.sh
+autoreconf --verbose --force --install || exit 1
+$srcdir/configure "$@" || exit 1
