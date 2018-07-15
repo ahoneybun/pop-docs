@@ -1,4 +1,4 @@
-AC_INIT([ubuntu-docs], [18.04],
+AC_INIT([ubuntu-docs], [18.10],
         [https://bugs.launchpad.net/ubuntu/+source/ubuntu-docs])
 AM_INIT_AUTOMAKE
 
