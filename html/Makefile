@@ -34,7 +34,7 @@ URLFIXER=fix-urls.sed
 # for the HTML to be built in turn. This means all the locales for which
 # HTML output is needed will have to have been specified in the main
 # HELP_LINGUAS variable in the ubuntu-help Makefile
-HELP_LINGUAS = ca cs da de el es fi fr gl he hi hu id it ja kn lv nl pl pt pt_BR ro ru sl sr sv ta te zh_CN
+HELP_LINGUAS = ca cs da de el es fi fr gl he hi hr hu id it ja kn lv nl pl pt pt_BR ro ru sl sr sv ta te zh_CN
 
 index_file_exists = $(wildcard $(SRCDIR)/$(lingua)/gnome-help/index.page)
 linguas := $(HELP_LINGUAS)

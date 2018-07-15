@@ -43,7 +43,11 @@ echo "Removing obsolete translations..."
 # Remove obsolete translations
 sed -i '/^#~/d' ../ubuntu-help/*/*.po
 # Remove orphans as a result of the previous command
-sed -i '$!N;/#.*\n$/d;P;D' ../ubuntu-help/*/*.po
+# (this is unforgivably clumsy)
+sed -i '$!N;s/^#.*\n$//;P;D' ../ubuntu-help/*/*.po
+sed -i '$!N;s/^#.*\n$//;P;D' ../ubuntu-help/*/*.po
+sed -i '$!N;s/^#.*\n$//;P;D' ../ubuntu-help/*/*.po
+sed -i '$!N;s/^#.*\n$//;P;D' ../ubuntu-help/*/*.po
 # Remove blank lines at the end
 sed -i -e :a -e '/^\n*$/{$d;N;};/\n$/ba' ../ubuntu-help/*/*.po
 
