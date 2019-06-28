@@ -38,6 +38,7 @@ EXTRAS = \
 	addremove-remove.page \
 	addremove-sources.page \
 	app-cheese.page \
+	community-support.page \
 	net-chat-empathy.page \
 	net-chat.page \
 	net-chat-skype.page \

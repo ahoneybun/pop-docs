@@ -100,9 +100,30 @@ kbd {
     <xsl:value-of select="$color.gray_border_actually"/><xsl:text>;
 }
 
-/* insert some space above the links groups on the front page */
-div.links-grid-link {
-    margin: 0.8em 0 0 0;
+/* override flex-basis value: 300px => 250px
+   links-grid to get three link groups per row, and links-tile
+   to make sense of the thumbnails at getting-started.html */
+div.links-grid, div.links-tile {
+  flex-basis: 250px;
+}
+
+/* override margin - no negative right and left margins
+   (to keep the internal navigation row within the outer border) */
+div.trails {
+  margin: 0;
+}
+
+/* override link button background */
+.link-button a {
+    background-color: #dd4814;
+}
+.link-button a:hover {
+  box-shadow: 1px 1px 1px #dd4814;
+}
+
+/* override important icon background */
+div.note-important > svg .yelp-svg-fill {
+  fill: #dd4814;
 }
 
 a img, :link img, :visited img {
@@ -503,6 +524,11 @@ a:hover {
     text-decoration: underline;
 }
 
+a:visited {
+    color: #DD4814;
+    text-decoration: none;
+}
+
 ul {
     margin-bottom: 16px;
 }
@@ -798,7 +824,7 @@ input, select {
 
 <xsl:template name="mal2html.page.linktrails.trail.prefix">
   <xsl:param name="node" select="."/>
-  <span style="color: #333">Ubuntu 19.04</span>
+  <span style="color: #333">Ubuntu 19.10</span>
   <xsl:variable name="direction">
     <xsl:call-template name="l10n.direction"/>
   </xsl:variable>
