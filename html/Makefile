@@ -67,14 +67,14 @@ ubuntu-help: clean style
 		cp "$(TMPDIR)/$$lc/gnome-help/"*.svg "$(HTMLDESTDIR)/$$lang/"; \
 		$(SED) -i -r 's/(test="action:install)"/\1, target:html"/' "$(TMPDIR)/$$lc/gnome-help/"*.page; \
 		$(SED) "s/#LANG#/$$lang/" $(UBUNTUXSL) > "$(TMPDIR)/ubuntu.xsl"; \
-		yelp-build html -o "$(HTMLDESTDIR)/$$lang/" -x "$(TMPDIR)/ubuntu.xsl" \
+		yelp-build html -i -o "$(HTMLDESTDIR)/$$lang/" -x "$(TMPDIR)/ubuntu.xsl" \
 			"$(TMPDIR)/$$lc/gnome-help"; \
 		$(SED) -i \
 			-e "s/<html>/<html lang="$$lang">/" \
 			"$(HTMLDESTDIR)/$$lang/"*.html; \
 		$(SED) -i -f "$(URLFIXER)" "$(HTMLDESTDIR)/$$lang/"*.html; \
 		sed -i -r -e \
-			's|(<div class="region"><div class="contents">)|<div class="title" style="margin-bottom: 1.5em"><span>Ubuntu 19.04</span></div>\1|' \
+			's|(<div class="region"><div class="contents)|<div class="title" style="margin-bottom: 1.5em; margin-left: 0.8em"><span>Ubuntu 19.10</span></div>\1|' \
 			"$(HTMLDESTDIR)/$$lang/index.html"; \
 		echo "\nSearching for yelp help system internal links and either changing them to equivalent or related external links or deleting them:"; \
 		$(SED) -i -e '/help:language-selector/d' "$(HTMLDESTDIR)/$$lang/"session*.html; \
@@ -95,9 +95,7 @@ style:
 		if test "$$lang" = "ms"; then lang=ms-MS; fi; \
 		if test "$$lang" = "pl"; then lang=pl-PL; fi; \
 		mkdir -p "$(HTMLDESTDIR)/$$lang/img"; \
-		mkdir -p "$(HTMLDESTDIR)/$$lang/figures"; \
-		#cp -n img/* "$(HTMLDESTDIR)/$$lang/img"; \
-		#cp -n "$(SRCDIR)/C/gnome-help/figures/"* "$(HTMLDESTDIR)/$$lang/figures"; \
+		mkdir "$(HTMLDESTDIR)/$$lang/figures"; \
 	done
 
 # Installs all HTML files to a single multilingual directory for subsequent copying to
@@ -112,7 +110,7 @@ install:
 		if test "$$lang" = "gl"; then lang=gl-GL; fi; \
 		if test "$$lang" = "ms"; then lang=ms-MS; fi; \
 		if test "$$lang" = "pl"; then lang=pl-PL; fi; \
-		for ext in css png js; do \
+		for ext in css js; do \
 			cp -af "$(INSTALLDIR)/$$lang"/*.$$ext "$(INSTALLDIR)"; \
 			rm -Rf "$(INSTALLDIR)/$$lang"/*.$$ext ; \
 		done ; \
