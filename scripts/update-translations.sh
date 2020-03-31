@@ -22,16 +22,21 @@ if [ ! -e "$TMPDOCS" ]; then
     exit 1
 fi
 
-echo "Extracting translations from $TMPDOCS..."
-tar -zxf "$TMPDOCS" --exclude='*.pot' --directory ..
+TMPLANGS=/tmp/ubuntu-docs/po-files
+mkdir -p $TMPLANGS
+rm -rf $TMPLANGS/*
 
-echo "Renaming translation files..."
-for i in ../ubuntu-help/*/ubuntu-help-*.po; do
-    OLDFILENAME=$i
-    NEWFILENAME=$(basename $i | sed -e 's/^ubuntu-help-//')
-    POLANG=$(basename $i .po | sed -e 's/^ubuntu-help-//')
-    mkdir -p ../ubuntu-help/$POLANG
-    mv $OLDFILENAME ../ubuntu-help/$POLANG/$NEWFILENAME
+echo "Extracting translations from $TMPDOCS..."
+tar -zxf "$TMPDOCS" --exclude='*.pot' --directory $TMPLANGS
+
+for i in $TMPLANGS/ubuntu-help/*/*.po $TMPLANGS/ubuntu-help/*.po; do
+    POFILE=$(basename $i | sed -e 's/^ubuntu-help-//')
+    PODIR=${POFILE%.*}
+    if [ -d "../ubuntu-help/$PODIR" ]; then
+        cp $i ../ubuntu-help/$PODIR/$POFILE
+    else
+        cp $i ../ubuntu-help/newlang-$POFILE
+    fi
 done
 
 echo "Removing obsolete translations..."
