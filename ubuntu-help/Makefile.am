@@ -3,14 +3,14 @@
 HELP_ID = ubuntu-help
 
 # ubuntu-docs languages:
-#   af am ar ast az bg bo br bs ca ce ceb ckb cs da de el en_AU en_CA en_GB eo es et eu fa
-#   fi fo fr gl he hi hr hu ia id it ja kab kk kn ko lt lv mg mjw ms my nb ne nl oc pl pt_BR
-#   pt ro ru si sk sl sq sr sv ta te tg th tl tr ug uk ur uz wo zh_CN zh_HK zh_TW
+#   af am ar ast az be bg bn bo br bs ca ce ceb ckb cs da de el en_AU en_CA en_GB eo es et eu
+#   eu fa fi fo fr gl he hi hr hu ia id it ja kab kk kn ko lt lv mg mjw ms my nb ne nl oc pl
+#   pt_BR pt ro ru si sk sl sq sr sv ta te tg th tl tr ug uk ur uz wo zh_CN zh_HK zh_TW
 # gnome-user-docs languages:
-#   as ca cs da de el fi fr es gl gu he hi hr hu id it ja kn lv lt mr nl pa pl pt pt_BR ro ru sl sr sr@latin sv te vi ta zh_CN
+#   as ca cs da de el fa fi fr es gl gu he hi hr hu id it ja kn lv lt mr nl pa pl pt pt_BR ro ru sl sr sr@latin sv te vi ta zh_CN
 #
 # We build localized pages for the intersection of the two sets:
-HELP_LINGUAS = ca cs da de el es fi fr gl he hi hr hu id it ja kn lt lv nl pl pt pt_BR ro ru sl sr sv ta te zh_CN
+HELP_LINGUAS = ca cs da de el es fa fi fr gl he hi hr hu id it ja kn lt lv nl pl pt pt_BR ro ru sl sr sv ta te zh_CN
 
 HELP_MEDIA = \
 	figures/ubuntu-logo.png
@@ -19,6 +19,7 @@ HELP_MEDIA = \
 # Not installed:
 #   help-irc.page
 #   help-mailing-list.page
+#   shell-apps-auto-start.page (startup-applications.page is sufficient)
 #   translate.page
 FORKED = \
 	about-this-guide.page \
