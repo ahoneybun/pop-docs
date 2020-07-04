@@ -34,7 +34,7 @@ URLFIXER=fix-urls.sed
 # for the HTML to be built in turn. This means all the locales for which
 # HTML output is needed will have to have been specified in the main
 # HELP_LINGUAS variable in the ubuntu-help Makefile
-HELP_LINGUAS = ca cs da de el es fi fr gl he hi hr hu id it ja kn lt lv nl pl pt pt_BR ro ru sl sr sv ta te zh_CN
+HELP_LINGUAS = ca cs da de el es fa fi fr gl he hi hr hu id it ja kn lt lv nl pl pt pt_BR ro ru sl sr sv ta te zh_CN
 
 index_file_exists = $(wildcard $(SRCDIR)/$(lingua)/gnome-help/index.page)
 linguas := $(HELP_LINGUAS)
@@ -61,6 +61,7 @@ ubuntu-help: clean style
 		if test "$$lang" = "gl"; then lang=gl-GL; fi; \
 		if test "$$lang" = "ms"; then lang=ms-MS; fi; \
 		if test "$$lang" = "pl"; then lang=pl-PL; fi; \
+		echo "\nBuilding language $$lang:"; \
 		mkdir -p "$(TMPDIR)/$$lc"; \
 		cp -rf "$(SRCDIR)/$$lc/gnome-help" "$(TMPDIR)/$$lc"; \
 		find "$(TMPDIR)/$$lc" -type l -exec rm -f {} \; ; \
@@ -74,9 +75,9 @@ ubuntu-help: clean style
 			"$(HTMLDESTDIR)/$$lang/"*.html; \
 		$(SED) -i -f "$(URLFIXER)" "$(HTMLDESTDIR)/$$lang/"*.html; \
 		sed -i -r -e \
-			's|(<div class="region"><div class="contents)|<div class="title" style="margin-bottom: 1.5em; margin-left: 0.8em"><span>Ubuntu 20.04</span></div>\1|' \
+			's|(<div class="region"><div class="contents)|<div class="title" style="margin-bottom: 1.5em; margin-left: 0.8em"><span>Ubuntu 20.10</span></div>\1|' \
 			"$(HTMLDESTDIR)/$$lang/index.html"; \
-		echo "\nSearching for yelp help system internal links and either changing them to equivalent or related external links or deleting them:"; \
+		echo "Searching for yelp help system internal links and either changing them to equivalent or related external links or deleting them"; \
 		$(SED) -i -e '/help:language-selector/d' "$(HTMLDESTDIR)/$$lang/"session*.html; \
 		grep "href=\"ghelp:" "$(HTMLDESTDIR)/$$lang/"*.html; \
 		rm -rf "$(HTMLDESTDIR)/$$lang/usr"; \
