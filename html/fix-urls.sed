@@ -32,8 +32,3 @@
 ## Fix some of the gnome help links in the generated HTML documentation
 s#help:empathy/audio-video#https://help\.gnome\.org/users/empathy/stable/audio-video#g
 s#help:\(gnome-orca\|cheese\|baobab\|brasero\|gucharmap\|empathy\)#https://help\.gnome\.org/users/\1/stable/#g
-
-## Use old name of gnome-tweaks for now (gnome-tweak-tool is a
-## transitional dummy package in 18.04), since the new name is
-## available only to users of Ubuntu 18.04 and later.
-s#\(apt:gnome-\)tweaks#\1tweak-tool#g
