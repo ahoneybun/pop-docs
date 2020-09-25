@@ -40,10 +40,6 @@ EXTRAS = \
 	addremove-sources.page \
 	app-cheese.page \
 	community-support.page \
-	net-chat-empathy.page \
-	net-chat.page \
-	net-chat-skype.page \
-	net-chat-video.page \
 	numeric-keypad.page \
 	prefs-language-install.page \
 	report-ubuntu-bug.page \
