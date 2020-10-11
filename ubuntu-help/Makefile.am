@@ -25,8 +25,7 @@ FORKED = \
 	about-this-guide.page \
 	get-involved.page \
 	index.page \
-	more-help.page \
-	net-install-flash.page
+	more-help.page
 
 # Ubuntu extras
 EXTRAS = \
@@ -40,6 +39,7 @@ EXTRAS = \
 	addremove-sources.page \
 	app-cheese.page \
 	community-support.page \
+	net-install-flash.page \
 	numeric-keypad.page \
 	prefs-language-install.page \
 	report-ubuntu-bug.page \
