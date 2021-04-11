@@ -5,7 +5,7 @@ HELP_ID = ubuntu-help
 # ubuntu-docs languages:
 #   af am ar ast az be bg bn bo br bs ca ce ceb ckb cs da de el en_AU en_CA en_GB eo es et eu
 #   eu fa fi fo fr gl he hi hr hu ia id it ja kab kk kn ko lt lv mg mjw ms my nb ne nl oc pl
-#   pt_BR pt ro ru si sk sl sq sr sv ta te tg th tl tr ug uk ur uz wo zh_CN zh_HK zh_TW
+#   pt_BR pt ro ru se si sk sl sq sr sv ta te tg th tl tr ug uk ur uz wo zh_CN zh_HK zh_TW
 # gnome-user-docs languages:
 #   as ca cs da de el fa fi fr es gl gu he hi hr hu id it ja kn lv lt mr nl pa pl pt pt_BR ro ru sl sr sr@latin sv te vi ta zh_CN
 #
@@ -39,7 +39,6 @@ EXTRAS = \
 	addremove-sources.page \
 	app-cheese.page \
 	community-support.page \
-	net-install-flash.page \
 	numeric-keypad.page \
 	prefs-language-install.page \
 	report-ubuntu-bug.page \

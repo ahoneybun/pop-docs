@@ -75,7 +75,7 @@ ubuntu-help: clean style
 			"$(HTMLDESTDIR)/$$lang/"*.html; \
 		$(SED) -i -f "$(URLFIXER)" "$(HTMLDESTDIR)/$$lang/"*.html; \
 		sed -i -r -e \
-			's|(<div class="region"><div class="contents)|<div class="title" style="margin-bottom: 1.5em; margin-left: 0.8em"><span>Ubuntu 20.10</span></div>\1|' \
+			's|(<div class="region"><div class="contents)|<div class="title" style="margin-bottom: 1.5em; margin-left: 0.8em"><span>Ubuntu 21.04</span></div>\1|' \
 			"$(HTMLDESTDIR)/$$lang/index.html"; \
 		echo "Searching for yelp help system internal links and either changing them to equivalent or related external links or deleting them"; \
 		$(SED) -i -e '/help:language-selector/d' "$(HTMLDESTDIR)/$$lang/"session*.html; \
