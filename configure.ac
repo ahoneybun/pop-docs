@@ -1,4 +1,4 @@
-AC_INIT([ubuntu-docs], [20.10],
+AC_INIT([ubuntu-docs], [21.04],
         [https://bugs.launchpad.net/ubuntu/+source/ubuntu-docs])
 AM_INIT_AUTOMAKE
 
