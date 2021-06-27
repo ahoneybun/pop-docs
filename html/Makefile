@@ -34,7 +34,7 @@ URLFIXER=fix-urls.sed
 # for the HTML to be built in turn. This means all the locales for which
 # HTML output is needed will have to have been specified in the main
 # HELP_LINGUAS variable in the ubuntu-help Makefile
-HELP_LINGUAS = ca cs da de el es fa fi fr gl he hi hr hu id it ja kn lt lv nl pl pt pt_BR ro ru sl sr sv ta te zh_CN
+HELP_LINGUAS = ca cs da de el es fa fi fr gl he hi hr hu id it ja kn lt lv nl pl pt pt_BR ro ru sl sr sv ta te tr uk zh_CN
 
 index_file_exists = $(wildcard $(SRCDIR)/$(lingua)/gnome-help/index.page)
 linguas := $(HELP_LINGUAS)
@@ -75,7 +75,7 @@ ubuntu-help: clean style
 			"$(HTMLDESTDIR)/$$lang/"*.html; \
 		$(SED) -i -f "$(URLFIXER)" "$(HTMLDESTDIR)/$$lang/"*.html; \
 		sed -i -r -e \
-			's|(<div class="region"><div class="contents)|<div class="title" style="margin-bottom: 1.5em; margin-left: 0.8em"><span>Ubuntu 21.04</span></div>\1|' \
+			's|(<div class="region"><div class="contents)|<div class="title" style="margin-bottom: 1.5em; margin-left: 0.8em"><span>Ubuntu 21.10</span></div>\1|' \
 			"$(HTMLDESTDIR)/$$lang/index.html"; \
 		echo "Searching for yelp help system internal links and either changing them to equivalent or related external links or deleting them"; \
 		$(SED) -i -e '/help:language-selector/d' "$(HTMLDESTDIR)/$$lang/"session*.html; \

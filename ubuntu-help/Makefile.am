@@ -7,10 +7,10 @@ HELP_ID = ubuntu-help
 #   eu fa fi fo fr gl he hi hr hu ia id it ja kab kk kn ko lt lv mg mjw ms my nb ne nl oc pl
 #   pt_BR pt ro ru se si sk sl sq sr sv ta te tg th tl tr ug uk ur uz wo zh_CN zh_HK zh_TW
 # gnome-user-docs languages:
-#   as ca cs da de el fa fi fr es gl gu he hi hr hu id it ja kn lv lt mr nl pa pl pt pt_BR ro ru sl sr sr@latin sv te vi ta zh_CN
+#   as ca cs da de el fa fi fr es gl gu he hi hr hu id it ja kn lv lt mr nl pa pl pt pt_BR ro ru sl sr sr@latin sv te tr uk vi ta zh_CN
 #
 # We build localized pages for the intersection of the two sets:
-HELP_LINGUAS = ca cs da de el es fa fi fr gl he hi hr hu id it ja kn lt lv nl pl pt pt_BR ro ru sl sr sv ta te zh_CN
+HELP_LINGUAS = ca cs da de el es fa fi fr gl he hi hr hu id it ja kn lt lv nl pl pt pt_BR ro ru sl sr sv ta te tr uk zh_CN
 
 HELP_MEDIA = \
 	figures/ubuntu-logo.png
