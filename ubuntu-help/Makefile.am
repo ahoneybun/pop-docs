@@ -13,6 +13,7 @@ HELP_ID = ubuntu-help
 HELP_LINGUAS = ca cs da de el es fa fi fr gl he hi hr hu id it ja kn lt lv nl pl pt pt_BR ro ru sl sr sv ta te tr uk zh_CN
 
 HELP_MEDIA = \
+	figures/tile-software.svg \
 	figures/ubuntu-logo.png
 
 # pages forked from gnome-user-docs and modified for Ubuntu
