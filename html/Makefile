@@ -65,7 +65,6 @@ ubuntu-help: clean style
 		mkdir -p "$(TMPDIR)/$$lc"; \
 		cp -rf "$(SRCDIR)/$$lc/gnome-help" "$(TMPDIR)/$$lc"; \
 		find "$(TMPDIR)/$$lc" -type l -exec rm -f {} \; ; \
-		cp "$(TMPDIR)/$$lc/gnome-help/"*.svg "$(HTMLDESTDIR)/$$lang/"; \
 		$(SED) -i -r 's/(test="action:install)"/\1, target:html"/' "$(TMPDIR)/$$lc/gnome-help/"*.page; \
 		$(SED) "s/#LANG#/$$lang/" $(UBUNTUXSL) > "$(TMPDIR)/ubuntu.xsl"; \
 		yelp-build html -i -o "$(HTMLDESTDIR)/$$lang/" -x "$(TMPDIR)/ubuntu.xsl" \
@@ -77,10 +76,7 @@ ubuntu-help: clean style
 		sed -i -r -e \
 			's|(<div class="region"><div class="contents)|<div class="title" style="margin-bottom: 1.5em; margin-left: 0.8em"><span>Ubuntu 21.10</span></div>\1|' \
 			"$(HTMLDESTDIR)/$$lang/index.html"; \
-		echo "Searching for yelp help system internal links and either changing them to equivalent or related external links or deleting them"; \
-		$(SED) -i -e '/help:language-selector/d' "$(HTMLDESTDIR)/$$lang/"session*.html; \
-		grep "href=\"ghelp:" "$(HTMLDESTDIR)/$$lang/"*.html; \
-		rm -rf "$(HTMLDESTDIR)/$$lang/usr"; \
+		echo "Done."; \
 	done
 
 clean:
