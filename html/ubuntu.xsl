@@ -107,6 +107,28 @@ div.links-grid, div.links-tile {
   flex-basis: 250px;
 }
 
+/* override flex-basis value: 520px => 400px
+   to allow two columns with the experimental-gnome-tiles style */
+div.tile2 {
+  flex-basis: 400px;
+}
+
+/* override background color of tiles */
+span.ex-gnome-tiles-banner {
+  background: rgb(0,0,0);
+}
+
+/* override color of banners at index page */
+span.ex-gnome-top-banner {
+  background-color: #fc8c88;
+}
+
+/* change hover behavior for new style components */
+a.ex-gnome-top:hover, a.ex-gnome-tile:hover {
+  text-decoration: none;
+  background-color: rgb(241,246,253);
+}
+
 /* override margin - no negative right and left margins
    (to keep the internal navigation row within the outer border) */
 div.trails {
